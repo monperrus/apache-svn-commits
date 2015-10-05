@@ -1,0 +1,84 @@
+[
+ {
+  "author": "epg", 
+  "date": "2003-04-30T09:10:55.028738Z", 
+  "msg": [
+   "Resolve #774 ([PATCH] avoid early exit when acting on some", 
+   "non-versioned files).  Thanks to Karl Fogel for review and", 
+   "suggestions.", 
+   "* subversion/clients/cmdline/main.c:", 
+   "(svn_cl__cmd_table): Add -q option to proplist.", 
+   "* subversion/clients/cmdline/proplist-cmd.c:", 
+   "(svn_cl__proplist): Instead of using SVN_ERR, just store the err and", 
+   "check to see if it is SVN_ERR_ENTRY_NOT_FOUND.  If it is, ignore the", 
+   "error and stop processing this file, printing a warning if the -q", 
+   "option was not used.  For all other errors return the err object and", 
+   "let normal error processing occur.", 
+   "* subversion/clients/cmdline/revert-cmd.c:", 
+   "(svn_cl__revert): Same change (but see svn_client_revert change", 
+   "below).", 
+   "* subversion/clients/cmdline/update-cmd.c:", 
+   "(svn_cl__update): Same change.", 
+   "* subversion/include/svn_client.h:", 
+   "(svn_client_update):", 
+   "(svn_client_revert):", 
+   "(svn_client_proplist): Note that these can return SVN_ERR_ENTRY_NOT_FOUND.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_is_wc_root): Note that it can return SVN_ERR_ENTRY_NOT_FOUND.", 
+   "* subversion/libsvn_client/revert.c:", 
+   "(svn_client_revert): Only use SVN_ERR on the svn_wc_adm_probe_open", 
+   "and svn_wc_adm_close calls; for all svn function calls in between", 
+   "(i.e. all svn functions called while the wc is locked), save the", 
+   "return value and if it is an error jump to the cleanup section at", 
+   "the end (where the wc is closed)."
+  ], 
+  "revision_id": "845845"
+ }, 
+ {
+  "author": "mprice", 
+  "date": "2003-04-29T22:37:41.018046Z", 
+  "msg": [
+   "* CHANGES: add ra_dav entry and change the date/revision information"
+  ], 
+  "revision_id": "845844"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-04-29T21:56:35.290350Z", 
+  "msg": [
+   "Style improvements from Greg Stein:", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(ensure_directories, Dump.__init__, Dump.start_revision): Use", 
+   "automatic string concatenation instead of multiple write calls.", 
+   "(Dump.add_or_change_path): Same, and use a format code instead of", 
+   "string.rjust."
+  ], 
+  "revision_id": "845843"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-04-29T21:56:17.646666Z", 
+  "msg": [
+   "Finish issue #891: \"REPORT fails if item missing in HEAD.\"", 
+   "Teach mod_dav_svn to accept both styles of update-report requests.", 
+   "* libsvn_ra_dav/fetch.c (make_reporter): the <src-path> should be a", 
+   "full url, just like <dst-path>.", 
+   "* mod_dav_svn/update.c (dav_svn__update_report): allow both 'regular'", 
+   "and 'vcc' resources to enter this routine.  if present, parse the", 
+   "new <src-path> element just like <dst-path>, and use its value", 
+   "*instead* of the resource's path.", 
+   "* diff_tests.py (diff_deleted_in_head):  enable regression test, which", 
+   "now passes."
+  ], 
+  "revision_id": "845842"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-04-29T21:56:00.861524Z", 
+  "msg": [
+   "Revert revision 5763.  It appears to add regression bugs, turns out to be", 
+   "unnecessary for my purposes, and therefore is not worth maintaining."
+  ], 
+  "revision_id": "845841"
+ }
+]

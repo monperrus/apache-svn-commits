@@ -1,0 +1,88 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-10-04T05:41:26.680089Z", 
+  "msg": [
+   "A follow-up to r26923, reverting an accidental part of that commit.", 
+   "* subversion/libsvn_wc/props.c: Revert all changes from r26923."
+  ], 
+  "revision_id": "867005"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-10-04T04:49:37.904149Z", 
+  "msg": [
+   "Fix issue #2954: svn:externals handling didn't play nice with depths.", 
+   "This change has two parts.  First, collect ambient depths into", 
+   "the traversal info, alongside svn:externals values:", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(struct svn_wc_traversal_info_t): Add depths hash to end of struct.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_traversed_depths): Declare new accessor function.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(svn_wc_init_traversal_info): Initialize new depths field.", 
+   "(svn_wc_traversed_depths): Define new accessor function.", 
+   "(close_directory): Store depth in traversal_info, and reduce the", 
+   "allocation load of the existing code a bit.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(report_revisions_and_depths): Store depth in traversal_info.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_dir_status): Store depth in traversal_info.", 
+   "(close_edit): Clear out depth for the anchor.", 
+   "Then, give the svn:externals code access to the requested depth and to", 
+   "the ambient depths collected above, so it can decide whether or not to", 
+   "do anything with svn:externals values:", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__handle_externals): Add requested_depth parameter.", 
+   "* subversion/libsvn_client/externals.c: Include svn_private_config.h", 
+   "for the \"_\" macro.", 
+   "(struct handle_externals_desc_change_baton): Add new fields", 
+   "requested_depth and ambient_depths.", 
+   "(svn_client__handle_externals): Take new requested_depth argument;", 
+   "set requested_depth and ambient_depths in the change baton.", 
+   "(svn_client__fetch_externals): Take new requested_depth argument;", 
+   "set it in the change baton, and set ambient_depths to NULL.", 
+   "(handle_externals_desc_change): Bag out if depth is too shallow.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Pass depth to svn_client__handle_externals.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client__switch_internal): Pass depth to svn_client__handle_externals.", 
+   "* subversion/libsvn_client/export.c", 
+   "(svn_client_export4): Pass depth to svn_client__fetch_externals."
+  ], 
+  "revision_id": "867004"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-10-04T03:48:21.473697Z", 
+  "msg": [
+   "Follow-up to r26917, accomodate Win32's lack of line buffering.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_init): Don't change the buffering mode of stdout to line", 
+   "based buffering on Windows (it's not supported).", 
+   "Suggested by: epg", 
+   "jrepenning"
+  ], 
+  "revision_id": "867003"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-10-04T01:43:48.660045Z", 
+  "msg": [
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Make --accept help string fit in 80 columns again.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "Update."
+  ], 
+  "revision_id": "867002"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-10-04T01:35:32.077667Z", 
+  "msg": [
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Update the expected help output, following up to r26922."
+  ], 
+  "revision_id": "867001"
+ }
+]

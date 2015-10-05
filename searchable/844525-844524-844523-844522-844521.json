@@ -1,0 +1,74 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-01-20T03:29:13.702581Z", 
+  "msg": [
+   "Since the stack smasher was removed from svn_fs_close_fs(), the", 
+   "function did nothing. As a result, svn_repos_close() also did nothing", 
+   "(well, it cleared its local variable named \"repos\"... feh).", 
+   "Our desired model is that these objects are \"closed\" when their", 
+   "containing pool is destroyed. Getting rid of the close functions helps", 
+   "to clarify that.", 
+   "Also snuck in the removal of the read/write sentinels. They are", 
+   "undefined and unused. If/when we use them, they'll be put back.", 
+   "* include/svn_fs.h (svn_fs_close_fs): removed. delete all callers.", 
+   "* include/svn_repos.h", 
+   "(svn_repos_close): removed. delete all callers.", 
+   "(svn_repos_read_sentinel_hook): removed. (no callers)", 
+   "(svn_repos_write_sentinel_hook): removed. (no callers)", 
+   "(create_hooks): removed creation of the sentinel files.", 
+   "* libsvn_fs/fs.c (svn_fs_close_fs): removed", 
+   "* libsvn_repos/repos.c", 
+   "(svn_repos_close, svn_repos_read_sentinel_hook,", 
+   "svn_repos_write_sentinel_hook): removed", 
+   "* libsvn_ra_local/ra_plugin.c (svn_ra_local__close): removed a useless", 
+   "cast. removed call to svn_repos_close. set baton->repos to NULL.", 
+   "* svnadmin/main.c", 
+   "* mod_dav_svn/repos.c", 
+   "* svnserve/serve.c", 
+   "* tests/libsvn_fs/fs-test.c", 
+   "* tests/libsvn_fs/changes-test.c", 
+   "* tests/libsvn_fs/strings-reps-test.c", 
+   "* tests/libsvn_repos/repos-test.c", 
+   "-- removed calls to svn_fs_close_fs() and svn_repos_close()", 
+   "* tests/svn_tests_main.c (main): move 'test_pool' out of the loop and", 
+   "use it like a regular iteration pool. (although: it does seem that", 
+   "we weren't in any trouble before, this is clearer to the reader)"
+  ], 
+  "revision_id": "844525"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-20T03:28:14.558897Z", 
+  "msg": [
+   "* CHANGES: Give issue numbers for the checksum work."
+  ], 
+  "revision_id": "844524"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-01-19T23:08:19.643905Z", 
+  "msg": [
+   "Finish first pass at svn subcommands", 
+   "* /trunk/doc/book/book/ch08.xml: Examples for the rest of the svn subcommands."
+  ], 
+  "revision_id": "844523"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-01-19T21:57:46.566188Z", 
+  "msg": [
+   "Finish prop* subcommands", 
+   "* /trunk/doc/book/book/ch08.xml: Examples for more subcommands."
+  ], 
+  "revision_id": "844522"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-19T21:45:55.221685Z", 
+  "msg": [
+   "More work on Chapter 6"
+  ], 
+  "revision_id": "844521"
+ }
+]

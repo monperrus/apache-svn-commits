@@ -1,0 +1,89 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-10-21T08:21:53.067573Z", 
+  "msg": [
+   "Resolve some deprecation warnings.", 
+   "* subversion/libsvn_fs_base/bdb/changes-table.c", 
+   "(svn_fs_bdb__changes_fetch): Use svn_dirent_is_child()."
+  ], 
+  "revision_id": "880220"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-21T07:48:55.350506Z", 
+  "msg": [
+   "Use wc_db for committing changes to directories, too. Since that handles", 
+   "changelists, we can also remove the svn_wc__loggy_delete_changelist()", 
+   "function and related bits.", 
+   "Starting with r40118, Subversion now processes the commit on a directory", 
+   "before its children. Thus, the SVN_ERR_WC_CORRUPT that we were seeing from", 
+   "svn_wc__db_scan_base_repos() via svn_wc__check_wc_root() no longer occurs.", 
+   "Remove the associated logic in log_do_committed().", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): the loggy process will always use wc-ng, so", 
+   "just assume USING_NG is true and remove it and any blocks that would", 
+   "not be executed (specifically: delay setting changed_* values, and the", 
+   "changelist handling).", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_delete_changelist): removed. no longer used.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(SVN_WC__LOG_DELETE_CHANGELIST, log_do_delete_changelist,", 
+   "svn_wc__loggy_delete_changelist): removed. no longer used.", 
+   "(log_do_committed): move the NEW_* and KEEP_CHANGELIST localvars to an", 
+   "outer scope. remove much of the code for altering directory nodes, and", 
+   "replace it with a call to svn_wc__db_global_commit(). Clean out the", 
+   "detection and ignoring of SVN_ERR_WC_CORRUPT.", 
+   "(start_handler): remove handling of SVN_WC__LOG_DELETE_CHANGELIST."
+  ], 
+  "revision_id": "880219"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2009-10-21T04:30:29.156867Z", 
+  "msg": [
+   "Apparently, wc-old allowed deleting the administrative data, but wc-ng", 
+   "does not.  C'est la vie.  So we don't try to reuse the working copy over", 
+   "and over again by deleting it and checking out on top, just create new", 
+   "working copies in new directories.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#check_out): Use different target directories for", 
+   "checkout, ensure all the working copies get deleted."
+  ], 
+  "revision_id": "880218"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-21T03:45:12.654256Z", 
+  "msg": [
+   "Improve the commit process, particularly with respect to selecting the", 
+   "repository information for the new, committed node.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(commit_baton): add repos_id and repos_relpath", 
+   "(commit_node): compute the KIND from the tables, rather than the", 
+   "parameters. consume repos info from the baton, instead of the values", 
+   "in the table(s) (tho we assert equivalent if a BASE_NODE row is", 
+   "present). add a few assertions and comments.", 
+   "(determine_repos_info): find repository information in the (changed)", 
+   "node or in ancestry of an added node.", 
+   "(svn_wc__db_global_commit): fetch the committed node's repository info", 
+   "into the baton."
+  ], 
+  "revision_id": "880217"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-21T03:14:33.414509Z", 
+  "msg": [
+   "Add some commentary and adjust some formatting and control flow to", 
+   "svn_wc__check_wc_root().", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(svn_wc__check_wc_root): early exit for inherited repository locations.", 
+   "shift the split until we need it. shift || and && operators to", 
+   "line-starts rather than line-ends. clarify that !switched is testing", 
+   "for NULL rather than the value of *switched (ie. not a typo). add", 
+   "comments throughout. remove obsolete comment about scan_base_repos."
+  ], 
+  "revision_id": "880216"
+ }
+]

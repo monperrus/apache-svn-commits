@@ -1,0 +1,83 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2007-02-27T20:01:37.428651Z", 
+  "msg": [
+   "Avoid a case of potential working copy corruption when an update/switch", 
+   "adds a file that was already scheduled for addition.", 
+   "NOTE: This is a marginal backwards incompatible format change to the", 
+   "working copy because of the addition of the force attribute to the", 
+   "modify-entry log command.", 
+   "If a new client uses this attribute (for example in the case mentioned", 
+   "above), something fails and an old client is used for the cleanup, then", 
+   "this flag will be ignored by the old client.  This will not result", 
+   "in a corrupt working copy, but will leave the added file in the schedule add", 
+   "state.  I consider this marginal case not worth a format upgrade by itself.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(merge_file): For an added file that was scheduled for addition, tweak", 
+   "the schedule field of the file's entry loggily.  In the same case", 
+   "don't install an empty \"fake\" text base for merging, but instead", 
+   "create a temporary empty file as the left side of the merge.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(SVN_WC__LOG_ATTR_FORCE): New macro.", 
+   "(log_do_modify_entry): Take the force flag in the log entry into account", 
+   "when modifying the entry.", 
+   "(svn_wc__loggy_entry_modify): Set force attribute in the log", 
+   "entry if the corresponding modify flag is set."
+  ], 
+  "revision_id": "863580"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-26T11:39:04.443250Z", 
+  "msg": [
+   "For checkout/update/switch, don't bother opening a text base known not", 
+   "to exist.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(apply_textdelta): Only open text base if the file wansn't added during", 
+   "this editor run, and in that case always require the text-base to", 
+   "exist."
+  ], 
+  "revision_id": "863579"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-02-26T11:20:46.982395Z", 
+  "msg": [
+   "Make SASL authentication use callbacks for credentials, instead of fetching", 
+   "credentials in advance for the mechanisms we *think* are going to need them.", 
+   "* subversion/libsvn_ra_svn/sasl_auth.c", 
+   "(interactions): Remove.", 
+   "(sasl_init_cb): Pass NULL instead of 'interactions' to sasl_client_init.", 
+   "(cred_baton_t): New baton type.", 
+   "(get_credentials, get_username_cb, get_password_cb): New functions.", 
+   "(new_sasl_ctx): Take an additional callbacks parameter, pass it to", 
+   "sasl_client_new().", 
+   "(handle_interact): Remove.", 
+   "(try_auth): Remove the calls to handle_interact() and the do..while loops", 
+   "around the calls to sasl_client_start() and sasl_client_step().", 
+   "(svn_ra_svn__do_auth): Remove the calls to svn_auth_first_credentials() and", 
+   "svn_auth_next_credentials(), which are now handled by get_credentials().", 
+   "Instead, use and initialize a cred_baton_t and an array of sasl_callback_t's", 
+   "and pass the array to new_sasl_ctx(). Adjust the error-handling logic to", 
+   "take these changes into account."
+  ], 
+  "revision_id": "863578"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2007-02-26T07:55:32.689227Z", 
+  "msg": [
+   "Update \"Last-Translator\" field"
+  ], 
+  "revision_id": "863577"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2007-02-26T07:51:23.821585Z", 
+  "msg": [
+   "Update Simplified Chinese translation to r23500"
+  ], 
+  "revision_id": "863576"
+ }
+]

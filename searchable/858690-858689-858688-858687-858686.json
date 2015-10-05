@@ -1,0 +1,98 @@
+[
+ {
+  "author": "blair", 
+  "date": "2006-02-24T23:39:06.260640Z", 
+  "msg": [
+   "Reorder svnmerge.py's command line options to listed alphabetically.", 
+   "* contrib/client-side/svnmerge.py", 
+   "(global_opts),", 
+   "(common_opts),", 
+   "(command_table):", 
+   "Move the options around so that are listed alphabetically."
+  ], 
+  "revision_id": "858690"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2006-02-24T23:06:07.885655Z", 
+  "msg": [
+   "Begin documenting the FS copy ID inheritance algorithm (not solidified yet", 
+   "due to The Fuzziness That Comes From Time and Inattention)."
+  ], 
+  "revision_id": "858689"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-02-24T22:49:13.219324Z", 
+  "msg": [
+   "When svnmerge.py is used to bidirectionally merge changes between a", 
+   "branch and its head, it is necessary to not merge the same changes", 
+   "forth and back: e.g., if you committed a merge of a certain revision", 
+   "of the branch into the head, you do not want that commit to appear as", 
+   "available to merged into the branch (as the code originated in the", 
+   "branch itself!).  svnmerge can skip these so-called \"reflected\"", 
+   "revisions with the new --bidirectional or -b command line option.", 
+   "Patch by: Raman Gupta <rocketraman@fastmail.fm>", 
+   "Reviewed by: Giovanni Bajo <rasky@develer.com>", 
+   "(Tweaked by me.)", 
+   "* contrib/client-side/svnmerge.py", 
+   "(analyze_revs):", 
+   "Take a new argument, the target directory receiving the merges.", 
+   "If the opts[\"bidirectional\"] is True, then pass --verbose to 'svn", 
+   "log --quiet' to get a lit of all the changed paths in the head", 
+   "URL.  Look for any changed paths that exactly match the target", 
+   "directory and look for property changes on the directory in the", 
+   "svnmerge-integrated property for the target directory.", 
+   "Return an additional RevisionSet containing the reflected", 
+   "revisions.", 
+   "(analyze_head_revs):", 
+   "Pass the target directory receiving the merges down to", 
+   "analyze_revs().", 
+   "(action_avail):", 
+   "Use the new returned RevisionSet from analyze_head_revs() to", 
+   "remove from the set of available revisions the reflected ones.", 
+   "(action_merge):", 
+   "Use the new returned RevisionSet from analyze_head_revs() to", 
+   "remove from the set of available revisions the reflected ones.", 
+   "(common_opts):", 
+   "Add a new -b and --bidirectional flag to this, which defaults to", 
+   "False.", 
+   "(command_table):", 
+   "Add documentation about the bidirectional merge support to the", 
+   "'avail' and 'merge' commands.", 
+   "Enable the -b and --bidirectional command line options for the", 
+   "'avail' and 'merge' subcommands.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(TestCase_TestRepo.testBidirectionalMerges):", 
+   "New test method to check that reflected revisions are recognized", 
+   "properly for bidirectional merges.", 
+   "(TestCase_TestRepo.testBidirectionalMergesMultiBranch):", 
+   "New test method to check that merges from a second branch are not", 
+   "considered reflected for other branches."
+  ], 
+  "revision_id": "858688"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-02-24T22:06:46.113448Z", 
+  "msg": [
+   "Trim trailing whitespace.", 
+   "* contrib/client-side/svnmerge_test.py:", 
+   "Trim trailing whitespace."
+  ], 
+  "revision_id": "858687"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-02-24T22:05:19.306881Z", 
+  "msg": [
+   "In svnmerge.py's test suite, always remove the template repository and", 
+   "working copies if they were created.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(TestCase_TestRepo.setUp):", 
+   "With atexit, always register a cleanup function to remote the", 
+   "template.  Previously, it was only removed if it was created."
+  ], 
+  "revision_id": "858686"
+ }
+]

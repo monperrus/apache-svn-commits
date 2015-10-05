@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-10-12T21:46:09.365429Z", 
+  "msg": [
+   "Minor cleanups while investigating issue #414:", 
+   "* fs-test.c (get_file_digest): Check for end of stream more carefully,", 
+   "to avoid a final, empty read.", 
+   "* reps-strings.c (write_svndiff_strings): Doc fix."
+  ], 
+  "revision_id": "840305"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-10-12T15:50:43.193159Z", 
+  "msg": [
+   "Woohoo!  A huge chunk of DAV property goodness!  We should now have", 
+   "working properties for files and directories in checkout, import,", 
+   "commit, update, and network-aware status.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__get_props, svn_ra_dav__get_props_resource,", 
+   "svn_ra_dav__get_one_prop): Removed ras argument, added sess", 
+   "argument.", 
+   "(ELEM_remove_prop): new enum value.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__get_props, svn_ra_dav__get_props_resource,", 
+   "svn_ra_dav__get_one_prop): Removed ras argument, added sess", 
+   "argument.", 
+   "All callers changed to pass their RA session's ->sess item, except", 
+   "those in fetch.c:start_element() and end_element(), which pass ->sess2.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "Calls to svn_ra_dav__get_props_resource and svn_ra_dav__get_one_prop", 
+   "modified to match new calling discipline.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(report_elements): Parse \"remove-prop\" XML.", 
+   "(svn_ra_dav__do_checkout): Fetch dir props during checkout.", 
+   "(validate_element): Check for \"remove-prop\" child.", 
+   "(start_element): Fetch file and dir props during an update replaces.", 
+   "(end_element): Fetch file and dir props during an update adds.", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(get_repos_path): New helper function.  This is kinda hack-y, and", 
+   "GregS (alone?) knows why.", 
+   "(get_value, save_value, dav_svn_db_remove, dav_svn_db_exists,", 
+   "dav_svn_db_first_name): Use new get_repos_path() helper.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(item_baton_t): Added changed_props and removed_props arrays,", 
+   "removed seen_prop_change.", 
+   "(close_helper): Send <S:fetch-props/> to instruct the client to", 
+   "fetch all the existing props, or <S:remove-prop name=\"(name)\"> to", 
+   "instruct the client to remove a no-longer-existing prop.  I doubt", 
+   "this is XML-safe.", 
+   "(upd_change_xxx_prop): Add changed props to the changed_props array,", 
+   "removed props to the removed_props array."
+  ], 
+  "revision_id": "840304"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-11T20:38:05.826824Z", 
+  "msg": [
+   "Begin work on 'svn cp' and 'svn mv'.  Just saving work at this point.", 
+   "[New .c files added; be sure to re-run autogen.sh to detect them.]", 
+   "* svn_client.h (svn_client_add, svn_client_delete):  add docstrings!", 
+   "(svn_client_copy):  new prototype.", 
+   "* svn_wc.h (svn_wc_copy):  declare.", 
+   "* libsvn_client/copy.c (svn_client_copy):  new file, new dummy func.", 
+   "* libsvn_wc/copy.c (svn_wc_copy):  implement.", 
+   "(copy_file_administratively):  new func", 
+   "(copy_dir_administratively):  new func", 
+   "* adm_ops.c (svn_wc_copy):  remove empty implementation", 
+   "* copy-cmd.c (svn_cl__copy):  new file, new func.", 
+   "* cl.h (svn_cl__copy):  declare.", 
+   "* main.c (svn_cl__cmd_table): add copy command.", 
+   "* svn_error_codes.h:  fix description typo."
+  ], 
+  "revision_id": "840303"
+ }, 
+ {
+  "author": "xela", 
+  "date": "2001-10-11T20:35:13.580207Z", 
+  "msg": [
+   "first draft of a native implementation"
+  ], 
+  "revision_id": "840302"
+ }, 
+ {
+  "author": "xela", 
+  "date": "2001-10-11T20:08:08.117838Z", 
+  "msg": [
+   "Added new methods (unadd) and (undelete)"
+  ], 
+  "revision_id": "840301"
+ }
+]

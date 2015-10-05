@@ -1,0 +1,112 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-06-21T19:46:34.493071Z", 
+  "msg": [
+   "* mod_dav_svn.dsp: Link with debug BDB DLL in Debug build, fixes a memory", 
+   "allocation bug.  Detected by Arild Fines <arild.fines@broadpark.no>."
+  ], 
+  "revision_id": "842380"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-21T16:37:51.773599Z", 
+  "msg": [
+   "Finish coding for issue #662, by making merge callbacks use the new", 
+   "notification system.", 
+   "The change looks big, but it's mainly about propagating states", 
+   "(unchanged vs modifed vs merged vs conflicted) up through as many call", 
+   "levels as necessary, to get from the point of state discovery to the", 
+   "point where the state is actually used for notification.", 
+   "Everything seems okay in manual testing, but want to write some", 
+   "automated merge tests before closing the issue.", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_diff_callbacks_t): Moved and renamed from here...", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_diff_callbacks_t): ...to here, since now depends on the", 
+   "svn_wc_notify_state_t type anyway.  Add a new state parameter to the", 
+   "file_changed and props_changed callbacks.  All callers changed.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_merge): Take notify_func and notify_baton, instead of", 
+   "after_editor and after_edit_baton.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(svn_client_merge): Same as header change above.", 
+   "(do_merge): Take notify_func and notify_baton, pass them along to", 
+   "editor creation.", 
+   "(do_single_file_merge): Take notify_func, notify_baton, use them", 
+   "directly, since no editor involved.", 
+   "(merge_file_changed, merge_props_changed): Take new state parameter,", 
+   "return post-op state through it.", 
+   "(diff_file_changed, diff_props_changed): Take new state parameter,", 
+   "but effectively ignore it -- just return svn_wc_notify_state_unknown", 
+   "if asked to return state at all.", 
+   "(diff_file_added, diff_file_deleted): Pass null for new state arg", 
+   "to diff_file_changed.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(file_diff, close_file, close_directory, directory_elements_diff):", 
+   "Just pass null for the new state arg to diff callbacks, since the", 
+   "only caller of this editor is diff, not merge, anyway, so there's no", 
+   "need to obtain state.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_diff_editor): Take notify_func and notify_baton.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(struct edit_baton): New notify_func and notify_baton fields.", 
+   "(svn_client__get_diff_editor): Same as header change, and store the", 
+   "notifier in the edit_baton.", 
+   "(delete_entry, add_directory): Invoke notifier.", 
+   "(close_file, close_directory): Get state from the callbacks, pass", 
+   "the state along to notify_func.", 
+   "* subversion/clients/cmdline/feedback.c", 
+   "(notify): Simplify control flow in the standard update case.", 
+   "* subversion/clients/cmdline/merge-cmd.c", 
+   "(svn_cl__merge): Pass a notifier instead of a trace editor.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Doc tweaks.", 
+   "(svn_wc_merge_prop_diffs): Take state return param.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__merge_prop_diffs): Change `merged' boolean return parameter", 
+   "to more general `state'.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__merge_prop_diffs): Same as header change.", 
+   "(svn_wc_merge_prop_diffs): Take state return param.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(close_directory): Adjust call to svn_wc__merge_prop_diffs.", 
+   "(svn_wc_install_file): Same.", 
+   "Also, remove the last vestiges of the old trace editor system:", 
+   "* subversion/clients/cmdline/trace-update.c: Removed.", 
+   "* subversion/clients/cmdline/switch-cmd.c", 
+   "(svn_cl__switch): Don't fetch trace editor anymore.  The code had", 
+   "already stopped using it, so this should be a no-op.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__get_trace_update_editor): Remove prototype."
+  ], 
+  "revision_id": "842379"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-21T14:39:36.017716Z", 
+  "msg": [
+   "Branching /trunk to work on Issue #745."
+  ], 
+  "revision_id": "842378"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-06-21T02:35:46.924039Z", 
+  "msg": [
+   "Example stylesheet for directory indexes.", 
+   "* notes/xslt/svnindex.xsl, notes/xslt/svnindex.css: New files."
+  ], 
+  "revision_id": "842377"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-06-20T22:43:44.060372Z", 
+  "msg": [
+   "* repos.c (dav_svn_set_headers): Set content type for collection GET", 
+   "based on the output format.", 
+   "(dav_svn_deliver): XML attributes are #IMPLIED, not #OPTIONAL."
+  ], 
+  "revision_id": "842376"
+ }
+]

@@ -1,0 +1,112 @@
+[
+ {
+  "author": "philip", 
+  "date": "2003-01-11T16:54:06.762936Z", 
+  "msg": [
+   "New program svnversion that generates a compact \"current revision\" for", 
+   "a working copy.  Use a quick hack to put the revision in a file in the", 
+   "installed include dir (that's ugly, I'm sure someone will be able to do", 
+   "something much neater).", 
+   "* subversion/svnversion/: New directory.", 
+   "* subversion/svnversion/main.c: New file.", 
+   "* Makefile.in: Add revision-install rule.  It's a hack.", 
+   "* build.conf: Add svnversion program and svnversion_tests.py tests.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py (svnversion_binary,", 
+   "run_svnversion): New.", 
+   "* subversion/tests/clients/cmdline/svnversion_tests.py: New file."
+  ], 
+  "revision_id": "844420"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-11T12:13:31.499504Z", 
+  "msg": [
+   "Refine some of the output from mailer.py", 
+   "* hook-scripts/mailer.py", 
+   "(StandardOutput.run_diff): ensure that we flush stdout/stderr before", 
+   "forking so the parent/child stay in sync.", 
+   "(_select_deletes, _select_modifies): test against None rather than", 
+   "\"not true\". the root directory is the empty string, which is", 
+   "considered false.", 
+   "(generate_list): report property (and text) changes, along with", 
+   "copies in the summary of the message. makes use of the new", 
+   ".text_changed property on the _change objects.", 
+   "(generate_diff): stop printing directory copies; that is now in the", 
+   "summary. make sure newlines are printed before each diff's header.", 
+   "don't print Copied lines for unchanged files (that info is in the", 
+   "summary). don't print diffs if the text didn't change (i.e. the", 
+   "props were changed, but no text change). use the new", 
+   ".either_binary() method on the FileDiff to avoid trying to diff", 
+   "binary file(s); print an appropriate message.", 
+   "(class _change): add a new 'text_changed' attribute. changed all", 
+   "constructor calls as appropriate.", 
+   "(ChangeCollector.apply_textdelta): if a change already exists, then", 
+   "ensure that its text_changed attribute gets set.", 
+   "* hook-scripts/tests/mailer-t1.sh: add a usage message when missing", 
+   "args. print a success message for clarity.", 
+   "* hook-scripts/tests/mailer-t1.output: update the reference output."
+  ], 
+  "revision_id": "844419"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-11T12:01:06.649052Z", 
+  "msg": [
+   "Of course, seconds later, I find that I didn't run a proper test. If", 
+   "the mime type property isn't present, then assume non-binary.", 
+   "* bindings/swig/python/svn/fs.py (FileDiff.either_binary): ensure that", 
+   "we retrieved a property value before testing it."
+  ], 
+  "revision_id": "844418"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-11T11:58:08.935187Z", 
+  "msg": [
+   "Various updates to the FileDiff class.", 
+   "* bindings/swig/python/svn/fs.py:", 
+   "(FileDiff.either_binary): new method to detect whether either file", 
+   "is a binary file, thus indicating whether the diff should be skipped", 
+   "(FileDiff.get_pipe): use a list for the diff command, along with the", 
+   "popen2 module (rather than os.popen). this avoids the shell for", 
+   "security purposes, and allows spaces in file names.", 
+   "(FileDiff.__del__): ignore errors while trying to remove the files."
+  ], 
+  "revision_id": "844417"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-11T09:32:55.529527Z", 
+  "msg": [
+   "Finish up the mail delivery selection and coding.", 
+   "* hook-scripts/mailer.py", 
+   "(determine_output): if 'mail_command' is set, then use a PipeOutput", 
+   "for delivery. tweak the SMTP delivery to pass a subject line and", 
+   "to use the new cfg.is_set() method.", 
+   "(mail_subject): new function to build a subject line based on the", 
+   "configuration, the repository, and the changes performed.", 
+   "(class MailedOutput): superclass for output classes which deliver", 
+   "email. It generates some RFC822 headers for the mail message.", 
+   "(class SMTPOutput): subclass form MailedOutput", 
+   "(SMTPOutput.__init__): take a subject and call the superclass for", 
+   "initialization. write out the mail headers.", 
+   "(SMTPOutput.run_diff): new method for running the \"diff\" command. it", 
+   "simply gathers the result and jams it into the in-memory buffer.", 
+   "(StandardOutput.run_diff): new method for running \"diff\". we simply", 
+   "fork/exec and let the diff program write to our stdout/stderr.", 
+   "(class PipeOutput): new class", 
+   "(PipeOutput.__init__): set up a pipe to a subprocess for an MDA.", 
+   "(PipeOutput.run_diff): fork a diff with its stdout/stderr connected", 
+   "to the input for the MDA subprocess.", 
+   "(PipeOutput.finish): close up the MDA pipe.", 
+   "(generate_diff): use output.run_diff() rather than manually building", 
+   "a pipe and copying its output into our output.", 
+   "(Config.__init__): preprocess the \"diff\" command into parts", 
+   "(Config.get_diff_cmd): new method to return an array for the command", 
+   "to run \"diff\".", 
+   "(Config.is_set): new method to test if an option is present and to", 
+   "return it (otherwise, return None)."
+  ], 
+  "revision_id": "844416"
+ }
+]

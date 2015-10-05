@@ -1,0 +1,87 @@
+[
+ {
+  "author": "xsteve", 
+  "date": "2003-08-21T13:17:41.289253Z", 
+  "msg": [
+   "* Added new user commands:", 
+   "- svn-status-get-specific-revision (interface to svn cat)", 
+   "- svn-ediff-with-revision (run ediff with a file working copy and a specified revision)"
+  ], 
+  "revision_id": "846885"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-08-21T05:39:42.147644Z", 
+  "msg": [
+   "Fix issue #1425:  don't let 'svn merge' bomb out when it hits", 
+   "unversioned obstructions during adds/deletes/changes of files/dirs.", 
+   "Instead, just 'skip' them and move on.  This allows tree-deltas to", 
+   "simply have \"failed hunks\", which happens all the time in patch", 
+   "application.", 
+   "* svn_wc.h", 
+   "(svn_wc_notify_state_t): new 'obstructed' state.", 
+   "(svn_wc_diff_callbacks_t): 'file_added', 'dir_added' callbacks now", 
+   "return a state variable, just like 'file_changed'.", 
+   "* libsvn_client/diff.c", 
+   "(merge_file_added, merge_dir_added): take notify_state variable.", 
+   "Set it to 'obstructed', 'changed', or whatever merge_file_changed()", 
+   "returns.", 
+   "(merge_dir_deleted, merge_file_deleted):  if an error occurs trying", 
+   "to delete an unversioned item of the same name, return 'obstructed'.", 
+   "(merge_file_changed): add safety-check for 'state' NULL-ness.  Also", 
+   "return 'missing' state when file isn't under version control or is", 
+   "missing from disk.", 
+   "(diff_file_added, diff_dir_added): take notify_state variable.", 
+   "ignore it.", 
+   "* libsvn_wc/diff.c", 
+   "(file_diff, delete_entry, close_file): pass NULL notify-state into", 
+   "file_added callback.", 
+   "* libsvn_client/repos_diff.c", 
+   "(close_file, add_directory, delete_entry): pass notify_state", 
+   "variable into all the callbacks that take them now. Send a 'skip'", 
+   "notification if we ever get back a 'missing' or 'obstructed'", 
+   "state.", 
+   "* merge_tests.py", 
+   "(merge_skips_obstructions): new regression test, tests zillions of", 
+   "'unversioned' obstruction scenarios.", 
+   "(delete_file_and_dir): fix typo in docstring.  and stop expecting", 
+   "errors from the merge command;  we get skips now, rather than bomb-outs."
+  ], 
+  "revision_id": "846884"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-08-20T21:54:47.875785Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_deliver): Fix a compile warning/bug, noticed by \"ei\" on #svn."
+  ], 
+  "revision_id": "846883"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-08-20T19:25:32.562729Z", 
+  "msg": [
+   "* subversion/bindings/swig/core.i", 
+   "Lose the 'svn_pool_clear' and 'svn_pool_destroy' %renames, and", 
+   "explicitly drop a prototype for apr_pool_clear() in.", 
+   "* subversion/bindings/swig/python/svn/core.py", 
+   "If we're gonna special-case apr_pool_destroy(), we should do the same", 
+   "for apr_pool_clear()."
+  ], 
+  "revision_id": "846882"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-08-20T16:04:05.988650Z", 
+  "msg": [
+   "Remove the artificial UUID record from cvs2svn's generated dumpfile, since", 
+   "the record is not required by the file format.  This was revision 6804,", 
+   "originally misapplied (by me) to tags/0.26.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(Dumper.__init__): Do not generate an artificial UUID record.", 
+   "(pass5): Do not pass \"--ignore-uuid\" to \"svnadmin load\"."
+  ], 
+  "revision_id": "846881"
+ }
+]

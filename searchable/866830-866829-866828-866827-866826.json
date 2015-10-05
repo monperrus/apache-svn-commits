@@ -1,0 +1,106 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-09-22T22:06:53.596669Z", 
+  "msg": [
+   "On the ancestry-walk branch:", 
+   "Expose the svn_repos_get_file_ancestry() API through the RA layer.  This", 
+   "only implements the client-side RA layer functions, not yet the server.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_get_file_ancestry): New.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra_vtable): Add entry for get_file_ancestry().", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_file_ancestry): New.", 
+   "(ra_local_vtable): Add entry for get_file_ancestry().", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(serf_vtable): Add entry for get_file_ancestry().", 
+   "* subversion/libsvn_ra_serf/blame.c", 
+   "(blame_context_t): Update handler type.", 
+   "(start_blame, end_blame): Update handler arguments.", 
+   "(process_request): New.", 
+   "(svn_ra_serf__get_file_revs, svn_ra_serf__get_file_ancestry): Implement as", 
+   "wrappers around process_request().", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__get_file_ancestry): New.", 
+   "* subversion/libsvn_ra_neon/file_revs.c", 
+   "(process_request): New.", 
+   "(svn_ra_neon__get_file_revs, svn_ra_neon__ge_file_ancestry): Implement as", 
+   "wrappers around process_request().", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(neon_vtable): Add get_file_ancestry() entry.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(svn_ra_neon__get_file_ancestry): New prototype.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(process_file_revs): New.", 
+   "(ra_svn_get_file_revs, ra_svn_get_file_ancestry): Implement as wrappers", 
+   "around process_file_revs()."
+  ], 
+  "revision_id": "866830"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-09-22T20:43:40.125389Z", 
+  "msg": [
+   "Eliminate endless loop edge-case (resolves issue #2577).", 
+   "Before, if no character could be converted, but the remaining buffer size", 
+   "was 3 or more, we'd loop endlessly. Now, we only loop until out of memory,", 
+   "depending on conversion problems to be reported as an error.", 
+   "* subversion/libsvn_subr/utf.c", 
+   "(convert_to_stringbuf): Always update the buffer size, even if", 
+   "the remaining size is as big as or bigger than the *assumed*", 
+   "character size. [Note: UTF-8 characters have a maximum size of 4, not", 
+   "3, octets.]"
+  ], 
+  "revision_id": "866829"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-09-22T16:15:24.400313Z", 
+  "msg": [
+   "Follow up to r26753: remove change in svnsync_tests.py that shouldn't have", 
+   "been committed."
+  ], 
+  "revision_id": "866828"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-09-22T16:12:18.955272Z", 
+  "msg": [
+   "* trunk: Add bugtraq:logregex and bugtraq:url properties to enable TSVN and", 
+   "other svn GUI's to parse our 'Issue #0000' syntax to add a direct link to", 
+   "the issue in the log window (and probably other features, but this is the", 
+   "only one I tested).", 
+   "Note: Accidental commit of svnsync_tests.py reverted in r26754.", 
+   "Patch by: Stefan Kung <tortoisesvn@gmail.com>"
+  ], 
+  "revision_id": "866827"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-09-22T14:48:39.741289Z", 
+  "msg": [
+   "Extend depth parameter from svn_client_propset3() to JavaHL.  Followup to", 
+   "r26745.", 
+   "(Note: This adds another JavaHL test failure to the one already present.)", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(propertySet, propertyRemove): Replace recurse parameter with depth.", 
+   "Use it in calling svn_client_propset3().", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_propertSet):", 
+   "Replace recurse parameter with depth.  Use it to call", 
+   "SVNClient::propertySet().", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_propertRemove):", 
+   "Replace recurse parameter with depth.  Use it to call", 
+   "SVNClient::propertyRemove().", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java,", 
+   "src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(propertySet, propertyRemove): Add new methods with depth parameter.", 
+   "Update wrappers to use depth."
+  ], 
+  "revision_id": "866826"
+ }
+]

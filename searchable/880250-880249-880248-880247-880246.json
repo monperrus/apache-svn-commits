@@ -1,0 +1,90 @@
+[
+ {
+  "author": "brane", 
+  "date": "2009-10-22T10:24:12.739017Z", 
+  "msg": [
+   "* CHANGES: Mark as plain text."
+  ], 
+  "revision_id": "880250"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-22T09:58:54.008880Z", 
+  "msg": [
+   "Flow the correct time for changed_date through the commit process. Also", 
+   "fix a small bug introduced in r40172 -- we need to verify REV_DATE is not", 
+   "NULL before converting it to an apr_time_t.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): switch REV_DATE param to NEW_DATE with a new", 
+   "type, and pass it on to wq_add_postcommit.", 
+   "(process_committed_internal): switch REV_DATE param to NEW_DATE and pass", 
+   "appropriately to sub-calls.", 
+   "(svn_wc_process_committed_queue, svn_wc_process_committed4): convert the", 
+   "REV_DATE parameter and pass to process_commited_internal."
+  ], 
+  "revision_id": "880249"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-22T09:57:44.783737Z", 
+  "msg": [
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_renamed_dir): Bring this XFAIL test an inch closer to XPASS.", 
+   "It does a repos->wc diff expecting the semantics of the new", 
+   "--show-copies-as-adds option, so if we pass that option, the test", 
+   "fails a bit later (in the repos->repos diff case)."
+  ], 
+  "revision_id": "880248"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-22T09:40:24.687465Z", 
+  "msg": [
+   "Further tighten the scope of a log_accum variable.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(remove_revert_files): remove the LOGTAGS parameter, and declare/use a", 
+   "LOG_ACCUM local variable. switch LOGTAGS over to LOG_ACCUM, and write", 
+   "it out before exiting the function.", 
+   "(process_committed_leaf): don't worry about LOG_ACCUM, and just let", 
+   "remove_revert_files() queue the right operations"
+  ], 
+  "revision_id": "880247"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-22T09:31:23.472763Z", 
+  "msg": [
+   "Switch the core postcommit work to a workqueue-based process, and pass all", 
+   "the parameters that it needs to function properly. As a result, the call", 
+   "to svn_wc__db_global_commit() now has the changed-* values which means the", 
+   "(re)install into the working copy has the proper values for keyword", 
+   "translation, so the trans_tests 1 can be un-XFail'd.", 
+   "This revision lifts install_committed_file() and log_do_committed() from", 
+   "log.c over to workqueue.c. Zero changes were made during the move.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_add_postcommit): new declaration", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(OP_POSTCOMMIT): new operation code", 
+   "(install_committed_file, log_do_committed): moved, unchanged, from log.c", 
+   "(run_postcommit): new handler to unpack the arguments from the work item", 
+   "skel and call log_do_committed.", 
+   "(svn_wc__wq_add_postcommit): new function to queue an OP_POSTCOMMIT", 
+   "(dispatch_table): add a new handler for OP_POSTCOMMIT", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): tighten the scope of log_accum to just the", 
+   "part that handles revert files. remove all the entry modification work", 
+   "for changed_* and the checksum, as the commit handling will deal with", 
+   "that properly (now that we pass all the right values). call the new wq", 
+   "function to queue up a postcommit work item.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_committed): removed. no longer used.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(SVN_WC__LOG_COMMITTED, install_committed_file, log_do_committed,", 
+   "svn_wc__loggy_committed): removed. no longer used.", 
+   "(start_handler): remove processing for SVN_WC__LOG_COMMITTED", 
+   "* subversion/tests/cmdline/trans_tests.py:", 
+   "(test_list): un-XFail the 'keywords_from_birth' test"
+  ], 
+  "revision_id": "880246"
+ }
+]

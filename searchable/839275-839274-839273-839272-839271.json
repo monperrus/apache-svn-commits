@@ -1,0 +1,86 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-05-04T11:26:42.000000Z", 
+  "msg": [
+   "Propagate errors from within the parsing callbacks.", 
+   "(struct report_baton_t): add \"err\" member", 
+   "(start_element, end_element): stash the error away for later use", 
+   "(reporter_finish_report): return an error, if present in the ctx"
+  ], 
+  "revision_id": "839275"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-05-04T10:47:29.000000Z", 
+  "msg": [
+   "For requests which need to parse XML responses, the code was following a", 
+   "particular template. Shift all of that code to a utility function.", 
+   "Then, add recognition of XML parsing errors in the response.", 
+   "* ra_dav.h (svn_ra_dav__parsed_request): new declaration", 
+   "* fetch.c (reporter_finish_report): use new function", 
+   "* options.c (svn_ra_dav__get_activity_url): use new function", 
+   "* merge.c (svn_ra_dav__merge_activity): use new function", 
+   "* util.c (svn_ra_dav__parsed_request): implement from unification of the", 
+   "pattern from fetch.c, options.c and merge.c. and XML parse error", 
+   "handling."
+  ], 
+  "revision_id": "839274"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-05-04T10:22:33.000000Z", 
+  "msg": [
+   "Fix typos."
+  ], 
+  "revision_id": "839273"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-05-04T09:22:04.000000Z", 
+  "msg": [
+   "Fix up some commit/update problems.", 
+   "* commit.c (struct commit_ctx_t): add a \"deleted\" member to track items that", 
+   "have been deleted.", 
+   "(commit_replace_root): use \"\" rather than \".\" to fetch a directory", 
+   "property.", 
+   "(commit_delete_entry): the request actually returns a 204 on success.", 
+   "Also, record the path in the deleted array.", 
+   "(commit_close_edit): pass the deleted array to merge_activity", 
+   "(svn_ra_dav__get_commit_editor): make the new deleted array", 
+   "* fetch.c (TOP_DIR): index the elts, not the struct itself", 
+   "(report_elements[]): use the proper namespace for the elements", 
+   "(push_dir): make sure to put a NULL into the vsn_url field", 
+   "(start_element): don't fetch the file when add-file is first seen; fetch", 
+   "at the end of the element (after we have its URL).", 
+   "(end_element): fetch the file when add-file is closed.", 
+   "(reporter_finish_report): don't write the null-term on the tail", 
+   "(svn_ra_dav__do_update): create rb->dirs with the right size element.", 
+   "don't write the null-term on the head. only write out the", 
+   "target-revision element if we are updating to a specific revision.", 
+   "* merge.c (svn_ra_dav__merge_activity): take new deleted_entries param.", 
+   "call close_commit for all the items that were deleted since the server", 
+   "will not mention them in the MERGE response.", 
+   "* ra_dav.h (svn_ra_dav__merge_activity): take new deleted_entries param."
+  ], 
+  "revision_id": "839272"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-05-04T09:06:49.000000Z", 
+  "msg": [
+   "Tweaks for proper commit/update behavior.", 
+   "* repos.c (dav_svn_do_walk): handle WORKING resources rather than erroring.", 
+   "* update.c (upd_set_target_revision): add namespaces to opening element.", 
+   "(...) use new DIR_OR_FILE() macro throughout. use DEBUG_CR throughout.", 
+   "(dav_svn__update_report): use the youngest rev if the target-revision", 
+   "element was not provided (or is bogus).", 
+   "use the repository path of the resource for the base of the update", 
+   "reporting process.", 
+   "properly fetch the CDATA from the entry, rather than a hack.", 
+   "add an extra error detection case: what kind of resource allows the", 
+   "report."
+  ], 
+  "revision_id": "839271"
+ }
+]

@@ -1,0 +1,95 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2009-01-01T22:16:58.089208Z", 
+  "msg": [
+   "Fix a class of C and python test failures with packing enabled.", 
+   "One failure identified in this case was due to ffd->min_unpacked_rev getting", 
+   "out-of-sync with db/min-unpacked-rev due to commits while an fs object was", 
+   "open.  The fix is by re-reading db/min-unpacked-rev when opening the", 
+   "(unpacked) rev file fails.", 
+   "This commit applies the new logic only in open_pack_or_rev_file(); later it", 
+   "should be extended to other callers of svn_fs_fs__path_rev_absolute() as", 
+   "well.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(update_min_unpacked_rev):  New.", 
+   "(svn_fs_fs__open):  Use update_min_unpacked_rev().", 
+   "(open_pack_or_rev_file):", 
+   "If opening the rev file fails, check if it had just been packed, and", 
+   "retry in that case.", 
+   "(pack_shard):", 
+   "Update comment."
+  ], 
+  "revision_id": "875085"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-01-01T20:04:08.612551Z", 
+  "msg": [
+   "On the 'python-3-compatibility' branch:", 
+   "Python 3 compatibility:", 
+   "Don't assing values to True/False keywords.", 
+   "* build/generator/gen_make.py:", 
+   "* build/generator/gen_msvc_dsp.py:", 
+   "* build/generator/gen_vcnet_vcproj.py:", 
+   "* subversion/bindings/swig/python/svn/repos.py:", 
+   "* subversion/tests/cmdline/svntest/__init__.py:", 
+   "* tools/client-side/change-svn-wc-format.py:", 
+   "* tools/dev/contribulyze.py:", 
+   "* tools/hook-scripts/log-police.py:", 
+   "* tools/hook-scripts/mailer/mailer.py: Don't assing values to True/False keywords."
+  ], 
+  "revision_id": "875084"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-01-01T17:58:21.683812Z", 
+  "msg": [
+   "Add sharding and packing support to 'make check'.", 
+   "* Makefile.in", 
+   "(check):  Support $FSFS_SHARDING and $FSFS_PACKING.", 
+   "* win-tests.py", 
+   "Add --fsfs-sharding and --fsfs-packing, and pass fsfs_sharding and", 
+   "fsfs_packing to TestHarness.", 
+   "* build/run_tests.py", 
+   "(main):", 
+   "Add --fsfs-sharding and --fsfs-packing, and pass fsfs_sharding and", 
+   "fsfs_packing to TestHarness.", 
+   "(TestHarness.__init__):", 
+   "Add fsfs_sharding and fsfs_packing parameters and pass them to the tests.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(fsfs_sharding, fsfs_packing):  New global variables.", 
+   "(get_fsfs_format_file_path):  New helper.", 
+   "(create_repos):", 
+   "Use fsfs_sharding to create the format file and fsfs_packing to install", 
+   "a post-commit hook that runs 'svnadmin pack'.", 
+   "(usage):  Add --fsfs-sharding and --fsfs-packing.", 
+   "(run_tests):", 
+   "Parse --fsfs-sharding and --fsfs-packing."
+  ], 
+  "revision_id": "875083"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-01T17:53:43.550167Z", 
+  "msg": [
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_and_increment_txn_key_body): Simplify error handling just a bit."
+  ], 
+  "revision_id": "875082"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-01T17:42:39.710115Z", 
+  "msg": [
+   "Reduce function visibility.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(move_into_place): Renamed from svn_fs_fs__move_into_place(), and moved", 
+   "within the file.", 
+   "(svn_fs_fs__set_revision_proplist, get_and_increment_txn_key_body,", 
+   "write_current, commit_body, svn_fs_fs__set_uuid, pack_shard):", 
+   "Update callers."
+  ], 
+  "revision_id": "875081"
+ }
+]

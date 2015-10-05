@@ -1,0 +1,105 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2007-01-30T22:37:46.576549Z", 
+  "msg": [
+   "Add a new runtime configuration operation (\"mime-types-file\") which,", 
+   "when present, specifies the location of a MIME types file (such as", 
+   "/etc/mime.types) which is used by the 'add' and 'import' operations", 
+   "for the auto-detection of MIME types of added/imported files.", 
+   "I'm not especially thrilled with the change to the svn_client_ctx_t.", 
+   "I don't want to parse the mime.types file multiple times in a single", 
+   "invocation.  And, ideally, I wouldn't parse it for operations that I", 
+   "know won't use it.  So it seemed natural to hang the types map on the", 
+   "svn_client_ctx_t, but leave it NULL for everything except 'add' and", 
+   "'import'.  However, this leaves the public API without any", 
+   "cross-reference between this structure and the svn_client_add3() and", 
+   "svn_client_import2() functions that use it.  But then again, you can't", 
+   "tell from the public API that those things make use of the runtime", 
+   "config's autoprop stuff, either.  Comments and suggestions welcome.", 
+   "* subversion/include/svn_io.h,", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_parse_mimetypes_file): New.", 
+   "(svn_io_detect_mimetype2): Was svn_io_detect_mimetype.  Now accepts", 
+   "an optional mimetype_map parameter from which mime types are now", 
+   "chosen by default.", 
+   "(svn_io_detect_mimetype): Now just a wrapper around svn_io_detect_mimetype2.", 
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_OPTION_MIMETYPES_FILE): New.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Note the new mime-types-file option in the", 
+   "default 'config' configuration file contents.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_ctx_t): Add 'mimetypes_map' member.", 
+   "* subversion/libsvn_client/add.c", 
+   "(svn_client__get_auto_props): Use svn_io_detect_mimetype2() instead of", 
+   "svn_io_detect_mimetype().", 
+   "* subversion/svn/main.c", 
+   "(main): For 'add' and 'import', parse any configured MIME types file."
+  ], 
+  "revision_id": "863380"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-01-30T22:31:59.110719Z", 
+  "msg": [
+   "Fix svnmerge.py to work for those with non-English locales set in", 
+   "their environment.", 
+   "* contrib/client-side/svnmerge.py", 
+   "Set LC_ALL -- rather than LC_MESSAGES -- to C, as the Subversion", 
+   "command-line doesn't acknowledge LC_MESSAGES in svn_cmdline_init().", 
+   "Found by: Phillipe Bruhat <book@cpan.org>", 
+   "Thomas Heller <theller@ctypes.org>"
+  ], 
+  "revision_id": "863379"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-01-30T22:18:04.403813Z", 
+  "msg": [
+   "Minor code cleanup.", 
+   "* subversion/svn/proplist-cmd.c:", 
+   "(svn_cl__proplist): Remove more redundant checks of opt_state->xml."
+  ], 
+  "revision_id": "863378"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-01-30T22:16:14.566563Z", 
+  "msg": [
+   "Introduce a new svn_path_splitext() function, our version of Python's", 
+   "os.path.splitext().  I'll be using this for MIME-type autodetection stuff.", 
+   "* subversion/include/svn_path.h,", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_splitext): New.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_splitext): New test of the svn_path_splitext() function.", 
+   "(test_funcs): Add a reference to the new test_splitext() function."
+  ], 
+  "revision_id": "863377"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-01-30T22:06:34.328023Z", 
+  "msg": [
+   "Improve operational logging.", 
+   "Log revision numbers for 'checkout', 'export', 'status -u', 'update',", 
+   "and 'list'.  Change output format for 'diff'/'merge'; if \"from\" and", 
+   "\"to\" are the same, log as '/canonical/path' rSTART:END.  Otherwise,", 
+   "log using a peg-rev style syntax, '/canonical/src@START'", 
+   "'/canonical/dest@END'.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(do_walk): Add revision number for \"list-dir\" log output.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): Add revision number(s) for \"switch\",", 
+   "\"diff-or-merge\", \"checkout-or-export\", \"update\", and", 
+   "\"remote-status\".  Add new collapsed output format for", 
+   "\"diff-or-merge\" with identical \"from\" and \"to\" paths.", 
+   "Patch by: kameshj", 
+   "me", 
+   "Suggested by: Honey George <george@collab.net>", 
+   "me"
+  ], 
+  "revision_id": "863376"
+ }
+]

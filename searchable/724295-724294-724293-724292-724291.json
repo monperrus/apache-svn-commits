@@ -1,0 +1,90 @@
+[
+ {
+  "author": "ningjiang", 
+  "date": "2008-12-08T09:14:16.507620Z", 
+  "msg": [
+   "Added svn:ignore propert to latest added modules directory"
+  ], 
+  "revision_id": "724295"
+ }, 
+ {
+  "author": "kristwaa", 
+  "date": "2008-12-08T09:08:27.538554Z", 
+  "msg": [
+   "DERBY-3934 (partial): Improve performance of reading modified Clobs.", 
+   "The following files are touched (all in derby.impl.jdbc):", 
+   "*** EmbedClob.", 
+   "Updated call to ClobUpdatableReader. The change of the position argument is", 
+   "intentional.", 
+   "*** TemporaryClob", 
+   "Replaced the ClobUpdatableReader returned by getReader with a UTF8Reader.", 
+   "Internal handling of TemporaryClob should deal with changing contents", 
+   "specifically, or create a ClobUpdatableReader where required.", 
+   "Note also the use of the new CharacterStreamDescriptor class. This piece of", 
+   "code will probably be changed later on, when there is more information about", 
+   "the stream available. For instance, caching byte/char positions allows to skip", 
+   "directly to the byte position through the underlying file API. This way, we", 
+   "don't have to decode all the raw bytes to skip the correct number of chars.", 
+   "*** ClobUpdatableReader", 
+   "More or less rewritten. It now uses the new methods exposed by InternalClob to", 
+   "detect changes in the underlying Clob content. Note that this class doesn't", 
+   "handle repositioning, only detection of changes and forwarding of read/skip", 
+   "calls.", 
+   "Note the lazy initialization of the underlying reader.", 
+   "WARNING: There is one thing missing, which is proper synchronization. Access to", 
+   "store will be synchronized in other locations, but this class is not thread", 
+   "safe. I haven't decided yet whether to synchronize on the reader object or the", 
+   "root connection. I think the latter is the best choice. Does anyone know", 
+   "anything about the cost of taking locks on the same object multiple times?", 
+   "*** StoreStreamClob", 
+   "Replaced old UTF8Reader constructor with the new one. Again, this code needs", 
+   "to be updated when more information about the stream is available. This is to", 
+   "allow UTF8Reader to perform better.", 
+   "*** UTF8Reader", 
+   "Added a new constructor, using the new CharacterStreamDescriptor class.", 
+   "Removed one constructor.", 
+   "Retrofitted the second old constructor to use CharacterStreamDescriptor. This", 
+   "will be removed when the calling code has been updated.", 
+   "The old method calculating the buffer size will also be removed.", 
+   "Stopped referencing PositionedStoreStream, using PositionedStream interface", 
+   "instead. This allows the positioning logic to be used for both store streams", 
+   "and LOBInputStream streams.", 
+   "The reader has been prepared to be able to deal with multiple data offsets,", 
+   "i.e. handling several store stream formats. For instance, the current", 
+   "implementations has an offset of two bytes, where as the planned new one will", 
+   "have an offset of at least five bytes. LOBInputStream has an offset of zero", 
+   "bytes (no header information).", 
+   "From now on, position aware streams are not closed as early as before, because", 
+   "we might have go backwards in the stream. Streams that can only move forwards", 
+   "are closed as soon as possible (as before).", 
+   "Note that this patch doesn't fix the most serious performance issue. This will", 
+   "be done in a follow-up patch by implementing getInternalReader in TemporaryClob.", 
+   "Patch file: derby-3934-3a-clobupdreader_utf8reader.diff"
+  ], 
+  "revision_id": "724294"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2008-12-08T09:04:21.948410Z", 
+  "msg": [
+   "Applied the svn properties"
+  ], 
+  "revision_id": "724293"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2008-12-08T08:51:13.938842Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "724292"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2008-12-08T08:50:38.940298Z", 
+  "msg": [
+   "Applied svn properties and fix the cs erros in camel components modules"
+  ], 
+  "revision_id": "724291"
+ }
+]

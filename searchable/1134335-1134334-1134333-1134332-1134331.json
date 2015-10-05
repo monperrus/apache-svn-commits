@@ -1,0 +1,68 @@
+[
+ {
+  "author": "cschneider", 
+  "date": "2011-06-10T14:39:54.203524Z", 
+  "msg": [
+   "Fork compile to save perm gen space"
+  ], 
+  "revision_id": "1134335"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2011-06-10T14:37:47.420462Z", 
+  "msg": [
+   "Fix build after recent changes."
+  ], 
+  "revision_id": "1134334"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2011-06-10T14:29:21.671043Z", 
+  "msg": [
+   "CAMEL-4082: Added toString in SimpleBuilder"
+  ], 
+  "revision_id": "1134333"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2011-06-10T14:28:54.008694Z", 
+  "msg": [
+   "DERBY-3993 With IBM 1.6 T_RawStoreFactory fails with There should be 0 observers, but we still have 1 observers on Win 2K", 
+   "backporting change #1082197 from trunk to 10.7 branch.", 
+   "The problem will only show up in SANE builds as that is the only time we do", 
+   "the sanity check.", 
+   "Xact.doComplete() is called near the end of the transaction to take care of any", 
+   "cleanup prior to committing or aborting the transaction.", 
+   "It calls notifyObservers(commitOrAbort) and it expects on return that each", 
+   "observer has been notified, and all the observers are coded", 
+   "to delete themselves from the observer list as part of this process. It then", 
+   "asserts that the list should be empty on return.", 
+   "The problem is that one of the DropOnCommit observer as part of it's", 
+   "processing manages to add another observer to the list. I am guessing that the", 
+   "problem becomes intermittent because either different", 
+   "JVM's/memory layouts/hash algorithms", 
+   "result in the order processing of the observer list to be different,", 
+   "or different implementations handle the adding of an observer to the list", 
+   "while scanning the list differently. There is nothing in the Observable", 
+   "javadoc that guarantees and order or says anything about expected behavior", 
+   "of notifyObservers() execution if another observer is added during the", 
+   "execution so I don't think it is a jvm bug.", 
+   "In my case in order to process a drop of a container marked drop on commit the", 
+   "raw store interface requires it to first be opened. The code adds", 
+   "a TruncateOnCommit as part of this open as that layer of the code does not", 
+   "know why it is being opened. I believe it is this \"new\" TruncateOnCommit", 
+   "observer which is left on the observer queue. Adding an extra notify to the", 
+   "drop on commit processing seems to fix the unit test, I'll see if that causes", 
+   "any problems in the full set of tests."
+  ], 
+  "revision_id": "1134332"
+ }, 
+ {
+  "author": "thomasm", 
+  "date": "2011-06-10T14:23:51.914330Z", 
+  "msg": [
+   "Simplify building JSOP, and correctly encode keys and values."
+  ], 
+  "revision_id": "1134331"
+ }
+]

@@ -1,0 +1,77 @@
+[
+ {
+  "author": "mriou", 
+  "date": "2007-04-04T18:32:18.939249Z", 
+  "msg": [
+   "Placing test at the right place and fixing it."
+  ], 
+  "revision_id": "525570"
+ }, 
+ {
+  "author": "mriou", 
+  "date": "2007-04-04T18:22:14.047086Z", 
+  "msg": [
+   "empty test dir = no tests"
+  ], 
+  "revision_id": "525569"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-04-04T18:17:57.711065Z", 
+  "msg": [
+   "This patch is for DERBY-2524 (DataTypeDescriptor(DTD) needs to have collation type and collation derivation. These new fields will apply", 
+   "only for character string types. Other types should ignore them.) and it does following 2 things", 
+   "1)Add collation type and collation derivation attributes and apis to TypeDescriptor interface and it's implementations.", 
+   "2)Save the collation type in the scale field of character types in writeExternal method of TypeDescriptorImpl. And read the scale field into", 
+   "the collation type for character types in readExternal method of TypeDescriptorImpl.", 
+   "svn stat -q", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\DataTypeDescriptor.java", 
+   "M      java\\engine\\org\\apache\\derby\\catalog\\TypeDescriptor.java", 
+   "M      java\\engine\\org\\apache\\derby\\catalog\\types\\TypeDescriptorImpl.java", 
+   "Details of the patch", 
+   "1)Added getters and setters for collationType and collationDerivation in TypeDescriptor. In addition, TypeDescriptor has new constants", 
+   "defined in them which will be used by the rest of the collation related code in Derby. One of the constants is COLLATION_DERIVATION_INCORRECT", 
+   "I am initializing the collation derivation for all the data types to COLLATION_DERIVATION_INCORRECT in TypeDescriptorImpl. This should get", 
+   "changed to \"implicit\" or \"none\" for character string types before the runtime code kicks in. For all the other types, it will remain set to", 
+   "COLLATION_DERIVATION_INCORRECT because collation does not apply to those data types.", 
+   "2)DTD implements the new apis in the TypeDescriptor interface.", 
+   "3)2 set of changes went into", 
+   "a)TypeDescriptorImpl has 2 new fields, namely, collationType and collationDerivation. collationDerivation is initialized to", 
+   "TypeDescriptor.COLLATION_DERIVATION_INCORRECT. For character string types, these field should get set correctly. In addition, there are apis", 
+   "to set and get values out of these 2 fields.", 
+   "b)The next change for this class is in writeExternal and readExternal methods. I would like community's feedback on my assumption for this", 
+   "particular change. The collation type of a character string type will get saved in the existing scale field since scale does not apply to", 
+   "character string types. My question is about collation derivation. The collation derivation infromation does not get saved like collation", 
+   "type. But may be that is ok because I am assuming that writeExternal and readExternal get called only for the persistent columns (ie columns", 
+   "belonging to system and user tables). Collation derivation of such character string columns (coming from persistent tables) is always", 
+   "implicit. And, hence in readExternal, for character string types, I can initialize collation derivation to be implicit. My assumption is", 
+   "that readExternal and writeExternal methods will never get called for character string types with collation of none or explicit. Today we", 
+   "don't have explicit as one of the possible values for collation derivation, but a character string type will have the collation derivation", 
+   "of none if it was the result of an aggregate method involving operands with different collation derivations. This comes from item 11) from", 
+   "Section Collation Determination section at http://wiki.apache.org/db-derby/BuiltInLanguageBasedOrderingDERBY-1478", 
+   "Questions", 
+   "1)I have included all the constant definitions related to collation in TypeDescriptor. If anyone has suggestion on a better place to", 
+   "define them, let me know. Wonder if there is already a class to define miscellaneous constant definitions like the ones I have added.", 
+   "TypeDescriptor does look like a good place for these constants defined by me because these constants all belong to the data type world.", 
+   "2)Is it right to assume that readExternal and writeExternal methods in TypeDescriptorImpl will get called only for persistent columns?"
+  ], 
+  "revision_id": "525568"
+ }, 
+ {
+  "author": "assaf", 
+  "date": "2007-04-04T17:57:23.789076Z", 
+  "msg": [
+   "Reduction in redundant LOCs"
+  ], 
+  "revision_id": "525567"
+ }, 
+ {
+  "author": "mkienenb", 
+  "date": "2007-04-04T17:54:18.655269Z", 
+  "msg": [
+   "Partial fix for MYFACES-1581 - UISelectOne encounters exception in call to equals().", 
+   "Harmless code change which hides the incorrect equals() implementation for some cases, but the real problem is in user code."
+  ], 
+  "revision_id": "525566"
+ }
+]

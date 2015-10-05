@@ -1,0 +1,98 @@
+[
+ {
+  "author": "srowen", 
+  "date": "2009-08-21T13:29:47.042803Z", 
+  "msg": [
+   "Fix a small-but-vital bug in the new JDBC data model implementation. Selecting user IDs in place of item IDs in one case. Oops."
+  ], 
+  "revision_id": "806545"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2009-08-21T13:28:34.247685Z", 
+  "msg": [
+   "Fix for the following stack trace:", 
+   "java.lang.IllegalStateException: The prefix xs is not bound.", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.getRefQName(SchemaBuilder.java:671)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.getRefQName(SchemaBuilder.java:644)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleElement(SchemaBuilder.java:1487)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleSequence(SchemaBuilder.java:1045)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleComplexType(SchemaBuilder.java:739)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleElement(SchemaBuilder.java:1514)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleXmlSchemaElement(SchemaBuilder.java:291)", 
+   "at org.apache.ws.commons.schema.XmlSchemaCollection.read(XmlSchemaCollection.java:412)", 
+   "at org.apache.axis2.description.WSDLToAxisServiceBuilder.getXMLSchema(WSDLToAxisServiceBuilder.java:144)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.copyExtensibleElements(WSDL11ToAxisServiceBuilder.java:2317)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:413)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:430)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:402)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.populateService(WSDL11ToAxisServiceBuilder.java:346)", 
+   "at org.apache.axis2.jaxws.description.impl.EndpointDescriptionImpl.buildAxisServiceFromWSDL(EndpointDescription", 
+   "In Axis2's WSDL11ToAxisBuilder.java, there is code that converts from multiple message parts like so", 
+   "<wsdl:message name=\"testMultipleSwAResponseMsg\">", 
+   "<wsdl:part name=\"testOutputSwA\" type=\"bons1:TestBO\"/>", 
+   "<wsdl:part name=\"swaOutput1\" type=\"xsd:hexBinary\"/>", 
+   "<wsdl:part name=\"swaOutput2\" type=\"xsd:hexBinary\"/>", 
+   "<wsdl:part name=\"swaOutput3\" type=\"xsd:base64Binary\"/>", 
+   "</wsdl:message>", 
+   "into XML Schema based ComplexType(s). Basically a new ComplexType is created with a XMLSchema sequence inside", 
+   "which you would see all the 4 parts. During this processing there is a code path where we lose fact that xsd", 
+   "prefix is mapped to xml schema namespace and it ends up using a xs as the prefix instead of xsd and the", 
+   "subsequent issue with xs prefix not found. This happens bec ause the complex type is created in the top level", 
+   "wsdl which has no declaration for xmlns:xsd or xmlns:xs"
+  ], 
+  "revision_id": "806544"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2009-08-21T13:27:22.099267Z", 
+  "msg": [
+   "Fix for the following stack trace:", 
+   "java.lang.IllegalStateException: The prefix xs is not bound.", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.getRefQName(SchemaBuilder.java:671)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.getRefQName(SchemaBuilder.java:644)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleElement(SchemaBuilder.java:1487)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleSequence(SchemaBuilder.java:1045)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleComplexType(SchemaBuilder.java:739)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleElement(SchemaBuilder.java:1514)", 
+   "at org.apache.ws.commons.schema.SchemaBuilder.handleXmlSchemaElement(SchemaBuilder.java:291)", 
+   "at org.apache.ws.commons.schema.XmlSchemaCollection.read(XmlSchemaCollection.java:412)", 
+   "at org.apache.axis2.description.WSDLToAxisServiceBuilder.getXMLSchema(WSDLToAxisServiceBuilder.java:144)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.copyExtensibleElements(WSDL11ToAxisServiceBuilder.java:2317)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:413)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:430)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.processTypes(WSDL11ToAxisServiceBuilder.java:402)", 
+   "at org.apache.axis2.description.WSDL11ToAxisServiceBuilder.populateService(WSDL11ToAxisServiceBuilder.java:346)", 
+   "at org.apache.axis2.jaxws.description.impl.EndpointDescriptionImpl.buildAxisServiceFromWSDL(EndpointDescription", 
+   "In Axis2's WSDL11ToAxisBuilder.java, there is code that converts from multiple message parts like so", 
+   "<wsdl:message name=\"testMultipleSwAResponseMsg\">", 
+   "<wsdl:part name=\"testOutputSwA\" type=\"bons1:TestBO\"/>", 
+   "<wsdl:part name=\"swaOutput1\" type=\"xsd:hexBinary\"/>", 
+   "<wsdl:part name=\"swaOutput2\" type=\"xsd:hexBinary\"/>", 
+   "<wsdl:part name=\"swaOutput3\" type=\"xsd:base64Binary\"/>", 
+   "</wsdl:message>", 
+   "into XML Schema based ComplexType(s). Basically a new ComplexType is created with a XMLSchema sequence inside", 
+   "which you would see all the 4 parts. During this processing there is a code path where we lose fact that xsd", 
+   "prefix is mapped to xml schema namespace and it ends up using a xs as the prefix instead of xsd and the", 
+   "subsequent issue with xs prefix not found. This happens bec ause the complex type is created in the top level", 
+   "wsdl which has no declaration for xmlns:xsd or xmlns:xs"
+  ], 
+  "revision_id": "806543"
+ }, 
+ {
+  "author": "bentmann", 
+  "date": "2009-08-21T13:20:50.403334Z", 
+  "msg": [
+   "o Added generics"
+  ], 
+  "revision_id": "806542"
+ }, 
+ {
+  "author": "yonik", 
+  "date": "2009-08-21T13:16:28.017614Z", 
+  "msg": [
+   "change example test to match example schema"
+  ], 
+  "revision_id": "806541"
+ }
+]

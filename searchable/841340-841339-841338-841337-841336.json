@@ -1,0 +1,95 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-02-13T22:09:05.640511Z", 
+  "msg": [
+   "When switching a single file, send an 'update' notification back to", 
+   "the application, which currently prints a 'U'.", 
+   "* svn_wc.h (svn_wc_notify_action_t): new enum value - svn_wc_notify_update", 
+   "* feedback.c (notify_updated): new callback.", 
+   "(svn_cl__notify_func):  parse 'updated' kind.", 
+   "* switch.c (svn_client_switch):  send update-notification after", 
+   "switching a file."
+  ], 
+  "revision_id": "841340"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-13T21:22:01.965263Z", 
+  "msg": [
+   "Finish 'svn switch' by making it work over ra_dav.", 
+   "* switch.c (svn_client_switch): pass a NULL base_dir argument to", 
+   "open_ra_session;  this temporarily forces the server to send", 
+   "fulltexts instead of diffs [see issue #630].", 
+   "* fetch.c (make_reporter): take new 'dst_path' argument.  If non-NULL,", 
+   "add it to the custom report.", 
+   "(svn_ra_dav__do_update, svn_ra_dav__do_status): pass NULL dst_path", 
+   "to make_reporter.", 
+   "(svn_ra_dav__do_switch): new func, pass real URL as dst_path.", 
+   "* session.c (dav_plugin):  replace NULL field with svn_ra_dav__do_switch.", 
+   "* ra_dav.h (svn_ra_dav__do_switch):  declare.", 
+   "* mod_dav_svn/util.c (dav_svn_simple_parse_uri):  tweak this function to handle", 
+   "ordinary public URIs, not just \"special\" URIs.", 
+   "* mod_dav_svn/update.c (dav_svn__update_report): parse new (optional)", 
+   "'dst-path' tag coming from the report.  New logic to decide what", 
+   "args to pass svn_repos_begin_report (which is really dir_delta in", 
+   "disguise.)  If the 2nd URL isn't passed in, then use two identical", 
+   "paths.  The update_cxt object is initialized with two paths now,", 
+   "representing the 1st and 2nd arguments to dir_delta; they may be", 
+   "the same, or they may be different.", 
+   "(update_ctx_t):  add new 'dst_path' field to structure.", 
+   "(item_baton_t):   add 2nd path field, to telescope the dst_path.", 
+   "(upd_open_root):  initialize 2nd path field to uc->dst_path.", 
+   "(make_child_baton):  telescope the 2nd path exactly like the first path.", 
+   "(send_vsn_url):  always use the 2nd path to generate a vsn-url.", 
+   "(close_helper):  always use the 2nd path to fetch a CR (& related props).", 
+   "* svn_ra.h (do_switch):  add comment about only working on directories."
+  ], 
+  "revision_id": "841339"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-02-13T19:45:14.985663Z", 
+  "msg": [
+   "When we run 'svn move foo bar', assuming that we have successfully created", 
+   "bar, we should be deleting foo.  This fixes issue 580.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_wc_copy): if is_move is true, delete the source file after the", 
+   "destination file is successfully created."
+  ], 
+  "revision_id": "841338"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-02-13T17:50:16.944620Z", 
+  "msg": [
+   "Some more filesystem changes.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(get_node_kind): Removed obsolete function.", 
+   "(struct is_different_args): New structure.", 
+   "(txn_body_is_different): New function.", 
+   "(svn_fs_is_different): Trail-ify this function (and uh...finish", 
+   "implementing it, too).", 
+   "(svn_fs_revisions_changed): Removed 'fs' argument (get it from", 
+   "'root' instead).", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_revisions_changed): Removed 'fs' argument (we can get it", 
+   "from the 'root').  Thanks, Yoshiki, for noticing the redundancy!", 
+   "* subversion/svnadmin/main.c", 
+   "(main): Update call to svn_fs_revisions_changed (and rename a local", 
+   "variable to get more compact code).", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(revisions_changed): Update call to svn_fs_revisions_changed."
+  ], 
+  "revision_id": "841337"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2002-02-13T07:31:42.660409Z", 
+  "msg": [
+   "* fs_node.c (dir_delta): Add new arg use_copyfrom_args.", 
+   "(svn_ruby_init_fs_node): Adjust argument."
+  ], 
+  "revision_id": "841336"
+ }
+]

@@ -1,0 +1,77 @@
+[
+ {
+  "author": "dws", 
+  "date": "2004-01-15T06:14:33.737571Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x/find-osrel,", 
+   "packages/rpm/redhat-8+/find-osrel : I can now generate Fedora Core 1 RPMs", 
+   "so add code to figure out that it is running on Fedora Core 1 and", 
+   "output \"fc1\" which is used to generate the RPM package file name."
+  ], 
+  "revision_id": "848370"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2004-01-14T23:15:56.866023Z", 
+  "msg": [
+   "Unbreak SVN::Ra for the moment.", 
+   "* core.i: Re-enable io_open_unique_file which is depended on by", 
+   "SVN::Ra. Proper typemap for apr_file_t ** is required for", 
+   "eliminate this."
+  ], 
+  "revision_id": "848369"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2004-01-14T20:36:18.707661Z", 
+  "msg": [
+   "* Added new command: svn-status-view-file-other-window", 
+   "- bound to the key 'v'", 
+   "* svn-log-edit-svn-log does work again", 
+   "- it takes now a prefix argument like svn-status-show-svn-log"
+  ], 
+  "revision_id": "848368"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-01-14T16:54:12.613158Z", 
+  "msg": [
+   "Suggest r8292 for 1.0 inclusion."
+  ], 
+  "revision_id": "848367"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-01-14T16:36:42.137660Z", 
+  "msg": [
+   "Finish issue #1695 - svn_fs__bdb_changes_fetch() fouls up change", 
+   "ordering.  Now, as we're summarizing the changes, deletions and", 
+   "replacements of paths will cause us to forget about any previous", 
+   "changes that occured in that transaction on children of the", 
+   "deleted/replaced path (unless, of course, those children are", 
+   "re-created *after* the deletion/replacement of their parent).", 
+   "This bug only manifests itself in filesystems written to by clients", 
+   "that don't do their commits in depth-first order.  To my knowledge,", 
+   "cvs2svn is the only one that meets this criteria.  But the result is", 
+   "an otherwise working Subversion repository on which you cannot run", 
+   "'svn log' or 'svnadmin dump' across revisions in which deletions", 
+   "happened not-depth-first.", 
+   "A big ol' thanks to Geoffrey C. Speicher <geoff@sea-incorporated.com>", 
+   "who not only noticed the bug, but graciously (and patiently) helped me", 
+   "with test data and with testing the fix.", 
+   "Review by: Geoffrey C. Speicher <geoff@sea-incorporated.com>", 
+   "* subversion/libsvn_fs/bdb/changes-table.c", 
+   "(make_change): Removed.", 
+   "(fold_change): Const-ify 'change' argument.  Also, fold in the guts", 
+   "of make_change() here -- no need to call a helper function this", 
+   "small from one place.", 
+   "(svn_fs__bdb_changes_fetch): If we fold a deletion or replacement", 
+   "into the changes hash, we need to forget about any previous", 
+   "changes that existed on child paths of our deleted/replaced path.", 
+   "* subversion/tests/libsvn_fs/changes-test.c", 
+   "(changes_fetch_ordering): New test.", 
+   "(test_funcs): Add new test."
+  ], 
+  "revision_id": "848366"
+ }
+]

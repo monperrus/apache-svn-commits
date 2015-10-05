@@ -1,0 +1,91 @@
+[
+ {
+  "author": "bluk", 
+  "date": "2010-04-18T22:31:14.176991Z", 
+  "msg": [
+   "Change mediatype with a charset for text providers", 
+   "This takes into account the Accept-Charset", 
+   "whenever possible.", 
+   "See [WINK-270]"
+  ], 
+  "revision_id": "935425"
+ }, 
+ {
+  "author": "bluk", 
+  "date": "2010-04-18T22:30:57.712992Z", 
+  "msg": [
+   "Code formatting changes"
+  ], 
+  "revision_id": "935424"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2010-04-18T22:05:27.902392Z", 
+  "msg": [
+   "[MPMD-83] use project.reporting.outputEncoding encoding for non-HTML reports"
+  ], 
+  "revision_id": "935423"
+ }, 
+ {
+  "author": "bluk", 
+  "date": "2010-04-18T22:04:04.536162Z", 
+  "msg": [
+   "Fix an ordering problem in the AcceptCharset", 
+   "ISO-8859-1 should be ordered first in various", 
+   "cases for Accept-Charset header.  q-value = 1.0", 
+   "This only occurs if no wildcard is in the", 
+   "Accept-Charset.", 
+   "See HTTP spec for complicated rules."
+  ], 
+  "revision_id": "935422"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-18T21:54:56.568915Z", 
+  "msg": [
+   "Rejigger a bunch of code in adm_ops.c, primarily concentrating on add4. Of", 
+   "particular import is making a copy of tweak_entries() (to post_add_work).", 
+   "tweak_entries is intended for post-update cleanup, meaning it should be", 
+   "manipulating nodes in the BASE tree, while post-add work requires", 
+   "manipulation of WORKING nodes.", 
+   "Much of this code is pretty garbaged by the way copy.c copys (incorrect)", 
+   "meatadata along with the content.", 
+   "Removed the public svn_wc_get_ancestry2() function, as nobody uses it. We", 
+   "will most likely have better ways in the future for fetching node data.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(tweak_entries): remove the REMOVE_MISSING_DIRS parameter, and code it", 
+   "for the TRUE case. adjust params in recursion.", 
+   "(post_add_work): copy of tweak_entries, with REMOVE_MISSING_DIRS", 
+   "omitted, assuming it is FALSE. as a result, the NOTIFY params are no", 
+   "longer needed, and NEW_REV and EXCLUDE_PATHS were not needed for", 
+   "post-add work, so eliminate these params in the copied code.", 
+   "(svn_wc__do_update_cleanup): remove the REMOVE_MISSING_DIRS param, and", 
+   "adjust call to tweak_entries", 
+   "(svn_wc_process_committed_queue2): use iterpool for a couple", 
+   "scratch_pool parameters to optimize overall memory usage", 
+   "(mark_tree_deleted): use iterpool where we can", 
+   "(erase_from_wc): rename localvar to DB_KIND. proactively toss the", 
+   "iterpool before one of the exit branches.", 
+   "(svn_wc_get_ancestry2): removed.", 
+   "(mark_item_copied): clear the DAV cache on the node", 
+   "(mark_tree_copied): use an iterpool in one place, and don't worry about", 
+   "the DAV cache, as mark_item_copied handles it now. simplify parens and", 
+   "logic in an if-condition.", 
+   "(svn_wc_add4): convert the on-disk type to the new DB kind, rather than", 
+   "new to old, for the comparison. fix a call to __get_entry() to allow a", 
+   "NULL return (allow_unversioned). remove the access baton extension", 
+   "from this function -- access batons are no longer used by the client.", 
+   "the compat functions will take care of this, however. tweak the logic", 
+   "around entry_modify2() (check modify_flags first) for some upcoming", 
+   "work that was omitted from this revision. fix up the DEPTH param and", 
+   "call post_add_work() rather than do_update_cleanup.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_get_ancestry2): removed", 
+   "* subversion/libsvn_wc/adm_ops.h:", 
+   "(svn_wc__do_update_cleanup): remove REMOVE_MISSING_DIRS param", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(close_edit): adjust call to do_update_cleanup"
+  ], 
+  "revision_id": "935421"
+ }
+]

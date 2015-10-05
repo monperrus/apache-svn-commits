@@ -1,0 +1,109 @@
+[
+ {
+  "author": "brane", 
+  "date": "2006-01-16T01:48:34.881012Z", 
+  "msg": [
+   "Working on issue #2449.", 
+   "Make the environment cache and associated odds and ends thread-safe.", 
+   "[in subversion/libsvn_fs_base]", 
+   "* bdb/uuids-table.c (svn_fs_bdb__open_uuids_table, svn_fs_bdb__get_uuid):", 
+   "Set DB_DBT_USERMEM on the result DBT's, as required by DB_THREAD.", 
+   "* bdb/env.c: Includ apr_thread_mutex.h, apr_thread_proc.h and apr_time.h.", 
+   "Update the docs about the environment cache.", 
+   "(bdb_env_t): Use thread-private storage for the error info.", 
+   "(cleanup_error_info): New.", 
+   "(get_error_info): New; use everywhare to access bdb_env_t.error_info.", 
+   "(create_env): Allocate a thread-private storage key for error_info.", 
+   "(cleanup_env): Delete error_info's thread-private storage key.", 
+   "Don't close the dbconfig_file, since it has its own pool cleanup.", 
+   "(bdb_cache_lock, bdb_cache_start_init, bdb_cache_init_failed,", 
+   "bdb_cache_initialized, bdb_cache_state): New.", 
+   "(bdb_cache_init): Return an svn_error_t* and make thread-safe.", 
+   "(acquire_cache_mutex, release_cache_mutex): New.", 
+   "(svn_fs_bdb__close): Check that bdb_baton is valid.  Call bdb_cache_init", 
+   "and make thread-safe.", 
+   "(bdb_open): If threads are enabled, assert the DB_THREAD flag.", 
+   "(svn_fs_bdb__open): Call bdb_cache_init and make thread-safe.", 
+   "(svn_fs_bdb__remove): Remove an unnecessary return statement."
+  ], 
+  "revision_id": "858180"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2006-01-15T05:42:57.767295Z", 
+  "msg": [
+   "Expose a new svn_uuid_generate() function.", 
+   "This solves two problems:", 
+   "- Python doesn't appear to have a decent built-in UUID generation", 
+   "module, which means that users of the Python bindings can't", 
+   "easily use svn_fs_set_uuid().", 
+   "- There are a whole lotta places through the codebase that are", 
+   "doing their own apr_uuid_get() + apr_uuid_format() calls.  This", 
+   "allows that work to be factorized and shared.", 
+   "NOTE: for some reason the Python bindings appear to require an", 
+   "explicit pool argument when using this new interface.  Not sure why...", 
+   "* subversion/include/svn_types.h", 
+   "(svn_uuid_generate): New.", 
+   "* subversion/libsvn_subr/kitchensink.c", 
+   "New file for miscellaneous functions (as if being in the miscellany", 
+   "library wasn't enough...).", 
+   "* subversion/libsvn_fs_base/lock.c", 
+   "(svn_fs_base__generate_lock_token): Use svn_uuid_generate().", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(dav_svn_checkout): Use svn_uuid_generate().", 
+   "* subversion/svnsync/main.c", 
+   "(get_lock): Use svn_uuid_generate().", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(create_activity): Use svn_uuid_generate().", 
+   "* subversion/libsvn_fs_fs/lock.c", 
+   "(svn_fs_fs__generate_lock_token): Use svn_uuid_generate()."
+  ], 
+  "revision_id": "858179"
+ }, 
+ {
+  "author": "danderson", 
+  "date": "2006-01-14T22:00:40.080724Z", 
+  "msg": [
+   "Make the distribution script use the default C locale for all", 
+   "packaging operations. Without this, if the release manager forgets to", 
+   "set the locale in his shell before rolling tarballs, some files may", 
+   "contain localized characters and messages.", 
+   "* dist.sh: set and export LC_ALL=C and LANG=C before executing any", 
+   "packaging operations."
+  ], 
+  "revision_id": "858178"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2006-01-14T19:20:47.899564Z", 
+  "msg": [
+   "Working on issue #2449.", 
+   "Forbid reopening a cached environment with a different set of flags.", 
+   "General cleanup, removing various 'FIXME's and introducing a more", 
+   "portable use of the apr_atomic API.", 
+   "[in subversion/libsvn_fs_base]", 
+   "* bdb/env.h: Don't include apr_atomic.h. Update docstrings.", 
+   "* bdb/env.c: Remove all instrumentation printfs.", 
+   "Include apr_atomic.h here instead of in bdb/env.h.", 
+   "(svn__atomic_t, svn__atomic_read, svn__atomic_set): New macros.", 
+   "Used to hide differences in the apr_atomic API between apr-0.x", 
+   "and apr-1.x.  Use everywhere instead of apr_atomic names.", 
+   "(bdb_env_t): New field 'flags'.  Change type of the 'panic' field.", 
+   "(bdb_error_gatherer, cleanup_env): Remove \"FIXME:\" comments.", 
+   "(bdb_cache_key): Write a useful error message.", 
+   "(svn_fs_bdb__open): Check open flags against cached environment.", 
+   "* fs.c (cleanup_fs_db): Remove instrumentation printf."
+  ], 
+  "revision_id": "858177"
+ }, 
+ {
+  "author": "niqueco", 
+  "date": "2006-01-14T03:09:52.757420Z", 
+  "msg": [
+   "Spanish translation updated.", 
+   "* subversion/po/es.po:", 
+   "Some translation updates."
+  ], 
+  "revision_id": "858176"
+ }
+]

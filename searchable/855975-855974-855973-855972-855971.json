@@ -1,0 +1,114 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-08-25T11:49:42.305181Z", 
+  "msg": [
+   "Late follow-up to r13756.  Change force to a more meaningful name in", 
+   "libsvn_ra_svn, svnserve and the svn protocol documentation.", 
+   "Suggested by: ghudson", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_lock_compat, ra_svn_lock): Change argument name force to steal_lock.", 
+   "(ra_svn_unlock_compat, ra_svn_unlock): Change argument name force to", 
+   "break_lock.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(lock, lock-many): Change parameter name from force to steal-lock.", 
+   "(unlock, unlock-many): Change parameter name from force to break-lock.", 
+   "* subversion/svnserve/serve.c", 
+   "(lock, lock_many): Change variable name from force to steal_lock.", 
+   "(unlock, unlock_many): Change variable name from force to break_lock."
+  ], 
+  "revision_id": "855975"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-08-25T07:09:49.348112Z", 
+  "msg": [
+   "Follow-up to r15892.", 
+   "* build/ac-macros/neon.m4 (SVN_NEON_CONFIG):", 
+   "Fix docstring for SVN_NEON_0_25_0."
+  ], 
+  "revision_id": "855974"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-08-25T03:33:54.910485Z", 
+  "msg": [
+   "* subversion/libsvn_client/commit_util.c: Add a newline to the end of", 
+   "the file, to silence a compiler warning \"no newline at end of file\"."
+  ], 
+  "revision_id": "855973"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-08-25T01:26:59.678896Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c", 
+   "(append_prop_conflict): Convert conflict description from utf8 to", 
+   "native fuzzily, since robustness is more important than accuracy.", 
+   "Suggested by: philip"
+  ], 
+  "revision_id": "855972"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-08-24T22:21:18.381770Z", 
+  "msg": [
+   "Revise svn_client_commit_item_t API to eliminate conflicting uses of its", 
+   "revision field.", 
+   "This change separates the copyfrom-rev and revision uses for the revision", 
+   "field in the svn_client_commit_item_t structure because both values are", 
+   "required to correctly implement wc-replacements of versioned items.", 
+   "Remark:", 
+   "Array manipulation is consistently implemented using the APR_ARRAY_* macros", 
+   "even where the old code didn't.", 
+   "Patch by: Ivan Zhakov <chemodax@gmail.com>", 
+   "* subversion/include/svn_client.h:", 
+   "(svn_client_commit_item_t): Deprecate.", 
+   "(svn_client_commit_item2_t): New structure, copied from", 
+   "svn_client_commit_item_t with addition field copyfrom_rev.", 
+   "(svn_client_get_commit_log_t): Deprecate.", 
+   "(svn_client_get_commit_log2_t): New. Same definition as", 
+   "svn_client_get_commit_log_t, but with a different contract: it takes", 
+   "an array of svn_client_get_commit_log2_t structures in the", 
+   "commit_items parameter.", 
+   "(svn_client_ctx_t): Add new log_msg_func2/log_msg_batton2 members for new", 
+   "API. Deprecate log_msg_func/log_msg_batton.", 
+   "* subversion/clients/cmdline/commit-cmd.c (svn_cl__commit),", 
+   "* subversion/clients/cmdline/copy-cmd.c (svn_cl__copy),", 
+   "* subversion/clients/cmdline/delete-cmd.c (svn_cl__delete),", 
+   "* subversion/clients/cmdline/import-cmd.c (svn_cl__import),", 
+   "* subversion/clients/cmdline/main.c (main),", 
+   "* subversion/clients/cmdline/mkdir-cmd.c (svn_cl__mkdir),", 
+   "* subversion/clients/cmdline/move-cmd.c (svn_cl_move):", 
+   "Use the new log_msg_func2 api.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "* subversion/clients/cmdline/util.c", 
+   "(svn_cl__get_log_message): Adjust to use svn_client_get_commit_log2_t.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__callback_baton_t): Update documentation.", 
+   "(svn_client__get_log_msg): New. Encapsulates backward compat callback call", 
+   "to log_msg_func.", 
+   "* subversion/libsvn_client/add.c", 
+   "(mkdir_urls): Use svn_client__get_log_msg().", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_import2, svn_client_commit_3): Use function", 
+   "svn_client__get_log_msg and svn_client_commit_item2_t.", 
+   "(have_processed_parent, adjust_rel_targets): Use svn_client_commit_item2_t.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(svn_client__get_log_msg): New. Utility function for backward compability", 
+   "with 1.2 API.", 
+   "(add_committable): Add new parameter copyfrom_rev.", 
+   "(harvest_committables): Adjust to changed add_committable.", 
+   "(look_up_committable, svn_client__sort_commit_item_urls,", 
+   "svn_client__condense_commit_items, file_mod_t,", 
+   "svn_client__do_commit): Use svn_client_commit_item2_t.", 
+   "(do_item_commit): Use item->copyfrom_rev instead of item->revision", 
+   "in case of a copied item.", 
+   "* subversion/libsvn_client/copy.c (wc_to_repos_copy, repos_to_repos_copy),", 
+   "* subversion/libsvn_client/delete.c (delete_urls),", 
+   "* subversion/libsvn_client/ra.c (get_wc_prop, push_wc_prop):", 
+   "Use svn_client_commit_item2_t and svn_client__get_log_msg."
+  ], 
+  "revision_id": "855971"
+ }
+]

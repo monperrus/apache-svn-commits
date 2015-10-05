@@ -1,0 +1,93 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-05-12T14:24:28.797779Z", 
+  "msg": [
+   "Following up to r37703 by replacing more uses of svn_io_remove_file() with", 
+   "svn_io_remove_file2().  In all cases, if we clear or ignore the returned error", 
+   "at the call-site, let the API ignore ENOENT, as well.", 
+   "* subversion/mod_dav_svn/activity.c,", 
+   "subversion/svn/util.c,", 
+   "subversion/libsvn_fs_base/fs.c,", 
+   "subversion/svnlook/main.c,", 
+   "subversion/libsvn_client/externals.c,", 
+   "subversion/libsvn_client/export.c,", 
+   "subversion/libsvn_client/merge.c,", 
+   "subversion/libsvn_client/patch.c,", 
+   "subversion/libsvn_client/commit.c,", 
+   "subversion/libsvn_fs_fs/fs_fs.c,", 
+   "subversion/libsvn_fs_fs/lock.c:", 
+   "Make the switch from svn_io_remove_file() to svn_io_remove_file2()."
+  ], 
+  "revision_id": "877780"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-05-12T14:03:18.007813Z", 
+  "msg": [
+   "Fix the DAV test failures the right way, by (sometimes) catching and", 
+   "ignoring errors legitimately thrown from the WC DB layer.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_base_get_dav_cache): Document the error value returned", 
+   "when no dav cache is found.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__internal_propget): Tolerate missing dav caches for", 
+   "compatibility with the old WC code."
+  ], 
+  "revision_id": "877779"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-12T13:28:27.723875Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/activity.c", 
+   "(dav_svn__store_activity): Use an un-deprecated API."
+  ], 
+  "revision_id": "877778"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T13:16:24.034292Z", 
+  "msg": [
+   "Update to use svn_io_remove_file2().", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(immediate_install_props): use svn_io_remove_file2, with MISSING_OK=TRUE", 
+   "instead of manually testing the error result.", 
+   "(remove_file_if_present): remove. unused.", 
+   "(svn_wc__props_delete): switch from remove_file_if_present to", 
+   "svn_io_remove_file2.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(svn_wc_transmit_text_deltas2): update to use remove_file2. go ahead and", 
+   "pass MISSING_OK=TRUE to avoid an error we'd just clear anyways.", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(open_adm_file): update to use remove_file2", 
+   "(svn_wc__remove_adm_file): update to use remove_file2, and add an", 
+   "svn_error_return while we're here.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(remove_file_if_present): remove. unused.", 
+   "(erase_unversioned_from_wc): update to remove_file2.", 
+   "(erase_from_wc): switch from remove_file_if_present to remove_file2.", 
+   "(svn_wc_remove_from_revision_control): switch to remove_file2.", 
+   "(attempt_deletion): update to remove_file2. we want MISSING_OK=FALSE", 
+   "since we need to inspect the error value.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(window_handler): update to remove_file2. pass MISSING_OK=TRUE to avoid", 
+   "an error creation that we'd clear anyways.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(upgrade_format): update to use svn_io_remove_file2(). on calls where", 
+   "we're going to toss the error, go ahead and pass MISSING_OK=TRUE.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_rm): update to remove_file2, simplifying the code. throw in an", 
+   "svn_error_return while we're here."
+  ], 
+  "revision_id": "877777"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-05-12T13:08:28.307099Z", 
+  "msg": [
+   "Revert r37693, which made an old-wc-compat exception at the wrong code layer."
+  ], 
+  "revision_id": "877776"
+ }
+]

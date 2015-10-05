@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-11-21T17:57:52.058831Z", 
+  "msg": [
+   "On the merge-tracking branch: A follow-up to r22369, accumulating", 
+   "merge info (which may be broken over multiple lines) in a", 
+   "memory-efficient manner.", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "(struct mergeinfo_baton): Change type of \"curr_info\" from \"const", 
+   "char *\" to \"svn_stringbuf_t\".", 
+   "(start_element): Set BATON->curr_info to empty.", 
+   "(end_element): Update for change of BATON->curr_info type.", 
+   "(cdata_handler): Fix for \"curr_info\" type change.", 
+   "(svn_ra_dav__get_merge_info): Initialize the members of \"struct", 
+   "mergeinfo_baton\" only once, accounting for the change in the type", 
+   "of its \"curr_info\" member by initializing it to an empty buffer.", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "862450"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-11-21T08:52:21.968583Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_response): Rename from handler_default(), and expand doc", 
+   "string to describe the implementation.  Reposition in-line comment", 
+   "to better describe the code, and remove an extraneous newline.", 
+   "(setup_request): Rename from setup_default(), and expand doc string", 
+   "to describe the implementation.  Adjust for handle_response() API", 
+   "rename.", 
+   "(svn_ra_serf__request_create): Adjust for setup_request() API", 
+   "rename."
+  ], 
+  "revision_id": "862449"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-21T08:05:19.753445Z", 
+  "msg": [
+   "Start moving libsvn_ra_dav over to the pool cleanup paradigm for", 
+   "cleaning up Neon resources. Improves readability. The new request structure", 
+   "should help marshal errors through the neon interface.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__request_t): Request structure for administration of", 
+   "request related (neon) resources.", 
+   "(svn_ra_dav__request_destroy): Mnemonic for readability.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__request_create): New. Constructor for svn_ra_dav__request_t.", 
+   "(svn_ra_dav__add_response_body_reader): New. Registers pool cleanup.", 
+   "(svn_ra_dav__set_neon_body_provider): Change request parameter type.", 
+   "(svn_ra_dav__xml_parser_create): New. Registers pool cleanup.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(dav_request_cleanup): Pool cleanup for Neon requests.", 
+   "(compressed_body_reader_cleanup): Pool cleanup for Neon compressed body", 
+   "readers - non compressed readers don't need cleanup.", 
+   "(xml_parser_cleanup): Pool cleanup for Neon xml parsers.", 
+   "(parsed_request): Rewrite using pool cleanup registering constructors.", 
+   "Now that all data is destructed on pool cleanup, use SVN_ERR for", 
+   "exception management.", 
+   "(svn_ra_dav__parsed_request,", 
+   "svn_ra_dav__parsed_request_compat): Wrap error from parsed_request().", 
+   "In the old days parsed_request() did that itself, but wrapping an error", 
+   "can't be a reason by itself to litter code with goto statements."
+  ], 
+  "revision_id": "862448"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-11-21T00:10:05.865866Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handler_default, setup_default): Add doc string saying which", 
+   "Serf API is implemented by each function.", 
+   "(svn_ra_serf__request_create): Fix typo."
+  ], 
+  "revision_id": "862447"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-11-21T00:05:40.420595Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__request_header_delegate_t): Fix typo in doc string."
+  ], 
+  "revision_id": "862446"
+ }
+]

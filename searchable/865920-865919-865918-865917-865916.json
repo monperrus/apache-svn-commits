@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-07-26T20:24:23.270601Z", 
+  "msg": [
+   "A follow-up to r25843 fixing some error code usage.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CEASE_INVOCATION): Correct apr_err code.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos_history2): Use SVN_ERR_CEASE_INVOCATION instead of", 
+   "SVN_ERR_CANCELLED.", 
+   "Found by: glasser"
+  ], 
+  "revision_id": "865920"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-26T19:41:13.369581Z", 
+  "msg": [
+   "Fix API backwards compatibility: use the correct recurse -> depth conversion", 
+   "for status.c", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_do_status): use SVN_DEPTH_FROM_RECURSE_STATUS instead of", 
+   "SVN_DEPTH_FROM_RECURSE to convert recurse to depth.", 
+   "* subversion/libsvn_ra/wrapper_template.h", 
+   "(compat_do_status): ditto", 
+   "* subversion/libsvn_wc/status.c", 
+   "(svn_wc_get_status_editor2): ditto"
+  ], 
+  "revision_id": "865919"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-26T19:33:22.312362Z", 
+  "msg": [
+   "Use macro SVN_DEPTH_FROM_RECURSE_STATUS where possible.", 
+   "* subversion/svn/main.c", 
+   "(main): use SVN_DEPTH_FROM_RECURSE_STATUS macro for converting recurse to", 
+   "depth."
+  ], 
+  "revision_id": "865918"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-26T18:50:17.719902Z", 
+  "msg": [
+   "Provide a way to limit the number of times svn_repos_history2() is", 
+   "invoked/cancel out of it.", 
+   "Expose a 'svnlook history --limit' option (with -l alias, a la 'svn log').", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_history_func_t, svn_repos_history2): Document that this", 
+   "callback can return SVN_ERR_CEASE_INVOCATION.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CEASE_INVOCATION): New error code used to indicate to a", 
+   "callback driver that invocation of the callback can cease, and that", 
+   "the driver function can (potentially) stop processing.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "Add import of svn_error_codes.h.", 
+   "(svn_repos_history2): Add handling for the SVN_ERR_CEASE_INVOCATION", 
+   "error code.", 
+   "* subversion/svnlook/main.c", 
+   "Include stdlib.h for strtol().", 
+   "(options_table): Add a --limit option.", 
+   "(cmd_table): Support the 'history --limit' behavior.", 
+   "(svnlook_opt_state, svnlook_ctxt_t): Add a limit field.", 
+   "(print_history_baton): Add limit and count fields.", 
+   "(print_history): Handle history item limiting.", 
+   "(do_history): Drop SHOW_IDS parameter, which is available from the", 
+   "context.  Adjust implementation accordingly, passing C->limit", 
+   "parameter to the new limit field on the operation-specific baton.", 
+   "Use constant TRUE instead of magic number 1 for boolean value", 
+   "passed to svn_repos_history2().", 
+   "(get_ctxt_baton): Propogate limit parameter.", 
+   "(subcommand_history): Adjust for API change.", 
+   "(main): Add parsing for -l/--limit, cribbed from svn/main.c.", 
+   "* subversion/tests/cmdline/svnlook_tests.py", 
+   "(limit_history): Add new test for 'svnlook history --limit'.", 
+   "(test_list): Add limit_history test to the list."
+  ], 
+  "revision_id": "865917"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-26T07:40:05.335884Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "Include svn_error_codes.h for SVN_ERR_CANCELLED, etc."
+  ], 
+  "revision_id": "865916"
+ }
+]

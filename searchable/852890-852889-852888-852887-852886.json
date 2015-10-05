@@ -1,0 +1,109 @@
+[
+ {
+  "author": "brane", 
+  "date": "2005-01-22T00:47:51.473400Z", 
+  "msg": [
+   "* build.conf (__ALL_TESTS__): Add locks-test to the dependency list.", 
+   "* subversion/svn_private_config.hw: Define DEFAULT_FS_TYPE."
+  ], 
+  "revision_id": "852890"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-01-21T22:04:31.694104Z", 
+  "msg": [
+   "New locking test.", 
+   "* lock_tests.py (examine_lock): Make sure that 'svn info' on a locked", 
+   "file gives all the info that it should."
+  ], 
+  "revision_id": "852889"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-01-21T21:21:43.886615Z", 
+  "msg": [
+   "Update tests and test docs for testing over DAV.  Note that testing", 
+   "over DAV now REQUIRES that authentication be setup.", 
+   "* README: Update to reflect that setting up authentication when", 
+   "testing over DAV is no longer optional.", 
+   "* main.py (wc_author2): New var.", 
+   "* lock_tests.py: Use svntest.main.wc_author2 and", 
+   "svntest.main.wc_passwd instead of just making up a user and password", 
+   "for our \"second\" user."
+  ], 
+  "revision_id": "852888"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-21T20:56:58.189405Z", 
+  "msg": [
+   "Locking branch:  implement ra_dav->get_commit_editor2().", 
+   "This allows 'svn commit' to send lock-tokens when committing over dav.", 
+   "Send them in CHECKOUT, PUT, PROPPATCH, DELETE, MERGE.", 
+   "Note: this implementation sends all paths & tokens in a single If:", 
+   "header in the final MERGE request, which means there's a practical", 
+   "limit of about 70 locks before we hit apache's 8K-per-header limit.", 
+   "There are plans in the works to fix this.", 
+   "* include/svn_dav.h", 
+   "(SVN_DAV_OPTION_RELEASE_LOCKS): new http header X-SVN-Option value.", 
+   "* libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__do_proppatch):  declare new 'extra_headers' arg.", 
+   "(svn_ra_dav__merge_activity):  take new 'lock_tokens' and 'keep_locks' args.", 
+   "* libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__change_rev_prop):  pass NULL extra_headers to __do_proppatch.", 
+   "* libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__do_proppatch):  process extra_headers, send in PROPPATCH.", 
+   "* libsvn_ra_dav/commit.c", 
+   "(svn_ra_dav__get_commit_editor2):  initialize new fields.", 
+   "(commit_ctx_t):        new 'tokens' and 'keep_locks' fields.", 
+   "(resource_baton_t):    new 'token' field.", 
+   "(commit_close_file):   if token available, send in If: header of PUT.", 
+   "(checkout_resource):   take 'token' arg, pass to do_checkout().", 
+   "(do_checkout):         take 'token' arg, send in If: header of CHECKOUT.", 
+   "(commit_add_dir,", 
+   "apply_log_message,", 
+   "commit_change_file_prop,", 
+   "commit_change_dir_prop): update callers of checkout_resource().", 
+   "(commit_delete_entry): update caller, send token in If: header of DELETE.", 
+   "(commit_add_file,", 
+   "commit_open_file):    look up path in token hash, store in file_baton.", 
+   "update checkout_resource() calls.", 
+   "(do_proppatch):        if token available, pass to svn_ra_dav__do_proppatch.", 
+   "(commit_close_edit):   pass token hash and keep_locks to __merge_activity.", 
+   "* libsvn_ra_dav/merge.c", 
+   "(svn_ra_dav__merge_activity):  use new args, pass all tokens to MERGE.", 
+   "* mod_dav_svn/version.c", 
+   "(build_lock_hash, release_locks):  new utility functions.", 
+   "(dav_svn_merge):   notice new RELEASE_LOCKS header, call utility funcs.", 
+   "(dav_process_if_header,", 
+   "dav_svn_add_if_resource,", 
+   "dav_svn_add_if_state,", 
+   "dav_svn_fetch_next_token):  temporary hacks... code copied from mod_dav", 
+   "so that dav_svn_merge() can parse If: header.", 
+   "* libsvn_fs_base/lock.c", 
+   "(svn_fs_base__unlock):  whoops, don't forget to canonicalize incoming path."
+  ], 
+  "revision_id": "852887"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-01-21T20:33:50.117405Z", 
+  "msg": [
+   "Rename FAQ to 'faq.html', because more intuitive and easier to type.", 
+   "Convert the old FAQ into a redirect page.", 
+   "* www/project_faq.html: Replace with a redirect page, renaming", 
+   "original to...", 
+   "* www/faq.html: ...here.  Add title attributes to all questions, so", 
+   "hovering the mouse over the question will show its anchor name.", 
+   "And fix up a couple of references to faq page itself, of course.", 
+   "* README, INSTALL,", 
+   "www/index.html,", 
+   "www/project_tools.html,", 
+   "www/inconveniences.html,", 
+   "www/project_issues.html,", 
+   "www/getting_subversion.html,", 
+   "www/mailing-list-guidelines.html: Adjust for above rename."
+  ], 
+  "revision_id": "852886"
+ }
+]

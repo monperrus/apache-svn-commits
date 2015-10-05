@@ -1,0 +1,99 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-06-25T14:18:35.947461Z", 
+  "msg": [
+   "Be consistent about what pool is passed to the svn_wc_walk_entries3's", 
+   "svn_wc_entry_callbacks2_t.found_entry callback.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_walk_entries3): Document what pool is passed to the callbacks.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(walker_helper): Always pass the subpool to the found_entry callbacks,", 
+   "previously the pool arg to svn_wc_walk_entries3 was passed for the first", 
+   "entry and a subpool was passed for all others."
+  ], 
+  "revision_id": "878270"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-06-25T14:15:53.019923Z", 
+  "msg": [
+   "Remove some needless and potentially confusing pool-fu related to the", 
+   "children_with_mergeinfo array.", 
+   "In many places in merge.c we allocate new elements to the", 
+   "CHILDREN_WITH_MERGEINFO array from CHILDREN_WITH_MERGEINFO->POOL, rather", 
+   "than the pool passed to the function.  There was one case I could see that", 
+   "required this: When calling svn_wc_walk_entries3 to create the initial", 
+   "children_with_mergeinfo array, the first callback sends the pool passed", 
+   "to svn_wc_walk_entries3, but subesequent callbacks send a subpool.", 
+   "Regardless of svn_wc_walk_entries3's quirks, the better approach is to", 
+   "stash a pool in the callback baton.  *Maybe* there once were other reasons", 
+   "for this, but there is no longer one today.  In every case the pool passed", 
+   "to to the function and CHILDREN_WITH_MERGEINFO->POOL, is the *same* pool", 
+   "(or the correct pool is readily available).", 
+   "* subversion/libsvn_client/merge.c", 
+   "(populate_remaining_ranges, insert_child_to_merge): Add a pool argument.", 
+   "(get_mergeinfo_walk_baton): Add a pool member.", 
+   "(get_mergeinfo_walk_cb): Allocate from pool arg.", 
+   "(get_mergeinfo_paths): Allocate new children_with_mergeinfo elements", 
+   "from baton's pool.", 
+   "(insert_parent_and_sibs_of_sw_absent_del_entry): Update call to", 
+   "insert_child_to_merge and allocate from pool arg.", 
+   "(get_mergeinfo_paths): Allocate from pool arg, stash pool in the", 
+   "callback baton.", 
+   "(process_children_with_new_mergeinfo): Allocate new", 
+   "children_with_mergeinfo elements from the pool argument.", 
+   "(do_directory_merge): Pass the pool argument to", 
+   "populate_remaining_ranges() rather than the iterpool."
+  ], 
+  "revision_id": "878269"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-25T13:57:37.884523Z", 
+  "msg": [
+   "Add a new function to detect the EOL marker of a file.", 
+   "* subversion/include/svn_subst.h", 
+   "(svn_subst_detect_file_eol): Declare.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_detect_file_eol): New function to detect the EOL marker", 
+   "of a file.", 
+   "* subversion/tests/libsvn_subr/subst-test.c: New file.", 
+   "(test_detect_file_eol): New unit test for svn_subst_detect_file_eol().", 
+   "* build.conf", 
+   "(subst-test): Build new unit test.", 
+   "(__ALL_TESTS__): Add new test here to make Windows happy."
+  ], 
+  "revision_id": "878268"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-25T11:52:42.371356Z", 
+  "msg": [
+   "Add an assertion to guard against invalid use of svn_subst_detect_eol().", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_detect_eol): We should consider converting this function to", 
+   "take a pointer and a buffer size argument, instead of two pointers which", 
+   "define the buffer's boundaries. For now, just add an assert which if", 
+   "triggered indicates a bug in the caller."
+  ], 
+  "revision_id": "878267"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-24T21:43:19.809539Z", 
+  "msg": [
+   "Adapt the wc_db relocate API for our current db-per-dir paradigm (with nice", 
+   "breadcrumbs as to how to get back to the \"right\" way).", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(test_global_relocate): Run the API in \"centralized\" mode.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(relocate_txn): Ensure parent URLs are proper subdirs in a select statement.", 
+   "(svn_wc__db_global_relocate): Recurse over the subdirs, if run in", 
+   "\"db-per-dir\" mode.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_check_node): Update param list and docs."
+  ], 
+  "revision_id": "878266"
+ }
+]

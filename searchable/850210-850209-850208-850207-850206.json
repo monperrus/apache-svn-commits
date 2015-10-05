@@ -1,0 +1,118 @@
+[
+ {
+  "author": "breser", 
+  "date": "2004-07-04T16:29:13.443467Z", 
+  "msg": [
+   "Formatting and logic fixes to r10132.", 
+   "* subversion/clients/cmdline/prompt.c", 
+   "(wait_for_input_or_timeout): Formatting fix and use the timeout argument.", 
+   "(prompt): More formatting and improve the error handling logic."
+  ], 
+  "revision_id": "850210"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-04T14:56:45.764087Z", 
+  "msg": [
+   "Treat the hostname portion of URLs specially in svn_path_canonicalize", 
+   "so that \"/../\" cannot backpath over it.", 
+   "Patch by: Klaus Rennecke <kre@tigris.org>", 
+   "(Test cases by me.)", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_canonicalize): Copy over the hostname unmangled, so that", 
+   "absolute_path is set correctly for URLs.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_canonicalize): Add some URLs into the test cases for", 
+   "svn_path_canonicalize."
+  ], 
+  "revision_id": "850209"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-04T13:48:50.402859Z", 
+  "msg": [
+   "When using 'svn cp' or 'svn mv' on a special file, do not attempt to", 
+   "actually copy the special file, instead retranslate it using", 
+   "svn_subst_copy_and_translate2.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Check for special status when copying", 
+   "the working copy file.  If special, use the translation routines", 
+   "to create a new one rather than copying the existing file."
+  ], 
+  "revision_id": "850208"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-04T13:01:03.207138Z", 
+  "msg": [
+   "Issue #1779: Improve svn_path_canonicalize to make more", 
+   "transformations aimed at removing path specification redundancies.", 
+   "This does also remove double path separators, which were able to crash", 
+   "'svn cp' because of inadequate checking in svn_path_split.", 
+   "All libsvn_client functions are documented as taking any URL, so we", 
+   "will keep that promise.  However, they should always operate on", 
+   "canonicalized paths internally.  If there are any more uses of", 
+   "non-canonicalized paths/URLs sneaking around they will be fixed in", 
+   "another patch.", 
+   "* subversion/include/svn_path.h", 
+   "(svn_path_canonicalize): Document the new transformations that this", 
+   "function is making.", 
+   "(svn_path_join, svn_path_basename, svn_path_dirname,", 
+   "svn_path_add_component, svn_path_remove_component,", 
+   "svn_path_remove_component, svn_path_get_longest_ancestor,", 
+   "svn_path_get_absolute, svn_path_split_if_file,", 
+   "svn_path_condense_targets, svn_path_remove_redundancies,", 
+   "svn_path_decompose): Document that canonicalized paths are required", 
+   "as input to these functions.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(discount_trailing_slash): Removed since svn_path_canonicalize uses", 
+   "a more sophisticated approach to removing redundancies and no", 
+   "longer needs it.  No other callers need it either, since", 
+   "canonicalized URLs can't have this kind of redundancy internally.", 
+   "(svn_path_remove_component, svn_path_dirname): Since canonicalized", 
+   "paths are smarter now, we don't need to check for canonicalization", 
+   "after our operation.", 
+   "(svn_path_canonicalize): Replaced old implementation with new that", 
+   "uses nearly identical logic to large portions of", 
+   "apr_filepath_merge.  It differs from apr_filepath_merge in that it", 
+   "handles URLs properly and does not access the OSs filesystem in", 
+   "any way.  It condenses redundant \"/./\", \"/../\", and  \"//\" portions", 
+   "of the path, as well as removing any trailing separator characters.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_path_split, test_basename, test_decompose): Remove tests that", 
+   "pass non-canonicalized paths as arguments, since the docstrings", 
+   "say they can't handle them.", 
+   "(test_canonicalize): Test out of some the new canonicalization", 
+   "features and remove the check for allocation.  It wasn't part of", 
+   "the docstring, and the new routine can't generally tell if the", 
+   "result will be identical without doing the whole transformation in", 
+   "the first place.", 
+   "* subversion/tests/clients/cmdline/externals_test.py", 
+   "(disallow_dot_or_dotdot_directory_reference): Remove a test that", 
+   "will pass after canonicalization is performed, since the actual", 
+   "referenced directory is not the current one or backpathed from the", 
+   "current."
+  ], 
+  "revision_id": "850207"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-07-04T05:06:11.225111Z", 
+  "msg": [
+   "Fix Issue #1916, allow people to interrupt/abort the client during a prompt.", 
+   "* subversion/clients/cmdline/prompt.c", 
+   "(wait_for_input_or_timeout): New function to poll for input to avoid", 
+   "blocking.", 
+   "(prompt): Add a ctx paramter to call it to get the cancel_func and", 
+   "cancel_baton and call wiat_for_input_or_timeout().", 
+   "(svn_cl__auth_simple_prompt,svn_cl__auth_username_prompt,", 
+   "svn_cl__auth_ssl_server_trust_prompt, svn_cl__auth_ssl_client_cert_prompt,", 
+   "svn_cl__auth_ssl_client_cert_pw_prompt): Use the baton as a ctx and pass", 
+   "it into prompt().", 
+   "(svn_cl__prompt_user): Pass NULL when calling prompt() for the ctx parameter.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): Use ctx as the baton for prompt_providers."
+  ], 
+  "revision_id": "850206"
+ }
+]

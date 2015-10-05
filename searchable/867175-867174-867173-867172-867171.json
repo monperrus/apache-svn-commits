@@ -1,0 +1,103 @@
+[
+ {
+  "author": "jpeacock", 
+  "date": "2007-10-11T01:25:52.650985Z", 
+  "msg": [
+   "Merge with trunk@27098"
+  ], 
+  "revision_id": "867175"
+ }, 
+ {
+  "author": "jpeacock", 
+  "date": "2007-10-11T01:23:08.344090Z", 
+  "msg": [
+   "Merge from trunk@26888"
+  ], 
+  "revision_id": "867174"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-10-11T01:20:53.114754Z", 
+  "msg": [
+   "Add a rough svnmerge.py merge history migration script (for issue #2878).", 
+   "This is checkpoint commit -- there's still some loose ends to handle,", 
+   "mostly pertaining to dealing with pre-existing svn:mergeinfo.", 
+   "* contrib/client-side/svnmerge/svnmerge-migrate-history.py: Add new script."
+  ], 
+  "revision_id": "867173"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-11T00:11:58.957175Z", 
+  "msg": [
+   "Follow-up to r27058: Since rev root IDs are tiny, just store them all", 
+   "in a hash table in one pool instead of in a large number of different", 
+   "(8k!) pools.  In the event that we need to expire them, wipe the whole", 
+   "cache; however, I believe that most operations only make revision root", 
+   "lookups on a small number of revisions (but many many times on each!).", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(NUM_RRI_CACHE_ENTRIES): Increase, because a large number no longer", 
+   "means a large preallocation of pointers (but rather just a large", 
+   "number before the hash gets wiped).", 
+   "(RRI_CACHE_ENTRIES_MASK): Remove.", 
+   "(rev_root_id_cache): Change from an array to a hash.", 
+   "(rev_root_id_cache_pool): Change from an array of pools to one", 
+   "pool.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(): Include svn_pools.h", 
+   "(initialize_fs_struct): Initialize cache.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__rev_get_root): Use new cache structure."
+  ], 
+  "revision_id": "867172"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-10T23:02:37.538654Z", 
+  "msg": [
+   "Move the cache of *immutable* DAG noderevs from revision roots to the", 
+   "svn_fs_t object.  This extends the lifetime of cache entries; in my", 
+   "test, a somewhat large diff operation on a repository in NFS got a 4x", 
+   "speedup.  Transaction DAG noderevs are still in the roots (though", 
+   "perhaps this should change).", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(TXN_NODE_CACHE_MAX_KEYS, REV_NODE_CACHE_MAX_KEYS): Split", 
+   "NODE_CACHE_MAX_KEYS into two variables; we want to cache more rev", 
+   "nodes in the FS-wide cache.", 
+   "(dag_node_cache_t): Move to fs.h", 
+   "(fs_root_data_t): Rename node_list and node_cache to txn_node_list", 
+   "and txn_node_cache.  Add comment that perhaps the struct should be", 
+   "split in two.", 
+   "(locate_cache): New function which returns the location of the", 
+   "appropriate cache and lookup key, depending on whether the root is", 
+   "txn or rev.", 
+   "(dag_node_cache_get): Use locate_cache to use the appropriate cache.", 
+   "(dag_node_cache_set): Use locate_cache to use the appropriate cache,", 
+   "and use the appropriate max key constant.  Add a pool parameter,", 
+   "which is only used for the allocation of the \"key\" string --- NOT", 
+   "for the cached nodes themselves!", 
+   "(dag_node_cache_invalidate): Operate on the renamed txn_node_*", 
+   "fields (this function is not used on immutable roots).", 
+   "(open_path, make_path_mutable, fs_make_dir, fs_make_file): Pass a", 
+   "pool to dag_node_cache_set.", 
+   "(make_root): Remove initialization of node_list/node_cache.", 
+   "(make_txn_root): Initialize txn_node_list/txn_node_cache.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(): Include fs.h, which now defines...", 
+   "(dag_node_t): ... which is removed.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(dag_node_t): Move typedef declaration from dag.h, because it is", 
+   "referenced in...", 
+   "(dag_node_cache_t): ... this declaration, moved from tree.c.  Also,", 
+   "the path field is renamed to \"key\", because for revision DAG-nodes,", 
+   "the key also includes the revision number.", 
+   "(fs_fs_data_t): Add rev_node_list and rev_node_cache fields.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(initialize_fs_struct): Factor out new function from fs_create and", 
+   "fs_open which initializes the vtable and fsap fields of the", 
+   "svn_fs_t; initialize the revision DAG-node cache fields here.", 
+   "(fs_create, fs_open): Use initialize_fs_struct."
+  ], 
+  "revision_id": "867171"
+ }
+]

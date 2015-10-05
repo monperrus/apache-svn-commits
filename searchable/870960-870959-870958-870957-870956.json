@@ -1,0 +1,111 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2008-05-01T17:41:02.805845Z", 
+  "msg": [
+   "Don't allow the conflict-based resolver choices for properties.  (This", 
+   "could be loosened if the proper code was added to", 
+   "libsvn_wc/props.c(maybe_generate_propconflict).)", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_resolve):", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_resolver_func_t, svn_wc_resolved_conflict3): Note", 
+   "that the conflict choices aren't legal for properties.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(svn_cl__conflict_handler): Don't allow (or mention) the conflict", 
+   "choices for properties."
+  ], 
+  "revision_id": "870960"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-01T17:25:08.321319Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(resolve_conflict_on_entry): Fix indentation."
+  ], 
+  "revision_id": "870959"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-05-01T17:07:53.589850Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch:", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_prompt_baton_t): Make docstring refer to", 
+   "svn_cmdline_prompt_baton2_t.", 
+   "(svn_cmdline_auth_plaintext_prompt): Make docstring more concise.", 
+   "* subversion/include/svn_auth.h: Fix stray SVN_CONFIG_PROMPT in comment,", 
+   "it has been renamed to SVN_CONFIG_ASK.", 
+   "(svn_auth_save_credentials): This function does rely on the pool", 
+   "to survice across RA sessions. Fix docstring to make this explicit.", 
+   "(svn_auth_plaintext_prompt_func_t): Mention pool lifetime issue", 
+   "wrt save_credentials that implementors might face.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Revert accidental line swap.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_setup_auth_baton): Mention that the RA layer may", 
+   "override the values for SVN_CONFIG_OPTION_STORE_PASSWORDS and", 
+   "SVN_CONFIG_OPTION_STORE_AUTH_CREDS set here.", 
+   "* subversion/libsvn_subr/prompt.c", 
+   "(prompt): Add comment concerning the use of members exclusive", 
+   "to svn_cmdline_prompt_baton2_t.", 
+   "(svn_cmdline_auth_plaintext_prompt): Use apr_strnatcasecmp instead", 
+   "of svn_cstring_casecmp to accomodate non-ASCII characters.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(simple_save_creds_helper): Use the answer cache only if a prompt", 
+   "callback was also supplied.", 
+   "Suggested by: danielsh"
+  ], 
+  "revision_id": "870958"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-05-01T15:33:54.842576Z", 
+  "msg": [
+   "Fix for issue #3187.  Properly calculate ranges to reverse merge", 
+   "on paths with non-inheritable revision ranges.", 
+   "The bulk of this fix is a change to svn_rangelist_intersect API allowing", 
+   "the caller to decide if inheritance is considered rather than considering", 
+   "it by default.  This makes svn_rangelist_intersect() more like", 
+   "svn_rangelist_remove() which shares a common implementation.", 
+   "Note: If this is not backported before the final 1.5 RC it will have to be", 
+   "reverted and svn_rangelist_intersect revved.", 
+   "* subversion/include/svn_mergeinfo.h", 
+   "(svn_rangelist_intersect): Add boolean consider_inheritance arg, tweak", 
+   "doc string to reflect this.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(svn_rangelist_intersect): Add new consider_inheritance arg and pass it", 
+   "to rangelist_intersect_or_remove() which does the real work for this", 
+   "function and svn_rangelist_remove.  If you were wondering, the latter", 
+   "already has a consider_inheritance arg and it is what is used when", 
+   "calculating forward merges, that is why issue #3187 only applies to", 
+   "reverse merges.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_merged_revisions): Update call to svn_rangelist_intersect() so as", 
+   "to *not* consider inheritance.  This is safe to do because paths whose", 
+   "parent has non-inheritable ranges are always handled separately even if", 
+   "that path has no explicit mergeinfo prior to the merge -- See condition", 
+   "3 in the doc string for merge.c:get_mergeinfo_paths().", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(filter_log_entry_with_rangelist):", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__get_youngest_common_ancestor):", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(test_rangelist_intersect, test_rangelist_intersect_randomly):", 
+   "Update calls to svn_rangelist_intersect(), always considering inheritance.", 
+   "This is equivalent to the previous default behavior.  The only call", 
+   "changed from the previous default in this commit is in merge.c above."
+  ], 
+  "revision_id": "870957"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-05-01T14:48:59.051130Z", 
+  "msg": [
+   "* subversion/libsvn_repos/log.c", 
+   "(get_combined_mergeinfo): Avoid allocating some subpools unnecessarily."
+  ], 
+  "revision_id": "870956"
+ }
+]

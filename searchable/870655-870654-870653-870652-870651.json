@@ -1,0 +1,121 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2008-04-14T16:49:50.131034Z", 
+  "msg": [
+   "Follow-up to r30349 and r30390, repair mergeinfo on root of 1.5.x branch.", 
+   "See http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=137036.", 
+   "At r30348 the 1.5.x branch had explicit mergeinfo on the following paths:", 
+   "/branches/1.5.x - from '/branches/svn-mergeinfo-enhancements' and '/trunk'.", 
+   "/branches/1.5.x/CHANGES - from", 
+   "'/branches/svn-mergeinfo-enhancements/CHANGES' and '/trunk/CHANGES'.", 
+   "Because of a bug with --reintegrate merges (since fixed - see r30368 and", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=136908)", 
+   "hwright had to use the following command to merge changes from the", 
+   "1.5.x-r30215 backport branch to 1.5.x:", 
+   "svn merge -c 30236,30238,30245,30288 \\", 
+   "https://svn.collab.net/repos/svn/branches/1.5.x-r30215 1.5.x-WC", 
+   "hwright committed this merge in r30349.  Due to another bug (fixed in", 
+   "r30467 and discussed here:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=137090) the", 
+   "mergeinfo on the root of the 1.5.x branch resulting from that merge was", 
+   "incorrect, specifically:", 
+   "A) The mergeinfo '/branches/svn-mergeinfo-enhancements:r30122' was deleted.", 
+   "This mergeinfo came about from the following sequence:", 
+   "r30122 committed to the svn-mergeinfo-enhancements branch.", 
+   "r30122 merged to trunk in r30124, adding explicit mergeinfo to trunk", 
+   "from svn-mergeinfo-enhancements.  Finally, r30124 was merged from", 
+   "trunk to the 1.5.x branch in r30135.", 
+   "B) A large number of revisions from '/trunk' were removed:", 
+   "r29085-29089,29091,29094-29107,29111,29114,", 
+   "29117,29126-29127,29129-29133,29135-29150,", 
+   "29153-29164,29166,29174,29176-29186,29188-29189,", 
+   "29193-29194,29198-29206,29208-29251,29254-29256,", 
+   "29261,29267-29273,29277,29280-29281,29284,", 
+   "29287-29303,29305-29307,29309-29325,29327-29343,", 
+   "29345-29348,29358-29379,29381-29392,29397,29399,", 
+   "29401,29409,29412,29414-29415,29417-29423,29425-29426,", 
+   "29429,29433-29434,29436-29447,29449-29466,29468-29478,", 
+   "29482,29484,29486-29487,29489,29491,29493,29496,29498,", 
+   "29508,29527-29528,29531,29533,29539-29540,29542,", 
+   "29544,29546,29551,29553,29556,29559,29565,29567-29569,", 
+   "29571-29578,29581,29583,29591,29594,29600,29603,29607,", 
+   "29611,29613-29614,29619,29623,29625-29626,29630-29631,", 
+   "29634,29642,29648,29650,29656,29659-29660,29663-29664,", 
+   "29671-29672,29677-29680,29692,29738-29739,29742-29744,", 
+   "29746,29751,29763,29769-29770,29784,29787,29797,29801,", 
+   "29821,29824,29828,29835,29855,29858-29859,29868-29869,", 
+   "29876,29878,29883-29884,29895,29898,29900,29914,29920,", 
+   "29925,29930,29939-29940,29942,29950,29958,29962,29968,", 
+   "29980,29986,29994-29997,30004,30009,30020,30030,30050,", 
+   "30054,30061-30062,30067,30070,30074,30086,30098,30117,", 
+   "30124,30130,30137,30145,30151,30159,30162,30185", 
+   "To make matters a bit more complicated, in r30390 arfrever, via a hand", 
+   "edit, fixed 'B'.  But he also removed the following mergeinfo:", 
+   "C) /trunk:r30286 - 30286 was merged to cmpilato's 1.5.x-r30215", 
+   "backport branch which was in turn merged to 1.5.x, so it", 
+   "should be present in 1.5.x's mergeinfo.", 
+   "D) /branches/1.5.x-r30215:r30236,30238,30245,30288 - This is the", 
+   "mergeinfo created which describes Hyrum's merge from the", 
+   "1.5.x-r30215 branch, so it should obviously also be present.", 
+   "Anyhow, to correct the mergeinfo I did the following for this commit:", 
+   "1) svn merge --record-only -c 30236,30238,30245,30288 \\", 
+   "http://svn.collab.net/repos/svn/branches/1.5.x-r30215@30288 1.5.x-WC", 
+   "This fixes 'D'.", 
+   "2) svn merge -c30124 --ignore-ancestry \\", 
+   "http://svn.collab.net/repos/svn/trunk 1.5.x-WC", 
+   "This fixes 'A'.  The --ignore-ancestry is required because the", 
+   "mergeinfo already shows r30124 has merged from trunk.", 
+   "3) svn merge --ignore-ancestry --depth empty -c 30288 \\", 
+   "http://svn.collab.net/repos/svn/branches/1.5.x-r30215@30288 1.5.x-WC", 
+   "This fixes 'C'."
+  ], 
+  "revision_id": "870655"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-04-14T16:26:33.575942Z", 
+  "msg": [
+   "Merge from trunk to in-memory-cache."
+  ], 
+  "revision_id": "870654"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-04-14T12:03:43.414197Z", 
+  "msg": [
+   "On the tree-conflicts branch, handle reading of the new conflict reason", 
+   "svn_wc_conflict_reason_added. A follow-up to r30542.", 
+   "Patch by: stsp", 
+   "* subversion/libsvn_wc/tree_conflicts.c:", 
+   "(tree_conflict_phrases): Add new member we_added_merge.", 
+   "(new_tree_conflict_phrases): Handle the new member. Also, stop", 
+   "implying that operations/actions occur on files only, i.e. remove", 
+   "\"the file\" from all phrases. Also, initialise phrases in the same", 
+   "order as they are declared in the struct.", 
+   "(select_our_phrase, read_reason, svn_wc_append_tree_conflict_info_xml):", 
+   "Handle the new member."
+  ], 
+  "revision_id": "870653"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2008-04-14T07:02:33.760981Z", 
+  "msg": [
+   "Simplified chinese translation update.", 
+   "* COMMITTERS: Update my email address.", 
+   "* subversion/po/zh_CN.po: Backport from trunk."
+  ], 
+  "revision_id": "870652"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2008-04-14T06:56:25.467917Z", 
+  "msg": [
+   "Simplified chinese translation update.", 
+   "* COMMITTERS: Update my email address.", 
+   "* subversion/po/zh_CN.po: Update to r30574."
+  ], 
+  "revision_id": "870651"
+ }
+]

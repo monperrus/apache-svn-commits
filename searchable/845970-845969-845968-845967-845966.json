@@ -1,0 +1,91 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2003-05-12T22:43:04.442865Z", 
+  "msg": [
+   "Whoa.  Turns out I was off by an order of magnitude.  Thank you Greg", 
+   "Stein and your E1337 scripting skillz!", 
+   "* www/svn-repositories2.html: Update."
+  ], 
+  "revision_id": "845970"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-05-12T22:35:47.430685Z", 
+  "msg": [
+   "Update Subversion's own survey and fix a date typo.", 
+   "* www/svn-repositories.html: Update", 
+   "* www/svn-repositories2.html: Update and fix typo."
+  ], 
+  "revision_id": "845969"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-05-12T22:23:33.351850Z", 
+  "msg": [
+   "Added new surveys from John Goerzen, Milcis Studios, Joerg", 
+   "Hessdoerfer, Daniel Patterson, and Edmund Horner", 
+   "* www/svn-repositories.html: New surveys", 
+   "* www/svn-repositories2.html: New surveys"
+  ], 
+  "revision_id": "845968"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-05-12T21:15:42.774311Z", 
+  "msg": [
+   "Begin work on issue #730:  restartable checkouts.", 
+   "Part 1: expand the reporter interface, so a 'low confidence' client", 
+   "can say it has a specific revision of a directory with zero entries.", 
+   "[ It turns out that it's not good to overload the directory revnum;", 
+   "there are scenarios where we need to know *both* that a) the entries", 
+   "file is incomplete, and b) what revnum the directory was trying to", 
+   "be.  Therefore, a new entries file will always have a valid revnum", 
+   "attached to THIS_DIR, and some other entry-flag indicating that the", 
+   "directory is incomplete.  And this changeset is about marshalling", 
+   "that future flag over the network. ]", 
+   "* svn_ra.h (svn_ra_reporter_t: set_path, link_path):  these reporter", 
+   "funcs now take 'start_empty' booleans.", 
+   "* svn_repos.h (svn_repos_set_path, svn_repos_link_path): declare new", 
+   "'start_empty' arguments.", 
+   "* libsvn_repos/reporter.c (remove_directory_children): new static", 
+   "helper func.", 
+   "(svn_repos_set_path, svn_repos_link_path): grow new 'start_empty'", 
+   "argument, and possibly call remove_directory_children() after doing", 
+   "fs linkage.", 
+   "* libsvn_ra_local/ra_plugin.c (reporter_set_path, reporter_link_path):", 
+   "take new 'start_empty' argument, pass into the libsvn_repos funcs of", 
+   "same name.", 
+   "* libsvn_ra_dav/fetch.c (reporter_set_path, reporter_link_path): take", 
+   "new 'start_empty' argument.  if present, marshall as start-empty xml", 
+   "attribute always set to 'true'.  otherwise don't send attribute at all.", 
+   "* mod_dav_svn/update.c (dav_svn__update_report): unmarshall the new", 
+   "'start-empty' xml attribute if present, pass into", 
+   "svn_repos_[set|link]_path as 'true'.", 
+   "* libsvn_ra_svn/client.c (ra_svn_set_path, ra_svn_link_path): take new", 
+   "'start_empty' arguments, unconditionally marshall as boolean over", 
+   "the network.", 
+   "* svnserve/serve.c (set_path, link_path): parse new boolean argument", 
+   "out of the tuple, pass into svn_repos funcs.", 
+   "* libsn_client/diff.c (do_merge, do_diff): update callers; pass FALSE", 
+   "to new set_path argument.", 
+   "* libsvn_wc/adm_crawler.c (svn_wc_crawl_revisions, report_revisions):", 
+   "update callers; pass FALSE for now.  In the future, this crawler", 
+   "will learn to make use of the flag when it sees incomplete entries", 
+   "files."
+  ], 
+  "revision_id": "845967"
+ }, 
+ {
+  "author": "kon", 
+  "date": "2003-05-12T20:12:11.607442Z", 
+  "msg": [
+   "* tools/client-side/psvn/psvn.el", 
+   "(svn-status-make-directory): New interactive function.", 
+   "(svn-status-mode-map, svn-status-mode-menu): Added bindings for it.", 
+   "(svn-status-mode): Mention it in the docstring.", 
+   "(svn-process-sentinel): Recognize mkdir as svn-process-cmd."
+  ], 
+  "revision_id": "845966"
+ }
+]

@@ -1,0 +1,103 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-12-18T22:44:41.793593Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Move the (still unfinished) \"elide mergeinfo catalog\" code into", 
+   "mergeinfo.c.  Make its entry point libsvn_client-visible.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(elide_mergeinfo_catalog_dir_baton,", 
+   "elide_mergeinfo_catalog_open_root,", 
+   "elide_mergeinfo_catalog_open_directory,", 
+   "elide_mergeinfo_catalog_cb_baton, elide_mergeinfo_catalog_cb,", 
+   "elide_mergeinfo_catalog): Move to mergeinfo.c.", 
+   "(calculate_left_hand_side): Adjust.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(elide_mergeinfo_catalog_dir_baton,", 
+   "elide_mergeinfo_catalog_open_root,", 
+   "elide_mergeinfo_catalog_open_directory,", 
+   "elide_mergeinfo_catalog_cb_baton, elide_mergeinfo_catalog_cb,", 
+   "svn_client__elide_mergeinfo_catalog): Moved from merge.c; the last", 
+   "one gains its \"svn_client__\" here.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__elide_mergeinfo_catalog): Declare."
+  ], 
+  "revision_id": "868610"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-18T22:38:57.052876Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Simplify the \"elide mergeinfo catalog\" editor by making the \"does this", 
+   "path have mergeinfo?\" check just look in the mergeinfo catalog instead", 
+   "of tracking the last place that the callback was called.", 
+   "To do this, we add the mergeinfo catalog to the callback baton and the", 
+   "directory baton (and make it the edit baton as well).", 
+   "* subversion/libsvn_client/merge.c", 
+   "(elide_mergeinfo_catalog_dir_baton): Remove", 
+   "last_child_seen_with_mergeinfo field; add mergeinfo_catalog field.", 
+   "(elide_mergeinfo_catalog_open_root): Initialize mergeinfo_catalog", 
+   "field of dir baton.", 
+   "(elide_mergeinfo_catalog_open_directory): Propagate", 
+   "mergeinfo_catalog field through dir batons.  Check for the path in", 
+   "the catalog, not in the last-child field.", 
+   "(elide_mergeinfo_catalog_cb_baton): New struct, to pass the catalog", 
+   "into the callback (in addition to the elidable_paths array).", 
+   "(elide_mergeinfo_catalog_cb): Use new baton type instead of just the", 
+   "elidable_paths array.  Propagate mergeinfo_catalog field.  Don't", 
+   "set \"last-child\" field.", 
+   "(elide_mergeinfo_catalog): Use new batons."
+  ], 
+  "revision_id": "868609"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-18T20:53:15.085943Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Do most of the infrastructure for implementing an \"elide mergeinfo", 
+   "catalog\" function.  This uses a little editor and the path driver.  I", 
+   "didn't actually implement the elision logic itself (which will involve", 
+   "a refactoring of libsvn_client/mergeinfo.c(elide_megeinfo)), though.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(elide_mergeinfo_catalog_dir_baton): New struct.", 
+   "(elide_mergeinfo_catalog_open_root): Make a dummy baton.", 
+   "(elide_mergeinfo_catalog_open_directory): Make a baton; figure out", 
+   "if the given directory gets its mergeinfo from itself or from the", 
+   "same place as its parent.", 
+   "(elide_mergeinfo_catalog_cb): Callback function, which in a future", 
+   "revision will actually check to see if the given path's mergeinfo", 
+   "is redundant.", 
+   "(elide_mergeinfo_catalog): New helper.", 
+   "(calculate_left_hand_side): Call elide_mergeinfo_catalog."
+  ], 
+  "revision_id": "868608"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-18T19:51:31.907699Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Re-commit r28531 by reverting r28532.  No, really, I do want this API!", 
+   "* subversion/include/svn_hash.h", 
+   "* subversion/libsvn_subr/hash.c", 
+   "(svn_hash_keys): New."
+  ], 
+  "revision_id": "868607"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-18T19:46:59.474210Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Revert r28531.  Turns out I only needed svn_hash_keys in order to do", 
+   "what svn_sort__hash does.", 
+   "* subversion/include/svn_hash.h", 
+   "* subversion/libsvn_subr/hash.c", 
+   "(svn_hash_keys): Remove."
+  ], 
+  "revision_id": "868606"
+ }
+]

@@ -1,0 +1,117 @@
+[
+ {
+  "author": "ringstrom", 
+  "date": "2003-12-15T22:32:46.134460Z", 
+  "msg": [
+   "!!! Contains API changes !!!", 
+   "Implement retries for the SSL client certificate filename and password", 
+   "prompts.  Also add a realm string to these prompt functions so that", 
+   "the user can know what information is being asked for.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_get_ssl_client_cert_prompt_provider,", 
+   "svn_client_get_ssl_client_cert_pw_prompt_provider):", 
+   "Add a retry_limit argument.", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_ssl_client_cert_prompt_func_t,", 
+   "svn_auth_ssl_client_cert_pw_prompt_func_t):", 
+   "Add a realm argument.", 
+   "* subversion/libsvn_client/ssl_client_cert_pw_providers.c", 
+   "(ssl_client_cert_pw_prompt_provider_baton_t):", 
+   "Add a retry_limit struct member.", 
+   "(ssl_client_cert_pw_prompt_iter_baton_t): New struct.", 
+   "(ssl_client_cert_pw_prompt_first_cred): Allocate and initialize an", 
+   "iteration baton.  Provide the realmstring to the prompt function.", 
+   "(ssl_client_cert_pw_prompt_next_cred): New function to handle", 
+   "authentication retries.", 
+   "(client_cert_pw_prompt_provider): Initialize the next_cred member.", 
+   "(svn_client_get_ssl_client_cert_pw_prompt_provider): Initialize the", 
+   "new retry_limit in the provider baton.", 
+   "* subversion/libsvn_client/ssl_client_cert_providers.c", 
+   "(ssl_client_cert_prompt_provider_baton_t):", 
+   "Add a retry_limit struct member.", 
+   "(ssl_client_cert_prompt_iter_baton_t): New struct.", 
+   "(ssl_client_cert_prompt_first_cred): Allocate and initialize an", 
+   "iteration baton.  Provide the realmstring to the prompt function.", 
+   "(ssl_client_cert_prompt_next_cred): New function to handle", 
+   "authentication retries.", 
+   "(client_cert_prompt_provider): Initialize the next_cred member.", 
+   "(svn_client_get_ssl_client_cert_prompt_provider): Initialize the", 
+   "new retry_limit in the provider baton.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__auth_ssl_client_cert_prompt): Add a realm argument.", 
+   "(svn_cl__auth_ssl_client_cert_pw_prompt): Add a realm argument.", 
+   "* subversion/clients/cmdline/prompt.c", 
+   "(svn_cl__auth_ssl_client_cert_prompt): Print the realm.", 
+   "(svn_cl__auth_ssl_client_cert_pw_prompt): Print the realm.", 
+   "Handle the empty string in the same way as the other prompts,", 
+   "and do not check for NULL since it cannot happen (and no other", 
+   "prompts do it).", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): Use 2 as retry limit for the client cert prompt functions.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(client_ssl_keypw_callback): Removed.", 
+   "(client_ssl_decrypt_cert): New function used to decrypt an encrypted", 
+   "client cerificate using the auth system.  Handles retries.", 
+   "(client_ssl_callback): Implement a realm string for client certs.", 
+   "Handle retries if the cert cannot not be loaded.  Use the new", 
+   "client_ssl_decrypt_cert to decrypt the certificate if needed."
+  ], 
+  "revision_id": "848080"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-12-15T20:06:56.339634Z", 
+  "msg": [
+   "* HACKING (Stabilizing a release branch): New section.  Thanks to Greg", 
+   "Hudson and Tobias Ringstr\u00f6m for comments."
+  ], 
+  "revision_id": "848079"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2003-12-15T20:03:20.565412Z", 
+  "msg": [
+   "* Added new marking commands", 
+   "\"* ?\" svn-status-mark-unknown", 
+   "\"* A\" svn-status-mark-added", 
+   "\"* M\" svn-status-mark-modified"
+  ], 
+  "revision_id": "848078"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-15T18:23:42.185320Z", 
+  "msg": [
+   "Garbage-collect the svnserve -u code.", 
+   "* libsvn_ra_svn/client.c (do_auth): Remove code to send client", 
+   "username during ANONYMOUS auth.  (It's kind of a privacy leak", 
+   "anyway.)", 
+   "* svnserve/main.c", 
+   "(svnserve__options): Remove -u option.", 
+   "(serve_thread_t): Remove believe_username field.", 
+   "(serve_thread): Don't pass believe_username argument to serve().", 
+   "(main): Remove code for -u option, and don't pass believe_username", 
+   "argument to serve().", 
+   "* svnserve/server.h, svnserve/serve.c", 
+   "(serve): Remove believe_username argument.", 
+   "* svnserve/serve.c", 
+   "(server_baton_t): Remove believe field.", 
+   "(auth): Never set the username for anonymous auth.", 
+   "Some trailing whitespace also eliminated."
+  ], 
+  "revision_id": "848077"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-12-15T01:39:12.101183Z", 
+  "msg": [
+   "Document the new \"--listen-host\" and \"--listen-port\" options to svnserve,", 
+   "based on feedback from Greg Hudson.", 
+   "* svnserve/svnserve.8:", 
+   "Add documentation for the new options.", 
+   "* svnserve/main.c:", 
+   "(svnserve__options): Clarify the \"--listen-host\" option description."
+  ], 
+  "revision_id": "848076"
+ }
+]

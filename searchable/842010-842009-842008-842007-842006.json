@@ -1,0 +1,98 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-12T16:56:20.995713Z", 
+  "msg": [
+   "Attempting to address Issue #622 by converting the RA layer's", 
+   "do_checkout() vtable function to the new editor interface.  Ra_local's", 
+   "driver was converted as well, while ra_dav's currently continues using", 
+   "a compatibility wrapper.  This seemed to help the memory usage a", 
+   "little bit in the ra_local case, but not as significantly as I'd", 
+   "desired.  The work needed to be done, regardless, though.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t): Make `editor' in the do_checkout() vtable item a", 
+   "new svn_delta_editor_t *.", 
+   "* subversion/libsvn_ra_local/checkout.c", 
+   "(send_file_contents): Make `editor' a new svn_delta_editor_t *.", 
+   "Lose the subpool, too.", 
+   "(set_any_props): Make `editor' a new svn_delta_editor_t *.  Drive", 
+   "appropriately.", 
+   "(walk_tree): Make `editor' a new svn_delta_editor_t *.  Add", 
+   "`edit_path' argument.  Use only an iteration subpool, not a depth subpool.", 
+   "(svn_ra_local__checkout): Make `editor' a new svn_delta_editor_t *.", 
+   "Update calls to walk_tree().", 
+   "* subversion/libsvn_ra_local/ra_local.h", 
+   "(svn_ra_local__checkout): Make `editor' a new svn_delta_editor_t *.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_checkout): Make `editor' a new svn_delta_editor_t *.", 
+   "Update call to svn_ra_local__checkout.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__do_checkout): Make `editor' a new svn_delta_editor_t *,", 
+   "and temporarily wrap it for compatibility.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__do_checkout): Make `editor' a new svn_delta_editor_t *.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client_checkout): No longer do wrapping in non-XML case, since", 
+   "the RA layer's do_checkout function now uses the new editor", 
+   "interface.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_wc_copy): No longer do wrapping, since the RA layer's", 
+   "do_checkout function now uses the new editor interface."
+  ], 
+  "revision_id": "842010"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-05-12T14:49:06.251414Z", 
+  "msg": [
+   "* www/project_status.html: fix typo"
+  ], 
+  "revision_id": "842009"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-11T19:59:38.529281Z", 
+  "msg": [
+   "* notes/fs-improvements.txt: Just refer to the dev list thread about", 
+   "how to represent IDs.  Follow-up to revision 1930."
+  ], 
+  "revision_id": "842008"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-11T19:24:02.426328Z", 
+  "msg": [
+   "Special-case revision 0 when dumping and loading.  This is required so", 
+   "we can do normal, sane things like this:", 
+   "$ svnadmin create newrepo", 
+   "$ svnadmin dump oldrepo | svnadmin load newrepo", 
+   "* dump.c", 
+   "(svn_repos_dump_fs): special case: when dumping revision 0, write a", 
+   "record so the props can be used by the parser, but no need to dump", 
+   "the root directory \"/\".  The root directory in *every* revision 0 is", 
+   "guaranteed to exist and be invariant.", 
+   "* load.c", 
+   "(set_revision_property): special case: set revision 0 dumpstream", 
+   "props on existing revision 0, IFF we're loading into an 'empty' fs.", 
+   "(new_revision_record): only create a new txn if parsing revnum > 0.", 
+   "(close_revision): only commit a txn if parsing revnum > 0."
+  ], 
+  "revision_id": "842007"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-11T18:47:05.336189Z", 
+  "msg": [
+   "Have dumpstream-parser's vtable accept file fulltexts, instead of", 
+   "ignoring them.  Use new svn_fs.h routine to write fulltext directly", 
+   "into filesystem node.", 
+   "* svn_fs.h (svn_fs_apply_text): declare new func.", 
+   "* tree.c (svn_fs_apply_text, txn_body_apply_text, text_baton_t,", 
+   "another_txn_body_finalize_edits, text_stream_writer,", 
+   "text_stream_closer ): implement new func with this machinery.", 
+   "* load.c (set_fulltext):  call svn_fs_apply_text, end of story.", 
+   "(parse_content_block):  don't forget to close the writable stream."
+  ], 
+  "revision_id": "842006"
+ }
+]

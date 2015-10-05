@@ -1,0 +1,97 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-02-02T03:58:32.368204Z", 
+  "msg": [
+   "Suppress the \"Properties on 'FILE':\" line when using 'svn proplist --quiet'.", 
+   "This only affects the output when run in non-xml mode.", 
+   "This may have minor backward compatibility concerns for scripts which depended", 
+   "on this output, but this is likely a non-issue.  Prior to this change, --quiet", 
+   "has not had special meaning for 'svn proplist'.", 
+   "This closes issue #1547.", 
+   "* subversion/svn/proplist-cmd.c", 
+   "(proplist_receiver):  Conditionally print the filename when given '--quiet'."
+  ], 
+  "revision_id": "863400"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-02-01T22:24:41.799319Z", 
+  "msg": [
+   "* subversion/libsvn_client:", 
+   "* subversion/libsvn_delta:", 
+   "* subversion/libsvn_diff:", 
+   "* subversion/libsvn_fs:", 
+   "* subversion/libsvn_ra:", 
+   "* subversion/libsvn_repos:", 
+   "* subversion/libsvn_subr:", 
+   "* subversion/libsvn_wc:", 
+   "(svn:ignore): Ignore the auto-generated .def files."
+  ], 
+  "revision_id": "863399"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-02-01T22:04:26.426537Z", 
+  "msg": [
+   "Refactor the internal proplist client API to use the receiver callbacks more", 
+   "effeciently.", 
+   "This also deprecates svn_proplist_item_t (and associated functions), which was", 
+   "used for packing paths and properties into a return array.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_proplist_item_t): Deprecate.", 
+   "(svn_proplist_receiver_t): Expand the receiver API to accept a path and a", 
+   "properties hash, instead of a svn_client_proplist_item_t.", 
+   "(svn_client_proplist_item_dup): Deprecate.", 
+   "(svn_client_proplist3): Remove a reference to proplist_item_t in the docs.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(push_props_on_list): Remove.", 
+   "(call_receiver): New.", 
+   "(remote_proplist): Instead of adding properties to an array, use", 
+   "call_receiver() for each target.", 
+   "(add_to_proplist): Remove.", 
+   "(proplist_walk_baton): Remove the props array, and add the receiver and baton.", 
+   "(proplist_walk_cb): Instead of adding properties to the array, use", 
+   "call_receiver().", 
+   "(svn_client_proplist3): Adjust call to remove_proplist() to use the receiver,", 
+   "remove unused variables.", 
+   "(proplist_receiver_baton): Add the pool to allocate the proplist_items in.", 
+   "(proplist_receiver_cb): Create and populate proplist_items to for usage with", 
+   "svn_client_proplist2().", 
+   "* subversion/svn/proplist-cmd.c", 
+   "(proplist_receiver_xml, proplist_receiver): Adjust parameter to reflect the", 
+   "changes to svn_proplist_receiver_t."
+  ], 
+  "revision_id": "863398"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-02-01T19:54:55.052300Z", 
+  "msg": [
+   "Revert r23309.", 
+   "Peter Lundblad expressed concern about using SVN_REVNUM_T_FMT due to", 
+   "translation concerns.  See:", 
+   "http://svn.haxx.se/dev/archive-2007-01/0995.shtml", 
+   "* subversion/svn/propget-cmd.c,", 
+   "subversion/svn/log-cmd.c,", 
+   "subversion/svn/proplist-cmd.c,", 
+   "subversion/svn/status-cmd.c,", 
+   "subversion/svn/info-cmd.c:", 
+   "Remove use of SVN_REVNUM_T_FMT."
+  ], 
+  "revision_id": "863397"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-01T15:20:45.956655Z", 
+  "msg": [
+   "Small fixes to the new props RELAX NG schema and add it to the build.", 
+   "* Makefile.in", 
+   "(SCHEMAS_DTD, SCHEMA_RNG, SCHEMA_XSD): Add the props schema.", 
+   "* subversion/svn/schema/props.rnc", 
+   "(attlist.property): Make 'base64' the only allowed value", 
+   "for encoding.  Document the encoding attribute."
+  ], 
+  "revision_id": "863396"
+ }
+]

@@ -1,0 +1,52 @@
+[
+ {
+  "author": "bandaram", 
+  "date": "2006-04-27T23:18:48.851712Z", 
+  "msg": [
+   "DERBY-1007: Follow up patch to earlier submitted patch.", 
+   "In a word, the fix for this issue ensures that, in the case of subqueries, the optimizer will correctly propagate the estimated costs for subqueries up to the parent subquery(-ies), thus allowing the parent query to make a better decision about which join order is ultimately the best. As seen in the example scenario included above, the correct estimates are higher--sometimes much higher--than what the optimizer was returning prior to this change: in the example, the optimizer was returning an incorrect cost estimate of 10783 before the patch, and a correct estimate of 1 million after the patch (where \"correct\" means that it's the value calculated by the optimizer and thus the value that should be returned; I'm not saying anything about the accuracy of the estimate here).", 
+   "One side effect of this is that, for very deeply nested queries and/or queries with a high number of FROM tables/expressions, the higher cost estimates can be multiplied--sometimes many times over--throughout the optimization process, which means that the overall query estimate can climb to a much larger number much more quickly. If the query is big enough, this can actually cause the optimizer to reach an estimated cost of INFINITY.", 
+   "That said, the current optimizer logic for choosing a plan does not expect to see an estimate of infinity for its plans. As a result the optimizer does comparisons of, and arithmetic with, cost estimates and row counts that, when applied to Infinity, give unexpected results.", 
+   "I have filed DERBY-1259 and DERBY-1260 to address the \"infinity problem\" in more detail, but am attaching here a follow-up patch that takes some basic steps toward making the optimizer more robust in the face of infinite cost estimates, which are now more likely to occur given the DERBY-1007 changes. In particular, the d1007_followup_v1.patch does the following:", 
+   "1) Fixes a couple of small problems with the handling of estimates for FromBaseTables, to ensure that a FromBaseTable's estimate is correctly propagated to (and handled by) the ProjectRestrictNode that sits above it. This parallels the original DERBY-1007 work but is a much simpler \"follow-up\" task as it deals only with base tables instead of subqueries, and thus the changes are fairly minor.", 
+   "2) There are several places in OptimizerImpl where the optimizer will only choose to accept a plan's cost if the cost is less than the current \"bestCost\". If no best cost has been found yet, bestCost is set to an uninitialized value of Double.MAX_VALUE with the assumption that the first valid plan will have a cost less than Double.MAX_VALUE and thus will be chosen as the best so far. However, since a plan's cost estimate can actually end up being Double.POSITIVE_INFINITY, which is greater than Double.MAX_VALUE, it's possible that the optimizer will reject a valid join order because its cost is infinity, and then end up completing without ever finding a valid plan--which is wrong. What we want is for the optimizer to accept the first valid plan that it finds, regardless of what the cost is. Then if it later finds a better plan, it can use that. So in several places the d1007_followup_v1.patch adds a check to see if bestCost is uninitialized and, if so, we'll always accept the first valid join order we find, regardless of what its cost is--even if it's infinity--because that's better than no plan at all.", 
+   "3) Modifies the \"compare\" method in CostEstimateImpl.java to try to account for comparisons between two plans that both have infinite costs. If this happens, we don't have much choice but to guess as to which plan is actually better. So the changes for followup_v1 make that guess based on a comparison of row counts for the two plans. And if the row counts themselves are infinity, then we'll guess based on the single scan row counts. And finally, if those values are both infinity, as well, then we're out of luck and we just say that the two costs are \"equal\" for lack of better alternative.", 
+   "4) And finally, due to unexpected behavior that results from arithmetic using infinity (see DERBY-1259), it is currently possible (though rather rare) for the optimizer to decide to do a hash join that has a cost estimate of Infinity. An example of a query for which this could happen can be found in DERBY-1205, query #1. That said, the BackingStoreHashtable that is used for carrying out a hash join currently creates a Java Hashtable instance with a capacity that matches the optimizer's estimated row count. So if the row count is infinity we'll try to create a Hashtable with some impossibly large capacity and, as a result, we'll end up with an OutOfMemory error. So the d1007_followup_v1.patch adds some code to handle this kind of situation in a more graceful manner.", 
+   "I ran derbyall with these changes on Linux Red Hat using ibm142 and saw no new failures.", 
+   "Submitted by Army Brown (qozinx@gmail.com)"
+  ], 
+  "revision_id": "397675"
+ }, 
+ {
+  "author": "jmitchell", 
+  "date": "2006-04-27T23:18:41.813224Z", 
+  "msg": [
+   "making action1 src consistent"
+  ], 
+  "revision_id": "397674"
+ }, 
+ {
+  "author": "jmitchell", 
+  "date": "2006-04-27T23:01:28.592645Z", 
+  "msg": [
+   "making action1 src consistent"
+  ], 
+  "revision_id": "397673"
+ }, 
+ {
+  "author": "carnold", 
+  "date": "2006-04-27T23:00:29.506560Z", 
+  "msg": [
+   "Bug 39437: Eliminate unnecessary conversion to local code page"
+  ], 
+  "revision_id": "397672"
+ }, 
+ {
+  "author": "jmitchell", 
+  "date": "2006-04-27T23:00:22.512803Z", 
+  "msg": [
+   "making action1 src consistent"
+  ], 
+  "revision_id": "397671"
+ }
+]

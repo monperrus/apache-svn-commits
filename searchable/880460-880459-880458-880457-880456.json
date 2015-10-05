@@ -1,0 +1,72 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-11-05T17:04:45.404070Z", 
+  "msg": [
+   "Follow-up to r40321:", 
+   "r40321 caused svn to use a wrong copyfrom path in case a directory was", 
+   "copied, and then one of its children was copied. The false copyfrom points", 
+   "to the source of the root of the first copy operation, rather than the", 
+   "source of the copied child. If you did such a copy using a trunk client as", 
+   "of r40321 or later (up to this commit), you'll need to fix copyfrom info", 
+   "somehow (e.g. via dump/edit/load or by copying again from history).", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(determine_copyfrom_info): Restore pre-r40321 behaviour to calculate", 
+   "correct copyfrom info for copies of children of locally copied", 
+   "subdirectories. Also adjust variable names to match corresponding", 
+   "output parameter names of svn_wc__db_read_info(), for clarity.", 
+   "Found by: gstein"
+  ], 
+  "revision_id": "880460"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-11-05T15:48:47.420835Z", 
+  "msg": [
+   "Improve the error condition encountered when trying to use a DAV", 
+   "write-through proxy but not having mod_proxy loaded. See this email thread:", 
+   "<http://subversion.tigris.org/ds/viewMessage.do?dsForumId=462&dsMessageId=2412741>.", 
+   "In mod_dav_svn, when processing an SVNMasterURI directive, check that", 
+   "mod_proxy is available in the httpd runtime.  Forwarding writes to a master", 
+   "from a slave requires the mod_proxy handler, and when it isn't present, the", 
+   "failure is ugly & opaque.  Apache's core, default handler sends back a \"405", 
+   "Not Allowed,\" for non-GET which looks like an authz failure.", 
+   "BTW, there's precedent for using ap_find_linked_module() to check that", 
+   "module dependencies are present.  Namely, mod_rewrite looks for mod_proxy,", 
+   "and mod_authnz_ldap looks for util_ldap.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "(SVNMasterURI_cmd): Use ap_find_linked_module() to ensure that mod_proxy", 
+   "is available.", 
+   "Patch by: Dave Brown <dave.brown{_AT_}wandisco.com>"
+  ], 
+  "revision_id": "880459"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2009-11-05T15:28:49.972016Z", 
+  "msg": [
+   "* notes/wc-ng-design: fix a typo"
+  ], 
+  "revision_id": "880458"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-05T15:02:42.435747Z", 
+  "msg": [
+   "On the 1.5.x-r40200 branch, resolve a semantic conflict I didn't find", 
+   "in the first pass (should've run tests...)", 
+   "* subversion/tests/cmdline/autoprop_tests.py", 
+   "(autoprop_tests): check_proplist() takes a different parameter list", 
+   "in 1.5.x than in 1.6.x and trunk."
+  ], 
+  "revision_id": "880457"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-05T14:41:02.774274Z", 
+  "msg": [
+   "* STATUS: Nominate r40200 and 40201 for backport to 1.5.x."
+  ], 
+  "revision_id": "880456"
+ }
+]

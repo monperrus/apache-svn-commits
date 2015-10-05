@@ -1,0 +1,82 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-02-06T00:46:39.000000Z", 
+  "msg": [
+   "Reverted Change #1, also known as \"2001-01-30 17:06   Karl Fogel\".", 
+   "The unrelated portions of that change were not reverted, however.", 
+   "Also, where Change #1 overlapped with Change #8, appropriate", 
+   "adjustments were made, and this new code was added:", 
+   "* libsvn_delta/default_editor.c (replace_root, close_edit): New", 
+   "functions.", 
+   "(default_editor): Include them.", 
+   "Unrelated to the reversion, renamed two editor functions:", 
+   "* include/svn_delta.h (svn_delta_edit_fns_t): Rename \"replace_root\" to", 
+   "\"begin_edit\" and \"delete_item\" to \"delete_entry\".  All callers and", 
+   "providers changed.  Considered fixing the doc string here to describe", 
+   "how an editor should remain inactive until begin_edit() is called, but", 
+   "the existing doc implies this, and it's intuitively what one would", 
+   "expect anyway.", 
+   "Finally, one non-code bugaboo about the reversion, which will need to", 
+   "be investigated further:", 
+   "* tests/libsvn_wc/Makefile.am (noinst_PROGRAMS, commit_test_SOURCES,", 
+   "commit_test_LDADD): Don't build commit-test for now, due to the", 
+   "bizarre linker error mentioned in a comment in the sources.  I think", 
+   "it's just a matter of changing some orderings in commit_test_LDADD,", 
+   "will go back and investigate after this commit."
+  ], 
+  "revision_id": "838485"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-02-05T20:12:56.000000Z", 
+  "msg": [
+   "Make the test framework able to run multiple named tests:", 
+   "* tests/svn_tests_main.c (main): Handle multiple test number arguments.", 
+   "Untangle filesystem intertest dependencies, so tests can be run", 
+   "independently:", 
+   "* tests/libsvn_fs/fs-test.c (create_berkeley_filesystem,", 
+   "trivial_transaction): Do nothing if run twice.  Latter make sure", 
+   "former has been run, too.", 
+   "(open_berkeley_filesystem, reopen_trivial_transaction,", 
+   "list_live_transactions): Make sure dependees have been run."
+  ], 
+  "revision_id": "838484"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-02-05T19:21:25.000000Z", 
+  "msg": [
+   "(changelog): Include all subdirs."
+  ], 
+  "revision_id": "838483"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-05T14:11:07.000000Z", 
+  "msg": [
+   "Store the transaction name for later usage."
+  ], 
+  "revision_id": "838482"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-05T14:08:06.000000Z", 
+  "msg": [
+   "Get activity creation working. We now have ACTIVITY -> TXN mappings.", 
+   "* version.c (dav_svn_can_be_activity): the resource must be a non-existing", 
+   "activity resource to be allowed as an activity.", 
+   "(dav_svn_make_activity): make up a transaction name and store a mapping", 
+   "from the activity name (info->object_name) to the txn name.", 
+   "* activity.c (dav_svn_get_txn): new function. get a transaction name given", 
+   "an activity id.", 
+   "(dav_svn_store_activity): new function. store a mapping from an activity", 
+   "id to a transaction name.", 
+   "* dav_svn.h (dav_svn_get_txn, dav_svn_store_activity): new prototypes", 
+   "* repos.c (dav_svn_prep_activity): set the EXISTS flag based on whether the", 
+   "activity already exists in the mapping table.", 
+   "(dav_svn_get_resource): store the pool into the repository structure"
+  ], 
+  "revision_id": "838481"
+ }
+]

@@ -1,0 +1,112 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:12.073035Z", 
+  "msg": [
+   "HBase load testing as a map-reduce job", 
+   "Summary:", 
+   "Added a script to start a streaming map-reduce job where each map", 
+   "tasks runs an instance of the load tester for a partition of the key-space.", 
+   "The load tester now takes a parameter indicating the start key for write", 
+   "operations.", 
+   "Test Plan: ran the map-reduce load test on a dev cluster", 
+   "Reviewers: kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase@lists, kranganathan", 
+   "Differential Revision: 324061", 
+   "Task ID: 697898"
+  ], 
+  "revision_id": "1181975"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:09.382927Z", 
+  "msg": [
+   "add the multi get into HTableInterface", 
+   "Summary:", 
+   "Add the multi get interface to HTableInterface, so client program does not need", 
+   "to cast the HTabeInterface to HTable for multi-get.", 
+   "Test Plan: run all the unit tests", 
+   "Reviewers: kannan, pkhemani, srash, vinodv, cgthayer, mbautin", 
+   "Reviewed By: cgthayer", 
+   "CC: dist-storage@lists, pkhemani, cgthayer, liyintang", 
+   "Differential Revision: 323946"
+  ], 
+  "revision_id": "1181974"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:03.563127Z", 
+  "msg": [
+   "thrift scannerstopwithfilter not honoring stop row", 
+   "Summary:", 
+   "should be a straightforward change.", 
+   "will upload another diff for 90", 
+   "Test Plan:", 
+   "not tested", 
+   "added a test case which doesn't really test  this change. The test case was to", 
+   "help me understand the scanner-state machine", 
+   "Reviewers: liyintang, jgray, dhruba", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-hdfs@lists, liyintang", 
+   "Differential Revision: 323183"
+  ], 
+  "revision_id": "1181973"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:00.312458Z", 
+  "msg": [
+   "Refactored and more detailed block read/cache and bloom metrics", 
+   "Summary: As we keep adding more granular block read and block cache usage", 
+   "statistics, there is a combinatorial explosion of the number of cases we have to", 
+   "monitor, especially when we want both per-column family / block type statistics", 
+   "and aggregate statistics on one or both of these dimensions. I am trying to", 
+   "unclutter HFile readers, LruBlockCache, StoreFile, etc. by creating a", 
+   "centralized class that knows how to update all kinds of per-column family/block", 
+   "type statistics.", 
+   "Test Plan:", 
+   "Run all unit tests.", 
+   "New unit test.", 
+   "Deploy to one region server in dark launch and compare the new output of", 
+   "hbaseStats.py to the old one (take a diff of the set of keys).", 
+   "Reviewers: pritam, liyintang, jgray, kannan", 
+   "Reviewed By: kannan", 
+   "CC: , hbase@lists, dist-storage@lists, kannan", 
+   "Differential Revision: 321147", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1181972"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:55.532232Z", 
+  "msg": [
+   "Fixed the TestHRegionServerFileSystemFailure test.", 
+   "Summary:", 
+   "This test was taking too long to run and at times would time", 
+   "out. The primary problem with the test was that all of HDFS (namenode +", 
+   "datanodes) were killed and hence the regionserver's DFClient would", 
+   "retry for a long time before dying and it would take a long time before", 
+   "giving up. Also, at the same time we were still loading the cluster with", 
+   "data even after the main part of the test was over. In this diff I stop", 
+   "the loading just before we bring down the mini cluster and I also only", 
+   "kill the namenode, this leaves the regionservers in a bit of sane state", 
+   "since they can still write to the datanodes.", 
+   "Also, this test was primarily designed for namenode failures, so the", 
+   "test still serves its purpose.", 
+   "The test now runs in under 2mins on my dev cluster.", 
+   "Test Plan: 1) Run the test multiple times. (Ran it about 600 times finally)", 
+   "Reviewers: kannan, liyintang, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: hbase@lists, , kannan, pritam, liyintang", 
+   "Differential Revision: 307053", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -"
+  ], 
+  "revision_id": "1181971"
+ }
+]

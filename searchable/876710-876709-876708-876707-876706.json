@@ -1,0 +1,60 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-03-17T20:16:48.136198Z", 
+  "msg": [
+   "On the 1.5.x-r36613 branch: Merge r36613 from trunk.", 
+   "Replace SVN_ERR_ASSERT's with asserts, the former are not available in 1.5.x."
+  ], 
+  "revision_id": "876710"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-17T19:59:41.585898Z", 
+  "msg": [
+   "Create a backport branch for r36613 group."
+  ], 
+  "revision_id": "876709"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-17T19:43:18.231707Z", 
+  "msg": [
+   "You'd think some sanity might exist SOMEWHERE in libsvn_wc. Apparently", 
+   "not, as this latest oddity really takes the cake.", 
+   "Refine how we set the COPIED flag for schedule-delete nodes. We don't want", 
+   "to set it if we have the changed_* information for a node. Why? Pfft. Why", 
+   "ask why?", 
+   "This keeps copy_tests 24 and schedule_tests 10 working (the driving force", 
+   "behind the recent work here). But also fixes the became-broken tests of", 
+   "update_tests 54 and switch_tests 31. Sigh.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): if cmt_rev is valid (aka changed_rev in the new world),", 
+   "then we do NOT want to set the copied flag."
+  ], 
+  "revision_id": "876708"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-17T19:29:57.866943Z", 
+  "msg": [
+   "* STATUS: Nominate r36613 and r36631."
+  ], 
+  "revision_id": "876707"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-17T17:37:56.121499Z", 
+  "msg": [
+   "Add then delete should remove nodes from version control, true. But I", 
+   "forget the delete-then-add scenario. It is entirely possibly to have a", 
+   "deleted subtree with added parents.", 
+   "Instead of aborting, just note that parents that are a simple add means no", 
+   "copy has occured, so we can exit the scan.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): break out of the scanning loop rather than aborting when", 
+   "we see an added ancestor of a deleted node."
+  ], 
+  "revision_id": "876706"
+ }
+]

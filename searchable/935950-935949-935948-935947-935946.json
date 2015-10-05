@@ -1,0 +1,102 @@
+[
+ {
+  "author": "jfaath", 
+  "date": "2010-04-20T15:03:56.321946Z", 
+  "msg": [
+   "JUDDI-384:  fixing single keyed-reference group validation issue"
+  ], 
+  "revision_id": "935950"
+ }, 
+ {
+  "author": "dvaleri", 
+  "date": "2010-04-20T15:01:47.100290Z", 
+  "msg": [
+   "Merged revisions 935945 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r935945 | dvaleri | 2010-04-20 10:49:18 -0400 (Tue, 20 Apr 2010) | 1 line", 
+   "[CXF-2771] Reworked management of Jetty MBeanContainer to avoid MBean name conflicts.", 
+   "........"
+  ], 
+  "revision_id": "935949"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-20T14:58:07.729356Z", 
+  "msg": [
+   "Split entry_modify2() into two functions: one to operate on the parent", 
+   "stub, and one for normal entry modifications. I think this will be easier", 
+   "to locate/fix/rewrite this stuff since we can tackle one type of entry", 
+   "without worrying about the other.", 
+   "The loggy_delete_entry() also grew a couple extra parameters to install a", 
+   "not-present node after the entry has been deleted. There was only one", 
+   "parent-stub loggy modification, and it occurred directly after the entry", 
+   "deletion. Rather than having loggy_entry_modify support parent stubs, I", 
+   "simply made loggy_delete_entry pick up extra functionality.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__entry_modify2): renamed to ...", 
+   "(svn_wc__entry_modify): ... this, and lost the PARENT_STUB param", 
+   "(svn_wc__entry_modify_stub): new function to modify the parent stub", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__entry_modify2): renamed to ...", 
+   "(entry_modify): ... this, and made static.", 
+   "(svn_wc__entry_modify, svn_wc__entry_modify_stub): new functions", 
+   "wrapping entry_modify", 
+   "(svn_wc__tweak_entry): rewrite to use one of the two public functions", 
+   "depending on its parameters. avoid using the internal function, so we", 
+   "can more easily change the modify functions", 
+   "(svn_wc__temp_mark_missing_not_present): switch to entry_modify_stub", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_delete_entry): add REVISION and KIND params", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_modify_entry): switch to entry_modify() and leave a couple", 
+   "comments about this call.", 
+   "(log_do_delete_entry): renamed to ...", 
+   "(basic_delete_entry): ... this. the params are changed to a standard DB,", 
+   "LOCAL_ABSPATH, and SCRATCH_POOL. code updated to track renames.", 
+   "(log_do_delete_entry): added (again) with new REVISION and KIND params.", 
+   "calls the old functionality (basic_delete_entry), then proceeds to", 
+   "create the not-present node if required.", 
+   "(start_handler): for LOG_DELETE_ENTRY, parse out the extra REVISION and", 
+   "KIND params, and pass them to log_do_delete_entry.", 
+   "(svn_wc__loggy_delete_entry): take the extra REVISION and KIND params", 
+   "and add them to the XML block", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(mark_item_copied): switch to entry_modify()", 
+   "(svn_wc_add4): switch to using entry_modify and entry_modify_stub as", 
+   "appropriate.", 
+   "(svn_wc__set_file_external_location): switch to entry_modify", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(post_copy_cleanup, copy_dir_administratively): switch to entry_modify", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(do_entry_deletion): rejigger the code to make one of two calls to", 
+   "loggy_delete_entry, based on whether a not-present node is required", 
+   "after the deletion.", 
+   "(add_directory): switch to entry_modify and entry_modify_stub", 
+   "(close_file): switch to entry_modify", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(run_revert): switch to entry_modify and entry_modify_stub", 
+   "(run_deletion_postcommit): switch to entry_modify", 
+   "(log_do_committed): switch to entry_modify_stub"
+  ], 
+  "revision_id": "935948"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2010-04-20T14:53:28.543786Z", 
+  "msg": [
+   "Fix http://issues.apache.org/bugzilla/show_bug.cgi?id=44041", 
+   "and avoid http://issues.apache.org/bugzilla/show_bug.cgi?id=48694", 
+   "Fix duplicate class definition under load. Avoid possible deadlocks."
+  ], 
+  "revision_id": "935947"
+ }, 
+ {
+  "author": "gdusbabek", 
+  "date": "2010-04-20T14:51:57.841705Z", 
+  "msg": [
+   "get_count requires SlicePredicate. adds multi_get_count. Patch by Sylvain Lebresne, reviewed by Gary Dusbabek. CASSANDRA-744"
+  ], 
+  "revision_id": "935946"
+ }
+]

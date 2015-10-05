@@ -1,0 +1,76 @@
+[
+ {
+  "author": "mcslee", 
+  "date": "2007-12-21T23:53:10.000000Z", 
+  "msg": [
+   "Make base set_name take const std:string& instead of std:string", 
+   "Summary: All the subclasses do that so it causes warnings not to and is dumb because copy constructing std::string is dumb", 
+   "Reviewed By: kholst", 
+   "Test Plan: Generate some codes, compile with -Werror"
+  ], 
+  "revision_id": "665405"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-12-21T23:52:19.000000Z", 
+  "msg": [
+   "Make \"args\" reserved in thrift", 
+   "Summary: Breaks the generated python code", 
+   "Reviewed By: dcorson", 
+   "Test Plan: Get an error if you use \"args\" as a variable name in Thrift."
+  ], 
+  "revision_id": "665404"
+ }, 
+ {
+  "author": "dweatherford", 
+  "date": "2007-12-21T07:07:31.000000Z", 
+  "msg": [
+   "[thrift] Make TTransportException::getType const throw()", 
+   "Summary: const so that catching via \"catch (const TTransportException& e)\" works", 
+   "properly, and throw() for good convention.", 
+   "Reviewed By: mcslee", 
+   "Test Plan: still compiles", 
+   "Revert: ok"
+  ], 
+  "revision_id": "665403"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2007-12-20T21:42:05.000000Z", 
+  "msg": [
+   "Thrift: A hack to prevent incorrect usage of Mutex Guards.", 
+   "Reviewed By: boz", 
+   "Test Plan:", 
+   "dreiss@dreiss-vmware:safe_concurrency:thrift/test$ nl -ba guard_test.cc", 
+   "1  #include \"../lib/cpp/src/concurrency/Mutex.h\"", 
+   "2  using facebook::thrift::concurrency::Guard;", 
+   "3  void test() {", 
+   "4    facebook::thrift::concurrency::Mutex m;", 
+   "5    Guard(m);", 
+   "6    Guard g1(m);", 
+   "7", 
+   "8    facebook::thrift::concurrency::ReadWriteMutex rwm;", 
+   "9    facebook::thrift::concurrency::RWGuard(m);", 
+   "10    facebook::thrift::concurrency::RWGuard g2(rwm);", 
+   "11  }", 
+   "dreiss@dreiss-vmware:safe_concurrency:thrift/test$ g++ -c guard_test.cc", 
+   "guard_test.cc: In function \u2018void test()\u2019:", 
+   "guard_test.cc:5: error: \u2018incorrect_use_of_Guard\u2019 was not declared in this scope", 
+   "guard_test.cc:9: error: \u2018incorrect_use_of_RWGuard\u2019 is not a member of \u2018facebook::thrift::concurrency\u2019", 
+   "dreiss@dreiss-vmware:safe_concurrency:thrift/test$", 
+   "Revert Plan: ok"
+  ], 
+  "revision_id": "665402"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-12-20T03:23:27.000000Z", 
+  "msg": [
+   "is_a is deprecated, instanceof only takes vars or constants", 
+   "Summary: Solution, dummy static class var to use instanceof", 
+   "Reviewed By: dweatherford", 
+   "Test Plan: Regen'd some mobile code in trunk using this"
+  ], 
+  "revision_id": "665401"
+ }
+]

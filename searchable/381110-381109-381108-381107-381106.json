@@ -1,0 +1,103 @@
+[
+ {
+  "author": "dasarath", 
+  "date": "2006-02-26T15:56:57.999475Z", 
+  "msg": [
+   "removing user-guide.txt as the web site has now been updated"
+  ], 
+  "revision_id": "381110"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2006-02-26T15:52:18.184790Z", 
+  "msg": [
+   "DERBY-464: Enable Grant and Revoke DML permission checking for tables. Builds on earlier submitted Part I patch.", 
+   "Previously submitted Part I patch implemented Grant and Revoke DDL statements.", 
+   "While permissions granted were correctly recorded in system catalogs, no", 
+   "permission checks were done at execution time. This Part II patch implements", 
+   "these privilege checking at execution time for TABLE PRIVILEGES only. This", 
+   "patch does some work for ROUTINE privileges, though not enabled yet. More work", 
+   "is needed to enforce ROUTINE and TRIGGER privileges.", 
+   "Bind phase changes", 
+   "------------------", 
+   "Bind phase needs to record access to database objects that need required", 
+   "privileges. No permission checking is done during compilation process. All", 
+   "checks are done at execution time.", 
+   "Top level nodes know what type of access is needed (like INSERT or UPDATE) but", 
+   "don't know on which columns. Lower level nodes (like ResultColumn) know what", 
+   "columns are being used, but not what type of privilege is needed. So, top level", 
+   "nodes push their required privilege type at the beginning of their bind phase.", 
+   "As lower level nodes go through their bind phase, they get current requested", 
+   "privilege and add required StatementPermission objects.", 
+   "DMLStatementNode now has now method, getPrivType() which defaults to", 
+   "SELECT_PRIV. Other DML nodes override this method to request their own default", 
+   "privilege.", 
+   "Bind phase changes for nodes:", 
+   "1) CallStatementNode: Set privType to EXECUTE_PRIV", 
+   "2) SelectNode: Set privType to SELECT_PRIV", 
+   "3) ResultColumn: Add column privilege of request type", 
+   "4) DeleteNode: Add SELECT_PRIV to columns in where clause and DELETE_PRIV to targetTable", 
+   "5) UpdateNode: Add SELECT_PRIV to columns in where clause and UPDATE_PRIV to columns in SET clause.", 
+   "There is a problem with this scheme for UpdateNode. While it correctly checks permissions for", 
+   "UPDATE T set a=2 where b=5 by checking for SELECT_PRIV on b and UPDATE_PRIV on a, current code", 
+   "incorrectly expects UPDATE_PRIV on c for UPDATE T set a=c where b=5. This can be resolved by", 
+   "binding on the left and right sides separately, with different default privilege.", 
+   "6) Change DMLStatementNode to add schema owner check in getSchemaDescriptor().", 
+   "7) FkConstraintDefinitionNode: Set REFERENCES_PRIV as the privType on list of columns specified.", 
+   "8) InsertNode: Add SELECT_PRIV to columns in expressions and INSERT_PRIV for targetTable", 
+   "9) CompilerContextImpl: Add another List to track schema ownership privilege checks. Would this only have", 
+   "one entry at most?", 
+   "Dictionary changes", 
+   "------------------", 
+   "Phase I already added StatementTablePermission, StatementColumnPermission and StatementRoutinePermission access", 
+   "descriptors. To check that only a schema owner can issue DDLs in their schema, another access descriptor has been", 
+   "added, StatementSchemaDescriptor.", 
+   "Conn package changes", 
+   "--------------------", 
+   "Change GenericAuthorizer.authorize() to perform runtime privilege checks right after current legacy checks for READ_ONLY", 
+   "or FULLUSER.", 
+   "Execute phase changes", 
+   "---------------------", 
+   "Changed GenericResultSetFactory to pass activation when invoking Authorizer.authorize().", 
+   "Pass access descriptors needed to check for privileges to execute phase.", 
+   "Other changes", 
+   "-------------", 
+   "sqlgrammar.jj: Change grantee to be an authorization identifier (sql-identifier)", 
+   "DDLStatementNode: Add new method getSchemaDescriptor(ownerCheck)", 
+   "Some metadata changes. Need testing.", 
+   "Test changes", 
+   "------------", 
+   "1) Moved current test grantRevoke.sql to grantRevokeDDL.sql. I intend to keep this test primarily for testing DDLs. Added", 
+   "some more tests here, including some DML statements too.", 
+   "2) Added new multi-user grantRevoke.java test to test DML statements. As the test grants/revokes privileges, it verifies", 
+   "behavior by invoking metadata, check against system tables and by issuing a DML statement that is expected to raise error.", 
+   "Plan to add more tests here, as additional privileges are implemented.", 
+   "Submitted by Satheesh Bandaram (satheesh@sourcery.org)"
+  ], 
+  "revision_id": "381109"
+ }, 
+ {
+  "author": "ehatcher", 
+  "date": "2006-02-26T15:38:30.930517Z", 
+  "msg": [
+   "Many javadoc additions, and adding ASL to each file"
+  ], 
+  "revision_id": "381108"
+ }, 
+ {
+  "author": "dolander", 
+  "date": "2006-02-26T15:34:32.606537Z", 
+  "msg": [
+   "Re-recording a few additional tests.  These are the core AJAX tests in the", 
+   "generic configurations.", 
+   "There are still 10 additional tests to be re-recorded."
+  ], 
+  "revision_id": "381107"
+ }, 
+ {
+  "author": "dasarath", 
+  "date": "2006-02-26T15:30:53.787837Z", 
+  "msg": [], 
+  "revision_id": "381106"
+ }
+]

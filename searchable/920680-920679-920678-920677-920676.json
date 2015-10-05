@@ -1,0 +1,55 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-03-09T05:20:01.683003Z", 
+  "msg": [
+   "cpp: Fix a race/deadlock in ThreadManager", 
+   "When removing a task from the pending queue, we were only notifying a", 
+   "blocked thread waiting to enqueue a task if the number of pending tasks", 
+   "was exactly one less than the limit.  However, if two tasks are finished", 
+   "at about the same time, this can result in two spots being freed up with", 
+   "only one notify.  With this change, we always notify on task completion,", 
+   "eliminating the race/deadlock."
+  ], 
+  "revision_id": "920680"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-03-09T05:19:59.426603Z", 
+  "msg": [
+   "cpp: non-blocking add for ThreadManager", 
+   "It's rare for the ThreadManager mutex to be contended, but it is", 
+   "possible.  For nonblocking applications, it is necessary to have a", 
+   "strict timeout for the lock acquisition.  With this change, that timeout", 
+   "is enforced.  Also add timeout parameters to Mutex::lock and", 
+   "Guard::Guard to support this feature."
+  ], 
+  "revision_id": "920679"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-03-09T05:19:56.623479Z", 
+  "msg": [
+   "cpp: Extend FunctionRunner to support periodic calls (in a thread)"
+  ], 
+  "revision_id": "920678"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-03-09T05:19:54.520902Z", 
+  "msg": [
+   "cpp: TSocket: call a second gettimeofday only for error checking", 
+   "Previously, we called gettimeofday twice for every send, which is", 
+   "costly.  Now, we only make the second call if send fails with EAGAIN."
+  ], 
+  "revision_id": "920677"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-03-09T05:19:52.433341Z", 
+  "msg": [
+   "cpp: TSocketPool: Optimize the case of a single server in the pool."
+  ], 
+  "revision_id": "920676"
+ }
+]

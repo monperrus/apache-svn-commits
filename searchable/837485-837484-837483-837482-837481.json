@@ -1,0 +1,81 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2000-10-05T21:35:01.000000Z", 
+  "msg": [
+   "Rework svn_xml output interfaces so they work on strings rather than", 
+   "sending output to files.", 
+   "(svn_xml_write_header, svn_xml_write_tag, svn_xml_write_tag_v,", 
+   "svn_xml_write_tag_hash): Deprecated.  write_tag_v is actually gone since", 
+   "it wasn't used.  Karl should get rid of these when he fixes up libsvn_wc", 
+   "to use the new functions.", 
+   "(svn_xml_make_header, svn_xml_make_tag, svn_xml_make_tag_v,", 
+   "svn_xml_make_tag_hash): New functions to create strings.", 
+   "(svn_xml_append_tag, svn_xml_append_tag_v, svn_xml_append_tag_hash):", 
+   "New functions to append to strings..", 
+   "* xml_output.c: Use svn_xml functions instead of knowing about XML", 
+   "syntax.", 
+   "(svn_delta_get_xml_editor): Allocate sufficient memory."
+  ], 
+  "revision_id": "837485"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-10-05T21:09:33.000000Z", 
+  "msg": [
+   "On Ben's advice, reverse responsibility chain for updating a working", 
+   "copy after a commit:", 
+   "(svn_ra_get_commit_editor): new arg *new_version replaces args", 
+   "close_commit_fn_t and close_commit_baton.", 
+   "(commit_ctx_t): store a pointer to a version number, don't store", 
+   "cleanup func and baton.", 
+   "(commit_close_edit): just set the new version, by reference, instead", 
+   "of invoking a cleanup function.", 
+   "(close_commit_baton): removed.", 
+   "(svn_wc_close_commit): public func replaces private close_commit, take", 
+   "args explicitly instead of via baton.", 
+   "(svn_wc_crawl_local_mods): take new token arg, don't take", 
+   "close_commit_fn_t and close_commit_baton args.", 
+   "(svn_wc_close_commit_fn_t): removed this typedef."
+  ], 
+  "revision_id": "837484"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-10-05T20:26:30.000000Z", 
+  "msg": [
+   "(do_parse): doc fix."
+  ], 
+  "revision_id": "837483"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-10-05T18:44:22.000000Z", 
+  "msg": [
+   "Ooops, let's change the entire entry-looper interface.  Reverting from 1.29     back to 1.28."
+  ], 
+  "revision_id": "837482"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-10-05T17:50:06.000000Z", 
+  "msg": [
+   "Implement routines to \"loop\" over an administrative `entries' file.", 
+   "The interface is extremely similar to apr's hash-looping.  :)", 
+   "* wc.h (svn_wc__entries_index_t): defined.", 
+   "* entries.c (svn_wc__entry_baton_t): two new fields (count and", 
+   "nth_item) for looping over entries file, looking for Nth item.", 
+   "(handle_start_tag):  handle looping as an independent case from the", 
+   "normal \"tag matching\" logic.  When we find the Nth item, return the", 
+   "entryname into baton (in addition to everything else).", 
+   "(svn_wc__entry_get, svn_wc__entry_set, svn_wc__entry_remove): changed", 
+   "calls to do_entry() appropriately.", 
+   "(do_entry): now takes **entryname_receiver arg (to return entryname to", 
+   "looper), and a boolean `looping' flag.  Sets up baton appropriately", 
+   "for looping.", 
+   "(svn_wc__entries_start):  new routine to create a looper index", 
+   "(svn_wc__entries_next):  new routine for looping"
+  ], 
+  "revision_id": "837481"
+ }
+]

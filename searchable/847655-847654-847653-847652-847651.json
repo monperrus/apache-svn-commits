@@ -1,0 +1,103 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-10-31T08:51:39.154743Z", 
+  "msg": [
+   "Rework Java SWIG bindings to work with VPATH and non-Linux boxen.", 
+   "* Makefile.in: Use SWIG_JAVA_COMPILE, SWIG_JAVA_LINK from swig.m4; change", 
+   "RUN_SWIG_JAVA to execute in the SWIG_BUILD_DIR; rework .java compilation to", 
+   "occur *after* we've generated the SWIG bindings (at install time via", 
+   "INSTALL_EXTRA_SWIG_JAVA); do not try to make a directory if it already", 
+   "exists; remove java-api and swig-java-api targets (what *were* these", 
+   "supposed to do?).", 
+   "* build/ac-macros/swig.m4: Add in $(JDK)/include to JAVA_INCLUDES by default.", 
+   "(Mac OS X has JDK in a funny place, so this will do the right thing -", 
+   "could be superfluous on non-Mac OS X boxes - oh well); until we have logic", 
+   "to know what to compile JNI as - just steal from our pal Python's module", 
+   "compile and link lines (good as anything else and better than before).", 
+   "* build/generator/gen_base.py: Remove java-api hack as now supplanted by", 
+   "INSTALL_EXTRA_SWIG_JAVA target.", 
+   "* build/generator/gen_make.py: Replace $(top_srcdir) with $(abs_srcdir)", 
+   "because autoconf is lame and makes those relative (post-2.52), and for the", 
+   "Java target we *need* the full path not the relative path (could optimize by", 
+   "just doing abs_srcdir just for the java targets); Remove java-specific", 
+   "hack for not printing the full paths.", 
+   "Apologies to dlr if this breaks his build."
+  ], 
+  "revision_id": "847655"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-10-31T04:57:51.989565Z", 
+  "msg": [
+   "* ch04.xml: Wording clarification.", 
+   "Suggested by: Joe Drew <hoserhead@woot.net>"
+  ], 
+  "revision_id": "847654"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2003-10-31T03:58:59.227357Z", 
+  "msg": [
+   "Minor api change to allow the subr library to be built as a DLL. Replace", 
+   "global variable svn_md5_empty_string_digest with a function of the same", 
+   "name, because it's the only global variable in the entire Subversion API", 
+   "and, unlike functions, global variables can't be transparently imported", 
+   "from Windows DLLs in C.", 
+   "Approved by: Greg Stein <gstein@lyra.org>", 
+   "* subversion/include/svn_md5.h", 
+   "* libsvn_subr/md5.c", 
+   "(svn_md5_empty_string_digest):", 
+   "convert this from an extern global into a function", 
+   "* subversion/libsvn_fs/reps-strings.c", 
+   "(svn_fs__get_mutable_rep, rep_contents_clear):", 
+   "update references to svn_md5_empty_string_digest"
+  ], 
+  "revision_id": "847653"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-10-31T03:24:15.486261Z", 
+  "msg": [
+   "* subversion/libsvn_fs/fs.c", 
+   "(svn_fs__clean_logs, svn_fs_hotcopy_berkeley): work around gcc warning", 
+   "about shadowed global declarations."
+  ], 
+  "revision_id": "847652"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-10-30T23:27:03.370058Z", 
+  "msg": [
+   "With Ben, define an authz callback interface for checking readable", 
+   "paths in svn_repos:", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_authz_read_func_t): New callback function type.", 
+   "(svn_repos_dir_delta, svn_repos_replay): Take new parameters", 
+   "authz_read_func and authz_read_baton.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Take the new parameters, but do nothing with", 
+   "them as yet.", 
+   "* subversion/libsvn_repos/replay.c", 
+   "(svn_repos_replay): Take the new parameters, but do nothing with", 
+   "them as yet.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_AUTHZ_CATEGORY_START): New error code category.", 
+   "(SVN_ERR_AUTHZ_ROOT_UNREADABLE): New error.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(svn_repos_dump_fs): Just pass NULLs as the new parameters to", 
+   "svn_repos_dir_delta and/or svn_repos_reply for now.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(finish_report): Same.", 
+   "* subversion/svnlook/main.c", 
+   "(generate_delta_tree): Same.", 
+   "* subversion/mod_dav_svn/merge.c", 
+   "(dav_svn__merge_response): Same.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(dav_svn__update_report): Same.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(dir_deltas, node_tree_delete_under_copy): Same."
+  ], 
+  "revision_id": "847651"
+ }
+]

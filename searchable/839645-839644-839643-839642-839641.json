@@ -1,0 +1,80 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-07-04T13:37:16.000000Z", 
+  "msg": [
+   "* libsvn_fs/txn.c (svn_fs_begin_txn): automatically put a datestamp", 
+   "property on newly created transactions.  This will help admin", 
+   "identify long-abandoned txns that may need to be hand-removed.  When", 
+   "a txn is promoted to a revision, this property will be automatically", 
+   "overwritten with a revision datestamp.", 
+   "* svnadmin/main.c (main):  make `lsrevs' print revision datestamps.", 
+   "make `lstxn' print transaction datestamps.", 
+   "* fs_test.c (transaction_props):  make fs-test #13 pass, by telling it", 
+   "to expect a datestamp among the properties."
+  ], 
+  "revision_id": "839645"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-07-04T12:12:21.000000Z", 
+  "msg": [
+   "Add date-parsing to subversion, and the ability to checkout or update", 
+   "using dates.  (`svn co URL -D 17-03-2001' or `svn up -D last tuesday')", 
+   "* getdate.y:  a parser of human-readable dates.  stolen from CVS (code", 
+   "is public domain, no copyright.)  slightly tweaked.", 
+   "* autogen.sh:  invoke bison or yacc to produce getdate.c", 
+   "* svn_time.h (svn_parse_date):  declare API in getdate.y", 
+   "* dag.c (txn_body_dag_init_fs):  put a datestamp on revision 0, too!", 
+   "* rev_hunt.c: (svn_repos_dated_revision): add boundary checks.", 
+   "* svn_ra.h (get_dated_revision):  new RA vtable routine.", 
+   "* libsvn_ra_local/ra_plugin.c (get_dated_revision):  implement as a", 
+   "simple pass-through to svn_repos_dated_revision().", 
+   "(ra_local_plugin):  add get_dated_revision.", 
+   "* libsvn_ra_dav/fetch.c (svn_ra_dav__get_dated_revision): dummy func,", 
+   "to be marshalled over network later.", 
+   "ra_dav.h (svn_ra_dav__get_dated_revision):  declare.", 
+   "session.c (dav_plugin):  add svn_ra_dav__get_dated_revision.", 
+   "* svn_repos.h (svn_repos_dated_revision):  change `time' var to `tm'.", 
+   "* main.c (main):  add -D flag.  (wow!  how often do we get to edit main()?)", 
+   "* cl.h (svn_cl__opt_state_t):  add 'date' field.", 
+   "* svn_error_codes.h (SVN_ERR_CL_MUTUALLY_EXCLUSIVE_ARGS):  new error.", 
+   "* svn_client.h, checkout.c (svn_client_checkout):  add time field!", 
+   "* checkout-cmd.c (svn_cl__checkout):  pass date to svn_client_checkout()", 
+   "* svn_client.h, update.c (svn_client_update):  add time field!", 
+   "* update-cmd.c (svn_cl__update):  pass date to svn_client_update()"
+  ], 
+  "revision_id": "839644"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-07-04T07:32:40.000000Z", 
+  "msg": [
+   "Fix even more timestamp breakage -- make sure we read what we wrote.", 
+   "We were usiing %03d to print/scan the tm_usec field and, while (apr_p)sprintf", 
+   "will expand the field to print all significant digits, it seems sscanf was", 
+   "confused.", 
+   "This should really, finally fix issue 404.", 
+   "* libsvn_subr/time.c (timestamp_format): Use %06d for tm_usec.", 
+   "* tests/libsvn_fs/fs-test.c (commit_date): Remove the #if 0 and comment."
+  ], 
+  "revision_id": "839643"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-07-03T20:38:13.000000Z", 
+  "msg": [
+   "* svn_repos.h (svn_repos_dated_revision):  declare.", 
+   "* rev_hunt.c (svn_repos_dated_revision):  implement, with helper."
+  ], 
+  "revision_id": "839642"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-03T20:19:48.000000Z", 
+  "msg": [
+   "Make milestone dates fall on weekdays."
+  ], 
+  "revision_id": "839641"
+ }
+]

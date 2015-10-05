@@ -1,0 +1,97 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-09-08T22:12:50.970567Z", 
+  "msg": [
+   "Refactoring for simplification, clarity, and correctness.  No", 
+   "functional change.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(delete_entry, add_directory): Stop using the verbose expression", 
+   "\"pb->edit_baton\" where our local variable \"eb\" will do.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(merge_file_added): Fix typo in inline comment.", 
+   "(merge_dir_added): Remove redundant NULL check."
+  ], 
+  "revision_id": "861460"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-08T21:53:59.101179Z", 
+  "msg": [
+   "* STATUS: Nominte r21384/r21047."
+  ], 
+  "revision_id": "861459"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-08T21:49:48.145776Z", 
+  "msg": [
+   "Fix issue #2584, correcting two problems:", 
+   "1) A merge which results in a conflicted file in your WC should", 
+   "produce a \"conflicted\" merge notification.", 
+   "2) 'svn merge --dry-run' needs to be smarter about accessing the", 
+   "working copy.", 
+   "While #1 is completely fixed, #2 will need some additional work to", 
+   "handle some edge cases for directory deletions/additions.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__dry_run_deletions): New API which returns the list of", 
+   "WC paths to entries which would have been deleted by an", 
+   "update/merge if not in \"dry run\" mode.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(delete_entry): Remember the WC paths to the entries that we", 
+   "would've deleted, were we not in --dry-run mode.  More work will be", 
+   "needed to handle directories, to avoid collisions from subsequent", 
+   "edits to the current target's children.", 
+   "(close_directory): Clear the list of dry run deletions.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(struct merge_cmd_baton): Add new \"dry_run_deletions\" list.  Since", 
+   "this list has a lifetime of edits to a single directory, a more", 
+   "appropriate home might be in repos_diff.c's dir_baton struct.  I", 
+   "did not see an obvious way to make the list available to the diff.c", 
+   "module without rev'ing some APIs (which didn't seem worth it).", 
+   "(svn_client__dry_run_deletions): Implement a new API to expose a", 
+   "list of paths outside of the diff.c module.", 
+   "(dry_run_deleted_p): Add new helper function which encapsulates a", 
+   "messy boolean check.", 
+   "(merge_dir_added, merge_file_added): Handle versioned", 
+   "files/directories which would have been deleted if we weren't in", 
+   "\"dry run\" mode.  Merges of directories into paths where files which", 
+   "would've been deleted if we weren't in \"dry run\" mode are still", 
+   "around may need some additional work to avoid problems from", 
+   "subsequent edits to children of the directory.", 
+   "(svn_client_merge2, svn_client_merge_peg2): Initialize", 
+   "merge_cmd_baton.dry_run_deletions.", 
+   "* subversion/svn/notify.c", 
+   "(notify): A merge which results in a conflicted file in your WC now", 
+   "produces a \"conflicted\" merge notification.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): Unmark merge_add_over_versioned_file_conflicts() as", 
+   "XFail, as it now succeeds.  This is a follow-up to the XFail test", 
+   "committed in r21047.", 
+   "Patch by: me", 
+   "rooneg", 
+   "Found by: rooneg", 
+   "Kamesh Jayachandran <kamesh@collab.net>"
+  ], 
+  "revision_id": "861458"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2006-09-08T16:44:14.804814Z", 
+  "msg": [
+   "* www/project_packages.html : Clarify that the RPM packages that won't work with", 
+   "BDB are just the RHEL3 versions."
+  ], 
+  "revision_id": "861457"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-08T15:32:04.163395Z", 
+  "msg": [
+   "A follow-up to r21381.", 
+   "* www/faq.html", 
+   "(avoiding-compiler-inlining): Wording tweak."
+  ], 
+  "revision_id": "861456"
+ }
+]

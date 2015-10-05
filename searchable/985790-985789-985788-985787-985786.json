@@ -1,0 +1,104 @@
+[
+ {
+  "author": "fmeschbe", 
+  "date": "2010-08-16T05:37:38.790313Z", 
+  "msg": [
+   "SLING-1650 refer to new (refactored) artifacts"
+  ], 
+  "revision_id": "985790"
+ }, 
+ {
+  "author": "rajikak", 
+  "date": "2010-08-16T05:23:46.831263Z", 
+  "msg": [
+   "Fixed SYNAPSE-676."
+  ], 
+  "revision_id": "985789"
+ }, 
+ {
+  "author": "toulmean", 
+  "date": "2010-08-16T05:16:22.291541Z", 
+  "msg": [
+   "remove our custom code to generate the website, using jekylltask instead"
+  ], 
+  "revision_id": "985788"
+ }, 
+ {
+  "author": "fmeschbe", 
+  "date": "2010-08-16T05:15:00.896073Z", 
+  "msg": [
+   "SLING-1650 Refactor auth/core, auth/form, auth/openid for the new packages identifying the auth component and refer to the new auth/core for the authentication handlers."
+  ], 
+  "revision_id": "985787"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-08-16T05:04:31.474419Z", 
+  "msg": [
+   "This change is mostly around cluster shutdown.  It removes the quiesce notion.", 
+   "Instead, we've added a listener in regionserver on the cluster shutdown znode", 
+   "up in zk.  When it disappears, all regionservers close all user regions using", 
+   "handlers (but not updating zk -- is this ok?).  This means the bulk of the", 
+   "HMsg stuff is gone and the only stuff that remains is the admin split, compact,", 
+   "and flush -- oh and split.... Master telling regionserver to exit is still here", 
+   "too.  This change is cleaning out a lot of crude, mostly the more than one", 
+   "way we had of doing stuff; now region shutdown is always handled by the", 
+   "expiration of a zknode over in master whether it a crash or clean shutdown or", 
+   "cluster shutdown.", 
+   "Change also unified how we do opens.  All use same method now instead of the", 
+   "two (or three) ways we had of opening previous.", 
+   "This change is not yet finished.  I've still to add to the master the closeup", 
+   "of the two servers carrying root and meta.  TODO.", 
+   "M src/test/java/org/apache/hadoop/hbase/TestSerialization.java", 
+   "Changed name of the message.  Should just removed HMsg from here.", 
+   "M src/test/java/org/apache/hadoop/hbase/master/TestMasterWithDisabling.java", 
+   "Changed name of HMsg for split.", 
+   "M src/test/java/org/apache/hadoop/hbase/master/TestMasterTransitions.java", 
+   "Changed name of testing HMsg.", 
+   "M src/test/java/org/apache/hadoop/hbase/util/TestMergeTool.java", 
+   "openHRegion params changed.", 
+   "M src/test/java/org/apache/hadoop/hbase/TestHMsg.java", 
+   "Use different HMsgs other than the ones removed.", 
+   "M src/main/java/org/apache/hadoop/hbase/zookeeper/ClusterStatusTracker.java", 
+   "Removed unnecessary data member.  Jon, this class seems to be listening to", 
+   "the wrong node; its listening to root location rather than shutdown node.", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/HRegionServer.java", 
+   "Cleaned out a bunch of HMsg and queisced state processing.", 
+   "Added new tracker on clusterStateZNode node.", 
+   "Cleanup around the end of the run method.  Moved crud out into own methods.", 
+   "The Worker thread in here is almost ready to do now handlers are doing", 
+   "nearly all it used do.", 
+   "Added Stoppable and Abortable to its API so now a client could directly", 
+   "tell a regionserver stop/abort.", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/handler/CloseRegionHandler.java", 
+   "Added a constructor flag which designates whether to update zk or not (so we", 
+   "use same close region code whenever we are closing a region, rather than have", 
+   "two ways of shutting down -- I want to use handlers because they are managed", 
+   "concurrency rather than what was there before which was starting up a thread", 
+   "for each region and running all concurrently).", 
+   "M src/main/java/org/apache/hadoop/hbase/master/ServerManager.java", 
+   "Removed crud around quescing servers and the messaging around stopping", 
+   "of a regionserver (regionserver exit stuff -- not needed anymore since", 
+   "regionserver reports its exit by letting go of its znode up in zk).", 
+   "Some refactoring of the heartbeat handling.  It shrunk radically.", 
+   "(processRegionServerExit): Removed.  Let expiredServer do whatever this", 
+   "was going to do.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/AssignmentManager.java", 
+   "Fix of comments and javadoc.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/HMaster.java", 
+   "Removed silly data member flag; ask servermanager; its running the shutdown", 
+   "so it knows best.", 
+   "M src/main/java/org/apache/hadoop/hbase/ipc/HBaseRPCProtocolVersion.java", 
+   "Upped the version", 
+   "M src/main/java/org/apache/hadoop/hbase/ipc/HRegionInterface.java", 
+   "Added Stoppable and Abortable.", 
+   "M src/main/java/org/apache/hadoop/hbase/util/Merge.java", 
+   "M src/main/java/org/apache/hadoop/hbase/util/MetaUtils.java", 
+   "(openHRegion) Params changed.", 
+   "M src/main/java/org/apache/hadoop/hbase/HMsg.java", 
+   "Stripped most of this classes content.  The rest should probably go too..", 
+   "but for one or two messages sent from RS to Master."
+  ], 
+  "revision_id": "985786"
+ }
+]

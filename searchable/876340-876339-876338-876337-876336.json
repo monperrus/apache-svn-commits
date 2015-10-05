@@ -1,0 +1,114 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-03-02T22:13:46.378847Z", 
+  "msg": [
+   "* www/index.html", 
+   "(rc-announcement): The most recent rc is rc3, not rc2."
+  ], 
+  "revision_id": "876340"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-02T21:54:23.915994Z", 
+  "msg": [
+   "For issue #2028, #2556 (and probably a few others): Let svn_client_add*()", 
+   "and the helpers it provides to other libsvn_client functions use", 
+   "svn_dirent_*() and svn_uri_*() instead of svn_path_*()", 
+   "This commit will fix the add part of update_tests.py 32.", 
+   "(Checking out to the root of a Windows drive).", 
+   "* subversion/libsvn_client/add.c", 
+   "(svn_client__get_auto_props): Use svn_dirent_basename().", 
+   "(add_dir_recursive): Use svn_dirent_join() and svn_dirent_local_style().", 
+   "(add_parent_dirs): Use svn_dirent_dirname() and svn_dirent_local_style().", 
+   "(svn_client_add4): Use svn_dirent_*() to find parents.", 
+   "(path_driver_cb_func): Use svn_uri_dirname()", 
+   "(add_url_parents): Use svn_uri_dirname().", 
+   "(mkdir_urls): Split uris using svn_uri_split and join them with", 
+   "svn_uri_join."
+  ], 
+  "revision_id": "876339"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T21:36:46.966109Z", 
+  "msg": [
+   "Bump the working copy format from 10 to 11.", 
+   "Clients expect the 'entries' file to have properly managed 'has_props'", 
+   "and 'has_prop_mods' fields. These are no longer set by trunk-based", 
+   "clients, so we need a bump to prevent older clients from reading 'entries'", 
+   "and assuming its values are proper.", 
+   "Note that trunk does not maintain 'cachable_props' and 'present_props' in", 
+   "the entries file. However, the values (now) placed into those fields (\"\")", 
+   "should be usable by older clients. But it is moot with the format bump.", 
+   "As of this bump, 1.6 clients will produce an error when attempting to", 
+   "access trunk-created working copies. When a trunk client opens a .svn", 
+   "subdirectory for *writing*, then it will silently bump the version.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(SVN_WC__VERSION): bump the value. add comments.", 
+   "(SVN_WC__VERSION_EXPERIMENTAL): bump up to 12.", 
+   "(SVN_WC__WC_NG_VERSION): bump to 12.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(upgrade_sql): insert another NULL placeholder for format=11", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(upgrade_sql): insert another NULL placeholder for format=11", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(data_loading_sql): insert another NULL placeholder for format=11"
+  ], 
+  "revision_id": "876338"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-02T21:12:49.727425Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(statement_keys, statements): Remove unused statements."
+  ], 
+  "revision_id": "876337"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T20:20:49.179337Z", 
+  "msg": [
+   "Refine how we detect obstructed subdirectories.", 
+   "When writing information into the parent directory about a subdirectory,", 
+   "use kind==\"subdir\" in the database (not a presence field). We still need", 
+   "the presence field because higher-level parts of svn rely on the status in", 
+   "the parent directory to determine what to do with the subdir (and the", 
+   "presence is used to detect add/delete/etc).", 
+   "The information retrieval functions can now return \"obstructed\",", 
+   "\"obstructed_delete\", or \"obstructed_add\". The higher levels don't do much", 
+   "with this at the moment. We may find a use for the detail later.", 
+   "When building the ENTRIES hash, we've also stopped inherited information", 
+   "from the parent directory. The wc_db system returns full info -- there is", 
+   "never a need to inherit. There is also a small tweak to avoid writing 0", 
+   "into WORKING_NODE.changed_rev.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(): alter comments to note that we can now write \"subdir\" into the .kind", 
+   "columns rather than .presence.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_kind_t): add a new kind that is used internally to wc_db", 
+   "(svn_wc__db_status_t): add the two new obstructed statuses, and remove", 
+   "the subdir status.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(word_to_kind): parse the \"subdir\" kind.", 
+   "(kind_to_word): return the \"subdir\" string.", 
+   "(word_to_presence): don't parse the obsolete \"subdir\" presence", 
+   "(presence_to_word): no more subdir presence", 
+   "(svn_wc__db_base_get_info): map subdir kind to a regular dir, and if we", 
+   "see this in the database, then return an obstructed status.", 
+   "(svn_wc__db_read_info): use the subdir kind as a better detection for", 
+   "obstruction, and inform the caller when it occurs (and whether the", 
+   "subdir was intended to be added or deleted or is missing from BASE).", 
+   "and map the subdir kind into a regular dir.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): interpret obstructed adds/deletes as if the data was", 
+   "still present. stop inheriting values from the parent entry.", 
+   "(insert_base_node): use kind==\"subdir\" as appropriate", 
+   "(insert_working_node): use kind==\"subdir\" as appropriate", 
+   "(write_entry): make sure working_node->changed_rev is initialized", 
+   "properly."
+  ], 
+  "revision_id": "876336"
+ }
+]

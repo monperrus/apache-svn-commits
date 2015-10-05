@@ -1,0 +1,94 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2004-01-09T19:57:25.669988Z", 
+  "msg": [
+   "* STATUS:  add r8223 and two votes."
+  ], 
+  "revision_id": "848300"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T19:31:35.470390Z", 
+  "msg": [
+   "Follow up to r8176:", 
+   "* STATUS: Put the +1 votes first for {r8055, r8085, r8104, r8105}."
+  ], 
+  "revision_id": "848299"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T19:23:23.043568Z", 
+  "msg": [
+   "* STATUS: Issue #1693 is now r8222."
+  ], 
+  "revision_id": "848298"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-01-09T19:22:33.111714Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/update.c", 
+   "(dav_svn__update_report): Use a subpool during the REPORT parsing,", 
+   "to prevent memory leak.", 
+   "Patch by: Tobias Ringstr\u00f6m <tobias@ringstrom.mine.nu>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "848297"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T19:20:35.533317Z", 
+  "msg": [
+   "Add cancellation support to the svn_repos dump/load/parse functions,", 
+   "and insert several cancellation points in the svnlook code.  For", 
+   "svnadmin, svnlook and the cmdline client:", 
+   "- Add SIGINT (Ctrl-C), SIGHUP and SIGTERM handling.", 
+   "- Ignore SIGPIPE, to prevent wedging the repos on network errors,", 
+   "or when piping the output to a command that quits before all data", 
+   "is read, e.g. head, more or less.", 
+   "Patch by Tobias Ringstrom, with minor tweak by Karl Fogel (capitalized", 
+   "the first word in new error messages).  See 1.0-cand issue #1693.", 
+   "* subversion/svnadmin/main.c", 
+   "(cancelled): New global variable to handle cancellation.", 
+   "(signal_handler): New signal handler.", 
+   "(check_cancel): New cancellation function.", 
+   "(subcommand_deltify): Check for cancellation.", 
+   "(subcommand_dump): Pass check_cancel to svn_repos_dump_fs.", 
+   "(subcommand_load): Pass check_cancel to svn_repos_load_fs.", 
+   "(subcommand_verify): Pass check_cancel to svn_repos_dump_fs.", 
+   "(main): Handle SIGINT, SIGHUP and SIGTERM. Ignore SIGPIPE.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_dump_fs): Add cancellation function and baton arguments.", 
+   "(svn_repos_load_fs): Add cancellation function and baton arguments.", 
+   "(svn_repos_parse_dumpstream):  Add cancellation function and baton", 
+   "arguments.", 
+   "* subversion/svnlook/main.c", 
+   "(cancelled): New global variable to handle cancellation.", 
+   "(signal_handler): New signal handler.", 
+   "(check_cancel): New cancellation function.", 
+   "(print_dirs_changed_tree, print_changed_tree, dump_contents,", 
+   "display_prop_diffs, print_diff_tree, print_tree, do_cat,", 
+   "print_history, do_plist): Check for cancellation.", 
+   "(main): Handle SIGINT, SIGHUP and SIGTERM. Ignore SIGPIPE.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(signal_handler): Renamed from sig_int.", 
+   "(svn_cl__check_cancel): Remove SIGINT from the error message since it", 
+   "can be other signals as well now.", 
+   "(main): Move the cancellation setup from the authentication setup", 
+   "code block. Handle SIGINT, SIGHUP and SIGTERM. Ignore SIGPIPE.", 
+   "* subversion/svndumpfilter/main.c", 
+   "(subcommand_exclude, subcommand_include): Add NULL cancellation function", 
+   "and baton for calls to svn_repos_parse_dumpstream.", 
+   "* subversion/libsvn_repos/load.c", 
+   "(svn_repos_load_fs): Add cancellation function and baton arguments", 
+   "and pass them on to svn_repos_parse_dumpstream.", 
+   "(svn_repos_parse_dumpstream):  Add cancellation function and baton", 
+   "arguments. Check for cancellation.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(svn_repos_dump_fs): Add cancellation function and baton arguments.", 
+   "Check for cancellation."
+  ], 
+  "revision_id": "848296"
+ }
+]

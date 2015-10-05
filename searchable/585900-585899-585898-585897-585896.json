@@ -1,0 +1,55 @@
+[
+ {
+  "author": "oysteing", 
+  "date": "2007-10-18T08:49:07.397242Z", 
+  "msg": [
+   "DERBY-2977 (Contributed by Jorgen Loland): Fixes a problem with the way log is appended to the repliation buffer. Previously, LogToFile#appendLogRecord was used to write log to the replication master log buffer. However, the LogAccessFile class that wraps write operations to log file also write checksums. We need these checksums at the slave because without them, the log instants on the slave and master will differ, in turn making recovery impossible (undo operations refer to a specific instant, which will not be correct).", 
+   "With this patch, log is appended to the repliation log buffer in LogAccessFile, not LogToFile like now. The patch modifies the following files:", 
+   "M java/engine/org/apache/derby/impl/services/replication/buffer/LogBufferElement.java", 
+   "M java/engine/org/apache/derby/impl/services/replication/buffer/ReplicationLogBuffer.java", 
+   "The buffer now accepts chunks of log records from LogAccessFile#writeToLog (i.e., appended to replication buffer in the same method that writes the log to disk) instead of single log records from LogToFile#appendLogRecord", 
+   "M java/engine/org/apache/derby/impl/services/replication/slave/ReplicationLogScan.java", 
+   "Modified the slave-side log parser to read the new chunk of log record format", 
+   "M java/engine/org/apache/derby/impl/services/replication/master/MasterController.java", 
+   "M java/engine/org/apache/derby/iapi/services/replication/master/MasterFactory.java", 
+   "Modified appendLog signature to accept log from LogAccessFile instead of from LogToFile", 
+   "M java/engine/org/apache/derby/impl/store/raw/log/LogAccessFile.java", 
+   "Can be set inReplicationMasterMode, in which log is appended to MasterFactory", 
+   "M java/engine/org/apache/derby/impl/store/raw/log/LogToFile.java", 
+   "Removed the code that appends log to replication log buffer, and tells LogAccessFile to go into replication master mode when needed."
+  ], 
+  "revision_id": "585900"
+ }, 
+ {
+  "author": "gsim", 
+  "date": "2007-10-18T08:28:37.242166Z", 
+  "msg": [
+   "Fix for QPID-644"
+  ], 
+  "revision_id": "585899"
+ }, 
+ {
+  "author": "mmartinec", 
+  "date": "2007-10-18T08:22:01.091139Z", 
+  "msg": [
+   "added a test case to t/rcvd_parser.t, Bug 5583"
+  ], 
+  "revision_id": "585898"
+ }, 
+ {
+  "author": "indika", 
+  "date": "2007-10-18T08:18:37.514514Z", 
+  "msg": [
+   "update the cofiguration for XQuery and dblookp"
+  ], 
+  "revision_id": "585897"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2007-10-18T08:17:45.290738Z", 
+  "msg": [
+   "Set svn:eol-style to native"
+  ], 
+  "revision_id": "585896"
+ }
+]

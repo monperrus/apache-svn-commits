@@ -1,0 +1,95 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2009-10-13T02:31:46.319907Z", 
+  "msg": [
+   "* tools/server-side/svn-rep-sharing-stats.c", 
+   "Add some TODO notes per glasser's mail.  And a comment."
+  ], 
+  "revision_id": "880045"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-13T01:59:02.088384Z", 
+  "msg": [
+   "Remove the variant error returns in the log processing.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(struct log_runner): remove the 'count' field", 
+   "(pick_error_code): removed. not needed.", 
+   "(SIGNAL_ERROR, log_do_file_xfer, log_do_file_timestamp,", 
+   "log_do_modify_entry, log_do_delete_lock, log_do_delete_changelist,", 
+   "log_do_committed, log_do_add_tree_conflict, start_handler): change", 
+   "error handling to use SVN_ERR_WC_BAD_ADM_LOG rather than the", 
+   "pick_error_code function.", 
+   "(run_log): don't initialize the 'count' field"
+  ], 
+  "revision_id": "880044"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-12T23:38:13.563651Z", 
+  "msg": [
+   "Move the 'killme' handling from loggy to the workqueue. This deals with", 
+   "removing a directory and its (versioned) contents after a commit deletes", 
+   "the directory.", 
+   "The old killme processing was a specialized mechanism that prevented easy", 
+   "and simple migration from loggy to workqueue.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_add_killme): new declaration. adds a 'killme' operation into", 
+   "the queue.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(OP_KILLME): new operation", 
+   "(struct work_item_dispatch): adjust handler parameters to include a", 
+   "cancel function and baton", 
+   "(run_revert, run_prepare_revert_files): take CANCEL_FUNC/BATON params", 
+   "(run_killme): new function to delete a committed, deleted directory.", 
+   "basically it is the old handle_killme() from log.c, but it has extra", 
+   "precautions for an already-peformed deletion.", 
+   "(svn_wc__wq_add_killme): construct a work item for OP_KILLME and queue", 
+   "it up.", 
+   "(dispatch_table): add OP_COMMIT", 
+   "(svn_wc__wq_run): pass the cancel func/baton to the handler", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_committed): remove the 'killme' file-related code, and", 
+   "substitute the wq-based killme operation.", 
+   "(handle_killme, check_killme): removed. no longer needed.", 
+   "(run_log): don't bother with killme checking/handling. the wq run in", 
+   "this function will handle any killme operations"
+  ], 
+  "revision_id": "880043"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-12T22:42:16.432959Z", 
+  "msg": [
+   "Remove a few more unnecessary access batons from the update editor.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(cleanup_dir_baton): Use svn_wc__run_log2 which doesn't need access batons.", 
+   "(do_entry_deletion): Use absolute path instead of retrieving it from the", 
+   "baton several times.", 
+   "(add_file_with_history): Retrieve relative path from parent baton.", 
+   "(merge_file): Use parent baton instead of access batons to retrieve paths.", 
+   "(close_edit): Use values in the edit baton instead of recalculating them."
+  ], 
+  "revision_id": "880042"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-12T22:16:41.927751Z", 
+  "msg": [
+   "When installing properties pass a database handle instead of an absolute", 
+   "directory path.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__install_props): Take db argument and retrieve node kind.", 
+   "(svn_wc__merge_props): Update caller.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__install_props): Update prototype.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(install_added_props): Update caller. Remove access baton and take", 
+   "two absolute paths.", 
+   "(svn_wc_add_repos_file4): Update caller. Remove access baton and", 
+   "relative path calculations."
+  ], 
+  "revision_id": "880041"
+ }
+]

@@ -1,0 +1,80 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2008-08-09T14:30:04.951748Z", 
+  "msg": [
+   "* www/hacking.html (Custom releases): New section.", 
+   "Patch by: Kevin Radke <kmradke@gmail.com>", 
+   "(Edited by me.)"
+  ], 
+  "revision_id": "872485"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-08-08T20:01:21.598739Z", 
+  "msg": [
+   "On the 1.5.x branch:", 
+   "* STATUS: Nominate r32409."
+  ], 
+  "revision_id": "872484"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-08-08T19:13:02.121860Z", 
+  "msg": [
+   "Fix an incompatibility with BSD make, which was introduced in r24293.", 
+   "Even though r24293 was meant to fix a compilation failure in the", 
+   "bindings when compiling Subversion from a different directory than", 
+   "where the source tree is located, this still didn't work for me.", 
+   "To illustrate, a command sequence like", 
+   "$ svn co https://svn.collab.net/repos/svn/trunk subversion", 
+   "$ mkdir obj", 
+   "$ cd obj", 
+   "$ ../subversion/configure --prefix= ...", 
+   "$ make", 
+   "$ make swig-py", 
+   "failed with:", 
+   "make: don't know how to make subversion/bindings/swig/python/svn_client.c. Stop", 
+   "It turned out to be a problem specific to BSD make.", 
+   "With GNU make, things worked fine.", 
+   "The problem was that in build-outputs.mk, the generated binding", 
+   "source files were preceeded with '$(top_builddir)/' when listed", 
+   "as targets, but did not have any prefix (i.e. were relative paths)", 
+   "when listed as dependencies. BSD make is apparently too naive to", 
+   "figure out that e.g. 'foo.c' and './foo.c' are meant to refer to", 
+   "the same file.", 
+   "Since '$(top_builddir)' is hardcoded to just '.' (a dot)", 
+   "at the top of Makefile.in, it is redundant and can be ommitted.", 
+   "As soon as the target and dependency paths matched, the problem", 
+   "went away. Turns out GNU make does not care either way, so this", 
+   "commit makes both make implementations happy.", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write): Don't prefix the names of generated binding", 
+   "source files with '$(top_builddir)/' when listing them as target,", 
+   "because this confuses BSD make. When listed as dependencies,", 
+   "the files do not have this prefix either."
+  ], 
+  "revision_id": "872483"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-08-08T16:43:05.797473Z", 
+  "msg": [
+   "Remove some redundant code from merge_file_deleted().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_file_deleted): Don't re-calculate the admin access baton, as we're", 
+   "given the right one."
+  ], 
+  "revision_id": "872482"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-08-08T16:25:37.246102Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "Add a comment linking test 77 (which was marked 'XFail' in r32405) to the", 
+   "email thread discussing the failure."
+  ], 
+  "revision_id": "872481"
+ }
+]

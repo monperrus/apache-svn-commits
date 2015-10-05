@@ -1,0 +1,115 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2005-12-21T20:45:12.563403Z", 
+  "msg": [
+   "Stop trying to figure out when close_file should be called in the DAV", 
+   "ra_replay implementation and just use the element we're sending in the", 
+   "XML for just that reason...  Can't believe I didn't notice that before.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(ELEM_close_file): New element contant.", 
+   "* subversion/libsvn_ra_dav/replay.c", 
+   "(maybe_close_file): Removed.", 
+   "(editor_report_elements): Add close-file.", 
+   "(start_element): Stop using maybe_close_file, handle ELEM_close_file", 
+   "elements.", 
+   "(end_element): Stop calling maybe_close_file."
+  ], 
+  "revision_id": "857975"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-12-21T20:38:27.229548Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svnsync_tests.py: Set svn:executable."
+  ], 
+  "revision_id": "857974"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-12-21T20:30:24.654650Z", 
+  "msg": [
+   "* subversion/po/sv.po: Update from latest sources."
+  ], 
+  "revision_id": "857973"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-12-21T18:13:45.548388Z", 
+  "msg": [
+   "Modify python test scripts to run via file:// and svn:// on IBM iSeries.", 
+   "There are a lot of changes here, but they all fall into one of three", 
+   "categories:", 
+   "1) These scripts have only been tested on Per Gummedal's iSeries Python", 
+   "version 2.3.3 - http://www.iseriespython.com/, which has some", 
+   "limitations:", 
+   "a) os.tempnam is not implemented, tempfile.mkstemp used instead.", 
+   "b) os.popen3 is not implemented, ebcdic.os400_run_cmd() used instead.", 
+   "c) Files created using open() have default permissions of -rwxrwxrwxc,", 
+   "different permissions explicitly set as needed.", 
+   "d) os.chmod() can only handle mode bits, e.g. 00 - 04000, values greater", 
+   "than that causes errno 3021, and are not used.", 
+   "2) Ebcdic assumptions:", 
+   "a) iSeries Python operates only on ebcdic encoded scripts, regardless", 
+   "of ccsid.  Therefore string literals in the script are converted to", 
+   "utf-8 with *.encode('utf-8') where appropriate.", 
+   "b) Files are opened for reading and/or writing only in binary mode to", 
+   "prevent OS conversion of the file contents based on CCSID.", 
+   "c) Regular expressions operate only on ebcdic encoded strings.", 
+   "d) When reading utf-8 text file contents in binary mode with readlines()", 
+   "only one line is returned regardless of home many lines are in the", 
+   "file.  os400_split_utf8_lines() from the new ebcdic.py file (r17543)", 
+   "splits the line on utf-8 newlines.", 
+   "3) Due to IBM APR hashing differences on the iSeries  the order of items", 
+   "returned by some commands, e.g. svn status, svn propget, differ from", 
+   "other platforms.  Hard coded expected output is reordered accordingly in", 
+   "these cases.", 
+   "* build/run_tests.py", 
+   "* subversion/tests/libsvn_subr/target-test.py", 
+   "* subversion/tests/svn/autoprop_tests.py", 
+   "* subversion/tests/svn/basic_tests.py", 
+   "* subversion/tests/svn/blame_tests.py", 
+   "* subversion/tests/svn/cat_tests.py", 
+   "* subversion/tests/svn/commit_tests.py", 
+   "* subversion/tests/svn/copy_tests.py", 
+   "* subversion/tests/svn/diff_tests.py", 
+   "* subversion/tests/svn/ebcdic.py", 
+   "* subversion/tests/svn/export_tests.py", 
+   "* subversion/tests/svn/externals_tests.py", 
+   "* subversion/tests/svn/history_tests.py", 
+   "* subversion/tests/svn/import_tests.py", 
+   "* subversion/tests/svn/lock_tests.py", 
+   "* subversion/tests/svn/log_tests.py", 
+   "* subversion/tests/svn/merge_tests.py", 
+   "* subversion/tests/svn/prop_tests.py", 
+   "* subversion/tests/svn/revert_tests.py", 
+   "* subversion/tests/svn/schedule_tests.py", 
+   "* subversion/tests/svn/special_tests.py", 
+   "* subversion/tests/svn/stat_tests.py", 
+   "* subversion/tests/svn/svnadmin_tests.py", 
+   "* subversion/tests/svn/svnlook_tests.py", 
+   "* subversion/tests/svn/svntest/actions.py", 
+   "* subversion/tests/svn/svntest/main.py", 
+   "* subversion/tests/svn/svntest/tree.py", 
+   "* subversion/tests/svn/svntest/wc.py", 
+   "* subversion/tests/svn/svnversion_tests.py", 
+   "* subversion/tests/svn/switch_tests.py", 
+   "* subversion/tests/svn/trans_tests.py", 
+   "* subversion/tests/svn/update_tests.py"
+  ], 
+  "revision_id": "857972"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-12-21T18:04:51.140912Z", 
+  "msg": [
+   "Patch AS400 python test framework to reflect new paths resulting from the", 
+   "move of the command-line client and its tests into \"svn\" subdirs from", 
+   "\"clients/cmdline\" subdirs (r17573).", 
+   "* as400test.py", 
+   "* build/os400/make_python_ebcdic", 
+   "* build/os400/make_python_utf8"
+  ], 
+  "revision_id": "857971"
+ }
+]

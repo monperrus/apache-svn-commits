@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-01-24T02:55:42.481092Z", 
+  "msg": [
+   "Allow symlinked hook scripts to run, by offering an alternative", 
+   "path-checking function that resolves symlinks.", 
+   "Patch by: Josef Wolf <jw@raven.inka.de>", 
+   "(Tweaked by me.)", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_check_resolved_path): New prototype.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(io_check_path): New function, contains the code from", 
+   "svn_io_check_path, but with new parameter 'resolve_symlinks'.", 
+   "Also, fix a comment while at it.", 
+   "(svn_io_check_path): Just wrap io_check_path, and pass false for the", 
+   "new flag, to maintain old semantics.", 
+   "(svn_io_check_resolved_path): New function; same as", 
+   "svn_io_check_path, but pass new flag as true, to resolve links.", 
+   "* subversion/libsvn_repos/hooks.c", 
+   "(svn_repos__hooks_start_commit, svn_repos__hooks_pre_commit,", 
+   "svn_repos__hooks_post_commit,  svn_repos__hooks_pre_revprop_change,", 
+   "svn_repos__hooks_post_revprop_change): Changed callers to use", 
+   "svn_io_check_resolved_path instead of svn_io_check_path."
+  ], 
+  "revision_id": "844630"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-24T01:42:27.687755Z", 
+  "msg": [
+   "Revert revision 4550.  As Greg Stein notes:", 
+   "We return hash tables in several places. But those hash tables", 
+   "should be mapped into Python dictionaries, rather than left as raw", 
+   "hash tables.", 
+   "For example, see the code in svn_client.i to process the return", 
+   "values for svn_client_status() and svn_client_ls()."
+  ], 
+  "revision_id": "844629"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-24T01:14:00.524280Z", 
+  "msg": [
+   "Stand on your left foot and kiss your elbow. Or, you can use a", 
+   "complicated if/continue/break idiom instead.", 
+   "* libsvn_auth/auth.c", 
+   "(struct svn_auth_iterstate_t): cred_kind is never used. toss it.", 
+   "(svn_auth_register_provider): add commentary on ORDER", 
+   "(svn_auth_first_credentials): simplify loop-break condition. don't", 
+   "dup/store the cred_kind into the iteration state.", 
+   "(svn_auth_next_credentials): simplify loop-break condition", 
+   "(svn_auth_save_credentials): simplify loop-break condition"
+  ], 
+  "revision_id": "844628"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-24T01:08:03.325753Z", 
+  "msg": [
+   "Patch by: Jani Averbach <jaa@cc.jyu.fi>", 
+   "(Tweaked by me.)", 
+   "* tools/backup/hot-backup.py: Allow multiple backups of the same", 
+   "revision, since the repository can change in ways that don't", 
+   "involve a new revision being created."
+  ], 
+  "revision_id": "844627"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-24T01:06:12.479417Z", 
+  "msg": [
+   "Finish issue #1085.", 
+   "* subversion/include/svn_wc.h", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc_text_modified_p): Add 'force_comparison'.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(check_prop_mods): New helper.", 
+   "(harvest_committables): Use new check_prop_mods() helper, and update", 
+   "calls to svn_wc_text_modified_p().", 
+   "* subversion/libsvn_client/diff.c", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "* subversion/libsvn_wc/diff.c", 
+   "* subversion/libsvn_wc/status.c", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "Update calls to svn_wc_text_modified_p(), passing 0 for the new", 
+   "'force_comparison' flag.", 
+   "* subversion/tests/clients/cmdline/trans_tests.py", 
+   "(eol_change_is_text_mod): New test for this issue.", 
+   "(test_list): Reference the new test."
+  ], 
+  "revision_id": "844626"
+ }
+]

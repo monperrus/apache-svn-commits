@@ -1,0 +1,71 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-11-27T14:47:24.728120Z", 
+  "msg": [
+   "On the 1.7.x-issue3814 backport branch, merge the following revisions", 
+   "from trunk, resolving conflicts:", 
+   "r1166267: Merged to prevent conflicts in diff_tests.py.", 
+   "r1206576: Tweak 'svn diff' output for prop values not terminated with EOL.", 
+   "r1206718: Fix issue #3814.", 
+   "r1206719: Follow-up fix for JavaHL tests."
+  ], 
+  "revision_id": "1206725"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-11-27T14:41:56.908149Z", 
+  "msg": [
+   "Fix issue #3991, \"'svn patch' deletes random lines with patch files missing", 
+   "trailing newline\".", 
+   "Contrary to UNIX patch behaviour, I decided not to have 'svn patch' error", 
+   "out on hunks that end at EOF before EOL was found. Instead of throwing an", 
+   "error 'svn patch' writes the final line without terminating it with EOL.", 
+   "The output of 'svn diff' clearly marks the missing EOL. Users can fix up", 
+   "the patched result as required.", 
+   "Another approach suggested in #3991 was to automatically fix up the line", 
+   "by appending an EOL. There are two problems with this:", 
+   "1) We don't know if the short line read from the hunk text was complete.", 
+   "E.g. the last line of the patch might originally have been \"foobar\\n\" and", 
+   "cut short to just \"foo\". Writing \"foo\" instead of \"foo\\n\" to the patched", 
+   "result seems more reasonable in this case.", 
+   "2) Adding the EOL would require more extensive changes. So far, content", 
+   "written to the patched result is also present in the patch file.", 
+   "We'd have to remember that a final EOL is missing and fake it, which", 
+   "requires more state to keep than simply omitting the EOL.", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(parse_next_hunk): Update current file position even if at EOF.", 
+   "If hunk text ends at EOF set the end of the hunk text range to the", 
+   "last byte of the file.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_lacking_trailing_eol): Adjust text expections and remove XFail marker."
+  ], 
+  "revision_id": "1206724"
+ }, 
+ {
+  "author": "luc", 
+  "date": "2011-11-27T14:32:00.846854Z", 
+  "msg": [
+   "Improved accuracy of Runge-Kutta based step interpolators near step", 
+   "start.", 
+   "JIRA: MATH-705"
+  ], 
+  "revision_id": "1206723"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-11-27T14:20:01.906435Z", 
+  "msg": [
+   "Create branch for issue #3814 fix backport to 1.7.x."
+  ], 
+  "revision_id": "1206722"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2011-11-27T13:49:39.340509Z", 
+  "msg": [
+   "Simplify for loops"
+  ], 
+  "revision_id": "1206721"
+ }
+]

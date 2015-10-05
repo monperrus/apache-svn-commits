@@ -1,0 +1,102 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-06-03T05:31:19.023342Z", 
+  "msg": [
+   "Aha, http://www.python.org/peps/pep-0227.html resolves the scoping", 
+   "mystery referred to in revision 6130:", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(interleaved_commits): Clarify the scoping situation."
+  ], 
+  "revision_id": "846205"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-03T05:07:58.564465Z", 
+  "msg": [
+   "\"Scope: it's what's for dinner.\"", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(interleaved_commits): Deal with odd scoping lossage."
+  ], 
+  "revision_id": "846204"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-03T04:59:13.226347Z", 
+  "msg": [
+   "Fix copy-n-pasto:", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(split_branch): Oops, get the name right."
+  ], 
+  "revision_id": "846203"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-03T04:47:29.902626Z", 
+  "msg": [
+   "Add two new tests, and fix some infrastructure:", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(parse_log.LineFeeder): New miniclass.", 
+   "(parse_log): Use run_svn filtered through LineFeeder.  See", 
+   "http://www.python.org/doc/current/lib/popen2-flow-control.html", 
+   "for a description of the flow control issues thus resolved.", 
+   "(interleaved_commits): New test.", 
+   "(split_branch): Start of a new test, XFail for now.", 
+   "(test_list): Run the new tests.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/CVSROOT/,", 
+   "tools/cvs2svn/test-data/main-cvsrepos/CVSROOT/README:", 
+   "New directory, new file.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/interleaved/:", 
+   "New test data.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/proj/:", 
+   "Extend test data."
+  ], 
+  "revision_id": "846202"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-03T04:12:28.145550Z", 
+  "msg": [
+   "Finally, I can reveal the *real* reason why I wrote the path-based", 
+   "editor driver.  Ladies and gents, meet svn_repos_replay().  A", 
+   "replacement not so much for svn_repos_dir_delta, but for at least a", 
+   "whole class of functionality that svn_repos_dir_delta was never", 
+   "intended to handle.", 
+   "I should note that, to my great joy, not only does this code solve", 
+   "issue #1290 (an svnadmin dump edge-case), but it also seems to greatly", 
+   "increase the speed of that operation.  On a 2.4 GHz machine with a", 
+   "copy of the svn.collab.net repository as of revision 6084, svnadmin", 
+   "dump used to take 9 1/2 minutes to dump all 6084 revisions.  Now, it", 
+   "takes 5 1/2 minutes.  I also saw about 20% in speed improvement", 
+   "running 'svnlook changed' over the 6084 revisions of that repository,", 
+   "too.", 
+   "Enjoy. :-)", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_replay): New hotness.  (For \"Old n' busted\", see", 
+   "`svn_repos_dir_delta').", 
+   "* subversion/libsvn_repos/replay.c", 
+   "New file.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(svn_repos_dump_fs): Use the new svn_repos_replay() for every", 
+   "revision except the first of a non-incremental dump.  Update call", 
+   "to svn_repos_dir_delta(), which is still called in that one case", 
+   "that the new function is not.", 
+   "* subversion/svnlook/main.c", 
+   "(generate_delta_tree): Use the new svn_repos_replay() instead of", 
+   "svn_repos_dir_delta().", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Remove 'use_copy_history' parameter.", 
+   "(struct context): Remove 'use_copy_history' member.", 
+   "(add_file_or_dir): Remove support for use_copy_history stuffs.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_finish_report): Update call to svn_repos_dir_delta().", 
+   "* subversion/mod_dav_svn/merge.c", 
+   "(dav_svn__merge_response): Update call to svn_repos_dir_delta().", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(dav_svn__update_report): Update call to svn_repos_dir_delta().", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(dir_deltas): Update call to svn_repos_dir_delta()."
+  ], 
+  "revision_id": "846201"
+ }
+]

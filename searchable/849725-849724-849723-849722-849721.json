@@ -1,0 +1,111 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-05-08T00:27:34.367253Z", 
+  "msg": [
+   "Make the FS node-ID functions go through a vtable.  Reintroduce", 
+   "id.[ch] into the FS modules, with different implementations.", 
+   "Deprecate svn_fs_parse_id and make it only work with the base", 
+   "filesystem.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(fs_library_vtable_t): Add parse_id function, to be defined by the", 
+   "base provider vtable.", 
+   "(id_vtable_t): New vtable type for ID objects.", 
+   "(svn_fs_id_t): Define as an abstract object.", 
+   "(svn_fs__create_id, svn_fs__id_node_id, svn_fs__id_copy_id,", 
+   "svn_fs__id_txn_id, svn_fs__id_eq, svn_fs__id_copy): Remove.", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_history_prev, svn_fs_history_location): Move to later in the", 
+   "file, for clarity.", 
+   "(svn_fs_parse_id, svn_fs_unparse_id, svn_fs_check_related,", 
+   "svn_fs_compare_ids): Define using ID vtable.", 
+   "(svn_fs__create_id, svn_fs__id_node_id, svn_fs__id_copy_id,", 
+   "svn_fs__id_txn_id, svn_fs__id_eq, svn_fs__id_copy): Remove.", 
+   "* libsvn_fs_base/id.c, libsvn_fs_base/id.h: Copied from r9571.", 
+   "Changed to use svn_fs_base__id_ prefixes for functions and to use", 
+   "private data field of svn_fs_id_t.", 
+   "(svn_fs_base__id_node_id, svn_fs_base__id_copy_id,", 
+   "svn_fs_base__id_txn_id, svn_fs_base__id_unparse, svn_fs_base__id_eq,", 
+   "svn_fs_base__id_check_related, svn_fs_base__id_compare,", 
+   "svn_fs_base__id_create, svn_fs_base__id_copy,", 
+   "svn_fs_base__id_parse): New names for ID functions.", 
+   "* libsvn_fs_fs/id.c, libsvn_fs_fs/id.h: Copied from r9465.  Changed to", 
+   "use svn_fs_fs__id_ prefixes for functions and to use private data", 
+   "field of svn_fs_id_t.", 
+   "(svn_fs_fs__id_node_id, svn_fs_fs__id_copy_id, svn_fs_fs__id_txn_id,", 
+   "svn_fs_fs__id_rev, svn_fs_fs__id_offset, svn_fs_fs__id_unparse,", 
+   "svn_fs_fs__id_eq, svn_fs_fs__id_check_related,", 
+   "svn_fs_fs__id_compare, svn_fs_fs__id_txn_create,", 
+   "svn_fs_fs__id_rev_create, svn_fs_fs__id_copy, svn_fs_fs__id_parse):", 
+   "New names for ID functions.", 
+   "* libsvn_fs_fs/fs_fs.h, libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__get_id_rev, svn_fs_fs__get_id_offset,", 
+   "svn_fs_fs__get_id_txn, svn_fs_fs__set_id_txn): Remove; now that we", 
+   "can have our own ID implementation, this functionality can be built", 
+   "in.  (Except for set_id_txn, which is only used in one place.)", 
+   "(create_new_txn_noderev_from_rev): Use svn_fs_fs__id_create with the", 
+   "proper fields the first time around, instead of svn_fs__id_copy", 
+   "followed by svn_fs_fs__set_id_txn, to preserve the immutability of", 
+   "node-IDs.", 
+   "* libsvn_fs_base/fs.c", 
+   "(svn_fs_base__vtable): Add svn_fs_base__id_parse to implement", 
+   "deprecated svn_fs_parse_id.", 
+   "* libsvn_fs_base/tree.c,", 
+   "libsvn_fs_base/bdb/nodes-table.c,", 
+   "libsvn_fs_base/bdb/changes-table.c,", 
+   "libsvn_fs_base/revs-txns.c,", 
+   "libsvn_fs_base/dag.c,", 
+   "libsvn_fs_base/util/fs_skels.c,", 
+   "libsvn_fs_fs/tree.c,", 
+   "libsvn_fs_fs/fs_fs.c,", 
+   "libsvn_fs_fs/dag.c:", 
+   "Rename calls to internal ID functions.  In FSFS, avoid directly", 
+   "referencing ID fields."
+  ], 
+  "revision_id": "849725"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2004-05-07T20:14:04.299204Z", 
+  "msg": [
+   "Extend translation documentation.", 
+   "* TRANSLATING (Starting a new translation): Document that", 
+   "the no-names-in-files convention also applies to po files.", 
+   "(Verifying your po file): New section.", 
+   "(Error message conventions): New section. Explicitly point to HACKING."
+  ], 
+  "revision_id": "849724"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-07T16:33:42.190797Z", 
+  "msg": [
+   "Remove some unused variables in FSFS to silence the compiler warnings", 
+   "noticed by kfogel.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(write_final_changed_path_info): Remove three unused variables."
+  ], 
+  "revision_id": "849723"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-05-07T15:40:55.413591Z", 
+  "msg": [
+   "Comply with TRANSLATING.", 
+   "* sv.po", 
+   "Remove forgotten comment with my name and e-mail address."
+  ], 
+  "revision_id": "849722"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-05-07T15:37:25.332684Z", 
+  "msg": [
+   "* HACKING: Replace the \"seeking patch manager\" bit with the new patch", 
+   "manager's name.  (If we get more roles like this, we may want to", 
+   "break them out into a separate file called ROLES.  But for now,", 
+   "keeping them in HACKING is fine, I think)."
+  ], 
+  "revision_id": "849721"
+ }
+]

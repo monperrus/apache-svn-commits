@@ -1,0 +1,102 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-09-19T18:35:49.101828Z", 
+  "msg": [
+   "On the merge-tracking branch: Update the APIs for some XML handler", 
+   "callbacks to align with rooneg's changes from the recent merge from", 
+   "trunk, and fix some other compilation warnings.", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "(start_element): Return svn_error_t *, adhering to", 
+   "svn_ra_dav__startelm_cb_t's prototype.  Add ELEM parameter, used by", 
+   "Neon to decide whether to proceed with parsing.  Ignore the element", 
+   "if it is unknown by setting *ELEM to NE_XML_DECLINE, and proceed", 
+   "with parsing by returning SVN_NO_ERROR.  For invalid XML, use", 
+   "UNEXPECTED_ELEMENT to signal the error, or to abort the XML", 
+   "parsing, return svn_error_t *.  Set *ELEM with the element ID.", 
+   "(end_element): Return svn_error_t *, adhering to", 
+   "svn_ra_dav__endelm_cb_t's prototype.  For invalid XML, use", 
+   "UNEXPECTED_ELEMENT to signal the error.  If svn_mergeinfo_parse()", 
+   "fails, pass on its error.  Remove the fail block.", 
+   "(cdata_handler): Return svn_error_t *, adhering to", 
+   "svn_ra_dav__cdata_cb_t's prototype.  To abort the XML parsing,", 
+   "return svn_error_t *.  Use local variable \"nlen\".", 
+   "(svn_ra_dav__get_merge_info): Remove used local variable \"err\".", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "me"
+  ], 
+  "revision_id": "861630"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-09-19T16:19:38.984362Z", 
+  "msg": [
+   "Explicitly document the results of calling svn_fs_node_created_rev() on", 
+   "unmodified transaction roots.", 
+   "See issue 2608 for a situation where this matters.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_node_created_rev): Note that roots of unmodified transactions aren't", 
+   "themselves considered to be modified nodes."
+  ], 
+  "revision_id": "861629"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-19T15:17:39.167083Z", 
+  "msg": [
+   "Add Cyrus SASL support to svnserve.", 
+   "Patch by: Vlad Georgescu <vgeorgescu@gmail.com>", 
+   "* subversion/libsvn_ra_svn/sasl_auth.c:", 
+   "(svn_ra_svn__sasl_status): Rename from sasl_status, change all uses and", 
+   "drop the 'static' qualifier.", 
+   "* subversion/libsvn_ra_svn/ra_svn_sasl.h", 
+   "(svn_ra_svn__sasl_status): New declaration.", 
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_SECTION_SASL): New section.", 
+   "(SVN_CONFIG_OPTION_USE_SASL): New option.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(create_conf): Document the new option.", 
+   "* subversion/svnserve/sasl_auth.c: New file.", 
+   "* subversion/svnserve/main.c", 
+   "(main): Call sasl_init().", 
+   "* subversion/svnserve/serve.c:", 
+   "(server_baton_t, authn_type, authz_type, get_access): Moved to server.h.", 
+   "(simple_auth_request): Contains the code that was prieviously in", 
+   "auth_request.", 
+   "(auth_request): Call sasl_auth_request() or simple_auth_request().", 
+   "(must_have_access): Consider the value of b->use_sasl when", 
+   "determining whether authentication should be performed.", 
+   "(find_repos): Read the value of the use-sasl option into b->use_sasl.", 
+   "Use that value when determining whether access is allowed to the", 
+   "repository.", 
+   "(get_access): Make non-static.", 
+   "* subversion/svnserve/server.h", 
+   "(server_baton_t): Moved here from serve.c. Has a new member 'use_sasl'", 
+   "(authn_type, authz_type, get_access): Moved here from serve.c.", 
+   "(sasl_init, sasl_auth_request): New declarations."
+  ], 
+  "revision_id": "861628"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-19T14:27:36.200217Z", 
+  "msg": [
+   "On the merge tracking branch:", 
+   "This file does not seem to need 'strcmp, strcat, strcpy' functions.", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "Removing the inclusion of \"apr_want.h\", stop defining APR_WANT_STRFUNC."
+  ], 
+  "revision_id": "861627"
+ }, 
+ {
+  "author": "madanus", 
+  "date": "2006-09-19T11:49:23.516729Z", 
+  "msg": [
+   "Fix doc to reflect actual function parameter, as per the obvious fix rule.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_merge_info): Change mergeinfo to mergeoutput."
+  ], 
+  "revision_id": "861626"
+ }
+]

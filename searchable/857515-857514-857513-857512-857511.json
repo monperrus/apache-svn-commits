@@ -1,0 +1,107 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T19:03:39.464616Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Add a new RA layer API for replaying the", 
+   "exact changes that produced a given revision into an editor.  This is", 
+   "intended to be used for mirroring a revision into a foreign repository.", 
+   "This also adds a new svnsync command that uses this API to replicate", 
+   "repositories.", 
+   "* build.conf", 
+   "(svnsync): New section for our new utility.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_replay): New prototype.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_replay2): New version of svn_repos_replay, lets you specify", 
+   "if you want to recieve deltas for text and property changes and adds", 
+   "the ability to limit the replay to a certain section of the repository.", 
+   "(svn_repos_replay): Deprecate.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__vtable_t): Add new replay method.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_replay): New function.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__replay): Implementation of the replay interface for", 
+   "libsvn_ra_local.", 
+   "(ra_local_vtable): Add replay.", 
+   "* subversion/libsvn_repos/replay.c", 
+   "Include svn_props.h.", 
+   "(path_driver_cb_baton): Add compare_root member, which holds the root", 
+   "for the previous revision if we're generating deltas.  Add authz func", 
+   "and baton.  Comment on the difference between the two root members.", 
+   "Add members to store the base path, base path length, and the low", 
+   "water mark for the client's historical data.", 
+   "(add_subdir): New helper function for replaying the creation of a tree", 
+   "into the editor, allows us to deal with the fact that the user might", 
+   "not have the history needed to reproduce it themselves.", 
+   "(is_within_base_path): Helper function to determine if a given path is", 
+   "within the base path we're copying history under.", 
+   "(path_driver_cb_func): Move copyfrom_path and copyfrom_rev up to the", 
+   "top level of the function so they can be used as an indication that", 
+   "an add is in fact a copy.  Send propchanges and text deltas if the", 
+   "user requested them.  Handle authorization as it applies to copyfrom", 
+   "sources.  Update comments.  Deal with the fact that the client may", 
+   "not have enough history to make use of some copies or text deltas.", 
+   "(svn_repos_replay2): New version of svn_repos_replay, sets up the", 
+   "compare_root, base path, low water mark and authz members of the", 
+   "baton, handles authz as it applies to modified paths we're not", 
+   "allowed to see.", 
+   "(svn_repos_replay): New wrapper function.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_replay): Implementation of replay for ra_svn.", 
+   "(ra_svn_vtable): Add replay.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__replay): New prototype.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(dav_vtable): Add replay method.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__replay): Dummy implementation until I get around to", 
+   "implementing this.", 
+   "* subversion/svnserve/serve.c", 
+   "(replay): Server side of the ra_svn replay code.", 
+   "(main_commands): Add replay command.", 
+   "* subversion/libsvn_ra_svn/protocol: Document replay command.", 
+   "* subversion/svnsync/main.c: New file, contains a program for replicating", 
+   "a repository via the svn_ra_replay API."
+  ], 
+  "revision_id": "857515"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T18:53:03.343777Z", 
+  "msg": [
+   "Create a new branch for the development of the svn_ra_replay API."
+  ], 
+  "revision_id": "857514"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-18T14:54:44.814756Z", 
+  "msg": [
+   "merge r17100:17413 from svn/branches/1.3.x to svn/branches/ebcdic/1.3.x"
+  ], 
+  "revision_id": "857513"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-18T12:46:26.652106Z", 
+  "msg": [
+   "Fix co bug where paths for mv log entries were absolute rather than relative.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__merge_props): Use utf-8 escaped SVN_UTF8_FSLASH symbolic constant", 
+   "in place of string literal."
+  ], 
+  "revision_id": "857512"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-18T10:20:34.957024Z", 
+  "msg": [
+   "On wc-propcaching branch: Kill another TODO from the code.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_props_modified_p): If the path has no entry, there is no prop mods."
+  ], 
+  "revision_id": "857511"
+ }
+]

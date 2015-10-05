@@ -1,0 +1,63 @@
+[
+ {
+  "author": "skitching", 
+  "date": "2008-02-05T21:52:58.687632Z", 
+  "msg": [
+   "Add docs only."
+  ], 
+  "revision_id": "618790"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2008-02-05T21:51:47.799642Z", 
+  "msg": [
+   "Enable Jetty web unit test"
+  ], 
+  "revision_id": "618789"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-02-05T21:50:16.154575Z", 
+  "msg": [
+   "DERBY-3304", 
+   "This commit addresses two issues.", 
+   "First of all, it cleanups up reset method in BaseActivation which was doing more than just bringing the Activation back", 
+   "to pre-execution state. The method had to make itself aware of holdability and what", 
+   "kind of resultset it was dealing with", 
+   "before closing or clearing the row of the resultset. The reason for this behavior", 
+   "is commit code path was relying on", 
+   "Activation.reset to do more than just bringing the activation to pre-execution state.", 
+   "I fixed this by moving this code", 
+   "from BaseActivation.reset to GenericLanguageConnectionContext.resetActivations.", 
+   "Additionally, in the new code in GenericLanguageConnectionContext.resetActivations, I added the code to not close the", 
+   "language result sets associated with activations that do not return rows even if activation may have holdability set to", 
+   "false. This will ensure that a commit inside a java procedure will not inadvertantly close the resultset associated with", 
+   "the java procedure call.", 
+   "Additionally, I copied some of the cleanup work(as shown below) from BaseActivation.reset into", 
+   "new code in GenericLanguageConnectionContext.resetActivations", 
+   "a.clearHeapConglomerateController();", 
+   "if (!a.isSingleExecution())", 
+   "a.clearWarnings();", 
+   "This code above was always getting executed at the time of commit before my commit and because of that, I decided to copy", 
+   "it in GenericLanguageConnectionContext.resetActivations. If anyone has any comments on this, please let me know.", 
+   "(Andrew trying to change commit message for Mamta)"
+  ], 
+  "revision_id": "618788"
+ }, 
+ {
+  "author": "dezzio", 
+  "date": "2008-02-05T21:49:11.409123Z", 
+  "msg": [
+   "Prevent deadlock in database during teardown when testing failures leave transactions open"
+  ], 
+  "revision_id": "618787"
+ }, 
+ {
+  "author": "dezzio", 
+  "date": "2008-02-05T21:46:09.098108Z", 
+  "msg": [
+   "Improved the robustness of these test cases"
+  ], 
+  "revision_id": "618786"
+ }
+]

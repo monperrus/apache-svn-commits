@@ -1,0 +1,105 @@
+[
+ {
+  "author": "striker", 
+  "date": "2003-10-30T07:52:25.593252Z", 
+  "msg": [
+   "Missed a check for APR 0.9.5.", 
+   "Patch by: Julian Foad", 
+   "* configure.in", 
+   "Update required version of APR from 0.9.4 to 0.9.5 (which is bundled", 
+   "with Apache 2.0.48."
+  ], 
+  "revision_id": "847640"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-10-30T01:38:13.249362Z", 
+  "msg": [
+   "Add a mechanism that \"repairs\" the text-time and prop-time in the", 
+   "entries file if they differ from the time of the working copy files", 
+   "even though there are no text/property differences.  This addresses", 
+   "issue 791.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_adm_locked): New function.", 
+   "(svn_wc_adm_write_check): Renamed to svn_wc__adm_write_check in", 
+   "wc.h since applications are not expected to use it.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__adm_write_check): Renamed from svn_wc_adm_write_check", 
+   "in svn_wc.h.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc_adm_locked): New function.", 
+   "(svn_wc__adm_write_check): Renamed from svn_wc_write_check, add", 
+   "comment about optimisation.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_props_modified_p): Repair prop-time if possible.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc_text_modified_p): Repair text-time if possible.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__make_adm_thing, svn_wc__adm_destroy,", 
+   "svn_wc__adm_cleanup_tmp_area): Use svn_wc__adm_write_check in", 
+   "place of svn_wc_write_check.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_process_committed): Use svn_wc__adm_write_check in place", 
+   "of svn_wc_adm_write_check.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__entries_write): Use svn_wc__adm_write_check in place of", 
+   "svn_wc_adm_write_check.", 
+   "* subversion/tests/clients/cmdline/stat_tests.py", 
+   "(get_prop_timestamp, get_text_timestamp, prop_time_behaviour,", 
+   "timestamp_behaviour): New test and helper functions."
+  ], 
+  "revision_id": "847639"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-29T19:13:57.950778Z", 
+  "msg": [
+   "Fix what feels like it could be a potential bug in open_path(), though", 
+   "I can't seem to think of a use-case that would trigger.  At any rate,", 
+   "the code should be more correct now, and what's more, it no longer", 
+   "does some work it doesn't need to do for nearly all read-only", 
+   "operations (which could mean a slight speed increase).", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(copy_id_inherit_unknown): New default enum value for copy_id_inherit_t.", 
+   "(make_parent_path): Explicitly set the copy-ID inheritance data to", 
+   "\"unknown\".", 
+   "(get_copy_inheritance): Add 'txn_id' parameter, and allow folks to", 
+   "call this with mutable nodes (since they were doing so already,", 
+   "sheesh...) which are now properly handled.", 
+   "(open_path): Add 'txn_id' parameter.", 
+   "(make_path_mutable): Detect missing copy-ID inheritance data,", 
+   "abort()ing if that occurs.", 
+   "(get_dag): Update call to open_path() (with no TXN_ID).", 
+   "(txn_body_change_node_prop, txn_body_make_dir, txn_body_delete,", 
+   "txn_body_copy, txn_body_make_file, txn_body_apply_textdelta,", 
+   "txn_body_apply_textdelta): Update call to open_path() (with TXN_ID).", 
+   "(txn_body_history_prev): Get the transaction ID for the root, and", 
+   "pass it to an updated call of open_path()."
+  ], 
+  "revision_id": "847638"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-29T16:47:44.874994Z", 
+  "msg": [
+   "* subversion/libsvn_client/blame.c", 
+   "(compare_items_as_paths): New.", 
+   "(log_message_receiver): Sort the changed paths, and process them in", 
+   "reverse order to guarantee that we choose the right copied parent", 
+   "directory."
+  ], 
+  "revision_id": "847637"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-10-29T15:15:12.279658Z", 
+  "msg": [
+   "Finish #1445:  add optional feature to make svn use last-commit-timestamps.", 
+   "(Just set \"use-commit-times = yes\" in the [miscellany] section of your", 
+   "runtime 'config' file.)", 
+   "* libsvn_subr/io.c (svn_io_set_file_affected_time): uncomment the new", 
+   "APR 0.9.5 api call: apr_file_mtime_set()."
+  ], 
+  "revision_id": "847636"
+ }
+]

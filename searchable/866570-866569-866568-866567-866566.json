@@ -1,0 +1,118 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2007-09-07T23:17:20.712402Z", 
+  "msg": [
+   "* subversion/include/svn_mergeinfo.h (svn_rangelist_merge): Doc fix."
+  ], 
+  "revision_id": "866570"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-09-07T19:03:21.436359Z", 
+  "msg": [
+   "Complete issue #2822, handling propagation of mergeinfo for WC -> WC", 
+   "copy/move operations.", 
+   "This commit makes WC -> WC copy/move operations, in conjunction with", 
+   "the --use-merge-history option, now require repository access", 
+   "(e.g. users may need to be online to use 'svn cp -g wcpath1 wcpath2'", 
+   "with a remote repository).  Such copy/move operations which do not use", 
+   "the --use-merge-history flag won't properly propagate inherited or", 
+   "implied mergeinfo to the destination.", 
+   "This commit is a resubmission of r26146 (which was later reverted in", 
+   "r26175 due to some problems).", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo): Leverage", 
+   "svn_client__derive_mergeinfo_location() to find actual source path", 
+   "and revnum.", 
+   "(propagate_mergeinfo_within_wc): New function to propagate implied", 
+   "and explicit mergeinfo for WC-local copy/move operations.  Handles", 
+   "flags to avoid contacting the repository.", 
+   "(do_wc_to_wc_copies): Add new WITH_MERGE_HISTORY parameter.  Rename", 
+   "local variable adm_access to dst_access to better reflect what it", 
+   "is.  Add code to acquire a src_access read lock for use with", 
+   "propagate_mergeinfo_within_wc(), and call that function.", 
+   "(do_wc_to_wc_moves): Add new WITH_MERGE_HISTORY parameter.  Rename", 
+   "local variable adm_access to dst_access to better reflect what it", 
+   "is.  Call propagate_mergeinfo_within_wc().", 
+   "(wc_to_wc_copy): Add new WITH_MERGE_HISTORY parameter, and pass it", 
+   "on to do_wc_to_wc_copies() and do_wc_to_wc_moves().", 
+   "(setup_copy): Add new WITH_MERGE_HISTORY parameter, and pass it", 
+   "on to wc_to_wc_copy().", 
+   "(svn_client_copy4, svn_client_move5): Add new WITH_MERGE_HISTORY", 
+   "parameter, and pass it on to setup_copy().", 
+   "(svn_client_move): Pass FALSE on to setup_copy() for its new", 
+   "WITH_MERGE_HISTORY parameter.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(copy_peg_rev_local_files, copy_peg_rev_local_dirs): Use -g flag for", 
+   "some calls to copy and move, and adjust expected mergeinfo", 
+   "accordingly.  Improve inline comments.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(create_deep_trees, avoid_repeated_merge_using_inherited_merge_info,", 
+   "avoid_repeated_merge_on_subtree_with_merge_info,", 
+   "obey_reporter_api_semantics_while_doing_subtree_merges,", 
+   "detect_copy_src_for_target_with_multiple_ancestors): Use -g flag", 
+   "for some calls to copy and move.  Adjust expected mergeinfo and/or", 
+   "expected status for property merge of mergeinfo.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_wc_with_replaced_file): Adjust expected status for property", 
+   "merge of mergeinfo.", 
+   "* www/merge-tracking/func-spec.html", 
+   "(wc-wc-copy-move): Note completion, and record behavior."
+  ], 
+  "revision_id": "866569"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-09-07T18:37:40.353299Z", 
+  "msg": [
+   "Fix propagation of mergeinfo for copied paths.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo): Calculate correct mergeinfo for copied", 
+   "paths.  Defer calculation of repository-relative path for the copy", 
+   "source until actually necessary."
+  ], 
+  "revision_id": "866568"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-09-07T16:04:16.750922Z", 
+  "msg": [
+   "Fix for Issue #2893 Handle mergeinfo for portions of a tree not checked out", 
+   "due to insufficient authz.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_path_t): Add 'absent' member.", 
+   "(remove_absent_children): New helper for do_merge().", 
+   "(do_merge): Call new remove_absent_children() prior to calling", 
+   "determine_merges_performed().  Don't describe absent paths to the reporter.", 
+   "(get_mergeinfo_walk_cb): Continue to pile it on our workhorse...start", 
+   "describing paths absent from the WC due to authz restrictions.  Also handle", 
+   "some new paths we might get now that get_mergeinfo_paths() is finding", 
+   "absent paths.", 
+   "(get_mergeinfo_error_handler): Squelch erros caused by unversioned paths,", 
+   "we might see these now that get_mergeinfo_paths() is finding absent paths.", 
+   "(insert_child_to_merge, cleanup_noop_merge): Deal with new absent member of", 
+   "merge_path_t.", 
+   "(get_mergeinfo_paths): Tweak doc string and comments to reflect changes to", 
+   "get_mergeinfo_walk_cb().  Change call to svn_wc_walk_entries3() to get", 
+   "absent paths.  Deal with new absent member of merge_path_t.", 
+   "(discover_and_merge_children): Refer to get_mergeinfo_paths() in the doc", 
+   "string when describing the contents of children_with_mergeinfo arg rather", 
+   "than trying to repeat it all here.  Don't do subtree merges on absent", 
+   "paths.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_and_skipped_paths): Remove comment about XFail.", 
+   "(test_list): Remove XFail from mergeinfo_and_skipped_paths."
+  ], 
+  "revision_id": "866567"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2007-09-07T10:48:47.223301Z", 
+  "msg": [
+   "French translation update.", 
+   "* subversion/po/fr.po: po-update + 7 fuzzy fixes and 4 new translations"
+  ], 
+  "revision_id": "866566"
+ }
+]

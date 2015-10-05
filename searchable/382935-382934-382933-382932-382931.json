@@ -1,0 +1,100 @@
+[
+ {
+  "author": "bandaram", 
+  "date": "2006-03-03T21:28:28.607615Z", 
+  "msg": [
+   "DERBY-1007: Fix optimizer to make subqueries return correct cost estimates.", 
+   "More description of the changes:", 
+   "1. Added the \"prepForNextRound()\" method that was part of OptimizerImpl", 
+   "to the Optimizer interface since that seemslike an appropriate place for it.", 
+   "2. Added a single line to OptimizerImpl.prepForNextRound() to reset the \"bestCost\"", 
+   "for the current round of optimization. Note that I do _not_ reset the \"foundABestPlan\"", 
+   "variable nor the \"bestJoinOrder\" array. This is because it's possible that a", 
+   "\"best join order\" may not exist for the current round, in which case the optimizer", 
+   "must know whether or not it found a best join order in a previous round", 
+   "(foundABestPlan) and if so what the corresponding join order was (bestJoinOrder).", 
+   "That information is required so that a valid query plan can be generated after", 
+   "optimization is complete.", 
+   "3. After making the above changes, I noticed that the optimizer cost", 
+   "estimates were not always showing up when logQueryPlan was set to true--they", 
+   "were sometimes being printed as question marks to represent \"Infinity\". The reason", 
+   "for this was that most of the code in the \"modifyAccessPaths\" phase of query", 
+   "compilation uses the estimates as they sit in the ResultSetNode.costEstimate", 
+   "field--which, for nodes above subqueries, will hold the \"bestCost\" estimates for", 
+   "the most recent plan chosen by the OptimizerImpl for the subquery. Since I am now", 
+   "(with DERBY-1007) resetting the \"bestCost\" variable at the start of every round,", 
+   "it's possible that \"bestCost\" will hold an estimate that has been \"reset\" to", 
+   "Double.MAX_VALUE. This can happen if it was reset (in prepForNextRound()) and", 
+   "then no valid join order was found for the current round (ex. if no valid join", 
+   "order exists or if there was an optimizer \"timeout\"). That in turn meant that", 
+   "the \"costEstimate\" field for nodes above the OptimizerImpl would have been \"reset\"", 
+   "as well, and hence the \"infinity\" value (i.e. question mark) was showing up in the", 
+   "logged query plan. So I had to find all nodes that use \"costEstimate\" during", 
+   "modifyAccessPaths() and update them to use the final, best cost estimate for", 
+   "that node (instead of just using the most recent value of \"costEstimate\"). This", 
+   "touched several of ResultSetNode's subclasses, but the diff in most cases is just", 
+   "a few lines. The exceptions are FromTable, SelectNode, UnionNode,", 
+   "IntersectOrExceptNode, and JoinNode, where I added new \"getFinalCostEstimate\" methods", 
+   "to correctly figure out the final cost estimate based on the final estimates for", 
+   "child nodes, as appropriate.", 
+   "4. The current optimizer \"timeout\" mechanism is based on the value in", 
+   "OptimizerImpl.bestCost. Since I'm now resetting that value at the start of every", 
+   "round, the timeout mechanism had to be changed in order to preserve its current", 
+   "functionality while removing the dependency on bestCost. So I've added a new", 
+   "variable, timeLimit, to OptimizerImpl that plays the same role w.r.t optimizer", 
+   "\"timeout\" that the old bestCost value did.", 
+   "5. Updated master/derived.out to match new behavior. There's one query in", 
+   "derived.sql that is affected by this issue. Before these changes the optimizer", 
+   "thought one join order B was cheaper than another join order A and so it chose", 
+   "to generate join order B. With these changes, though, it now (correctly) sees that", 
+   "join order A and join order B are equivalent, so it just goes with join order A.", 
+   "This difference manifests itself in the ordering of two rows in the result set for", 
+   "that query--so I've updated the masters accordingly.", 
+   "6. Added a new, simple test case specific to DERBY-1007 to lang/subquery.sql, and", 
+   "updated the master file accordingly. The test case is the same one mentioned in the", 
+   "description for this issue.", 
+   "Submitted by Army Brown (qozinx@sbcglobal.net)"
+  ], 
+  "revision_id": "382935"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2006-03-03T21:24:33.860970Z", 
+  "msg": [
+   "http://jira.activemq.org/jira/browse/AMQ-612", 
+   "http://jira.activemq.org/jira/browse/AMQ-613"
+  ], 
+  "revision_id": "382934"
+ }, 
+ {
+  "author": "sebor", 
+  "date": "2006-03-03T21:23:29.366831Z", 
+  "msg": [
+   "2006-03-03  Martin Sebor  <sebor@roguewave.com>", 
+   "* fstream (__GNUC__MINOR__): Corrected spelling."
+  ], 
+  "revision_id": "382933"
+ }, 
+ {
+  "author": "sebor", 
+  "date": "2006-03-03T21:22:53.482488Z", 
+  "msg": [
+   "2006-03-03  Martin Sebor  <sebor@roguewave.com>", 
+   "STDCXX-160", 
+   "* fstream.cc: Avoided using operator+ on pos_type (which need", 
+   "not be defined) and used the required operator+= instead."
+  ], 
+  "revision_id": "382932"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-03-03T21:17:47.125485Z", 
+  "msg": [
+   "DERBY-654, committing on behalf of Sunitha Kambhampati.", 
+   "This change disables the test from running in the j9 environment, so that", 
+   "regression test don't fail.  The bug remains open, and can be intermittently", 
+   "reproduced in the environment described in DERBY-654."
+  ], 
+  "revision_id": "382931"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "omalley", 
+  "date": "2010-02-25T14:14:18.044371Z", 
+  "msg": [
+   "HADOOP-6579. Provide a mechanism for encoding/decoding Tokens from", 
+   "a url-safe string and change the commons-code library to 1.4. (omalley)"
+  ], 
+  "revision_id": "916290"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2010-02-25T13:54:47.621830Z", 
+  "msg": [
+   "* branches/1.6.x-r916286: New branch to merge r916286 to 1.6.x."
+  ], 
+  "revision_id": "916289"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2010-02-25T13:49:11.181995Z", 
+  "msg": [
+   "Merged revisions 916077 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r916077 | dkulp | 2010-02-24 20:21:10 -0500 (Wed, 24 Feb 2010) | 1 line", 
+   "[CXF-2654] Add missing files and re-enable tests", 
+   "........"
+  ], 
+  "revision_id": "916288"
+ }, 
+ {
+  "author": "calavera", 
+  "date": "2010-02-25T13:42:10.903969Z", 
+  "msg": [
+   "fixes redundant assignation of mimeType. Thanks to Pascal Christoph"
+  ], 
+  "revision_id": "916287"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2010-02-25T13:40:22.271727Z", 
+  "msg": [
+   "With the below apache configuration (see the trailing slash at the end of", 
+   "'/svn/'):", 
+   "<Location /svn/>", 
+   "DAV svn", 
+   "SVNParentPath /repositories", 
+   "#See the trailing slash on the master URI also can cause the confusion.", 
+   "SVNMasterURI http://master/svn/", 
+   "SVNAdvertiseV2Protocol Off", 
+   "</Location>", 
+   "we get the following error on the client side:", 
+   "svn: Commit failed (details follow):", 
+   "svn: MKACTIVITY of '/svn/demujin/!svn/act/4b6d547c-018d-4e02-9d3f-2b283076cc06':", 
+   "Could not read status line: connection was closed by server (http://localhost)", 
+   "On the server (proxy) it is an assertion error on the following code block from", 
+   "subversion/mod_dav_svn/mirror.c:proxy_request_fixup():", 
+   "assert((uri_segment[0] == '\\0')", 
+   "|| (uri_segment[0] == '/'));", 
+   "For the above configuration we get the uri_segment with the value", 
+   "'reponame/some/path/inside/the/repo'.", 
+   "We fix this by canonicalizing the 'root_dir' (the one in Location) and", 
+   "'uri.path' (path portion of Master URI).", 
+   "* subversion/mod_dav_svn/dav_svn.h", 
+   "(dav_svn__get_root_dir): Document that root_dir is in canonicalized form.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "(create_dir_config): Canonicalize the root_dir.", 
+   "* subversion/mod_dav_svn/mirror.c", 
+   "(dav_svn__location_in_filter, dav_svn__location_body_filter):", 
+   "As root_dir is in canonical form canonicalize the uri.path too to avoid", 
+   "spurious errors.", 
+   "(dav_svn__location_header_filter): As root_dir is canonical we need to", 
+   "explicitly introduce the path seperator.", 
+   "Suggested by: julianfoad"
+  ], 
+  "revision_id": "916286"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-10-29T07:08:06.117182Z", 
+  "msg": [
+   "Fix a small bug regarding wcroot cleanup.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(create_wcroot): no need to run the cleanup for wc-1 roots. they do not", 
+   "have an SDB to close."
+  ], 
+  "revision_id": "880340"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-29T06:07:03.836214Z", 
+  "msg": [
+   "Revamp the closing/cleanup of the DB. The DIR_DATA hash has a subpool", 
+   "which gets destroyed before our cleanups run, which means that DIR_DATA", 
+   "cannot be used (oops). So rather than iterating over DIR_DATA to look for", 
+   "WCROOT_T structures to deal with, we simply register cleanups for each", 
+   "WCROOT_T to clean itself.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(close_wcroot): new function to close a WCROOT_T, which is simply", 
+   "closing the SDB inside it. some double-free detection is here, too", 
+   "(close_many_wcroots): close a whole hash of WCROOT_T structures.", 
+   "(create_wcroot): register a cleanup for the new WCROOT_T", 
+   "(close_db, close_db_apr): removed. no longer used.", 
+   "(svn_wc__db_open): remove the cleanup registration for the DB", 
+   "(svn_wc__db_close): full revamp to find all WCROOT_T structure and get", 
+   "them closed. the DIR_DATA structure is also emptied.", 
+   "(svn_wc__db_temp_forget_directory): tweak the iteration to get iteration", 
+   "key information for clearing the DIR_DATA. then use close_many_wcroots", 
+   "to close all the discovered wcroots."
+  ], 
+  "revision_id": "880339"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-28T22:53:17.645616Z", 
+  "msg": [
+   "Merge svn_io_mktemp() into svn_io_open_unique_file3().", 
+   "This effectively switches tempfile handling to mkstemp() in many places.", 
+   "We now have two (rather than three) distinct tempfile interfaces again:", 
+   "- svn_io_open_unique_file3() which is secure and offers no control over", 
+   "the name of the temporary file, and should be used whenever possible.", 
+   "- svn_io_open_uniquely_named() which provides a lot of control over the", 
+   "name of the temporary file and should only be used if temporary files", 
+   "are used to interface directly with the user (such as when saving a log", 
+   "message to a temporary file, or when creating conflict marker files).", 
+   "Suggested by: gstein", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_mktemp): Undeclare.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_mktemp): Merge this ...", 
+   "(svn_io_open_unique_file3): ... into this, and drop the FILENAME parameter.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Prevent this commit from breaking copy", 
+   "test 10, \"executable bit should be preserved when copying\".", 
+   "After copying a file, if the copy source exists in WORKING, copy file", 
+   "permissions from the copy source to the destination. If the copy source", 
+   "does not exist in WORKING, set the destination's permissions to the OS's", 
+   "default permissions.", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(detranslate_wc_file, maybe_update_target_eols): Update the only callers", 
+   "of svn_io_mktemp()."
+  ], 
+  "revision_id": "880338"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-28T22:24:05.398072Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(BASE_NODE, PRISTINE, WORKING_NODE, ACTUAL_NODE, LOCK, WC_LOCK):", 
+   "Add some foreign key constraints on wcroot.id and repository.id."
+  ], 
+  "revision_id": "880337"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-28T22:20:49.745875Z", 
+  "msg": [
+   "* notes/obliterate/presentations/SvnObliterate-SubConf2009.odp: New file."
+  ], 
+  "revision_id": "880336"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-06-10T22:55:46.311102Z", 
+  "msg": [
+   "PHP Generator: Throw an exception on bad types.", 
+   "Summary:", 
+   "Previously, if you set a structure field to, say, an int when it was", 
+   "supposed to be a container (array) or struct (object), the serialization", 
+   "code would either produce corrupt output (container) or cause a fatal", 
+   "error (struct).  Now they both throw exceptions.", 
+   "Reviewed By: mcslee", 
+   "Test Plan: Looked at generated code."
+  ], 
+  "revision_id": "666365"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-10T22:55:38.242956Z", 
+  "msg": [
+   "Change Python servers to use the standard logging module.", 
+   "Previously Thrift was using `print` to report errors.  Thrift is infrastructure", 
+   "and should not impose its error logging mechanism on the apps that use it.  For", 
+   "example, [elided] uses the logging module to send logs to a particular file.", 
+   "I ran the unit test.  That exercises most of the error handling routines."
+  ], 
+  "revision_id": "666364"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-10T22:55:26.587636Z", 
+  "msg": [
+   "Python forking server should close connection in parent.", 
+   "When a function called by the forking python thrift server throws an", 
+   "exception the client will hang.  This happens because the parent of the", 
+   "forked process does not properly close the socket fd.", 
+   "Under normal operation the server operation completes and returns a value to", 
+   "the client.  However, when an exception occurs the 'end' message is never", 
+   "sent to the client so the client relies on a connection close to abort the", 
+   "call (this is how the threading server works I believe).", 
+   "This fails with the forking server because the parent process never closes", 
+   "the socket fd.  The child has closed the fd at this point, but the", 
+   "connection will not actually be closed until all open instances of the fd", 
+   "are closed. Since the client is waiting for a message and the server never", 
+   "closes it the client is forced to wait until a read timeout occurs many", 
+   "minutes later.", 
+   "This diff closes the parent's copy of the socket fd immediately after the", 
+   "fork occurs.", 
+   "I modified my load test server to throw an exception.  The client did not hang."
+  ], 
+  "revision_id": "666363"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-10T22:55:13.675253Z", 
+  "msg": [
+   "Thrift: Allow for alternative Mutex initializers.", 
+   "Summary:", 
+   "Add an argument to the Mutex constructor.", 
+   "It takes a pointer to a function that initializes the internal pthread_mutex_t.", 
+   "We provide initializers for default pthread_mutex_t (which is our default),", 
+   "adaptive mutexes, and recursive mutexes.", 
+   "Reviewed By: hzhao, psaab, mcslee", 
+   "Test Plan: Built libthrift."
+  ], 
+  "revision_id": "666362"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-10T22:55:04.785645Z", 
+  "msg": [
+   "Fix locking bug in ThreadManager.", 
+   "It looks like the scheduler waits on monitor_, but the worker notifies", 
+   "workerMonitor_. Also, it does so out of critical section."
+  ], 
+  "revision_id": "666361"
+ }
+]

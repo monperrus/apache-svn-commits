@@ -1,0 +1,88 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-09-30T21:44:34.319574Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(restore_file): Get rid of an unused access baton."
+  ], 
+  "revision_id": "879795"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-30T21:25:04.857924Z", 
+  "msg": [
+   "Follow-up to r39680:", 
+   "Continue work on issue #2543 \"Inconsistent svn diff after rename\"", 
+   "Make repository->WC diff consistent with WC->WC diff, by diffing", 
+   "files added-with-history against the empty file by default.", 
+   "As with WC->WC diffs, the --notice-ancestry option now triggers the", 
+   "old behaviour of diffing against the copyfrom source.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_repos_wc): When doing a pegged diff, if ignoring ancestry,", 
+   "just use the target's URL as retrieved from the entry unchanged.", 
+   "Else, determine the pegged target's URL under consideration of history", 
+   "as before.  While here, add a missing svn_error_return().", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff): If a pegged diff fails because a path could not be found,", 
+   "suggest trying the --notice-ancestry option. This should help users", 
+   "migrating to the new default behaviour, which might yield 'path not found'", 
+   "errors during commands such as 'svn diff -r42 foo' if foo did not exist", 
+   "under the name 'foo' in revision 42.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_renamed_file, diff_within_renamed_dir,", 
+   "diff_base_repos_moved): Test the Repos->WC diff case both with and", 
+   "without ancestry, now that we support both.", 
+   "(diff_nonrecursive_checkout_deleted_dir): Pass --notice-ancestry to avoid", 
+   "a 'path not found' error making the test fail."
+  ], 
+  "revision_id": "879794"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T19:54:49.614329Z", 
+  "msg": [
+   "Since we share the list of statements through libsvn_wc, we can now", 
+   "use a shared database connection with a list of cached statements", 
+   "for reading entries.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries_new): Create a pool as result pool for svn_wc__db_temp_get_sdb,", 
+   "to allow closing a non cached database. Don't explictly close the db.", 
+   "(svn_wc__entries_write_new): Use cached database.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_temp_get_sdb): Allow retrieving a cached database handle.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_temp_get_sdb): Update prototype."
+  ], 
+  "revision_id": "879793"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T18:35:44.204915Z", 
+  "msg": [
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(make_entry,", 
+   "svn_fs_base__dag_clone_child,", 
+   "svn_fs_base__dag_copy): Don't join in-repository paths as dirents, as this", 
+   "fails on paths like 'c:hi'"
+  ], 
+  "revision_id": "879792"
+ }, 
+ {
+  "author": "rdonch", 
+  "date": "2009-09-30T18:26:31.635576Z", 
+  "msg": [
+   "In the svn-python testsuite, use the svn_dirent functions instead of the", 
+   "svn_path ones, and internal_style instead of canonicalize.", 
+   "Besides getting rid of deprecated function calls, this also fixes several WC", 
+   "testcases that were failing on Windows.", 
+   "* subversion/bindings/swig/python/tests/client.py:", 
+   "(SubversionClientTestCase.allocate_temp_dir): use svn_dirent_internal_style", 
+   "instead of svn_path_internal_style.", 
+   "* subversion/bindings/swig/python/tests/wc.py:", 
+   "(SubversionWorkingCopyTestCase.setUp): use svn_dirent_internal_style instead", 
+   "of svn_path_canonicalize."
+  ], 
+  "revision_id": "879791"
+ }
+]

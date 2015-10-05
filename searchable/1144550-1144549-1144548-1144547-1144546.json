@@ -1,0 +1,84 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2011-07-08T23:23:27.050522Z", 
+  "msg": [
+   "For issue #3952, drop support for revprop packing from trunk.  This revision", 
+   "removes that support wholesale, not only the SQLite-specific parts.", 
+   "This merges r1143907 from the revprop-packing branch, which removed some", 
+   "SQLite-specific code, and in addition removes all instances in fs_fs.c of", 
+   "if (ffd->format >= SVN_FS_FS__MIN_PACKED_REVPROP_FORMAT)", 
+   ".", 
+   "The merge-back should not be a problem, since all those new-in-this-revision", 
+   "changes are not intended to be made on the branch.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_MIN_UNPACKED_REVPROP, PATH_REVPROPS_DB): Remove.", 
+   "(fs_fs_data_t.min_unpacked_revprop, fs_fs_data_t.revprop_db): Remove.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(revprops-db.h): Remove include.", 
+   "(REVPROPS_DB_SQL_DECLARE_STATEMENTS): Remove.", 
+   "(update_min_unpacked_revprop, path_min_unpacked_revprop,", 
+   "create_packed_revprops_db, pack_revprop_shard): Remove.", 
+   "(is_packed_revprop): Retain, but hard-wire to FALSE always.  (It is", 
+   "presently only used in assert() calls.)", 
+   "(with_some_lock): Don't update_min_unpacked_revprop().", 
+   "(svn_fs_fs__open, upgrade_body, svn_fs_fs__hotcopy, set_revision_proplist,", 
+   "revision_proplist, svn_fs_fs__create):", 
+   "Don't refer to revprops.db or min-unpacked-revprop.", 
+   "(svn_fs_fs__revision_proplist):", 
+   "Stop accounting for concurrent revprop packing.", 
+   "(commit_body): Add a comment.  (The fix was done in r1144530.)", 
+   "(recover_body): Remove a special case.", 
+   "[ In answer to the ### question I remove, our code creates an empty skel", 
+   "in revprops.db when all revprops are deleted. ]", 
+   "(pack_body):", 
+   "Don't refer to revprops.db or min-unpacked-revprop.", 
+   "* build.conf", 
+   "(private-includes): Remove revprops-db.h.", 
+   "(revprops): Remove.", 
+   "* subversion/libsvn_fs_fs/revprops-db.sql:", 
+   "Remove."
+  ], 
+  "revision_id": "1144550"
+ }, 
+ {
+  "author": "axb", 
+  "date": "2011-07-08T23:21:39.073896Z", 
+  "msg": [
+   "when will I learn to copy/paste!!!"
+  ], 
+  "revision_id": "1144549"
+ }, 
+ {
+  "author": "jgomes", 
+  "date": "2011-07-08T23:20:06.424732Z", 
+  "msg": [
+   "Add 32-bit project build."
+  ], 
+  "revision_id": "1144548"
+ }, 
+ {
+  "author": "ivaynberg", 
+  "date": "2011-07-08T23:18:56.776446Z", 
+  "msg": [
+   "FC#getDefaultLabel() tweak"
+  ], 
+  "revision_id": "1144547"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2011-07-08T23:18:30.843224Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1144537\"  (a conflict handled by hand)", 
+   "------------------------------------------------------------------------", 
+   "r1144537 | jleroux | 2011-07-09 00:58:35 +0200 (sam., 09 juil. 2011) | 8 lines", 
+   "Closes \"SequenceUtil may generate duplicate IDs in Load Balancing mode\" https://issues.apache.org/jira/browse/OFBIZ-2353", 
+   "Pb: If OFBiz is deployed on 2 servers in Load Balancing Mode, SequenceUtil will generate duplicate IDs because synchronization is done at JVM level instead of doing it in DB.", 
+   "The OFBIZ-2353 SELECT FOR UPDATE solution.patch provides a simple mean to quickly resolve this issue. I did not remove the bank loop (useless since there is a DB contention).", 
+   "I created a cluster general property. But since, most of the time, when you use a cluster you use also a sole database with a delegator having distributed-cache-clear-enabled set to true, I retrieve this information to automatically use SELECT FOR UPDATE in this case", 
+   "This has been tested on a cluster with JMeter. BTW I found that UserLoginHistory can throw errors because it does not use a SeqId in PK but only login+fromDate. I guess there are other cases like that but in reality it's unlikely that someone log on 2 diff machines with the  same login at the same time (ms), just a JMeter side effect...", 
+   "------------------------------------------------------------------------"
+  ], 
+  "revision_id": "1144546"
+ }
+]

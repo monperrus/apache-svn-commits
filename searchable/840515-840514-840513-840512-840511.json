@@ -1,0 +1,114 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-11-12T23:02:35.466061Z", 
+  "msg": [
+   "Bump version:", 
+   "* subversion/include/svn_version.h (SVN_VER_MINOR): Set to 6, so we", 
+   "have Subversion 0.6.0.", 
+   "(SVN_VER_NAME): Undef."
+  ], 
+  "revision_id": "840515"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-11-12T23:00:39.724604Z", 
+  "msg": [
+   "Commit local mods that live within a 'copied' subtree.", 
+   "* adm_crawler.c (crawl_dir): if this_dir has copyfrom history, then", 
+   "don't touch the adds_only flag.  The caller has explicitly unset it."
+  ], 
+  "revision_id": "840514"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-11-12T22:35:42.010132Z", 
+  "msg": [
+   "Finish path filtering in \"svn log\".  This resolves issue #505.", 
+   "* subversion/include/svn_types.h (svn_log_message_receiver_t): Get rid", 
+   "of `last_call' parameter, all callers changed.", 
+   "* subversion/clients/cmdline/log-cmd.c (log_message_receiver_baton):", 
+   "New field `first_call'.", 
+   "(svn_cl__log): Initialize new first_call field in the baton.", 
+   "(log_message_receiver): Print a separator string before the log", 
+   "message if this is the first call, and print a separator string after", 
+   "every log message whether or not this is the last call.", 
+   "* subversion/include/svn_ra.h (svn_ra_plugin_t): Doc updates for", 
+   "get_log().", 
+   "* subversion/libsvn_ra_dav/log.c (log_end_element): Adjust call to log", 
+   "receiver.", 
+   "* subversion/mod_dav_svn/log.c (log_receiver_baton): Remove", 
+   "`first_call' field.", 
+   "(log_receiver): Don't send the start or end of the report response,", 
+   "just send the log items themselves.", 
+   "(dav_svn__log_report): Convert relative paths to absolute paths in the", 
+   "repository, for path filtering.  Send the start and end XML for the", 
+   "report here, instead of depending on log_receiver to do it.", 
+   "* subversion/include/svn_repos.h (svn_repos_get_logs): Doc updates.", 
+   "* subversion/libsvn_repos/log.c (svn_repos_get_logs): Finish code to", 
+   "filter by path.  Don't pass last_call parameter to log receiver.", 
+   "(detect_changed): Let root path stand, don't try to extend it to", 
+   "itself.  Workaround path library misbehavior; see issue #559 for more", 
+   "about this.  Doc fixes.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c (get_log): Convert incoming", 
+   "relative paths to repository absolute paths.", 
+   "* subversion/libsvn_subr/path.c (add_component_internal): Bugfix --", 
+   "don't double a lone dir separator.", 
+   "Unrelated changes:", 
+   "* subversion/libsvn_wc/entries.c (svn_wc_get_version_controlled_paths):", 
+   "Remove unused variable `this_dir', to get rid of compiler warning.", 
+   "* subversion/libsvn_wc/copy.c (recursively_remove_all_wcprops):", 
+   "Removed unused variables `status' and `this_dir', , to get rid of", 
+   "compiler warnings.", 
+   "* subversion/libsvn_wc/adm_ops.c (add_to_revision_control,", 
+   "svn_wc_delete): Fix calls to mark_tree."
+  ], 
+  "revision_id": "840513"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-11-12T21:41:58.831422Z", 
+  "msg": [
+   "Two more changes toward directory copies:", 
+   "- delete bogus versioned-resource-urls in the copied tree", 
+   "- mark the tree as 'existence=copied', so 'svn st' can still show A's.", 
+   "[Still needed:", 
+   "- during commit of a copied tree, report any mixed revisions found.", 
+   "- make sure local mods are still committed within a copied tree. ]", 
+   "* svn_wc.h (enum svn_wc_existence_t): new state - svn_wc_existence_copied", 
+   "(SVN_WC_ENTRY_VALUE_COPIED): new xml value string.", 
+   "* adm_ops.c (mark_tree):  renamed from 'delete_tree' again,", 
+   "generalized to recursively change a schedule and/or existence flag.", 
+   "(svn_wc_delete): update call to mark_tree.", 
+   "(add_to_revision_control): if ancestry is given, set this", 
+   "'existence=copied' flag, recursively, in the new entry.  Also, don't", 
+   "set the working revision to 0 for a copy, keep it unchanged.", 
+   "(svn_wc_revert):  bugfix, initialize vars to null.", 
+   "* copy.c (recursively_remove_all_wcprops):  new helper func.", 
+   "(copy_dir_administratively): call new function above.", 
+   "* entries.c (svn_wc__atts_to_entry): detect SVN_WC_ENTRY_VALUE_COPIED.", 
+   "(normalize_entry): write out this same value in the other direction.", 
+   "* status.c (assemble_status): notice the 'copied' flag when assembling", 
+   "the status structures.", 
+   "* log.c (log_do_committed): be sure to remove 'copyfrom' flags, and", 
+   "set existence to normal, in the parent entry of a copied directory.", 
+   "* wc.h (SVN_WC__ENTRY_MODIFY_ATTRIBUTES): um, shouldn't 0x0100 be the", 
+   "next number in the flags progression?  :-)"
+  ], 
+  "revision_id": "840512"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-11-12T17:34:45.635874Z", 
+  "msg": [
+   "Bug fixes for Issue #557.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(remove_all_tmpfiles, cleanup_commit): New.", 
+   "(crawl_local_mods): Renamed from svn_wc__crawl_local_mods().  Now,", 
+   "accepts the \"affected_targets\" parameter from its caller (instead of", 
+   "it living inside this stack frame).", 
+   "(svn_wc_crawl_local_mods): Call cleanup_commit()."
+  ], 
+  "revision_id": "840511"
+ }
+]

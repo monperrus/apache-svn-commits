@@ -1,0 +1,88 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2008-10-07T07:01:49.184512Z", 
+  "msg": [
+   "Introduce svn_wc_add_repos_file3() which is stream-based rather than", 
+   "path-based. When a caller needs to use a path, then they learn too much", 
+   "about the structure/implementation of the WC. With a stream, they can just", 
+   "feed the function a stream from wherever they have the file (instead of", 
+   "placing it into .svn/tmp/).", 
+   "add_repos_file2() also took special files in normal form, but other files", 
+   "in expanded form. add_repos_file3() now takes all files in normal form.", 
+   "Note: yes, I've seen issue #2198. The overall cleanup will come later, but", 
+   "I'm not focusing on that now.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_add_repos_file3): new declaration, deprecating...", 
+   "(svn_wc_add_repos_file2): ... is now deprecated", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(svn_wc_add_repos_file3): the new base contents are dropped into a", 
+   "temporary file, later to be moved into place, and it is checksummed at", 
+   "the same time. the contents are also dropped into the temp area, later", 
+   "to be copied/translated into place (which handles both special files,", 
+   "and regular files).", 
+   "(svn_wc_add_repos_file2): open streams onto the given files, possibly", 
+   "applying detranslating in the process. we need to use the given", 
+   "properties to determine information about the file, since the target", 
+   "path may not be version-controlled. after calling add_repos_file3(),", 
+   "delete the files, per the API contract."
+  ], 
+  "revision_id": "873585"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-07T01:19:23.440844Z", 
+  "msg": [
+   "Merge r33296 (the merge.c part) from trunk:", 
+   "* r33296 (only subversion/libsvn_client/merge.c)", 
+   "Resolves:", 
+   "merge.c: In function 'filter_self_referential_mergeinfo':", 
+   "merge.c:521: warning: declaration of 'merge_source_root_url' shadows a", 
+   "previous local", 
+   "Notes:", 
+   "Small followup on the r33112 group", 
+   "Justification:", 
+   "Warnings are bad. Especially if they show us an unused but assigned", 
+   "variable.", 
+   "Votes:", 
+   "+1: rhuijben, danielsh, hwright"
+  ], 
+  "revision_id": "873584"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-07T01:13:48.523403Z", 
+  "msg": [
+   "* STATUS: Vote for r33296."
+  ], 
+  "revision_id": "873583"
+ }, 
+ {
+  "author": "jwhitlock", 
+  "date": "2008-10-06T23:36:13.972465Z", 
+  "msg": [
+   "* Makefile.in (LT_EXECUTE): Remove unnecessary libtool argument. Follow-up to", 
+   "r33507.", 
+   "Approved by: djames"
+  ], 
+  "revision_id": "873582"
+ }, 
+ {
+  "author": "jwhitlock", 
+  "date": "2008-10-06T22:37:45.403230Z", 
+  "msg": [
+   "Enable ctypes-python to do an in-place build/check without requiring a", 
+   "Subversion installation.", 
+   "* Makefile.in (LT_EXECUTE): New libtool command.", 
+   "(ctypes-python, check-ctypes-python): Use libtool, via LT_EXECUTE, to execute", 
+   "setup.py.", 
+   "* subversion/bindings/ctypes-python/setup.py: Add new command line option.", 
+   "(initialize_options): Initialize the new option.", 
+   "(validate_options): Validate the new option.", 
+   "(get_apr_config): Use the new option.", 
+   "* subversion/bindings/ctypes-python/TODO: Remove task this commit completes.", 
+   "Approved by: djames"
+  ], 
+  "revision_id": "873581"
+ }
+]

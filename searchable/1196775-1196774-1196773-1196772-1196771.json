@@ -1,0 +1,75 @@
+[
+ {
+  "author": "lahiru", 
+  "date": "2011-11-02T19:25:44.098025Z", 
+  "msg": [
+   "save the table data to the model when lost focus"
+  ], 
+  "revision_id": "1196775"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2011-11-02T19:25:08.414868Z", 
+  "msg": [
+   "MYFACES-3381 Add @JSFFaceletFunction annotation (change target to method)"
+  ], 
+  "revision_id": "1196774"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-02T19:24:23.140423Z", 
+  "msg": [
+   "HBASE-2312 [jira] Possible data loss when RS goes into GC pause while rolling", 
+   "HLog", 
+   "Summary:", 
+   "There is a very corner case when bad things could happen(ie data loss):", 
+   "1)\tRS #1 is going to roll its HLog - not yet created the new one, old one will", 
+   "get no more writes", 
+   "2)\tRS #1 enters GC Pause of Death", 
+   "3)\tMaster lists HLog files of RS#1 that is has to split as RS#1 is dead, starts", 
+   "splitting", 
+   "4)\tRS #1 wakes up, created the new HLog (previous one was rolled) and appends an", 
+   "edit - which is lost", 
+   "The following seems like a possible solution:", 
+   "1)\tMaster detects RS#1 is dead", 
+   "2)\tThe master renames the /hbase/.logs/<regionserver name>  directory to", 
+   "something else (say /hbase/.logs/<regionserver name>-dead)", 
+   "3)\tAdd mkdir support (as opposed to mkdirs) to HDFS - so that a file create", 
+   "fails if the directory doesn't exist. Dhruba tells me this is very doable.", 
+   "4)\tRS#1 comes back up and is not able create the new hlog. It restarts itself.", 
+   "Test Plan: EMPTY", 
+   "Reviewers: JIRA, stack, khemani", 
+   "Reviewed By: khemani", 
+   "CC: tedyu, nspiegelberg, stack, Kannan, khemani, jgray", 
+   "Differential Revision: 99"
+  ], 
+  "revision_id": "1196773"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-02T19:24:18.496231Z", 
+  "msg": [
+   "[jira] [HBASE-4627] Ability to specify a custom start/end to RegionSplitter", 
+   "Summary:", 
+   "[HBASE-4627]", 
+   "added a custom start/end row to RegionSplitter.  Also solved", 
+   "an off-by-one error because the end row is prefix-inclusive and not", 
+   "exclusive.", 
+   "<a href=\"https://issues.apache.org/jira/browse/HBASE-4489\" title=\"Better key splitting in RegionSplitter\"><del>HBASE-4489</del></a> changed the default endKey on HexStringSplit from 7FFF... to FFFF...  While this is correct, existing users of 0.90 RegionSplitter have 7FFF as the end key in their schema and the last region will not split properly under this new code.  We need to let the user specify a custom start/end key range for when situations like this arise.  Optimally, we should also write the start/end key in META so we could figure this out implicitly instead of requiring the user to explicitly specify it.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestRegionSplitter", 
+   "CC: JIRA", 
+   "Reviewers: DUMMY_REVIEWER", 
+   "Differential Revision: 39"
+  ], 
+  "revision_id": "1196772"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-02T19:21:35.352152Z", 
+  "msg": [
+   "Add 2312 to CHANGES.txt"
+  ], 
+  "revision_id": "1196771"
+ }
+]

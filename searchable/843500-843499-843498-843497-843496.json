@@ -1,0 +1,92 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-10-21T11:42:17.440949Z", 
+  "msg": [
+   "Get rid of the 'errors' thing and just throw exceptions. No real need", 
+   "to try and report all errors at once; simplify the logic and report", 
+   "one at a time for fixing.", 
+   "Also shifted a bunch of data collection from the makefile generator to", 
+   "the generic base class.", 
+   "* build/gen_base.py:", 
+   "(GeneratorBase.__init__): stop catching exceptions from the Target", 
+   "creation. raise an error for unknown build types. shift code from", 
+   "the makefile generator to collect source files, build directories,", 
+   "script files, and more (oh my!)", 
+   "(_Target.find_sources): stop returning 'errors' and rely on", 
+   "exceptions instead.", 
+   "(_collect_paths): raise exceptions rather than return an error flag", 
+   "* build/gen_make.py:", 
+   "(MakefileGenerator.write): stop collecting an 'errors' flag and just", 
+   "raise (or allow) exceptions. shift a bunch of collection out to", 
+   "the base class."
+  ], 
+  "revision_id": "843500"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-10-21T08:49:27.185745Z", 
+  "msg": [
+   "Start some work to support SWIG extensions in our build system. With", 
+   "the larger interest in the bindings, we need more help in building and", 
+   "installing them.", 
+   "* build.conf: bring [options] back and shift the path to the includes", 
+   "there. add a new option for which languages have SWIG support.", 
+   "add a bunch of sections for swig targets [format not yet set].", 
+   "* build/gen_base.py:", 
+   "(GeneratorBase.__init__): look up a target class based on the build", 
+   "type, and instantiate it for the target object.", 
+   "(_Target.__init__): remove type checks for defaulting the install", 
+   "type. use a class attribute instead (via self.FOO).", 
+   "(_Target.find_sources): use a class attribute rather than a global", 
+   "type->pattern mapping.", 
+   "(_TargetExe, _TargetScript, _TargetLib, _TargetDoc, _TargetSWIG):", 
+   "new target classes.", 
+   "(_build_types): new dict to map types to classes", 
+   "(_default_sources): tossed in favor of class attrs", 
+   "(_predef_sections): remove the [includes] section", 
+   "* build/gen_make.py:", 
+   "(MakefileGenerator.write): for swig types, just skip out for now.", 
+   "look for include paths in the [options] section."
+  ], 
+  "revision_id": "843499"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-10-21T06:12:24.049630Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "843498"
+ }, 
+ {
+  "author": "trow", 
+  "date": "2002-10-21T06:04:26.340284Z", 
+  "msg": [
+   "Greg Stein has (very wisely) suggested that the bindings for svn_opt.h", 
+   "should be inside of the _util extension.  This gets rid of the", 
+   "_opt namespace that I created in revision 3395 and lets SWIG do more", 
+   "of the work.", 
+   "* subversion/bindings/swig/svn_opt.i", 
+   "Deleted.", 
+   "* subversion/bindings/swig/svn_client.i", 
+   "Remove the %import of svn_opt.i", 
+   "* subversion/bindings/swig/python/setup.py", 
+   "Removed the code to build the opt stuff.", 
+   "* subversion/bindings/swig/swigutils_py.h", 
+   "* subversion/bindings/swig/swigutils_py.c", 
+   "Removed my misbegotten python -> svn_opt_revision_t marshaller.", 
+   "* subversion/bindings/swig/util.i", 
+   "Included svn_opt.h."
+  ], 
+  "revision_id": "843497"
+ }, 
+ {
+  "author": "ballbach", 
+  "date": "2002-10-21T05:02:57.332624Z", 
+  "msg": [
+   "* Makefile: bug reading repository version from svn st update"
+  ], 
+  "revision_id": "843496"
+ }
+]

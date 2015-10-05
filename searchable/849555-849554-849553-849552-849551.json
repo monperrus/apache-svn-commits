@@ -1,0 +1,106 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T19:27:24.205997Z", 
+  "msg": [
+   "Cleanup the offset handling in FSFS.  Explicitly seek to the end of a", 
+   "file when opening it for append-mode writing, so that future routines", 
+   "will read a correct offset in the case nothing has yet been written.", 
+   "Also, place a cosmetic ENDREP after directory content representations", 
+   "for consistency.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_file_offset): New helper function that returns the current", 
+   "offset in an open file.", 
+   "(build_rep_list, get_combined_window, rep_write_get_baton,", 
+   "rep_write_contents_close, write_final_rev,", 
+   "write_final_changed_path_info): Use the new get_file_offset", 
+   "helper function.", 
+   "(open_and_seek_representation_write, svn_fs__fs_commit): Seek to", 
+   "the end of the file after opening it for append.", 
+   "(write_hash_rep): Write a cosmetic ENDREP after rep."
+  ], 
+  "revision_id": "849555"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T16:53:32.528730Z", 
+  "msg": [
+   "Fix various compiler warnings in libsvn_fs_fs.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(make_path_mutable): Remove unused variable parent.", 
+   "(txn_body_history_prev): Remove unused variable copy_kind.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs__fs_get_rev): Removed", 
+   "(write_noderev_txn): Declare as static.", 
+   "(build_rep_list): Remove unused variable len.", 
+   "(rep_write_get_baton): Use APR_SIZE_T_FMT to print out the size", 
+   "field."
+  ], 
+  "revision_id": "849554"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T16:30:49.781980Z", 
+  "msg": [
+   "Create an empty 'changes' file when a new transaction is created in", 
+   "FSFS.  Also enable the purge_txn routine, and add it to fs_commit so", 
+   "that old transactions are not left around.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs__fs_begin_txn): Create an empty 'changes' file.", 
+   "(svn_fs__fs_purge_txn): Uncomment.", 
+   "(svn_fs__fs_commit): Remove the transaction directory after", 
+   "committing."
+  ], 
+  "revision_id": "849553"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T15:36:07.407434Z", 
+  "msg": [
+   "Make FSFS code write deltified representations.  This is in large", 
+   "parts copied from make-revs.c in r9474.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(struct rep_write_baton): Added new fields to support writing of", 
+   "deltas.", 
+   "(rep_write_contents): Write to the delta stream if it is", 
+   "available.", 
+   "(choose_delta_base): New, selects a representation to base the", 
+   "delta off of, copied from make-revs.c.", 
+   "(rep_write_get_baton): If this is a delta instead of plaintext,", 
+   "set up the appropriate delta writer interface.", 
+   "(rep_write_contents_close): Find the size of the svndiff binary", 
+   "data, and always write a cosmetic \"ENDREP\"."
+  ], 
+  "revision_id": "849552"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T12:56:14.611643Z", 
+  "msg": [
+   "Make FSFS code read deltified windows.  This is mostly copied from", 
+   "make-revs.c in r9474, with better error reporting.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "Add defines for the PLAIN and DELTA representation identifiers.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(struct rep_args_t): Rename the fields to indicate they are the", 
+   "the location of the delta-base of the representation.", 
+   "(read_rep_line): Handle representations that have a delta-base.", 
+   "(struct rep_state): New, tracks state as a single representation", 
+   "is read (from make-revs.c).", 
+   "(build_rep_list): New, builds a list of the delta reps leading up", 
+   "to a plain text or self-compressed delta rep (from", 
+   "make-revs.c).", 
+   "(struct rep_read_baton): Replace structure with one similar to", 
+   "contents_baton in make-revs.c", 
+   "(get_combined_window): New, Compose the corresponding delta", 
+   "windows of the rep list until we reach one that doesn't need a", 
+   "delta source, or until we reach the end (from make-revs.c).", 
+   "(rep_read_get_baton, rep_read_contents): Re-implemented, copied", 
+   "from contents_read in make-revs.c.", 
+   "(read_contents_write_handler, rep_read_contents_close): Removed.", 
+   "(get_representation_at_offset): There is no longer a need for a", 
+   "close function as everything is cleaned up via pools."
+  ], 
+  "revision_id": "849551"
+ }
+]

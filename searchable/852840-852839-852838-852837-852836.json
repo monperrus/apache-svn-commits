@@ -1,0 +1,69 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2005-01-17T20:40:04.015214Z", 
+  "msg": [
+   "Remove an inefficiency in how we create lock \"directory entries\"", 
+   "files.  Thanks to Peter Lundblad for the suggestion.", 
+   "* lock.c (add_hash_to_entries_file): Add new arg \"created_new_file\".", 
+   "(write_lock_to_file): Re-work algorithm to write entries files from", 
+   "path-end to path-beginning (the exact opposite of the way it was", 
+   "done before).  This way we don't have to read and/or rewrite", 
+   "existing parent entries files that already have children.", 
+   "(merge_array_components): Moved higher in file.  No code changes."
+  ], 
+  "revision_id": "852840"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-17T19:31:05.037694Z", 
+  "msg": [
+   "Remove an unused test helper program.", 
+   "* subversion/tests/libsvn_repos/md5args.c: Delete.", 
+   "* build.conf: Remove references."
+  ], 
+  "revision_id": "852839"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-17T19:23:18.267269Z", 
+  "msg": [
+   "Locking branch:  whoops, fix ra_dav COPY requests, which I broke.", 
+   "This is a followup to r12684, where (as a favor to cmpilato) I tried", 
+   "to teach ne_copy() calls to parse <D:error> responses.  I foolishly", 
+   "forgot that during a commit the same neon session is used for *many*", 
+   "different http requests.  That means our neon request-hooks need to be", 
+   "declared at the start of commit and *only* pay attention to COPY", 
+   "requests.  Otherwise one ends up with with the hooks trying to use", 
+   "uninitialized baton data on every single request... which segfaults.", 
+   "* libsvn_ra_dav/commit.c", 
+   "(struct copy_baton):  move to top of file, add 'method' field.", 
+   "(commit_ctx_t):  add pointer to copy_baton structure.", 
+   "(svn_ra_dav__get_commit_editor2):  set up copy baton and neon hooks here.", 
+   "(create_request_hook):  new callback, notice COPY requests only.", 
+   "(pre_send_hook):  do nothing, except for COPY requests.", 
+   "(commit_add_file, commit_add_dir):  update callers of ne_copy()."
+  ], 
+  "revision_id": "852838"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-17T18:48:48.642694Z", 
+  "msg": [
+   "More build generator cleanup. Avoid setting meaningless filename attributes.", 
+   "* build/generator/gen_base.py (TargetLib.__init__, TargetExe.__init__):", 
+   "Do not set filename or objext for external libs or projects.", 
+   "(TargetProject.__init__): Do not set filename."
+  ], 
+  "revision_id": "852837"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-17T18:41:58.508955Z", 
+  "msg": [
+   "* build.conf: Remove a few spurious tab characters.", 
+   "Mark run-repos-tests.py as not dependent on BDB."
+  ], 
+  "revision_id": "852836"
+ }
+]

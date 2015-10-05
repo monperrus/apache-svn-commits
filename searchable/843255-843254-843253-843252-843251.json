@@ -1,0 +1,86 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-09-17T22:04:20.513227Z", 
+  "msg": [
+   "* subversion/bindings/swig/INSTALL", 
+   "Remove separate Runtime subdir installation instruction -- this", 
+   "should be happening as part of 'make install' at the top level now."
+  ], 
+  "revision_id": "843255"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-09-17T22:03:45.413099Z", 
+  "msg": [
+   "* subversion/bindings/swig/swigutil_py.h", 
+   "* subversion/bindings/swig/swigutil_py.c", 
+   "(svn_swig_py_revarray_to_list): New, for use with svn_fs_revisions_changed."
+  ], 
+  "revision_id": "843254"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-09-17T21:59:50.410170Z", 
+  "msg": [
+   "Reflect the Grand Slinky-Style Issue Shift."
+  ], 
+  "revision_id": "843253"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-09-17T18:45:13.759391Z", 
+  "msg": [
+   "Require SWIG 1.3.14 or .15 now. This also means we need to use the new", 
+   "fragment stuff for pulling in t_output_helper.", 
+   "(Mike needs the newer vsn for some of the _global_ typemap stuff)", 
+   "* ac-helpers/swig.m4: update minimum required swig vsn", 
+   "* bindings/swig/apr.i, svn_client.i, svn_fs.i, svn_string.i,", 
+   "svn_types.i, util.i: add fragment parameter to some typemaps", 
+   "that use t_output_helper to ensure that the function is available", 
+   "for that swig binding/compilation unit.", 
+   "* bindings/swig/svn_delta.i: we pick up a use of t_output_helper via", 
+   "the [application of the] OUTPARAM typemap. however, SWIG doesn't", 
+   "seem to be noting the fragment via a %apply. to force it into this", 
+   "compilation unit, we add the dependency to an unrelated typemap.", 
+   "* bindings/swig/python/setup.py: on new SWIG releases, use -noproxy to", 
+   "avoid generating wrappers (we have our own). change over to apr-0."
+  ], 
+  "revision_id": "843252"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-09-16T12:04:34.519341Z", 
+  "msg": [
+   "This script (obviously) follows a lot of code from commit-email.pl and", 
+   "svnlook, and started on that path for printing diffs. But when it came", 
+   "to figuring out the base rev/root for performing diffs, the svnlook", 
+   "pattern would compute that during tree-navigation during the printing.", 
+   "I discovered it was much easier to just do this while collecting the", 
+   "changes themselves.", 
+   "This change revamps the ChangeCollector [editor] class to remember the", 
+   "base path and revision for each item that was changed. At rendering", 
+   "time, we can easily perform the appropriate diff without needing to", 
+   "have extensive code to generate that base. This is especially", 
+   "necessary since our data structures are not built in a parent/child", 
+   "relationship such as those from the \"node_editor\" of svn_repos (since", 
+   "that kind of structure can more easily track the imposition of a new", 
+   "base on child nodes).", 
+   "The actual output generation is little changed, as this is mostly", 
+   "about collecting the data in the first place.", 
+   "* hook-scripts/mailer.py:", 
+   "(class _change): records a specific change to a resource in the", 
+   "repository", 
+   "(generate_content): the dicts map to change objects; tweak the data", 
+   "flow to the lower funcs", 
+   "(generate_diff): take a change object rather than a tuple", 
+   "(class Repository): set up a dict of roots so that (in the future)", 
+   "we can cache open roots based on a group of revs", 
+   "(class ChangeCollector): revamp the batons to pass (path, base_path,", 
+   "base_rev). store _change instances rather than lists.", 
+   "(_svn_basename): new helper function to compute a basename", 
+   "(True, False): set these up if they don't already exist"
+  ], 
+  "revision_id": "843251"
+ }
+]

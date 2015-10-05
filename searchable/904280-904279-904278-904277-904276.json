@@ -1,0 +1,81 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2010-01-28T22:20:32.373773Z", 
+  "msg": [
+   "Fix #3460 - svn patch is not fuzzy when applying unidiffs.", 
+   "* subversion/include/private/svn_diff_private.h", 
+   "(svn_hunk_t): Add fields leading_context and trailing_context. They are", 
+   "used for determining if there is enough context to apply a patch", 
+   "with fuzz.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(hunk_info_t): Add field FUZZ.", 
+   "(match_hunk): Add new parameter FUZZ, specifying how many lines", 
+   "at the beginning and end of the hunk will always match.", 
+   "Ignore FUZZ if there isn't enough context to do fuzzy matching.", 
+   "(scan_for_match): Add new parameter FUZZ. Call match_hunk() with FUZZ.", 
+   "(get_hunk_info): Add new parameter FUZZ. Call scan_for_match() with", 
+   "FUZZ. Save FUZZ in HI for later use. Set HI->rejected to TRUE", 
+   "if no line can be found where the hunk applies.", 
+   "(copy_hunk_text): Remove. This interface cannot cope well enough", 
+   "with hunks applied with fuzz.", 
+   "(reject_hunk): Re-implement parts of copy_hunk_text() inline,", 
+   "copying the hunk's diff text to the target's reject stream.", 
+   "(apply_one_hunk): Rename to ...", 
+   "(apply_hunk): ... this, because it is the brother-in-law of reject_hunk().", 
+   "Re-implement parts of copy_hunk_text inline, copying hunk's modified", 
+   "text to the patched result. Except lines which matched with fuzz, because", 
+   "those must be copied verbatim from the target to retain the local changes", 
+   "which made fuzzy matching necessary.", 
+   "(apply_one_patch): Call get_hunk_info() repeatedly with increasing", 
+   "fuzz factor until either the hunk matches or the maximum fuzz", 
+   "factor is reached. Track renaming and removal of functions.", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(parse_next_hunk): Count number of lines of context at start and end", 
+   "of hunk and save the information in hunk. Refactored some if", 
+   "statements for increased readability.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_with_fuzz): New.", 
+   "(test_list): Add new test.", 
+   "Patch by: Daniel N\u00e4slund <daniel{_AT_}longitudo.com>", 
+   "me", 
+   "Review by: julianfoad", 
+   "(older version)"
+  ], 
+  "revision_id": "904280"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2010-01-28T22:14:45.325176Z", 
+  "msg": [
+   "* site/publish/docs/community-guide/index.html", 
+   "Tweak 'pre' font sizes."
+  ], 
+  "revision_id": "904279"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2010-01-28T22:11:06.745284Z", 
+  "msg": [
+   "* site/TODO", 
+   "New file.  Fun times.  Party on.  Excellent."
+  ], 
+  "revision_id": "904278"
+ }, 
+ {
+  "author": "faywang", 
+  "date": "2010-01-28T21:57:48.270255Z", 
+  "msg": [
+   "OPENJPA-1486: lazily fetched embeddable should not be materialized in the query result"
+  ], 
+  "revision_id": "904277"
+ }, 
+ {
+  "author": "justin", 
+  "date": "2010-01-28T21:56:19.465290Z", 
+  "msg": [
+   "SLING-1333 - forgot the ReferenceParser"
+  ], 
+  "revision_id": "904276"
+ }
+]

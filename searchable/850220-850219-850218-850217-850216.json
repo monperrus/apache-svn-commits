@@ -1,0 +1,79 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-07-06T00:46:37.465913Z", 
+  "msg": [
+   "Issue #1814: ra_dav URIs are double-encoded when using svn ls.  The", 
+   "root of this problem was svn_ra_dav__get_baseline_props would most of", 
+   "the time return a URI decoded relative path.  The problem occurred if", 
+   "some trailing portion of the URL was not found in the HEAD revision.", 
+   "In that case, in which case it would return a URI encoded relative", 
+   "path.  The fix is just to URI decode the relative path when that", 
+   "occurs so that it always returns a URI decoded relative path.", 
+   "Contribution by: Shlomi Fish <shlomif@iglu.org.il>", 
+   "(He provided the regression test.)", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_baseline_props): URI decode lopped_path before", 
+   "returning it as a relative path.", 
+   "* subversion/tests/clients/cmdline/copy_tests.py", 
+   "(get_repos_rev): New function to retrieve the repository's revision.", 
+   "(double_uri_escaping_1814): New regression test for the issue."
+  ], 
+  "revision_id": "850220"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-05T18:32:14.100472Z", 
+  "msg": [
+   "Factorize the common code from svn_path_remove_component and", 
+   "svn_path_dirname.  Also, fix a whitespace formatting issue introduced", 
+   "in r10135.", 
+   "Patch by: Klaus Rennecke <kre@tigris.org>", 
+   "(Tweaked by me: whitespace fix and docstring addition.)", 
+   "* subversion/libsvn_subr/path.c", 
+   "(previous_segment): New factorized routine that finds the end of the", 
+   "previous path segment.", 
+   "(svn_path_remove_component, svn_path_dirname): Utilize the newly", 
+   "created previous_segment.", 
+   "(svn_path_canonicalize): Add whitespace after a while statement."
+  ], 
+  "revision_id": "850219"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-07-05T16:10:13.441861Z", 
+  "msg": [
+   "Fix a bug in get_dir_status that makes us call handle_dir_entry with a", 
+   "null entry pointer which makes it crash.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_dir_status): Only call handle_dir_entry if the entry is versioned."
+  ], 
+  "revision_id": "850218"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-05T13:06:09.816098Z", 
+  "msg": [
+   "Fix svn_path_remove_component, which was broken in r10133.  I", 
+   "remembered to fix the other function which used to use", 
+   "discount_trailing_slash, but not this one.  Ugh.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_remove_component): Strip the trailing slash from the", 
+   "URL in addition to the path.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_remove_component): New, test which verifies that", 
+   "svn_path_remove_component does what it should."
+  ], 
+  "revision_id": "850217"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2004-07-05T05:16:32.882008Z", 
+  "msg": [
+   "Fix a typo in swig documentation", 
+   "* subversion/bindings/swig/INSTALL:", 
+   "I can spell D-L-L."
+  ], 
+  "revision_id": "850216"
+ }
+]

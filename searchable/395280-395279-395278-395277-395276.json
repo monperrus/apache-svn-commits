@@ -1,0 +1,85 @@
+[
+ {
+  "author": "nick", 
+  "date": "2006-04-19T15:43:06.123638Z", 
+  "msg": [
+   "Test to ensure that when we add slides, we can write them back out and everything behaves"
+  ], 
+  "revision_id": "395280"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2006-04-19T15:37:31.306577Z", 
+  "msg": [
+   "Part of patch for XALANJ-1324 and others.", 
+   "Removed code that was removing xsl:variable declarations from the list of", 
+   "children of the LRE.   This caused problems with annotating LocalVariableGen", 
+   "objects with the range of instructions over which the variable is actually", 
+   "alive.  This is in support of method splitting and outlining.", 
+   "See org.apache.xalan.xsltc.compiler.util.MethodGenerator.outlineChunks for more", 
+   "information.", 
+   "Patch reviewed by Christine Li and Erin Harris."
+  ], 
+  "revision_id": "395279"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2006-04-19T15:37:23.452890Z", 
+  "msg": [
+   "Part of patch for XALANJ-1324 and others.", 
+   "Added support for splitting and outlining chunks of a method that would", 
+   "otherwise exceed the 64KB limit imposed by the Java Virtual Machine", 
+   "specification on the length of the byte code in a method.  See Javadocs for all", 
+   "the gory details.", 
+   "Also made changes to fix-up branches that would overflow a 16-bit relative", 
+   "branch offset.  Such branches could occur even in methods that would not exceed", 
+   "the 64KB method size limit.  The sense of the branch is reversed and made to", 
+   "guard an unconditional branch whose target is the target of the original", 
+   "conditional branch.  A wide (32-bit) offset is used in the unconditional branch.", 
+   "See org.apache.xalan.xsltc.compiler.util.MethodGenerator.outlineChunks for more", 
+   "information.", 
+   "Patch reviewed by Christine Li and Erin Harris."
+  ], 
+  "revision_id": "395278"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2006-04-19T15:37:09.964038Z", 
+  "msg": [
+   "Part of patch for XALANJ-1324 and others.", 
+   "Created a new method on ClassGenerator.addMethod(MethodGenerator), which", 
+   "deals with the fact that method splitting and outlining could create more than", 
+   "one method from a single MethodGenerator object.  References to", 
+   "ClassGenerator.addMethod(Method) are generally replaced with references to the", 
+   "method with the new signature.", 
+   "Also, in the cases of some classes, applied changes to accurately annotate", 
+   "LocalVariableGen objects with the range of instructions over which the", 
+   "variable is actually alive in support of method splitting and outlining.", 
+   "See org.apache.xalan.xsltc.compiler.ClassGenerator and", 
+   "org.apache.xalan.xsltc.compiler.MethodGenerator for more information.", 
+   "Patch reviewed by Christine Li and Erin Harris."
+  ], 
+  "revision_id": "395277"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2006-04-19T15:36:51.134348Z", 
+  "msg": [
+   "Part of patch for XALANJ-1324 and others.", 
+   "References to serializer methods in byte code generated for xsl:message were", 
+   "using virtual method invocation on ToXMLStream.  This causes problems for", 
+   "method outlining, as the variable involved is marked as being of type", 
+   "SerializationHandler.  If this part of a method is outlined, the value will", 
+   "be copied into the outlined method as a SerializationHandler, and the JVM's byte", 
+   "code verifier will report an VerifyError for the references to the virtual", 
+   "methods on ToXMLStream.", 
+   "Replaced virtual method references on ToXMLStream with equivalent interface", 
+   "method references on SerializationHandler.  Though the performance could be", 
+   "slightly worse, performance is probably not of great importance for xsl:message.", 
+   "See org.apache.xalan.xsltc.compiler.util.MethodGenerator.outlineChunks for more", 
+   "information.", 
+   "Patch reviewed by Christine Li and Erin Harris."
+  ], 
+  "revision_id": "395276"
+ }
+]

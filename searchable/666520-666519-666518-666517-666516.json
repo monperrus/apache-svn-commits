@@ -1,0 +1,47 @@
+[
+ {
+  "author": "zhen", 
+  "date": "2008-06-11T04:49:28.564422Z", 
+  "msg": [
+   "SHINDIG-365", 
+   "SHINDIG-366", 
+   "Initial implementation of new views features: gadgets.views.bind, gadgets.views.View.bind, gadgets.views.View.getUrlTemplate.", 
+   "Note that currently only basic variable substitution is implemented."
+  ], 
+  "revision_id": "666520"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-06-11T04:34:34.815546Z", 
+  "msg": [
+   "DERBY-3338", 
+   "Reworking the code as suggested by Dan in DERBY-3338 may actually fix the problem experienced on weme6.1 (DERBY-1848 for jdbcapi/SetQueryTimeoutTest.java) The way the CancelQueryTask.forgetContext() is written right now, it leaves a small window of code path through it that leaves the CancelTimerTask linked to the StatementContext, a timing window allows the CancelTimerTask's run method to later cancel a different statement once the StatementContext is re-used. A short example here might be helpful.", 
+   "Let Stmt1A be a JDBC Statement object(with set query timeout set on it) and SC1 be a StatementContext. Say that user has requested a ResultSet object movement for Stmt1A. At the start of the ResultSet movement code, we use a StatementContext (say in this case it is SC1) and push that StatementContext for Stmt1A. During the push, we start a Timer say CQt1 since user has set query timeout for Stmt1A. After the ResultSet movement code, Stmt1A starts its pop on SC1. During the pop, say the Timer CQt1 expires and so CQT1 is queued upto run. Before CQT1 runs, say the control goes back to finish the rest of the pop SC1 code. During the pop, we call CancelQueryTask.forgetContext(). The current code here checks if the Timer has been cancelled. If not cancelled, then we mark the StatementContext associated with CQT1 as null otherwise we don't touch StatementContext object associated with CQT1. Since in our specific case, the Timer has already been cancelled, we leave SC1 associated with CQT1. After this we finish the rest of the code to pop SC1 for Stmt1A. Keep in mind that CQT1 has not run yet. Since SC1 is available for some other Statement to use, say Stmt2B pushes SC1 before it does it's ResultSet movement. So, now SC1 is associated with Stmt2B. At this point, say CQT1's run gets scheduled. Since it still has SC1 associated with it (because we never cleared it in forgetContext), CQT1 is going to mark SC1 as timedout. This is where we run into problem. We are indirectly marking wrong JDBC Statement as timed out (in this particular case Stmt2B) and that is what I think is causing occassional timeouts in jdbcapi/SetQueryTimeoutTest.java. I have rearranged the code and run the tests and I have not been able to reproduce the problem with jdbcapi/SetQueryTimeoutTest.java even after 30 runs (normally it reproduces for me in about 3-5 runs)."
+  ], 
+  "revision_id": "666519"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2008-06-11T04:13:58.261539Z", 
+  "msg": [
+   "Added snippet comments for the spring integration component wiki page"
+  ], 
+  "revision_id": "666518"
+ }, 
+ {
+  "author": "damitha", 
+  "date": "2008-06-11T04:06:04.168036Z", 
+  "msg": [
+   "Fixed AXIS2C-1161"
+  ], 
+  "revision_id": "666517"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2008-06-11T03:59:12.600743Z", 
+  "msg": [
+   "some import and generics cleanup and adding user dictionary for eclipse"
+  ], 
+  "revision_id": "666516"
+ }
+]

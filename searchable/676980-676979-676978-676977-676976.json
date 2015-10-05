@@ -1,0 +1,51 @@
+[
+ {
+  "author": "skitching", 
+  "date": "2008-07-15T17:07:21.383916Z", 
+  "msg": [
+   "Update location of sun maven repository"
+  ], 
+  "revision_id": "676980"
+ }, 
+ {
+  "author": "skitching", 
+  "date": "2008-07-15T17:06:53.382367Z", 
+  "msg": [
+   "Trivial license header fix."
+  ], 
+  "revision_id": "676979"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2008-07-15T17:06:16.109925Z", 
+  "msg": [
+   "QPID-940,QPID-594,QPID-805,QPID-826 : Updated the client exception handling so that exceptions are not lost. In performing the changes I noted that the AMQStateManager is only used for connection creation in the 08/09 codepath. Now this may be due to the fact that we don't currently need to wait on any other states. We need to improve our testing of error conditions for all protcol versions.", 
+   "Changes Summary:", 
+   "The MethodHandlers had their AMQStateManager parameters swapped for AMQSession as that is what they all cared about.", 
+   "The BlockingMethodFrameListener was used as a basis to create a generic BlockingWaiter which is now used by StateWaiter,", 
+   "There is probably scope to refactor the AMQStateManager and the parts of the AMQProtocolHandler that deal with the _frameListeners into a generic class but that can be looked at as part of a wider client refactor.", 
+   "Additionally tests were updated such as SimpleACLTest and ConnectionTest as they were expecting JMSExceptions from the constructor but the JMS API does not demand that and AMQExceptions are now correctly being thrown.", 
+   "The SimpleACLTest also required a change to AMQSession.", 
+   "The test calls send which will cause the connection to be closed asynchrously due to a permission violation. As this exception is not expected and is asynchorous to the client code it cannot be directly thrown. The solution is to record this exception in the AMQStateManager, it can tell that there are no waiters for the exception so it can record the value.(Potential exists to alert if the exception is overwritten but I don't think this is required right now)", 
+   "When the AMQSession checks that the connection is closed it is then possible to check if the current State is CLOSED and if we have an exception sitting in the AMQStateManager. If all these are true we can attach the AMQStateManager exception to the IllegalState Exception that is normally thrown when the Session is closed.", 
+   "This maintains JMS Compliance and allows us to discover the cause of the failure, SimpleACLTest was updated by removing the IllegalState catch section that was causing the test to silently fail."
+  ], 
+  "revision_id": "676978"
+ }, 
+ {
+  "author": "adrianc", 
+  "date": "2008-07-15T17:05:45.033360Z", 
+  "msg": [
+   "Converted Party Manager->View Profile->Subscriptions screenlet to form widget."
+  ], 
+  "revision_id": "676977"
+ }, 
+ {
+  "author": "skitching", 
+  "date": "2008-07-15T17:04:05.230371Z", 
+  "msg": [
+   "Fix old-style license headers."
+  ], 
+  "revision_id": "676976"
+ }
+]

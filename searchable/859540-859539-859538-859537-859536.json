@@ -1,0 +1,93 @@
+[
+ {
+  "author": "mhagger", 
+  "date": "2006-04-27T23:27:18.391096Z", 
+  "msg": [
+   "Alter the XFail decorator to be immutable again.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (XFail.__init__): Add", 
+   "comment about the deferred evaluation of cond_func.", 
+   "(XFail.convert_result): Don't modify self._result_text.", 
+   "(XFail.run_text): New method, overriding method from base class.  If", 
+   "self.cond_func returns true, then output run_text appropriate for a", 
+   "test that is expected to fail."
+  ], 
+  "revision_id": "859540"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-27T23:22:29.408895Z", 
+  "msg": [
+   "Don't invert the return results of XFail unless cond_func returns true.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (XFail.convert_result):", 
+   "Only invert the return result if self.cond_func returns true."
+  ], 
+  "revision_id": "859539"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-27T23:17:49.402824Z", 
+  "msg": [
+   "Use lambda:1 as the default initializer for XFail.cond_func.", 
+   "This avoid having to check it against None before using it.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (XFail.__init__): Use", 
+   "lambda:1 as the default initializer for XFail.cond_func.", 
+   "(XFail.convert_result): No need to test cond_func against None", 
+   "before calling it."
+  ], 
+  "revision_id": "859538"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-27T23:15:01.281053Z", 
+  "msg": [
+   "Rename XFail \"cond\" constructor argument to cond_func.", 
+   "This is to avoid confusion with the cond argument to Skip's", 
+   "constructor, which is a simple boolean variable.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (XFail.__init__,", 
+   "XFail.convert_result): Rename cond to cond_func."
+  ], 
+  "revision_id": "859537"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-04-27T17:18:09.335740Z", 
+  "msg": [
+   "Turn on mod_authz_svn for tests over DAV.  We have several tests that", 
+   "exercise our authz functionality, but up to now they have only been run", 
+   "over ra_svn, since our ra_dav tests have not been configured to use", 
+   "mod_authz_svn.  Since our test suite does not provide us with the ability", 
+   "to change httpd.conf for a single test, that means we need to turn it on", 
+   "for all tests, with a default authz file that just gives anyone full read", 
+   "write access to the repository, just like they had without mod_authz_svn.", 
+   "Note: Anyone who's been running the DAV tests without using davautocheck", 
+   "will have to tweak their httpd.conf to make things work again.", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(basic_authz): Pass a name to sbox.build(), and move the writing of", 
+   "the authz conf file later in the test so it doesn't get overwritten.", 
+   "(copy_from_unreadable_dir): Ditto, but also make the authz file", 
+   "conditional on the type of ra layer we're using.", 
+   "* subversion/tests/cmdline/README: Mention the AUthzSVNAccessFile", 
+   "config needed for the authz tests.", 
+   "* subversion/tests/cmdline/authz_tests.py", 
+   "Alias XFail.", 
+   "(skip_test_when_no_authz_available): Let http tests use authz again.", 
+   "(is_this_dav): New helper function.", 
+   "(test_list): Mark authz_open_directory as XFail on DAV, since it seems", 
+   "to have some problems there.", 
+   "* subversion/tests/cmdline/svntest/testcase.py", 
+   "(XFail.__init__): Add a cond parameter, don't set up _result_text here,", 
+   "stash cond for later.", 
+   "(XFail.convert_result): Set up the _result_text here, and mention why.", 
+   "Also reverse the order of the pass and fail strings, due to the fact", 
+   "that we're changing the order of the call to this function.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(Sandbox._set_name): Set authz_file conditionally based on ra layer.", 
+   "(Sandbox.build): Allow the user to pass in an explicit name.", 
+   "(TestRunner.run): Reverse the order fo calls to convert_result and", 
+   "run_text, to allow the XFail class to reset _result_text.", 
+   "* tools/test-scripts/svntest/mod_dav_svn.conf: Add AuthzSVNAccessFile", 
+   "directives."
+  ], 
+  "revision_id": "859536"
+ }
+]

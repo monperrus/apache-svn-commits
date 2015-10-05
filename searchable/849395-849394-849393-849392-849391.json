@@ -1,0 +1,111 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-04-11T16:04:40.477966Z", 
+  "msg": [
+   "Add support to the fs_fs code to read file contents, either as", 
+   "plain-text or as a self-compressed svndiff.  Directories use the same", 
+   "handling code, so they also gain the ability to be self-compressed.", 
+   "Finally, the PLAIN and DELTA representation specifiers are supported.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(txn_body_history_prev): This function always operates on", 
+   "committed revisions, so there is no need to pass a txn_id to", 
+   "open_path.", 
+   "* subversion/libsvn_fs_fs/fs_fs_.c", 
+   "(hash_read): New function that essentially implements", 
+   "svn_hash_read for svn_stream_t types.", 
+   "(rep_args_t): Changed from a typedef to a struct to better adhere", 
+   "to svn convention for local structures, also added new fields", 
+   "to support PLAIN and DELTA representation headers.", 
+   "(read_rep_line): Support PLAIN and DELTA representation headers.", 
+   "(rep_read_baton, read_contents_write_handler, rep_read_get_baton,", 
+   "rep_read_contents_close, rep_read_contents): New, implement", 
+   "reading svn_stream_t objects from plain text or self-compressed", 
+   "svndiff text representations.", 
+   "(svn_fs__fs_get_contents): Implement using the above new", 
+   "functions.", 
+   "(svn_fs__fs_rep_contents_dir): Use the new representation reading", 
+   "routines instead of a special case always plain text one."
+  ], 
+  "revision_id": "849395"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-11T02:15:08.196397Z", 
+  "msg": [
+   "Add working-but-unfinished code to convert a dumpfile to a rev file.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "The converter.  The quality of this code isn't great, but it's only", 
+   "for generating test cases and will eventually go away.  It stores", 
+   "the node-rev metadata for the entire dumpfile in memory in a", 
+   "succession-of-trees form, and only works for dumpfiles starting at", 
+   "rev 0.", 
+   "The converter does not yet generate proper node-IDs, does not write", 
+   "out changed-path information, does not write out rev-props, and does", 
+   "not know what to do with a uuid.", 
+   "I build this code with:", 
+   "libtool cc -g -Wall -I$svninst/include/subversion-1 \\", 
+   "-I$svninst/include/apr-0 -L$svninst/lib make-revs.c \\", 
+   "-o make-revs -lsvn_repos-1", 
+   "(struct entry): Holds node-rev information.", 
+   "(struct parse_baton): Holds information global to the conversion", 
+   "process.", 
+   "(new_entry): Create and initialize an entry.", 
+   "(get_root): Convenience function to index the pb->roots array.", 
+   "(find_entry): Search a past root for a pathname.", 
+   "(copy_entry): Set up a node-rev based an on old node-rev, either", 
+   "as a change or as a hard or soft copy.", 
+   "(get_child): Get the child of a directory, ensuring that it has", 
+   "been copied for the current revision.", 
+   "(follow_path): Get the path for the current root, ensuring that", 
+   "each element has been copied for the current revision.", 
+   "(get_node_info): Extract node information from the header block of a", 
+   "dumped node.", 
+   "(write_directory_rep): Write out the rep of a directory to the rev", 
+   "file.", 
+   "(write_props): Write out a props rep to the rev file.", 
+   "(write_node_rev): Write out a node-rev to the rev file.", 
+   "(write_entry): Recursive function to write out the changed aspects", 
+   "of a node-rev and its children to the rev file.", 
+   "(new_revision_record, new_node_record, set_revision_property,", 
+   "set_node_property, delete_node_property, remove_node_props,", 
+   "set_fulltext, apply_textdelta, close_node, close_revision):", 
+   "Implementation of parser using above helper functions.", 
+   "(parser, main): Trivial front-end to above parser."
+  ], 
+  "revision_id": "849394"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-11T02:01:39.613022Z", 
+  "msg": [
+   "* libsvn_fs_fs/structure: Reorder fields a little for clarity.  Fix", 
+   "the wording of the copyroot field.  Add a note that the \"props\"", 
+   "field may be omitted if there are no properties."
+  ], 
+  "revision_id": "849393"
+ }, 
+ {
+  "author": "niqueco", 
+  "date": "2004-04-10T22:40:00.165429Z", 
+  "msg": [
+   "* es.po", 
+   "More translation updates."
+  ], 
+  "revision_id": "849392"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-10T22:29:12.906141Z", 
+  "msg": [
+   "* libsvn_fs_fs/structure: Make it so that reps can contain plain", 
+   "text, for ease of testing and potentially for time-efficient", 
+   "directory storage (the BDB implementation uses plain text for", 
+   "directories, although I don't think anyone ever tried self-", 
+   "compressed text).  Also, add a component to the \"rep\" field", 
+   "giving the expanded size of the representation, for efficient", 
+   "computation of svn_fs_file_length()."
+  ], 
+  "revision_id": "849391"
+ }
+]

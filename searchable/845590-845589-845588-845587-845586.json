@@ -1,0 +1,95 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-04-01T21:21:53.449467Z", 
+  "msg": [
+   "Issue #1090: svn_client_copy(URL, wc) now recognizes different UUIDs.", 
+   "If the repository UUIDs are different, then schedule a normal add,", 
+   "rather than an add-with-history.", 
+   "Note that this is the first change which actually *depends* on the", 
+   "repository having a fetchable UUID.  But this should be in accord with", 
+   "our compatibility policy, since we've had repository UUIDs since svn 0.19.", 
+   "Also note that we now have a public function for fetching a UUID from", 
+   "a working-copy entry.  For compatibility purposes, if an old working", 
+   "copy has no uuids in the entries file, this function \"falls back\" into", 
+   "making a network request.  For efficiency, though, it's probably best", 
+   "for people to do fresh checkouts and get UUIDs in their entries files.", 
+   "* session.c (svn_ra_dav__do_get_uuid): ugh, this was broken.  You", 
+   "can't do a propfind for ra_session->url in revision 0, unless url is", 
+   "the repository root, which it almost never is.  You need to query", 
+   "HEAD.  Also, for efficiency, use _get_one_prop() instead of _get_dir().", 
+   "* svn_client.h (svn_client_uuid_from_path, svn_client_uuid_from_url):", 
+   "declare.  new utility functions for getting uuids from either", 
+   "entries files or via RA->get_uuid().", 
+   "* add.c (svn_client__add):  new internal func which used to be", 
+   "svn_client_add.  requires an access baton as input.", 
+   "(svn_client_add):  generate an access baton and call svn_client__add.", 
+   "* ra.c (svn_client_uuid_from_path, svn_client_uuid_from_url):", 
+   "implement new funcs.", 
+   "* export.c (svn_client__remove_admin_dirs): renamed from static", 
+   "remove_admin_dirs(), to semi-public function.  Also, change \"??\" in", 
+   "comment to \"?\", because our new gcc -std=c89 switch was complaining", 
+   "about encountering a \"trigraph\".", 
+   "(svn_client_export): update caller of previous.", 
+   "* client.h (svn_client__add, svn_client__remove_admin_dirs):  declare.", 
+   "* copy.c (repos_to_wc_copy): if src and dst uuids don't match, then 1)", 
+   "remove administrative areas from the checkout, and 2) don't pass", 
+   "'copyfrom' args to svn_wc_add() -- just do a normal recursively", 
+   "scheduled addition of the unversioned tree.", 
+   "* main.py (copy_repos): new optional 'ignore_uuid' argument, so we can", 
+   "pass --ignore-uuid to 'svnadmin load'.", 
+   "* copy_tests.py (repos_to_wc):  new regression test for both use cases", 
+   "of 'svn cp URL wc'.  If repository is foreign/identical, it verifies the", 
+   "scheduled addition hasn't/has history."
+  ], 
+  "revision_id": "845590"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-04-01T21:08:06.925418Z", 
+  "msg": [
+   "Add support for zlib compressed streams.", 
+   "Patch by: Eric Dorland <eric.dorland@mail.mcgill.ca>", 
+   "* configure.in: Add --with-zlib.", 
+   "* subversion/include/svn_io.h (svn_stream_compressed): New function.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(define ZBUFFER_SIZE): New constant.", 
+   "(struct zbaton): New type.", 
+   "(zalloc, zfree, zerr_to_svn_error, read_helper_gz, read_handler_gz,", 
+   "write_handler_gz, close_handler_gz, svn_stream_compressed): New functions.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(generate_test_bytes, test_stream_compressed): New test."
+  ], 
+  "revision_id": "845589"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-04-01T20:50:36.052823Z", 
+  "msg": [
+   "* subversion/bindings/swig/svn_types.i", 
+   "Add a typemap for svn_filesize_t.", 
+   "Patch by: Matt Kraai <kraai@alumni.cmu.edu>", 
+   "(Above change only.)", 
+   "* subversion/bindings/swig/svn_wc.i", 
+   "Treat the int * used by svn_wc_check_wc() correctly."
+  ], 
+  "revision_id": "845588"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-04-01T18:02:14.245694Z", 
+  "msg": [
+   "* subversion/bindings/swig/INSTALL: Add missing quotes and fix the", 
+   "spelling of 'alternate.'"
+  ], 
+  "revision_id": "845587"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-04-01T09:49:56.071901Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "845586"
+ }
+]

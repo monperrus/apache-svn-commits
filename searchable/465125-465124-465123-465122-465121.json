@@ -1,0 +1,74 @@
+[
+ {
+  "author": "trustin", 
+  "date": "2006-10-18T02:20:39.833746Z", 
+  "msg": [
+   "Resolved issue: DIRMINA-289 (Change MINA to create heap buffers by default.)", 
+   "* Renamed ByteBuffer.useDirectBuffers to preferDirectBuffers", 
+   "* ByteBuffer.allocate(int) now can fall back to direct buffer if the preferred buffer type is 'heap'"
+  ], 
+  "revision_id": "465125"
+ }, 
+ {
+  "author": "hansbak", 
+  "date": "2006-10-18T02:10:50.894304Z", 
+  "msg": [
+   "better to store the destination address always because they can be modified in the partyTo/contactMechTo fields"
+  ], 
+  "revision_id": "465124"
+ }, 
+ {
+  "author": "jboynes", 
+  "date": "2006-10-18T02:09:52.213933Z", 
+  "msg": [
+   "tag das 1.0-incubator-M2"
+  ], 
+  "revision_id": "465123"
+ }, 
+ {
+  "author": "bpendleton", 
+  "date": "2006-10-18T01:43:14.545223Z", 
+  "msg": [
+   "DERBY-1967: UNION (ALL) constraint violation problem", 
+   "This patch was contributed by Yip Ng (yipng168@gmail.com)", 
+   "In the bind phase of ConditionalNode (NULLIF), the CAST node is", 
+   "generated on top of the untyped NULL and it gets the data type", 
+   "descriptor(DTD) of the left operand. However, the CAST node should", 
+   "have DTD where its value can be nullable.", 
+   "BinaryComparisonOperatorNode bcon = (BinaryComparisonOperatorNode)testCondition;", 
+   "QueryTreeNode cast = getNodeFactory().getNode(", 
+   "C_NodeTypes.CAST_NODE,", 
+   "thenElseList.elementAt(0),", 
+   "bcon.getLeftOperand().getTypeServices(), <=== not nullable!", 
+   "getContextManager());", 
+   "The second query:", 
+   "select nullif('x','x') as f0, f1 from a", 
+   "union all", 
+   "select nullif('x','x') as f0, nullif(1,1) as f1 from b;", 
+   "works because it didn't generate a NormalizedResultSet on top of", 
+   "the PRN on the right hand side of the union since the datatype and", 
+   "length matches. So it didn't hit the path where it does additional", 
+   "checking at execution time.", 
+   "For the first query:", 
+   "select nullif('x','x') as f0, f1 from a", 
+   "union all", 
+   "select nullif('x','x') as f0, nullif('x','x') as f1 from b;", 
+   "The union result column's length does not match with the right hand", 
+   "side result column, so it generated a NormalizedResultSet on top of", 
+   "the RHS of the union. When the system retrieves the row from", 
+   "NormalizedResultSet at execution time, the normalize method is called", 
+   "on the DTD and checks if the source is NULL and whether its DTD", 
+   "is not nullable. In this case, the SQLSTATE 23502 is thrown."
+  ], 
+  "revision_id": "465122"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2006-10-18T01:39:23.970587Z", 
+  "msg": [
+   "MNG-2617 Clean up generating integration tests on window", 
+   "Submitted by: Dan Fabulich"
+  ], 
+  "revision_id": "465121"
+ }
+]

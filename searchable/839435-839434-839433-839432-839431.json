@@ -1,0 +1,74 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-06-01T08:15:25.000000Z", 
+  "msg": [
+   "Bug fix for issue #397.", 
+   "Enable building of external libraries (e.g. Neon and APR).", 
+   "* Makefile.in: add \"external-*\" rules. Rename existing rules to \"local-*\".", 
+   "The new external rules depends upon the new macro EXTERNAL_PROJECT_DIRS.", 
+   "* build.conf: toss the [external] section; we can easily hard-code this", 
+   "stuff right into Makefile.in rather than process it via gen-make.", 
+   "* gen-make.py: remove 'external' from the predefined sections list."
+  ], 
+  "revision_id": "839435"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-06-01T07:41:42.000000Z", 
+  "msg": [
+   "Bug fix for issue #397.", 
+   "Fix up problems with build/link when --disable-shared is used.", 
+   "The root problem was the use of SVN_CLIENT_DEPS. This didn't truly handle", 
+   "the dependencies and link-time behavior properly (in the absence of a", 
+   "recursive make with ordered subdir builds).", 
+   "The fix is to recognize that the dependencies are caused by libsvn_ra,", 
+   "rather than the client. Next, to associate those dependencies directly with", 
+   "libsvn_ra. libtool provides for this within the .la as long as you depend", 
+   "directly on .a files rather than .la files (fixed in libtool 1.4). Since we", 
+   "only need the dependencies during disable-shared, the focus on .a files is", 
+   "possible. As a result, when programs link against libsvn_ra.la, they", 
+   "automatically pull in the other libraries (ra_dav and the fs-based libs).", 
+   "* Makefile.in: toss *_CLIENT_DEPS and define SVN_RA_LIB_DEPS and", 
+   "SVN_RA_LIB_LINK. _DEPS for dependency handling and _LINK for what occurs", 
+   "within the link line. For static builds, these are filled in. For shared", 
+   "builds, they are empty.", 
+   "Remove SVN_NEON_LIBS macro (unused).", 
+   "* gen-make.py: add recognition of add-deps in a definition to add arbitrary", 
+   "text to a dependency line.", 
+   "* build.conf: remove use of SVN_CLIENT_DEPS (see above). expand definition", 
+   "of libsvn_ra to conditionally include more dependencies, and to link", 
+   "against additional libraries.", 
+   "* configure.in: no need to SVN_LIBSVN_* so toss the sinclude() of", 
+   "svn-define-libs.m4. SVN_NEON_LIBS, SVN_TESTS_MAIN_LIBS, FS_BASED_DIRS,", 
+   "and FS_BASED_TESTS are no longer used; remove them. convert definition", 
+   "of LIBSVN_CLIENT_DEPS to SVN_RA_LIB_DEPS and SVN_RA_LIB_LINK.", 
+   "* svn-define-libs.m4: no longer used; removed."
+  ], 
+  "revision_id": "839434"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-06-01T03:02:52.000000Z", 
+  "msg": [
+   "typo. plate. plate o' typoes."
+  ], 
+  "revision_id": "839433"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-06-01T02:54:18.000000Z", 
+  "msg": [
+   "Fix separators on nav bar."
+  ], 
+  "revision_id": "839432"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-05-31T23:36:49.000000Z", 
+  "msg": [
+   "Added a FAQ to website."
+  ], 
+  "revision_id": "839431"
+ }
+]

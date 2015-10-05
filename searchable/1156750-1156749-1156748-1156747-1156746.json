@@ -1,0 +1,70 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2011-08-11T19:16:24.198365Z", 
+  "msg": [
+   "More fixes for issue #3986 'svn_client_mergeinfo_log API is broken'.", 
+   "Prior to this change svn_client__get_repos_mergeinfo_catalog promised a", 
+   "a mergeinfo catalog with a key relative to RA_SESSION's session URL for the", 
+   "target, but keys relative to the *root* of the repository for the subtrees.", 
+   "It actually only ever did the latter...which caused some obvious problems", 
+   "for one of its two callers, svn_client__get_wc_or_repos_mergeinfo_catalog,", 
+   "which might call either svn_client__get_wc_mergeinfo_catalog or", 
+   "svn_client__get_repos_mergeinfo_catalog and return a catalog keyed on either", 
+   "repos-root-relative paths or session-relative-paths.  Ouch.  Both of these", 
+   "functions are now consistent, returning a catalog keyed on root-relative", 
+   "paths.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_repos_mergeinfo_catalog): Make the mergeinfo catalog", 
+   "returned by this function consistent with", 
+   "svn_client__get_wc_mergeinfo_catalog; the keys to the catalog are now", 
+   "relative to the root of the repository, rather than relative to the root", 
+   "of the RA session passed in.", 
+   "(svn_client__get_wc_or_repos_mergeinfo_catalog): Account for change in", 
+   "mergeinfo catalog keys provided by", 
+   "svn_client__get_repos_mergeinfo_catalog.", 
+   "(get_mergeinfo): Stop changing mergeinfo catalog keys from relative to the", 
+   "session URL to relative to the root of the repository,", 
+   "svn_client__get_wc_or_repos_mergeinfo_catalog does this itself now.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_repos_mergeinfo_catalog): Update doc string.", 
+   "* subversion/tests/cmdline/mergeinfo_tests.py", 
+   "(wc_target_inherits_mergeinfo_from_repos): Remove XFail decorator and", 
+   "comments."
+  ], 
+  "revision_id": "1156750"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2011-08-11T19:16:21.146012Z", 
+  "msg": [
+   "fix NPE when encryption_options is unspecified", 
+   "patch by jbellis; reviewed by brandonwilliams for CASSANDRA-3007"
+  ], 
+  "revision_id": "1156749"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2011-08-11T19:14:50.271387Z", 
+  "msg": [
+   "apply patch for: https://issues.apache.org/jira/browse/AMQ-2845"
+  ], 
+  "revision_id": "1156748"
+ }, 
+ {
+  "author": "jfarrell", 
+  "date": "2011-08-11T19:11:26.523322Z", 
+  "msg": [
+   "Removing duplicate java client properties seen during release process"
+  ], 
+  "revision_id": "1156747"
+ }, 
+ {
+  "author": "jfarrell", 
+  "date": "2011-08-11T19:09:13.080743Z", 
+  "msg": [
+   "Updating version number to 0.7.0 for clients"
+  ], 
+  "revision_id": "1156746"
+ }
+]

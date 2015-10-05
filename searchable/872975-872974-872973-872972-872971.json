@@ -1,0 +1,115 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2008-09-04T17:42:49.986838Z", 
+  "msg": [
+   "Merge the double-delete branch back to trunk, fixing issue #3156 \"Delete", 
+   "should conflict with delete (at the repos level)\"", 
+   "<http://subversion.tigris.org/issues/show_bug.cgi?id=3156>.", 
+   "In a WC of trunk@32867:", 
+   "svn merge $SVN_REPOS/trunk@32867 $SVN_REPOS/branches/double-delete@32896", 
+   "The substance of this change is from r30438, the log message of which is:", 
+   "[[[", 
+   "On the double-delete feature branch, block any commit that includes", 
+   "the deletion of a file or directory that has already been deleted in", 
+   "the repository.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(delete_entry): Treat the response '404 Not Found' as an error.", 
+   "* subversion/libsvn_ra_neon/commit.c", 
+   "(commit_delete_entry): Treat the response '404 Not Found' as an error.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(out_of_date): Extend for case where we don't know the node type", 
+   "because the node does not exist.", 
+   "(delete_entry): If a path is not found, return an error.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(commit_out_of_date_deletions): Extend test cases to include all", 
+   "relevant combinations of deletion vs (property-change | text-change |", 
+   "deletion). Use svntest.actions.run_and_verify_commit consistently.", 
+   "]]]", 
+   "This change makes merge_tests.py 33 fail. See the issue for details."
+  ], 
+  "revision_id": "872975"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2008-09-04T16:21:20.147917Z", 
+  "msg": [
+   "bash_completion update for mergeinfo --show-revs option.", 
+   "* tools/client-side/bash_completion: handle --show-revs argument values"
+  ], 
+  "revision_id": "872974"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-09-04T16:04:06.689613Z", 
+  "msg": [
+   "Make the test suite print a summary of XFAIL tests, as well as the", 
+   "summaries of skipped and failed (including XPASS) tests that it already", 
+   "prints.", 
+   "* build/run_tests.py", 
+   "(TestHarness.run): Print a summary of XFAIL results as well as others."
+  ], 
+  "revision_id": "872973"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2008-09-04T15:10:37.249315Z", 
+  "msg": [
+   "On the file externals branch.", 
+   "* branches/file-externals:", 
+   "Merge r32891 through r32897 from trunk."
+  ], 
+  "revision_id": "872972"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2008-09-04T14:50:19.046759Z", 
+  "msg": [
+   "Fix some inconsistencies with svn:externals handling.", 
+   "1) Removing an external or a file in a directory external and running", 
+   "'svn update' will restore the external itself or an item in the", 
+   "external, however, 'svn switch' will not using the same URL.", 
+   "2) compare_external_items() should not compare externals as identical", 
+   "if either one uses a HEAD peg revision, since a commit may have", 
+   "replaced the item with another one.", 
+   "Also see http://svn.haxx.se/dev/archive-2008-08/0714.shtml .", 
+   "The amazing thing about this patch is that it removes code from", 
+   "svn_client :)", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__compare_revisions):", 
+   "Remove.", 
+   "(svn_client__handle_externals):", 
+   "Remove the update_unchanged argument.", 
+   "* subversion/libsvn_client/revisions.c", 
+   "(svn_client__compare_revisions):", 
+   "Remove.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client__switch_internal):", 
+   "No longer pass FALSE to svn_client__handle_externals() as the", 
+   "update_unchanged argument.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal):", 
+   "No longer pass FALSE to svn_client__handle_externals() as the", 
+   "update_unchanged argument.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_external_item_change_baton):", 
+   "Remove the update_unchanged field.", 
+   "(struct handle_externals_desc_change_baton):", 
+   "Remove the update_unchanged field.", 
+   "(compare_external_items):", 
+   "Remove.", 
+   "(handle_external_item_change):", 
+   "Always update the external.", 
+   "(handle_externals_desc_change):", 
+   "Do not copy the update_unchanged field from the", 
+   "handle_externals_desc_change_baton to the", 
+   "handle_external_item_change_baton.", 
+   "(svn_client__handle_externals):", 
+   "No longer take an update_unchanged argument.", 
+   "(svn_client__fetch_externals):", 
+   "No longer set the update_unchanged field in the", 
+   "handle_externals_desc_change_baton struct."
+  ], 
+  "revision_id": "872971"
+ }
+]

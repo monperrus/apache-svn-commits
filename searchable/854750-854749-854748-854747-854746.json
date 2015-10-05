@@ -1,0 +1,102 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2005-05-10T20:13:49.487643Z", 
+  "msg": [
+   "* STATUS: nominate autoversioning bugfix for 1.2.0."
+  ], 
+  "revision_id": "854750"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-05-10T20:09:02.939230Z", 
+  "msg": [
+   "Fix major autoversioning interoperability bug.", 
+   "Propagate the svn_lock_t 'xml_comment' boolean field into", 
+   "svn_fs_lock() and svn_repos_fs_lock() APIs, rather than dropping it", 
+   "into the ether.  While we're at it, rename the boolean to something", 
+   "more understandable.", 
+   "This fixes a large autoversioning bug.  Because the boolean was always", 
+   "being written to disk as '0', mod_dav_svn was assuming (upon fetching", 
+   "locks) that every lock-comment was created by a subversion client.", 
+   "This caused it to return garbage values back to generic DAV clients.", 
+   "Bug detected/fixed with cmpilato and fitz.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_lock_t):  rename 'xml_comment' to 'dav_comment' for clarity.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_lock): take new 'is_dav_comment' boolean arg.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_lock): take new 'is_dav_comment' boolean arg.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t):  add boolean to vtable->lock().", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_lock): pass new boolean to svn_fs_lock().", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_lock): pass new boolean argument to vtable func.", 
+   "* subversion/libsvn_fs_base/lock.h", 
+   "(svn_fs_base__lock): take new boolean arg.", 
+   "* subversion/libsvn_fs_base/lock.c", 
+   "(struct lock_args, svn_fs_base__lock, txn_body_lock):  take new", 
+   "boolean arg and make use of it.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.c", 
+   "(svn_fs_base__unparse_lock_skel, svn_fs_base__parse_lock_skel):", 
+   "update other users of svn_lock_t to use boolean's new name.", 
+   "* subversion/libsvn_fs_fs/lock.h", 
+   "(svn_fs_fs__lock):  take new boolean arg.", 
+   "* subversion/libsvn_fs_fs/lock.c", 
+   "(IS_DAV_COMMENT_KEY):  renamed from IS_XML_COMMENT_KEY.", 
+   "(write_digest_file, read_digest_file):  update callers to use new key name.", 
+   "(struct lock_baton, svn_fs_fs__lock, lock_body): take new boolean", 
+   "arg and make use of it.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__lock):  pass 0 as new argument to svn_repos_fs_lock().", 
+   "* subversion/svnserve/serve.c", 
+   "(lock):  pass 0 as new argument to svn_repos_fs_lock().", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(svn_lock_to_dav_lock, dav_lock_to_svn_lock): update other users of", 
+   "svn_lock_t to use boolean's new name.", 
+   "(dav_svn_append_locks, dav_svn_refresh_locks): pass the boolean", 
+   "argument into svn_repos_fs_lock().", 
+   "* subversion/tests/libsvn_fs/locks-test.c", 
+   "(lock_only, lookup_lock_by_path, attach_lock, get_locks, basic_lock,", 
+   "lock_credentials, final_lock_check, lock_dir_propchange,", 
+   "lock_name_reservation, directory_locks_kinda, lock_expiration,", 
+   "lock_break_steal_refresh, lock_out_of_date):", 
+   "pass 0 as new argument to svn_fs_lock().", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(rmlocks):  pass 0 as new argument to svn_fs_lock()."
+  ], 
+  "revision_id": "854749"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-05-10T18:50:28.926686Z", 
+  "msg": [
+   "* subversion/libsvn_repos/repos.c", 
+   "(create_hooks): Fix a stutter.", 
+   "Patch by: Andr\u00e9 Malo <nd@perlig.de>"
+  ], 
+  "revision_id": "854748"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-05-10T16:33:47.214628Z", 
+  "msg": [
+   "* subversion/libsvn_repos/repos.c", 
+   "(create_hooks): Say \"stolen\" instead of \"broken\" in the pre-lock", 
+   "hook template text, and give an example just to make sure.", 
+   "Thanks to Brian Fitzpatrick, Mike Pilato, Ben Collins-Sussman, my", 
+   "parents, and all my teachers for their help with this change."
+  ], 
+  "revision_id": "854747"
+ }, 
+ {
+  "author": "jaa", 
+  "date": "2005-05-10T15:07:04.849464Z", 
+  "msg": [
+   "Revert by request sussman's r14669, both entries are duplicates.", 
+   "* CHANGES: ditto"
+  ], 
+  "revision_id": "854746"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-12-03T00:23:29.096718Z", 
+  "msg": [
+   "Rebranch sqlite-deep-copies from sqlite-mergeinfo-without-mergeinfo."
+  ], 
+  "revision_id": "868270"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-03T00:22:43.909585Z", 
+  "msg": [
+   "Remove sqlite-deep-copies branch, which I think will use enough of the", 
+   "stuff from sqlite-mergeinfo-without-mergeinfo that I'd rather rebranch", 
+   "it from there."
+  ], 
+  "revision_id": "868269"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-02T23:51:36.836836Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "[Note: I think this branch may be a dead end, but I will be porting", 
+   "part of this revision to the sqlite-deep-copies branch.]", 
+   "Implement svn_fs_get_mergeinfo_for_tree using new in-FS metadata", 
+   "instead of sqlite.  Tests don't all pass, because file-not-found", 
+   "errors are thrown; I believe this is because higher-level code is", 
+   "written to incorrectly mask errors, not because of bugs in this code", 
+   "(but who knows!).", 
+   "Pool usage may be poor; this is noted (cryptically) as /* XXXdsg go", 
+   "swimming */.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(get_mergeinfo_hash_for_path): Don't mask file-not-found errors.", 
+   "(crawl_directory_dag_for_mergeinfo): New helper, which walks the FS,", 
+   "only looking at nodes that actually have mergeinfo (which can be", 
+   "efficiently found based on the new tags), and merges the mergeinfo", 
+   "into a single hash.", 
+   "(get_mergeinfo_hash_for_tree): The core of the", 
+   "svn_fs_get_mergeinfo_for_tree implementation, which uses the above", 
+   "helper.", 
+   "(fs_get_mergeinfo_for_tree): Use the above helpers instead of a", 
+   "blatantly incorrect query.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs_fs__dag_has_descendents_with_mergeinfo): New helper", 
+   "function.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(get_combined_mergeinfo): When querying the previous revision, only", 
+   "query mergeinfo for paths that exist in the previous revision."
+  ], 
+  "revision_id": "868268"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2007-12-02T21:25:22.241944Z", 
+  "msg": [
+   "Polish translation update.", 
+   "* subversion/po/pl.po: Polish translation update."
+  ], 
+  "revision_id": "868267"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-02T20:13:53.507724Z", 
+  "msg": [
+   "Feature branch, to address the fact that our sqlite mergeinfo index", 
+   "completely ignores svn_fs_copy, svn_fs_revision_link, and", 
+   "svn_fs_delete operations, and thus can get out of date with the actual", 
+   "repository contents.", 
+   "(This branch is in a way the opposite of the", 
+   "sqlite-mergeinfo-without-mergeinfo branch, which currently ignores the", 
+   "sqlite database rather than fixing this issue.)"
+  ], 
+  "revision_id": "868266"
+ }
+]

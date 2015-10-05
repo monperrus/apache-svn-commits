@@ -1,0 +1,107 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-12-19T23:10:08.786120Z", 
+  "msg": [
+   "Have ra_local send special 'entry' properties during all checkouts and", 
+   "updates.  Also, make sure that this entry information is refreshed when", 
+   "'bumping' an entry after a commit.  NOTE:  ra_dav doesn't yet do this;", 
+   "but expect it soon... I'm working on it.", 
+   "[ The idea here -- once ra_dav is working -- is that every time you", 
+   "update or commit, this new information will *gradually* start to", 
+   "appear in your existing wc's entries files.  (Or, if you do a fresh", 
+   "checkout, you'll get the info al at once.)  This info will be used", 
+   "for keyword expansion and possibly 'svn status' someday. ]", 
+   "These changes also required a fix for issue #583; cmpilato helped", 
+   "ensure a proper solution was included.  (This issue involved fixing", 
+   "the very convoluted behavior whereby the update-editor's close_edit's", 
+   "call to 'ensure_uniform_revision' ultimately resulted in a call to", 
+   "log_do_committed!)", 
+   "* svn_delta.h, pipe_editors.c (svn_delta_default_pipe_editor):  duh,", 
+   "don't return a 'const' editor.  The whole point is to hack the template.", 
+   "(svn_bump_func_t):  take author/date args, so as not to break xml", 
+   "tests;  see our new renaming of svn_wc_set_revision below.", 
+   "* svn_types.h (SVN_PROP_ENTRY_COMITTED_REV,", 
+   "SVN_PROP_ENTRY_COMMITTED_DATE, SVN_PROP_ENTRY_LAST_AUTHOR):  new", 
+   "property/entry names.", 
+   "* svn_repos.h, rev_hunt.c (svn_repos_get_committed_info): new helper", 
+   "func, retrieves the CR and related info that we want to attach to", 
+   "all entries.", 
+   "* libsvn_ra_local/checkout.c (set_any_props): for ra_local checkouts,", 
+   "generate entry props and send them to the update editor.", 
+   "* libsvn_ra_local/ra_local.h (svn_ra_local__get_update_pipe_editor)", 
+   "declare new func.", 
+   "(svn_ra_local__commit_closer_t): add a pointer to the fs.", 
+   "* libsvn_ra_local/ra_plugin.c (do_update): wrap the update editor with", 
+   "our custom \"pipe\" editor by calling new func.", 
+   "(cleanup_commit): call the close_func using close_commit_func's new", 
+   "arguments (see below.)", 
+   "(get_commit_editor): add fs pointer to the commit_closer_t.", 
+   "* libsvn_ra_local/update-editor.c: new file, contains the new", 
+   "entry-prop-generating editor.  based on template pipe-editor.", 
+   "* svn_ra.h (svn_ra_close_commit_func_t): change prototype to take date", 
+   "& author of freshly created revision.", 
+   "* svn_wc.h (svn_wc_process_committed): declare.", 
+   "(svn_wc_set_revision):  undeclare, no longer needed.", 
+   "* adm_ops.c (svn_wc_set_revision): remove, no longer needed.", 
+   "svn_wc__ensure_uniform_revision will do the work internally, since", 
+   "there are no other callers.", 
+   "(process_committed): renamed from 'set_revision' for clarity.  take", 
+   "date & author strings that arrive from the fs revision prop.  Cache", 
+   "them in the wc entry when the RA layer calls this routine", 
+   "post-commit.", 
+   "(svn_wc_process_committed): new func.", 
+   "(svn_wc__ensure_uniform_revision): do revision bumping internally;", 
+   "no need to call log_do_committed anymore.  this solves cmpilato's", 
+   "complaint (issue #583).", 
+   "* commit.c (send_to_repos): call svn_wc_process_committed, twice.", 
+   "* track_editor.c (close_edit): pass NULLs for the bump_func's author", 
+   "and date.  again, this to prevent the breakage of our xml-output", 
+   "codepath.", 
+   "* libsvn_ra_dav/merge.c (bump_resource): temporarily send NULL values", 
+   "for date & author args to the bump_func.  (### fetch real values later)", 
+   "(svn_ra_dav__merge_activity): update call to bump_func.", 
+   "* notes/dir_copies:  unrelated, just saving some old notes on how dir", 
+   "copies work in the wc."
+  ], 
+  "revision_id": "840755"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-12-19T22:13:25.576539Z", 
+  "msg": [
+   "add Sander to the limited-access committers."
+  ], 
+  "revision_id": "840754"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-12-19T22:09:06.963787Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc__ensure_wc): Um...can you say, \"code compression\"?  ;-)"
+  ], 
+  "revision_id": "840753"
+ }, 
+ {
+  "author": "xela", 
+  "date": "2001-12-19T21:51:35.669868Z", 
+  "msg": [
+   "Important bugfix for java/subversion users.", 
+   "The pools were created with the \"apr_pool_create\" function.", 
+   "This is terribly wrong. Changed this to \"svn_pool_create\".", 
+   "* clientimpl_status.c"
+  ], 
+  "revision_id": "840752"
+ }, 
+ {
+  "author": "xela", 
+  "date": "2001-12-19T20:34:33.751011Z", 
+  "msg": [
+   "Added some more flesh to TestStatus.java to", 
+   "evaluate the results of a status request.", 
+   "* TestStatus.java"
+  ], 
+  "revision_id": "840751"
+ }
+]

@@ -1,0 +1,103 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-08-31T23:26:38.117813Z", 
+  "msg": [
+   "On the 1.6.x-r38000 branch:", 
+   "Merge r38803 and 38841, the last revisions to merge without conflict.", 
+   "Conflict resolution fun will start in later merges."
+  ], 
+  "revision_id": "879085"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-08-31T23:05:01.668400Z", 
+  "msg": [
+   "On the 1.6.x-r38000 branch:", 
+   "Merge the originally proposed (and vetoed) r38000 group from trunk:", 
+   "r38000, r38006, r38099, r38100, and r38181.", 
+   "More merges to follow.", 
+   "Here is a log message for this merge, formed by manually combining the log", 
+   "messages of those five changes.", 
+   "===", 
+   "Fix a tree-conflict error when merge tries to replace a file.", 
+   "Given a local edit (or an edit on the target branch) is present on a node,", 
+   "then any add or delete that the merge tries to apply is a tree-conflict.", 
+   "If a node was first deleted after merge-left and added again before", 
+   "merge-right, merge issued *_deleted() and then *_added(),", 
+   "and each tried to add a separate tree-conflict. Fix this.", 
+   "Before adding a tree-conflict with an incoming add, look whether the", 
+   "same node already has a tree-conflict with an incoming delete.", 
+   "If it has, choose one of the tree-conflicts to remain.", 
+   "In the special case where the *local* conflict cause is an edit", 
+   "and the node kinds match, remove any tree-conflicts from the node and", 
+   "merge normally.", 
+   "This is in effect persistent, in the way that merge will now even", 
+   "replace a tree-conflict that was already there before the merge in", 
+   "question started. This is a side-effect, but it does in fact make", 
+   "sense when applying the same merge range piecemeal.", 
+   "Mailinglist thread:", 
+   "http://subversion.tigris.org/ds/viewMessage.do?dsForumId=462&dsMessageId=2359772", 
+   "Subject: multiple tree-conflicts during merge -- was: Re: Error reading spooled REPORT request response", 
+   "Date: 2009-06-05 19:14", 
+   "Found by: Wilfredo S\u00e1nchez Vega <wsanchez@wsanchez.net>", 
+   "* subversion/libsvn_client/merge.c", 
+   "(tree_conflict): Split the making of the tree-conflict struct into...", 
+   "(make_tree_conflict): ...this new function.", 
+   "(tree_conflict_on_add):", 
+   "New function, special case of tree_conflict(). Implement the fix.", 
+   "(merge_file_added, merge_dir_added): Use tree_conflict_on_add().", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(add_directory, close_file): Skip notify on tree-conflicts during a replace.", 
+   "Add comment and some whitespace.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_replace_causes_tree_conflict): New test.", 
+   "(test_list): Add it."
+  ], 
+  "revision_id": "879084"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-08-31T22:36:54.910961Z", 
+  "msg": [
+   "Create a backport branch for the r38000 group."
+  ], 
+  "revision_id": "879083"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-08-31T22:22:37.207527Z", 
+  "msg": [
+   "r39000, r39002, and r39007 were all just part of a bigger plot:", 
+   "Getting merge_test 132 (\"replace that causes a tree-conflict\") to pass", 
+   "for valid reasons.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_replace_causes_tree_conflict): Tweak test expectations slightly,", 
+   "a property conflict on a directory is flagged. We have no defined", 
+   "behaviour yet for the case where both a property and a tree conflict", 
+   "is flagged, so just pass the current behaviour of flagging both.", 
+   "Leave a comment asking whether this is OK for future archaeologists.", 
+   "Most importantly, remove XFail. This test now passes beautifully,", 
+   "all TCs are correctly recognized as \"local edit, incoming replace", 
+   "upon merge\"."
+  ], 
+  "revision_id": "879082"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-08-31T22:04:44.584501Z", 
+  "msg": [
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_dir_deleted): Flag a tree conflict if the deletion of a directory", 
+   "fails due to local mods. This used to be skipped as an obstruction.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(delete_file_and_dir): Adjust test expectations. These were inconsistent", 
+   "before this change, expecting a file with local property modifications", 
+   "to be a tree conflict victim after a merge attempts to delete it, but", 
+   "expecting a directory with local property modifications to be skipped", 
+   "when a merge attempts to delete it.  Now, both node kinds become tree", 
+   "conflict victims in this situation, making things more consistent."
+  ], 
+  "revision_id": "879081"
+ }
+]

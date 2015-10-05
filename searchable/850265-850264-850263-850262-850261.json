@@ -1,0 +1,122 @@
+[
+ {
+  "author": "rey4", 
+  "date": "2004-07-09T00:24:39.462846Z", 
+  "msg": [
+   "Build generator cleanup. Try to handle paths thoughout the build", 
+   "generator more consistently. The main effect of this is that paths in", 
+   "outputted msvc files and makefiles use one kind of slash instead of", 
+   "combinations of forward slashes and backslashes.", 
+   "* build/generator/gen_base.py", 
+   "(native_path, build_path, build_path_join, build_path_split,", 
+   "build_path_splitfile, build_path_dirname, build_path_basename,", 
+   "build_path_retreat, build_path_strip):", 
+   "new path handling functions", 
+   "(_strip_path, _retreat_dots):", 
+   "removed, replaced by build_path_strip and build_path_retreat", 
+   "(lots of places):", 
+   "make use of new path functions", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write, Generator.write_symbols):", 
+   "make use of new path functions", 
+   "* build/generator/gen_win.py", 
+   "(WinGeneratorBase.parse_options, WinGeneratorBase.__init__):", 
+   "stop converting all user entered paths into absolute paths,", 
+   "instead try to use them as they are", 
+   "(WinGeneratorBase.__init__)", 
+   "set new \"rootpath\" member", 
+   "(msvc_path, msvc_path_join, WinGeneratorBase.path, WinGeneratorBase.apath):", 
+   "new path handling functions", 
+   "(WinGeneratorBase.search_for, WinGeneratorBase.map_rootpath,", 
+   "WinGeneratorBase.make_windirs):", 
+   "removed", 
+   "(WinGeneratorBase.get_configs, WinGeneratorBase.get_proj_sources,", 
+   "WinGeneratorBase.get_output_dir, WinGeneratorBase.get_intermediate_dir,", 
+   "WinGeneratorBase.get_def_file, WinGeneratorBase.get_external_project,", 
+   "WinGeneratorBase.get_win_includes, WinGeneratorBase.get_win_lib_dirs):", 
+   "make use of new path functions", 
+   "(WinGeneratorBase._find_bdb, WinGeneratorBase.parse_options,", 
+   "WinGeneratorBase.__init__, get_win_defines, , get_win_libs):", 
+   "simplify bdb detection", 
+   "* build/generator/gen_msvc_dsp.py", 
+   "* build/generator/gen_vcnet_vcproj.py", 
+   "(Generator.write_project, Generator.write):", 
+   "stop passing around rootpath parameters"
+  ], 
+  "revision_id": "850265"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-07-09T00:03:44.808509Z", 
+  "msg": [
+   "Allow clients to fetch revprops (other than svn: ones) that contain", 
+   "a colon in their name with propget.  Issue #1807.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(make_ne_propname): No longer used, remove this function.", 
+   "(svn_ra_dav__change_rev_prop): Call svn_ra_dav__change_rev_proplist() and", 
+   "grab the result from the hash."
+  ], 
+  "revision_id": "850264"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-08T23:53:42.651165Z", 
+  "msg": [
+   "Reimplement the blame command in terms of the new get_file_revs RA", 
+   "functionality.  Finishes issue #1715 to speed up blame.", 
+   "* libsvn_client/blame.c (diff_baton): Removed.  Users converted to use", 
+   "file_rev_baton.", 
+   "(file_rev_baton, delta_baton): New struct.", 
+   "(add_file_blame, window_handler, check_mimetype, file_rev_handler,", 
+   "old_blame): New function.", 
+   "(svn_client_blame): Converted to use get_file_revs RA layer functionality.", 
+   "Fall back on old behaviour (using old_blame) if that function is not", 
+   "available."
+  ], 
+  "revision_id": "850263"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-08T23:11:03.232667Z", 
+  "msg": [
+   "Add an RA layer function which matches svn_repos_get_file_revs.  Part of", 
+   "the fix for issue #1715 to speed up the blame command.", 
+   "* include/svn_ra.h (svn_ra_file_rev_handler_t): New typedef.", 
+   "(svn_ra_plugin_t): Added get_file_revs function pointer.", 
+   "* libsvn_ra_local/ra_plugin.c (svn_ra_local__get_file_revs): New function.", 
+   "(ra_local_plugin): Add svn_ra_local__get_file_revs at the end.", 
+   "* libsvn_ra_dav/file_revs.c: New file.", 
+   "* libsvn_ra_dav/ra_dav.h (svn_ra_dav__get_file_revs): Declare function.", 
+   "(anon. enum): Add ELEM_* constants for get-file-revs report.", 
+   "* libsvn_ra_dav/session.c (dav_plugin): Add svn_ra_dav__get_file_revs at the", 
+   "end.", 
+   "* mod_dav_svn/file_revs.c: New file.", 
+   "* mod_dav_svn/update.c (dav_svn_make_base64_output_stream): Renamed from just", 
+   "make_base64_output_stream and made non-static.  Callers updated.", 
+   "* mod_dav_svn/version.c (dav_svn_deliver_report): Handler file-revs-report", 
+   "request.", 
+   "* mod_dav_svn/dav_svn.h (dav_svn__file_revs_report,", 
+   "dav_svn_make_base64_output_stream): Declare.", 
+   "* libsvn_ra_svn/client.c (parse_prop_diffs, ra_svn_get_file_revs): New", 
+   "function.", 
+   "(ra_svn_plugin): Add ra_svn_get_file_revs at the end.", 
+   "* libsvn_ra_svn/protocol (propdelta): New prototype.", 
+   "(get-file-revs): Document new command.", 
+   "* svnserve/serve.c (file_revs_baton_t): New struct typedef.", 
+   "(write_prop_diffs, svndiff_handler, svndiff_close_handler, file_rev_handler,", 
+   "get_file_revs): New function.", 
+   "(main_commands): Add entry for get-file-revs command."
+  ], 
+  "revision_id": "850262"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-08T22:53:51.366646Z", 
+  "msg": [
+   "Docstring fix.", 
+   "* include/svn_repos.h: Mark svn_repos_file_rev_handler_t and", 
+   "svn_repos_get_file_revs as new in the 1.1 API."
+  ], 
+  "revision_id": "850261"
+ }
+]

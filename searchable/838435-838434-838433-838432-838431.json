@@ -1,0 +1,123 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-01-30T23:30:12.000000Z", 
+  "msg": [
+   "(SUBDIRS): Put . first, you'll never regret it."
+  ], 
+  "revision_id": "838435"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-01-30T23:23:40.000000Z", 
+  "msg": [
+   "(check): It's \"tests\", not \"tests-common\"."
+  ], 
+  "revision_id": "838434"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-01-30T23:21:50.000000Z", 
+  "msg": [
+   "(svn_LDADD): Don't link in the test editor, there's no reason the", 
+   "client needs it."
+  ], 
+  "revision_id": "838433"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-01-30T23:06:26.000000Z", 
+  "msg": [
+   "This is Change #8, from the set of 8 or so changes posted by Ben to", 
+   "the dev list and now recorded in the STACK file.", 
+   "In the delta library, a single routine returns a \"dummy\" editor", 
+   "structure full of pointers to do-nothing functions.  The editor", 
+   "implementor then fills in only the ones it cares about.", 
+   "To avoid circular dependency between the test library and", 
+   "libsvn_delta, the \"tests-common/\" directory has been renamed \"tests/\"", 
+   "and all library-specific test subdirs have been moved into it.  The", 
+   "tests are now all built together, after all the libraries.", 
+   "* subversion/include/svn_delta.h (svn_delta_default_editor): Prototype", 
+   "and document.", 
+   "* subversion/libsvn_delta/default_editor.c: New file, implements a", 
+   "default editor template.", 
+   "* subversion/libsvn_delta/xml_output.c (svn_delta_get_xml_editor):", 
+   "Construct editor the new way.", 
+   "(tree_editor): Now local to svn_delta_get_xml_editor.", 
+   "* subversion/libsvn_delta/compose_editors.c (svn_delta_compose_editors,", 
+   "composed_editor): Same.", 
+   "* subversion/client/trace-update.c (svn_cl__get_trace_update_editor,", 
+   "trace_editor): Same.", 
+   "* subversion/client/trace-commit.c (svn_cl__get_trace_commit_editor,", 
+   "trace_editor): Same.", 
+   "* subversion/libsvn_ra_dav/commit.c (svn_ra_dav__get_commit_editor,", 
+   "commit_editor): Same.", 
+   "* subversion/libsvn_ra_dav/fetch.c (svn_ra_dav__get_update_editor,", 
+   "update_editor): Same.  Also, moved #if to top of file, to avoid", 
+   "warnings about unused functions.", 
+   "* subversion/libsvn_wc/get_editor.c (make_editor, tree_editor): Same.", 
+   "Rearrangements to consolidate tests and avoid circular dependencies:", 
+   "tests/                 replaces   tests-common/", 
+   "tests/libsvn_delta/    replaces   libsvn_delta/tests/", 
+   "tests/libsvn_fs/       replaces   libsvn_fs/tests/", 
+   "tests/libsvn_ra_dav/   replaces   libsvn_ra_dav/tests/", 
+   "tests/libsvn_wc/       replaces   libsvn_wc/tests/", 
+   "tests/libsvn_vcdiff/   replaces   vcdiff/tests/", 
+   "tests/libsvn_subr/     replaces   libsvn_subr/tests/", 
+   "tests/libsvn_string/   replaces   libsvn_string/tests/", 
+   "tests/mod_dav_svn/     replaces   mod_dav_svn/tests/", 
+   "* Makefile.am (AC_OUTPUT): Compensate for above changes.", 
+   "* subversion/tests/svn_test_editor.c (svn_test_get_editor): Use new", 
+   "svn_delta_default_editor.", 
+   "* subversion/Makefile.am (SUBDIRS): Put tests/ subdir last.", 
+   "* subversion/tests/Makefile.am (SUBDIRS): Mention new subdirs.", 
+   "* subversion/libsvn_client/Makefile.am,", 
+   "subversion/libsvn_fs/Makefile.am,", 
+   "subversion/libsvn_ra_dav/Makefile.am,", 
+   "subversion/libsvn_subr/Makefile.am, subversion/libsvn_wc/Makefile.am,", 
+   "subversion/mod_dav_svn/Makefile.am (SUBDIRS): Removed this rule, as it", 
+   "was used only for the now-obsolete tests/ subdirs.", 
+   "* subversion/client/Makefile.am,", 
+   "subversion/tests/libsvn_delta/Makefile.am,", 
+   "subversion/tests/libsvn_fs/Makefile.am,", 
+   "subversion/tests/libsvn_subr/Makefile.am,", 
+   "subversion/tests/libsvn_wc/Makefile.am: Replace", 
+   "@SVN_TESTS_COMMON_EDITOR_LIBS@ and @SVN_TESTS_COMMON_MAIN_LIBS@ with", 
+   "@SVN_TESTS_EDITOR_LIBS@ and @SVN_TESTS_MAIN_LIBS@ respectively.", 
+   "* subversion/tests/libsvn_delta/Makefile.am (deltaparse_test_LDADD):", 
+   "Reverse order of test editor library and delta library.  How Ben knew", 
+   "that this would make the linker error go away is one of the great", 
+   "mysteries of my life at the moment.", 
+   "* subversion/tests/libsvn_fs/skel-test.c,", 
+   "subversion/tests/libsvn_fs/fs-test.c: Fix #include paths.", 
+   "* configure.in, README, subversion.dsw: Compensate for above changes.", 
+   "* STACK: Remove Change #8."
+  ], 
+  "revision_id": "838432"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-01-30T21:35:33.000000Z", 
+  "msg": [
+   "Fixes path inconsistencies on Windows.  More generally, actually makes use", 
+   "of the \"style\" parameter passed to the path library functions to choose the", 
+   "right path delimeter ('/' or '\\' at this time).", 
+   "* config.hw (SVN_PATH_LOCAL_SEPARATOR):", 
+   "Added this #define for Windows usage.", 
+   "* configure.in (SVN_PATH_LOCAL_SEPARATOR):", 
+   "Added this #define for those systems that use autoconf.", 
+   "* svn_com.dsp:", 
+   "Added the subversion root directory to the include path so config.h can be", 
+   "found by the inclusion of the path headers.", 
+   "* svn_path.h (SVN_PATH_REPOS_SEPARATOR, SVN_PATH_URL_SEPARATOR):", 
+   "Added url separator define, and changed naming of repos to be an exported", 
+   "symbol.", 
+   "* path.c (get_separator_from_style):", 
+   "Added new function for choosing an appropriate path separator, given a", 
+   "subversion path style.  Also changed a variety of functions in this module", 
+   "to make use of this new function instead of simply using", 
+   "SVN_PATH_REPOS_SEPARATOR."
+  ], 
+  "revision_id": "838431"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-24T22:36:37.362610Z", 
+  "msg": [
+   "fix log message in zkwrapper"
+  ], 
+  "revision_id": "1188425"
+ }, 
+ {
+  "author": "todd", 
+  "date": "2011-10-24T22:33:02.191720Z", 
+  "msg": [
+   "MAPREDUCE-3252. Fix map tasks to not rewrite data an extra time when map output fits in spill buffer. Contributed by Todd Lipcon."
+  ], 
+  "revision_id": "1188424"
+ }, 
+ {
+  "author": "todd", 
+  "date": "2011-10-24T22:32:47.716925Z", 
+  "msg": [
+   "MAPREDUCE-3252. Fix map tasks to not rewrite data an extra time when map output fits in spill buffer. Contributed by Todd Lipcon."
+  ], 
+  "revision_id": "1188423"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-24T22:30:57.199578Z", 
+  "msg": [
+   "Fix why online schema change didn't preserve locality", 
+   "**** 89 MASTER ONLY ****", 
+   "Summary:", 
+   "rH17734 (Port online schema changes to 89) has some problem to preserve", 
+   "locality.", 
+   "There are 2 code path to process RegionClose event, which needs to preserve", 
+   "locality.", 
+   "path #1: If the master issues a close region operation, the region server will", 
+   "close that region and update the zk. The master watches the zk event and handle", 
+   "the region close event properly.", 
+   "path #2:  For other reasons ( e.g RS cannot open region), the region server", 
+   "wants to close this region. The region server will send the msg MSG_REPORT_CLOSE", 
+   "to master. The master will update the region status as closed for this region.", 
+   "rH17734 only updates the code path #2 for preserving locality after restart.", 
+   "But for online schema changes, it actually go through the code path #1.", 
+   "That's why we lost the locality after online schema change.", 
+   "The solution is to preserve the locality in the common code path for path #1", 
+   "and path #2", 
+   "Test Plan:", 
+   "Tested in dev cluster.", 
+   "Running all the unit test now", 
+   "Reviewers: kannan, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan", 
+   "Differential Revision: 347074", 
+   "Task ID: 766545"
+  ], 
+  "revision_id": "1188422"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-24T22:30:48.269202Z", 
+  "msg": [
+   "First version of TestMasterFailover for hbase-89", 
+   "**** 89 MASTER ONLY ****", 
+   "Summary: An initial unit test with multiple masters for hbase-89. This is only", 
+   "one test from the open source trunk's TestMasterFailover. Multiple changes are", 
+   "being made in master code to be able to \"kill\" a master within a unit test", 
+   "without shutting down the cluster.", 
+   "Test Plan: Unit tests (including the new one), dev cluster.", 
+   "Reviewers: kannan, kranganathan, nspiegelberg", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, mbautin, kannan, pkhemani", 
+   "Differential Revision: 341948", 
+   "Revert Plan: OK", 
+   "Task ID: 558162"
+  ], 
+  "revision_id": "1188421"
+ }
+]

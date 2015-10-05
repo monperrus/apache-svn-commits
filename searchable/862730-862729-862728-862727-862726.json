@@ -1,0 +1,105 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2006-12-12T03:32:45.328739Z", 
+  "msg": [
+   "On the multiple moves branch:", 
+   "Error if the copy or move API is called with multiple sources, but with", 
+   "*_as_child flag not set.  It is nonsensical to attempt to copy multiple", 
+   "files without copying them as children of a destination.  cp/mv error out,", 
+   "and so should we.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED): New error code.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(svn_client_copy4, svn_client_move5):  Passing more than one source with", 
+   "the *_as_child flag set to false is an API violation.  Check for this", 
+   "condition, and return SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED if it", 
+   "is encountered.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_copy4, svn_client_move5):  Update documentation to reflect the", 
+   "new error condition."
+  ], 
+  "revision_id": "862730"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-12T03:27:42.713606Z", 
+  "msg": [
+   "Log test refactoring.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(check_log_chain): Improve error message output when a log's line", 
+   "count is not as expected."
+  ], 
+  "revision_id": "862729"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-12T03:23:27.660527Z", 
+  "msg": [
+   "Log test refactoring.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(parse_log_output): Set 'revision' field for items in the return", 
+   "value to a numeric value (as promised by the doc string), instead", 
+   "of a string representation of a numeric value.  Remove excess", 
+   "parenthesis around the value used in the assignment of local", 
+   "variable \"lines\".  Update extremely out-of-date TODO comment.", 
+   "(check_log_chain): Remove now-unnecessary use of int() around access", 
+   "to the 'revision' field of a log item.  Improve clarity of inline", 
+   "comment."
+  ], 
+  "revision_id": "862728"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-11T23:43:58.217005Z", 
+  "msg": [
+   "ra_dav-refactoring: Cancellation for arbitrary response body readers as well", 
+   "as wrapped XML parsers. Also introduce automatic error marshalling in the", 
+   "wrappers.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__block_reader): New callback type which implements", 
+   "ne_block_reader 'our way'.", 
+   "(svn_ra_dav__add_response_body_reader): Take a reader of type", 
+   "svn_ra_dav__block_reader.", 
+   "(svn_ra_dav__xml_parser_create): Since we'll be using the parser", 
+   "with the request anyway, register it automatically. Take the extra", 
+   "required ne_accept_response parameter to do so.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "Change callers of svn_ra_dav__xml_parser_create().", 
+   "(multistatus_parser_create,", 
+   "error_parser_create): Auto-attach to the request.", 
+   "(attach_ne_body_reader): New. Copied from", 
+   "svn_ra_dav__add_response_body_reader().", 
+   "(body_reader_wrapper_baton_t,", 
+   "body_reader_wrapper,", 
+   "svn_ra_dav__add_response_body_reader): Components to wrap", 
+   "'svn_ra_dav__block_reader'-s into 'ne_block_reader's; making a layer", 
+   "which worries about errors and cancellation.", 
+   "(spool_reader): Change to implement svn_ra_dav__block_reader.", 
+   "(parser_wrapper_baton_t,", 
+   "wrapper_reader_cb): Change to make the parser wrapper support cancellation.", 
+   "(parsed_request): Change to support the new svn_ra_dav__xml_parser_create()", 
+   "and svn_ra_dav__add_response_body_reader() interfaces.", 
+   "(svn_ra_dav__simple_request): Adjust to new multistatus_parser_create().", 
+   "(svn_ra_dav__request_dispatch): Adjust to renamed attach_ne_body_reader().", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(custom_get_request): Change the reader argument type to", 
+   "svn_ra_dav__block_reader.", 
+   "(fetch_file_reader,", 
+   "get_file_reader): Change function signature to svn_ra_dav__block_reader;", 
+   "adapt implementation to match.", 
+   "* subversion/libsvn_ra_dav/lock.c", 
+   "Adjust callers of svn_ra_dav__xml_parser_create()."
+  ], 
+  "revision_id": "862727"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-11T22:18:13.388160Z", 
+  "msg": [
+   "ra_dav-refactoring: Remove unused variable."
+  ], 
+  "revision_id": "862726"
+ }
+]

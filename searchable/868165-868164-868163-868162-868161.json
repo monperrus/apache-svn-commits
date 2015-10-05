@@ -1,0 +1,103 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-27T23:08:42.236011Z", 
+  "msg": [
+   "If a call to svn_fs_mergeinfo__update_index is ultimately going to be", 
+   "a no-op, don't perform any write operations at all.", 
+   "The upshot of this change is that commits that don't change any", 
+   "svn:mergeinfo will no longer block (or be blocked by) commands that", 
+   "read from the merge tracking database.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(table_has_any_rows_with_rev): New helper function.", 
+   "(clean_tables): New helper function to do the cleanup of failed", 
+   "transactions, factored out of svn_fs_mergeinfo__update_index.", 
+   "(svn_fs_mergeinfo__update_index): Factor out clean_tables.", 
+   "* subversion/libsvn_fs_util/sqlite-util.c", 
+   "* subversion/libsvn_fs_util/sqlite-util.h", 
+   "(svn_fs__sqlite_step): New helper for calling sqlite3_step when you", 
+   "don't know if you expect SQLITE_ROW or SQLITE_DONE."
+  ], 
+  "revision_id": "868165"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-11-27T23:05:18.798151Z", 
+  "msg": [
+   "* CHANGES: Add r22355 for 1.4.x."
+  ], 
+  "revision_id": "868164"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-27T21:55:40.451566Z", 
+  "msg": [
+   "Add --design option to the python test suite. At this time the option only", 
+   "makes the tests continue when one of the run_and_verify fails. This is a", 
+   "(small) start to making it easier to write python regression tests.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(setup_design_mode, wrap_ex): Wrap/decorate all run_and_verify* functions. In", 
+   "the wrapper, print out but further ignore all exceptions.", 
+   "(usage, run_tests): Add '--design' option."
+  ], 
+  "revision_id": "868163"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-27T20:48:08.835263Z", 
+  "msg": [
+   "Update a TODO item."
+  ], 
+  "revision_id": "868162"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-27T20:45:17.879292Z", 
+  "msg": [
+   "On the 'fix-ra-mergeinfo-api' branch...", 
+   "Treat paths provided to svn_ra_get_mergeinfo() as relative to the", 
+   "session URL.  (Oddly, mod_dav_svn already made this assumption.)", 
+   "WARNING: This causes merge-tests 45 and 52 to fail.  Various tweaks", 
+   "I've made over time cause those same tests to fail only over", 
+   "certain RA layers, but right now they all fail consistently.", 
+   "* subversion/include/svn_ra.h,", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_get_mergeinfo): Require and verify that the provided paths", 
+   "are relative.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_mergeinfo): Treat incoming paths as relative to the session root.", 
+   "Re-relative-ize the output paths.", 
+   "* subversion/mod_dav_svn/reports/mergeinfo.c", 
+   "(dav_svn__get_mergeinfo_report): Re-relative-ize the output paths.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_mergeinfo): Treat incoming paths as relative to", 
+   "the session root, and re-relative-ize the output paths.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__path_relative_to_session): Add prototype.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__path_relative_to_session): Was path_relative_to_session()", 
+   "in copy.c; now no longer static.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_repos_mergeinfo): Treat 'rel_path' as relative to", 
+   "the repository root instead of relative to the session.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_or_repos_mergeinfo): Rework logic a bit,", 
+   "using svn_client__path_relative_to_root() instead of doing path math.", 
+   "(svn_client__get_repos_mergeinfo): Treat 'rel_path' as relative to", 
+   "the repository root instead of relative to the session.  (Most", 
+   "callers were treating it relative to the session URL anyway, it", 
+   "was merely a fluke that it ever worked.)", 
+   "(svn_client_mergeinfo_get_merged): Request no leading slash on", 
+   "mergeinfo path.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(path_relative_to_session): Now ra.c:svn_client__path_relative_to_session().", 
+   "(calculate_target_mergeinfo): Lose reparenting logic.", 
+   "(repos_to_wc_copy, repos_to_wc_copy_single): Track renamed function.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_reflected_revisions): Request no leading slash on mergeinfo paths.", 
+   "* TODO-1.5-branch", 
+   "Remove the TODO item related to this change."
+  ], 
+  "revision_id": "868161"
+ }
+]

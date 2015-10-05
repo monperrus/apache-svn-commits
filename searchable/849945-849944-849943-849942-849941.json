@@ -1,0 +1,119 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-05-24T03:57:57.156268Z", 
+  "msg": [
+   "Update the FSFS internal documentation to match reality.", 
+   "* libsvn_fs_fs/README: Remove; all the work is done.", 
+   "* structure: Update to reflect the way the back-end was actually", 
+   "implemented."
+  ], 
+  "revision_id": "849945"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-23T23:15:09.273068Z", 
+  "msg": [
+   "Perform some cleanups to r9868 at the suggestion of Philip Martin.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(svn_wc__logfile_path): New, determines the name to use for a given", 
+   "numbered log file.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__logfile_path): New, implemented.", 
+   "(svn_wc__run_log): Fix a possible error leak if svn_xml_parse", 
+   "returned an error when an EOF was read.  Also, use", 
+   "svn_wc__logfile_path where appropriate.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(cleanup_dir_baton): Simplify the error handling logic.", 
+   "(do_entry_deletion, close_directory): Use the new factorized", 
+   "svn_wc__logfile_path where appropriate.", 
+   "(install_file): Use svn_wc__logfile_path and also initialize", 
+   "merge_outcome."
+  ], 
+  "revision_id": "849944"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-23T20:55:31.610688Z", 
+  "msg": [
+   "In FSFS, turn the DAG node cache into an LRU cache.  Finally achieves", 
+   "true O(n) FS performance for big imports and checkouts, because we no", 
+   "longer expire a parent directory entry for every 32 child entries.", 
+   "* libsvn_fs_fs/tree.c", 
+   "(struct dag_node_cache_t): Add a path field, and replace idx field", 
+   "with prev and next pointers for LRU list.  Also, add a typedef for", 
+   "consistency.", 
+   "(fs_root_data_t): Replace the node_cache_keys and node_cache_idx", 
+   "fields with a dummy entry for the circular LRU list of cache", 
+   "entries.", 
+   "(dag_node_cache_get): When we get a cache hit, move the cache entry", 
+   "to the head of the LRU list.", 
+   "(dag_node_cache_set): Rewrite in terms of LRU list.", 
+   "(dag_node_cache_invalidate): Iterate over LRU list instead of keys", 
+   "array.", 
+   "(make_root): Initialize the dummy entry of the LRU list."
+  ], 
+  "revision_id": "849943"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-23T20:52:47.824017Z", 
+  "msg": [
+   "Improve the performance of the libsvn_wc update editor by letting it", 
+   "run multiple log files at the same time.  When running a group of log", 
+   "files, the resulting entries file is written out only once at the", 
+   "end.  Previously, the entries file was read and written at the", 
+   "beginning and end of every log file.", 
+   "As a result of this change, all logs in the working copy directory", 
+   "have a numerical suffix that indicates which number they are in a", 
+   "sequence.  During cleanup, the log files are executed in order, but", 
+   "they are deleted in reverse order so that stale log files cannot be", 
+   "left behind.", 
+   "Many of the ideas necessary to make this work are from Philip Martin", 
+   "<philip@codematters.co.uk>.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__run_log): Loop through all files named \"log\", \"log.1\",", 
+   "\"log.2\", etc. until a non-existant file is found.  After executing", 
+   "this log file group, erase them in reverse order.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct dir_baton): Add new log_number field to keep track of the", 
+   "next available log file number for this directory.", 
+   "(cleanup_dir_baton, cleanup_dir_baton_child): New, called when a", 
+   "dir_baton is destroyed.  They run any left over log files so that", 
+   "updates are easily resumable if a soft-interrupt caused the editor", 
+   "to end.", 
+   "(make_dir_baton): Initialize the new log file number field.", 
+   "(struct file_baton): Add a field to record the directory that this", 
+   "file is located in.", 
+   "(make_file_baton): Initialize the dir_baton field.", 
+   "(do_entry_deletion): Take new log_number parameter that accepts a", 
+   "pointer to an integer that contains the next log file number to", 
+   "use.  Reset this log number after running the log file group.", 
+   "(delete_entry): Pass the log file number to do_entry_deletion.", 
+   "(close_directory): Always run the current log file group.", 
+   "(install_file): Take new log_number parameter, use it, and perform a", 
+   "merge dry run if necessary so that the correct conflict status can", 
+   "be reported to the caller.  Previously, running the log file would", 
+   "generate this information.", 
+   "(close_edit): Pass a log number of 0 to do_entry_deletion.", 
+   "(svn_wc_add_repos_file): Pass a log number of 0 to install file and", 
+   "run the resulting log file."
+  ], 
+  "revision_id": "849942"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-05-23T18:07:46.262978Z", 
+  "msg": [
+   "Replace printf, fprintf and fputs with svn_cmdline variants in svnversion", 
+   "and svndumpfitler. Some _() markers added on strings.", 
+   "This is a part of the fix for issue #780.", 
+   "* svndumpfilter/main.c (close_revision, do_filter):", 
+   "Replace printf, fprintf, fputs with svn_cmdline_ variants.", 
+   "(main): Dito. Also flush stdout before normal exit.", 
+   "* svnversion/main.c (usage): Replace fprintf with svn_cmdline_fprintf.", 
+   "(main): Dito. Also flush stdout before normal exit."
+  ], 
+  "revision_id": "849941"
+ }
+]

@@ -1,0 +1,114 @@
+[
+ {
+  "author": "kelvingoodson", 
+  "date": "2007-07-26T14:15:41.872435Z", 
+  "msg": [
+   "add DISCLAIMER files to jars that can be downloaded separately from maven repos"
+  ], 
+  "revision_id": "559820"
+ }, 
+ {
+  "author": "jimk", 
+  "date": "2007-07-26T14:15:17.920436Z", 
+  "msg": [
+   "HADOOP-1516 HClient fails to readjust when ROOT or META redeployed on new region server", 
+   "Detailed changes:", 
+   "MiniHBaseCluster", 
+   "- rewrite abortRegionServer, stopRegionServer - they now remove the", 
+   "server from the map of servers.", 
+   "- rewrite waitOnRegionServer - now removes thread from map of threads", 
+   "TestCleanRegionServerExit", 
+   "- reduce Hadoop ipc client timeout and number of retries", 
+   "- use rewritten stopRegionServer and waitOnRegionServer from MiniHBaseCluster", 
+   "- add code to verify that failover worked", 
+   "- moved testRegionServerAbort to separate test file", 
+   "TestRegionServerAbort", 
+   "- new test. Uses much the same code as TestCleanRegionServerExit but", 
+   "aborts the region server instead of shutting it down", 
+   "cleanly. Includes code to verify that failover worked.", 
+   "hbase-site.xml (in src/contrib/hbase/src/test)", 
+   "- reduce master lease timeout and time between lease timeout checks so", 
+   "that tests will run quicker.", 
+   "HClient", 
+   "- Major restructing of code that determines what region server to", 
+   "contact for a specific region. The main method findServersForTable", 
+   "is now recursive so that it will find the meta and root regions if", 
+   "they have not already been located or will re-find them if they have", 
+   "been reassigned and the old server can no longer be contacted.", 
+   "- re-ordered administrative and general purpose methods so they are no", 
+   "longer located in seemingly random order.", 
+   "- re-ordered code in ClientScanner.loadRegions so that if the location", 
+   "of the region changes, it will actually try to connect to the new", 
+   "server rather than continually trying to use the connection to the", 
+   "old server.", 
+   "HLog", 
+   "- use HashMap<Text, SequenceFile.Writer> instead of", 
+   "TreeMap<Text, SequenceFile.Writer> because the TreeMap would return", 
+   "a value for a key it did not have (it was the value of another", 
+   "key). I have observed this before when the key is Text, but could", 
+   "not create a simple test case that reproduced the problem.", 
+   "- added some new DEBUG level logging", 
+   "- removed call to rollWriter() from closeAndDelete(). We don't need to", 
+   "start a new writer if we are closing the log.", 
+   "HLogKey", 
+   "- cleaned up per HADOOP-1466 (I initially modified it to add some", 
+   "debug logging which was later removed, but when I was making the", 
+   "modifications I took the opportunity to clean up the file)", 
+   "- changed toString() format", 
+   "HMaster", 
+   "- better handling of RemoteException", 
+   "- modified BaseScanner", 
+   "- now knows if it is scanning the root or a meta region", 
+   "- scanRegion no longer returns a value", 
+   "- if scanning the root region, it counts the number of meta regions", 
+   "it finds and sets a new AtomicInteger, numberOfMetaRegions when the", 
+   "scan is complete.", 
+   "- added abstract methods initialScan and maintenanceScan this allowed", 
+   "run method to be implemented in the base class.", 
+   "- boolean rootScanned is now volatile", 
+   "- modified RootScanner", 
+   "- moved actual scan into private method for readability (scanRoot)", 
+   "- implementation of abstract methods just call scanRoot", 
+   "- add constructor for inner static class MetaRegion", 
+   "- use a BlockingQueue to queue up work for the MetaScanner", 
+   "- clean up handling of an unexpected region server exit", 
+   "- PendingOperation.process now returns a boolean so that HMaster.run", 
+   "can determine if the operation completed or needs to be retried later", 
+   "- PendingOperation processing no longer does a wait inside the process", 
+   "method since this might cause a deadlock if the current operation is", 
+   "waiting for another operation that has yet to be processed", 
+   "HMsg", 
+   "- removed MSG_REGIONSERVER_STOP_IN_ARRAY, MSG_NEW_REGION", 
+   "- added MSG_REPORT_SPLIT", 
+   "HRegionServer", 
+   "- changed reportSplit to contain old region and new regions", 
+   "- use IP from default interface rather than host name", 
+   "- abort calls HLog.close() instead of HLog.rollWriter()"
+  ], 
+  "revision_id": "559819"
+ }, 
+ {
+  "author": "jeremias", 
+  "date": "2007-07-26T13:59:12.832088Z", 
+  "msg": [
+   "rubico.com doesn't exist anymore."
+  ], 
+  "revision_id": "559818"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2007-07-26T13:48:00.069916Z", 
+  "msg": [
+   "Fix for AXIS2-2961 - FastInfoset build failure (unit test) in JDK 1.4"
+  ], 
+  "revision_id": "559817"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2007-07-26T13:47:32.753397Z", 
+  "msg": [
+   "Fix for AXIS2-2961 - FastInfoset build failure (unit test) in JDK 1.4"
+  ], 
+  "revision_id": "559816"
+ }
+]

@@ -1,0 +1,97 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-15T12:23:13.460871Z", 
+  "msg": [
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(internal_open): Following up on r37185, remove note on SQLITE_OPEN_NOMUTEX", 
+   "not required as somebody might have forced us in another mode."
+  ], 
+  "revision_id": "877345"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-15T11:33:40.097703Z", 
+  "msg": [
+   "Notify unversioned obstructions to allow GUI clients to process unversioned", 
+   "obstruction errors without relying on parsing the error message strings.", 
+   "This patch only handles the common case of the recoverable unversioned", 
+   "obstructions add file over file and add directory over directory, that are", 
+   "recoverable with an svn update --force.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Add svn_wc_notify_update_obstruction value.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_directory, add_file): Notify an svn_wc_notify_update_obstruction action", 
+   "on the recoverable unversioned obstructions."
+  ], 
+  "revision_id": "877344"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-15T08:10:47.647146Z", 
+  "msg": [
+   "Implement svn_wc__db_read_children() for old-style working copies. Test it", 
+   "out with the crawl_revisions code.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__gather_children_old): new declaration to gather children from", 
+   "old-style working copies.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(get_entries): new function to get an entries hash, given a DB and an", 
+   "ABSPATH. it will use access batons (and, thus, cached entries), or it", 
+   "will read in the hash (to later be tossed). this was refactored out of", 
+   "svn_wc__read_info_old.", 
+   "(svn_wc__read_info_old): call get_entries() for the refactored logic.", 
+   "(svn_wc__gather_children_old): new function to return all the versioned", 
+   "children in a directory.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(gather_children): take a boolean, instead of a statement index, to", 
+   "determine whether to gather the children in BASE, or in the WORKING", 
+   "tree. remove call to get_statement_for_path() since we need logic in", 
+   "between the parse_local_abspath call and the statement binding. add a", 
+   "call to svn_wc__gather_children_old() for old working copies.", 
+   "(svn_wc__db_base_get_children, svn_wc__db_read_children): change param", 
+   "type/value in the call to gather_children.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(report_revisions_and_depths): use db_read_children for the list of", 
+   "children, rather than iterating over the ENTRIES hash table. fetch", 
+   "entries individually, rather than using the hash table. no need to", 
+   "skip \"this-dir\" since that is not in the children. be wary of the", 
+   "entry we fetch for subdirs, since we examine the DELETED flag."
+  ], 
+  "revision_id": "877343"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-15T07:27:05.763604Z", 
+  "msg": [
+   "Revise some \"show_hidden\" handling for correctness, and for performance.", 
+   "This also corrects a problem introduced in walk_entries3() in r37241.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(entry_is_hidden): replace with the algorithm that was in *actual* use", 
+   "in prune_deleted. specifically, depth=exclude entries should be", 
+   "labeled as hidden.", 
+   "(svn_wc_entry): optimization: fetch ALL the entries (to avoid a call to", 
+   "prune_deleted), and then manually hide an entry as appropriate.", 
+   "(prune_deleted): remove the old tests and just call entry_is_hidden.", 
+   "note that the \"preflight\" code to see if hidden items are present did", 
+   "NOT have the correct logic. it declared some false positives which", 
+   "could then cause a second, identical list to be created (ie. it", 
+   "thought an entry is hidden, but it got put in the list anyways)", 
+   "(svn_wc_walk_entries3): if the root of the walk is hidden, and the user", 
+   "asked not to see hidden entries, then we should report the node as", 
+   "unversioned (per depth_test 36). this is not truly correct behavior,", 
+   "as we should be able to report \"hidden, but versioned\" for the root.", 
+   "also note that we manually look for a hidden node, rather than having", 
+   "svn_wc_entry() do it (so we can be sure of what is happening)."
+  ], 
+  "revision_id": "877342"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-04-14T20:50:50.952039Z", 
+  "msg": [
+   "* STATUS: vote."
+  ], 
+  "revision_id": "877341"
+ }
+]

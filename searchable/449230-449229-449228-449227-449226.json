@@ -1,0 +1,63 @@
+[
+ {
+  "author": "bago", 
+  "date": "2006-09-23T13:19:09.430725Z", 
+  "msg": [
+   "Another attempt fixing inter-projects urls (JAMES-618 / JAMES-634)"
+  ], 
+  "revision_id": "449230"
+ }, 
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T13:17:59.299870Z", 
+  "msg": [
+   "HARMONY-1544", 
+   "The patch contains Doxygen documentation for all classes/methods/fields in ControlFlowGraph.h file - the base", 
+   "structure for Jitrino IR in both optimizer and codegenerator modules.", 
+   "Ubuntu 6 - smoke"
+  ], 
+  "revision_id": "449229"
+ }, 
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T13:07:44.430156Z", 
+  "msg": [
+   "HARMONY-1541", 
+   "The current implementation of JVMTI breakpoints invokes agent from inside of exception (on Windows) or signal (on", 
+   "Linux) handler. This usually works but may cause problems if for example agent decides to stop the thread with", 
+   "breakpoint for some long time. On Windows exception handler cannot be invoked by another thread until other exception", 
+   "handler is running. This may cause dead locks with any exception happening in other threads, e.g. C++ exceptions on", 
+   "windows are done through the same mechanism. On Linux calling arbitrary functions from inside of signal handler may", 
+   "not work as well.", 
+   "The solution for this problem is if JVMTI sees that happened breakpoint is actually set by JVMTI, for processing it", 
+   "it should exit the handler. In order to start breakpoint processing the handler exit IP is changed from the IP", 
+   "pointing to the interrupted location to the JVMTI processing handler. Then exception/signal handler exits and makes", 
+   "the kernel happy while execution is transferred to JVMTI breakpoints handler. This also is done while holding", 
+   "breakpoints list lock so that no intermittent modification, like removing the breakpoin which caused exception is", 
+   "possible.", 
+   "Ubuntu 6 - smoke, c-unit, kernel"
+  ], 
+  "revision_id": "449228"
+ }, 
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T12:53:26.910495Z", 
+  "msg": [
+   "HARMONY-1540", 
+   "The following scenario doesn't work:", 
+   "Do SingleStep for method. Stop in the middle of method. Do PopFrame. Try to enter into the method again.", 
+   "It happens because SingleStep event isn't reported for new IP locations when TI agent does PopFrame.", 
+   "This patch depends on previous implementation of SingleStep and PopFrame.", 
+   "Ubuntu 6 - smoke and c-unit"
+  ], 
+  "revision_id": "449227"
+ }, 
+ {
+  "author": "bago", 
+  "date": "2006-09-23T12:43:48.403063Z", 
+  "msg": [
+   "Minor fixes for generated site urls and deployment (JAMES-618 / JAMES-634)"
+  ], 
+  "revision_id": "449226"
+ }
+]

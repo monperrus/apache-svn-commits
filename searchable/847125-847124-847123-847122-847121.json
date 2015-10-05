@@ -1,0 +1,95 @@
+[
+ {
+  "author": "brane", 
+  "date": "2003-09-11T23:34:39.904796Z", 
+  "msg": [
+   "Clearing the field for issue #872.", 
+   "* subversion/libsvn_subr/error.c (svn_handle_error): Stop using", 
+   "svn_utf_utf8_to_native, now that each svn_error_t has its own pool;", 
+   "use svn_utf_cstring_from_utf8_fuzzy instead. Also, don't convert the", 
+   "file name in the error location output.", 
+   "* subversion/libsvn_subr/utf.c (svn_utf_utf8_to_native): Remove.", 
+   "(svn_utf_cstring_from_utf8_fuzzy): Clear the error before returning.", 
+   "* subversion/include/svn_utf.h (svn_utf_utf8_to_native): Remove."
+  ], 
+  "revision_id": "847125"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-09-11T23:02:53.299889Z", 
+  "msg": [
+   "Fix issue #1196: 'svn up' deletions are now 'obstructed' by local mods.", 
+   "This is better than silently removing the modified item from version", 
+   "control, which the user may not notice.  So now deletions (along with", 
+   "additions) can be 'obstructed' and require user intervention, followed", 
+   "by re-running 'svn up' to continue.", 
+   "* svn_wc.h (svn_wc_remove_from_revision_control):  new 'instant_error' option.", 
+   "* libsvn_wc/adm_ops.c (svn_wc_remove_from_revision_control):", 
+   "Reorganize logic in this function so that it 1) has the ability to", 
+   "instantly throw error when it sees a locally modified file, and 2)", 
+   "is safely interruptible, leaving half-deleted dirs 'incomplete', so", 
+   "'svn up' can still salvage them later.", 
+   "(svn_wc_delete, svn_wc_revert): update callers -- pass FALSE for", 
+   "'instant_error'.", 
+   "* log.c (log_do_delete_entry): update caller -- pass TRUE for", 
+   "'instant_error', and do *not* trap/discard specific errors anymore.", 
+   "(log_do_committed, svn_wc__run_log): update callers -- pass FALSE for", 
+   "'instant_error'.", 
+   "* libsvn_client/externals.c (relegate_external,", 
+   "handle_external_item_change): update callers -- pass FALSE for", 
+   "'instant_error'.", 
+   "* libsvn_wc/update_editor.c (delete_entry):  throw obstruction error", 
+   "on a locally-modified file instantly.  In the directory case: catch", 
+   "the LEFT_LOCAL_MOD error that might come back from running the log,", 
+   "*remove* the logfile (since we know the wc is still consistent), and", 
+   "throw an OBSTRUCTED_UPDATE error.", 
+   "* update_tests.py (update_delete_modified_files): change this", 
+   "regression test to expect 'obstructed update' error, rather than an", 
+   "unversioned file."
+  ], 
+  "revision_id": "847124"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2003-09-11T22:44:14.627728Z", 
+  "msg": [
+   "An incremental improvement aimed toward fixing issue 1515.", 
+   "* tools/cvs2svn/cvs2svn.py (SymbolicNameTracker.copy_descend): Whether a path", 
+   "was the root of a copy, or within a copy, we still need to record that it", 
+   "was copied. Previously, the \"within a copy\" case was ignored."
+  ], 
+  "revision_id": "847123"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2003-09-11T21:57:54.063144Z", 
+  "msg": [
+   "Add a --username command line option to cvs2svn.py to change the", 
+   "default username of 'unknown', which is used when cvs2svn.py creates a", 
+   "branch or tag.", 
+   "* cvs2svn.py", 
+   "(make_revision_props): Take ctx as an argument to get the default", 
+   "commit username.  Change all callers.", 
+   "(usage): Add --username option.", 
+   "* cvs2svn.1: Add documentation for --username."
+  ], 
+  "revision_id": "847122"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2003-09-11T21:55:34.987199Z", 
+  "msg": [
+   "Improve the book Makefile so it updates when it should and doesn't when it", 
+   "shouldn't.  It was always updating book-html-chunk, and never updating the", 
+   "embedded revision number.", 
+   "* doc/book/Makefile", 
+   "Re-check the output of \"svnversion\" every time, but only update version.xml", 
+   "if the revision number has changed.  (Previously version.xml was never", 
+   "updated unless it had been deleted.)", 
+   "Only rebuild book-html-chunk if it is older than its (main) source files.", 
+   "(Previously it was re-built every time.)", 
+   "The image files are now dependencies of most targets."
+  ], 
+  "revision_id": "847121"
+ }
+]

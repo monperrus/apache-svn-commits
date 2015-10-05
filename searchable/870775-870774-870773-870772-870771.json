@@ -1,0 +1,101 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-04-19T12:00:42.702184Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch, drop the command", 
+   "line option --store-plaintext-pw in favour of an interactive prompt.", 
+   "* subversion/include/svn_config.h", 
+   "(svn_config_get_bool2): New function.", 
+   "(svn_config_get_bool): Adjust docstring in light of svn_config_get_bool2.", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_setup_auth_baton2): Remove declaration of removed function.", 
+   "(svn_cmdline_setup_auth_baton): Restore old docstring.", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_plaintext_prompt_func_t): New callback.", 
+   "(SVN_AUTH_PARAM_DONT_STORE_PLAINTEXT_PASSWORDS): New constant.", 
+   "(svn_auth_get_simple_provider2): Declare.", 
+   "(svn_auth_get_simple_provider): Deprecate.", 
+   "* subversion/libsvn_subr/config.c", 
+   "(svn_config_get_bool2): Extension of svn_config_get_bool.", 
+   "Can indicate whether the default value supplied was used,", 
+   "i.e. whether the boolean value returned was actually retrieved", 
+   "from the configuration file.", 
+   "(svn_config_get_bool): Call svn_config_get_bool2.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_setup_auth_baton2): Remove. This was needed to pass", 
+   "the --store-plaintext-pw pcommand line option down to the providers.", 
+   "(svn_cmdline_setup_auth_baton): Restore, and create the simple provider", 
+   "with svn_auth_get_simple_provider2. Use svn_config_get_bool2 to determine", 
+   "whether store-plaintext-passwords is explicitly defined in the", 
+   "configuration file. Also sprinkle some new comments, and remove", 
+   "a rather obsolete comment, which seems to predate even the", 
+   "store-passwords configuration option.", 
+   "* subversion/libsvn_subr/prompt.c", 
+   "(svn_cmdline_auth_plaintext_prompt): New function.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(simple_provider_baton_t): New type.", 
+   "(simple_save_creds_helper): Store encrypted passwords by default.", 
+   "For plaintext passwords, check the configuration file settings.", 
+   "If the configuration file does not define any explicit preference,", 
+   "use the svn_auth_plaintext_prompt_func_t callback to prompt the", 
+   "user about how to proceed.", 
+   "(svn_auth_get_simple_provider2): New revision of", 
+   "svn_auth_get_simple_provider, takes an svn_auth_plaintext_prompt_func_t", 
+   "callback, and a baton for it.", 
+   "(svn_auth_get_simple_provider): Call svn_auth_get_simple_provider2.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t, svn_cl__options): Remove opt_store_plaintext_passwords.", 
+   "(svn_cl__options): Remove the --store-plaintext-pw option.", 
+   "(main): Remove handling of opt_store_plaintext_passwords, and call", 
+   "svn_cmdline_setup_auth_baton again."
+  ], 
+  "revision_id": "870775"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-19T02:59:25.123917Z", 
+  "msg": [
+   "* subversion/libsvn_subr/log.c", 
+   "(svn_log__log): Oops, added second iterpool in r30689; drop it."
+  ], 
+  "revision_id": "870774"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-04-18T23:23:49.426109Z", 
+  "msg": [
+   "On the in-memory-cache branch:", 
+   "Have \"default\" serialization/deserialization functions for", 
+   "memcache-based caches, which treat the value as an svn_string_t.  This", 
+   "avoids an extra copy of the value for each set and get, vs just", 
+   "explicitly writing serialization/deserialization functions.", 
+   "* subversion/include/svn_cache.h", 
+   "(svn_cache_create_memcache): Document this.", 
+   "* subversion/libsvn_subr/cache-memcache.c", 
+   "(memcache_get): If you don't have a deserialize_func, have", 
+   "apr_memcache_getp stick its data right into the main pool, and then", 
+   "pack it into an svn_string_t.  Add a missing call to", 
+   "svn_pool_destroy.", 
+   "(memcache_set): If you don't have a serialize_func, pull the data", 
+   "right out of value as an svn_string_t."
+  ], 
+  "revision_id": "870773"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-04-18T23:15:46.944034Z", 
+  "msg": [
+   "Unnominate r30574."
+  ], 
+  "revision_id": "870772"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-04-18T23:12:43.172807Z", 
+  "msg": [
+   "Revert r30574 which is unnecessary."
+  ], 
+  "revision_id": "870771"
+ }
+]

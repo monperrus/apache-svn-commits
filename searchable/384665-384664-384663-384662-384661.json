@@ -1,0 +1,62 @@
+[
+ {
+  "author": "cutting", 
+  "date": "2006-03-10T01:18:58.512155Z", 
+  "msg": [
+   "Reverted changes from 384385, which removed local backup copy of block & removed most timeouts.  That worked well when all hosts are healthy, but when a few are very slow it caused too many tasks to timeout and loads to balloon on slow hosts.  So the local backup is back, but no longer in /tmp, rather in dfs.data.dir, and timeouts are back.  I also added connect timeouts, so that dfs connects also don't get hung up by slow hosts."
+  ], 
+  "revision_id": "384665"
+ }, 
+ {
+  "author": "sebor", 
+  "date": "2006-03-10T01:15:10.061611Z", 
+  "msg": [
+   "2006-03-09  Martin Sebor  <sebor@roguewave.com>", 
+   "* README: Corrected the location of the etc/nls/ subdirectory."
+  ], 
+  "revision_id": "384664"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2006-03-10T01:02:26.912841Z", 
+  "msg": [
+   "Fixed wiki URL."
+  ], 
+  "revision_id": "384663"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2006-03-10T01:02:17.421733Z", 
+  "msg": [
+   "Fixed wiki URL."
+  ], 
+  "revision_id": "384662"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-03-10T01:00:23.240369Z", 
+  "msg": [
+   "DERBY-1042: committed on behalf of Suresh Thalamati", 
+   "I could not reproduce this problem on my machine. By looking at the code I", 
+   "found backup is getting unblocked before the post commit work is done.", 
+   "This may cause the error that is reported, if the jar files to copied to the", 
+   "backup is deleted by the post commit. Attached patch unblocks the backup", 
+   "only after the post commit work that is schedules to run in the same", 
+   "transaction is done. While scanning the code for this problem, I also noticed", 
+   "couple of other small issues, this patch addresses them also.", 
+   "DERBY-1042:", 
+   "-- unblock the backup only after the post commit work to be done on the same", 
+   "transaction is complete.", 
+   "-- when backup is in progress drop stub files are not deleted during", 
+   "checkpoint. These are necessary to perform recovery starting from the", 
+   "backup checkpoint.", 
+   "-- synchronized getContaineNames() that gets the containers to be written to", 
+   "the backup. This method need to be synchronized so that other privileged", 
+   "actions does not run in parallel and vice versa.", 
+   "-- Modified the OnlineBackupTest1.java and OnlineBackupTest3.java tests to", 
+   "abort if there is a error during the backup instead of waiting incorrectly", 
+   "for the failed backup to complete forever."
+  ], 
+  "revision_id": "384661"
+ }
+]

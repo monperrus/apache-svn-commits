@@ -1,0 +1,94 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-03-12T18:42:40.000000Z", 
+  "msg": [
+   "Put the track editor in libsvn_delta, and modify it to do *nothing* but", 
+   "build a target list at a particular address.  (ra_local uses the track", 
+   "editor under the hood.)", 
+   "* track_editor.c (struct edit_baton, close_file,", 
+   "svn_ra_local__get_commit_track_editor) : operate on a generic", 
+   "apr_array_header_t instead of a `closer' baton.", 
+   "(add_file, add_dir): store path in these routines, to align with", 
+   "crawl_local_mod semantics.  Karl was only storing paths in", 
+   "close_file, which is not sufficient.", 
+   "(close_file, close_edit):  remove these routines, they're no-ops.", 
+   "(delete_entry, apply_textdelta, change_file_prop, change_dir_prop):", 
+   "add these routines, they need to store a path too.", 
+   "(store_path):  new helper.", 
+   "* svn_delta.h (svn_delta_get_commit_track_editor): declare publically.", 
+   "* ra_local.h (svn_ra_local__get_commit_track_editor):  undeclare privately.", 
+   "* libsvn_delta/Makefile.am:  add track_editor.c", 
+   "* libsvn_ra_local/Makefile.am:  remove track_editor.c", 
+   "* ra_plugin.c (get_commit_editor):  call", 
+   "svn_delta_get_commit_track_editor correctly.", 
+   "* adm_ops.c (svn_wc_set_revision):  bugfixes and logic changes.", 
+   "- svn_xml_make_open_tag expects logtag string to be initialized.", 
+   "- new logic for opening logfiles (to handles deleted files correctly.)"
+  ], 
+  "revision_id": "838900"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-12T18:28:35.000000Z", 
+  "msg": [
+   "Move core of svn_fs_merge into svn_fs__dag_merge.  (Next task is to", 
+   "try Yoshiki Hayashi's commit_txn, replacing an error return with a", 
+   "merge attempt instead.)", 
+   "* dag.h, dag.c (svn_fs__dag_merge): New func.", 
+   "(svn_fs__dag_dir_entries_hash): New func.", 
+   "(svn_fs__dag_dir_entries_skel): New name for svn_fs__dag_dir_entries,", 
+   "all callers changed.", 
+   "* dag.c (replace_dir_entry): Doc fix.  Replace assertion with a real", 
+   "error check.", 
+   "(add_new_entry): Take an id instead of a node for the new entry.  All", 
+   "callers changed.", 
+   "* tree.c (txn_body_dir_entries): Use svn_fs__dag_dir_entries_hash.", 
+   "(dag_merge_args, txn_body_dag_merge): New struct and func.", 
+   "(svn_fs_merge): Implement using above.", 
+   "Unrelated changes:", 
+   "* dag.c (find_dir_entry_skel): Indentation fix."
+  ], 
+  "revision_id": "838899"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-03-12T16:32:20.000000Z", 
+  "msg": [
+   "* tests/libsvn_fs/fs-test.c", 
+   "Sweeping change: use APR_HASH_KEY_STRING throughout instead of", 
+   "explicit strlen() calls."
+  ], 
+  "revision_id": "838898"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-03-12T16:20:45.000000Z", 
+  "msg": [
+   "Make sure that every function which requires an open filesystem calls", 
+   "svn_fs__check_fs, so the user gets an error, instead of a crash in", 
+   "Berkeley DB.  (Changes from Yoshiki Hayashi --- Thanks!)", 
+   "* libsvn_fs/editor.c: #include \"err.h\".", 
+   "(svn_fs_get_editor): Call svn_fs__check_fs.", 
+   "* libsvn_fs/rev-table.c (svn_fs_youngest_rev, svn_fs_revision_prop,", 
+   "svn_fs_revision_proplist, svn_fs_change_rev_prop): Same.", 
+   "* libsvn_fs/tree.c (svn_fs_revision_root): Same.", 
+   "* libsvn_fs/txn.c (svn_fs_begin_txn, svn_fs_open_txn,", 
+   "svn_fs_list_transactions): Same.", 
+   "* tests/libsvn_fs/fs-test.c: Add new tests for above behavior.", 
+   "(check_no_fs_error, call_functions_with_unopened_fs): New functions.", 
+   "(test_funcs): Add call_functions_with_unopened_fs.", 
+   "* libsvn_fs/editor.c (svn_fs_get_editor): Don't forget to initialize", 
+   "the edit baton's pointer to the filesystem."
+  ], 
+  "revision_id": "838897"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-03-12T15:43:27.000000Z", 
+  "msg": [
+   "Noonie noonie noo..."
+  ], 
+  "revision_id": "838896"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2008-09-24T17:57:43.273869Z", 
+  "msg": [
+   "Revert r29800 because --disable-neon-version-check is better."
+  ], 
+  "revision_id": "873345"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-09-24T17:28:41.894394Z", 
+  "msg": [
+   "When the test suite encounters a tree mismatch and prints the expected and", 
+   "actual trees, print them in a stable sorted order for easier visual", 
+   "comparison.", 
+   "* subversion/tests/cmdline/svntest/tree.py", 
+   "(SVNTreeNode.__cmp__): New method.", 
+   "(node_is_greater): Delete, as this function was unused. The new", 
+   "SVNTreeNode.__cmp__() is a functional replacement for it anyway.", 
+   "(dump_tree): Sort the children before displaying them."
+  ], 
+  "revision_id": "873344"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-09-24T17:09:21.910437Z", 
+  "msg": [
+   "Move declarations of svn_auth_get_(gnome_keyring|kwallet)_* to svn_auth.h.", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_get_gnome_keyring_simple_provider,", 
+   "svn_auth_get_gnome_keyring_ssl_client_cert_pw_provider,", 
+   "svn_auth_get_kwallet_simple_provider,", 
+   "svn_auth_get_kwallet_ssl_client_cert_pw_provider): Move to here from", 
+   "svn_auth_dso.h.", 
+   "* subversion/include/svn_auth_dso.h: Delete.", 
+   "* subversion/libsvn_auth_gnome_keyring/gnome_keyring.c:", 
+   "* subversion/libsvn_auth_kwallet/kwallet.cpp: Don't include \"svn_auth_dso.h\".", 
+   "* build/generator/extractor.py", 
+   "(_filter_names): Append svn_auth_get_*_provider."
+  ], 
+  "revision_id": "873343"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-24T16:58:12.893811Z", 
+  "msg": [
+   "Make sure we don't disown a file when checksumming it.  This fixes a", 
+   "failure on the Windows buildbots.", 
+   "Found by: pburba", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_file_checksum2): Have the file stream own the file.  Also fix", 
+   "a typo in a comment."
+  ], 
+  "revision_id": "873342"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-09-24T16:40:13.249541Z", 
+  "msg": [
+   "Factor out some generic array manipulation logic from the code that handles", 
+   "CHILDREN_WITH_MERGEINFO arrays.", 
+   "Create functions for searching and inserting in a generic sorted APR array.", 
+   "Replace the search function find_child_or_parent() and the insertion", 
+   "function insert_child_to_merge() with functions that do the same jobs using", 
+   "the generic helpers. Stop requiring the caller to remember the index where", 
+   "the next item should be inserted, as that is error-prone.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(compare_merge_path_t_as_paths): Move this function to an earlier point in", 
+   "the source file. Add a doc string.", 
+   "(get_child_with_mergeinfo): New function.", 
+   "(find_child_or_parent, find_child_with_mergeinfo): Delete.", 
+   "(insert_child_to_merge): Re-write.", 
+   "(insert_parent_and_sibs_of_sw_absent_del_entry, get_mergeinfo_paths,", 
+   "process_children_with_new_mergeinfo): Adjust for the above changes,", 
+   "eliminating the indexes.", 
+   "* subversion/libsvn_client/mergeinfo.c,", 
+   "subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__merge_path_dup): New function.", 
+   "* subversion/include/svn_sorts.h", 
+   "(svn_sort__bsearch_lower_bound, svn_sort__array_insert): New functions.", 
+   "* subversion/libsvn_subr/sorts.c", 
+   "(bsearch_lower_bound): New function.", 
+   "(svn_sort__bsearch_lower_bound, svn_sort__array_insert): New functions."
+  ], 
+  "revision_id": "873341"
+ }
+]

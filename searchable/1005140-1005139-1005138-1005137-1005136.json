@@ -1,0 +1,77 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:10.746618Z", 
+  "msg": [
+   "THRIFT-922. cpp: Add profiling code to help conversion to C++ templates", 
+   "Add some profiling code to track when potentially unnecessary virtual", 
+   "calls are made in the thrift C++ serialization and deserialization code.", 
+   "This can be used to help service implementors determine which places in", 
+   "their code should be updated to use an appropriate thrift template", 
+   "class."
+  ], 
+  "revision_id": "1005140"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:08.212612Z", 
+  "msg": [
+   "THRIFT-928. cpp: Thrift Server Client Stats", 
+   "Add the ability for Thrift servers to monitor client connections.  It is", 
+   "activated by #including server/TClientInfo.h and creating 1) a", 
+   "TClientInfoCallHandler passed to the processor with setEventHandler()", 
+   "and 2) a TClientInforServerHandler passed to the server with", 
+   "setServerEventHandler().", 
+   "The result vector, showing active connections, provides client address", 
+   "and the thrift call it is executing (or last executed), the time", 
+   "connected, and the number of calls made since connection."
+  ], 
+  "revision_id": "1005139"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:00.568390Z", 
+  "msg": [
+   "THRIFT-922. cpp: Update C++ generator to emit templatized code", 
+   "When the \"templates\" option is passed to the C++ generator, it now emits", 
+   "templatized versions of the client and processor.  Generated types emit", 
+   "templatized read() and write() functions.", 
+   "This allows the generated code to invoke the correct non-virtual", 
+   "TTransport and TProtocol implementations, resulting in faster", 
+   "serialization and deserialization."
+  ], 
+  "revision_id": "1005138"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:09:58.115408Z", 
+  "msg": [
+   "THRIFT-922. cpp: Fix C++ compilation when using list<bool>", 
+   "The STL specializes vector<bool> to store the values as individual bits, rather", 
+   "than bools.  Therefore, when using a Thrift list<bool>, readBool() gets invoked", 
+   "not with a bool&, but with a std::vector<bool>::reference.", 
+   "TProtocol does provide a readBool(std::vector<bool>::reference) implementation.", 
+   "However, almost all TProtocol subclasses defined only readBool(bool&), which", 
+   "hides the other overloaded versions of readBool().  As a result, the code", 
+   "worked only when accessing TProtocol objects via a \"TProtocol*\", and not", 
+   "directly via the subclass type.  When using C++ templates, protocol objects do", 
+   "get invoked via pointers to the subclass type, causing compile failures when", 
+   "std::vector<bool> is used.", 
+   "This change updates the various TProtocol implementations to also provide", 
+   "readBool(std::vector<bool>::reference)."
+  ], 
+  "revision_id": "1005137"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:09:56.020933Z", 
+  "msg": [
+   "THRIFT-922. cpp: Templatize binary and compact protocol", 
+   "Convert TBinaryProtocol and TCompactProtocol to template classes, taking", 
+   "the transport class as a template parameter.  This allows them to make", 
+   "non-virtual calls when using the template, improving serialization", 
+   "performance."
+  ], 
+  "revision_id": "1005136"
+ }
+]

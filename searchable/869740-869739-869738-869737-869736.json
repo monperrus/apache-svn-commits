@@ -1,0 +1,106 @@
+[
+ {
+  "author": "rocketraman", 
+  "date": "2008-03-02T00:48:59.102960Z", 
+  "msg": [
+   "Resolve issue with encoding commit log messages as described by", 
+   "Romulo Ceccon at:", 
+   "http://article.gmane.org/gmane.comp.version-control.subversion.svnmerge.devel/872", 
+   "* contrib/client-side/svnmerge.py: Import locale, set locale to user default.", 
+   "(recode_stdout_to_file): New method to decode standard output and encode using", 
+   "the user's default locale encoding.", 
+   "(get_commit_log): Call recode_stdout_to_file to change the encoding of svn", 
+   "log output.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(testCommitMessageEncoding): New test case to verify the commit log message", 
+   "encoding.", 
+   "Patch by:  Romulo A. Ceccon <romuloceccon@yahoo.com.br>", 
+   "me", 
+   "Review by: Thomas Heller <theller@ctypes.org>"
+  ], 
+  "revision_id": "869740"
+ }, 
+ {
+  "author": "rocketraman", 
+  "date": "2008-03-02T00:24:27.597272Z", 
+  "msg": [
+   "Eliminate need for --bidirectional flag. Detect sources that", 
+   "have integration info for the target, and automatically enable", 
+   "reflected rev detection in this case. The automatic detection is", 
+   "skipped if --bidirectional is explicitly set.", 
+   "* contrib/client-side/svnmerge.py: Update help for global options.", 
+   "(should_find_reflected): New method to determine whether to find", 
+   "reflected revs or not.", 
+   "(action_avail),", 
+   "(action_merge): Call should_find_reflected.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(testBidirectionalMerges),", 
+   "(testBidirectionalMergesMultiBranch): Test avail with and", 
+   "without --bidirectional. Remove test for non-reflected default,", 
+   "and test merges without --bidirectional."
+  ], 
+  "revision_id": "869739"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-03-01T22:58:48.453366Z", 
+  "msg": [
+   "Followup to r29663: *really* *really* fix a bunch of error leaks in", 
+   "the svnserve Cyrus SASL implementation.", 
+   "It turns out that it's easy to write bugs in a file that is entirely", 
+   "#ifdefed out on the machine you're working on...", 
+   "* subversion/svnserve/cyrus_auth.c", 
+   "(write_failure): Use the right variable name.", 
+   "Found by: hwright"
+  ], 
+  "revision_id": "869738"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-03-01T19:04:42.614610Z", 
+  "msg": [
+   "Followup to r29659: *really* fix a bunch of error leaks in the", 
+   "svnserve Cyrus SASL implementation.", 
+   "* subversion/svnserve/cyrus_auth.c", 
+   "(write_failure): New wrapper around svn_ra_svn_write_cmd_failure", 
+   "which clears its error argument.", 
+   "(fail_cmd, cyrus_auth_request): Use write_failure.", 
+   "Found by: ehu"
+  ], 
+  "revision_id": "869737"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-03-01T14:14:00.790223Z", 
+  "msg": [
+   "Reduce the number of reallocations needed when working with string buffers.", 
+   "Valgrind shows that the my__realloc function is called an awful lot of times", 
+   "during common svn actions.", 
+   "This change introduces a new function that makes it easy to create a string", 
+   "buffer with an estimated buffer size.", 
+   "* subversion/include/svn_string.h", 
+   "(svn_stringbuf_create_ensure): New function declaration.", 
+   "* subversion/libsvn_subr/svn_string.c", 
+   "(svn_stringbuf_create_ensure): New function definition. Creates an empty", 
+   "stringbuf with the requested buffer size.", 
+   "(create_stringbuf): Take a minimum buffer size argument.", 
+   "(svn_stringbuf_ncreate): Use the new function svn_stringbuf_create_ensure as", 
+   "base.", 
+   "(svn_stringbuf_createv): Update the call to create_stringbuf.", 
+   "* subversion/libsvn_subr/xml.c", 
+   "(xml_escape_attr, svn_xml_make_open_tag_hash): Estimate the size of the", 
+   "target string, use that to create a new string buffer.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_stringbuf_from_aprfile): Idem.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_readline): Idem.", 
+   "* subversion/libsvn_subr/utf.c", 
+   "(convert_to_stringbuf): Idem.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(uri_escape, svn_path_uri_decode, illegal_path_escape): Idem.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(start_report): Idem."
+  ], 
+  "revision_id": "869736"
+ }
+]

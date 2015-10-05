@@ -1,0 +1,82 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-07-16T17:50:33.024130Z", 
+  "msg": [
+   "On the issue-3220-dev branch, fix a segfault scenario.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(fs_mergeinfo_changed): Initialize some variables.", 
+   "By the way, initial results from the work done so far indicate that", 
+   "this new approach is, in fact, far more accurate than the old code.", 
+   "And a recent performance comparison showed this code taking 12 seconds", 
+   "to do what the old code did (incorrectly, even) in nearly 6 minutes."
+  ], 
+  "revision_id": "872215"
+ }, 
+ {
+  "author": "firemeteor", 
+  "date": "2008-07-16T17:19:23.142114Z", 
+  "msg": [
+   "On the issue-2843-dev branch.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "(svn_wc_relocate3): Relocate the excluded target as a single entry."
+  ], 
+  "revision_id": "872214"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-07-16T16:14:47.293374Z", 
+  "msg": [
+   "STATUS: Improve notes for r31749."
+  ], 
+  "revision_id": "872213"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-07-16T16:09:12.558995Z", 
+  "msg": [
+   "STATUS: Vote for r30812, r30929, r30935, r30961."
+  ], 
+  "revision_id": "872212"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-07-16T14:55:02.728006Z", 
+  "msg": [
+   "On the issue-3220-dev branch, commit outstanding work done so far.", 
+   "Prior to this change, the method used by 'log -g' for determining what", 
+   "merges were made in a revision was:", 
+   "- fetch all the mergeinfo found in REV", 
+   "- fetch all the mergeinfo found in REV-1", 
+   "- compare, contrast, and collapse the results", 
+   "The problems with this approach are two-fold.  First, it's slow, and", 
+   "it gets slower as more paths in a revision grow mergeinfo.  Secondly,", 
+   "it's just wrong.  Just because mergeinfo appears or disappears doesn't", 
+   "mean a merge was done -- perhaps a path that held some mergeinfo was", 
+   "merely deleted.", 
+   "The new approach is to look at only the paths changed in REV, and see", 
+   "if/how their mergeinfo changed.  This is much, much faster on average", 
+   "for repository actually using mergeinfo, and much more accurate as", 
+   "well.", 
+   "As of this commit, this basic overhaul is mostly finished.  The code", 
+   "does not yet handle the effects of inherited mergeinfo on the paths of", 
+   "interest, though.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(fs_mergeinfo_changed): New (pretty-generic) mergeinfo change", 
+   "calculation function.", 
+   "(get_combined_mergeinfo_changes): New, supercedes ...", 
+   "(get_combined_mergeinfo, get_merged_rev_mergeinfo): ...these, which", 
+   "are now removed.", 
+   "(do_logs): Use get_combined_mergeinfo_changes() instead of", 
+   "get_merged_rev_mergeinfo().", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos__prev_location): New prototype.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos__prev_location): Was prev_location(), now module-public.", 
+   "Allow prev_rev, prev_path, and appeared_rev parameters to be NULL,", 
+   "in which case (for each) don't try to set their pointer values.", 
+   "Callers updated."
+  ], 
+  "revision_id": "872211"
+ }
+]

@@ -1,0 +1,71 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-08-29T14:29:55.669618Z", 
+  "msg": [
+   "Revert r10731.  While it's true that the output of", 
+   "svn_path_canonicalize may contain a double slash in the authority", 
+   "section of a URL, passing a URL to svn_path_dirname is a botch,", 
+   "particularly if we reach the authority section (\"http:\" is not the", 
+   "dirname of \"http://hostname\").  The short-term solution for this trap", 
+   "door is to avoid passing URLs to path-specific svn_path functions; the", 
+   "long-term (2.0) solution is to separate out the functions which", 
+   "operate on URLs from ones which operate on paths.", 
+   "* subversion/libsvn_subr/path.c (previous_segment): Don't skip over", 
+   "multiple slashes, since we shouldn't see them."
+  ], 
+  "revision_id": "850835"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-08-29T14:29:15.957165Z", 
+  "msg": [
+   "* subversion/clients/cmdline/info-cmd.c (svn_cl__info): Display an", 
+   "error if the user mistakenly passes a URL to \"svn info\".", 
+   "(Otherwise, we start calling svn_path_dirname on a URL, which is a", 
+   "botch given how the path API currently works.)"
+  ], 
+  "revision_id": "850834"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-08-29T12:11:14.221791Z", 
+  "msg": [
+   "Fix the inverted logic in 'svnadmin recover' that breaks the warning", 
+   "message when the repository lock cannot be immediately acquired.", 
+   "* subversion/svnadmin/main.c", 
+   "(subcommand_recover): Return if the error was *not* EAGAIN."
+  ], 
+  "revision_id": "850833"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2004-08-29T01:52:39.776473Z", 
+  "msg": [
+   "Resolve issue 1415.", 
+   "Test whether gcc supports -std=c89 when in maintainer mode, don't base the", 
+   "decision on an incomplete list of platforms.", 
+   "Based on a patch by Leif Eriksen <leif.eriksen_at_hpa.com.au>.", 
+   "* build/ac-macros/svn-macros.m4 (SVN_MAYBE_ADD_TO_CFLAGS): New macro.", 
+   "* configure.in (enable-maintainer-mode): Use it."
+  ], 
+  "revision_id": "850832"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2004-08-29T01:23:55.371259Z", 
+  "msg": [
+   "Implement tab-completion for svnshell.py.", 
+   "Inspired by a patch by Craig Howard <craig.howard_at_shadnet.shad.ca>.", 
+   "Resolves issue 1459.", 
+   "* tools/examples/svnshell.py", 
+   "(SVNShell._parse_path): Avoid exception if path is \"\".", 
+   "(SVNShell._complete): New function.", 
+   "(SVNShell.complete_cd): New function.", 
+   "(SVNShell.complete_cat): New function.", 
+   "(SVNShell.complete_ls): New function.", 
+   "(SVNShell.complete_pcat): New function."
+  ], 
+  "revision_id": "850831"
+ }
+]

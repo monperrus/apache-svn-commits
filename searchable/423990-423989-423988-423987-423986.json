@@ -1,0 +1,51 @@
+[
+ {
+  "author": "jmsnell", 
+  "date": "2006-07-20T17:12:49.633783Z", 
+  "msg": [
+   "Building friendly zips"
+  ], 
+  "revision_id": "423990"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2006-07-20T17:09:03.163775Z", 
+  "msg": [
+   "DERBY-781: Materialize select subqueries where possible to avoid recreating their resultsets multiple times. Here is more info from the contributor.", 
+   "Attaching a patch (d781_v1.patch) to address this issue by allowing the optimizer to consider and choose hash joins with subqueries, which is a more general case of the specific union example mentioned in the description for this issue.  In brief, the patch does this by following up on the suggestions given by Jeff Lichtman in comments above and also in the following thread:", 
+   "http://article.gmane.org/gmane.comp.apache.db.derby.devel/12208", 
+   "Since result set materialization comes for \"free\" with hash joins, that fact we now allow hash joins with subqueries (as of this patch) means that we implicitly have a way to materialize the subquery result sets.", 
+   "The details of the patch are included as DERBY-781_v1.html.  I added a simple test to lang/subquery.sql to demonstrate that the optimizer can and will choose to do hash joins for subqueries, and I updated one other master file--predicatesIntoViews--for which the optimizer is now choosing a hash join instead of a nested loop.  Testing of \"unsafe\" hash joins (see section VII of the document) and generation of correct plans is done through existing tests, esp. the lang/lojreorder.sql test, which was very useful in helping to verify the correctness of the changes.", 
+   "Note that I did not add the sample union query shown in the description for this issue to the tests because when I run it against the current codeline, the optimizer will already choose to do materialization of the UnionNode (via hash join) even without the patch for this issue, and thus it didn't seem like that particular test case was useful.  The new test in subqery.sql is more relevant because the optimizer will choose to do a nested loop join with the subquery before my changes and will do a hash join after my changes, which seems to more accurately reflect what this issue is about.", 
+   "I ran derbyall using sane jars on Red Hat Linux with ibm142 and saw no new failures, and the overall execution time does not change despite the extra work the optimizer is doing.", 
+   "Submitted by Army Brown (qozinx@gmail.com)"
+  ], 
+  "revision_id": "423989"
+ }, 
+ {
+  "author": "ltheussl", 
+  "date": "2006-07-20T17:03:04.280065Z", 
+  "msg": [
+   "PR: MAVEN-1691", 
+   "Use our own jelly to solve the tag caching bug in 1.0."
+  ], 
+  "revision_id": "423988"
+ }, 
+ {
+  "author": "jmsnell", 
+  "date": "2006-07-20T17:03:03.964304Z", 
+  "msg": [
+   "Building friendly zips"
+  ], 
+  "revision_id": "423987"
+ }, 
+ {
+  "author": "ltheussl", 
+  "date": "2006-07-20T17:01:56.171507Z", 
+  "msg": [
+   "PR: MAVEN-1691", 
+   "Use our own jelly to solve the tag caching bug in 1.0."
+  ], 
+  "revision_id": "423986"
+ }
+]

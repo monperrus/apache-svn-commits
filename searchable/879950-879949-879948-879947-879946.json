@@ -1,0 +1,87 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-08T15:56:18.199106Z", 
+  "msg": [
+   "Fix a few more places that relied on svn_uri_*()s handling of relative", 
+   "paths, by switching them to dirents and/or relpaths. Also fix a few related", 
+   "svn_path_*() deprecation warnings by using the uri api.", 
+   "* subversion/libsvn_client/add.c", 
+   "(mkdir_urls): Use svn_uri functions.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(try_copy, svn_client_copy5, svn_client_move5):", 
+   "Detect urls and choose svn_uri/dirent depending on that.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(resolve_relative_external_url): Detect url type and then choose the", 
+   "right canonicalization. Don't rely on uncanonicalized to match", 
+   "canonicalized.", 
+   "* subversion/libsvn_client/locking_commands.c", 
+   "(store_locks_callback): Use dirent api for wc paths.", 
+   "(organize_lock_targets): Detect url vs working copy cases and choose", 
+   "the right api.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(remote_propget): Use relpath api for in-repository path.", 
+   "* subversion/libsvn_ra/util.c", 
+   "(svn_ra__assert_mergeinfo_capable_server): Urls don't have a local style.", 
+   "* subversion/libsvn_repos/node_tree.c", 
+   "(delete_entry, add_open_helper): Use relpath api.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(get_base_info_for_deleted): Join as relpath.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Don't transform urls to local style.", 
+   "* subversion/svnlook/main.c", 
+   "(print_tree): Detect passed path format."
+  ], 
+  "revision_id": "879950"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-08T15:36:59.022781Z", 
+  "msg": [
+   "* subversion/libsvn_delta/path_driver.c", 
+   "(svn_delta_path_driver): Allow driving the path driver over not-relpaths, to", 
+   "fix a few tests."
+  ], 
+  "revision_id": "879949"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-08T15:24:39.460620Z", 
+  "msg": [
+   "* CHANGES: Re-word a change and mention its issue number."
+  ], 
+  "revision_id": "879948"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-08T14:06:22.041722Z", 
+  "msg": [
+   "Never use an APR hash's built-in iterator, as this is not thread-safe. Always", 
+   "allocate it in a pool. This is a follow-up to r39869 and fixes the last", 
+   "remaining instances in the core code. There are still some in swigutil_*.c.", 
+   "* subversion/include/svn_hash.h,", 
+   "subversion/libsvn_subr/hash.c", 
+   "(svn_hash__clear): Add a pool argument and use it for the hash iterator.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(path_is_subtree): Add a pool argument and use it for the hash iterator.", 
+   "(subtree_touched_by_merge): Pass a pool to path_is_subtree().", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(close_directory): Pass a pool to svn_hash__clear().", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__revision_proplist): Pass a pool to svn_hash__clear().", 
+   "* subversion/tests/libsvn_wc/tree-conflict-data-test.c", 
+   "(test_write_invalid_tree_conflicts): Pass a pool to svn_hash__clear()."
+  ], 
+  "revision_id": "879947"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-10-08T13:51:06.396170Z", 
+  "msg": [
+   "Follow-up to r39865, fix a logic error and merge_tests.py 76 with it.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node_get_base_rev): Add missing dereference."
+  ], 
+  "revision_id": "879946"
+ }
+]

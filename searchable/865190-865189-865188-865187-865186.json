@@ -1,0 +1,104 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-05-23T16:03:13.350273Z", 
+  "msg": [
+   "On the merge-sensitive-log branch:", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "Fix the expected log message help text.  Followup to r25115."
+  ], 
+  "revision_id": "865190"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-05-23T12:27:31.074848Z", 
+  "msg": [
+   "On the merge-sensitive-log branch:", 
+   "Merged revisions 25108-25114 via svnmerge from", 
+   "/trunk", 
+   "This also resolves conflicts introduced by the cherry picking of the", 
+   "--merge-sensistive/-g option into trunk in r25113."
+  ], 
+  "revision_id": "865189"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2007-05-23T06:26:46.180516Z", 
+  "msg": [
+   "* autogen.py: Update to support new --save-preprocessed-headers flag,", 
+   "which saves the headers after preprocessing to a supplied path."
+  ], 
+  "revision_id": "865188"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-05-23T00:28:09.080023Z", 
+  "msg": [
+   "Exchange the more specific --suggested-source option introduced in", 
+   "r25112 for the --merge-sensitive/-g option (cherry picked out of the", 
+   "merge-sensitive-log branch), as requested by epg on IRC.", 
+   "To explain the reasoning for this and r25112 a little more:", 
+   "1) In the common case (a branch copied from trunk), multiple potential", 
+   "merge sources will exist (since the copy source's merge info is also", 
+   "copied).  Requiring an additional option makes the decision to use the", 
+   "highest recommended potential merge source in the list of merge", 
+   "sources (currently the copy source) explicit.  Also not uncommon is a", 
+   "branch created from a tag (e.g. for a new feature or involved bugfix", 
+   "for an existing release), or a renamed branch, in which case the copy", 
+   "source is not necessarily the appropriate source to use for a merge.", 
+   "2) Novice users often (inappropriately) type commands like 'svn merge'", 
+   "in a (futile) attempt to get help.  In a heavily modified working", 
+   "copy, having 'svn merge' actually perform a merge is like giving", 
+   "novice users a stick of dynamite to play with.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_inheritance_and_discontinuous_ranges): Use", 
+   "--merge-sensitive instead of --suggested-source.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Use opt_state->merge_sensitive instead of suggested_src.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__longopt_t): Remove svn_cl__suggested_source_opt (replaced", 
+   "by 'g').", 
+   "(svn_cl__opt_state_t): Remove suggested_src field (replaced by", 
+   "merge_sensitive).", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Remove \"suggested-source\" option, replaced by", 
+   "\"merge-sensitive\" (with help text slightly expanded from what's on", 
+   "the merge-sensitive-log branch).", 
+   "(svn_cl__cmd_table): Associate the --merge-sensitive option with", 
+   "'merge' operations, in lieu of the --suggested-source option.", 
+   "(main): Replace handling for the svn_cl__suggested_source_opt option", 
+   "with handling for 'g'.", 
+   "Suggested by: epg", 
+   "markphip"
+  ], 
+  "revision_id": "865187"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-05-22T23:28:12.390532Z", 
+  "msg": [
+   "Keep 'svn merge' (no arguments) backward compatible to avoid the", 
+   "situation where a user types 'svn merge' to attempt to get help, and", 
+   "is unpleasantly surprised by the execution of a merge operation.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_inheritance_and_discontinuous_ranges): Pass the", 
+   "--suggested-source option to the 'svn merge' command.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Return an error if both a merge source and the", 
+   "--suggested-source option are not specified.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__longopt_t): Add an svn_cl__suggested_source_opt enum value..", 
+   "(svn_cl__opt_state_t): Add a suggested_src boolean field.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Add a \"suggested-source\" option.", 
+   "(svn_cl__cmd_table): Associate the --suggested-source option with", 
+   "'merge' operations.", 
+   "(main): Handle the svn_cl__suggested_source_opt option.", 
+   "Reviewed by: markphip", 
+   "kameshj", 
+   "pburba", 
+   "cmpilato"
+  ], 
+  "revision_id": "865186"
+ }
+]

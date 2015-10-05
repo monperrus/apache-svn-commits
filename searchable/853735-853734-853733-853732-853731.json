@@ -1,0 +1,81 @@
+[
+ {
+  "author": "nori", 
+  "date": "2005-03-25T13:55:37.976049Z", 
+  "msg": [
+   "Japanese translation updates.", 
+   "* subversion/po/ja.po: Update translation against r13185 by working on", 
+   "untranslated/fuzzy entries added at r13174:13185, add 15 terms to", 
+   "the translation dictionary, and unify terms.", 
+   "Now ja.po has 1205 translated messages against r13185 (Emacs PO-mode", 
+   "status: \"1206t+63o\")."
+  ], 
+  "revision_id": "853735"
+ }, 
+ {
+  "author": "nori", 
+  "date": "2005-03-25T07:07:51.724205Z", 
+  "msg": [
+   "Japanese translation updates.", 
+   "* subversion/po/ja.po: Update translation against r13173 by working on", 
+   "untranslated/fuzzy entries added at r13152:13173 and add a term to", 
+   "the translation dictionary.", 
+   "Now ja.po has 1144 translated messages against r13173 (Emacs PO-mode", 
+   "status: \"1145t+59o\")."
+  ], 
+  "revision_id": "853734"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-03-25T05:10:48.322799Z", 
+  "msg": [
+   "First, properly destroy the iterpool in the dav locking function, and", 
+   "temporarily stop using it when calling the shim so as to avoid a", 
+   "segfault in lock_tests:deleted_dir_lock.", 
+   "* subversion/libsvn_ra_dav/session.c (svn_ra_dav__lock): Pool fixups,", 
+   "+ big fat ### comment."
+  ], 
+  "revision_id": "853733"
+ }, 
+ {
+  "author": "nori", 
+  "date": "2005-03-25T05:01:11.258406Z", 
+  "msg": [
+   "Japanese translation in the 1.1.x branch updates.", 
+   "* subversion/po/ja.po: Merge one replacement of a message and its", 
+   "translation in the trunk at r13068, which is necessary along with the", 
+   "code change in the 1.1.x branch going for 1.1.4 release."
+  ], 
+  "revision_id": "853732"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-03-25T04:14:14.917462Z", 
+  "msg": [
+   "Prevent dav_method_delete() from auto-removing locks in 'svn ci --no-unlock'.", 
+   "Existing code:", 
+   "'svn commit' unlocks by default.  DAV commits do not.  Thus ra_dav", 
+   "normally sends a custom 'release-locks' header in MERGE, which forces", 
+   "mod_dav to release locks after the commit.  If user does 'svn commit", 
+   "--no-unlock', the release-locks header isn't sent, and thus", 
+   "mod_dav_svn does nothing after the commit.", 
+   "And now the sequel to this:", 
+   "'svn commit locked-schedule-delete' still unlocks by default.  And", 
+   "dav_method_delete() *always* tries to unlock.  That's fine, but what", 
+   "about when the user specifies '--no-unlock'?  We can't change mod_dav,", 
+   "but we can change mod_dav_svn.  For '--no-unlock', send custom", 
+   "'keep-locks' header in DELETE request telling mod_dav_svn to not", 
+   "actually unlock anything.", 
+   "* subversion/include/svn_dav.h", 
+   "(SVN_DAV_OPTION_KEEP_LOCKS):   new header constant.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_delete_entry):   if 'svn commit --no-unlock', then pass the", 
+   "new 'keep-locks' request header in the DELETE request.", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(struct dav_lockdb_private):  new 'keep_locks' boolean field.", 
+   "(dav_svn_open_lockdb):  notice the new request header.", 
+   "(dav_svn_remove_lock):  if header is present, don't unlock anything."
+  ], 
+  "revision_id": "853731"
+ }
+]

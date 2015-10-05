@@ -1,0 +1,98 @@
+[
+ {
+  "author": "epg", 
+  "date": "2007-09-21T22:02:51.158155Z", 
+  "msg": [
+   "svn_client_log4's handling of multiple wc targets is unreachable via the", 
+   "svn command-line client, and therefore untestable.  So, reject multiple wc", 
+   "targets in svn_client_log4 instead of svn_cl__log.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client_log4): Drop unused base_name variable.  Reject multiple wc", 
+   "targets with the error message from svn_cl__log, and document the", 
+   "sordid history of this case.  Now we can drop the for loop for wc", 
+   "targets and other special handling, leaving only one call to", 
+   "svn_ra_get_log2.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_log4): Update doc string.", 
+   "* subversion/svn/log-cmd.c", 
+   "(svn_cl__log): Don't check for multiple wc targets.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(dynamic_revision): This test did nothing more than make sure the log", 
+   "commands exited 0 with no error output.  Use run_and_verify_log_xml to", 
+   "ensure the log commands actually work.  Consequently, break PREV out of", 
+   "the loop, as it is a different revision from the others.", 
+   "(only_one_wc_path): Add test to ensure multiple wc targets are rejected."
+  ], 
+  "revision_id": "866810"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-09-21T21:51:29.678578Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(TestRunner.run): Print a traceback for Failure exceptions, as well;", 
+   "dlr and glasser both agreed this was a good idea, but I think we", 
+   "should only catch Skip here in the first place..."
+  ], 
+  "revision_id": "866809"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-09-21T21:37:31.517665Z", 
+  "msg": [
+   "Fix the only test that fails when svn-test-work is a symlink elsewhere.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(commit_from_long_dir): Use os.path.realpath to get abs_wc_dir, as", 
+   "that's what svn does."
+  ], 
+  "revision_id": "866808"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-09-21T21:19:51.353672Z", 
+  "msg": [
+   "On the ancestry-walk branch:", 
+   "Implement svn_repos_get_file_ancestry().  Right, this is just", 
+   "svn_repos_get_file_revs(), only from youngest to oldest.  Shuffle some other", 
+   "code around for reuse.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(send_ctx_t): New structure.", 
+   "(ancestry_walker_baton): Add a send_ctx_t member.", 
+   "(send_revision): New helper function.", 
+   "(send_path_revision_list): Use send_revision() to send individual revisions.", 
+   "(ancestry_found_ancestor): New.", 
+   "(svn_repos_get_file_ancestry): Send ancestry in reverse order, using the", 
+   "ancestry walker and helpers."
+  ], 
+  "revision_id": "866807"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-09-21T20:07:44.483065Z", 
+  "msg": [
+   "r26426 introduced a final sentinel call in ra-{neon,serf,svn} but not", 
+   "ra-local, resulting in an extra invalid </logentry> in log --xml output.", 
+   "Callers already know the log is finished because control returns from", 
+   "svn_ra_get_log2, so just drop this extra receiver call.", 
+   "In support of this, add a new test function for verifying svn log; we", 
+   "should extend log_tests.py to make more use of this in the future (and the", 
+   "in-progress change for issue 2850 uses it).", 
+   "* subversion/libsvn_ra_neon/log.c", 
+   "(log_end_element): Don't follow last log entry with one more", 
+   "SVN_INVALID_REVNUM call to the receiver.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(end_log): Don't follow last log entry with one more", 
+   "SVN_INVALID_REVNUM call to the receiver.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_log): Don't follow last log entry with one more", 
+   "SVN_INVALID_REVNUM call to the receiver.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(LogEntry, LogParser): Add utility classes for testing and parsing svn", 
+   "log --xml output.", 
+   "(run_and_verify_log_xml): Add function to test svn log --xml output.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(merge_sensitive_log_added_path): Test with run_and_verify_log_xml too."
+  ], 
+  "revision_id": "866806"
+ }
+]

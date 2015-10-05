@@ -1,0 +1,58 @@
+[
+ {
+  "author": "remm", 
+  "date": "2006-05-26T16:38:24.398855Z", 
+  "msg": [
+   "- Fix some bugs with annotation support."
+  ], 
+  "revision_id": "409695"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2006-05-26T16:29:02.911494Z", 
+  "msg": [
+   "Add package documentation for a few contrib modules."
+  ], 
+  "revision_id": "409694"
+ }, 
+ {
+  "author": "chrisd", 
+  "date": "2006-05-26T16:26:52.655315Z", 
+  "msg": [
+   "Make the worker and event MPMs not touch the scoreboard when", 
+   "handling a fork() failure.  The previous behaviour appears to have", 
+   "been inherited from the prefork MPM, where is it appropriate.", 
+   "The prefork MPM sets thread_limit to 1 and therefore each", 
+   "child process has a single worker_score structure in the scoreboard's", 
+   "array, i.e., ap_scoreboard_image->servers[slot][0].  In make_child(),", 
+   "it sets this structure's status to SERVER_STARTING, and then does", 
+   "a fork(); if the fork() fails, it resets the status to SERVER_DEAD.", 
+   "The worker and event MPMs, by constrast, obviously use multiple", 
+   "worker_score structures per child process.  They may also be", 
+   "in use by worker threads from a previous generation at any particular", 
+   "moment.  Therefore make_child() and the parent process in general", 
+   "doesn't normally update them; make_child() doesn't set them all", 
+   "to SERVER_STARTING before doing fork(), for example.", 
+   "So, make_child() shouldn't set them to SERVER_DEAD if fork()", 
+   "fails (and even if it should, it certainly shouldn't be just", 
+   "updating the first one)."
+  ], 
+  "revision_id": "409693"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2006-05-26T16:18:18.645295Z", 
+  "msg": [
+   "Include full Apache license, not just per-file boilerplate notice, as recommended by http://www.apache.org/dev/apply-license.html.  Also supply a NOTICE file."
+  ], 
+  "revision_id": "409692"
+ }, 
+ {
+  "author": "jkuhnert", 
+  "date": "2006-05-26T16:17:02.144745Z", 
+  "msg": [
+   "Committing before applying patch."
+  ], 
+  "revision_id": "409691"
+ }
+]

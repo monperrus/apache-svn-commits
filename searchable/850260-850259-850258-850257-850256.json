@@ -1,0 +1,98 @@
+[
+ {
+  "author": "striker", 
+  "date": "2004-07-08T22:53:07.300585Z", 
+  "msg": [
+   "Fix issue #1837: mod_authz_svn chokes on repos with a space in its name.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(req_check_access): unescape the destination uri."
+  ], 
+  "revision_id": "850260"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-08T19:50:51.381238Z", 
+  "msg": [
+   "Fix revprop deletion when using ra_svn.  Make the \"value\" portion of", 
+   "the change-rev-prop command be optional.  If it is missing, treat the", 
+   "revprop change as a deletion.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t): Document that the change_rev_prop vtable entry", 
+   "can accept a NULL for value, which indicates a revprop deletion.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_change_rev_prop): Make the value string be optional.", 
+   "* subversion/svnserve/serve.c", 
+   "(change_rev_prop): Make the value string be optional.", 
+   "* subversion/libsvn_ra_svn/protocol: Document that value is optional", 
+   "in change-rev-prop."
+  ], 
+  "revision_id": "850259"
+ }, 
+ {
+  "author": "mthelen", 
+  "date": "2004-07-08T19:46:46.022894Z", 
+  "msg": [
+   "Update a doc comment to use the active voice.", 
+   "Approved by sussman.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(check_access_subtree): Update doc comment to use the active voice rather", 
+   "than passive."
+  ], 
+  "revision_id": "850258"
+ }, 
+ {
+  "author": "mthelen", 
+  "date": "2004-07-08T19:31:19.197476Z", 
+  "msg": [
+   "Fix issue #1949.  Check COPY requests to make sure the user has read access to", 
+   "the entire subtree of the path being copied.", 
+   "Approved by sussman.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(AUTHZ_SVN_READ_TREE): New access type, requiring read access to a path and", 
+   "every location beneath that path.", 
+   "(sections_matching_prefix_baton): New baton type for finding config sections", 
+   "that match a prefix.", 
+   "(parse_authz_lines): Add parens to clarify precedence.", 
+   "(find_sections_matching_prefix): New callback function to determine whether", 
+   "a config section name matches a prefix.  If it matches, the section name", 
+   "is pushed onto an array in the baton.  This is used to find all config", 
+   "sections for locations beneath a particular path.", 
+   "(check_access_subtree): New function to check access to the subtree beneath", 
+   "a path.  Access to the path itself is not checked, and is assumed to be", 
+   "allowed.  Access to the subtree is considered to be disallowed only if it", 
+   "is restricted by a configuration option in the subtree.  Also, the actual", 
+   "existence of locations in the subtree is completely ignored.  If access to", 
+   "a location beneath the path is disallowed, all access to the subtree is", 
+   "disallowed regardless of whether the restricted location actually exists", 
+   "in the repository.", 
+   "(check_access): Rearrange the logic of a do-while loop to make it a while", 
+   "loop.  Also, if access of AUTHZ_SVN_READ_TREE is required, then call", 
+   "check_access_subtree after doing the normal check for read access.", 
+   "(req_check_access): Require AUTHZ_SVN_READ_TREE access for the source path", 
+   "of a COPY request.", 
+   "* subversion/include/svn_config.h", 
+   "(svn_config_section_enumerator_t): New callback to be called for each", 
+   "section in a svn_config_t.", 
+   "(svn_config_enumerate_sections): New function that calls a callback for", 
+   "each section in a svn_config_t.", 
+   "(svn_config_enumerate): Fix a typo in the comment header.", 
+   "* subversion/libsvn_subr/config.c", 
+   "(svn_config_enumerate_sections): New function that calls a callback for", 
+   "each section in a svn_config_t."
+  ], 
+  "revision_id": "850257"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-08T18:38:26.433257Z", 
+  "msg": [
+   "Implement a repository level function to get all content, properties and", 
+   "rev properties for a range of the interesting revisions of a file.  Part of", 
+   "issue #1715 to speed up the blame command.", 
+   "* include/svn_repos.h (svn_repos_file_rev_handler_t, svn_repos_get_file_revs):", 
+   "Added declarations.", 
+   "* libsvn_repos/rev_hunt.c (svn_repos_get_file_revs): New function."
+  ], 
+  "revision_id": "850256"
+ }
+]

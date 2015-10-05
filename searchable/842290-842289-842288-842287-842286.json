@@ -1,0 +1,105 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2002-06-14T18:43:04.289168Z", 
+  "msg": [
+   "Implement 'svn export', as requested by issue #506.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "prototype svn_cl_export().", 
+   "* subversion/clients/cmdline/export-cmd.c", 
+   "new file, implements svn_cl__export().", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): add an entry for svn_cl__export().", 
+   "* subversion/include/svn_client.h", 
+   "prototype and document svn_client_export().", 
+   "* subversion/libsvn_client/export.c", 
+   "new file, implements svn_client_export().", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn--help_stdout", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn_help_stdout", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn_stderr", 
+   "add 'export' to the getopt tests."
+  ], 
+  "revision_id": "842290"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T18:39:57.049235Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(delete_entry): Add explanatory comment."
+  ], 
+  "revision_id": "842289"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T18:32:37.454953Z", 
+  "msg": [
+   "* tools/cgi/tweak-log.cgi", 
+   "(gNumRecentCommits): Init to 20 instead of 10, based on experience."
+  ], 
+  "revision_id": "842288"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T16:49:59.518172Z", 
+  "msg": [
+   "Merge notification system changes from the issue-662-dev branch:", 
+   "svn merge -r2198:2212 http://svn.collab.net/repos/svn/branches/issue-662-dev", 
+   "Plus the following post-merge changes:", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(update_delete_modified_files): Pass 'log msg' as the commit message,", 
+   "not 'foo'.  Otherwise, if you happen to have a file `foo' lying", 
+   "around, svn ci complains that the log message is a pathname :-).", 
+   "* subversion/tests/clients/cmdline/switch_tests.py: Set the", 
+   "svn:executable property on this file.", 
+   "(commit_routine_switching): Same 'log msg' change as above.", 
+   "This resolves enough of issue #662 to allow us to finish issue #517", 
+   "(module system).", 
+   "To help understand what's left to do for issue #662, here's a", 
+   "chronology of the issue-662-dev branch:", 
+   "2198 -- Created branches/issue-662-dev/, based on trunk/", 
+   "2199 -- Commited an almost-complete rewrite of the notification", 
+   "system, making most things use a notify callback instead of", 
+   "trace editor.  The only thing left using a trace editor", 
+   "after this is `svn merge'.  However, the branch no longer", 
+   "passes \"make check\" after this, due to various differences", 
+   "between the old trace output and the new notification", 
+   "output.", 
+   "2202 -- Reverted the changes to the commit/copy/import/ system, as", 
+   "that portion of 2199 was causing most of the test suite", 
+   "failures.  After this, only a few tests still fail.", 
+   "2212 -- Made the remaining tests pass, but by fixing bugs this", 
+   "time, not by more reversions.", 
+   "So the recipe to finish issue #662 is pretty simple, now that we've", 
+   "merged the above changes into trunk.  First, undo the reversions of", 
+   "2202 (but undo them in trunk, not the branch!), see what still fails,", 
+   "and fix it.  Then rewrite the merge/diff editors to use notification", 
+   "instead of trace, and get rid of the old trace editor code."
+  ], 
+  "revision_id": "842287"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T15:35:59.681043Z", 
+  "msg": [
+   "* branches/issue-662-dev/:", 
+   "Get \"make check' passing again (following up to revision 2202).  These", 
+   "tests now pass:", 
+   "basic_tests.py 10: basic switch command", 
+   "update_tests.py 4: update to revision 0", 
+   "update_tests.py 5: make sure overlapping identical changes do not conflict", 
+   "switch_tests.py 1: test some basic switching operations", 
+   "switch_tests.py 4: reverse update wc that contains switched things", 
+   "switch_tests.py 6: reverse update switched wc things to an older rev", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client_switch): Pass content_state and prop_state to", 
+   "notify_func, in file case.", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(receive_overlapping_same_change): Expect 'G' not 'U'.  The old", 
+   "notification output was simply bogus.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(delete_entry): Pass reconstructed correct path to notify_func."
+  ], 
+  "revision_id": "842286"
+ }
+]

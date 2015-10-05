@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jeastman", 
+  "date": "2010-07-07T21:58:16.388757Z", 
+  "msg": [
+   "MAHOUT-167: Moved ported hadoop OutputFormat classes from examples to same package in core"
+  ], 
+  "revision_id": "961515"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2010-07-07T21:45:36.251511Z", 
+  "msg": [
+   "Use a dynamic_cast and check for Null."
+  ], 
+  "revision_id": "961514"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2010-07-07T21:45:25.165290Z", 
+  "msg": [
+   "adding ignores"
+  ], 
+  "revision_id": "961513"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2010-07-07T21:43:17.800341Z", 
+  "msg": [
+   "Finish the readLine method since the PushbackInputStream is implemented now."
+  ], 
+  "revision_id": "961512"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2010-07-07T21:23:38.527631Z", 
+  "msg": [
+   "DERBY-4731 XA two phase commit with active GLOBAL TEMPORARY TABLE causes An internal error identified by RawStore module", 
+   "For temp tables declared as following derby needs to do special work at the", 
+   "time of commit to arrange for the temporary table to have no rows once the", 
+   "commit completes.:", 
+   "DECLARE GLOBAL TEMPORARY TABLE SESSION.T1 ( XWSID INT) ON COMMIT DELETE ROWS NOT LOGGED ON ROLLBACK DELETE ROWS", 
+   "Derby implements these temporary tables as unlogged real internal tables with", 
+   "backing containers on disk.  The ddl is all in memory so that they are only", 
+   "seen by the current session.  On commit the underlying container is dropped and", 
+   "a new empty container is created.", 
+   "This all works fine except in the XA case.  In this case the transaction", 
+   "has done real updates (temp table updates are unlogged and thus not seen", 
+   "as update operations from the XA point of view), then the transaction executes", 
+   "an XA prepare followed by an XA commit.  No update transactions are allowed", 
+   "between the prepare and the commit.  The problem is that the pre-commit work", 
+   "done for the temp tables was executing updates on the internal containers", 
+   "(dropping and createing new ones), and raw store identified this as an XA", 
+   "protocol violation.  Since the work is only on internal non XA transaction", 
+   "related updates it is ok to do these between the prepare and commit.", 
+   "The fix arranges for this work to be done in a nested updatable user transaction", 
+   "when in an XA transaction.  It is ok to commit this work independently from", 
+   "the parent user transaction because", 
+   "for XA because it does the right thing in both possible cases:", 
+   "1) If the XA transaction commits successfully then the same work has been", 
+   "done.  Because of where it is done in the code, the committing user can", 
+   "never get access to the global temp tables between the time the nested", 
+   "xact commits and the XA transaction commits.", 
+   "2) If the XA transaction fails to commit somehow, then I think one of two", 
+   "things will happen:", 
+   "a) the session will go away, and then it does not matter what happens", 
+   "to the session life objects.", 
+   "b) the transaction will rollback, and on commit work which deleted the", 
+   "rows is the same work that needs to get done on rollback.", 
+   "The only locks the nested transaction gets is created new containers, so there", 
+   "should be no problem with lock contention of the work with either the parent", 
+   "transaction, or any other transactions."
+  ], 
+  "revision_id": "961511"
+ }
+]

@@ -1,0 +1,90 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2007-10-09T01:10:13.248381Z", 
+  "msg": [
+   "Fix issue #2842: filter ambient depth as well as requested depth.", 
+   "(This is also part of issue #695.)", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct edit_baton): Change 'depth' to 'requested_depth'.", 
+   "(struct dir_baton, struct file_baton): Add new 'ambient_depth' fields.", 
+   "(make_dir_baton, make_file_baton): Flag whether or not this baton is", 
+   "the end of the line by setting the depth field appropriately.", 
+   "Return new baton by reference, to enable returning an error", 
+   "directly if the new code raises an error.  In make_dir_baton, set", 
+   "the depth to svn_depth_unknown if it is to be corrected later.", 
+   "(open_directory, open_root, add_file_with_history, delete_entry,", 
+   "change_dir_prop, close_directory, absent_file_or_dir, apply_textdelta,", 
+   "change_file_prop): Adjust for above.", 
+   "(add_directory, open_file, add_file): Same.  Note that this changes", 
+   "the semantics slightly: previously, the new baton pointer might", 
+   "have remained untouched if we returned early due to an error,", 
+   "whereas now it will definitely have been set.  I don't think any", 
+   "callers care about this; the previous behavior was just an", 
+   "accident of how the code was written."
+  ], 
+  "revision_id": "867105"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-10-08T22:20:28.145116Z", 
+  "msg": [
+   "Fix issue #2582: Clarify utility of --quiet in 'svn status' built-in help.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Improve global summary of -q option.", 
+   "(svn_cl__cmd_table.\"status\"): Describe how -q behaves for this subcommand.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help--version_stdout,", 
+   "subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Adjust accordingly."
+  ], 
+  "revision_id": "867104"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-08T21:24:21.770045Z", 
+  "msg": [
+   "For SWIG-Python tests, use unique names for temp repositories, so that", 
+   "multiple executions of the test suite don't stomp on each other (or on", 
+   "future executions: client.py doesn't really clean up after itself).", 
+   "(tempfile.mkdtemp would be better than tempfile.mktemp, but", 
+   "subversion/bindings/swig/INSTALL claims we need to support way back to", 
+   "Python 2.0.)", 
+   "* subversion/bindings/swig/python/tests/trac/versioncontrol/tests/svn_fs.py", 
+   "(REPOS_PATH): Use mktemp.", 
+   "* subversion/bindings/swig/python/tests/client.py", 
+   "(test_checkout, test_url_from_path, test_uuid_from_path): Use mktemp."
+  ], 
+  "revision_id": "867103"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-10-08T21:24:21.506575Z", 
+  "msg": [
+   "Fix issues #2894 and #2955.", 
+   "#2894 was a 1.5 regression that prevented repo->wc copies from working if the", 
+   "URL needed URI-escaping.  #2955 was an older problem about the destination", 
+   "of the repo->wc copy having URI escape sequences in its name after the copy.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_wc_copy): URI-decode pair->src_rel (i.e. the source path relative", 
+   "to the RA session).  This fixes #2894.", 
+   "(svn_client_copy4, setup_copy): For repo->wc copies, make sure the", 
+   "destination is never URI-encoded.  This fixes #2955.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(copy_multiple_repo_wc): Extend the test to cover issue #2955.", 
+   "(URI_encoded_repos_to_wc): Fix a few problems with the test.", 
+   "(test_list): Remove XFail marker from URI_encoded_repos_to_wc."
+  ], 
+  "revision_id": "867102"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-10-08T20:31:54.702953Z", 
+  "msg": [
+   "Fix log test 24 and authz test 7 over ra_neon.", 
+   "* subversion/libsvn_ra_neon/log.c", 
+   "(log_start_element): Make a copy of the revprop name in the log entry pool,", 
+   "ensuring that it exists long enough to be used by the receiver."
+  ], 
+  "revision_id": "867101"
+ }
+]

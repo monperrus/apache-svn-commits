@@ -1,0 +1,112 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-06-14T02:23:34.753947Z", 
+  "msg": [
+   "Some various SWIG changes", 
+   "[ all files in subversion/bindings/swig/ ]", 
+   "* svn_types.i: restore the typemap for 'svn_revnum_t *'", 
+   "* svn_fs.i: remove the varname-based typemaps that were present to", 
+   "differentiate between 'svn_revnum_t *' and 'svn_fs_id_t *'", 
+   "* svn_repos.i, svn_wc.i: remove the special revnum typemap", 
+   "* swigutil.c (svn_swig_strings_to_array): construct an array of", 
+   "'const char *' rather than stringbugs.", 
+   "* swigutil.h (svn_swig_strings_to_array): doc clarification", 
+   "* python/setup.py: add -1 to the libraries"
+  ], 
+  "revision_id": "842280"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-06-14T00:59:18.769438Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc_entry): return SVN_ERR_WC_NOT_DIRECTORY, rather than", 
+   "SVN_ERR_WC_OBSTRUCTED_UPDATE, when we are called with a path that is not", 
+   "a working copy directory."
+  ], 
+  "revision_id": "842279"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T00:41:18.506833Z", 
+  "msg": [
+   "* subversion/include/svn_fs.h, subversion/libsvn_fs/tree.c", 
+   "(svn_fs_revision_root_revision): Return SVN_INVALID_REVNUM, not", 
+   "hardcoded -1.", 
+   "Note that this change was already committed on branches/issue-662-dev/", 
+   "in revision 2199."
+  ], 
+  "revision_id": "842278"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T00:27:41.552199Z", 
+  "msg": [
+   "* subversion/libsvn_client/apply_edits.c: Remove this unused file.", 
+   "Note that this change has also already been committed on", 
+   "branches/issue-662-dev/, in revision 2199."
+  ], 
+  "revision_id": "842277"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T00:24:37.202495Z", 
+  "msg": [
+   "* branches/issue-662-dev/:", 
+   "Undo some of revision 2199, so most of \"make check\" passes again on", 
+   "this branch.  Here's the plan:", 
+   "Revision 2199 went most of the way to resolving issue #662 (\"Use", 
+   "notification callbacks, not composition editors, in libsvn_client", 
+   "api\").  But to get modules working (issue #517), we really only need", 
+   "checkout, update, and possibly switch to be using the new notification", 
+   "system; everything else can wait.  However, having gone so far on", 
+   "#662, I didn't want to lose the work.  So it's all committed on", 
+   "branches/issue-662-dev as revision 2199, after which I'm reverting as", 
+   "much of it as necessary to make the tests pass again while still", 
+   "giving us what we need for modules.", 
+   "When it's time to merge that work into the trunk, the patch is", 
+   "svn diff -r2198:HEAD http://svn.collab.net/.../branches/issue-662-dev", 
+   "(I'm too lazy to figure out the `svn merge' command right now).  And", 
+   "when it's time to complete issue #662, we can look at the reversions", 
+   "on this branch since 2199 and figure out the best course.  Most likely", 
+   "the easiest thing will be to peruse the log messages while looking at", 
+   "this diff", 
+   "svn diff -rHEAD:2199", 
+   "restore all the changes, then continue from there; but there may be a", 
+   "better strategies when the time comes.", 
+   "Anyway, after this semi-reversion, the following tests still fail:", 
+   "basic_tests.py 10: basic switch command", 
+   "update_tests.py 4: update to revision 0", 
+   "update_tests.py 5: make sure overlapping identical changes do not conflict", 
+   "switch_tests.py 1: test some basic switching operations", 
+   "switch_tests.py 4: reverse update wc that contains switched things", 
+   "switch_tests.py 6: reverse update switched wc things to an older rev", 
+   "...Which sorta makes sense, considering that the notification changes", 
+   "to updates and switches have not been reverted, because they're what", 
+   "we actually want :-).", 
+   "Here's what got undone:", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_import): Restore before and after editors, lose", 
+   "notify_func and notify_baton.", 
+   "(svn_client_commit, svn_client_copy): Restore before and after", 
+   "editors.", 
+   "* subversion/libsvn_client/copy.c, subversion/libsvn_client/commit.c:", 
+   "Revert revision 2199 to effect above header changes.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__get_trace_commit_editor): Declare again.", 
+   "* subversion/clients/cmdline/copy-cmd.c: Revert most of 2199, but", 
+   "leave the new opt_state->quiet handling.", 
+   "* subversion/clients/cmdline/commit-cmd.c,", 
+   "subversion/clients/cmdline/import-cmd.c: Revert 2199.", 
+   "* subversion/clients/cmdline/trace-commit.c: Un-uncomment this file.", 
+   "Remove some debugging code that is only useful when once again working", 
+   "on issue 662:", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "(guarantee_greek_repository): Remove debugging prints.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(run_svn): Remove alternate debug code."
+  ], 
+  "revision_id": "842276"
+ }
+]

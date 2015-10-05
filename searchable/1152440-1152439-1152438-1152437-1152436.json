@@ -1,0 +1,85 @@
+[
+ {
+  "author": "oheger", 
+  "date": "2011-07-30T09:58:58.977424Z", 
+  "msg": [
+   "[CONFIGURATION-452] Documentation updates."
+  ], 
+  "revision_id": "1152440"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2011-07-30T09:54:46.853899Z", 
+  "msg": [
+   "Removed unused/dead code."
+  ], 
+  "revision_id": "1152439"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2011-07-30T09:33:21.209800Z", 
+  "msg": [
+   "AXIOM-311: Moved some attachments related unit tests from axiom-tests to axiom-api so that we can do a unit test coverage analysis in preparation of AXIOM-326."
+  ], 
+  "revision_id": "1152438"
+ }, 
+ {
+  "author": "struberg", 
+  "date": "2011-07-30T09:30:09.397867Z", 
+  "msg": [
+   "upgrade to latest plugin-parent"
+  ], 
+  "revision_id": "1152437"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-07-30T09:22:14.478686Z", 
+  "msg": [
+   "Fixed version of the change originally committed in r1152345 and", 
+   "reverted again in r1152348:", 
+   "Extend svn_wc__db_scan_deletion() to return the moved-to path of", 
+   "of a moved node, if requested, in MOVED_TO_ABSPATH.", 
+   "This function previously returned the op-root of the copied-half of the", 
+   "move as MOVED_TO_ABSPATH, but (luckily) none of the callers requested it.", 
+   "Return the op-root in a new output parameter COPY_OP_ROOT_ABSPATH instead.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(scan_deletion_baton_t): Add COPY_OP_ROOT_RELPATH.", 
+   "(scan_deletion_txn): If the node has been moved-away, compute", 
+   "and return the moved-to relpath as well as the the op-root of", 
+   "the copied-half of the move.", 
+   "Also, do not assert that every node being moved has a BASE.", 
+   "This isn't true for sequences like: mv A B; mv B/f B/e;", 
+   "In the second move, B/f has no BASE because it is part of the", 
+   "copied-half B of the first move.", 
+   "(scan_deletion): Add new output parameter COPY_OP_ROOT_RELPATH and", 
+   "pass it into the scan_deletion baton.", 
+   "(get_info_for_copy, read_url_txn, svn_wc__db_global_relocate): Update", 
+   "scan_deletion() callers, passing NULL for COPY_OP_ROOT_RELPATH.", 
+   "(svn_wc__db_scan_deletion): Add new output parameter COPY_OP_ROOT_ABSPATH.", 
+   "Convert relative paths in moved-to information provided by scan_deletion()", 
+   "into absolute paths, and return them.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_scan_deletion): Add COPY_OP_ROOT_ABSPATH parameter and update", 
+   "the docstring.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_DELETION_INFO): Get moved-to information from the BASE since", 
+   "it is stored there as of r1152410.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__internal_get_repos_info, svn_wc__node_get_deleted_ancestor,", 
+   "svn_wc__internal_get_commit_base_rev, svn_wc__internal_node_get_schedule):", 
+   "Update callers, passing NULL for COPY_OP_ROOT_ABSPATH.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(get_info_for_deleted, read_one_entry): Update callers, passing NULL", 
+   "for COPY_OP_ROOT_ABSPATH.", 
+   "* subversion/libsvn_wc/info.c", 
+   "(build_info_for_node): Update caller, passing NULL for COPY_OP_ROOT_ABSPATH.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(TESTING_DATA): Put moved-to data into BASE layer. Add some missing", 
+   "move-target nodes that are needed by scan_deletion() to properly resolve", 
+   "moved-to information.", 
+   "(test_scan_deletion): Update callers, verify COPY_OP_ROOT_ABSPATH where", 
+   "a move is being resolved, else pass NULL for COPY_OP_ROOT_ABSPATH."
+  ], 
+  "revision_id": "1152436"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-05-06T05:05:57.355742Z", 
+  "msg": [
+   "Create the 'svn upgrade' subcommand for upgrading working copies to wc-ng.", 
+   "This does *not* make any API changes, which will be for another day.", 
+   "I understand the desire to avoid subcommand-creep, and am doing this after", 
+   "much thought and deliberation.  If there are strong dissenting opinions, I'd", 
+   "like to hear them.", 
+   "(Whether or not this says, I'd still like to have a separate client-level API", 
+   "for upgrading.)", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(basis_upgrade, upgrade_1_5, logs_left_1_5, upgrade_wcprops): Update some", 
+   "expected output text, and run 'upgrade' instead of 'cleanup'.", 
+   "* subversion/svn/cl.h:", 
+   "Declare the new subcommand.", 
+   "* subversion/svn/cleanup-cmd.c", 
+   "(svn_cl__cleanup): Revert back to the previous behavior of only cleaning", 
+   "up old logs, not upgrading the working copy.", 
+   "* subversion/svn/upgrade-cmd.c:", 
+   "New.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Add the new subcommand.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(check_format_upgrade): Update the help text for a too-old working copy."
+  ], 
+  "revision_id": "877675"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-06T04:36:37.468122Z", 
+  "msg": [
+   "* notes/wc-ng-design:", 
+   "Flesh out the section on upgrading the working copy, based upon discussions", 
+   "with gstein earlier today.  Add some comments about potential gotchas."
+  ], 
+  "revision_id": "877674"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-06T04:02:23.427590Z", 
+  "msg": [
+   "Merge r37137 from trunk:", 
+   "* r37137", 
+   "Make some sweeping pool lifetime fixes in the BDB backend.", 
+   "Justification:", 
+   "Bringing 'svn ls -v' over HTTP on a directory with 10000 files", 
+   "from 2Gb+ of RAM to under 400Mb is a very good thing.", 
+   "Votes:", 
+   "+1: cmpilato, arfrever, gstein"
+  ], 
+  "revision_id": "877673"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-05T23:11:13.626443Z", 
+  "msg": [
+   "Removed an unused function.", 
+   "* subversion/libsvn_wc/compose_delta.c:", 
+   "(svn_txdelta__compose_windows): removed. dunno why it ever existed."
+  ], 
+  "revision_id": "877672"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-05T23:10:15.787137Z", 
+  "msg": [
+   "Clarify some code around the fold_scheduling() function.", 
+   "It is never called when MODIFY_SCHEDULE is false, so toss that call. Move", 
+   "the test for MODIFY_FORCE out to the caller. The only remaining references", 
+   "to modify_flags are to clear the MODIFY_SCHEDULE flag, so (intead) just", 
+   "return a boolean indicating whether to do that or not.", 
+   "This gives us a more semantic meaning to the params, rather than", 
+   "unfettered access to the modify flags.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(fold_scheduling): adjust params to avoid MODIFY_FLAGS, shove some", 
+   "responsibility upon the (single) caller, to clarify our limited access", 
+   "over modification stuffs", 
+   "(svn_wc__entry_modify): adjust call to fold_scheduling for clarity."
+  ], 
+  "revision_id": "877671"
+ }
+]

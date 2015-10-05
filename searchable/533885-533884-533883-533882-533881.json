@@ -1,0 +1,59 @@
+[
+ {
+  "author": "donsez", 
+  "date": "2007-04-30T23:47:13.010192Z", 
+  "msg": [
+   "creation of the bundle shell.scriptcmd"
+  ], 
+  "revision_id": "533885"
+ }, 
+ {
+  "author": "ate", 
+  "date": "2007-04-30T23:47:12.708174Z", 
+  "msg": [
+   "Ugh, damn svn, seems not all files were committed???", 
+   "This really should have been part of the previous commit, r533883"
+  ], 
+  "revision_id": "533884"
+ }, 
+ {
+  "author": "ate", 
+  "date": "2007-04-30T23:41:09.394734Z", 
+  "msg": [
+   "Complete refactoring of the JetspeedSerializer!", 
+   "The JetspeedSerializer was a monolitic component which depended on all other components for which it performed data serialization: capabilities, security, profiler and registry.", 
+   "This caused setting up a proper test environment without circular dependencies in the build impossible.", 
+   "Furthermore, extending/improving upon the JetspeedSerializer wouldn't be a trivial task at all.", 
+   "So, I've \"turned it inside out\", making it a \"normal\" Spring component by itself, and breaking out the large serialization code in \"pluggable\" JetspeedComponentSerializer classes.", 
+   "No, each component for which serialization is needed, can provide its own (part of the) serialization with a component scoped JetspeedComponentSerializer implementation.", 
+   "Furthermore, and most important, because the main JetspeedSerializer(Impl) now can be configured with one or more component serializers, and it no longer depends on any of them,", 
+   "it can be used for seeding test data for a specific component (only).", 
+   "For the tests, I've also added a deleteData method to the JetspeedComponentSerializer which can be used for cleaning out (component specific) data before/after a test case run.", 
+   "I've already got the simplest (database related) tests working for the Capabilities component which I will commit shortly hereafter.", 
+   "For the other (database related) tests, I'll try to adjust en configure them ASAP.", 
+   "One last important remark:", 
+   "The original usage of the jetspeedSerializer was command line based through the JetspeedSerializerApplication.", 
+   "For now, I've temporarily removed the implementation code from this class because the new setup requires a complete rehaul for it.", 
+   "Once I've got all the tests working properly again, I'll reimplement this class using the new configuration."
+  ], 
+  "revision_id": "533883"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2007-04-30T23:39:41.042480Z", 
+  "msg": [
+   "- Obvious typo in didRead. Ooops. Maybe Eclipse did that.", 
+   "- Return 1 for available when using a Comet read and no real read was done (actually, it could well be good enough", 
+   "to only use didRead to get an \"accurate\" available() method, but it could probably be useful for blocking IO)."
+  ], 
+  "revision_id": "533882"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2007-04-30T23:36:10.604324Z", 
+  "msg": [
+   "- New read loop (much more conventional using the more accurate InputStream.available() method)."
+  ], 
+  "revision_id": "533881"
+ }
+]

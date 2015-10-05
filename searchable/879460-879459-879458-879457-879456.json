@@ -1,0 +1,122 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-17T07:02:55.881707Z", 
+  "msg": [
+   "Implement the wc_db functions for manipulating the work queue, and write a", 
+   "test to exercise them.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_INSERT_WORK_ITEM, STMT_SELECT_WORK_ITEM, STMT_DELETE_WORK_ITEM):", 
+   "new statements for managing the work queue", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_wq_add, svn_wc__db_wq_fetch, svn_wc__db_wq_completed):", 
+   "implement using the new STMT values in wc-queries.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(create_open): new helper function to create a fake working copy, open", 
+   "the DB on it, and return where it is located.", 
+   "(test_getting_info, test_inserting_nodes, test_children,", 
+   "test_working_info, test_pdh, test_scan_addition, test_scan_deletion,", 
+   "test_global_relocate): replace the create_fake_wc and", 
+   "svn_wc__db_open calls with a single call to the new create_open()", 
+   "(detect_work_item): new helper function to examine a skel to ensure it", 
+   "is a work item that we created, and to return a numeric identifier for", 
+   "which item", 
+   "(test_work_queue): new test to run several work items a bunch of times,", 
+   "and eventually remove them.", 
+   "(test_funcs): add test_work_queue"
+  ], 
+  "revision_id": "879460"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-17T05:53:58.184562Z", 
+  "msg": [
+   "Add some code to wc_db to look for stale work items in a wcroot's work", 
+   "queue. Fail with SVN_ERR_WC_CLEANUP_REQUIRED when this is detected, unless", 
+   "the DB has been opened to specifically allow this (e.g. when we're opening", 
+   "it in order to *run* that work queue, such as during svn cleanup).", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_t): add a new 'enforce_empty_wq' flag", 
+   "(verify_no_work): new helper function to examine a DB's work queue, to", 
+   "ensure that it is empty.", 
+   "(create_wcroot): take new ENFORCE_EMPTY_WQ parameter. when TRUE, we", 
+   "verify that the work queue is empty, before allowing the wcroot to be", 
+   "constructed.", 
+   "(fetch_repos_info): small tweak on the error return", 
+   "(parse_local_abspath): pass db->enforce_empty_wq to the create_wcroot", 
+   "calls.", 
+   "(svn_wc__db_open): take a new ENFORCE_EMPTY_WQ param and stash it into", 
+   "the new DB.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_open): add an ENFORCE_EMPTY_WQ parameter", 
+   "* subversion/include/svn_error_codes.h:", 
+   "(SVN_ERR_WC_CLEANUP_REQUIRED): new code that is raised when we discover", 
+   "a non-empty work queue in a wcroot.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_LOOK_FOR_WORK): new SQL query to look for any unprocessed items", 
+   "within the work queue.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(svn_wc_upgrade): tweak db_open call. the work queue does not need to be", 
+   "empty in order for us to upgrade it (we may even have to upgrade the", 
+   "wq and/or its items)", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(alloc_db, svn_wc_adm_probe_open3): pass ENFORCE_EMPTY_WQ == TRUE to the", 
+   "db_open() calls.", 
+   "* subversion/libsvn_wc/context.c:", 
+   "(svn_wc_context_create): adjust call to db_open()", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(test_getting_info, test_inserting_nodes, test_children,", 
+   "test_working_info, test_pdh, test_scan_addition, test_scan_deletion,", 
+   "test_global_relocate): adjust db_open calls."
+  ], 
+  "revision_id": "879459"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-17T05:37:14.700297Z", 
+  "msg": [
+   "A couple simple modifications to the workqueue system.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_run): add a CANCEL_FUNC and CANCEL_BATON to the running of", 
+   "the work queue. the thing is resumable, so we can allow the user to", 
+   "stop its operation partway.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(struct work_item_dispatch): remove the LOCAL_ABSPATH from the callback.", 
+   "the work_item contains all the appropriate data. that abspath only", 
+   "provides an indicator of which WCROOT should have its wq processed.", 
+   "(run_revert): remove the LOCAL_ABSPATH param", 
+   "(svn_wc__wq_run): add cancellation parameters, and test it within the", 
+   "loop. adjust the parameters to the work item functions."
+  ], 
+  "revision_id": "879458"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-17T03:34:33.675039Z", 
+  "msg": [
+   "A couple of improvements to writing entries.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(entries_write): Don't require a cached access baton, but if we do have one,", 
+   "set the new entries hash after writing them.", 
+   "(svn_wc__entry_modify2): The access baton may be NULL, so use the provided", 
+   "path, instead of retrieving it from the (possibly NULL) access baton."
+  ], 
+  "revision_id": "879457"
+ }, 
+ {
+  "author": "rdonch", 
+  "date": "2009-09-16T21:29:19.087621Z", 
+  "msg": [
+   "In the SWIG/Python testsuite, made the libsvn_client tests clean up after themselves, properly.", 
+   "* subversion/bindings/swig/python/tests:", 
+   "(SubversionClientTestCase.allocate_temp_dir): New method.", 
+   "(SubversionClientTestCase.setUp): Add storage for cleanup info.", 
+   "(SubversionClientTestCase.tearDown): Actually clean up. New method.", 
+   "(SubversionClientTestCase.test_checkout):", 
+   "(SubversionClientTestCase.test_url_from_path):", 
+   "(SubversionClientTestCase.test_uuid_from_path):", 
+   "(SubversionClientTestCase.test_info_file): Use allocate_temp_dir to ensure cleanup."
+  ], 
+  "revision_id": "879456"
+ }
+]

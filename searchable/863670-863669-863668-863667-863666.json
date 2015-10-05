@@ -1,0 +1,98 @@
+[
+ {
+  "author": "sunny256", 
+  "date": "2007-03-07T15:06:06.630532Z", 
+  "msg": [
+   "* subversion/po/nb.po: make locale-gnu-po-update at r23595 before", 
+   "merging new messages from trunk. Contains 10 fuzzy and 5 untranslated", 
+   "messages."
+  ], 
+  "revision_id": "863670"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-03-07T09:12:45.609077Z", 
+  "msg": [
+   "Implement 'svnadmin recover' for FSFS, recreating the db/current file", 
+   "from information in the rev/ files.", 
+   "This makes is possible for repository admins to back up the repository", 
+   "using either a naive incremental backup strategy or a parallelised", 
+   "asynchronous strategy without requiring them to pick a serialisation point", 
+   "to back up the 'current' file (a point that doesn't exist in the parallelised", 
+   "case).", 
+   "* subversion/svnadmin/main.c", 
+   "(cmd_table): Adjust the description for 'recover' to differentiate", 
+   "the BDB and FSFS cases.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_recover): New generic version of svn_fs_berkeley_recover(), with", 
+   "added notes to describe FSFS recovery.", 
+   "(svn_fs_berkeley_recover): Move to the deprecated BDB-only section.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(struct fs_library_vtable_t): Rename the recover() vtable function from", 
+   "bdb_recover(), and move it out of the provider-specific section.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_recover): New, containing the guts of svn_fs_berkeley_recover(),", 
+   "accounting for the vtable name change.", 
+   "(svn_fs_berkeley_recover): Reimplement in terms of the generic wrapper.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(write_current): New function to recreate db/current, factored out", 
+   "from write_final_current()", 
+   "(write_final_current): Use write_current() to write the current file.", 
+   "(recover_get_largest_revision): New.  Determines the largest", 
+   "revision in a filesystem.", 
+   "(struct recover_read_from_file_baton, read_handler_recover): New.", 
+   "Support for streams wrapping a range of bytes in an APR file.", 
+   "(recover_find_max_ids): New.  Recursively determines the largest", 
+   "node and copy id used in a revision.", 
+   "(recover_body): New.  Body of the recovery function, called under the", 
+   "fs-wide write-lock.", 
+   "(svn_fs_fs__recover): New.  Calls recover_body() under the write-lock.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__recover): New.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_recover): Implement by delegating to svn_fs_fs__recover().", 
+   "* notes/fsfs", 
+   "(Note: Backups): Note that the suggested improvement is now implemented."
+  ], 
+  "revision_id": "863669"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-03-07T07:35:23.589598Z", 
+  "msg": [
+   "Fix a bug whereby an error encountered while setting up a DAV commit", 
+   "leaves empty transactions lying around.", 
+   "This can be demonstrated using e.g. 'svn mkdir http://.../doesnotexist/foo'.", 
+   "Found by: epg", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(svn_ra_dav__get_commit_editor): Abort the commit if we get an error", 
+   "during setup, removing the activity and aborting the transaction."
+  ], 
+  "revision_id": "863668"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-03-07T06:59:11.064707Z", 
+  "msg": [
+   "* contrib/hook-scripts/detect-merge-conflicts.sh:", 
+   "Set svn:eol-style to native.", 
+   "Set all the svn:keywords and use them."
+  ], 
+  "revision_id": "863667"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-03-06T20:15:23.323002Z", 
+  "msg": [
+   "On the merge-tracking branch: Fix up merge info elision/Issue #2733-2734 test.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_elision): Renamed.", 
+   "(local_mergeinfo_elision_and_inheritance): Replacement for", 
+   "mergeinfo_elision test.  Expand comments to show where we are testing", 
+   "Issue #2733 and #2734, properly account for merge info inheritance in", 
+   "expected results, test for elision of local descendant merge info to", 
+   "target of merge, and lastly some white space fixes."
+  ], 
+  "revision_id": "863666"
+ }
+]

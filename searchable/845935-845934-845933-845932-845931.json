@@ -1,0 +1,89 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-05-09T05:16:10.491602Z", 
+  "msg": [
+   "Lose some unused code we discovered while investigating callers of", 
+   "svn_io_run_cmd():", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_run_cmd): Removed.", 
+   "(start_handler): Don't dispatch to svn_log_do_run_cmd anymore; no", 
+   "one was writing that command anyway, since we stopped using", 
+   "external diff3 for update-driven merging.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(SVN_WC__LOG_RUN_CMD): Removed, we no longer need this.", 
+   "(SVN_WC__LOG_ATTR_INFILE, SVN_WC__LOG_ATTR_OUTFILE,", 
+   "SVN_WC__LOG_ATTR_ERRFILE, SVN_WC__LOG_ATTR_ARG_6,", 
+   "SVN_WC__LOG_ATTR_ARG_7, SVN_WC__LOG_ATTR_ARG_8,", 
+   "SVN_WC__LOG_ATTR_ARG_9): No one uses these now, remove."
+  ], 
+  "revision_id": "845935"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-09T00:47:07.171780Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "(generate_label): Fix this so that diff labels contain dates and", 
+   "mention specifics about revisions and transactions."
+  ], 
+  "revision_id": "845934"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-08T23:37:16.812994Z", 
+  "msg": [
+   "* build.conf", 
+   "(svn-config): Don't install this; see issue #751 for details."
+  ], 
+  "revision_id": "845933"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-05-08T23:12:31.648904Z", 
+  "msg": [
+   "Fix an install bug reported by Dominik Westner <lists@logicunited.com>.", 
+   "Arrange for libsvn_ra_dav to be installed before libsvn_ra so that", 
+   "libtool relinking works.", 
+   "* configure.in (INSTALL_RULES): Put install-dav-lib before install-lib."
+  ], 
+  "revision_id": "845932"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-08T21:15:45.942058Z", 
+  "msg": [
+   "Yikes.  Here are some bugfixes that must be propogated by our next", 
+   "release, which unfortunately pushes the next compatibility phase of", 
+   "Issue #1015 (\"Need to escape property values over DAV\") back another", 
+   "milestone.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__parsed_request): Add 'set_parser' callback, and call it", 
+   "to when we have constructed a Neon XML parser.  Fix some", 
+   "indentation, too.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(set_parser): New callback.", 
+   "(start_element): Dup the encoding into our pool.", 
+   "(end_element): Don't forget to reset pc->encoding to NULL after use.", 
+   "(svn_ra_dav__get_props): Update call to", 
+   "svn_ra_dav__parsed_request(), passing set_parser() as the callback.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_dated_revision, reporter_finish_report): Update call to", 
+   "svn_ra_dav__parsed_request(), passing no callback.", 
+   "* subversion/libsvn_ra_dav/log.c", 
+   "(svn_ra_dav__get_log): Update call to svn_ra_dav__parsed_request(),", 
+   "passing no callback.", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "(svn_ra_dav__merge_activity): Update call to svn_ra_dav__parsed_request(),", 
+   "passing no callback.", 
+   "* subversion/libsvn_ra_dav/options.c", 
+   "(svn_ra_dav__get_activity_collection): Update call to", 
+   "svn_ra_dav__parsed_request(), passing no callback.", 
+   "* subversion/tests/clients/cmdline/prop_tests.py", 
+   "(binary_props): Uh ... finish writing this test (how did I manage to", 
+   "not do this before?!).  Still leaving it Skip()ed for now, though."
+  ], 
+  "revision_id": "845931"
+ }
+]

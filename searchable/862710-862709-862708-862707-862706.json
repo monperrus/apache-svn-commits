@@ -1,0 +1,96 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2006-12-10T19:46:50.717608Z", 
+  "msg": [
+   "ra_dav-refactoring: Docstring expansion.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__startelm_cb_t): Explain SVN_RA_DAV__XML_INVALID can", 
+   "be returned as a valid 'elem' value too."
+  ], 
+  "revision_id": "862710"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-10T19:13:05.172875Z", 
+  "msg": [
+   "ra_dav-refactoring: Simplify the start element callback by taking advantage", 
+   "of wrapper behaviour. Also remove SVN_RA_DAV__XML_VALID: it used to be", 
+   "a valid callback response, but alas, that is no more.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(SVN_RA_DAV__XML_VALID): Remove, now obsolete.", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "* subversion/libsvn_ra_dav/options.c", 
+   "Adjust element validator to return a valid value for the 'elem' callback", 
+   "output parameter. Adjust the start-element callback for this new", 
+   "validation behaviour.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(start_element): Be a good XML consumer and - next to the above - also", 
+   "ignore unknown XML elements instead of erring out. This is a forward", 
+   "compatibility issue. (Rename the parent_state parameter to 'parent'", 
+   "to make the validate_element call fit on one line.)"
+  ], 
+  "revision_id": "862709"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-10T18:31:11.691302Z", 
+  "msg": [
+   "ra_dav-refactoring: Remove non-required Neon headers.", 
+   "* subversion/libsvn_ra_dav/file_revs.c", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "* subversion/libsvn_ra_dav/log.c", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "* subversion/libsvn_ra_dav/options.c", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "Remove non-required Neon headers."
+  ], 
+  "revision_id": "862708"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-12-10T17:06:49.028790Z", 
+  "msg": [
+   "ra_dav-refactoring; And... go in for the kill: Reimplement get_locks() with", 
+   "our own propfind request.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "Remove Neon locking related structure (references).", 
+   "(ELEM_lock_href): Now that we use the same parser between LOCK", 
+   "and PROPFIND responses, we may get href elements as a child of several", 
+   "different parents; don't distinguish between them.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(create_request_hook,", 
+   "pre_send_hook,", 
+   "post_send_hook,", 
+   "setup_neon_request_hook): Removed, now obsolete.", 
+   "(lock_elements): Modified to contain the elements involved in a", 
+   "lockdiscovery PROPFIND request, in order to use the common code", 
+   "between LOCK and PROPFIND (=get_lock) requests.", 
+   "(lock_baton_t): Add PROPFIND response fields, as well as the xml_table", 
+   "field to tell the callbacks about the elements table to use.", 
+   "(lock_start_element,", 
+   "lock_end_element): Use the xml element table in the baton. Also", 
+   "fill in the PROPFIND response related fields in the baton.", 
+   "(lock_from_baton): If there is no token, there is no lock to return.", 
+   "(do_lock): Initialize the new xml_table baton member.", 
+   "(struct receiver_baton,", 
+   "lock_receiver): Remove, now obsolete.", 
+   "(svn_ra_dav__get_lock): Reimplement with a PROPFIND call using", 
+   "svn_ra_dav__request_dispatch().", 
+   "(Justin is committing this on behalf of eh who is having problems committing.)"
+  ], 
+  "revision_id": "862707"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-12-10T16:58:55.314778Z", 
+  "msg": [
+   "* INSTALL: The fix is included with APR 1.2.8 which has been released."
+  ], 
+  "revision_id": "862706"
+ }
+]

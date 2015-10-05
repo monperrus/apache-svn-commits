@@ -1,0 +1,109 @@
+[
+ {
+  "author": "bhuvan", 
+  "date": "2009-10-09T12:45:18.923072Z", 
+  "msg": [
+   "* STATUS: Move r39887 from \"Approved changes\" section to \"Candidate", 
+   "changes\" section."
+  ], 
+  "revision_id": "879970"
+ }, 
+ {
+  "author": "bhuvan", 
+  "date": "2009-10-09T12:37:30.236963Z", 
+  "msg": [
+   "* STATUS: Nominate r39887 for backport to 1.6.6 release. Include", 
+   "nomination for Branko as well."
+  ], 
+  "revision_id": "879969"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-09T11:43:21.116932Z", 
+  "msg": [
+   "Following up on r39876, fix a few more svn_uri_*() abuses. This", 
+   "time in mod_dav_svn, libsvn_fs_base and the absentee handling", 
+   "(as tested with libsvn_ra_svn).", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_split_uri, get_resource):", 
+   "Use dirent api for filesystem paths to a repository.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(parent_path_relpath): Use relpath joining for relative paths.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(absent_directory, absent_file): Handle relative paths."
+  ], 
+  "revision_id": "879968"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-09T11:06:17.618855Z", 
+  "msg": [
+   "Remove redundant type casts. Move declarations before code, for C'89", 
+   "compliance.", 
+   "* subversion/libsvn_auth_gnome_keyring/gnome_keyring.c", 
+   "(callback_destroy_data_keyring, callback_done, callback_get_info_keyring,", 
+   "callback_default_keyring, password_get_gnome_keyring): Remove explicit", 
+   "casts from (void *), which are unnecessary in C.", 
+   "(get_default_keyring_name, check_keyring_is_locked, unlock_gnome_keyring):", 
+   "Remove explicit casts from function pointers to their typedefs.", 
+   "(password_get_gnome_keyring, password_set_gnome_keyring): Move declarations", 
+   "before code, for C'89 compliance."
+  ], 
+  "revision_id": "879967"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-10-09T10:51:59.832179Z", 
+  "msg": [
+   "As part of issue #3506, change rep-cache DB use in FSFS: make it open the", 
+   "connection only when necessary and delay all the writes to the end, in order", 
+   "to prevent readers from being blocked by concurrent FS writers.", 
+   "While here, centralize the \"Is rep sharing allowed by the format and", 
+   "the fsfs.conf configuration\" question into one place, and never call", 
+   "into rep-cache.c if the answer to that question is negative.", 
+   "Right now, the DB is opened only by FS writers, and is opened under", 
+   "the FSFS write lock.", 
+   "Review by: glasser", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t):  Add member 'rep_sharing_allowed'.", 
+   "* subversion/libsvn_fs_fs/rep-cache.c", 
+   "(svn_fs_fs__get_rep_reference,", 
+   "svn_fs_fs__set_rep_reference):", 
+   "Open the DB if it isn't opened already.", 
+   "Assert that rep sharing is allowed.", 
+   "* subversion/libsvn_fs_fs/rep-cache.c,", 
+   "subversion/libsvn_fs_fs/rep-cache.h", 
+   "(svn_fs_fs__open_rep_cache):", 
+   "Open the DB only if it wasn't opened before.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(read_config, svn_fs_fs__open, svn_fs_fs__create):", 
+   "Centralize reading the config into this new helper function.", 
+   "Fold the format number checking into ffd->rep_sharing_allowed.", 
+   "Don't open the rep cache.", 
+   "(rep_write_contents_close):", 
+   "Don't call svn_fs_fs__get_rep_reference() if the format supports", 
+   "rep-sharing but the configuration doesn't allow that.", 
+   "(write_final_rev):", 
+   "Instead of adding rep-cache.db entries immediately, store them in an", 
+   "array for later processing by the caller.  Add new parameters", 
+   "REPS_TO_CACHE and REPS_POOL.  Avoid caching anything if the", 
+   "configuration doesn't allow rep-sharing.", 
+   "(commit_baton):", 
+   "Add new members REPS_TO_CACHE and REPS_POOL.", 
+   "(commit_body):", 
+   "Pass REPS_TO_CACHE and REPS_POOL to write_final_rev().", 
+   "(write_reps_to_cache):", 
+   "New.  Flushes REPS_TO_CACHE to the DB.", 
+   "(commit_sqlite_txn_callback, commit_body_rep_cache):", 
+   "Call commit_body() outside the sqlite transaction (since it doesn't", 
+   "write to the DB anymore) and write_reps_to_cache() inside the", 
+   "sqlite transaction (for better throughput).  Open the DB before", 
+   "starting the sqlite transaction.", 
+   "(svn_fs_fs__commit):", 
+   "Initialize REPS_TO_CACHE and REPS_POOL.  Check rep_sharing_allowed", 
+   "rather than rep_cache_db, since the latter is no longer guaranteed to be", 
+   "already-open whenever rep sharing is allowed."
+  ], 
+  "revision_id": "879966"
+ }
+]

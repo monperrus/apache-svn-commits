@@ -1,0 +1,120 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-02-10T14:44:07.723984Z", 
+  "msg": [
+   "On the issue-3334-dirs branch: Fix remaining issue #3334 problems.", 
+   "The remaining problem on the issue #3334 branch can basically be summed up", 
+   "as follows: If we have a locally deleted tree and an update or switch brings", 
+   "down edits or deletions on, or within, the deleted tree, then we raise a", 
+   "tree conflict on the deleted tree but don't update the text bases or", 
+   "entries for paths within the locally deleted tree.  So the WC is at mixed", 
+   "revisions post-update.  This means if the tree conflicts are resolved that", 
+   "the WC cannot be committed because the mixed revisions cause out of date", 
+   "errors.  Attempts to update the WC again result in the same tree conflicts.", 
+   "This patch solves this problem by allowing the new text bases within the", 
+   "deleted tree to be installed and the working revision of the entries to be", 
+   "updated, but it still leaves the tree as scheduled for deletion.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(edit_baton): New member 'deleted_trees' to keep track of locally deleted", 
+   "subtrees.", 
+   "(remember_deleted_tree, in_deleted_tree): Accessors for 'deleted_trees'.", 
+   "(complete_directory): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree.", 
+   "(file_baton): New member 'deleted' to keep track of locally deleted files,", 
+   "including newly added files within a locally deleted tree.", 
+   "(make_file_baton): Initialize new member.", 
+   "(check_tree_conflict): Don't consider incoming edits or deletes of paths", 
+   "that are *proper* subtrees of a locally deleted tree to be tree conflicts.", 
+   "(do_entry_deletion): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree.  Suppress notifications if within a tree", 
+   "conflict caused by a locally deleted tree.", 
+   "(open_directory): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree.  Populate 'deleted_trees' member of edit_baton.", 
+   "Don't set bump_dir_info->skipped, suppress nested tree conflict", 
+   "notifications, and update the target revision of the directory if inside", 
+   "a tree conflict caused by a local deletion.", 
+   "(close_directory): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree but do suppress notifications.", 
+   "(add_file): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree.  Set the new 'deleted' member of file_baton.", 
+   "(open_file): Don't exit early if inside a tree conflict caused", 
+   "by a locally deleted tree and suppress nested tree conflict notifications.", 
+   "(merge_file): If a file is locally deleted or replaced install the new", 
+   "text base but don't copy the new text base to the working location.", 
+   "Keep locally deleted, but not replaced, files marked as deleted.  Don't", 
+   "adjust entries file to match working file for locally deleted files.", 
+   "(close_file): Suppress notifications for files that are locally deleted.", 
+   "(close_edit): Update the working revision of all locally deleted trees.", 
+   "(make_editor): Initialize new 'deleted_trees' hash.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(test_list): Remove XFail from tree_conflicts_resolved.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(test_list): Remove XFail from tree_conflicts_resolved_depth_empty,", 
+   "tree_conflicts_resolved_depth_files,", 
+   "tree_conflicts_resolved_depth_immediates,", 
+   "and tree_conflicts_resolved_depth_infinity.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(test_list): Remove XFail from revert_tree_conflicts_in_updated_files.", 
+   "* subversion/tests/cmdline/stat_tests.py", 
+   "(test_list): Remove XFail from status_with_tree_conflicts.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(tree_conflicts_on_switch_1_2): Remove XFail comment.", 
+   "(test_list): Remove XFail from tree_conflicts_on_switch_1_1 and", 
+   "tree_conflicts_on_switch_1_2.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(tree_conflicts_on_update_1_2):", 
+   "(test_list): Remove XFail from prop_update_on_scheduled_delete,", 
+   "update_wc_with_replaced_file, tree_conflicts_on_update_1_1,", 
+   "tree_conflicts_on_update_1_2, and tree_conflict_uc1_update_deleted_tree."
+  ], 
+  "revision_id": "875865"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-10T14:13:04.762046Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Save the entry's checksum.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): If the node isn't a directory, record the checksum in the", 
+   "working and base nodes."
+  ], 
+  "revision_id": "875864"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-10T13:53:30.237365Z", 
+  "msg": [
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): send the updated path to the notification", 
+   "handler instead of the ancestor of path, when updating a node below", 
+   "the working copy root.", 
+   "Note: This path is not visible from svn, but it is on AnkhSVN."
+  ], 
+  "revision_id": "875863"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-10T13:29:08.224220Z", 
+  "msg": [
+   "* subversion/libsvn_wc/merge.c", 
+   "(merge_text_file): Turn result_target argument into local variable.", 
+   "(svn_wc__merge_internal): Don't pass ununitialized pointer to resolve", 
+   "warning.", 
+   "Found by: me", 
+   "Patch by: stsp"
+  ], 
+  "revision_id": "875862"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-10T11:09:12.777513Z", 
+  "msg": [
+   "* build/generator/gen_win.py", 
+   "(parse_options): Skip generating libsvn_auth_kwallet and", 
+   "libsvn_auth_gnome_keyring projects on Windows."
+  ], 
+  "revision_id": "875861"
+ }
+]

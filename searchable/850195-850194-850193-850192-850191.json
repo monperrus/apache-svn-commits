@@ -1,0 +1,97 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2004-07-01T22:51:30.436301Z", 
+  "msg": [
+   "* STATUS: Add r9338 and r9340 and vote for them - trivial build.conf changes."
+  ], 
+  "revision_id": "850195"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-01T22:42:28.979997Z", 
+  "msg": [
+   "Allow importing and exporting of special files.  This also completes", 
+   "the changes made in r10117 by not setting timestamps on special files", 
+   "when exporting.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(detranslate_special_file): Move so that it occurs before", 
+   "create_special_file.", 
+   "(create_special_file): When exporting from a working copy, this", 
+   "function can be called with an actual special file as the source.", 
+   "In this event, create a temporary detranslation from which the", 
+   "special file is created.", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_versioned_files): If we are exporting a special file, do not", 
+   "set the timestamp.  Also use the new", 
+   "svn_subst_copy_and_translate2.", 
+   "(struct file_baton): Add a special field to keep track of whether", 
+   "the file has the svn:special property set.", 
+   "(change_file_prop): Update the file_baton's special field when", 
+   "necessary.", 
+   "(close_file): Check for special files when invoking working copy", 
+   "translation, and use the new svn_subst_copy_and_translate2.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(send_file_contents): Check for special files when invoking working", 
+   "copy translation, and use the new svn_subst_copy_and_translate2.", 
+   "(import_file): Add the svn:special property to files that are", 
+   "detected as non-normal.", 
+   "* subversion/tests/clients/cmdline/special_tests.py", 
+   "(import_export_symlink): New test that imports and exports a", 
+   "symlink."
+  ], 
+  "revision_id": "850194"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-01T21:53:02.629297Z", 
+  "msg": [
+   "Fix several bugs related to manually adding a svn:special property to", 
+   "a pre-existing file.  Also, properly re-translate working copy files", 
+   "when reverting changes to one of the \"magic\" properties.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_admin_things): If there were property changes, check to see", 
+   "if one of the magic properties were among them.  If so, do not", 
+   "check for file modification and always re-run the working copy", 
+   "translation code.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(install_file): Add SVN_PROP_SPECIAL as one of the magic properties", 
+   "that will trigger a working copy file regeneration on update.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(detranslate_special_file): Fix a typo that was causing src_stream", 
+   "to be created from the destination file, not the source file.", 
+   "(svn_subst_copy_and_translate2): If the source file is a special", 
+   "file, treat it as if the special parameter was TRUE."
+  ], 
+  "revision_id": "850193"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-07-01T18:02:28.481118Z", 
+  "msg": [
+   "Make the fix in r9814 easier to read per Philip Martin's suggestion.", 
+   "* subversion/libsvn_wc/props.c", 
+   "Move setting of slash to 1 closer to where we set it to 0."
+  ], 
+  "revision_id": "850192"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-07-01T17:41:09.279349Z", 
+  "msg": [
+   "Since some special files (namely symlinks) cannot easily have their", 
+   "modification time changed, disable modification time updating for all", 
+   "special devices.  Theoretically there could be some use for having", 
+   "commit times tracked for other device files, but the work for that can", 
+   "be done when it is deemed necessary.", 
+   "Notably this does not fix the export cases.  Since exporting special", 
+   "files doesn't work currently anyway, I'll save that for a later fix.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "* subversion/libsvn_wc/log.c", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(restore_file, log_do_file_timestamp, revert_admin_things): Only", 
+   "change the modified time if the file is not special."
+  ], 
+  "revision_id": "850191"
+ }
+]

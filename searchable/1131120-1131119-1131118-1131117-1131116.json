@@ -1,0 +1,75 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-06-03T17:54:12.026232Z", 
+  "msg": [
+   "Add optional support for libmagic and use it to determine mime-types", 
+   "of binary files.", 
+   "libmagic is a BSD-licensed library for recognizing file types based", 
+   "on magic numbers. It is shipped with many Linux distributions and", 
+   "other UNIX-like systems as part of the file(1) utility.", 
+   "libmagic also seems to have Windows support but I don't know how to", 
+   "modify the Windows build system to compile with libmagic (help from", 
+   "windows devs to fill this gap would be appreciated!).", 
+   "The existing auto-props and mime-types-file mechanisms take precedence", 
+   "over libmagic during mime-type detection. But libmagic has the advantage", 
+   "that no configuration tweaks are needed and that it does not rely on the", 
+   "filename extension to determine the mime-type.", 
+   "Using libmagic also works around problems where Subversion's own heuristic", 
+   "misdetects a binary file as text. I've seen this happen with some PDF", 
+   "documents, for instance.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_detect_mimetype2): If support for libmagic was compiled in", 
+   "and no mime-type was found in the provided mime-type map, try to", 
+   "get the mime-type from libmagic. If that fails fall back to the existing", 
+   "heuristic. Do not attempt to determine mime-types for empty files because", 
+   "that can result in mime-types such as \"application/x-empty\" which", 
+   "Subversion would interpret as binary.", 
+   "* subversion/libsvn_client/add.c", 
+   "(svn_client__get_auto_props): Ignore \"text/*\" mimetypes returned from", 
+   "libmagic. This preserves existing default behavior of only setting the", 
+   "svn:mime-type property on binary files.", 
+   "* Makefile.in: Expand libmagic library and include definitions.", 
+   "* configure.ac: Detect libmagic. Provide an --with-libmagic switch to", 
+   "point at installations in non-default paths or disable libmagic support", 
+   "(--with-libmagic=no).", 
+   "* INSTALL: Document libmagic dependency.", 
+   "* build.conf:", 
+   "(libsvn_subr): Add optional libmagic dependency.", 
+   "(magic): New -- definition for optional libmagic dependency."
+  ], 
+  "revision_id": "1131120"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2011-06-03T17:47:44.298461Z", 
+  "msg": [
+   "CAMEL-2525: Added camel-ahc to features and added osgi tests"
+  ], 
+  "revision_id": "1131119"
+ }, 
+ {
+  "author": "esjewett", 
+  "date": "2011-06-03T17:39:06.700147Z", 
+  "msg": [
+   "[ESME-348] Update URL scheme"
+  ], 
+  "revision_id": "1131118"
+ }, 
+ {
+  "author": "justin", 
+  "date": "2011-06-03T17:30:33.974151Z", 
+  "msg": [
+   "fixing comments"
+  ], 
+  "revision_id": "1131117"
+ }, 
+ {
+  "author": "justin", 
+  "date": "2011-06-03T17:28:11.850599Z", 
+  "msg": [
+   "SLING-2093 - adding test"
+  ], 
+  "revision_id": "1131116"
+ }
+]

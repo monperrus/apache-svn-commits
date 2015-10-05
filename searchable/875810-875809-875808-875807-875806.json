@@ -1,0 +1,103 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2009-02-07T20:48:46.965404Z", 
+  "msg": [
+   "* subversion/tests/cmdline/autoprop_tests.py", 
+   "(create_config): Set 'password-stores' option in the generated 'config' file."
+  ], 
+  "revision_id": "875810"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-02-07T20:46:30.951013Z", 
+  "msg": [
+   "Search for pkg-config only once and use pkg-config found by AC_PATH_PROG.", 
+   "* configure.ac", 
+   "(pkg-config): Use AC_PATH_PROG to find pkg-config and store the path to", 
+   "pkg-config in PKG_CONFIG variable.", 
+   "(D-Bus, GNOME Keyring): Use PKG_CONFIG variable.", 
+   "* build/ac-macros/kwallet.m4", 
+   "(SVN_LIB_KWALLET):", 
+   "* build/ac-macros/neon.m4", 
+   "(SVN_LIB_NEON, SVN_NEON_CONFIG):", 
+   "* build/ac-macros/sqlite.m4", 
+   "(SVN_SQLITE_PKG_CONFIG): Use PKG_CONFIG variable."
+  ], 
+  "revision_id": "875809"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-07T13:36:53.588829Z", 
+  "msg": [
+   "* STATUS: Nominate r35733 for backport"
+  ], 
+  "revision_id": "875808"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-07T13:23:44.140617Z", 
+  "msg": [
+   "* subversion/bindings/javahl/native/JNIUtil.cpp", 
+   "(JNIUtil::preprocessPath): Remove a gigantic Windows only performance", 
+   "penalty by using the always correct svn_path_internal_style() instead", 
+   "of the hidden breaking apr_filepath_merge with APR_FILEPATH_TRUENAME", 
+   "that only did validation on Windows.", 
+   "Reported on users@ as: Linux is 10 times faster than Windows because Eclipse", 
+   "is slow on Windows."
+  ], 
+  "revision_id": "875807"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-07T13:04:28.331379Z", 
+  "msg": [
+   "Stop recanonicalizing the base url on every call of svn_path_url_add_component", 
+   "by introducing svn_path_url_add_component2 that assumes the caller already did", 
+   "this.", 
+   "(Our working copy library guarantees all url entries are canonicalized for", 
+   "new (tested) and old (recanonicalize on load) working copy formats, but", 
+   "we are recanonicalizing every single path continuously during svn update even", 
+   "without changes).", 
+   "This change reduces the user time of svn update time by about 3 or 4% here.", 
+   "(about 1% wallclock time in my experiment. ra_neon, remote repository)", 
+   "Update all callers except for the RA layers that currently", 
+   "might assume the canonicalization.", 
+   "* subversion/include/svn_path.h", 
+   "(svn_path_url_add_component2): New function", 
+   "(svn_path_url_add_component): Deprecate function.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_url_add_component2): New function.", 
+   "(svn_path_url_add_component): Move to ...", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_path_url_add_component): ... here.", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__node_description):", 
+   "* subversion/libsvn_wc/crop.c", 
+   "(svn_wc_crop_tree):", 
+   "* subversion/libsvn_wc/util.c", 
+   "(svn_wc__path_switched):", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(tweak_entries, svn_wc_add3):", 
+   "* subversion/libsvn_wc/status.c", 
+   "(tweak_statushash, find_dir_url, make_file_baton, close_file):", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(make_dir_baton, make_file_baton, delete_entry, add_directory,", 
+   "svn_wc_get_switch_editor3, check_wc_root, svn_wc_add_repos_file3):", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(take_from_entry, write_entry, write_entry_xml):", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(report_revisions_and_depths, svn_wc_crawl_revisions4):", 
+   "* subversion/libsvn_client/externals.c", 
+   "(handle_externals_desc_change):", 
+   "* subversion/libsvn_client/merge.c", 
+   "(tree_conflict, filter_self_referential_mergeinfo, merge_file_added", 
+   "merge_dir_added, populate_remaining_ranges, get_mergeinfo_walk_cb,", 
+   "combine_range_with_segments, normalize_merge_sources, svn_client_merge3,", 
+   "ensure_all_missing_ranges_are_phantoms, calculate_left_hand_side):", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__node_description): Update callers."
+  ], 
+  "revision_id": "875806"
+ }
+]

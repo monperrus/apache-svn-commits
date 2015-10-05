@@ -1,0 +1,82 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:01:00.061835Z", 
+  "msg": [
+   "Revert unintended conf changes from r8089"
+  ], 
+  "revision_id": "1181350"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:00:58.093462Z", 
+  "msg": [
+   "HBASE-1660: script to handle rolling restarts", 
+   "Summary:", 
+   "1. added 'restart' option to hbase-daemon.sh for unit-level restarting", 
+   "2. added rolling-restart.sh script to perform system-level rolling restarts", 
+   "Test Plan:", 
+   "./bin/start-hbase.sh", 
+   "./bin/rolling-restart.sh", 
+   "./bin/stop-hbase.sh", 
+   "Reviewed in public trunk: https://review.cloudera.org/r/632"
+  ], 
+  "revision_id": "1181349"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:00:44.012336Z", 
+  "msg": [
+   "HBASE-2870: Add Backup CLI Option to HMaster", 
+   "Summary:", 
+   "Adds '--backup' option to HMaster.  All backup masters will wait until a", 
+   "primary master has written the /hbase/master znode before poll waiting.  This", 
+   "allows us to have a deterministic primary master while starting up multiple", 
+   "masters.", 
+   "Test Plan:", 
+   "mvn test", 
+   "DiffCamp Revision: 143527", 
+   "Reviewed By: kranganathan", 
+   "CC: davidrecordon, nspiegelberg, achao, kranganathan", 
+   "Tasks:", 
+   "#287209: Create secondary master for HBase in deployment and code", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181348"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:00:40.199501Z", 
+  "msg": [
+   "HBASE-2871: Make \"start|stop\" commands symmetric for Master & Cluster"
+  ], 
+  "revision_id": "1181347"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:00:36.678654Z", 
+  "msg": [
+   "Entire Row Deletes not stored in Row+Col Bloom", 
+   "Summary:", 
+   "Applying changes for fixing bug HBASE-2823 from open-source repository to", 
+   "internal one.", 
+   "Summary: When a Delete Row is issued on a row with row+col bloom filter, some", 
+   "of the columns might not be deleted. Since a Delete Row is just Delete Family", 
+   "applied to all columns, if a file doesn't contain the column we are searching", 
+   "for it might end up unaffected. In order to ensure the file will be included,", 
+   "the row together with row+col are added in the bloom. Then shouldSeek() checks", 
+   "both row and row+col if the bloom is row+col (BloomType.ROWCOL). That adds", 
+   "additional false positives, which are taken into account with dividing the error", 
+   "rate the user requires by two.", 
+   "Test Plan:", 
+   "Added a new unit test to check this.", 
+   "DiffCamp Revision: 141218", 
+   "Reviewed By: nspiegelberg", 
+   "CC: nspiegelberg, kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181346"
+ }
+]

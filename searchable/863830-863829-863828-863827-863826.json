@@ -1,0 +1,119 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2007-03-09T20:12:49.876239Z", 
+  "msg": [
+   "Add --changelist option to 'svn log'.", 
+   "Note that 'svn log' has never been able to take a bunch of worknig", 
+   "copy paths as arguments, but the following syntax works:", 
+   "svn log URL wcpath1 wcpath2 ...", 
+   "Which means we can now run", 
+   "svn log URL --changelist mychange", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table):  let 'svn log' take --changelist.", 
+   "* subversion/svn/log-cmd.c", 
+   "(svn_cl__log):  notice --changelist argument, use it to build target array.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "update test's expected output of 'svn help log'."
+  ], 
+  "revision_id": "863830"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-03-09T18:16:38.711503Z", 
+  "msg": [
+   "* notes/changelist-design.txt:  update to-do list, clarify UI."
+  ], 
+  "revision_id": "863829"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-03-09T18:15:11.369148Z", 
+  "msg": [
+   "Make 'svn changelist' take --changelist filter option.", 
+   "This allows the user to delete a changelist all at once:", 
+   "svn cl --remove --changelist mychange", 
+   "It also allows the user to cleverly rename a changelist:", 
+   "svn cl newchange --changelist oldchange", 
+   "* subversion/svn/changelist-cmd.c", 
+   "(svn_cl__changelist):  notice opt_state->changelist, merge", 
+   "changelist members into existing target array.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table):  add changelist option to 'svn changelist'."
+  ], 
+  "revision_id": "863828"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-03-09T17:42:38.442143Z", 
+  "msg": [
+   "Rename changelist '--clear' flag to '--remove'.", 
+   "Saying 'svn changelist --clear foo.c' implies too much knowledge of", 
+   "the underlying entries-based implementation.  (\"Clear the changelist", 
+   "field\".)  The name '--remove' better describes what the user is doing:", 
+   "removing a path from a changelist.", 
+   "* subversion/svn/cl.h", 
+   "(enum):  remove svn_cl__clear_opt, add svn_cl__remove_opt.", 
+   "(svn_cl__opt_state_t):  rename 'clear' to 'remove'.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options):  rename 'clear' to 'remove'.", 
+   "(svn_cl__cmd_table):   same.", 
+   "(main):  same.", 
+   "* subversion/svn/changelist-cmd.c", 
+   "(svn_cl__changelist):  look for opt_state->remove."
+  ], 
+  "revision_id": "863827"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-03-09T17:26:56.657337Z", 
+  "msg": [
+   "Rewrite changelist APIs for potential alternate future implementations.", 
+   "Based on list consensus, keep the door open to storing changelist data", 
+   "in a central database someday (rather than recursively scanning", 
+   "entries files.)  Instead of \"set foo.txt's changelist to BAR\", make", 
+   "two apis: \"add foo.txt to changelist BAR\" and \"remove foo.txt from", 
+   "changelist BAR\".  Also, at rooneg's request, create a streamy version", 
+   "of the changelist-fetching routine to be more friendly to other", 
+   "clients.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_set_changelist):  delete.", 
+   "(svn_client_retrieve_changelist):  delete.", 
+   "(svn_changelist_receiver_t):  new callback type.", 
+   "(svn_client_get_changelist):  new function.", 
+   "(svn_client_get_changelist_streamy):  new function.", 
+   "(svn_client_add_to_changelist):  new function.", 
+   "(svn_client_remove_from_changelist):  new function.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t):  add new svn_wc_notify_changelist_failed type.", 
+   "(svn_wc_set_changelist):  add new 'matching_changelist' argument.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_WC_MISMATCHED_CHANGELIST):  new error code.", 
+   "* subversion/libsvn_client/changelist.c", 
+   "(svn_client_set_changelist):  delete.", 
+   "(svn_client_retriev_changelist):  delete.", 
+   "(svn_client_add_to_changelist):  new function.", 
+   "(svn_client_remove_from_changelist):  new function.", 
+   "(svn_client_get_changelist):  new function.", 
+   "(svn_client_get_changelist_streamy):   new function.", 
+   "(struct fe_baton):  add new boolean and callback fields, for streamy work.", 
+   "(found_an_entry):  if streamy, call the callback.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_set_changelist):  rework logic to (possibly) enforce", 
+   "matching against existing changelist.", 
+   "Also, skip & throw warning on unversioned items.", 
+   "* subversion/svn/changelist-cmd.c", 
+   "(svn_cl__changelist):  call new add and remove APIs.", 
+   "* subversion/svn/revert-cmd.c", 
+   "(svn_cl__revert):  update call to svn_client_get_changelist.", 
+   "* subversion/svn/info-cmd.c", 
+   "(svn_cl__info):   update call to svn_client_get_changelist.", 
+   "* subversion/svn/notify.c", 
+   "(notify):  update printed text for addition/removal actions.", 
+   "fix 80-column line.", 
+   "handle warning in new svn_wc_notify_changelist_failed signal.", 
+   "* notes/changelist-design.txt:  update with latest notes and to-do's."
+  ], 
+  "revision_id": "863826"
+ }
+]

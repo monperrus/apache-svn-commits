@@ -1,0 +1,120 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-06-25T16:20:23.000000Z", 
+  "msg": [
+   "Tandem coding with Mike Pilato:", 
+   "* reps-table.h, reps-table.c (svn_fs__get_mutable_rep): Finish.", 
+   "(svn_fs__write_new_rep): Add `const' to arg."
+  ], 
+  "revision_id": "839565"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-06-25T15:48:13.000000Z", 
+  "msg": [
+   "(changelog): show branches and tags."
+  ], 
+  "revision_id": "839564"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-06-25T15:45:44.000000Z", 
+  "msg": [
+   "* subversion/libsvn_fs/dag.c", 
+   "(rep_has_mutable_flag, rep_set_mutable_flag, string_from_rep,", 
+   "string_key_from_rep): Moved to reps-table.c.", 
+   "(txn_body_dag_init_fs): Write a valid skel for the root node,", 
+   "thanks.", 
+   "(make_entry): Build a valid skel for the new node.", 
+   "(svn_fs__dag_file_length): svn_fs__string_key_from_rep only needs a", 
+   "const char *, so why use an svn_string_t?", 
+   "* subversion/libsvn_fs/reps-table.c", 
+   "(rep_is_fulltext):  New helper function.", 
+   "(svn_fs__string_key_from_rep): Was dag.c:string_key_from_rep().", 
+   "(svn_fs__string_from_rep): Was dag.c:string_from_rep().", 
+   "(svn_fs__rep_is_mutable): Was dag.c:rep_is_mutable().", 
+   "(rep_set_mutable_flag): Moved from dag.c", 
+   "(svn_fs__get_mutable_rep): New function.", 
+   "* subversion/libsvn_fs/reps-table.h", 
+   "(svn_fs__string_key_from_rep): Was dag.c:string_key_from_rep().", 
+   "(svn_fs__string_from_rep): Was dag.c:string_from_rep().", 
+   "(svn_fs__rep_is_mutable): Was dag.c:rep_is_mutable().", 
+   "(svn_fs__get_mutable_rep): New function.", 
+   "* subversion/libsvn_fs/strings-table.c", 
+   "(svn_fs__string_copy): New function", 
+   "* subversion/libsvn_fs/strings-table.h", 
+   "(svn_fs__string_copy): New function", 
+   "* subversion/tests/libsvn_fs/strings-reps-test.c", 
+   "(txn_body_string_copy, copy_string): New funcs.", 
+   "(test_funcs): Include new copy_string() test."
+  ], 
+  "revision_id": "839563"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-06-22T20:20:12.000000Z", 
+  "msg": [
+   "Mike and Karl, still pluggin' away at FS changes.", 
+   "* libsvn_fs/dag.h", 
+   "(svn_fs__dag_file_length): Length argument is now an apr_size_t.", 
+   "* libsvn_fs/dag.c", 
+   "(string_key_from_rep): New helper function.", 
+   "(string_from_rep): Use string_key_from_rep.", 
+   "(svn_fs__dag_file_length): Use new strings/reps stuff.  Also, length", 
+   "argument is now an apr_size_t.", 
+   "(svn_fs__dag_commit_txn): Remove to-done \"todo\".", 
+   "* libsvn_fs/tree.c", 
+   "(file_length_args): Changed type for 'length'.", 
+   "* libsvn_fs/structure", 
+   "\"Correct brain-o\" --kfogel"
+  ], 
+  "revision_id": "839562"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-06-22T19:11:41.000000Z", 
+  "msg": [
+   "* libsvn_fs/nodes-rev.h", 
+   "* libsvn_fs/nodes-rev.c", 
+   "Removed (contents now in nodes-table.h and .c).", 
+   "* libsvn_fs/nodes-table.h", 
+   "(svn_fs__get_rep, svn_fs__put_rep): Removed obsolete functions.", 
+   "(svn_fs__get_node_revision, svn_fs__put_node_revision,", 
+   "svn_fs__create_node, svn_fs__create_successor, svn_fs__stable_node,", 
+   "svn_fs__delete_node_revision): Moved from node-rev.h.", 
+   "* libsvn_fs/err.c", 
+   "* libsvn_fs/err.h", 
+   "(svn_fs__err_corrupt_representation): Removed function.", 
+   "* libsvn_fs/nodes-table.c", 
+   "Dump a bunch of junk formerly found in node-rev.c", 
+   "(is_valid_header, is_valid_node_revision): Updated to handle New and", 
+   "Improved (tm) node revision skels.", 
+   "(is_valid_representation): Removed function.", 
+   "(svn_fs__get_node_revision): New home for former contents of", 
+   "now-absent function svn_fs__get_rep().", 
+   "(svn_fs__put_node_revision): Now write the node-revision skel to the", 
+   "database (reps live elsewhere).  Replaces svn_fs__put_rep().", 
+   "(svn_fs__create_node, svn_fs__create_successor, svn_fs__stable_node,", 
+   "svn_fs__delete_node_revision): Moved from node-rev.c but NOT edited.", 
+   "* libsvn_fs/dag.c", 
+   "No longer #include node-rev.h (cuz it's GONE!).", 
+   "Some formatting fixes throughout (Gnu-style, if you will).", 
+   "(get_node_revision, set_node_revision, svn_fs__dag_get_node,", 
+   "svn_fs__dag_dir_entries_hash): Remove ### tweakit comment.", 
+   "(dir_entry_from_node): Now use svn_fs__dag_dir_entries_skel.", 
+   "(svn_fs__dag_get_proplist): Implement using reps/strings.", 
+   "(get_dir_entries): Moved some sanity checking into here from", 
+   "svn_fs__dag_dir_entries_skel.", 
+   "(svn_fs__dag_dir_entries_skel, dir_entry_from_node): Compactified.", 
+   "* tests/libsvn_fs/fs-test.c", 
+   "(txn_body_check_id): Use svn_fs__get_node_revision instead of", 
+   "now-defunct svn_fs__get_rep.", 
+   "* libsvn_fs/txn.c", 
+   "No longer #include node-rev.h (cuz it's GONE!).", 
+   "* libsvn_fs/this-branch.txt", 
+   "Status updated."
+  ], 
+  "revision_id": "839561"
+ }
+]

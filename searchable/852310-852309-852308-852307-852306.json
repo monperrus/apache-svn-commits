@@ -1,0 +1,82 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2004-12-08T05:20:03.498147Z", 
+  "msg": [
+   "Create a new test to test just the locking functionality and fix the", 
+   "fsfs locking code to pass it.", 
+   "* tests/libsvn_fs/locks-test.c (lock_only): New function.", 
+   "(test_funcs): Add lock_only to array.", 
+   "* libsvn_fs_fs/lock.c (merge_paths): New convenience function.", 
+   "(abs_path_to_lock_file, abs_path_to_lock_token_file): Modify", 
+   "function to return an svn_error_t and return the result in the first", 
+   "arg.  Change all callers."
+  ], 
+  "revision_id": "852310"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2004-12-08T04:58:31.498674Z", 
+  "msg": [
+   "Change the C testsuite to allow testing of the fsfs backend by passing", 
+   "--fs-type=fsfs.", 
+   "Modify the main function to pass an svn_test_opts_t baton to all test", 
+   "functions.  The objective here is to provide an extensible means to", 
+   "pass opts information to all test functions (although at the moment,", 
+   "it's only used to pass the fs_type).", 
+   "Create a new function, svn_test__create_any_fs(), which should only be", 
+   "used by non backend-specific filesystem tests.  All other tests", 
+   "(client, wc, etc) should continue to use the svn_test__create_fs()", 
+   "function", 
+   "Update all svn_test_driver_t functions to accept the arg (this is the", 
+   "bulk of the commit, and affected files and functions are not", 
+   "enumerated in this log message).", 
+   "* subversion/include/svn_test.h (svn_test_opts_t): New typedef.", 
+   "(svn_test_driver_t): Add svn_test_opts_t to args.", 
+   "* subversion/tests/libsvn_fs/run-fs-tests.py: Fix call to run-tests to", 
+   "run locks-test.", 
+   "* subversion/tests/libsvn_fs/locks-test.c: Update all tests to call", 
+   "svn_test__create_any_fs() instead of svn_test__create_fs().", 
+   "* subversion/tests/fs-helpers.c (svn_test__create_any_fs): New function.", 
+   "(svn_test__create_fs): Move logic to svn_test__create_any_fs and", 
+   "wrap that function, passing SVN_FS_TYPE_BDB as the fs_type.", 
+   "* subversion/tests/fs-helpers.h (svn_test__create_any_fs): New", 
+   "function.  Update docs on svn_test__create_fs.", 
+   "* subversion/tests/svn_tests_main.c (do_test_num): Take an", 
+   "svn_test_opts_t arg and use that in all calls to test functions.", 
+   "(main): Add opts struct.  Look for \"--fs-type=FOO\" in argv and", 
+   "assign FOO to opts->fs_type.  Pass opts along to do_test_num."
+  ], 
+  "revision_id": "852309"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2004-12-08T00:44:48.158444Z", 
+  "msg": [
+   "* subversion/libsvn_delta/svndiff.c: Mark error mesages for translation."
+  ], 
+  "revision_id": "852308"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-12-07T22:51:45.138447Z", 
+  "msg": [
+   "* notes/locking/locking-implementation.txt:", 
+   "add some client-side designs, after a bunch of IRC discussion", 
+   "with lundblad and ghudson.  Please comment!", 
+   "* doc/book/TODO:", 
+   "add a to-do."
+  ], 
+  "revision_id": "852307"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-12-07T22:08:34.507783Z", 
+  "msg": [
+   "Locking branch: Follow-up to r12231. Fix crash found by sussman, thanks.", 
+   "* subversion/libsvn_client/locking_commands.c (svn_client_lock,", 
+   "svn_client_unlock): Add missing argument to an error message."
+  ], 
+  "revision_id": "852306"
+ }
+]

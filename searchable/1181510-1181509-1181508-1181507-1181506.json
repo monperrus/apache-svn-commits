@@ -1,0 +1,118 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:14:57.531387Z", 
+  "msg": [
+   "Fix 2 unit test failure", 
+   "Summary:", 
+   "TestGlobalMemStoreSize fails because the total region number = region number +2", 
+   "(root and meta). [Fixed]", 
+   "TestHeapSize fails because the HRegion has 1 more reference now. [Fixed]", 
+   "TestReplicationSource fails because \"", 
+   "Caused by: java.io.IOException: java.io.FileNotFoundException:", 
+   "java.io.FileNotFoundException: Parent directory doesn't exist:", 
+   "/user/mvaradachari/.logs\"", 
+   "I will keep work on this.", 
+   "TestAdmin fails because timeout when disable the table. Actually I cannot", 
+   "reproduce this problem. I attempt several times. The unit test always passed", 
+   "Test Plan:", 
+   "passing unit tests", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: jgray, nspiegelberg, kannan", 
+   "CC: nspiegelberg, awolff, hbase@lists", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 228874"
+  ], 
+  "revision_id": "1181510"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:14:51.952054Z", 
+  "msg": [
+   "Importing HBASE-3235."
+  ], 
+  "revision_id": "1181509"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:14:45.112166Z", 
+  "msg": [
+   "HBASE-3693: isMajorCompaction() triggers lots of listStatus DFS RPC calls from HBase", 
+   "Summary:", 
+   "Cache the modification time stamp in the storefile.", 
+   "So every time when adding a new storefile into the store, it will cache the", 
+   "lastest modification timestamp.", 
+   "Test Plan:", 
+   "Add a new unit test function to verify that the cache result in each store file", 
+   "is exactly the same as the previous one, which get the timestamp from fs", 
+   "directly.", 
+   "Passing unit tests", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, nspiegelberg, dhruba, kannan", 
+   "Commenters: jgray, nspiegelberg", 
+   "CC: jgray, nspiegelberg, awolff, kannan, hbase@lists,", 
+   "Tasks:", 
+   "#485656: HBASE-3693: isMajorCompaction() triggers lots of listStatus DFS RPC", 
+   "calls from HBase", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 228349"
+  ], 
+  "revision_id": "1181508"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:14:39.762149Z", 
+  "msg": [
+   "Avoid the static variable global mem store size in HRegion.", 
+   "Summary:", 
+   "I found an easy way to avoid the static variable global mem store size in the", 
+   "HRegion.", 
+   "Every time when the RS detect a new region, set the reference of this RS to", 
+   "this region.", 
+   "I aslo add a unit test for this case", 
+   "Test Plan:", 
+   "Passing the unit tests", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, nspiegelberg, dhruba, kannan", 
+   "CC: awolff, kannan, hbase@lists,", 
+   "Tasks:", 
+   "#503382: put latency in prod cluster", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 228061"
+  ], 
+  "revision_id": "1181507"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:14:33.742418Z", 
+  "msg": [
+   "put latency in prod cluster", 
+   "Summary:", 
+   "From adding more metrics in the RS, we found the function reclaimMemStore takes", 
+   "nearly 40% execution of multiput to get the global mem store size.", 
+   "So we try to improve this by adding a new static variable in HRegion class,", 
+   "which keep the record of the current global mem store size.", 
+   "After changing, the reclaimMemStore takes almost 0 ms.", 
+   "And we see that the multitput latency decreased dramatically.", 
+   "Now this is the question, why it decreased so much?", 
+   "Test Plan:", 
+   "Passing unit tests.", 
+   "This change may conflict when there are multiple RS running on the same", 
+   "machine. It may happens in the unit test. In this case, we can change the unit", 
+   "test by increasing the high water marker.", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, nspiegelberg, dhruba, kannan", 
+   "Commenters: dhruba, nspiegelberg", 
+   "CC: nspiegelberg, dhruba, awolff, kannan", 
+   "Tasks:", 
+   "#503382: put latency in prod cluster", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 227203"
+  ], 
+  "revision_id": "1181506"
+ }
+]

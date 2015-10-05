@@ -1,0 +1,94 @@
+[
+ {
+  "author": "otis", 
+  "date": "2006-12-21T00:21:05.215372Z", 
+  "msg": [
+   "- ThreadLocals' remove() was added in Java 1.5, using set(null) instead"
+  ], 
+  "revision_id": "489230"
+ }, 
+ {
+  "author": "sichen", 
+  "date": "2006-12-21T00:18:51.273005Z", 
+  "msg": [
+   "map interest invoice to interest invoice item types in seed data"
+  ], 
+  "revision_id": "489229"
+ }, 
+ {
+  "author": "jonesde", 
+  "date": "2006-12-21T00:12:10.573162Z", 
+  "msg": [
+   "Some interesting users that have been around for while that we didn't know about previously"
+  ], 
+  "revision_id": "489228"
+ }, 
+ {
+  "author": "cam", 
+  "date": "2006-12-21T00:10:00.371668Z", 
+  "msg": [
+   "1. Put the \"transient\" back on dom.svg.AbstractElement.liveAttributeValues,", 
+   "since it doesn't need to be serialised."
+  ], 
+  "revision_id": "489227"
+ }, 
+ {
+  "author": "cam", 
+  "date": "2006-12-21T00:05:36.272573Z", 
+  "msg": [
+   "1. Reworked LiveAttributeValues:", 
+   "* The LiveAttributeValue table in dom.svg.AbstractElement now holds", 
+   "hard references to the LAVs, to avoid some attributes being", 
+   "collected.[1]", 
+   "* SVG DOM classes now hold static data structures describing the", 
+   "attributes and their characteristics (animatable-ness, type, etc.).", 
+   "The following idiom is used:", 
+   "protected static DoublyIndexedTable xmlTraitInformation;", 
+   "static {", 
+   "xmlTraitInformation =", 
+   "new DoublyIndexedTable(<superclassname>.xmlTraitInformation);", 
+   "xmlTraitInformation.put", 
+   "(<attrNS>, <attrLN>, <new TraitInformation object>);", 
+   "}", 
+   "protected DoublyIndexedTable getTraitInformationTable() {", 
+   "return xmlTraitInformation;", 
+   "}", 
+   "Thus, the many isAttributeAnimatable, getAttributeType and", 
+   "getAttributePercentageInterpretation methods in these classes that", 
+   "did string comparisons have been removed.", 
+   "* SVG DOM classes now have individual fields to store the animatable", 
+   "LAVs that apply to that element, which are instantiated upon creation", 
+   "of the object.  The reasoning for this is that nearly all of these", 
+   "LAV objects will need to be created when the bridge queries their", 
+   "values anyway.  Also, to avoid unnecessary hash table lookups for", 
+   "each of these attributes, the get/set methods need only refer to", 
+   "the field instead of using getLiveAttributeValue.", 
+   "The following idiom is used:", 
+   "public SVGOMBlahElement(String prefix, AbstractDocument owner) {", 
+   "super(prefix, owner);", 
+   "initializeLiveAttributes();", 
+   "}", 
+   "protected void initializeAllLiveAttributes() {", 
+   "super.initializeAllLiveAttributes();", 
+   "initializeLiveAttributes();", 
+   "}", 
+   "private void initializeLiveAttributes() {", 
+   "attr1 = createLiveAnimatedLength(...);", 
+   "attr2 = createLiveAnimatedNumber(...);", 
+   "...", 
+   "}", 
+   "The reason for this roundabout way of initialising the fields is", 
+   "that the protected, no argument constructor of the DOM classes", 
+   "is used when cloning/importing nodes, and the LAVs cannot be", 
+   "instantiated at that point since the ownerDocument field has not", 
+   "been set yet.  Thus there needs to be a way of initialising them", 
+   "from both the public constructor, and a separate method call after", 
+   "construction if the element was cloned.", 
+   "The updateAttributeValue/getUnderlyingValue methods can be removed", 
+   "soon.", 
+   "2. Some slight license header reformatting.", 
+   "[1] http://mail-archives.apache.org/mod_mbox/xmlgraphics-batik-dev/200611.mbox/%3cOFC6B87B15.8ADED3BF-ON85257224.007B7604-85257224.007CB544@knotes.kodak.com%3e"
+  ], 
+  "revision_id": "489226"
+ }
+]

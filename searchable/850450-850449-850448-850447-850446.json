@@ -1,0 +1,84 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-07-21T16:43:03.745916Z", 
+  "msg": [
+   "* www/project_packages.html: Mention the non-Fink Mac OS X packages too.", 
+   "Suggested by: Matthew E. Porter <matthew.porter@metissian.com>"
+  ], 
+  "revision_id": "850450"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-21T10:49:28.329283Z", 
+  "msg": [
+   "Fix bug introduced into ra_local in r10353 in the case where the file://", 
+   "URL includes a hostname.", 
+   "* libsvn_ra_local/split_url.c (svn_ra_local__split_url): Change \"localhost/\"", 
+   "to \"localhost\" in comparison to URL hostname."
+  ], 
+  "revision_id": "850449"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2004-07-21T09:16:49.676534Z", 
+  "msg": [
+   "Revert the effects of r10233 and r10236 on unix. These changes caused", 
+   "the build system to include swig runtime functions in our swig \"core\"", 
+   "modules so we wouldn't have to depend on external swig runtime", 
+   "libraries. But they also caused a few problems.", 
+   "1) They caused a libtool error on linux", 
+   "(http://www.contactor.se/~dast/svn/archive-2004-07/0758.shtml).", 
+   "Putting the runtime into the core module meant that the other modules", 
+   "would need to be linked to it to access the runtime. Libtool would do", 
+   "the linking correctly during the initial build, but when it relinked", 
+   "the libraries during installation it would try invoke gcc with -l_core,", 
+   "which doesn't work because core modules have names like _core.so, not", 
+   "lib_core.so. This is probably a bug in libtool.", 
+   "2) They don't work on cygwin because they create mutual dependencies", 
+   "between core modules and libsvn_swig_(perl|py|java) modules. On cygwin,", 
+   "libtool can't make two shared libraries which depend on each other.", 
+   "A solution to this which was never committed was to build the", 
+   "libsvn_swig_* libraries as static libraries.", 
+   "(http://www.contactor.se/~dast/svn/archive-2004-07/0586.shtml)", 
+   "3) They don't work on darwin. Having other modules depend on the core", 
+   "modules is no good on darwin because the core moules are built", 
+   "as dynamically loadable libraries, not dynamically linked libraries", 
+   "on that platform. On darwin, a library can be either dynamically", 
+   "loadable or dynamically linked, but not both.", 
+   "(http://www.contactor.se/~dast/svn/archive-2004-07/0759.shtml)", 
+   "* build/ac-macros/swig.m4:", 
+   "* Makefile.in", 
+   "revert r10236", 
+   "* build/generator/gen_base.py", 
+   "(SWIGObject._init_, TargetSWIG.add_dependencies):", 
+   "revert r10236", 
+   "(TargetSWIGRuntime, TargetSWIG.add_dependencies):", 
+   "undo effects of r10233 on unix build, restore dependency on external", 
+   "swig runtime libraries", 
+   "* build.conf", 
+   "(swig_client, swig_delta, swig_fs, swig_ra, swig_repos, swig_wc):", 
+   "undo effects of r10233 on unix build, make dependencies on", 
+   "\"swig_core\" into \"nonlib\" dependencies so they only show up", 
+   "on windows"
+  ], 
+  "revision_id": "850448"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-07-20T23:00:23.486019Z", 
+  "msg": [
+   "* project_development.html: New page, long overdue.", 
+   "* project_tools.html: Link to it."
+  ], 
+  "revision_id": "850447"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2004-07-20T20:37:42.836262Z", 
+  "msg": [
+   "* STATUS: Nominate and vote: r10371."
+  ], 
+  "revision_id": "850446"
+ }
+]

@@ -1,0 +1,55 @@
+[
+ {
+  "author": "stevehay", 
+  "date": "2008-11-20T18:21:18.519818Z", 
+  "msg": [
+   "On Win32, \"mod_perl.h\" needs to pull in <malloc.h> before the perl headers, at least when built with USE_ITHREADS, otherwise libapreq doesn't build.", 
+   "The problem is that perl's headers redefine free/malloc/realloc in ways that <malloc.h> doesn't like if the perl compilation flags (-DPERL_IMPLICIT_SYS etc) are in force when the perl headers get loaded.", 
+   "This doesn't affect building mod_perl itself because the two XS extensions that get compiled with perl flags (Leak and Symbol) don't include \"mod_perl.h\", and the remaining XS files that do include \"mod_perl.h\" (in src/modules/perl) don't get compiled with perl flags--they use flags specified in src/modules/win32/mod_perl.dsp instead.", 
+   "However, it breaks the build of libapreq because that includes XS files (Cookie and Request) that get compiled with perl flags *and* include \"mod_perl.h\"."
+  ], 
+  "revision_id": "719315"
+ }, 
+ {
+  "author": "faywang", 
+  "date": "2008-11-20T18:16:46.645282Z", 
+  "msg": [
+   "OPENJPA-742: add get lineNumber/ColumnNumber to SourceTracker"
+  ], 
+  "revision_id": "719314"
+ }, 
+ {
+  "author": "stevehay", 
+  "date": "2008-11-20T18:12:31.058388Z", 
+  "msg": [
+   "Hopefully fix the crash-on-startup problem found in 1.31-RC4 way back in April. (See", 
+   "http://marc.info/?t=120716940300003&r=1&w=2", 
+   "and especially", 
+   "http://marc.info/?l=apache-modperl-dev&m=120886179707098&w=2", 
+   ".) I think the uninitialized PL_perlio_mutex referred to there was the problem, and happened because PERL_SYS_INIT hadn't been called because USE_THREADS isn't defined (I have USE_ITHREADS instead, which is different).", 
+   "Actually, according to perlembed, PERL_SYS_INIT/PERL_SYS_TERM should always be called (if they are defined), so just do that.", 
+   "(Revision 151364 did a similar thing for mod_perl2, which was missing these calls completely.)", 
+   "Having changed it so that they get called, I then found that PERL_SYS_INIT caused a warning about arg2 being the wrong type, so a cast is also needed to fix that."
+  ], 
+  "revision_id": "719313"
+ }, 
+ {
+  "author": "hlship", 
+  "date": "2008-11-20T18:11:38.513469Z", 
+  "msg": [
+   "TAP5-372: Merge changes from 5.0.16 --> 5.0.17 into trunk (5.1)", 
+   "TAP5-373: When JavaScript libraries are moved to the \"top\" of the document, they should be added to the <head>, not the <body>", 
+   "TAP5-359: Use of the email validator with client-side validation displays a pop-up error message about client-side validator \"email\" being missing", 
+   "TAP5-370: Error from DocumentLinker about missing <html> tag, even for XML document w/o JavaScript"
+  ], 
+  "revision_id": "719312"
+ }, 
+ {
+  "author": "andrey", 
+  "date": "2008-11-20T18:01:20.353016Z", 
+  "msg": [
+   "Moved \"Naming Strategy\" field from \"Connect to Database\" dialog to \"Select Options\" dialog"
+  ], 
+  "revision_id": "719311"
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:50.452444Z", 
+  "msg": [
+   "HBASE-4040: JSON Output for HFilePrettyPrinter", 
+   "Summary: Added JSON output mode to existing HFilePrettyPrinter.", 
+   "Test Plan: Ran on a small HFile from my dev server and loaded output into a", 
+   "javascript file for a sanity check; all good.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg", 
+   "CC: nspiegelberg, riley", 
+   "Differential Revision: 275553", 
+   "Task ID: 617955"
+  ], 
+  "revision_id": "1181595"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:47.670612Z", 
+  "msg": [
+   "Don't ignore corrupt StoreFiles when opening a region", 
+   "Summary: We used to ignore StoreFiles that failed to open, which led to a", 
+   "situation when only a subset of regions was opened, and HBase did not return", 
+   "results to clients for the affected set of keys. This change makes sure we", 
+   "propagate IOExceptions coming from an attempt to open a StoreFile all the way up", 
+   "to HRegionServer.openRegion, where it will lead to a failure to open the whole", 
+   "region. This way we can avoid returning corrupt data to the application.", 
+   "Test Plan: Unit tests. 5-node cluster. Dark launch.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, nspiegelberg", 
+   "Commenters: nspiegelberg, dhruba", 
+   "CC: hbase@lists, , nspiegelberg, dhruba, kannan, mbautin", 
+   "Revert Plan: OK", 
+   "Differential Revision: 277786", 
+   "Task ID: 624776"
+  ], 
+  "revision_id": "1181594"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:33.375399Z", 
+  "msg": [
+   "Multi-column scanner unit test", 
+   "Summary:", 
+   "This is the unit test part of D276188 (\"Optimize multi-column scans using Bloom", 
+   "filters\"). Unlike D276188, this version of TestMultiColumnScanner also tests", 
+   "deletes. A couple of additional comments and an exception in a case that should", 
+   "not happen are also included.", 
+   "After a discussion with Kannan and Liyin we decided to go with Liyin's version", 
+   "of multi-column scanner Bloom filter optimization (D276469, \"Optimize multiple", 
+   "column get operation by taking advantage of bloomfilters\"), provided that we", 
+   "address a couple of issues, such as avoiding seeking in store files that don't", 
+   "contain the first column in the beginning. However, this unit test is still", 
+   "relevant and we will use it to test the changes in D276469.", 
+   "Test Plan: Run all unit tests, including the new one. Load testing in", 
+   "HBaseTest.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, liyintang", 
+   "CC: , hbase@lists, kannan", 
+   "Revert Plan: OK", 
+   "Differential Revision: 277037"
+  ], 
+  "revision_id": "1181593"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:27.991371Z", 
+  "msg": [
+   "Don't rewind on a reseek operation in HFile v2 reader", 
+   "Summary: Not doing a rewind to the first key in block on a reseek operation in", 
+   "HFile v2 reader, because reseek implies going forward in the file. This fixes a", 
+   "performance regression introduced in HFile v2 code. This evaded my performance", 
+   "tests because it only applies to a case of sequential reads with skipping keys,", 
+   "but I only did random read and contiguous sequential read tests.", 
+   "Test Plan: Run unit tests. Run HBaseTest.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, nspiegelberg", 
+   "CC: hbase@lists, , kannan", 
+   "Revert Plan: OK", 
+   "Differential Revision: 275483"
+  ], 
+  "revision_id": "1181592"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:22.973788Z", 
+  "msg": [
+   "TestReplicationSourceManager fails due to port conflict", 
+   "Summary: If mcproxy is running on local box, this unit test often fails because", 
+   "of port conflict on 60020.", 
+   "Test Plan: ran unit test with mcproxy running before and after fix to confirm", 
+   "the test now passes ok.", 
+   "Reviewed By: mbautin", 
+   "Reviewers: mbautin, nspiegelberg", 
+   "CC: hbase@lists, mbautin, kannan", 
+   "Differential Revision: 277177"
+  ], 
+  "revision_id": "1181591"
+ }
+]

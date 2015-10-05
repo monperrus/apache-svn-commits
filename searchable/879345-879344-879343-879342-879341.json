@@ -1,0 +1,119 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2009-09-13T11:17:27.774682Z", 
+  "msg": [
+   "Replace some more deprecated svn_path functions.", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(global): Remove now unneeded include.", 
+   "(capabilities_headers_iterator_callback): Replace", 
+   "svn_path_canonicalize with svn_uri_canonicalize.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(global): Remove now unneeded include.", 
+   "(end_propfind): Replace svn_path_canonicalize with", 
+   "svn_uri_canonicalize.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(end_report): Replace svn_path_join with svn_uri_join.", 
+   "* subversion/libsvn_ra_serf/merge.c", 
+   "(global): Remove now unneeded include.", 
+   "(end_merge): Replace svn_path_* with svn_uri_*."
+  ], 
+  "revision_id": "879345"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-13T10:56:34.164070Z", 
+  "msg": [
+   "Multiple minor cleanups.", 
+   "* subversion/libsvn_wc/status.c:", 
+   "(assemble_status): tighten the scope of several variables", 
+   "(send_status_structure): constify the WB param.", 
+   "(is_external_path): take an EXTERNALS hash, rather than the broader", 
+   "walker baton (WB). use svn_apr_hash_index_key() for some clarity.", 
+   "(send_unversioned_item): constify the WB param. update params to the", 
+   "is_external_path call.", 
+   "(handle_externals): constify the WB parameter. drop the RESULT_POOL", 
+   "parameter since it wasn't correct thru the tortuous editor callbacks.", 
+   "grab the hash's pool, and replicate the keys into that pool.", 
+   "(get_dir_status): constify the WB param. rename POOL to SCRATCH_POOL.", 
+   "create the ITERPOOL earlier, in order to use it as a scratch pool for", 
+   "various sub-calls. use svn_hash_from_cstring_keys() rather than a dup", 
+   "implementation. ignore the actual tree conflict item, and simply", 
+   "record the path which has a conflict (ie. store \"\" in the hash)."
+  ], 
+  "revision_id": "879344"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-09-13T10:52:39.265922Z", 
+  "msg": [
+   "Replace some deprecated svn_path functions.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__discover_vcc,svn_ra_serf__get_relative_path):", 
+   "replace svn_path_[join|canonicalize|is_child] with", 
+   "svn_uri_[join|canonicalize|is_child]."
+  ], 
+  "revision_id": "879343"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-13T09:04:52.891834Z", 
+  "msg": [
+   "Some simple variable renames to match precedent.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(get_entry_access_info): rename PARENT_STUB to NEED_PARENT_STUB", 
+   "(svn_wc_mark_missing_deleted): rename NEWENT to TMP_ENTRY", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(complete_directory): use outer block's TMP_ENTRY", 
+   "(set_copied_callback): tighten the scope of TMP_ENTRY and remove the", 
+   "FLAGS variable."
+  ], 
+  "revision_id": "879342"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-13T07:52:48.238409Z", 
+  "msg": [
+   "While investigating the removal of some tree_conflict_data modifications,", 
+   "I found there were quite a few more attributes/fields to clear out.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(SVN_WC__ENTRIES_TOPLEVEL): removed. unused.", 
+   "(SVN_WC__ENTRIES_ENTRY): moved to old-and-busted.c as ENTRIES_TAG_ENTRY", 
+   "(SVN_WC__ENTRY_ATTR_REPOS, SVN_WC__ENTRY_ATTR_INCOMPLETE,", 
+   "SVN_WC__ENTRY_ATTR_LOCK_TOKEN, SVN_WC__ENTRY_ATTR_LOCK_OWNER,", 
+   "SVN_WC__ENTRY_ATTR_LOCK_COMMENT,", 
+   "SVN_WC__ENTRY_ATTR_LOCK_CREATION_DATE): moved to old-and-busted.c as", 
+   "ENTRIES_ATTR_* since these may be read from old XML format entries", 
+   "files. These no longer occur in logfiles.", 
+   "(SVN_WC__ENTRY_ATTR_CHANGELIST, SVN_WC__ENTRY_ATTR_KEEP_LOCAL,", 
+   "SVN_WC__ENTRY_ATTR_TREE_CONFLICT_DATA,", 
+   "SVN_WC__ENTRY_ATTR_FILE_EXTERNAL): removed. these do NOT occur in", 
+   "old XML format entries files, nor in logfiles.", 
+   "(SVN_WC__ENTRY_MODIFY_TREE_CONFLICT_DATA): removed. tree conflicts", 
+   "modifications are now handled using new APIs.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_entry_modify): remove attribution storage definitions for", 
+   "the REPOS, INCOMPLETE, and TREE_CONFLICT_DATA items. no callers ever", 
+   "attempt to modify these values thru the loggy mechanism.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(fold_entry): remove code to modify tree_conflict_data since no caller", 
+   "ever tries to modify it this way.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(ENTRIES_BOOL_*): new values for boolean fields in the old entries files", 
+   "(ENTRIES_TAG_ENTRY): was SVN_WC__ENTRIES_ENTRY. this is the tag name for", 
+   "entries in the old XML format entries file.", 
+   "(ENTRIES_ATTR_*): new attribute names for the old XML format files", 
+   "(read_entry): fold 'schedule' directly into the error message, rather", 
+   "than composing it (specificaly: avoid the ATTR symbol usage). switch", 
+   "all read_bool() calls to use the new ENTRIES_BOOL_* symbols. adjust", 
+   "the error message string for the 'depth' value to match the style of", 
+   "the 'schedule' value.", 
+   "(svn_wc__atts_to_entry): for REPOS, INCOMPLETE, and LOCK_*, use the new", 
+   "ENTRIES_ATTR_* symbols, and don't set a specific modify_flags value.", 
+   "remove all handling for tree_conflict_data and keep_local since these", 
+   "do not occur in old XML format files, nor in (today's) logfiles.", 
+   "(handle_start_tag): switch to ENTRIES_TAG_ENTRY."
+  ], 
+  "revision_id": "879341"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-06-08T20:27:32.000000Z", 
+  "msg": [
+   "Helper routine and tests for sequential key generation in the", 
+   "`representations' and `strings' tables, plus a minor reorganization to", 
+   "put all key manufacturing in one place:", 
+   "* convert-size.h, convert-size.c: Renamed, see below.", 
+   "* key-gen.h, key-gen.c: Replace convert-size.h, convert-size.c.", 
+   "* id.c, skel.c, txn-table.c: #include key-gen.h instead of", 
+   "convert-size.h.", 
+   "* key-gen.h (next_key_key): Declare extern.", 
+   "(svn_fs__next_key): New declaration.", 
+   "* key-gen.c (next_key_key): Define.", 
+   "(svn_fs__next_key): New func.", 
+   "* key-test.c: New file, tests svn_fs__next_key.", 
+   "* run-fs-tests.sh: Run `key-test' program.", 
+   "* build.conf (key-test): New target."
+  ], 
+  "revision_id": "839485"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-06-08T17:17:46.000000Z", 
+  "msg": [
+   "New conflict test, plus some general reorganization, all submitted by", 
+   "Mike Sussman <msussman@collab.net>:", 
+   "* svn_tree.py (compare_trees): Take new singleton_handler function", 
+   "arguments, invoked when one tree contains elements not present in the", 
+   "other tree.  Don't flatten tree structures; instead, descend in the", 
+   "usual way and compare them as trees, the same way the filesystem does.", 
+   "The motivation for this was conflict testing.  Subversion conflicts", 
+   "produce extra files, but the old compare_trees() was first flattening", 
+   "the tree structure and then comparing children based only on an index", 
+   "into an array of children.  This worked fine until there were extra", 
+   "entries, namely the .rej files, in the working copy where the conflict", 
+   "actually occurs -- rho.xxx.rej from the second wc would be wrongly", 
+   "compared to tau from the first tree, and the test would fail fail.  So", 
+   "now we walk the tree structures in parallel, and handle structural", 
+   "differences by invoking one or the other of the singleton handlers.", 
+   "Most tests will simply use default_singleton_handler() (see below),", 
+   "which simply raises an SVNTreeUnequal exception.  Some tests, however,", 
+   "will override the default, providing a singleton handler more", 
+   "appropriate to that test; see conflict_from_wc_top() below for an", 
+   "example.", 
+   "(compare_file_nodes): Renamed from compare_nodes.", 
+   "(get_child, default_singleton_handler): New helper funcs.", 
+   "(SVNTypeMismatch, SVNTreeIsNotDirectory): New exceptions.", 
+   "* local_tests.py (conflict_from_wc_top): New test for conflict.", 
+   "(verify_rej_file): New singleton func to handle the .rej files in the", 
+   "conflict test.", 
+   "(extra_files): New global dictionary needed by both verify_rej_file", 
+   "and conflict_from_wc_top to verify that all .rej files have been", 
+   "covered exactly once.", 
+   "(run_and_verify_commit, run_and_verify_update, run_and_verify_status,", 
+   "run_and_verify_checkout): Take new singleton funcs as arguments and", 
+   "pass to compare_trees.  All callers changed.", 
+   "(guarantee_greek_repository): Minor bugfix - modified url to take", 
+   "proper number of forward slashes.  We were actually passing a URL to", 
+   "SVN with four forward slashes, but this was actually getting hidden by", 
+   "SVN's robustness.", 
+   "(test_list): Run the new conflict test."
+  ], 
+  "revision_id": "839484"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-06-08T16:34:10.000000Z", 
+  "msg": [
+   "(Syntactic elements): Move structured data from `strings' table to", 
+   "`representations' table, for easier ranged operations on strings.", 
+   "(DELTA, CHECKSUM): Removed these redundant sections.  It's clear from", 
+   "context and from the grammar how these work."
+  ], 
+  "revision_id": "839483"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-06-08T09:46:58.000000Z", 
+  "msg": [
+   "Pick up new more changes of svn_string_t -> svn_stringbuf_t."
+  ], 
+  "revision_id": "839482"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-06-08T09:01:08.000000Z", 
+  "msg": [
+   "Rename the svn_string_t type to svn_stringbuf_t."
+  ], 
+  "revision_id": "839481"
+ }
+]

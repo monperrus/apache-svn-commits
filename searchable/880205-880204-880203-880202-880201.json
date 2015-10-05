@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-10-20T17:07:48.405787Z", 
+  "msg": [
+   "When running cleanup, we need our specially-opened DB for ALL the subdirs,", 
+   "not just \".\"", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(can_be_cleaned): new utility function to fetch a directory's format and", 
+   "run a couple tests on it. extracted from svn_wc_cleanup3().", 
+   "(cleanup_internal): check if the directory can be cleaned, and get the", 
+   "format number. that number is used to determine whether a workqueue", 
+   "even exists in this directory. run cleanup for \".\" before the children.", 
+   "(svn_wc_cleanup3): don't bother checking the directory or running its", 
+   "workqueue. cleanup_internal() will do all that. also, use our special", 
+   "DB for the whole operation, not just \".\""
+  ], 
+  "revision_id": "880205"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-20T16:51:10.044652Z", 
+  "msg": [
+   "Introduce a new macro to flush an existing LOG_ACCUM buffer, and use it to", 
+   "start breaking up log entries into separate work queue items.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(remove_revert_files, process_committed_leaf): Use the new macro liberally.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(SVN_WC__FLUSH_LOG_ACCUM): A new macro for flushing a log_accum string", 
+   "to the work queue."
+  ], 
+  "revision_id": "880204"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-20T16:49:20.242082Z", 
+  "msg": [
+   "Update doc strings to reflect WC-NG changes. Update them where an ADM_ACCESS", 
+   "parameter has been replaced with a WC-NG alternative or removed, and (only in", 
+   "those same doc strings) where path parameters have been renamed, usually to", 
+   "LOCAL_ABSPATH or similar. Add \"TODO\" comments where the required change was", 
+   "not clear or other parameters were undocumented.", 
+   "* subversion/libsvn_client/add.c,", 
+   "subversion/libsvn_client/commit_util.c,", 
+   "subversion/libsvn_client/patch.c,", 
+   "subversion/libsvn_client/repos_diff.c,", 
+   "subversion/libsvn_wc/copy.c,", 
+   "subversion/libsvn_wc/diff.c,", 
+   "subversion/libsvn_wc/entries.c,", 
+   "subversion/libsvn_wc/entries.h,", 
+   "subversion/libsvn_wc/log.h,", 
+   "subversion/libsvn_wc/props.h,", 
+   "subversion/libsvn_wc/status.c,", 
+   "subversion/libsvn_wc/update_editor.c", 
+   "Throughout these files, update doc strings as described above."
+  ], 
+  "revision_id": "880203"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-20T16:25:16.748752Z", 
+  "msg": [
+   "The new svn_wc__db_global_commit() function takes a hash of new properties", 
+   "for the dav-cache. This revision begins the process of carrying around a", 
+   "hash in the commit logic, rather than an array of changes.", 
+   "We also break the post-commit setting of the dav-cache off the end of the", 
+   "batch of post-commit work, and use a new work item in the queue to make the", 
+   "change.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_set_dav_cache): new work item queueing function", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(OP_SET_DAV_CACHE): new operation", 
+   "(copy_and_translate): fix docstring. param is DEST_ABSPATH.", 
+   "(run_set_dav_cache, svn_wc__wq_set_dav_cache): new functions to run and", 
+   "queue an OP_SET_DAV_CACHE operation.", 
+   "(dispatch_table): add a handler for OP_SET_DAV_CACHE", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_modify_wcprop): removed. no longer used.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(SVN_WC__LOG_MODIFY_WCPROP, log_do_modify_wcprop,", 
+   "svn_wc__loggy_modify_wcprop): removed. no longer used.", 
+   "(start_handler): remove test for SVN_WC__LOG_MODIFY_WCPROP operation", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): queue all the loggy work up to the wcprop", 
+   "work. use the new workqueue operation for the wcprops, after building", 
+   "a hash of the props."
+  ], 
+  "revision_id": "880202"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-20T15:11:33.206367Z", 
+  "msg": [
+   "De-spaghetti some props writing code.  This has the happy side-effect of", 
+   "making loggy_write_properties() clearer, and it's callers a bit saner, too.", 
+   "A single function should not be overloaded for both loggy and non-loggy writing.", 
+   "Ever.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__write_properties): Remove.", 
+   "(loggy_write_properties): New, always do loggy writes.", 
+   "(svn_wc__install_props, svn_wc__loggy_revert_props_create):", 
+   "Call the new loggy writer.", 
+   "(immediate_install_props): Do the work here, rather than overloading a", 
+   "function to do write the properties out.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__write_properties): Remove.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(run_prepare_revert_files): Create the required empty revert props file", 
+   "manually, instead of overloading another function to do it for us."
+  ], 
+  "revision_id": "880201"
+ }
+]

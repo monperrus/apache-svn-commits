@@ -1,0 +1,108 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-11-06T05:08:53.207749Z", 
+  "msg": [
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_get_location_segments, svn_ra_get_locations): Cleanup error handling."
+  ], 
+  "revision_id": "867685"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-11-06T04:04:58.025973Z", 
+  "msg": [
+   "* subversion/include/svn_string.h", 
+   "(svn_cstring_join): Clarify behavior, since it's a bit unusual."
+  ], 
+  "revision_id": "867684"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-11-06T01:33:29.549819Z", 
+  "msg": [
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos__hooks_start_commit): Remove meaningless part of doc string."
+  ], 
+  "revision_id": "867683"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-06T01:23:54.420870Z", 
+  "msg": [
+   "Followup to r27607.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_change_txn_props): Clarify documentation.", 
+   "Suggested by: blair"
+  ], 
+  "revision_id": "867682"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-06T00:45:46.596418Z", 
+  "msg": [
+   "Add fs- and repos-level APIs to change multiple transaction properties", 
+   "atomically.", 
+   "Rationale: Every normal commit starts by setting at least three", 
+   "transaction properties, and in FSFS, this meant we were", 
+   "doing an \"open/read prop hash/close/open/write prop hash/close\" dance", 
+   "three times.  This API lets that operation happen just once per", 
+   "commit.  (A small savings, but some (incredibly naive) application of", 
+   "DTrace to the test suite seemed to show that the svnserve spent a huge", 
+   "fraction of its time reading in txn props.)", 
+   "Note that while I did implement this API for BDB as well, I just", 
+   "implemented it as a loop calling the svn_fs_change_txn_prop (singular)", 
+   "implementation; somebody who knows BDB better than me could try to", 
+   "make its implementation only do one BDB transaction or whatever as", 
+   "well, and also use it internally in place of the old API.", 
+   "(Note that the new APIs put the properties in arrays, not hashes, so", 
+   "that property deletion can be represented.)", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_change_txn_props): New API.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_change_txn_props): New API.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(txn_vtable_t): New change_props slot.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_change_txn_props): Invoke vtable method.", 
+   "* subversion/libsvn_fs_base/revs-txns.c", 
+   "(svn_fs_base__change_txn_prop): Implement new API by calling", 
+   "old API repeatedly.", 
+   "(txn_vtable): Fill in new vtable slot.", 
+   "* subversion/libsvn_fs_base/revs-txns.h", 
+   "(svn_fs_base__change_txn_prop): Declare new function.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(txn_vtable): Fill in new vtable slot.", 
+   "(svn_fs_fs__change_txn_props): Implement new API using guts of the", 
+   "old API.", 
+   "(svn_fs_fs__change_txn_prop): Change into a wrapper around the new", 
+   "API.", 
+   "(commit_body): Batch up the deletions of svn:check-locks,", 
+   "svn:check-ood, and svn:contains-mergeinfo using the new API.", 
+   "(svn_fs_fs__begin_txn): Batch up setting svn:date, svn:check-locks,", 
+   "and svn:check-ood using the new API.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__change_txn_props): Declare new function.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos__change_txn_props): Rename to", 
+   "svn_repos_fs_change_txn_props and change to take an array instead", 
+   "of a hash.  And move it later in the file.  (This is getting all", 
+   "Ship-of-Theseus.)", 
+   "(svn_repos_fs_begin_txn_for_commit2): Adjust.", 
+   "(validate_prop): Remove unused pool argument.", 
+   "(svn_repos_fs_change_txn_prop): Change into a wrapper around the new", 
+   "API.", 
+   "(svn_repos_fs_change_rev_prop3): Adjust.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(open_root): Adjust.", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos__change_txn_props): Remove declaration, because it is now", 
+   "public.", 
+   "* subversion/include/svn_props.h", 
+   "(svn_prop_hash_to_array): New API utility function.", 
+   "* subversion/libsvn_subr/constructors.c", 
+   "(svn_prop_hash_to_array): Implement new utility function."
+  ], 
+  "revision_id": "867681"
+ }
+]

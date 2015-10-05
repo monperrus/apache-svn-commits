@@ -1,0 +1,82 @@
+[
+ {
+  "author": "brane", 
+  "date": "2003-02-05T04:48:19.998581Z", 
+  "msg": [
+   "More work on issue #872. We weren't calling diff correctly.", 
+   "* subversion/libsvn_client/diff.c (diff_file_changed): Print the file", 
+   "index line in the native encoding.", 
+   "* subversion/libsvn_subr/io.c (svn_io_run_cmd): *Do* pass program args", 
+   "to APR in the APR encoding, not the native one.", 
+   "(svn_io_run_diff, svn_io_run_diff3): Pass UTF-8 program names to", 
+   "svn_io_run_cmd and svn_error_createf."
+  ], 
+  "revision_id": "844820"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-02-05T04:47:11.038747Z", 
+  "msg": [
+   "Fix typo.", 
+   "* /trunk/doc/book/book/ch06.xml: Fix typo."
+  ], 
+  "revision_id": "844819"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-02-05T04:46:15.258308Z", 
+  "msg": [
+   "Changes from the meeting on Sunday.  Stopped at svn export.", 
+   "* /trunk/doc/book/book/ch08.xml: Incorporate edits from review."
+  ], 
+  "revision_id": "844818"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2003-02-05T04:21:08.218736Z", 
+  "msg": [
+   "Fix issue #1099: Hook ra_svn up with checksumming action.", 
+   "* subversion/libsvn_ra_svn/client.c: Include <apr_md5.h> and \"svn_md5.h\".", 
+   "(ra_svn_get_file): Read a checksum from the get-file response.", 
+   "Calculate a checksum as the file is read, and compare it to the", 
+   "provided checksum.", 
+   "* subversion/libsvn_ra_svn/editor.c: Include <apr_md5.h> and \"svn_md5.h\".", 
+   "(ra_svn_svndiff_close): Read a command response in order to catch", 
+   "errors decoding the svndiff (this is where any checksum errors", 
+   "found by the receiver will be reported).", 
+   "(ra_svn_apply_textdelta): Send base_checksum and result_checksum", 
+   "along with the token in the apply-textdelta command (turning NULL", 
+   "pointers into \"\").", 
+   "(ra_svn_handle_apply_textdelta): Read base_checksum and", 
+   "result_checksum from the sender (turning \"\" into NULL pointers),", 
+   "and pass them along to apply_textdelta.  Wrap the svn_stream_close", 
+   "call with SVN_CMD_ERR so checksum errors will be reported to the", 
+   "sender, otherwise send an empty command response so the sender", 
+   "knows it succeeded.", 
+   "* subversion/svnserve/serve.c: Include <apr_md5.h> and \"svn_md5.h\".", 
+   "(get_file): Get the checksum for the file and send it in the", 
+   "get-file response."
+  ], 
+  "revision_id": "844817"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-05T02:32:00.299666Z", 
+  "msg": [
+   "Fixed issue #872. Final correctness and readability changes.", 
+   "* subversion/libsvn_fs/fs.c (svn_fs_create_berkeley): Call APR with APR-encoded", 
+   "paths, but call Berkeley DB with native paths.", 
+   "(svn_fs_open_berkeley, svn_fs_berkeley_recover, svn_fs_berkeley_recover):", 
+   "Move the UTF-8-to-native conversion to just before the BDB call for clarity.", 
+   "* subversion/libsvn_subr/opt.c (svn_opt_args_to_target_array): Always maintain", 
+   "the master target array in UTF-8, converting to and from APR encoding only", 
+   "before the call to apr_filepath_merge.", 
+   "* subversion/clients/cmdline/util.c (svn_cl__edit_externally): Use APR-encoded", 
+   "paths to call APR, but call system() with a native-encoded path.", 
+   "(svn_cl__cleanup_log_msg): Send UTF-8 encoded path to svn_error_createf.", 
+   "* subversion/svnserve/serve.c (find_repos): Use APR-encoded paths to call", 
+   "APR, and canonocalize the UTF-8, not the APR-encoded path."
+  ], 
+  "revision_id": "844816"
+ }
+]

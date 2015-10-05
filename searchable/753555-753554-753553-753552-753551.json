@@ -1,0 +1,69 @@
+[
+ {
+  "author": "pqf", 
+  "date": "2006-10-25T14:54:34.000000Z", 
+  "msg": [
+   "Support FastCGI Authorizer protocols now"
+  ], 
+  "revision_id": "753555"
+ }, 
+ {
+  "author": "pqf", 
+  "date": "2006-10-12T01:35:20.000000Z", 
+  "msg": [
+   "Print warning log while read data error from FastCGI process"
+  ], 
+  "revision_id": "753554"
+ }, 
+ {
+  "author": "pqf", 
+  "date": "2006-09-28T03:40:13.000000Z", 
+  "msg": [
+   "Hello.", 
+   "Here is a piece of arch/unix/fcgid_pm_unix.c, from line 286:", 
+   "---------------------", 
+   "if ((rv = apr_dir_make_recursive(get_socketpath(main_server),", 
+   "APR_UREAD | APR_UWRITE | APR_UEXECUTE,", 
+   "configpool)) != APR_SUCCESS", 
+   "|| chown(get_socketpath(main_server), unixd_config.user_id,", 
+   "-1) < 0) {", 
+   "ap_log_error(APLOG_MARK, APLOG_ERR, rv, main_server,", 
+   "\"mod_fcgid: Can't create unix socket dir\");", 
+   "exit(1);", 
+   "}", 
+   "--------------------", 
+   "directory is chown()-ed even if it already exists and has", 
+   "proper owner. There is no problem with it usually, as this", 
+   "code is executed with root priveleges.", 
+   "But, there are new solutions like SELinux where some actions", 
+   "are denied even for root. For example, fedora core 5 with", 
+   "default permissions allows http to bind a socket in special", 
+   "directories under /var/lib/httpd, but disallow to call", 
+   "chown() on the directory. As a result, the apache start", 
+   "failed.", 
+   "I propose to insert stat() here, which checks that the", 
+   "directory already exists and have proper owner and", 
+   "permissions. In that case, the chown()'ing or mkdir()'ing", 
+   "are not required, and can be denied by policy.", 
+   "--", 
+   "Max"
+  ], 
+  "revision_id": "753553"
+ }, 
+ {
+  "author": "pqf", 
+  "date": "2006-09-06T15:18:02.000000Z", 
+  "msg": [
+   "avoid the 1-second sleep the first time a process is spawned"
+  ], 
+  "revision_id": "753552"
+ }, 
+ {
+  "author": "pqf", 
+  "date": "2006-09-06T15:08:25.000000Z", 
+  "msg": [
+   "Close socket before fork"
+  ], 
+  "revision_id": "753551"
+ }
+]

@@ -1,0 +1,120 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-04-18T08:30:59.281431Z", 
+  "msg": [
+   "/me is a bit rusty in shell...", 
+   "Don't tee off output from build commands, because that hides the real", 
+   "return code. And use sendmail instead of mailx, because mailx doesn't", 
+   "support the -t option on all machines, while sendmail does (or should).", 
+   "* svntest/svntest-config.sh ($TEE, $MAILX): Removed.", 
+   "($SENDMAIL): Point to sendmail.", 
+   "* svntest/svntest-sendmail.sh: Use $SENDMAIL instead of $MAILX.", 
+   "* svntest/svntest-update.sh, svntest/svntest-rebuild.sh: Don't $TEE."
+  ], 
+  "revision_id": "841810"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-04-18T04:40:03.579314Z", 
+  "msg": [
+   "Make 'svn diff' display property changes.  Mostly.", 
+   "I have put the property-diff display code into display_prop_diffs().", 
+   "If this change starts a bikeshed discussion, people can toy with this", 
+   "function.", 
+   "Two caveats/bugs around this feature:", 
+   "-- issue 685:  'svn diff -r N:M' can't show complete propchanges on", 
+   "directories yet.  We need to extend the RA vtable, I think.", 
+   "-- issue 686: when doing 'svn diff -r N', the server actually sends", 
+   "*reverse* propchanges.  we need a way to reverse these meanings", 
+   "so they print out correctly!  Maybe Philip can provide insight", 
+   "here.  I can think of a painful way to fix this.", 
+   "* svn_delta.h (svn_diff_callbacks_t): tweak props_changed callback to", 
+   "take a list of original_props.", 
+   "* libsvn_client/diff.c (display_prop_diffs):  new helper func.", 
+   "(diff_props_changed):  check for prop mods on files, call the helper func.", 
+   "(directory_elements_diff):  same for directories.", 
+   "(merge_props_changed):  update to new prototype.", 
+   "(struct file_baton, dir_baton):  add two property lists to these batons.", 
+   "(make_dir_baton, make_file_baton):  initialize the property lists.", 
+   "(change_file_prop, change_dir_prop):  new editor funcs.", 
+   "(svn_wc_get_diff_editor):  link the new editor funcs.", 
+   "* libsvn_client/repos_diff.c (get_file_from_ra): fetch pristine-props", 
+   "of the file, store in file_baton for later.  (struct file_baton):", 
+   "new pristine-props field.  (close_file, close_directory): pass", 
+   "pristine-props to props_changed().", 
+   "* libsvn_wc/diff.c (file_diff): if props are modified, call", 
+   "props_changed() callback.", 
+   "* svn_wc.h (svn_wc_get_prop_diffs): tweak interface.", 
+   "* props.c (svn_wc_get_prop_diffs):  allow the caller to *optionally*", 
+   "grab propdiffs, pristine props, or both.  this is the gstein style", 
+   "of doing things.  :-)", 
+   "* CHANGES:  new user-visible feature."
+  ], 
+  "revision_id": "841809"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-18T03:28:12.154583Z", 
+  "msg": [
+   "Fix the broken diff tests.", 
+   "* subversion/mod_dav_svn/util.c", 
+   "(dav_svn_simple_parse_uri): Handle repository root URIs."
+  ], 
+  "revision_id": "841808"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-17T20:25:10.499714Z", 
+  "msg": [
+   "Starting the work of getting updates spanning disjoint URLs to work.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_link_path): New.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_reporter_t): Add 'link path' reporter vtable entry.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(report_revisions): Add support for disjoint URLs.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(reporter_baton_t): New structure.", 
+   "(make_reporter_baton, reporter_set_path, reporter_delete_path,", 
+   "reporter_link_path, reporter_finish_report, reporter_abort_report): New.", 
+   "(ra_local_reporter): Use new local wrapper functions.", 
+   "(svn_ra_local__do_update, svn_ra_local__do_switch,", 
+   "svn_ra_local__do_status): Use new make_reporter_baton() helper to wrap", 
+   "the report baton returned by the repos layer.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(dav_svn__update_report): Update to handle \"linkpath\" attributes.", 
+   "(close_helper): Fix print format string buglet.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_report_baton_t): Add 'txn2' and 'txn2_root' members.", 
+   "(svn_repos_link_path): New.", 
+   "(svn_repos_finish_report, svn_repos_abort_report): Update to handle", 
+   "linkpath case.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Use the editor's set_target_revision() for", 
+   "txn roots, too.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(ra_dav_reporter): Add 'reporter_link_path' vtable filling.", 
+   "(reporter_link_path): New."
+  ], 
+  "revision_id": "841807"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-04-17T19:24:27.877021Z", 
+  "msg": [
+   "Finish up the massive rewrite of 'svn diff'.  Comparison of two", 
+   "arbitrary URLs should work now, including the optional @rev syntax", 
+   "(issue 674).", 
+   "[ Local rumors have it that diff_tests are failing over DAV, as of my", 
+   "first commit yesterday.  I'm going to check this out now. ]", 
+   "* svn_client.h (svn_client_diff):  revert docstring change;  both", 
+   "revisions passed to this routine *must* be specified.", 
+   "* diff.c (do_diff): huge comment regarding how svn_client_diff works.", 
+   "Also, rewrite this routine to be more generalized, and handle", 
+   "double-URLs diffing more cleanly.", 
+   "* CHANGES:  start new user-visible changes section."
+  ], 
+  "revision_id": "841806"
+ }
+]

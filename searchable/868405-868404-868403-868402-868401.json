@@ -1,0 +1,112 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-12-07T21:58:46.759731Z", 
+  "msg": [
+   "Fix a bug where the svn:eol-style property could be set to a bogus", 
+   "value (e.g. via propset/propedit), with annoying repercussions.", 
+   "Originally reported against TortoiseSVN at", 
+   "<http://tortoisesvn.tigris.org/servlets/ReadMsg?list=users&msgNo=8535>:", 
+   "\"When somebody went to switch from trunk to a tag (the tag did not", 
+   "have the property), SVN failed at the point that it tried to remove", 
+   "the property from their working copy (the error was something like", 
+   "\"invalid eol-style\").  So I removed this property from trunk, got", 
+   "the user to manually remove the property from their working copy and", 
+   "then they could switch successfully (the property is just merged", 
+   "away at that point).\"", 
+   "But then things got much worse.  Now anyone on trunk who tries to", 
+   "update to the head revision is faced with the same error.  The", 
+   "work-around of course is that they must all manually delete this", 
+   "property.\"", 
+   "Subsequently reported against Subversion's own libraries at", 
+   "<http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=133402>.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_canonicalize_svn_prop): Error out if the value of the", 
+   "svn:eol-style property is set, but isn't recognized.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(inappropriate_props): Extend test to check that an invalid value", 
+   "for the svn:eol-style property results in an error.", 
+   "Found by: Dave Lawrence <dlawrence@ad-holdings.co.uk>", 
+   "Stefan Kueng <tortoisesvn@gmail.com>", 
+   "Reviewed by: Stefan Kueng <tortoisesvn@gmail.com>", 
+   "sussman", 
+   "ehu", 
+   "glasser"
+  ], 
+  "revision_id": "868405"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-12-07T21:20:46.086050Z", 
+  "msg": [
+   "Fix bug in merge notifications involving deletions/replacements.", 
+   "Previously, when a merge deleted a path the deletion notification(s) came", 
+   "before the \"--- Merging*\" | \"--- Reverse-merging*\" headers.  This change", 
+   "ensures the header always shows first.", 
+   "A beneficial side-effect of this change is that merge delete and replacement", 
+   "notifications are now akin to those from update -- Specifically, if a", 
+   "directory is deleted we no longer report on every child under that directory", 
+   "as deleted too.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_dir_deleted): Pass NULL notify function/baton to", 
+   "svn_client__wc_delete(), instead let repos_diff.c:delete_entry() do the", 
+   "notifications.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(delete_file_and_dir, merge_dir_replace):", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir):", 
+   "Tweak expected merge output to reflect changes above."
+  ], 
+  "revision_id": "868404"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-07T18:18:53.465913Z", 
+  "msg": [
+   "Fix a buglet in the test suite's mergeinfo parser trigged when a line", 
+   "of output head a prefix but no value.", 
+   "* subversion/tests/cmdline/svntest/parsers.py", 
+   "(STATE_TOKENS): Don't treat the space-after-colon as part of the token.", 
+   "(parse_next): Advance past the space-after-colon when grabbing the value.", 
+   "* subversion/tests/cmdline/mergeinfo_tests.py", 
+   "(test_list): No longer expect explicit_mergeinfo_source() to fail."
+  ], 
+  "revision_id": "868403"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-07T18:10:28.683956Z", 
+  "msg": [
+   "For issue #2820, add to 'svn mergeinfo' the ability to query merge", 
+   "info/availability for a single explicit source URL.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__from_source_opt): New enum value.", 
+   "(svn_cl__opt_state_t): Add 'from_source' member.", 
+   "* subversion/svn/mergeinfo-cmd.c", 
+   "(show_mergeinfo_for_source): New helper.", 
+   "(svn_cl__mergeinfo): If --from-source is provided, only show output", 
+   "for a particular merge source (whether or not any merges have been", 
+   "made from that source); otherwise, show all info for prior merge", 
+   "sources (as before).", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Add info for the --from-source option.", 
+   "(svn_cl__cmd_table): Add --from-source support to the mergeinfo command.", 
+   "(main): Add handling for the --from-source option.", 
+   "* subversion/tests/cmdline/mergeinfo_tests.py", 
+   "(explicit_mergeinfo_source): New.", 
+   "(test_list): Add refererence to new test, XFail() because of what", 
+   "appears to be a bug in the test suite itself."
+  ], 
+  "revision_id": "868402"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-07T18:07:39.720134Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/parsers.py", 
+   "(MergeinfoReportParser): Tweak comment to fix indentation of sample", 
+   "mergeinfo output."
+  ], 
+  "revision_id": "868401"
+ }
+]

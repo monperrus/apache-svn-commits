@@ -1,0 +1,108 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-09-15T23:55:47.366968Z", 
+  "msg": [
+   "Fixed issue 2404 by disallowing copy or move (copy plus delete)", 
+   "operations between working copies from different repositories.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(svn_wc_copy2): Open the svn_wc_adm_access_t * to src_path earlier,", 
+   "still assuming that it is okay to bail out of this function if an", 
+   "error is encountered without calling svn_wc_adm_close().  Use", 
+   "svn_path_split_if_file() to dissect src_path_dir from src_path, and", 
+   "grab its svn_wc_entry_t * for comparison of repository URIs to", 
+   "dst_entry.  Return an error if they don't match.  Note that we", 
+   "might now be able to avoid a call to svn_io_check_path() (since we", 
+   "already have the node kind in hand at that point).  I didn't remove", 
+   "this in fear of removing necessary error checking.", 
+   "* subversion/tests/clients/cmdline/copy_tests.py", 
+   "(wc_to_wc_copy_between_different_repos): New test case confirming", 
+   "that we do not allow WC to WC copy attempts between different", 
+   "repositories.", 
+   "(test_list): Added wc_to_wc_copy_between_different_repos to the", 
+   "list.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(Sandbox): Updated the doc string.", 
+   "(Sandbox.dependents): New list member (defaults to None).", 
+   "(Sandbox.__init__): Refactored majorty of body into _set_name().", 
+   "(Sandbox._set_name): New method used to reset an instance's name,", 
+   "and other variables which derive their value from the name.", 
+   "(Sandbox.clone_dependent): Creates a near-copy of the instance and", 
+   "sets it as a dependent.", 
+   "(Sandbox.cleanup_test_paths): Cleanup our dependents as well."
+  ], 
+  "revision_id": "856215"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-09-15T22:43:52.753093Z", 
+  "msg": [
+   "Fixed display of usage information, which was previously outputing the", 
+   "not-so-informative text \"None\".", 
+   "* build/run_tests.py", 
+   "(main): Moved script-level doc string from this function up to the", 
+   "top of the file, so that the reference to __doc__ will actually", 
+   "find the text to display.  The other option would be to scope it to", 
+   "main.__doc__, but the doc string made more sense up at the top of", 
+   "the file."
+  ], 
+  "revision_id": "856214"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-09-15T22:11:07.567089Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(run_tests): When my_getopt() throws a getopt.GetoptError exception,", 
+   "set both local variables \"opts\" and \"args\" to prevent an", 
+   "UnboundLocalError when referencing \"opts\" later in the function.", 
+   "This can occur when passing bogus arguments to a black box test,", 
+   "such as --cleanup=1 (when only --cleanup is recognized)."
+  ], 
+  "revision_id": "856213"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-09-15T20:11:26.143034Z", 
+  "msg": [
+   "Begin implementing svn_fs_move() in the BDB backend.  As of this", 
+   "commit, svn_fs_move() exists, and does the right stuff to the", 
+   "repository.  But the rest of the codebase needs to learn about the", 
+   "concept of \"pending move IDs\", and deal accordingly.", 
+   "Branch: fs-atomic-renames", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_move): New.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t): Add 'move' vtable entry.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_move): New.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_move): New. ### Not implemented ###", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(get_copy_inheritance): Leave a marker of my last thunk.", 
+   "(make_parent_path): Fix the docstring.", 
+   "(struct move_args, txn_body_move, base_move): New.", 
+   "(root_vtable): Add base_move.", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(svn_fs_base__dag_move): New.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_move): New.", 
+   "(set_entry):  Allow ID to be NULL, meaning \"remove this entry\".", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(move_test): New (failing) test.", 
+   "(test_funcs): Add XFail reference to new move_test() test.  For BDB,", 
+   "this fails because the code isn't using the pending move ID", 
+   "correctly.  For FSFS, this fails because svn_fs_move() isn't", 
+   "implemented at all."
+  ], 
+  "revision_id": "856212"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-09-15T19:12:33.159279Z", 
+  "msg": [
+   "* subversion/po/sv.po: Update and fix fuzzy message."
+  ], 
+  "revision_id": "856211"
+ }
+]

@@ -1,0 +1,77 @@
+[
+ {
+  "author": "jimb", 
+  "date": "2000-10-09T16:32:55.000000Z", 
+  "msg": [
+   "Don't encourage baroque usage of pools.", 
+   "* include/svn_fs.h (svn_fs_subpool, svn_fs_node_subpool): Delete declarations.", 
+   "* libsvn_fs/fs.c (svn_fs_subpool): Delete.", 
+   "* libsvn_fs/node.c (svn_fs_node_subpool): Delete.", 
+   "* include/svn_fs.h (svn_fs_run_cleanup_node): New function, for", 
+   "symmetry with apr_run_cleanup.", 
+   "* libsvn_fs/node.c (svn_fs_run_cleanup_node): Define it.", 
+   "* libsvn_fs/delta.c (replace_from_scratch, replace_related): Use", 
+   "svn_fs_run_cleanup_node instead of paired calls to close the node and", 
+   "remove the cleanup.", 
+   "* libsvn_fs/node.c (cache_node): Remove sanity check about caching", 
+   "nodes with their own pools.  All that stuff has changed, and that rule", 
+   "is no longer relevant.", 
+   "* libsvn_fs/node.c (cache_node): Use apr_null_cleanup for the exec", 
+   "cleanup, not zero; the latter is an error.", 
+   "* libsvn_fs/node.c (svn_fs_cleanup_node): Same.", 
+   "* libsvn_fs/node.c (close_node): Doc fixes.", 
+   "* libsvn_fs/node.c (svn_fs__open_node_by_id): Clarify logic."
+  ], 
+  "revision_id": "837560"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-09T06:56:54.000000Z", 
+  "msg": [
+   "Add code to encode and decode text deltas in a custom format called", 
+   "svndiff.  (For now, documentation is available at", 
+   "http://subversion.tigris.org/subversion-dev/current/msg00864.html.  I'll", 
+   "include something in the tree when things settle.)  It is unclear whether", 
+   "svndiff is compact enough for our needs, but it gives us something to play", 
+   "with.  Nothing uses this code yet except the test programs.", 
+   "(svn_txdelta_to_vcdiff): gc this declaration (there's no implementation).", 
+   "(svn_txdelta_to_svndiff, svn_txdelta_parse_svndiff): New functions to", 
+   "encode an decode a text delta.", 
+   "* svndiff-test.c: New program, exercises encoding function and lets us get", 
+   "some performance data.  Not useful for the testing framework at the moment.", 
+   "* random-test.c: Extend the pipeline to encode and decode the generated", 
+   "delta before applying it.  Does not add appreciably to execution time."
+  ], 
+  "revision_id": "837559"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-09T06:20:12.000000Z", 
+  "msg": [
+   "I didn't quite understand how svn errors work and had the first two", 
+   "arguments to svn_error_create reversed.  Fix."
+  ], 
+  "revision_id": "837558"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2000-10-09T05:08:55.000000Z", 
+  "msg": [
+   "Rearrange logic that closes directories after traversing them to work", 
+   "properly in the presence of symlinks, once we have them."
+  ], 
+  "revision_id": "837557"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-08T17:41:42.000000Z", 
+  "msg": [
+   "(add_or_replace_file): Make an attempt at getting this right.  I think", 
+   "the sense of the error test was correct before rev 1.85, but the handling", 
+   "was wrong (we can't wrap an error which didn't happen), and the test in", 
+   "the replace case was also going to dereference a null pointer.", 
+   "(SVN_ERR_WC_ENTRY_EXISTS): New error code for the case in question."
+  ], 
+  "revision_id": "837556"
+ }
+]

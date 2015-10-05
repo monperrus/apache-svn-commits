@@ -1,0 +1,81 @@
+[
+ {
+  "author": "bodewig", 
+  "date": "2009-04-28T07:52:44.131624Z", 
+  "msg": [
+   "standard taglibs uses mvn now"
+  ], 
+  "revision_id": "769275"
+ }, 
+ {
+  "author": "hansbak", 
+  "date": "2009-04-28T07:49:12.547957Z", 
+  "msg": [
+   "some more faultfixing on customer request notifications: mainly the partyIdTo was not provided"
+  ], 
+  "revision_id": "769274"
+ }, 
+ {
+  "author": "kahatlen", 
+  "date": "2009-04-28T07:48:10.290563Z", 
+  "msg": [
+   "DERBY-4001: Sequence comparison with \"ALL\" does not yield correct results", 
+   "There are three essential changes in the patch:", 
+   "1) ProjectRestrictNode.pullOptPredicates()", 
+   "Don't pull any predicates if the from table is marked as a not exists", 
+   "table. This way the flattening of queries like the ones below will", 
+   "work, because the predicate 1<>1 is not pulled out and applied on the", 
+   "outer table.", 
+   "SELECT * FROM T WHERE NOT EXISTS (SELECT * FROM T WHERE 1<>1)", 
+   "SELECT * FROM T WHERE X < ALL (SELECT X FROM T WHERE 1<>1)", 
+   "SELECT * FROM T WHERE X NOT IN (SELECT X FROM T WHERE 1<>1)", 
+   "2) SubqueryNode.preprocess()", 
+   "Don't allow not exists flattening unless all the predicates in the", 
+   "subquery reference the base table of the inner query. When all the", 
+   "predicates reference that table, none of them will be used in the", 
+   "outer query, so they won't cause any trouble for the flattening. This", 
+   "makes queries like the one below work:", 
+   "SELECT * FROM T T1 WHERE NOT EXISTS (SELECT * FROM T T2 WHERE T1.X > 100)", 
+   "No flattening will happen in this case, though.", 
+   "Although it may sound like (2) would prevent the example queries in", 
+   "(1) from being flattened, that's not the case. This is because simple", 
+   "predicates like 1<>1 are pushed down before SubqueryNode.preprocess()", 
+   "gets to the flattening, so it doesn't see those predicates. The", 
+   "flattening is still safe, since we have made sure that those", 
+   "predicates won't be pulled out again.", 
+   "3) SubqueryNode.preprocess()", 
+   "If an ALL subquery or a NOT IN subquery is flattened, a new join", 
+   "condition is created, for instance", 
+   "WHERE X < ALL (SELECT Y ...) results in the join condition X >= Y", 
+   "and", 
+   "WHERE X NOT IN (SELECT Y ...) results in the join condition X = Y", 
+   "The patch adds a check so that the flattening only happens if the", 
+   "right side of the join condition references the base table of the", 
+   "subquery. If it does, we know that the join condition cannot be used", 
+   "to filter rows from the outer table, so it's safe to do the", 
+   "flattening. This prevents queries like the ones below from being", 
+   "flattened, and they now work as expected:", 
+   "SELECT * FROM T WHERE X < ALL (SELECT 100 FROM T)", 
+   "SELECT * FROM T T1 WHERE X = ALL (SELECT T1.X FROM T)", 
+   "SELECT * FROM T WHERE X NOT IN (SELECT 100 FROM T)", 
+   "SELECT * FROM T T1 WHERE X NOT IN (SELECT T1.X+100 FROM T)"
+  ], 
+  "revision_id": "769273"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2009-04-28T07:46:58.652760Z", 
+  "msg": [
+   "Implement group and user on windows"
+  ], 
+  "revision_id": "769272"
+ }, 
+ {
+  "author": "gertv", 
+  "date": "2009-04-28T07:43:12.063800Z", 
+  "msg": [
+   "Adding svn:ignore for tests/camel-itest-osgi"
+  ], 
+  "revision_id": "769271"
+ }
+]

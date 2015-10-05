@@ -1,0 +1,72 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-01-17T03:15:26.376332Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x,", 
+   "packages/rpm/redhat-8.x:  Now requires apache-2.0.44 (APACHE_2_0_BRANCH).", 
+   "Added svnversion command."
+  ], 
+  "revision_id": "844480"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-01-17T00:01:18.400381Z", 
+  "msg": [
+   "Fix issue 1091.  Don't attempt to calculate the checksum if there is no", 
+   "temporary text-base.  The faulty code has been there for ages, but it has", 
+   "only recently started to matter.", 
+   "* subversion/libsvn_wc/adm_ops.c (svn_wc_process_committed): Check the", 
+   "file exists before checksumming.", 
+   "* subversion/tests/clients/cmdline/copy_tests.py (basic_copy_and_move_files):", 
+   "Add a second commit."
+  ], 
+  "revision_id": "844479"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-01-16T23:30:37.105212Z", 
+  "msg": [
+   "Fix silly segfault.  (issue #1092)  Now 'svn rm .' just errors as it should.", 
+   "* adm_ops.c (svn_wc_delete): if we can't get the dir's entry in its", 
+   "parent, then it can't possibly be in a 'deleted' state."
+  ], 
+  "revision_id": "844478"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-01-16T22:01:59.634007Z", 
+  "msg": [
+   "Finish #1017: move the directory propchange up-to-date-checks from", 
+   "libsvn_client into the RA layers.  Note that good ol' commit_test #13", 
+   "is the regression test for this rule.", 
+   "* libsvn_client/commit.c (svn_client_commit): remove the code which", 
+   "checks that dirs-with-propchanges are up-to-date.  this should be", 
+   "done in the RA layers, not in the client layer.  (otherwise we have", 
+   "a race condition.)", 
+   "* libsvn_ra_dav/commit.c (do_proppatch):  add a huge comment about", 
+   "exactly why nothing needs to change in here.  the DAV layer already", 
+   "does what we want.  :-)", 
+   "* libsvn_repos/commit.c (struct dir_baton) new base_rev field.", 
+   "(open_root, open_directory): actually store the incoming base_rev in", 
+   "the dir baton.", 
+   "(add_directory): store SVN_INVALID_REVNUM in the new dir baton.", 
+   "(change_dir_prop): compare the dir baton's base rev against the", 
+   "created-rev of the same path in the txn, and possibly throw", 
+   "out-of-date error.", 
+   "* commit_tests.py (hudson_part_2): look for regexp \"out.of.date\" in", 
+   "error message, instead of \"out of date\"."
+  ], 
+  "revision_id": "844477"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-01-16T18:38:47.067109Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c (svn_wc_entry): Rewrite so that it doesn't", 
+   "access the physical filesystem.  This gives typically a 10% reduction in", 
+   "stat() calls for svn operations like checkout, update and status."
+  ], 
+  "revision_id": "844476"
+ }
+]

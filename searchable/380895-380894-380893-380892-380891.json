@@ -1,0 +1,73 @@
+[
+ {
+  "author": "trustin", 
+  "date": "2006-02-25T04:49:41.226550Z", 
+  "msg": [
+   "* Updated the download link", 
+   "* Removed unused xdocs", 
+   "* Updated getting started section"
+  ], 
+  "revision_id": "380895"
+ }, 
+ {
+  "author": "ltheussl", 
+  "date": "2006-02-25T04:42:11.935104Z", 
+  "msg": [
+   "Update description."
+  ], 
+  "revision_id": "380894"
+ }, 
+ {
+  "author": "trustin", 
+  "date": "2006-02-25T04:17:31.946465Z", 
+  "msg": [
+   "'mvn assembly:assembly' will generate a full distribution from now on."
+  ], 
+  "revision_id": "380893"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2006-02-25T03:57:51.799280Z", 
+  "msg": [
+   "patch 4 toward resolving DERBY-210 Network Server will leak prepared statements if not explicitly closed by the user until the connection is closed", 
+   "Contributed by Deepa Remesh", 
+   "Changes the finalizer method in Statement and PreparedStatement to not send commits or CLSQRY to the server", 
+   "n PreparedStatement class, the finalizer was calling closeX method, which was doing:", 
+   "* Call super.closeX() ---> Statement.closeX()", 
+   "* Cleanup parameter objects - parameterMetaData_, sql_, parameters_ array", 
+   "* Remove the PreparedStatement from connection_.CommitAndRollbackListeners_ list", 
+   "Changes done by patch:", 
+   "* Add a new method markClosed() which will free client-side resources.", 
+   "* The new method is named markClosed() to keep it uniform with naming convention in superclass.", 
+   "* This method is called from close() and finalize() methods.", 
+   "* markClosed() method will call super.markClosed() to perform cleanup of parent class. It will cleanup the objects specific to PreparedStatement, which are ParameterMetaData and parameters. It also removes the PreparedStatement form the list in Connection object.", 
+   "2. In Statement class, the finalizer was calling closeX method, which was doing:", 
+   "* Close any open cursors for this statement on the server.", 
+   "- If result set is open on server, send CLSQRY to the server.", 
+   "- check if autocommit is required when closing result sets and flow a commit to server, if required", 
+   "* Call Statement.markClosed(), which does", 
+   "- Mark close the result sets on the client", 
+   "- If cursor name was set on the statement, remove it from Connection.clientCursorNameCache_", 
+   "- Call markClosed() on prepared statements for auto generated keys", 
+   "- Call markClosedOnServer(), which frees up the section. The freed section will be re-used by new statements.", 
+   "* Remove the Statement from Connection.openStatements_ list", 
+   "* Cleanup ResultSetMetaData", 
+   "Changes done by patch:", 
+   "* Move the cleanup of ResultSetMetaData and remove of Statement from Connection.openStatements_ list into markClosed() method. This will keep all client-side cleanup in markClosed().", 
+   "* Change the finalizer to just call markClosed(). This method frees up client-side resources and operates on synchronized collections. So I have removed the synchronize block from the finalizer.", 
+   "* The autocommit logic does not exist in the finalizer since only markClosed() is called from finalizer. This will avoid untimely commits which was causing the regression in the test lang/updatableResultSet.java", 
+   "-This line, and those below, will be ignored--", 
+   "M    java/client/org/apache/derby/client/am/Statement.java", 
+   "M    java/client/org/apache/derby/client/am/PreparedStatement.java"
+  ], 
+  "revision_id": "380892"
+ }, 
+ {
+  "author": "dain", 
+  "date": "2006-02-25T03:56:55.334925Z", 
+  "msg": [
+   "Configuration store uses local repository for storage"
+  ], 
+  "revision_id": "380891"
+ }
+]

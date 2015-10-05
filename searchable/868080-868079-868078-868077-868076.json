@@ -1,0 +1,105 @@
+[
+ {
+  "author": "markphip", 
+  "date": "2007-11-24T22:11:11.462267Z", 
+  "msg": [
+   "Reverse merge part of r28005.  One file contained changes from another", 
+   "patch being reviewed.  Sorry.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/SVNClient.cpp", 
+   "(diff): remove code from uncommitted patch"
+  ], 
+  "revision_id": "868080"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2007-11-24T21:56:48.735506Z", 
+  "msg": [
+   "Follow-up to r28002 remove withMergeHistory parameter from copy and move.", 
+   "At least one of the JavaHL tests is failing due to the change in", 
+   "svn:mergeinfo.  Will look into that separately.", 
+   "Note from the future: r28006 partially reverted SVNClient.cpp which contained", 
+   "changes from another patch.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(copy, move):  Remove withMergeHistory parameter.", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_copy,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_move):", 
+   "Remove jwithMergeHistory parameter.", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java,", 
+   "src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(copy, move): Remove withMergeHistory parameter", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testCopy, testMove): Remove withMergeHistory parameter."
+  ], 
+  "revision_id": "868079"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-24T21:17:12.726557Z", 
+  "msg": [
+   "Add a proxy authentication mechanism to ra_serf; implement Basic authentication.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(load_config): Load proxy username & password from the server config file.", 
+   "* subversion/libsvn_ra_serf/propfind_buckets.c", 
+   "(become_request): Set the Proxy-Authorization header if needed.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__setup_serf_req): Set the Proxy-Authorization header if needed.", 
+   "(handle_response): Handle http code 407 as 'proxy authorization required'.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(struct svn_ra_serf__connection_t): Add fields to cache proxy header info.", 
+   "(struct svn_ra_serf__session_t): Add proxy related fields.", 
+   "(struct svn_ra_serf__auth_protocol_t): Add code field so we can make a", 
+   "difference between handlers of server authentication and proxy", 
+   "authentication.", 
+   "(svn_ra_serf__handle_auth): Add code parameter.", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(handle_proxy_basic_auth,", 
+   "init_proxy_basic_connection,", 
+   "setup_request_proxy_basic_auth): New function.", 
+   "(serf_auth_protocols[]): Add handler for Basic authentication requests of", 
+   "proxy servers.", 
+   "(svn_ra_serf__handle_auth): Add handling of proxy authentication."
+  ], 
+  "revision_id": "868078"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-24T20:27:10.193239Z", 
+  "msg": [
+   "Remove merged branch."
+  ], 
+  "revision_id": "868077"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-24T20:20:57.105659Z", 
+  "msg": [
+   "Merge the 'mergeinfoless-copies' branch into trunk.", 
+   "(Merged /branches/mergeinfoless-copies:r27771-28001.)", 
+   "This branch changes the way copies and merges happen in a fairly", 
+   "significant want.", 
+   "First, copies revert to their pre-1.5 state of simply being copies,", 
+   "with the mild exception that some no-cost-to-calculate mergeinfo is", 
+   "dropped into place on the copy destination.  (As a side-effect, we", 
+   "lose the --use-merge-history/-g option for 'svn copy' and 'svn move'", 
+   "as unnecessary.)", 
+   "Secondly, merges now use node ancestry in their calculations, treating", 
+   "a node's \"mergeinfo\" as the sum of its recorded mergeinfo (either", 
+   "recorded directly or inherited from some parent directory) and its", 
+   "natural history (the changes made directly to this node over time).", 
+   "The result is a tradeoff: the restoration of copy's incredible speed", 
+   "(which is a major selling point of Subversion) for a", 
+   "slower-than-already-slow merge.  But the benefits of this change also", 
+   "include theoretical correctness, algorithmic consistency, and -- best", 
+   "of all -- that repositories created prior to Subversion 1.5 will", 
+   "already have valuable information to feed into the merge algorithms of", 
+   "Subversion 1.5 without having ever recorded the first svn:mergeinfo", 
+   "property -- the natural history of branches!"
+  ], 
+  "revision_id": "868076"
+ }
+]

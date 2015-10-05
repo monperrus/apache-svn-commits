@@ -1,0 +1,83 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2006-08-04T05:58:52.842966Z", 
+  "msg": [
+   "Unroll duct tape; tear on the perpendicular; apply to svnsync insufficient", 
+   "arguments errors.", 
+   "* subversion/svnsync/main.c", 
+   "(main): Catch errors that have a known-to-be-moronic default error string,", 
+   "and rethrow them (effectively) with an error string that's more appropriate", 
+   "for this application."
+  ], 
+  "revision_id": "861035"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2006-08-04T05:39:40.891986Z", 
+  "msg": [
+   "Fix an editor driving sequence bug in svnsync.", 
+   "* subversion/svnsync/main.c", 
+   "(close_edit): If you call open_root(), you must also call close_directory()", 
+   "before closing the edit with close_edit()."
+  ], 
+  "revision_id": "861034"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2006-08-04T05:36:32.407341Z", 
+  "msg": [
+   "Code cleanups in svnsync.", 
+   "This change collapses the identical dir_baton_t and file_baton_t", 
+   "editor baton structures into a single node_baton_t, and loses", 
+   "unnecessary SVN_ERR() invocations.", 
+   "* subversion/svnsync/main.c", 
+   "(node_baton_t): New, the combined form of ...", 
+   "(dir_baton_t, file_baton_t): ... these now-removed structure definitions.", 
+   "(open_root, delete_entry, add_directory, open_directory, add_file,", 
+   "open_file, apply_textdelta, close_file, absent_file, close_directory,", 
+   "absent_directory, change_file_prop, change_dir_prop, close_edit):", 
+   "Track renamed baton items, and lose unnecessary SVN_ERR() invocations", 
+   "and whitespace."
+  ], 
+  "revision_id": "861033"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2006-08-04T05:11:49.691856Z", 
+  "msg": [
+   "Disallow the copying of svn:sync-* properties when using svnsync, and", 
+   "report to the user when those properties have been skipped as part of", 
+   "the syncronization effort.", 
+   "This fixes a bug which occurs when mirroring a mirror.  Upon", 
+   "initializing the mirror-of-a-mirror, svnsync would allow you to copy", 
+   "all the revprops of revision 0 from the original mirror, causing the", 
+   "mirror-of-a-mirror to now carry svn:sync-* properties that applied to", 
+   "the original mirror.  So a mirror-of-a-mirror would now effectively be", 
+   "configured to be a mirror of the wrong source repository, and have", 
+   "false information about what had already been syncronized from that", 
+   "repository.", 
+   "* subversion/svnsync/main.c", 
+   "(copy_revprops): Don't copy svn:sync* properties.  Also, change the", 
+   "printed message to indicate that svn:sync- properties were", 
+   "skipped, if any were. (Unfortunately for the diff, I had to move", 
+   "this function further up in the file.)", 
+   "(do_initialize): Just use copy_revprops() to do the initial property", 
+   "copy, and lose the code which would now be a duplicate of copy_revprops().", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(run_init): Tweak the expected output."
+  ], 
+  "revision_id": "861032"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-08-03T21:49:52.320372Z", 
+  "msg": [
+   "On the merge-tracking branch: Add comment about later implementing a", 
+   "conflict resolution mode hook.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(do_merge, do_single_file_merge): Add in-line comment."
+  ], 
+  "revision_id": "861031"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2008-05-01T18:49:45.659987Z", 
+  "msg": [
+   "* subversion/libsvn_client/cmdline.c: Fix copyright years."
+  ], 
+  "revision_id": "870965"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-05-01T18:41:24.442469Z", 
+  "msg": [
+   "On the 'log-g-performance' branch:  Rework 'svn log -g' with enhanced na\u00efvet\u00e9.", 
+   "When originally written, 'svn log -g' wanted to deal with issues that", 
+   "arose from the merge tracking model at the time:  copies would record", 
+   "natural history as explicit mergeinfo, which meant that branchpoints", 
+   "looked as if they were themselves merges of all the pre-branchpoint", 
+   "history.", 
+   "But merge tracking evolved since then, and no longer behaves that", 
+   "way.  Copies don't create mergeinfo (or if they do, it isn't", 
+   "natural-history-turned-mergeinfo), so the mergeinfo recorded on a", 
+   "branch is -- unless hand-horked -- truly only a record of merged", 
+   "revision ranges, minus even the common ancestry of the merge source", 
+   "and target.", 
+   "So.  We make 'svn log -g' stupider, and in the process, we gain huge", 
+   "responsiveness as a result.", 
+   "What does this mean for users?  First, it means that the log", 
+   "generation code no longer crawls the entire history of the log targets", 
+   "before sending anything to the user (unless the user requested", 
+   "information in ascending order).  As soon as a committed merge is", 
+   "detected, we fork off to handle the merged revisions.  Now, if the", 
+   "merge unnaturally records history that overlaps with the main target's", 
+   "history, we *will see duplicates*.  I've decided (for now) that we", 
+   "will never rule out transmitting a revision in which a primary log", 
+   "target was changed just because we already saw that revision via some", 
+   "previous merge.  However, we will not show *merged* revisions more", 
+   "than once.", 
+   "### NOTE: This breaks some tests.  I'll deal with that in future commits. ###", 
+   "* subversion/libsvn_repos/log.c", 
+   "(handle_merged_revisions): New helper function, cored from do_merged_logs().", 
+   "(do_merged_logs): Rework this function for symmatry with do_logs().", 
+   "(In fact, I may in a follow-up commit combine the two functions.)", 
+   "Use handle_merged_revisions() as a partner to send_log().", 
+   "(do_logs): Minor (mostly formatting) changes for further symmatry", 
+   "with do_merged_logs()."
+  ], 
+  "revision_id": "870964"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-05-01T18:09:18.972756Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch:", 
+   "* subversion/libsvn_subr/simple_providers.c: Add reminder comment", 
+   "for people adding auth providers which store passwords encrypted.", 
+   "Suggested by: danielsh"
+  ], 
+  "revision_id": "870963"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-05-01T18:01:30.935064Z", 
+  "msg": [
+   "Revert some accidental whitespace changes in r30883.", 
+   "The moral of the story today: When selectively reverting part of a", 
+   "file with a GUI tool be sure you have the \"notice whitespace changes\"", 
+   "option *on*.", 
+   "* subversion/libsvn_client/merge.c", 
+   "* subversion/libsvn_client/mergeinfo.c"
+  ], 
+  "revision_id": "870962"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-01T17:43:42.038805Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(resolve_conflict_on_entry): Only do auto-accept if we're trying to", 
+   "resolve text."
+  ], 
+  "revision_id": "870961"
+ }
+]

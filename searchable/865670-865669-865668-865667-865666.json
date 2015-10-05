@@ -1,0 +1,81 @@
+[
+ {
+  "author": "dws", 
+  "date": "2007-06-30T18:32:40.394521Z", 
+  "msg": [
+   "* STATUS: Nominate r25593 (RHEL5 RPM) for backport from trunk to 1.4.x."
+  ], 
+  "revision_id": "865670"
+ }, 
+ {
+  "author": "djh", 
+  "date": "2007-06-30T17:15:55.338631Z", 
+  "msg": [
+   "Fix sporadic file i/o issues on Windows that show up often in Vista.", 
+   "The underlying problem is that deletes are asynchronous on Windows (files and", 
+   "directories are not actually deleted until they have been closed by all", 
+   "applications).  For instance, this can cause us to fail creating a temp", 
+   "directory we thought we successfully deleted.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(WIN32_RETRY_LOOP): Add comment about async delete's on Windows and add", 
+   "another return code they can cause to the list of return codes we retry on.", 
+   "(svn_io_make_dir_recursively): Add the retry loop to creating directories.", 
+   "(svn_io_remove_dir2): Stop doing the rewind workaround on Windows.", 
+   "(dir_make): Add the retry loop to creating directories and don't fail the", 
+   "whole call if stat returns an error (or incomplete) when we're trying", 
+   "to set the sgid bit."
+  ], 
+  "revision_id": "865669"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-06-30T16:06:50.992085Z", 
+  "msg": [
+   "Followup to r25589: Don't filter mergeinfo for 'svn log -g' under certain", 
+   "circumstances.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(filter_baton): Add finding_current_revision boolean member.", 
+   "(branching_copy_filter): Use finding_current_revision to shortcircuit the", 
+   "filtering process.", 
+   "(get_combined_mergeinfo): Add an additional argument.", 
+   "(get_merged_rev_mergeinfo): Update calls to get_combined_mergeinfo().", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(test_list): Unmark merge_sensitive_log_non_branching_revision() as XFail."
+  ], 
+  "revision_id": "865668"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2007-06-30T15:09:52.125007Z", 
+  "msg": [
+   "* packages/rpm/redhat-8+/subversion.spec,", 
+   "packages/rpm/rhel-3/subversion.spec,", 
+   "packages/rpm/rhel-4/subversion.spec : Update changelog to note RHEL5.", 
+   "* packages/rpm/rhel-5,", 
+   "packages/rpm/rhel-5/.rpmmacros,", 
+   "packages/rpm/rhel-5/find-osrel,", 
+   "packages/rpm/rhel-5/subversion.conf,", 
+   "packages/rpm/rhel-5/subversion-0.31.0-rpath.patch,", 
+   "packages/rpm/rhel-5/subversion.spec,", 
+   "packages/rpm/rhel-5/filter-requires.sh,", 
+   "packages/rpm/rhel-5/README,", 
+   "packages/rpm/rhel-5/Makefile : Added RHEL5 RPM build files."
+  ], 
+  "revision_id": "865667"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-06-30T10:57:28.021321Z", 
+  "msg": [
+   "Fix the emulation of non-recursive in svnserve to correctly", 
+   "map non-recursive to depth=files for update, switch, and diff.", 
+   "(This makes the corresponding tests in the 1.4.x test suite", 
+   "pass against a trunk svnserve.)  Note that status is correct", 
+   "to make non-recursive mean depth=empty.", 
+   "* subversion/svnserve/serve.c", 
+   "(update, switch_cmd, diff): Use SVN_DEPTH_FROM_RECURSE macro to set", 
+   "depth instead of an incorrect infinity-or-empty assignment."
+  ], 
+  "revision_id": "865666"
+ }
+]

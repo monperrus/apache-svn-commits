@@ -1,0 +1,70 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-03T04:39:09.148302Z", 
+  "msg": [
+   "Continuing refining of the entries reading.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(write_entry): a schedule delete can happen for a node in a copied", 
+   "subtree, so there isn't always a base node. add a bit of logic to try", 
+   "and determine when to create (or not) a BASE row. also, when we write", 
+   "out not-present rows, go ahead and include the kind.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_base_get_info, svn_wc__db_read_info): only return an", 
+   "obstructed status if we *expect* the subdir to be present."
+  ], 
+  "revision_id": "876350"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-03-03T02:52:52.510151Z", 
+  "msg": [
+   "Fix bug in build system - everything must go through libtool to work.", 
+   "* build/generator/gen_make.py", 
+   "(_extension_map): All objects must go to .lo's not .o."
+  ], 
+  "revision_id": "876349"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-03T02:30:28.792767Z", 
+  "msg": [
+   "* www/svn_1.6_releasenotes.html", 
+   "(sqlite): Tweak the recommended version and requirement wording."
+  ], 
+  "revision_id": "876348"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-03T01:56:23.819266Z", 
+  "msg": [
+   "Further fixes to managing entries in the sqlite database.", 
+   "- when writing a schedule_normal entry, we might write a WORKING_NODE row", 
+   "or a BASE_NODE row depending on whether the node is copied.", 
+   "- no need to individually delete BASE or WORKING rows since we fully blast", 
+   "them each time we write out entries.", 
+   "- better handling of copied nodes: set schedule_normal and their revision", 
+   "to whatever was copied.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): capture the copyfrom node's revision for use in all", 
+   "copied children. the children should be schedule_normal rather than", 
+   "schedule_add.", 
+   "(write_entry): stop deleting rows. select a BASE or WORKING node based", 
+   "on whether the entry is copied."
+  ], 
+  "revision_id": "876347"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-03T01:50:50.027730Z", 
+  "msg": [
+   "Minor cleanups to make harvest_committables() a bit easier to read.", 
+   "* subversion/libsvn_client/commit_util.c:", 
+   "(harvest_committables): rename PARENT_DIR param to PARENT_ADM. when", 
+   "computing TARGET within the loop, don't be sneaky with join_many. use", 
+   "a plain old \"if\" and (hey!) it can even a copy. change a use of", 
+   "path_split() to dirent_dirname() since the basename wasn't used."
+  ], 
+  "revision_id": "876346"
+ }
+]

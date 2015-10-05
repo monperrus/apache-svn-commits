@@ -1,0 +1,99 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2010-03-30T21:22:48.481831Z", 
+  "msg": [
+   "Fix mergeinfo on three branches that does not agree with the expected offset", 
+   "of 840074 from the load of the Tigris Subversion repository into the ASF", 
+   "repository.", 
+   "See: http://svn.haxx.se/dev/archive-2010-03/0160.shtml", 
+   "* 1.6.x", 
+   "* 1.6.x/CHANGES", 
+   "The original offset problem was on '/subversion/branches/1.6.x-r40452' and", 
+   "'/subversion/branches/1.6.x-r40452/CHANGES', but the 1.6.x-r40452 branch", 
+   "was reintegrated back to 1.6.x in r891009.  To fix this, I did the", 
+   "following:", 
+   "1) Reverse merged the reintegration:", 
+   "svn merge --ignore-ancestry -c-891009 ^/subversion/branches/1.6.x", 
+   "1.6.x-WC", 
+   "2) Reverted *all* but mergeinfo changes to 1.6.x and 1.6.x/CHANGES:", 
+   "3) Did a record only merge of all the work done on the 1.6.x-r40452", 
+   "branch:", 
+   "svn merge --record-only -r880529:890996", 
+   "^/subversion/branches/1.6.x-r40452@890996 1.6.x-WC", 
+   "4) Did are record only merge of the revisions merged from trunk to", 
+   "to the 1.6.x-r40452 branch during its lifetime:", 
+   "svn merge --record-only -r880524:880526 ^^/subversion/trunk 1.6.x-WC", 
+   "* fs-successor-ids", 
+   "This branch still exists.  The mergeinfo offset was wrong starting in", 
+   "r880536 when the branch copied from trunk@880535.", 
+   "To fix this, I did the following:", 
+   "1) Merged the difference between the branch at the first revision it", 
+   "existed and trunk at the revision the branch was copied from:", 
+   "svn merge --ignore-ancestry", 
+   "^/subversion/branches/fs-successor-ids@880536", 
+   "^/subversion/trunk@880535 fs-successor-ids-WC", 
+   "This returns the mergeinfo to that that of trunk when it was copied,", 
+   "so it once again has the right offset.", 
+   "This branch has never been synced with trunk, but there was a merge to", 
+   "it in r880537, where r866919, r868662, and r880528 were merged from an", 
+   "earlier incarnation of the branch.  The mergeinfo for that merge is only", 
+   "partially correct, the first two revisions *predate* the revision", 
+   "(r866918) the branch was created:", 
+   "subversion/branches/fs-successor-ids:863264,865007,880528", 
+   "I fixed those two revisions is via a propedit.", 
+   "* python-3-compatibility", 
+   "Like fs-successor-ids, this branch still exists, unlike fs-successor-ids,", 
+   "the mergeinfo offsets were correct when the branch was created and didn't", 
+   "get corrupted until last sync from trunk to the branch in r880589.  To", 
+   "fix this I did the following:", 
+   "1) Reverse merged only the mergeinfo changes made by r880589:", 
+   "svn merge --ignore-ancestry --depth empty -c-880589", 
+   "^/subversion/branches/python-3-compatibility", 
+   "python-3-compatibility-WC", 
+   "2) Used --record-only to create the correct sync info from trunk:", 
+   "svn merge --record-only -r880499:880588 ^/subversion/trunk", 
+   "python-3-compatibility-WC"
+  ], 
+  "revision_id": "929295"
+ }, 
+ {
+  "author": "hindessm", 
+  "date": "2010-03-30T21:22:43.751483Z", 
+  "msg": [
+   "Updating some urls to reflect new harmony/enhanced/java/trunk tree."
+  ], 
+  "revision_id": "929294"
+ }, 
+ {
+  "author": "awojtuniak", 
+  "date": "2010-03-30T21:21:31.532755Z", 
+  "msg": [
+   "ARIES-259 patch"
+  ], 
+  "revision_id": "929293"
+ }, 
+ {
+  "author": "buscob", 
+  "date": "2010-03-30T21:15:16.421026Z", 
+  "msg": [
+   "A patch from Blas Rodriguez Somoza", 
+   "OFBIZ-3604 - XHTML validation errors (humanres)", 
+   "XHTML validation errors", 
+   "Wrong markup at line 9. Lacks <tr>", 
+   "</tr><td class=\"label\">${uiLabelMap.PartyFirstName}</td>", 
+   "Wrong marckup at line 15. Lacks <tr>", 
+   "<tr><input type=\"hidden\" name=\"roleTypeId\" value=\"EMPLOYEE\"/></tr>"
+  ], 
+  "revision_id": "929292"
+ }, 
+ {
+  "author": "francisdb", 
+  "date": "2010-03-30T21:14:27.580720Z", 
+  "msg": [
+   "EMPIREDB-35 make sure our jars are osgi compatible", 
+   "EMPIREDB-66 review release process with apache parent pom 7"
+  ], 
+  "revision_id": "929291"
+ }
+]

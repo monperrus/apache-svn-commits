@@ -1,0 +1,91 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-02-17T16:05:59.629372Z", 
+  "msg": [
+   "Bring branch up to date with trunk.  (Merged /trunk:r35776-35793,35795-35925)."
+  ], 
+  "revision_id": "876000"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-17T15:18:55.941223Z", 
+  "msg": [
+   "More merging from the explore-wc branch to trunk.", 
+   "Revisions merged, and primary (desired) change:", 
+   "35412: start generating wc-metadata.sql.h", 
+   "35708: look for wc.db when checking the wc format", 
+   "35721: be consistent and use wc-metadata.h", 
+   "35722: move version detection into wc_db", 
+   "35762: update svn:ignore on libsvn_wc", 
+   "35861: correct CLEAN_FILES handling in Makefile.in", 
+   "After handling a few conflicts, post-merge, I needed to #ifdef out some of", 
+   "the new sqlite code in entries.c, and tweak svn_wc__db_version().", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(...): plain old merge", 
+   "(svn_wc__entries_write_old, svn_wc__entries_init): add some #ifdef", 
+   "guards around the new sqlite code.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(...): plain old merge", 
+   "(svn_wc__db_version): check for APR_ENOENT from the db version test"
+  ], 
+  "revision_id": "875999"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-17T15:09:16.504200Z", 
+  "msg": [
+   "Fix the version detection logic -- on older sqlite installs, it would", 
+   "create the database. Factored out our open() logic so that we can use a", 
+   "mode==readonly (ie. the database must exist, and we'll just read it).", 
+   "For older sqlite installs, changed the error return from", 
+   "SVN_ERR_WC_CORRUPT to APR_ENOENT. The sqlite database might have nothing", 
+   "to do with a working copy.", 
+   "* subversion/libsvn_subr/sqlite.c:", 
+   "(internal_open): new function, factored out of svn_sqlite__open()", 
+   "(svn_sqlite__get_schema_version): switch to internal_open, open the", 
+   "database readonly, and require its presence.", 
+   "(svn_sqlite__open): use new internal_open function."
+  ], 
+  "revision_id": "875998"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-17T14:52:03.069919Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Fix the build by exposing a required API at the intra-library-level.", 
+   "* subversion/libsvn_wc/old-and-busted.c", 
+   "(resolve_to_defaults): Rename from this...", 
+   "(svn_wc__resolve_to_defaults): ...to this.", 
+   "(svn_wc__read_entries_old): Update caller.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Update caller.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(svn_wc__resolve_to_defaults): New."
+  ], 
+  "revision_id": "875997"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-17T13:20:10.035553Z", 
+  "msg": [
+   "* build/generator/vcnet_vcproj.ezt", 
+   "Following up to the extra enabled warnings for gcc in 1.6, set Visual C++", 
+   "2005/2008 warning level to 4 to catch more warnings while building on", 
+   "Windows.", 
+   "For now, specifically disable the following level 4 warnings to keep the", 
+   "warning level manageable:", 
+   "4100: 'identifier' : unreferenced formal parameter", 
+   "4127: conditional expression is constant", 
+   "4204: nonstandard extension used : non-constant aggregate initializer", 
+   "4701: potentially uninitialized local variable 'name' used", 
+   "4706: assignment within conditional expression", 
+   "Note that apr.h specifically disables the following level 3 warning using", 
+   "#pragma:", 
+   "4996: 'function': was declared deprecated (level 3)", 
+   "Which should actually be enabled for Subversion Maintainers."
+  ], 
+  "revision_id": "875996"
+ }
+]

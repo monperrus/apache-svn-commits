@@ -1,0 +1,111 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2005-06-14T00:35:45.996582Z", 
+  "msg": [
+   "With Joe Orton, make Subversion work with either Neon 0.24.7 or 0.25.0.", 
+   "This updates configury to allow either Neon 0.24.7 or 0.25.0, then", 
+   "adds compile-time conditional blocks throughout libsvn_ra_dav to DTRT", 
+   "for whichever version of Neon is in effect.", 
+   "This resolves issue #2297.", 
+   "* configure.in:", 
+   "(NEON_ALLOWED_LIST): Replaces NEON_WANTED_REGEX because there isn't", 
+   "actually enough regexp support in Bourne shell to test for both", 
+   "0.24.7 and 0.25.0 in one 'case' statement.", 
+   "(NEON_LATEST_WORKING_VER): Bump up to 0.25.0.", 
+   "* build/ac-macros/neon.m4", 
+   "(SVN_LIB_NEON, SVN_NEON_CONFIG): Rewrite version testing", 
+   "according to above changes to configure.in, and define", 
+   "SVN_NEON_0_25_0 if find Neon 0.25.0.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(struct lock_request_baton): New field 'request' holds the request", 
+   "being executed.", 
+   "(svn_ra_dav__request_interrogator): New callback type.", 
+   "(svn_ra_dav__request_dispatch): Add interrogator callback and baton", 
+   "to parameters, in Neon 0.25.0.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(interrogate_for_location): New interrogator callback.", 
+   "(do_checkout): Get \"location\" header from the response in either the", 
+   "Neon 0.24.7 way or the 0.25.0 way, depending on which is operative.", 
+   "(simple_request, commit_delete_entry, commit_close_file): Pass null", 
+   "interrogators to svn_ra_dav__request_dispatch if Neon 0.25.0.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(fetch_file_reader, get_file_reader): Return int if Neon 0.25.0.", 
+   "Document that these implement the ne_block_reader interface.", 
+   "(interrogate_for_content_type): New interrogator callback.", 
+   "(custom_get_request): Get the content-type from the request response", 
+   "in the 0.24.7 way or the 0.25.0 way as appropriate.  Also, lose the", 
+   "effectively unused 'code' variable, and explicitly ignore the", 
+   "integer returned from svn_ra_dav__request_dispatch(), which we were", 
+   "implicitly ignoring anyway.", 
+   "(reporter_finish_report): Let rb->err take precedence over an", 
+   "error from svn_ra_dav__parsed_request().", 
+   "* subversion/libsvn_ra_dav/session.c: Include ne_utils.h.", 
+   "(handle_creationdate_header, handle_lock_owner_header): Only define", 
+   "these if Neon 0.24.7.", 
+   "(post_send_hook): New function to get lock metadata; define this", 
+   "function only if Neon 0.25.0.", 
+   "(setup_neon_request_hook): Register post_send_hook, if Neon 0.25.0.", 
+   "(ra_dav_get_schemes, svn_ra_dav__open): Use the new ne_has_support()", 
+   "interface instead of ne_supports_ssl(), in Neon 0.25.0.", 
+   "(svn_ra_dav__lock, svn_ra_dav__unlock, svn_ra_dav__get_lock): Add", 
+   "comments about what remains to be done.", 
+   "(create_request_hook): Store the request as well as the method in lrb.", 
+   "(lock_receiver): Run post_send_hook() on the request manually, to", 
+   "pick up the response headers properly.", 
+   "* subversion/libsvn_ra_dav/file_revs.c", 
+   "(svn_ra_dav__get_file_revs): Let rb->err take precedence over an", 
+   "error from svn_ra_dav__parsed_request().", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(spool_reader): Return int if Neon 0.25.0.  Document that this", 
+   "implements the ne_block_reader interface.", 
+   "(parsed_request): Handle ne_decompress_destroy correctly for both", 
+   "0.24.7 and 0.25.0.", 
+   "(svn_ra_dav__request_dispatch): If Neon 0.25.0, take a request", 
+   "interrogator and baton, and invoke them on the request.", 
+   "(ra_dav_error_accepter): Only accept error responses with text/xml", 
+   "content type.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_DAV_RESPONSE_HEADER_BADNESS): New error code.", 
+   "* INSTALL: Document support for both versions of Neon."
+  ], 
+  "revision_id": "855125"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2005-06-13T23:38:05.581645Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x/subversion.spec,", 
+   "packages/rpm/redhat-8+/subversion.spec : Fix breakage that *only* occurs", 
+   "on release build.  No need for this any more as the book is a separate", 
+   "project and the version number is now set correctly during the release", 
+   "process."
+  ], 
+  "revision_id": "855124"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-06-13T22:03:14.373641Z", 
+  "msg": [
+   "* branches/server-l10n", 
+   "Sync'd the server-l10n branch with trunk (circa r15048)."
+  ], 
+  "revision_id": "855123"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-06-13T19:09:30.385543Z", 
+  "msg": [
+   "* STATUS: Vote for r14859/r14923/r14939."
+  ], 
+  "revision_id": "855122"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-06-13T18:56:36.169818Z", 
+  "msg": [
+   "* STATUS: Nominate r15046 for backport from trunk."
+  ], 
+  "revision_id": "855121"
+ }
+]

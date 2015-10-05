@@ -1,0 +1,121 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-04-29T05:10:32.598144Z", 
+  "msg": [
+   "On the fs-rep-sharing branch:", 
+   "Update the checksum-reps table interface to use svn_checksum_t.", 
+   "* subversion/libsvn_fs_base/bdb/dbt.h,", 
+   "subversion/libsvn_fs_base/bdb/dbt.c", 
+   "(svn_fs_base__checksum_to_dbt): New.", 
+   "* subversion/libsvn_fs_base/bdb/checksum-reps-table.h,", 
+   "subversion/libsvn_fs_base/bdb/checksum-reps-table.c", 
+   "(svn_fs_bdb__get_checksum_rep, svn_fs_bdb__set_checksum_rep,", 
+   "svn_fs_bdb__delete_checksum_rep): Use a svn_checksum_t parameter for", 
+   "accepting checksums.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_set_proplist, svn_fs_base__dag_finalize_edits): Use", 
+   "svn_checksum_t for getting the file checksum from reps-strings.c", 
+   "(store_checksum_rep): Use a svn_checksum_t to store the value in the", 
+   "checksum_reps table.", 
+   "* subversion/libsvn_fs_base/err.h,", 
+   "subversion/libsvn_fs_base/err.c", 
+   "(svn_fs_base__err_no_such_checksum_rep): Take a svn_checksum_t parameter and", 
+   "parse it appropriately."
+  ], 
+  "revision_id": "870905"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-29T03:50:09.335880Z", 
+  "msg": [
+   "* subversion/libsvn_subr/log.c", 
+   "Fix doc string.", 
+   "Found by: stsp"
+  ], 
+  "revision_id": "870904"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-29T00:48:20.723356Z", 
+  "msg": [
+   "Use svn_ra_callbacks2_t.get_client_string() in ra_svn/svnserve and log", 
+   "it in the new 'open' log item in svnserve.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "Add optional ra-client (identifying the RA implementation) and client", 
+   "(the string returned by svn_ra_callbacks2_t.get_client_string()) to the", 
+   "client's response to the server greeting.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(open_session): Send ra and client strings in the greeting response.", 
+   "* subversion/svnserve/serve.c", 
+   "(serve): Accept ra and client strings and log them in the new 'open' log", 
+   "command, along with capabilities, protocol version, and the repository", 
+   "path.", 
+   "* tools/server-side/svn_server_log_parse.py", 
+   "(Parser._parse_open): Parse open commands.", 
+   "* tools/server-side/test_svn_server_log_parse.py", 
+   "Test Parser._parse_open."
+  ], 
+  "revision_id": "870903"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-29T00:33:19.279010Z", 
+  "msg": [
+   "* tools/server-side/svn_server_log_parse.py", 
+   "Add TODO about decoding URI-encoded log items before calling the callback."
+  ], 
+  "revision_id": "870902"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-29T00:13:11.359299Z", 
+  "msg": [
+   "Log some svnserve errors (I'm sure we have a lot more we could log).", 
+   "* subversion/svnserve/serve.c", 
+   "(log_write): Add simple wrapper around svn_io_file_write().", 
+   "(log_error):", 
+   "- Move most of the old log_fs_warning logic to this new function,", 
+   "which takes err, log_file, remote_host, user, and repos", 
+   "directly, so it can be used from main(), too.", 
+   "- Do nothing if err is NULL", 
+   "- Log NULL repos as \"-\"", 
+   "- Expand format to include the err debug info (file/line) when available.", 
+   "- Use log_write().", 
+   "(log_server_error): Add wrapper around log_error that gets most of", 
+   "the arguments from server_baton_t and svn_ra_svn_conn_t", 
+   "(error_create_and_log): Add helper function to create, log, and", 
+   "return a new error.", 
+   "(log_command): Rename from svnserve_log.  Use log_write.", 
+   "(SLOG, replay_one_revision): Use log_command.", 
+   "(load_configs): Take server_baton_t and svn_ra_svn_conn_t arguments", 
+   "in order to log errors when called from serve().  main() passes", 
+   "NULL for them, in which case this still returns them, and main()", 
+   "still exits non-zero.  Return generic errors to the user instead", 
+   "of leaking the passwd/authz file paths, but log the full error", 
+   "(fixes svn issue 2271).  Move below log functions.", 
+   "(lookup_access): Take svn_ra_svn_conn_t argument and use it to log", 
+   "authz_check_access errors before discarding (fixing an old TODO).", 
+   "(must_have_access, add_lock_tokens, lock_many, unlock_many): Pass", 
+   "conn along to lookup_access.  Log the access denied error we", 
+   "return to the user.", 
+   "(unlock_paths): Take new conn argument to use in logging errors from", 
+   "svn_repos_fs_unlock before discarding (fixing an old TODO).", 
+   "(commit): Pass conn along to unlock_paths.", 
+   "(find_repos): Take new conn argument to pass along to load_configs.", 
+   "Log the access denied error we return to the user.", 
+   "(fs_warning_func): Renamed from log_fs_warning and now just a simple", 
+   "wrapper around log_server_error.", 
+   "(serve): Log the access denied error we return to the user.  Log", 
+   "errors from find_repos.", 
+   "* subversion/svnserve/server.h", 
+   "(load_configs): Update declaration.", 
+   "(log_error): Declare.", 
+   "* subversion/svnserve/main.c", 
+   "(main): Log errors from serve before discarding.  Log fork(2) errors.", 
+   "* subversion/tests/cmdline/authz_tests.py", 
+   "(authz_validate): Adapt svnserve error messages."
+  ], 
+  "revision_id": "870901"
+ }
+]

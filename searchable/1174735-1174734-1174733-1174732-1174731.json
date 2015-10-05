@@ -1,0 +1,89 @@
+[
+ {
+  "author": "neels", 
+  "date": "2011-09-23T13:13:40.399243Z", 
+  "msg": [
+   "Merge r1174699, removing stuff obsoleted by the previous two merged revisions.", 
+   "Remove stuff obsoleted by r1174342, r1174693.", 
+   "* subversion/libsvn_wc/wc_db.c (svn_wc__db_upgrade_apply_props):", 
+   "Remove loop adding rows to EXTERNALS table. After above revisions, these", 
+   "rows are populated after all upgrades are done, from svn_client_upgrade().", 
+   "* subversion/libsvn_wc/wc-queries.sql (STMT_INSERT_EXTERNAL_UPGRADE):", 
+   "Remove statement, only STMT_INSERT_EXTERNAL is used now (the purpose was", 
+   "to obtain a file external's kind, which is now also done further up in", 
+   "svn_client_upgrade())."
+  ], 
+  "revision_id": "1174735"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2011-09-23T13:13:33.480863Z", 
+  "msg": [
+   "Remove the dependency on the fixed 61616 port number"
+  ], 
+  "revision_id": "1174734"
+ }, 
+ {
+  "author": "omalley", 
+  "date": "2011-09-23T13:13:10.009920Z", 
+  "msg": [
+   "AMBARI-8. Move dependencies into controller. (omalley)"
+  ], 
+  "revision_id": "1174733"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2011-09-23T13:11:21.958478Z", 
+  "msg": [
+   "Merge r1174693, part two of issue #4016 fix.", 
+   "Resolve a text conflict to theirs-conflict because of indentation mismatch", 
+   "(caused by a cosmetic change from r1169770 in handle_external_item_change()).", 
+   "Follow-up to r1174342.", 
+   "Fix some errors around relative externals URLs during upgrade, and around", 
+   "checked out WCs at an external's target path which don't match the external", 
+   "definition. Also improve upgrade continuation on errors with externals.", 
+   "The function that resolves relative externals URLs to absolute ones is needed", 
+   "in svn_client_upgrade(), so it goes from static to private API. Makes a lot of", 
+   "sense: svn_wc_external_item2_t already is even *public* API, but there's no", 
+   "function to make proper use of the svn_wc_external_item2_t.url field. IMHO", 
+   "svn_wc__resolve_relative_external_url() should go to public API eventually,", 
+   "but such move is unrelated to this patch.", 
+   "* subversion/libsvn_client/cleanup.c", 
+   "(svn_client_upgrade):", 
+   "- Use svn_wc__resolve_relative_external_url() to properly resolve relative", 
+   "external URLs. Previously, this would wrongly assume all externals' URLs", 
+   "to be absolute already.", 
+   "- Verify that the URL, if gotten from a readily checked out external,", 
+   "actually is identical to the externals definition (i.e. detect if a", 
+   "mismatching WC is checked out at the target path).", 
+   "- Don't abort on errors in externals definitions, go on with the next", 
+   "external definition (like the inner loop does already).", 
+   "- Instead of obtaining an absolute path of every external item, get the", 
+   "abspath of the path that defines the externals once, and join relpaths", 
+   "with that.", 
+   "- Make the error handling slightly less complex to read by a little bit of", 
+   "code dup.", 
+   "- Rename local var (EXTERNAL_KIND), tweak comments.", 
+   "* subversion/include/private/svn_wc_private.h,", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(svn_wc__resolve_relative_external_url):", 
+   "Move here and rename from ...", 
+   "* subversion/libsvn_client/externals.c", 
+   "(resolve_relative_external_url):", 
+   "... this.", 
+   "(uri_scheme):", 
+   "Move along with resolve_relative_external_url, keep as static.", 
+   "(handle_external_item_change, svn_client__export_externals):", 
+   "Apply rename, no functional change."
+  ], 
+  "revision_id": "1174732"
+ }, 
+ {
+  "author": "erans", 
+  "date": "2011-09-23T13:08:58.798293Z", 
+  "msg": [
+   "Name change: \"NonMonotonousSequenceException\" to \"NonMonotonicSequenceException\"."
+  ], 
+  "revision_id": "1174731"
+ }
+]

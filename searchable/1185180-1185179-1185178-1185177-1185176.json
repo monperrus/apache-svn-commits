@@ -1,0 +1,48 @@
+[
+ {
+  "author": "olamy", 
+  "date": "2011-10-17T14:03:38.443185Z", 
+  "msg": [
+   "[MTOMCAT-102] option to add dynamically a context.xml to a war before packaging it"
+  ], 
+  "revision_id": "1185180"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2011-10-17T14:03:30.175469Z", 
+  "msg": [
+   "A patch from Paul Foxworthy \"Order not completed when filled from more than one InventoryItem\" https://issues.apache.org/jira/browse/OFBIZ-4386", 
+   "There is a nasty bug in IssuanceServices in the situation where the order is filled from more than one InventoryItem. When the order is created, there are OrderItemShipGrpInvRes reservations created for all the inventory items needed to fill the order.", 
+   "In the simple method issueOrderItemShipGrpInvResToShipment in IssuanceServices, at line 173 (https://fisheye6.atlassian.com/browse/ofbiz/trunk/applications/product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml?hb=true#to173), there is an assumption that if the OrderShipment already exists, we are some sort of adjustment, and we should adjust the OrderShipment quantity by the difference between the old OrderShipment quantity and the new one. This all works fine in the situation where there is only one InventoryItem needed to fill the order. However, if there are two or more InventoryItems, the simple method is called twice, and an incorrect quantity is calculated.", 
+   "The crux of the problem is that OrderShipment doesn't care about InventoryItems, so there will be only one OrderShipment row for a given product. In contrast, ItemIssuance does care about InventoryItems, so there will be more than one if the product is supplied from more than one InventoryItem. The ItemIssuance code doesn't take account of this distinction.", 
+   "I have provided two patches. One is a new unit test that exemplifies the bug. If you just apply this patch to trunk, the unit test will fail with an OrderShipment quantity of 4 when it ought to be 6.", 
+   "The other patch is my fix for IssuanceServices, which now looks for a relevant ItemIssuance to decide if we are adjusting quantities, or creating a new ItemIssuance (and possibly a new OrderShipment).", 
+   "jleroux: I commit patch by patch to be able to backport the fix, here only the fix"
+  ], 
+  "revision_id": "1185179"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-10-17T14:03:22.717749Z", 
+  "msg": [
+   "[MTOMCAT-102] implements extraDependencies to be able to jdbc driver mail etc.. to the root classloader (ie including in the standalone jar)"
+  ], 
+  "revision_id": "1185178"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-10-17T14:03:06.939023Z", 
+  "msg": [
+   "[MTOMCAT-102] acces log valve format used configurable"
+  ], 
+  "revision_id": "1185177"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-10-17T14:02:45.713336Z", 
+  "msg": [
+   "option to enable naming"
+  ], 
+  "revision_id": "1185176"
+ }
+]

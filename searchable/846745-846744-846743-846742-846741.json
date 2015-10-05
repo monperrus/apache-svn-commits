@@ -1,0 +1,110 @@
+[
+ {
+  "author": "sergeyli", 
+  "date": "2003-08-08T01:40:05.726986Z", 
+  "msg": [
+   "The migration strategy is to complete as much abstraction changes as possible", 
+   "using Neon 0.23.9, and make sure all tests pass. Then, there's going to be", 
+   "little change for Neon 0.24, hopefully not touching any files but ra_dav.h", 
+   "and util.c.", 
+   "The replacements have been done using `perl -pi -e' command, so I have to", 
+   "apologize if the lines got longer than 80 characters in some files.", 
+   "* subversion/libsvn_ra_dav/log.c:", 
+   "* subversion/libsvn_ra_dav/merge.c:", 
+   "* subversion/libsvn_ra_dav/options.c:", 
+   "* subversion/libsvn_ra_dav/props.c:", 
+   "* subversion/libsvn_ra_dav/fetch.c:", 
+   "* subversion/libsvn_ra_dav/ra_dav.h:", 
+   "* subversion/libsvn_ra_dav/util.c:", 
+   "Series of rename operations to prepare for Neon 0.24, but work with", 
+   "Neon 0.23.9. All tests succeed over DAV with Neon 0.23.9.", 
+   "SVN_RA_DAV__XML_VALID       <- NE_XML_VALID", 
+   "SVN_RA_DAV__XML_INVALID     <- NE_XML_INVALID", 
+   "SVN_RA_DAV__XML_DECLINE     <- NE_XML_DECLINE", 
+   "SVN_RA_DAV__XML_CDATA       <- NE_XML_CDATA", 
+   "SVN_RA_DAV__XML_COLLECT     <- NE_XML_COLLECT", 
+   "svn_ra_dav__xml_elmid       <- ne_xml_elmid", 
+   "svn_ra_dav__xml_elm_t       <- struct ne_xml_elm", 
+   "svn_ra_dav__xml_validate_cb <- ne_xml_validate_cb", 
+   "svn_ra_dav__xml_startelm_cb <- ne_xml_startelm_cb", 
+   "svn_ra_dav__xml_endelm_cb   <- ne_xml_endelm_cb", 
+   "ELEM_unknown                <- NE_ELM_unknown", 
+   "ELEM_root                   <- NE_ELM_root", 
+   "ELEM_UNUSED                 <- NE_ELM_UNUSED", 
+   "ELEM_207_first              <- NE_ELM_207_first", 
+   "ELEM_multistatus            <- NE_ELM_multistatus", 
+   "ELEM_response               <- NE_ELM_response", 
+   "ELEM_responsedescription    <- NE_ELM_responsedescription", 
+   "ELEM_href                   <- NE_ELM_href", 
+   "ELEM_propstat               <- NE_ELM_propstat", 
+   "ELEM_prop                   <- NE_ELM_prop", 
+   "ELEM_status                 <- NE_ELM_status", 
+   "ELEM_207_UNUSED             <- NE_ELM_207_UNUSED", 
+   "ELEM_PROPS_UNUSED           <- NE_ELM_PROPS_UNUSED", 
+   "* subversion/libsvn_ra_dav/fetch.c:", 
+   "Uses ELEM_SVN_prop instead of ELEM_prop as redefined in ra_dav.h.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h:", 
+   "(svn_ra_dav__xml_push_handler): declaration of new function implemented", 
+   "in util.c.", 
+   "Definitions to support all the renames stated above.", 
+   "ELEM_prop was renamed to ELEM_SVN_prop to differentiate between prop tag", 
+   "in DAV: namespace and the same tag in Subversion namespace", 
+   "ELEM_SVN_prop               <- ELEM_prop", 
+   "* subversion/libsvn_ra_dav/util.c:", 
+   "(svn_ra_dav__xml_push_handler): new function on top of ne_xml_push_handler,", 
+   "adds memory pool as the last parameter. This parameter is not used with", 
+   "Neon 0.23.9, but will be with Neon 0.24."
+  ], 
+  "revision_id": "846745"
+ }, 
+ {
+  "author": "sergeyli", 
+  "date": "2003-08-07T22:50:14.728168Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(start_element, end_element): Return NE_XML_INVALID instead of number 1.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(CHKERR): Return NE_XML_INVALID instead of number 1.", 
+   "* davautocheck.sh: script to create HTTPD configuration and run some or all", 
+   "DAV tests, all automatically and with many parameters detected or generated.", 
+   "More suitable for release or \"blanket\" testing than for debugging. Executes", 
+   "all tests if run without parameters, or executes a specific test if run like", 
+   "this: davautocheck.sh basic 3."
+  ], 
+  "revision_id": "846744"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-08-07T21:01:16.357898Z", 
+  "msg": [
+   "Revert the portion of revision 6636 that caused caching headers to be", 
+   "sent.  It was not sending the headers when expected (for example, in", 
+   "checkouts), and Mike raised some concerns about correctness anyway.", 
+   "See reopened issue #971 for details.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_set_headers): Don't send caching headers."
+  ], 
+  "revision_id": "846743"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-08-07T20:35:07.302646Z", 
+  "msg": [
+   "Finish issue #1142 - svn diff cannot compare a wc file vs a revision", 
+   "in another branch.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_repos_wc): Choose our anchors and targets based on the node kind.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(test_list): diff_repos_and_wc() is no longer expected to fail."
+  ], 
+  "revision_id": "846742"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-08-07T18:47:54.121682Z", 
+  "msg": [
+   "Merged changes from trunk between revisions 6353:6666."
+  ], 
+  "revision_id": "846741"
+ }
+]

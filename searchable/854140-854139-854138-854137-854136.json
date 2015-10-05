@@ -1,0 +1,81 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2005-04-09T11:17:05.636159Z", 
+  "msg": [
+   "Create machinery to substantially fix issue #2265.  Subsequent commits", 
+   "will add calls to svn_fs_initialize() to render the fix more robust.", 
+   "* subversion/include/svn_fs.h (svn_fs_initialize): Add new API for", 
+   "initializing global FS library data.  Optional, but if you don't", 
+   "call it the FSFS lock file problem isn't quite fixed.", 
+   "* subversion/libsvn_fs/fs-loader.h (fs_vtable_t): Add a", 
+   "serialized_init member for initializing FS objects with a", 
+   "lock-protected pool common to all FS objects.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(common_pool, common_pool_lock): New global variables--a pool common", 
+   "to all FS objects, and a lock to protect it.", 
+   "(uninit): New cleanup handler to unset the common pool and lock.", 
+   "(svn_fs_initialize): Set up the common pool and lock.", 
+   "(serialized_init): New helper function to invoke the FS module's", 
+   "serialized_init function with the common pool while protected by", 
+   "the lock.", 
+   "(svn_fs_create, svn_fs_open, svn_fs_create_berkeley,", 
+   "svn_fs_open_berkeley): Invoke serialized_init.", 
+   "* subversion/libsvn_fs_base/fs.c (base_serialized_init, fs_vtable):", 
+   "Add dummy serialized_init function.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): Add a lock member for the repository-specific mutex.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(SVN_FSFS_LOCK_USERDATA_PREFIX): New constant.", 
+   "(fs_serialized_init): Grab or create a repository-specific lock", 
+   "based on the uuid.", 
+   "(fs_vtable): Include fs_serialized_init.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c (svn_fs_fs__with_write_lock): Lock", 
+   "the repository-specific mutex around holding the write lock."
+  ], 
+  "revision_id": "854140"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-04-09T10:36:09.005686Z", 
+  "msg": [
+   "* STATUS [1.2]: Nominate."
+  ], 
+  "revision_id": "854139"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-04-09T10:32:59.220322Z", 
+  "msg": [
+   "Fix svn status help text. \"*\" appears in column 8, not 9.", 
+   "Reported by Jim Correia <jim.correia@pobox.com>.", 
+   "* subversion/clients/cmdline/main.c (status help text): s/ninth/eighth/."
+  ], 
+  "revision_id": "854138"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2005-04-09T10:03:31.331687Z", 
+  "msg": [
+   "In FSFS, cache the uuid in the FSFS-specific data.  This change will", 
+   "allow a subsequent commit to minimize the amount of time spent during", 
+   "serialized initialization.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): Add a field for the cached uuid.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__open): Read in the cached uuid.", 
+   "(svn_fs_fs__get_uuid): Return the cached uuid.", 
+   "(svn_fs_fs__set_uuid): Reset the cached uuid.  (This takes care of", 
+   "svn_fs_fs__create.)"
+  ], 
+  "revision_id": "854137"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-04-09T07:38:30.049409Z", 
+  "msg": [
+   "* STATUS: Add and vote for r14061."
+  ], 
+  "revision_id": "854136"
+ }
+]

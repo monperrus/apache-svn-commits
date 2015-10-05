@@ -1,0 +1,117 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2008-10-15T23:10:25.717894Z", 
+  "msg": [
+   "Jigger around how the access batons manage the shared state. Each set of", 
+   "associated batons has a set of shared path->baton mappings. That mapping", 
+   "has been moved into a new \"shared\" structure, along with a hash that will", 
+   "map working copy paths to new pristine files for post-commit processing.", 
+   "The first draft of the latter mapping is present, but unused in this", 
+   "commit.", 
+   "Additional changes were made within the access baton code to flow pools", 
+   "around to the proper places, to deal with the new shared structure, to", 
+   "clarify pool usage, and optimize some lock checking.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_adm_close2): take a scratch pool", 
+   "(svn_wc_adm_close): deprecated", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): pass a pool to svn_wc__adm_write_check", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "(svn_wc__make_adm_thing): take a path rather than an access baton.", 
+   "renamed pool to scratch_pool for clarity.", 
+   "(svn_wc__adm_destroy, svn_wc__adm_cleanup_tmp_area): rename pool argument.", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__make_adm_thing): take a path rather than an access baton. no", 
+   "need to do a write check -- the callers need to do that now.", 
+   "(init_adm_tmp_area): do the write-check once, and then call the", 
+   "(modified) make_adm_thing function.", 
+   "(svn_wc__make_killme): update call to svn_wc__adm_write_check().", 
+   "(init_adm): update calls into svn_wc__make_adm_thing()", 
+   "(svn_wc__adm_destroy, svn_wc__adm_cleanup_tmp_area): rename pool param,", 
+   "and pass it along to svn_wc__adm_write_check().", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_write_check): take a (scratch) pool argument.", 
+   "(svn_wc__adm_save_pristine_path, svn_wc__adm_get_pristine_path): new", 
+   "functions.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_shared_t): new structure holding state that is shared", 
+   "across all access batons in an associated set.", 
+   "(svn_wc_adm_access_t): shift wc_format field to start of struct (just", 
+   "seems to be better at top given its importance). remove the SET field", 
+   "and add in a SHARED field referencing an svn_wc__adm_shared_t.", 
+   "(missing, extend_lock_walker): make these const", 
+   "(do_close): take a (scratch) pool argument rather than using the pool", 
+   "out of the access baton. adjust for new shared stuff.", 
+   "(create_lock): take just a path, rather than an access baton.", 
+   "(pool_cleanup, svn_wc_adm_open_anchor): adjust do_close() params", 
+   "(adm_access_alloc): initialize the SHARED field instead of SET.", 
+   "(adm_ensure_set, svn_wc__adm_missing): deal with the extra SHARED", 
+   "field/structure.", 
+   "(svn_wc__adm_steal_write_lock): alter params to create_lock(). copy over", 
+   "the SHARED reference, rather than just the SET.", 
+   "(do_open): take a reference to a shared structure, rather than a full", 
+   "access baton. adjust some calling params. revamp handling of the", 
+   "shared data and how it gets passed recursively, along with the copying", 
+   "from temp hash into the final shared data set. fix up the error exit", 
+   "to properly deal with any allocated batons.", 
+   "(svn_wc_adm_open3): alter params to do_open() and make sure that an set", 
+   "of batons is allocated since do_open() no longer does that.", 
+   "(svn_wc__adm_retrieve_internal, join_batons): tweak for new shared", 
+   "structure.", 
+   "(svn_wc_adm_close2): new function", 
+   "(svn_wc_adm_close): deprecated; use new svn_wc_adm_close2() func.", 
+   "(svn_wc__adm_write_check): take a (scratch) pool argument", 
+   "(svn_wc__adm_save_pristine_path, svn_wc__adm_get_pristine_path): new", 
+   "functions", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__entries_write): pass pool to svn_wc__adm_write_check()."
+  ], 
+  "revision_id": "873750"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2008-10-15T23:08:15.215107Z", 
+  "msg": [
+   "* subversion/bindings/ctypes-python/setup.py", 
+   "(get_apr_config): Include svn_auth_kwallet-1 and svn_auth_gnome_keyring-1", 
+   "in list of libraries to load."
+  ], 
+  "revision_id": "873749"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-15T23:04:15.362046Z", 
+  "msg": [
+   "Fix the docstring of svn_fs_deltify_revision().", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_deltify_revision): Update docstring."
+  ], 
+  "revision_id": "873748"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-15T22:46:40.223896Z", 
+  "msg": [
+   "For tree conflicts, make the detailed \"svn info\" messages say \"switch\"", 
+   "instead of \"update\" when the operation is a switch, rather than saying", 
+   "\"update\" for both.", 
+   "* subversion/svn/tree-conflicts.c", 
+   "(tree_conflict_phrases): Add \"switch\" phrase fields.", 
+   "(new_tree_conflict_phrases): Add \"switch\" phrases.", 
+   "(select_their_phrase): Support \"switch\" phrases."
+  ], 
+  "revision_id": "873747"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-10-15T22:26:33.990159Z", 
+  "msg": [
+   "On the 'fs-rep-sharing' branch:", 
+   "* subversion/libsvn_fs_base/notes/structure", 
+   "Update to reflect that we now use SHA1 checksums (instead of MD5) for", 
+   "the keys of the `checksum-reps' table."
+  ], 
+  "revision_id": "873746"
+ }
+]

@@ -1,0 +1,106 @@
+[
+ {
+  "author": "joeswatosh", 
+  "date": "2008-01-25T06:36:25.392919Z", 
+  "msg": [
+   "Follow on to r28944 \"Add --depth and --quiet support to 'svn changelist'.\"", 
+   "* subversion/bindings/swig/ruby/svn/client.rb", 
+   "(Svn::Client::Context#add_to_changelist,", 
+   "Svn::Client::Context#remove_from_changelist): Add changelists_names and", 
+   "depth parameters.", 
+   "(Svn::Client::Context#changelists): Improve how we figure out if we are", 
+   "getting one ore more changelist_names.", 
+   "* subversion/bindings/swig/ruby/svn/wc.rb", 
+   "(Svn::Wc.set_changelist): Move method from here...", 
+   "(Svn::Wc::AdmAccess#set_changelist): ...to here.", 
+   "* subversion/bindings/swig/svn_wc.i", 
+   "(_svn_wc_set_changelist): Removed special handling.", 
+   "* subversion/bindings/swig/svn_client.i", 
+   "(_svn_client_remove_from_changelist): Removed special handling.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#assert_changelists): Deal with changing APIs to", 
+   "Svn::Client::Context#add_to_changelist and", 
+   "Svn::Client::Context#remove_from_changelists.", 
+   "* subversion/bindings/swig/ruby/test/test_wc.rb", 
+   "(SvnWcTest#test_changelist): Deal with set_changelist move from a module", 
+   "method on Svn::Wc to an instance method on Svn::Wc::AdmAccess."
+  ], 
+  "revision_id": "869100"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2008-01-25T06:00:34.441118Z", 
+  "msg": [
+   "Follow on to r28940 \"More changes in changelist land, ....\"  Change the test", 
+   "expectations since the nil changelist now includes all the stuff not in other", 
+   "changelists.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#assert_changelists): Update test expectations such that the", 
+   "\"nil\" changelist has everything not in other changelists."
+  ], 
+  "revision_id": "869099"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2008-01-25T05:54:28.178730Z", 
+  "msg": [
+   "Follow on to r28935 \"... \"restore\" changelist support to 'svn diff --", 
+   "summarize'.\" Add changelists parameter to diff summarize for Ruby bindings.", 
+   "* subversion/bindings/swig/ruby/svn/client.rb", 
+   "(Svn::Client::Context#diff_summarize,", 
+   "Svn::Client::Context#diff_summarize_peg): Add changelists parameter."
+  ], 
+  "revision_id": "869098"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-25T05:36:50.746423Z", 
+  "msg": [
+   "Replace the SQLite-based implementation of mergeinfo indexing in", 
+   "libsvn_fs_base with a native Berkeley DB implementation.  (Much of", 
+   "this was inspired by -- if not copied almost wholesale from -- the", 
+   "FSFS implementation of the same.)", 
+   "NOTE: While this seems to unbreak the various tests which were", 
+   "SEGFAULTing due to illegal BDB transaction nesting attempts,", 
+   "there is one remaining failure here unique to BDB: merge_tests.py 66", 
+   "* subversion/libsvn_fs_base/revs-txns.h,", 
+   "* subversion/libsvn_fs_base/revs-txns.c", 
+   "(svn_fs_base__set_txn_mergeinfo): Removed as unused.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_commit_txn): Don't do special mergeinfo-y things", 
+   "here any more.", 
+   "* subversion/libsvn_fs_base/tree.h", 
+   "(SVN_FS__PROP_TXN_MERGEINFO): Removed as unused.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(parent_path_path): Add docstring.", 
+   "(parent_path_relpath): New function.", 
+   "(change_txn_mergeinfo): Removed as unused.", 
+   "(txn_body_change_node_prop): Don't call change_txn_mergeinfo() any more.", 
+   "(struct get_mergeinfo_data_and_entries_baton,", 
+   "struct get_mergeinfo_hash_for_path_baton,", 
+   "struct get_node_mergeinfo_stats_baton): New baton structures.", 
+   "(txn_body_get_mergeinfo_data_and_entries, crawl_directory_for_mergeinfo,", 
+   "append_to_merged_froms, txn_body_get_mergeinfo_hash_for_path,", 
+   "txn_body_get_node_mergeinfo_stats, get_mergeinfo_hashes_for_paths,", 
+   "base_get_mergeinfo): New functions.", 
+   "(root_vtable): Use base_get_mergeinfo() instead of", 
+   "svn_fs_mergeinfo__get_mergeinfo().", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_create): Stop creating sqlite indexes for BDB repositories.", 
+   "(base_hotcopy): Stop copying sqlite indexes for BDB repositories."
+  ], 
+  "revision_id": "869097"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-25T05:34:39.174528Z", 
+  "msg": [
+   "Make diff_tests.py 45 pass with --fs-type bdb again.", 
+   "* subversion/libsvn_fs_base/err.c", 
+   "(svn_fs_base__err_dangling_rev): Change error text to be more", 
+   "consistent with what FSFS uses (and sound less like an internal", 
+   "corruption of the repository anyway)."
+  ], 
+  "revision_id": "869096"
+ }
+]

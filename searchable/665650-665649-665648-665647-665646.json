@@ -1,0 +1,77 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-04-08T19:38:49.000000Z", 
+  "msg": [
+   "Fix a minor bug in TDebugProtocol and remove dead code."
+  ], 
+  "revision_id": "665650"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-04-08T06:26:27.000000Z", 
+  "msg": [
+   "Use poll instead of select in TServerSocket", 
+   "Summary: - select has a restricted max fd set size. While this should not be an issue in the normal case for", 
+   "TServerSocket because it is started when the process starts, it could be a problem if someone wanted", 
+   "to start a new server socket at a later point in time when socket values could be greater than max.", 
+   "Reviewed By: dreiss", 
+   "Test Plan: - Compiled.", 
+   "- Deployed search tier and made sure it could serve queries.", 
+   "Revert: OK", 
+   "TracCamp Project: Thrift", 
+   "DiffCamp Revision: 11076"
+  ], 
+  "revision_id": "665649"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-04-08T06:26:05.000000Z", 
+  "msg": [
+   "Thrift error logging improvements", 
+   "Summary: - Move strerror_s to Thrift.h (was previously in TTransportException.h)", 
+   "- Capture errno as soon as syscall returns failure and make it part of error message.", 
+   "- Cleaned up several instances of the wrong error value being printed.", 
+   "- More consistently pass the errno in the TTransport Exception", 
+   "- Add more consistent error logging for the various transport failure modes", 
+   "Reviewed By: dreiss", 
+   "Test Plan: - compile everything.", 
+   "- test on search tier", 
+   "Revert: OK", 
+   "TracCamp Project: Thrift", 
+   "DiffCamp Revision: 11077"
+  ], 
+  "revision_id": "665648"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-04-08T06:25:45.000000Z", 
+  "msg": [
+   "use poll instead of select in TSocket", 
+   "Summary: fd_set, which we pass into select only supports  fds with values < 1024.", 
+   "fds can be >= 1024.", 
+   "this can cause memory corruption", 
+   "learning this stuff over 2 weeks of examining crazy core dumps is way more fun that reading it up somewhere.", 
+   "poll takes an array of fds insetad, so your fd can be any int", 
+   "Reviewed By: dreiss", 
+   "Test Plan: ran inside a test search cluster", 
+   "Revert: OK", 
+   "DiffCamp Revision: 10731"
+  ], 
+  "revision_id": "665647"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-04-08T05:07:26.000000Z", 
+  "msg": [
+   "Fix a bug in TPipedTransport that broke pipelining.", 
+   "Previously, TPipedTransport wrote it's full buffer to the \"pipe\" and", 
+   "fully reset its buffer on a readEnd.  This assumed that the buffer was", 
+   "fully read at that point.  This is not the case if requests are pipelined.", 
+   "This change makes it only pipe out the portion that has been read and", 
+   "copy the unread portion to the beginning of the buffer.", 
+   "Also add a test that verifies the new functionality."
+  ], 
+  "revision_id": "665646"
+ }
+]

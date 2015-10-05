@@ -1,0 +1,113 @@
+[
+ {
+  "author": "neels", 
+  "date": "2008-11-05T04:06:38.523573Z", 
+  "msg": [
+   "A tree-conflict notification fix.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(close_directory): Don't let prop changes on tree-conflicted directories", 
+   "overwrite the tree-conflicted flag, thus don't omit notification.", 
+   "(close_file): Remove misleading check of tree-conflicts flag when notifying", 
+   "about a skip due to lock failure. Tree-conflict detection comes only", 
+   "after this notification.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(tree_conflicts_on_merge_no_local_ci_4_1,", 
+   "tree_conflicts_on_merge_no_local_ci_4_2): Apply fix in expected output."
+  ], 
+  "revision_id": "874135"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-11-05T02:20:59.012399Z", 
+  "msg": [
+   "Fix default return values for *TREE_CONFLICTED in the merge callbacks.", 
+   "Partly fix merge_props_changed() w.r.t. tree-conflicts.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_props_changed):", 
+   "Set *TREE_CONFLICTED to FALSE by default (was missing). Report one", 
+   "new tree-conflict. Add a TODO comment to detect other tree-conflicts.", 
+   "(merge_file_changed):", 
+   "Properly propagate possible tree-conflicts from merge_props_changed().", 
+   "(merge_file_deleted):", 
+   "Set *TREE_CONFLICTED to FALSE by default (was missing).", 
+   "(merge_dir_added): Set the default of *TREE_CONFLICTED at the top (moved).", 
+   "(merge_dir_deleted):", 
+   "Set the default of *TREE_CONFLICTED at the top (moved), and set to", 
+   "FALSE instead of TRUE. This removes loads of false conflicts, on", 
+   "directories that are to be deleted on a merge.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(delete_file_and_dir, tree_conflicts_on_merge_local_ci_5_1,", 
+   "tree_conflicts_on_merge_local_ci_5_2,", 
+   "tree_conflicts_on_merge_no_local_ci_4_1,", 
+   "tree_conflicts_on_merge_no_local_ci_4_2,", 
+   "tree_conflicts_on_merge_no_local_ci_5_1,", 
+   "tree_conflicts_on_merge_no_local_ci_5_2):", 
+   "Fix up some tests, in essence undoing previous fix ups that made the tests", 
+   "look better than they deserved."
+  ], 
+  "revision_id": "874134"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-11-05T01:15:02.233723Z", 
+  "msg": [
+   "On the reintegrate-improvements branch: Merge r34024-34058 from trunk."
+  ], 
+  "revision_id": "874133"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-11-05T00:56:24.242936Z", 
+  "msg": [
+   "On the reintegrate-improvements branch: Make reintegrate merges tolerate", 
+   "subtree mergeinfo on the source as long as it indicates the same ranges were", 
+   "previously merged from the target to the source across the entire source", 
+   "tree.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(remove_irrelevant_ranges): Provide a more thorough doc string. Handle as", 
+   "hash of segment arrays for each subtree rather than a single array for the", 
+   "root only.", 
+   "(calculate_left_hand_side): Clear an old TODO(reint) and add a doc string.", 
+   "Consider *all* the subtrees with mergeinfo in the target.  If subtree", 
+   "mergeinfo is thwarting reintegrate then provide a more detailed error", 
+   "message spelling out which subtrees are the problem.", 
+   "(subtree_mergeinfo_walk_baton): New baton for", 
+   "get_subtree_mergeinfo_walk_cb.", 
+   "(get_subtree_mergeinfo_walk_cb): New svn_wc_entry_callbacks2_t found_entry", 
+   "callback.", 
+   "(svn_client_merge_reintegrate): Walk the reintegrate target to find all", 
+   "subtrees with explicit mergeinfo and pass that to", 
+   "calculate_left_hand_side() as a hash.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(svn_mergeinfo_intersect): This API promises a deep copy, but did so only", 
+   "for the rangelists, not the mergeinfo path keys.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(reintegrate_with_subtree_mergeinfo): Expand this test to check that the", 
+   "new and improved error message identifies the specific subtrees with", 
+   "mergeinfo that are stopping reintegrate from working.", 
+   "(reintegrate_with_rename,", 
+   "reintegrate_branch_never_merged_to,", 
+   "reintegrate_with_subtree_mergeinfo): Remove XFails."
+  ], 
+  "revision_id": "874132"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-11-05T00:12:43.458694Z", 
+  "msg": [
+   "Make \"revert\" handle tree conflicts per victim rather than per parent.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_admin_things): Do not clear tree conflicts recorded in this entry.", 
+   "(revert_entry): Do not send a notification, but instead report (through a", 
+   "new boolean output parameter) whether something was reverted.", 
+   "(revert_internal): Allow an unversioned item (with no entry) to be", 
+   "processed, if it is a tree conflict victim. Clear any tree conflict for", 
+   "this victim. Send a notification if either a tree conflict or any other", 
+   "state was reverted. Recurse into unversioned tree conflict victims as", 
+   "well as all versioned children.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(revert_tree_conflicts_in_updated_file): Adjust for per-victim reverting."
+  ], 
+  "revision_id": "874131"
+ }
+]

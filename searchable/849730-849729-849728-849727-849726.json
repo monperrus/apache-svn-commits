@@ -1,0 +1,86 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2004-05-08T23:11:21.131635Z", 
+  "msg": [
+   "Remove from TODO a fix that has already been made."
+  ], 
+  "revision_id": "849730"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-05-08T22:15:34.970679Z", 
+  "msg": [
+   "* doc/book/TODO:  rewrite book's TODO based on last 2 months of user comments."
+  ], 
+  "revision_id": "849729"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-08T21:15:36.655931Z", 
+  "msg": [
+   "Make the interface between the FS loader and FS module use an init", 
+   "function, instead of a pointer to the vtable, because Windows", 
+   "DSO-loading reportedly only works with functions.  Add an ABI version", 
+   "constant to prevent old FS modules from being loaded into a new", 
+   "Subversion or vice versa.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(FS_ABI_VERSION): Define.", 
+   "(fs_init_func_t): New type for FS module init function.", 
+   "(svn_fs_base__init, svn_fs_fs__init): Declare.", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_base__vtable, svn_fs_fs__vtable: Don't declare any more.", 
+   "(fs_modules): Use init func instead of vtable pointer.", 
+   "(load_vtable): Rename to load_module.  Return an initfunc.", 
+   "(get_library_vtable): Use an initfunc to get the vtable.", 
+   "* libsvn_fs_base/fs.c", 
+   "(svn_fs_base__vtable): Make static and rename to library_vtable.", 
+   "(svn_fs_base__init): New init function", 
+   "* libsvn_fs_fs/fs.c", 
+   "(svn_fs_fs__vtable): Make static and rename to library_vtable.", 
+   "(svn_fs_fs__init): New init function."
+  ], 
+  "revision_id": "849728"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-08T20:06:30.266781Z", 
+  "msg": [
+   "Stop consuming the public svn_fs API from the FS modules.  This should", 
+   "break the cyclical dependencies between libsvn_fs and the FS modules.", 
+   "* libsvn_fs_base/tree.c,", 
+   "libsvn_fs_base/bdb/dbt.c,", 
+   "libsvn_fs_base/bdb/nodes-table.c,", 
+   "libsvn_fs_base/err.c,", 
+   "libsvn_fs_base/dag.c,", 
+   "libsvn_fs_base/util/fs_skels.c,", 
+   "libsvn_fs_fs/tree.c,", 
+   "libsvn_fs_fs/fs_fs.c,", 
+   "libsvn_fs_fs/revs-txns.c,", 
+   "libsvn_fs_fs/err.c: Don't use the public svn_fs API.  Use direct", 
+   "field references or internal functions as appropriate."
+  ], 
+  "revision_id": "849727"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-08T03:05:59.897030Z", 
+  "msg": [
+   "Move svn_fs__canonicalize path into the FS modules, so that we can", 
+   "break the cyclical dependency of the FS modules on libsvn_fs.  (More", 
+   "work still has to be done on that point.)", 
+   "NOTE: List consensus on this issue centered around a libsvn_fs_subr.", 
+   "That can still happen; this duplication of one function just happens", 
+   "to be the most minimal change to fix the circular dependency.", 
+   "* libsvn_fs/fs-loader.c, libsvn_fs/fs-loader.h", 
+   "(svn_fs__canonicalize_path): Remove.", 
+   "* libsvn_fs_base/fs.c, libsvn_fs_base/fs.h", 
+   "(svn_fs_base__canonicalize_path): Add.", 
+   "* libsvn_fs_fs/fs.c, libsvn_fs_fs/fs.h", 
+   "(svn_fs_fs__canonicalize_path): Add.", 
+   "* libsvn_fs_base/tree.c, libsvn_fs_base/dag.c, libsvn_fs_fs/tree.c:", 
+   "Rename all reference to svn_fs_fs__canonicalize_path."
+  ], 
+  "revision_id": "849726"
+ }
+]

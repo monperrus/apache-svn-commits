@@ -1,0 +1,88 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2000-10-06T16:48:13.000000Z", 
+  "msg": [
+   "Rewrite the working copy crawler completely.  (What is this, the third", 
+   "time around?  :) )", 
+   "The entry-looping interface was inverted;  the recursive crawler no", 
+   "longer \"pulls\" the next entry from an entries file, but now calls an", 
+   "xml parser which then \"pushes\" each entry at a callback.  This", 
+   "callback decides what to do about the entry, and sometimes calls the", 
+   "crawler again, thereby completing the recursive circle.  Phew!", 
+   "* wc.h (svn_wc__entries_index, svn_wc__entries_start,", 
+   "svn_wc__entries_next): remove these declarations, we don't want this", 
+   "interface for entry-looping anymore.", 
+   "(svn_wc__entry_baton_t, do_parse): declare in public, because both", 
+   "entries.c and adm_crawler.c both need to use it.cd", 
+   "* entries.c (svn_wc__entry_baton_t):  just a struct now, the typedef", 
+   "is public.", 
+   "(do_parse):  no longer static, but public.", 
+   "(svn_wc__entry_baton_t): add new fields (i.e. func ptr) for looping", 
+   "purposes.", 
+   "(handle_start_tag): handle \"looping\" as a special case: call looper", 
+   "callback and return when done.q", 
+   "* adm_crawler.c (entry_callback):  new callback containing most of the", 
+   "old logic from process_subdirectory.  Called by expat whenever a", 
+   "new entry is found, and completes recursion by calling", 
+   "process_subdirectory.", 
+   "(svn_wc__crawler_baton_t):  new beast, encapsulating all info ever", 
+   "needed in a call to either process_subdirectory or entry_callback.", 
+   "(do_dir_replaces):  take a crawler_baton now, instead of lots of", 
+   "args.", 
+   "(struct stack_object, remove_stack, append_stack): move filehash", 
+   "into crawler baton instead.", 
+   "(process_subdirectory) very gutted;  guts moved to entry_callback."
+  ], 
+  "revision_id": "837495"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-10-06T09:08:36.000000Z", 
+  "msg": [
+   "* svn_ra.h (svn_ra_checkout): don't take a dir_baton any more", 
+   "* fetch.c: use editor's replace_root function; call the textdelta handler", 
+   "with a NULL arg to close the file", 
+   "* ra-dav-test.c: call the close_edit function; flesh out a bit with some", 
+   "comments/questions; don't worry about a dir_baton"
+  ], 
+  "revision_id": "837494"
+ }, 
+ {
+  "author": "daniel", 
+  "date": "2000-10-06T08:19:36.000000Z", 
+  "msg": [
+   "svn-apache.m4: as Greg Stein suggested, the check for a configured apache 2", 
+   "now uses test -r.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "837493"
+ }, 
+ {
+  "author": "daniel", 
+  "date": "2000-10-06T05:50:20.000000Z", 
+  "msg": [
+   "* svn-apache.m4: after the apache check has found an apache 2 directory, it", 
+   "now checks for the presense of apr.h to make sure that the apache installation", 
+   "has been configured. If apr.h isn't found, a warning message is produced. This", 
+   "may instead switch off the \"apache present\" variables.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "837492"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2000-10-06T04:04:50.000000Z", 
+  "msg": [
+   "(svn_errno_t): Two new error codes: SVN_ERR_FS_NOT_OPEN and", 
+   "SVN_ERR_FS_CORRUPT."
+  ], 
+  "revision_id": "837491"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2007-08-27T16:46:02.676510Z", 
+  "msg": [
+   "Finish issue #2890: Expose svn_client__suggest_merge_sources(); make", 
+   "svn_client_merge_peg3() require real input again.", 
+   "Rather than have svn_client_merge_peg3() do a bunch of super-secret", 
+   "voodoo calculations to determine the merge source when none is", 
+   "provided, we now expose the voodoo-calculating function through the", 
+   "public API.  This will allow alternative clients to tell users exactly", 
+   "what they would use as part of a merge *before* actually using it, and", 
+   "overall makes for a tighter API.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_suggest_merge_sources): Moved from svn_client_private.h", 
+   "to svn_client.h.  Move 'suggestions' parameter to the head of the", 
+   "list.  Lose the unnecessary 'revision' parameter.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_repos_root): New prototype.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client_suggest_merge_sources): Was svn_client__suggest_merge_sources.", 
+   "Move 'suggestions' parameter to the head of the list.  Lose the", 
+   "unnecessary 'revision' parameter, and just create the needed", 
+   "revision on-the-fly.  Make returned paths be full URLs.  Finally,", 
+   "do a little whitespace management.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client__get_repos_root): Was get_repos_root.", 
+   "(svn_client_merge3): Update calls to svn_client__get_repos_root().", 
+   "(svn_client_merge_peg3): Disallow missing source paths, and leave", 
+   "merge source suggestion-taking to our caller.  Update calls to", 
+   "svn_client__get_repos_root().", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Use svn_client_suggest_merge_sources() to get a", 
+   "real merge source in the absence of a user-provided one."
+  ], 
+  "revision_id": "866410"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-27T16:12:49.495816Z", 
+  "msg": [
+   "Update a consumer of svn_wc_walk_entries2() to use the latest API.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(walker_default_error_handler): Rename from this...", 
+   "(svn_wc__walker_default_error_handler): ... to this.", 
+   "(svn_wc_walk_entries2): Update user of", 
+   "svn_wc__walker_default_error_handler().", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__walker_default_error_handler): New function prototype.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_resolve_conflict3): Update to the svn_wc_walk_entries3() API.", 
+   "(resolve_walk_callbacks): Use the default error handler to handle errors."
+  ], 
+  "revision_id": "866409"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-08-27T15:07:39.768141Z", 
+  "msg": [
+   "Add copy test for issue #2894", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(svntest.wc): Import", 
+   "(URI_encoded_repos_to_wc): New.", 
+   "(test_list): Add URI_encoded_repos_to_wc to list, mark it as XFail."
+  ], 
+  "revision_id": "866408"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2007-08-27T10:52:12.423450Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.c", 
+   "(init_sspi_connection): Check error from load_security_dll()."
+  ], 
+  "revision_id": "866407"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-08-27T05:13:10.861856Z", 
+  "msg": [
+   "* subversion/tests/cmdline/externals_tests.py", 
+   "(old_style_externals_ignore_peg_reg):", 
+   "New test that checks that the old pre-1.5 svn:externals format", 
+   "ignores peg revisions."
+  ], 
+  "revision_id": "866406"
+ }
+]

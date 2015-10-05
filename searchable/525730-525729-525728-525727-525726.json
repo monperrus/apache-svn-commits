@@ -1,0 +1,72 @@
+[
+ {
+  "author": "trustin", 
+  "date": "2007-04-05T06:45:42.030020Z", 
+  "msg": [
+   "Applied covariant return type to VmPipeAcceptor.getLocalAddress()"
+  ], 
+  "revision_id": "525730"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-04-05T06:41:54.176158Z", 
+  "msg": [
+   "Submitting a patch (DERBY2524_Collation_Info_In_DTD_v2_diff.txt) attached to DERBY-2524. This is a followup to the earlier commited patch (DERBY2524_Collation_Info_In_DTD_v1_diff.txt svn revision 525568)", 
+   "svn stat -q", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\DataTypeDescriptor.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\StringDataValue.java", 
+   "M      java\\engine\\org\\apache\\derby\\catalog\\TypeDescriptor.java", 
+   "M      java\\engine\\org\\apache\\derby\\catalog\\types\\TypeDescriptorImpl.java", 
+   "The patch does following to address feedback received on the earlier patch in thread http://www.nabble.com/-jira--Created%3A-%28DERBY-2524%29-DataTypeDescriptor%28DTD%29-needs-to-have-collation-type-and-collation-derivation.-These-new-fields-will-apply-only-for-character-string-types.-Other-types-should-ignore-them.-p9842379.html", 
+   "1)Moved the constant definitions from TypeDescriptor to StringDataValue.", 
+   "2)Added javadoc comments for all the constants. One big javadoc comment for one of the constants in the related constants and other", 
+   "constants in that group will just have a javadoc of @see.", 
+   "3)I had used string costants for collation derivation since they are more verbose. But that is more expensive than simply using", 
+   "int. As a middle ground, I have defined collation derivation constants as int but the names of the constants are verbose :)", 
+   "I also changed the api for collation derivation to work with int rather than String. Finally, changed collationDerivation from", 
+   "String to int in TypeDescriptorImpl.", 
+   "4)Rather than using \"error\" to indicate incorrect collation derivation, we will just initialize collation derivation to \"none\".", 
+   "For all character string types, the collation derivation should get changed to \"implicit\" unless we are working with aggregate", 
+   "result type of character string type and the operands to the aggregate have different collation types.", 
+   "5)Currently, I only save collation type of a persistent character string type column into SYSCOLUMNS's COLUMNDATATYPE column. Collation", 
+   "derivation for such character string type is assumed as \"implicit\" because that is the only possible option in Derby 10.3 for persistent", 
+   "columns. But in some future release of Derby, when we will start supporting SQL COLLATE clause, we will want to differentiate between", 
+   "\"explicit\" and \"implicit\" collation derivation for such persistent columns. So, may be it will be good for us to start saving collation", 
+   "derivation too. For now, I have added this task as a line item under wiki page http://wiki.apache.org/db-derby/BuiltInLanguageBasedOrderingDERBY-1478 under \"Performance/Desirable items\" section.", 
+   "6)I caused several javadoc errors for using @see Classname.methodname rather than @see Classname#methodname. Sorry about that. Fixed", 
+   "those errors in this patch.", 
+   "I think with this patch, I have taken care of all the feedback received on the earlier patch DERBY2524_Collation_Info_In_DTD_v1_diff.txt.", 
+   "Again, if anyone has any comment on this committed patch or earlier commit svn revision 525568, please send your feedback on", 
+   "Derby mailing list."
+  ], 
+  "revision_id": "525729"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2007-04-05T06:41:32.657328Z", 
+  "msg": [
+   "Improve the explanation of entity-catalog parameters.", 
+   "This was referring to the old default from when this xconf was at Cocoon."
+  ], 
+  "revision_id": "525728"
+ }, 
+ {
+  "author": "trustin", 
+  "date": "2007-04-05T06:40:10.981517Z", 
+  "msg": [
+   "* Changed VmPipeAcceptor to throw an IOException with an explicit message when negative port number is specified.", 
+   "* Changed VmPipeAddress.toString() to return better string representation"
+  ], 
+  "revision_id": "525727"
+ }, 
+ {
+  "author": "trustin", 
+  "date": "2007-04-05T06:35:11.802973Z", 
+  "msg": [
+   "* Renamed anonymous address to local address", 
+   "* Fixed infinite loop", 
+   "* A lock object is created inside the VmPipeSessionImpl now"
+  ], 
+  "revision_id": "525726"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "mikemccand", 
+  "date": "2011-06-15T15:12:48.941268Z", 
+  "msg": [
+   "LUCENE-3191: add TopDocs.merge, TopGroups.merge, SearchGroup.merge, to make sharding easier"
+  ], 
+  "revision_id": "1136080"
+ }, 
+ {
+  "author": "marios", 
+  "date": "2011-06-15T15:01:55.469424Z", 
+  "msg": [
+   "Remove what seems to be a pointless assignment.", 
+   "Signed-off-by: Chris Lalancette <clalance@redhat.com>"
+  ], 
+  "revision_id": "1136079"
+ }, 
+ {
+  "author": "breed", 
+  "date": "2011-06-15T15:01:31.062217Z", 
+  "msg": [
+   "needed to escape the parenthesis"
+  ], 
+  "revision_id": "1136078"
+ }, 
+ {
+  "author": "marios", 
+  "date": "2011-06-15T15:01:31.031068Z", 
+  "msg": [
+   "Remove EC2 instance tagging and load balancer registering.", 
+   "During an EC2 create_instance call, two optional things", 
+   "might be done; tagging the instance with the name provided,", 
+   "and registering the new instance with a loadbalancer.", 
+   "Unfortunately, there is a big problem with this; the instance", 
+   "ID does not always exist immediately after the ec2.launch_instances", 
+   "call returns.  This seems to be a generic problem with EC2,", 
+   "as I've run into it several times.", 
+   "Because of this, we *cannot* tag the instance or register", 
+   "the instance with the load balancer right within the create_instance", 
+   "call, since we can't be sure the instance ID yet exists.", 
+   "Luckily, the loss of either function shouldn't be that huge;", 
+   "the name can never be retrieved (since there is no generic tag", 
+   "support), and you can always register an instance with a load", 
+   "balancer later.", 
+   "Therefore, totally remove these operations from create.  Not", 
+   "only does this make create_instance more reliable, it restores", 
+   "the \"one deltacloud API -> one cloud backend call\" semantic", 
+   "that we try to preserve.", 
+   "v2: Remove more of the tagging code that is now unnecessary; also", 
+   "remove the \"load_balancer\" feature from the ec2 driver", 
+   "Signed-off-by: Chris Lalancette <clalance@redhat.com>"
+  ], 
+  "revision_id": "1136077"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2011-06-15T14:59:10.079984Z", 
+  "msg": [
+   "Factor out a function.", 
+   "* subversion/include/private/svn_fs_util.h,", 
+   "subversion/libsvn_fs_util/fs-util.c", 
+   "(svn_fs__append_to_merged_froms): New, factored out of libsvn_fs_*/tree.c.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(append_to_merged_froms): Removed.", 
+   "(txn_body_get_mergeinfo_for_path): Adjust caller.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(append_to_merged_froms): Removed.", 
+   "(get_mergeinfo_for_path): Adjust caller."
+  ], 
+  "revision_id": "1136076"
+ }
+]

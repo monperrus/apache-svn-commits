@@ -1,0 +1,109 @@
+[
+ {
+  "author": "jszakmeister", 
+  "date": "2008-02-18T21:36:36.059988Z", 
+  "msg": [
+   "Fix the null digest detection in fsfsverify, and implement it in a way that", 
+   "preserves the digest for output.", 
+   "* contrib/server-side/fsfsverify.py", 
+   "(NULL_DIGEST): New.", 
+   "(Rep.__init__): Don't reset the digest.", 
+   "(Rep.verify): Don't compare the md5 digest if the NULL digest was recorded in", 
+   "the node rev."
+  ], 
+  "revision_id": "869490"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-02-18T21:05:41.475347Z", 
+  "msg": [
+   "Follow-up to r29414: fix a copy-and-paste-o.", 
+   "* tools/server-side/svn_dav_log_parse.py", 
+   "(_parse_get_file): Call the right handler."
+  ], 
+  "revision_id": "869489"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-02-18T20:08:38.270454Z", 
+  "msg": [
+   "Change property listing action in the SVN-ACTION DAV logging names to", 
+   "match the svnserve command set.  Specifically, remove the prop-list", 
+   "command; add \"props\" and \"text\" flags to the get-dir action; and", 
+   "create a get-file action like the get-dir one.  mod_dav_svn never logs", 
+   "a \"get-file P rR text\" action, but that's OK.", 
+   "(See also r29412.)", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(db_first_name): Change \"prop-list\" SVN-ACTION to \"get-dir props\" or", 
+   "\"get-file props\".", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(do_walk): Add \"text\" to get-dir SVN-ACTION.", 
+   "* tools/server-side/svn_dav_log_parse.py", 
+   "Update docstring.", 
+   "(_parse_get_dir): Adjust.", 
+   "(_parse_get_file): New.", 
+   "(_parse_prop_list): Remove.", 
+   "* tools/server-side/test_svn_dav_log_parse.py", 
+   "(TestCase.get_dir_or_file): Extract from test_get_dir.", 
+   "(TestCase.test_get_dir): Now a wrapper around get_dir_or_file.", 
+   "(TestCase.test_get_file): New.", 
+   "(TestCase.test_prop_list): Remove.", 
+   "(Test.handle_get_dir): Adjust.", 
+   "(Test.handle_get_file): New.", 
+   "(Test.handle_prop_list): Remove."
+  ], 
+  "revision_id": "869488"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-02-18T20:08:22.007088Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/replay.c: Fix typo in comment."
+  ], 
+  "revision_id": "869487"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-02-18T19:41:18.121453Z", 
+  "msg": [
+   "Change some of the SVN-ACTION DAV logging names to match the svnserve", 
+   "command set.", 
+   "Justification:", 
+   "- 1.5 already contains backwards-incompatible changes to the logging", 
+   "format; this (if it gets backported) is a reasonable time to make", 
+   "other bikesheddy changes.", 
+   "- The svnserve command set is a good vocabulary for svn operational", 
+   "actions; there's no reason to have a second vocabulary that is", 
+   "mostly but not entirely the same.", 
+   "- When svnserve grows logging, it would make sense to use its command", 
+   "set as the vocabulary; making these format changes would allow the", 
+   "two servers to share the same log format.", 
+   "The specific changes made:", 
+   "list-dir => get-dir", 
+   "revprop-change => change-rev-prop", 
+   "revprop-list => rev-proplist", 
+   "blame => get-file-revs", 
+   "remote-status => status", 
+   "diff-or-merge => diff", 
+   "(I would also like to get rid of prop-list, and in exchange add", 
+   "props?/text? fields to get-dir and a new get-file.)", 
+   "(It may also be worth logging get-locations and", 
+   "get-location-segments, especially given that the latter has", 
+   "complicated performance characteristics.)", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(save_value): revprop-change => change-rev-prop", 
+   "(db_first-name): revprop-list => rev-proplist", 
+   "* subversion/mod_dav_svn/reports/file-revs.c", 
+   "(dav_svn__file_revs_report): blame => get-file-revs", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): diff-or-merge => diff", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(do_walk): list-dir => get-dir", 
+   "* tools/server-side/svn_dav_log_parse.py", 
+   "Update docstring; adjust everywhere.", 
+   "* tools/server-side/test_svn_dav_log_parse.py", 
+   "Adjust everywhere."
+  ], 
+  "revision_id": "869486"
+ }
+]

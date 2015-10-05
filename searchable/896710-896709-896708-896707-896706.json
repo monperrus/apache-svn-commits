@@ -1,0 +1,116 @@
+[
+ {
+  "author": "chaase3", 
+  "date": "2010-01-06T23:09:19.432735Z", 
+  "msg": [
+   "DERBY-4503: Documentation needs note on purpose of built-in authentication mechanism", 
+   "Modified 10 topics in 10.1 branch.", 
+   "Patch: DERBY-4503-10.1-2.diff"
+  ], 
+  "revision_id": "896710"
+ }, 
+ {
+  "author": "johnh", 
+  "date": "2010-01-06T23:05:29.033026Z", 
+  "msg": [
+   "This patch implements a new set of URL(/I) generation interfaces designed to", 
+   "replace the current UrlGenerator and LockedDomainService interfaces.", 
+   "However, it does *not* actually replace these, instead providing shim code", 
+   "(GlueUrlGenerator) that binds the new interfaces together. This is done for two", 
+   "reasons:", 
+   "1. Use of UrlGenerator is extensive in the Shindig codebase (easy to", 
+   "substitute).", 
+   "2. Further, outside users are known to override UrlGenerator/DefaultUrlGenerator", 
+   "for custom purposes.", 
+   "As such, this should be treated as Phase I (phase II may be to provide \"reverse\"", 
+   "shims from UrlGenerator to the new interfaces, though that may not be possible", 
+   "in full).", 
+   "Three new interfaces are introduced, all with roughly the same implementation", 
+   "pattern:", 
+   "1. IframeUriManager", 
+   "- Responsible for generating IFRAME rendering URIs.", 
+   "- Includes methods to create an IFRAME URI and validate a created URI (for", 
+   "host, path, version, etc. matching).", 
+   "- UriStatus returned from validate method includes INVALID_DOMAIN state.", 
+   "Method and state intended to replace LockedDomainService.", 
+   "2. JsUriManager", 
+   "- Creates and validates URIs used by JsServlet and rendering code.", 
+   "3. OAuthUriManager", 
+   "- Generates (no validation needed) OAuth callback URIs.", 
+   "In addition, the following core pieces are provided:", 
+   "1. LockedDomainPrefixGenerator", 
+   "- Interface used for generating a locked-domain prefix from a Gadget's URI.", 
+   "2. UriCommon", 
+   "- Exports constants for Params used by Shindig, to avoid hard-coded values.", 
+   "3. UriStatus", 
+   "- New, more complete enum of Uri validation statuses, including", 
+   "locked-domain.", 
+   "Default implementations of all interfaces are provided:", 
+   "1. DefaultIframeUriManager", 
+   "- Uses *new* container config values to differentiate from existing", 
+   "UrlGenerator (and to cohesively bundle config in one place). This allows config", 
+   "for both to coexist easily.", 
+   "- Supports URI templating. This is useful for supporting metadata services", 
+   "that return more highly-cacheable URIs, which are trivially manipulated into", 
+   "\"complete\" URIs through string substitution.", 
+   "- Intelligently places user prefs on the fragment or query string, depending", 
+   "on whether they're needed for rendering.", 
+   "- Provides hook to do the same for security token, though this is not", 
+   "implemented in this CL.", 
+   "2. AllJsIframeVersioner (implements IframeUriManager.Versioner)", 
+   "- Implements existing algorithm for versioning IFRAME URIs (mark them with the", 
+   "checksum of all JS).", 
+   "- Not installed by default, since the algorithm is heuristic at best.", 
+   "3. DefaultJsUriManager", 
+   "- Generates extern JS URIs from host and path components.", 
+   "- Pulls same apart into constituent components (collection of features and", 
+   "validation status).", 
+   "4. DefaultJsVersioner", 
+   "- Provides version string for all features used by the given request. This", 
+   "means version params of extern JS change only when their referenced JS does.", 
+   "5. DefaultOAuthUriManager", 
+   "- Implements the same thing as the current oauth callback generation", 
+   "algorithm: simple URI template.", 
+   "The Uri class is also augmented to support fragment params in addition to query", 
+   "params, to support fragment vs. query param placement.", 
+   "The general design pattern for IFRAME and JS URI generation is to have", 
+   "ContainerConfig supply Host (which may contain scheme) and Path info, and to", 
+   "construct a Uri out of constituent components rather than String-parsing. This", 
+   "tighter structure arguably leads to cleaner, more descriptive code.", 
+   "Lastly, GlueUrlGenerator is an implementation of UrlGenerator that as", 
+   "aforementioned uses the three interfaces above under the hood. This makes it", 
+   "possible to use the new URI generation implementation (and some functionality)", 
+   "without our replacing all callers of UrlGenerator."
+  ], 
+  "revision_id": "896709"
+ }, 
+ {
+  "author": "jlaskowski", 
+  "date": "2010-01-06T22:57:31.260177Z", 
+  "msg": [
+   "Test enhancements for ensuring OpenEJB supports generic business method call interceptors", 
+   "See OPENEJB-1128 Intercepting generic business method calls fails for more"
+  ], 
+  "revision_id": "896708"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2010-01-06T22:55:53.324693Z", 
+  "msg": [
+   "Add the following test cases", 
+   "ExclusiveConsumer", 
+   "IndividualAck", 
+   "MessageListenerRedelivery", 
+   "StompRedeliveryPolicyTest"
+  ], 
+  "revision_id": "896707"
+ }, 
+ {
+  "author": "jlaskowski", 
+  "date": "2010-01-06T22:52:50.403673Z", 
+  "msg": [
+   "Fix for XBEAN-143 ClassFinder processes annotated generic interfaces"
+  ], 
+  "revision_id": "896706"
+ }
+]

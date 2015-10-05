@@ -1,0 +1,89 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-06-29T02:44:33.319887Z", 
+  "msg": [
+   "Document the \"mergeinfo\" capability of ra_svn in terms of its", 
+   "corresponding \"get-merge-info\" command.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "Document the \"mergeinfo\" capability.  Rename the \"get-merge-info\"", 
+   "command to \"get-mergeinfo\" for terminology consistency and clarity.", 
+   "Suggested by: glasser"
+  ], 
+  "revision_id": "865645"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-06-28T23:09:32.184736Z", 
+  "msg": [
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "(svn_ra_svn__do_internal_auth): In docstring, fix reference to", 
+   "svn_ra_svn__do_cyrus_auth."
+  ], 
+  "revision_id": "865644"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-06-28T23:09:27.355273Z", 
+  "msg": [
+   "Remove support for ra_svn protocol version 1 from", 
+   "libsvn_ra_svn. (Every released and supported version of Subversion", 
+   "speaks protocol version 2.)", 
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "(svn_ra_svn__session_baton_t): Remove protocol_version field.", 
+   "(svn_ra_svn__do_cyrus_auth): Remove documentation of realm == NULL", 
+   "support (which is version 1 only).", 
+   "(svn_ra_svn__auth_response): Remove \"compat\" argument.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(svn_ra_svn__auth_response): Remove version 1 behavior (including", 
+   "the argument that triggers it.)", 
+   "(handle_auth_request): Remove version 1 behavior (which is to do", 
+   "nothing).", 
+   "(open_session): Require server to support version 2.  Remove version", 
+   "1 behavior and comments explaining the different (including a very", 
+   "helpful comment describing exactly how to remove version 1", 
+   "support).", 
+   "* subversion/libsvn_ra_svn/cyrus_auth.c", 
+   "(try_auth): Remove \"compat\" argument (passed through to", 
+   "svn_ra_svn__auth_response).", 
+   "(svn_ra_svn__do_cyrus_auth): Remove support for realm == NULL.", 
+   "* subversion/libsvn_ra_svn/internal_auth.c", 
+   "(svn_ra_svn__do_internal_auth): Remove support for realm == NULL,", 
+   "and don't pass \"compat\" to svn_ra_svn__auth_response."
+  ], 
+  "revision_id": "865643"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-06-28T23:09:20.681079Z", 
+  "msg": [
+   "Remove support for ra_svn protocol version 1 from svnserve.  (Every", 
+   "released and supported version of Subversion speaks protocol version", 
+   "2.)  Note that this commit does not remove version 1 support from", 
+   "the ra_svn client.", 
+   "* subversion/svnserve/server.h", 
+   "(server_baton_t): Remove protocol_version field (which would always", 
+   "be 2, and is easy enough to put back in if we need a v3).", 
+   "* subversion/svnserve/serve.c", 
+   "(trivial_auth_request): Remove special case for version 1 (which", 
+   "doesn't send a trivial request at all).", 
+   "(must_have_access): Remove check that we're at version at least 2", 
+   "before sending authentication request.", 
+   "(serve): In the greeting, send a minimum version of 2 instead of 1,", 
+   "and send an empty mechs list (which is ignored by version 2", 
+   "clients).  Ensure that the client requests protocol version 2, and", 
+   "assume its response is in version 2 format.  Don't store the", 
+   "protocol version in the server baton."
+  ], 
+  "revision_id": "865642"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-06-28T22:29:36.561374Z", 
+  "msg": [
+   "Whitespace change, committed to test problems I'm having committing", 
+   "to the repository."
+  ], 
+  "revision_id": "865641"
+ }
+]

@@ -1,0 +1,93 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2005-01-13T23:13:10.243763Z", 
+  "msg": [
+   "Locking branch:  make 'svn [un]lock --force' work correctly over ra_dav.", 
+   "Instead of sending \"X-SVN-Options: force\" header in both LOCK and", 
+   "UNLOCK requests, use specific headers with specific meanings.  Send", 
+   "\"X-SVN-Options: lock-steal\" in LOCK and \"X-SVN-Options: lock-break\" in", 
+   "UNLOCK.", 
+   "* include/svn_dav.h", 
+   "(SVN_DAV_OPTION_FORCE):       remove this header definition.", 
+   "(SVN_DAV_OPTION_LOCK_BREAK):  new header definition.", 
+   "(SVN_DAV_OPTION_LOCK_STEAL):  new header definition.", 
+   "* libsvn_ra_dav/session.c", 
+   "(pre_send_hook):              use new headers in outbound requests.", 
+   "* mod_dav_svn/lock.c", 
+   "(svn_lock_to_dav_lock):       add 'hide_auth_user' parameter.", 
+   "(struct dav_lockdb_private):  remove 'force' boolean, add 'lock_break'", 
+   "and 'lock_steal' booleans.", 
+   "(dav_svn_open_lockdb):        set the new booleans.", 
+   "(dav_svn_get_locks,", 
+   "dav_svn_has_locks):          only lie to mod_dav if 'lock_steal' is set.", 
+   "update caller of svn_lock_to_dav_lock().", 
+   "(dav_svn_append_locks):       pass 'lock_steal' to _fs_attach_lock().", 
+   "(dav_svn_remove_lock):        pass 'lock_break' to _fs_unlock().", 
+   "(dav_svn_find_lock,", 
+   "dav_svn_refresh_locks):      update callers of svn_lock_to_dav_lock()."
+  ], 
+  "revision_id": "852790"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-13T22:32:14.321596Z", 
+  "msg": [
+   "* tools/dev/check-license.py:", 
+   "Teach it to recurse and to know which filetypes to check."
+  ], 
+  "revision_id": "852789"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-13T22:20:30.617913Z", 
+  "msg": [
+   "Locking branch:  initial implementation of ra_dav->get_lock().", 
+   "This is just a matter of calling ne_lock_discover(), which does a", 
+   "PROPFIND for the 'DAV:lockdiscovery' property on a URI.", 
+   "* libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__lock, svn_ra_dav__unlock): localize some errorstrings.", 
+   "(create_request_hook, pre_send_hook):   notice PROPFIND requests.", 
+   "(struct receiver_baton):                new context.", 
+   "(lock_receiver):                        new callback for ne_lock_discover().", 
+   "(svn_ra_dav__get_lock):                 implement."
+  ], 
+  "revision_id": "852788"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-13T21:56:04.832868Z", 
+  "msg": [
+   "* packages/win32-innosetup/tools/mk_distro.bat:", 
+   "* packages/win32-innosetup/tools/svnpath/svnpath.rc:", 
+   "* packages/win32-innosetup/tools/mk_distro.pl:", 
+   "* packages/win32-innosetup/tools/cmn.pl:", 
+   "* packages/win32-innosetup/tools/mk_htmlhelp.bat:", 
+   "* packages/win32-innosetup/tools/set_version.pl:", 
+   "* packages/win32-innosetup/tools/mk_svndoc.pl:", 
+   "* packages/win32-innosetup/W32notes.txt:", 
+   "* packages/win32-innosetup/svn.iss:", 
+   "* packages/win32-innosetup/missing_msvcp60dll.html:", 
+   "* packages/win32-innosetup/Readme.txt:", 
+   "* packages/win32-innosetup/missing_shfolderdll.html:", 
+   "* packages/win32-innosetup/templates/svn-doc.css:", 
+   "* packages/win32-innosetup/templates/svn_version.iss:", 
+   "* packages/win32-innosetup/templates/svn_dynamics.iss:", 
+   "Set eol-style native."
+  ], 
+  "revision_id": "852787"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-01-13T21:45:30.271212Z", 
+  "msg": [
+   "Locking branch: Add TODOs.", 
+   "* subversion/clients/cmdline/lock-cmd.c (svn_cl__lock),", 
+   "subversion/clients/cmdline/unlock-cmd.c (svn_cl__unlock): Add TODO to print", 
+   "warning and continue on failure.", 
+   "* subversion/libsvn_client/locking_commands.c (svn_client_unlock):", 
+   "Add TODO to return error if paht not locked."
+  ], 
+  "revision_id": "852786"
+ }
+]

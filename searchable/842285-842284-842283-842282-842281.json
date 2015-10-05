@@ -1,0 +1,96 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-06-14T14:25:29.445219Z", 
+  "msg": [
+   "Ongoing work on the delta combiner (issue #531).", 
+   "* libsvn_delta/text_delta.c (svn_txdelta__insert_op): Check if the op", 
+   "can be combined with the previous one.", 
+   "* libsvn_delta/compose_delta.c:", 
+   "- Revert part of the r2187 commmit: The offset index doesn't have to", 
+   "store the position in the new data stream for svn_txdelta_new ops,", 
+   "that's already implicit in the op's offset field.", 
+   "(offset_index_node_t): Removed.", 
+   "(offset_index_t): Changed 'offs' member to an apr_off_t* again.", 
+   "All uses changed accordingly.", 
+   "- Audit the meaning of 'offset' and 'limit' in a range. An index belongs", 
+   "to the range if \"offset <= index < limit\".", 
+   "- More copying of source ops.", 
+   "(copy_source_ops): Accept an 'offset' and 'limit' parameter instead of", 
+   "\"range_list_node_t *range\", and only use one pool. Learn how to copy all", 
+   "sorts of source stream ops, except overlapping target copies.", 
+   "(svn_txdelta__compose_windows): Initialize the new data in build_baton.", 
+   "* tests/libsvn_delta/random-test.c: Audit 'offset' and 'limit' semantics.", 
+   "* libsvn_delta/vdelta-test.c: Rework to test delta combination, too."
+  ], 
+  "revision_id": "842285"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2002-06-14T14:07:04.427563Z", 
+  "msg": [
+   "index.html: Remove references to modules support being post 1.0 as", 
+   "Karl is working on modules support right now."
+  ], 
+  "revision_id": "842284"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-06-14T13:31:35.993613Z", 
+  "msg": [
+   "Fix uninitialised memory read.  Confirmed with valgrind.", 
+   "Patch by: Miklos Fazekas <boga@mac.com>", 
+   "* subversion/libsvn_ra_dav/session.c (get_proxy): Initialise port_str", 
+   "instead of proxy_port."
+  ], 
+  "revision_id": "842283"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-14T05:16:02.550703Z", 
+  "msg": [
+   "Some further SWIG refinements.", 
+   "In particular, rename swigutil.* and the functions in them to be", 
+   "Python-specific. It is entirely reasonable and possible for multiple", 
+   "libraries to be loaded into the process space (e.g. consider Mozilla", 
+   "loading a Perl and a Python scripts which in turn binding to svn via", 
+   "the two SWIG binding libraries).", 
+   "* build.conf: [libsvn_swig_py] set the source file specifically since", 
+   "there will more files in the future (although we might move the", 
+   "source files to the swig/python/ subdir)", 
+   "* include/svn_fs.h: (svn_fs_id_root, svn_fs_is_id_root,", 
+   "svn_fs_txn_path_is_id): remove these declarations -- the", 
+   "functions no longer exist.", 
+   "* swig/svn_fs.i: add semicolon after tha nodefault for compat with", 
+   "swig 1.3.12. change include to swigutil_py.h and wrap it with the", 
+   "SWIGPYTHON define.", 
+   "* swig/swigutil_py.c: renamed from swig/swigutil.c", 
+   "* swig/swigutil_py.h: renamed from swig/swigutil.h", 
+   "(svn_swig_py_prophash_to_dict, svn_swig_py_convert_hash,", 
+   "svn_swig_py_c_strings_to_list, svn_swig_py_strings_to_array):", 
+   "these were renamed from their original counterparts by changing", 
+   "their prefix from svn_swig to svn_swig_py.", 
+   "-- all callers changed", 
+   "* swig/svn_client.i: insert include of swigutil_py.h and wrap it with the", 
+   "SWIGPYTHON define.", 
+   "* swig/util.i: change include to swigutil_py.h and wrap it with the", 
+   "SWIGPYTHON define. ignore svn_stream_printf() since the variadic", 
+   "function cannot be wrapped.", 
+   "* swig/svn_repos.i: change include to swigutil_py.h and wrap it with the", 
+   "SWIGPYTHON define.", 
+   "* swig/svn_delta.i: future change for when we require swig 1.3.12"
+  ], 
+  "revision_id": "842282"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-14T03:16:42.253994Z", 
+  "msg": [
+   "Cleanup some cruft resulting from a previous failed attempt at Issue #670.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "* subversion/include/svn_fs.h", 
+   "(struct paths_changed_args, svn_fs_paths_changed): Removed."
+  ], 
+  "revision_id": "842281"
+ }
+]

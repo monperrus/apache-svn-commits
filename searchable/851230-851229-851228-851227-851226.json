@@ -1,0 +1,119 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2004-09-28T03:00:43.144201Z", 
+  "msg": [
+   "Clean up some problems with signed vs unsigned and 32 bit vs 64 bit values.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_log2): convert limit argument into an apr_uint64_t before passing", 
+   "it in to svn_ra_svn_write_tuple.", 
+   "* subversion/svnserve/serve.c", 
+   "(log_cmd): make limit an apr_uint64_t to avoid warnings about", 
+   "signed/unsigned comparison and guard against values larger than INT_MAX", 
+   "so we don't pass really big values into svn_repos_get_logs3.  cast limit", 
+   "to int before passing into svn_repos_get_logs3."
+  ], 
+  "revision_id": "851230"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-09-28T01:22:42.602830Z", 
+  "msg": [
+   "Implement a '--limit' switch for 'svn log', which allows you to limit", 
+   "the number of log entries returned.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_get_logs3): new prototype, adds a new 'limit' argument to", 
+   "svn_repos_get_logs2.", 
+   "(svn_repos_get_logs2): deprecate.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(svn_repos_get_logs3): new, implements limit functionality.", 
+   "(svn_repos_get_logs2, svn_repos_get_logs): implement in terms of new", 
+   "svn_repos_get_logs3 function.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_log2): new prototype, adds a new 'limit' argument to", 
+   "svn_client_log.", 
+   "(svn_client_log): deprecate.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client_log2): new, like old svn_client_log, but now calls the", 
+   "get_log2 method of the RA layer.", 
+   "(svn_client_log): reimplement in terms of svn_client_log2.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__opt_state_t): add limit field.", 
+   "* subversion/clients/cmdline/log-cmd.c", 
+   "(svn_cl__log): call svn_client_log2 instead of svn_client_log.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__options): add limit option.", 
+   "(main): handle limit option.", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "(svn help log): update for new --limit flag.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t::get_log2): new, adds a 'limit' argument to get_log.", 
+   "(svn_ra_plugin_t::get_log): deprecate.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_log2): new, like svn_ra_local__get_log, but with an", 
+   "additional 'limit' argument.", 
+   "(svn_ra_local__get_log): reimplement in terms of svn_ra_local_get_log2.", 
+   "(ra_local_plugin): add svn_ra_local__get_log2.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_UNSPECIFIED_NUMBER): new constant, indicates an optional", 
+   "number that was not found.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(vparse_tuple): handle the 'n' case for optional entries in a tuple.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_log2): add limit functionality, with fallback in case the server", 
+   "doesn't respect the limit request.", 
+   "(ra_svn_log): implement in terms of ra_svn_log2.", 
+   "(ra_svn_plugin): add ra_svn_log2.", 
+   "* subversion/svnserve/serve.c", 
+   "(log_cmd): add limit functionality.", 
+   "* subversion/libsvn_ra_dav/log.c", 
+   "(log_baton): add limit and count fields for keeping track of logs we", 
+   "receive versus how many we're willing to display.", 
+   "(log_end_element): bail out if we go over the limit of entries we're", 
+   "going to show.", 
+   "(svn_ra_dav__get_log2): new, adds limit to old svn_ra_dav__get_log impl.", 
+   "(svn_ra_dav__get_log): reimplement in terms of svn_ra_dav__get_log2.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__get_log2): prototype.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(dav_plugin): add svn_ra_dav__get_log2.", 
+   "* subversion/mod_dav_svn/log.c", 
+   "(dav_svn__log_report): parse limit out of request and pass it on to", 
+   "svn_repos_get_logs2."
+  ], 
+  "revision_id": "851229"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2004-09-27T22:51:48.955623Z", 
+  "msg": [
+   "Typo fixes in the svnbook.", 
+   "* doc/book/book/ch05.xml", 
+   "(svn-ch-5-sect-1.4): \"algoritm\" --> \"algorithm\".", 
+   "* doc/book/book/ch09.xml", 
+   "(svn-ch-9-sect-1.2-re-switch): \"perl\" --> \"Perl\"."
+  ], 
+  "revision_id": "851228"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2004-09-27T21:53:36.290955Z", 
+  "msg": [
+   "* TRANSLATING", 
+   "- Add the new \"Maintenance on branches\" section to the section list.", 
+   "- Minor addition to the Vim modeline."
+  ], 
+  "revision_id": "851227"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2004-09-27T19:38:29.690614Z", 
+  "msg": [
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-status-ensure-cursor-on-file): New function.", 
+   "It is used for a better error checking for operations", 
+   "that operate on files."
+  ], 
+  "revision_id": "851226"
+ }
+]

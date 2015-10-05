@@ -1,0 +1,83 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2003-05-24T00:24:26.479386Z", 
+  "msg": [
+   "Instead of implementing the same thing ourselves, have SVNShell use cmd.Cmd.", 
+   "* tools/examples/svnshell.py", 
+   "(__init__): call _setup_prompt and cmdloop instead of _do_prompt.", 
+   "(cmd_help): deleted, the Cmd class has a perfectly servicable help built in.", 
+   "(cmd_*): rename to do_*, and adjust arguments (now take a single arg).", 
+   "(postcmd): new method, just calls _setup_prompt.", 
+   "(_do_prompt): rename to _setup_prompt, and remove a bunch of logic we no", 
+   "longer need.", 
+   "(main): remove the termios stuff, i'm fairly sure Cmd can handle this sort", 
+   "of thing for us, but if anyone has trouble, feel free to just put it back."
+  ], 
+  "revision_id": "846105"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-23T22:22:31.188026Z", 
+  "msg": [
+   "* svnserve/main.c (main): Remove the comment claiming that our libraries", 
+   "aren't thread-safe; the only non-thread-safe area of our library we know", 
+   "about is the collection of file and line data in errors, and a race", 
+   "there just means we report inaccurate file and line information in", 
+   "maintainer-mode error messages."
+  ], 
+  "revision_id": "846104"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-05-23T21:55:58.042328Z", 
+  "msg": [
+   "A new checkout implementation:  don't call RA->do_checkout(); instead", 
+   "have svn_client_checkout() secretly run svn_client_update() on an", 
+   "incomplete wc-root dir.", 
+   "[In my latest tests, this change makes ra_local and ra_dav checkouts", 
+   "about 10% faster, and ra_svn checkouts are the same speed.]", 
+   "* cmdline/checkout-cmd.c (svn_cl__checkout): don't ever pass an", 
+   "'unspecified' revision into svn_client_checkout, because", 
+   "svn_client_checkout claims it won't accept such; default to HEAD", 
+   "instead.", 
+   "* svn_wc.h (svn_wc_ensure_adm):  declare as a public function.", 
+   "* libsvn_wc/adm_files.h (svn_wc__ensure_adm):  remove declaration.", 
+   "* libsvn_wc/adm_files.c (svn_wc_ensure_adm):  was svn_wc__ensure_adm.", 
+   "* libsvn_wc/adm_ops.c (svn_wc_add):  update caller.", 
+   "* libsvn_wc/update_editor.c (prep directory): update caller.", 
+   "* libsvn_client/checkout.c (svn_client__checkout_internal): fulfill", 
+   "docstring promise; opt_revision_t argument mustn't be 'unspecified'.", 
+   "Also, instead of calling RA->checkout(), create a new incomplete", 
+   "root wc-dir and run svn_client_update on it.", 
+   "* svnadmin_tests.py (create_txn, remove_txn):  increment all expected", 
+   "txn numbers by 1.   my forthcoming mail about this.  :-)"
+  ], 
+  "revision_id": "846103"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-23T21:28:14.972892Z", 
+  "msg": [
+   "Create branch and tag paths using the modern recommended layout:", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(branch_path, get_tag_path): Removed.", 
+   "(make_path): New function, creates trunk, tag, or branch path.", 
+   "All callers of branch_path changed to use make_path instead.", 
+   "* tools/cvs2svn/run-tests.py: Adjust all tests accordingly."
+  ], 
+  "revision_id": "846102"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-23T20:22:17.997820Z", 
+  "msg": [
+   "Get better information about bug fix rates:", 
+   "* tools/dev/iz/find-fix.py", 
+   "(extract): Add new `details' flag for detailed resolution info.", 
+   "(summary): Pass true for the new flag, adjust output accordingly.", 
+   "(plot): Pass false for the new flag."
+  ], 
+  "revision_id": "846101"
+ }
+]

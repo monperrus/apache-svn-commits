@@ -1,0 +1,56 @@
+[
+ {
+  "author": "smilek", 
+  "date": "2007-10-26T00:00:39.017842Z", 
+  "msg": [
+   "in endDragging(), added call to jetspeed.page.onBrowserWindowResize() if browser is IE6"
+  ], 
+  "revision_id": "588405"
+ }, 
+ {
+  "author": "smilek", 
+  "date": "2007-10-26T00:00:37.373222Z", 
+  "msg": [
+   "broke postCreate into several methods in order to support deferred calls - in slow browsers (e.g. IE6), the PageEditor loads slowly and the loading indicator will not update in IE6/IE7 unless we break the loading operation up this way"
+  ], 
+  "revision_id": "588404"
+ }, 
+ {
+  "author": "smilek", 
+  "date": "2007-10-26T00:00:34.971514Z", 
+  "msg": [
+   "used by jetspeed.postload_docwrite() as a substitute for <script> in IE DOMContentLoaded detection 'technique''"
+  ], 
+  "revision_id": "588403"
+ }, 
+ {
+  "author": "smilek", 
+  "date": "2007-10-26T00:00:32.791718Z", 
+  "msg": [
+   "changed jetspeed.om.Portlet.submitWinState() to prevent calls to ajax api (move/moveabs) unless user has edit page action privilege", 
+   "added jetspeed.om.Page.columnEmptyCheck(), which sets height of a column to 1px when it is empty - column height is set back to auto when not empty; this prevents sibling columns to the right from shifting left and taking the place of the empty column (previously used min-height 40px, which worked in mozilla but not IE)", 
+   "added script annotation functions - scripts included in portlets are searched for calls to addEventListener, attachEvent, document.write and (document|window).location= statements. When such a statement is found, one of these new functions is wrapped around the original statement. This allows us to:", 
+   "1) prevent addition of event listeners for onload/DOMContentLoaded/domready - this is necessary because onload has already occurred when we load portlet content (i.e. the onload event will not fire again) - instead we call the listener function directly", 
+   "2) attempt to handle document.write. since onload has occurred, a document.write call will replace the entire document", 
+   "3) prevent setting (window|document).location to an action or render url", 
+   "for more details see the individual functions:", 
+   "jetspeed.postload_addEventListener()", 
+   "jetspeed.postload_attachEvent()", 
+   "jetspeed.postload_docwrite()", 
+   "jetspeed.setdoclocation()", 
+   "also, the script annotation code is in jetspeed.widget.PortletWindow._fixScripts()", 
+   "added jetspeed.addDummyScriptToHead() (and associated utility function jetspeed.containsElement()) for purposes of adding script nodes with src attribute to head element for benefit of ajax toolkits which search script nodes in head to determine if a library has been loaded (e.g. wicket)", 
+   "added jetspeed.ui.swfobject, which is a modified/condensed version of the SWFObject library (http://code.google.com/p/swfobject) - the library appears here due to problems with loading it for each portlet that needs it", 
+   "in jetspeed.om.Page.loadPostRender(), make deferred call to new function jetspeed.url.loadingIndicatorStepPreload() so that loading indicator step images are preloaded after all other page content is finished loading"
+  ], 
+  "revision_id": "588402"
+ }, 
+ {
+  "author": "smilek", 
+  "date": "2007-10-26T00:00:30.092759Z", 
+  "msg": [
+   "minor changes to jetspeed.debugColumn()"
+  ], 
+  "revision_id": "588401"
+ }
+]

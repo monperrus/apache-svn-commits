@@ -1,0 +1,106 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-01-11T03:41:41.896455Z", 
+  "msg": [
+   "Fix issue #598.", 
+   "Patch by: Joseph Dane <jdane@studio3511.com>", 
+   "* status.c (svn_cl__print_status_list): Display a meaningful message", 
+   "when calling 'status' on a non-existent (as opposed to simply", 
+   "non-VC'd) file.", 
+   "* subversion/include/svn_wc.h (enum svn_wc_status_kind): Move", 
+   "svn_wc_status_unversioned up to be near svn_wc_status_none, make", 
+   "comments terser.  (This was not part of Joseph Dane's original change,", 
+   "I added it while I was in the neighborhood. -kff)"
+  ], 
+  "revision_id": "840895"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-11T03:39:04.419303Z", 
+  "msg": [
+   "New EOL logic for 'svn revert'.", 
+   "* adm_ops.c (revert_admin_things): before copying text-base out to", 
+   "overwrite the working, check the eol-style property.  If 'native',", 
+   "call copy_and_translate to native eol style."
+  ], 
+  "revision_id": "840894"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-11T03:08:49.133812Z", 
+  "msg": [
+   "Working with Ben on eol conversion, part of issue #524:", 
+   "* subversion/libsvn_wc/questions.c (svn_wc_text_modified_p): Rewrite", 
+   "to handle various newline styles.", 
+   "* subversion/libsvn_wc/wc.h (enum svn_wc__eol_style): New style", 
+   "svn_wc__eol_style_unknown; remove trailing comma from last style", 
+   "entry.  Doc fix.", 
+   "(SVN_WC__DEFAULT_EOL_MARKER): New #define.", 
+   "* subversion/libsvn_wc/props.c (svn_wc__eol_style_from_value): Use", 
+   "svn_wc__eol_style_unknown for unrecognized value.", 
+   "* subversion/include/svn_io.h (svn_io_copy_and_translate): Doc", 
+   "tweaks.", 
+   "* subversion/include/svn_error_codes.h (SVN_ERRDEF): New error", 
+   "SVN_ERR_IO_UNKNOWN_EOL.  Reword SVN_ERR_IO_INCONSISTENT_EOL.", 
+   "* subversion/libsvn_wc/adm_crawler.c (do_postfix_text_deltas):", 
+   "Separate native and fixed eol style cases when committing."
+  ], 
+  "revision_id": "840893"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T03:05:33.893823Z", 
+  "msg": [
+   "Convert the wcprop get/set functions to use sane types (i.e. not stringbuf)", 
+   "* svn_wc.h (svn_wc_get_wc_prop, svn_wc_set_wc_prop): change param types", 
+   "* svn_ra.h (svn_ra_get_wc_prop_func_t, svn_ra_set_wc_prop_func_t):", 
+   "change param types", 
+   "* libsvn_wc/wc.h (svn_wc__wcprop_get, svn_wc__wcprop_set): change param", 
+   "types", 
+   "* libsvn_wc/props.c (wcprop_list): change path argument to \"const char *\".", 
+   "switch over to use SVN_ERR() rather than if/return logic", 
+   "(svn_wc__wcprop_get, svn_wc__wcprop_set): update to the new param types", 
+   "* libsvn_wc/adm_ops.c (svn_wc_get_wc_prop, svn_wc_set_wc_prop): switch", 
+   "functions over to use the new param types. simplify baton assignment.", 
+   "* libsvn_wc/get_editor.c (change_dir_prop): if the prop is a wcprop, then", 
+   "call svn_wc__wcprop_set() using the new param types", 
+   "(close_file): when dumping stored wcprops, call svn_wc__wcprop_set with", 
+   "the new param types", 
+   "* libsvn_ra_dav/merge.c (merge_ctx_t {}): remove vsn_url_name field (a", 
+   "stringbuf) since we can use a simple string constant now.", 
+   "(bump_resource): change vsn_url_str to be an svn_string_t instead and", 
+   "adjust things to call the set_prop callback appropriately", 
+   "(svn_ra_dav__merge_activity): don't init the vsn_url_name field any more", 
+   "* libsvn_ra_dav/ra_dav.h (svn_ra_dav__get_activity_url): the returned value", 
+   "is not a \"const svn_string_t *\" instead of a stringbuf", 
+   "* libsvn_ra_dav/commit.c (commit_ctx_t {}): remove the vsn_url_name field", 
+   "(a stringbuf) since we can set the prop using a string constant now.", 
+   "(get_version_url): change logic to use new get_func param types", 
+   "(get_activity_url): return the activity_url as an svn_string_t instead.", 
+   "change logic to call get_func with its new types now.", 
+   "(create_activity): change the activity_url type which is passed to", 
+   "get_activity_url() (which changed the param type). adjust construction", 
+   "of the final activity URL to compensate for the type change.", 
+   "(svn_ra_dav__get_commit_editor): no longer set the vsn_url_name field", 
+   "* libsvn_ra_dav/fetch.c (begin_checkout): return the activity_url as an", 
+   "svn_string_t type", 
+   "(svn_ra_dav__do_checkout): handle the type change of the activity_url", 
+   "* libsvn_ra_dav/options.c (options_ctx_t {}): change the activity_url", 
+   "field over to an svn_string_t.", 
+   "(end_element): initialize cc->activity_url as an svn_string_t now", 
+   "(svn_ra_dav__get_activity_url): change the type of the activity_url param"
+  ], 
+  "revision_id": "840892"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T02:53:16.427223Z", 
+  "msg": [
+   "Fix the creator-displayname and creationdate properties", 
+   "* (dav_svn_insert_prop): if the property isn't defined, then return NOTDEF", 
+   "to let mod_dav handle the undefined property appropriately."
+  ], 
+  "revision_id": "840891"
+ }
+]

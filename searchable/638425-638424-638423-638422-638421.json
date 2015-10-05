@@ -1,0 +1,50 @@
+[
+ {
+  "author": "kmarsden", 
+  "date": "2008-03-18T15:58:54.279487Z", 
+  "msg": [
+   "DERBY-3538 NullPointerException during execution for query with LEFT OUTER JOIN whose inner table selects all constants.", 
+   "Contributed by Army Brown", 
+   "Here are some of Army's comments ...", 
+   "it *appears* that the problem is in the \"doProjection()\" method of ProjectRestrictResultSet. During code generation we recognize that the SELECT has all constants and thus that its result set is \"reusable\"; see ProjectRestrictNode.generateMinion(), esp. the call to:", 
+   "mb.push(resultColumns.reusableResult());", 
+   "At execution, ProjectResrictResultSet sees that it can reuse the result set so it \"caches\" the execution row in doProjection() and then just returns that on subsequent calls. However, when returning the cached row, the method does *not* call \"setCurrentRow()\" with the cached row. In some cases (esp. left outer join) that can mean that the \"current execution row\" corresponding to the ProjectRestrictResultSet remains null when it should be set to the cached row. Thus when it comes time to evaluate the ON predicate, which references the ProjectRestrictResultSet's execution row, the predicate fails with an NPE because the \"current execution row\" is not set for that PRRS."
+  ], 
+  "revision_id": "638425"
+ }, 
+ {
+  "author": "bommel", 
+  "date": "2008-03-18T15:57:42.426626Z", 
+  "msg": [
+   "TOBAGO-619 Avoid usages of javascript:false in iframe src attribute", 
+   "context path is missing"
+  ], 
+  "revision_id": "638424"
+ }, 
+ {
+  "author": "sjanuary", 
+  "date": "2008-03-18T15:55:14.579598Z", 
+  "msg": [
+   "Apply patch for HARMONY-5607 ([classlib][pack200] Inner class handling is wrong)"
+  ], 
+  "revision_id": "638423"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2008-03-18T15:51:22.589756Z", 
+  "msg": [
+   "Port test changes for DERBY-3160 (590720), to avoid authentication errors in", 
+   "AuthenticationTest, PoolDSAuthenticationTest and XADSAuthenticationTest with", 
+   "10.4"
+  ], 
+  "revision_id": "638422"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2008-03-18T15:48:06.173643Z", 
+  "msg": [
+   "auto-generated test rules"
+  ], 
+  "revision_id": "638421"
+ }
+]

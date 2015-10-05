@@ -1,0 +1,89 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-02-26T00:19:00.553447Z", 
+  "msg": [
+   "Switch to filesystem over to a streamy write interface.  That is, no", 
+   "longer are the entire new contents of a file held in memory during the", 
+   "use of the stream returned by svn_fs_apply_textdelta().", 
+   "This change, while it does modify some internal representations of", 
+   "data used in our Berkeley database storage, is design to be compatible", 
+   "with existing Subversion repositories.", 
+   "* subversion/libsvn_fs/dag.h", 
+   "(svn_fs__dag_get_edit_stream): Renamed from svn_fs__dag_set_contents.", 
+   "Also, changed this function to return a writable stream on a new", 
+   "EDIT-DATA-KEY, rather than simply writing the contents of a", 
+   "(potentially huge) string.", 
+   "(svn_fs__dag_finalize_edits): New function.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(svn_fs__dag_delete_if_mutable, make_node_immutable): Become aware", 
+   "of EDIT-DATA-KEY reps, too.", 
+   "(svn_fs__dag_get_edit_stream): Renamed from svn_fs__dag_set_contents.", 
+   "Also, changed this function to return a writable stream on a new", 
+   "EDIT-DATA-KEY, rather than simply writing the contents of a", 
+   "(potentially huge) string.", 
+   "(svn_fs__dag_finalize_edits): New function.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(txdelta_baton_t): Replace 'target_string' with 'target_stream'.", 
+   "(txn_body_finalize_edits, txn_body_apply_textdelta): New functions.", 
+   "(window_consumer): Call txn_body_finalize_edits after handling the", 
+   "final (NULL) window.", 
+   "(write_to_string, txn_body_get_mutable_source_stream,", 
+   "txn_body_write_target_string): Removed obsolete functions.", 
+   "(svn_fs_apply_textdelta): Switch this to a trail-sy operation, and", 
+   "implement streamy writes under the hood.", 
+   "* subversion/libsvn_fs/structure", 
+   "Made consistent the descriptions of file and directory node revision", 
+   "HEADERs, and added optional EDIT-DATA-KEY for files.", 
+   "* subversion/libsvn_fs/node-rev.h", 
+   "(SVN_FS__NR_EDIT_KEY): New macro.", 
+   "* subversion/libsvn_fs/nodes-table.c", 
+   "(is_mutable_header): New helper function.", 
+   "(is_valid_node_revision): Become aware of EDIT-DATA-KEY reps, too.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(write_and_read_file): Slight code format change."
+  ], 
+  "revision_id": "841450"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2002-02-25T18:01:43.045238Z", 
+  "msg": [
+   "Added 'Is Subversion stable enough for me to use for my own projects?' FAQ"
+  ], 
+  "revision_id": "841449"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-02-24T23:44:26.042354Z", 
+  "msg": [
+   "Implement the new editor functions. Compiles, but untested.", 
+   "* include/svn_delta.h (svn_delta_compat_wrap): change prototype; we", 
+   "need to wrap the edit baton, so it needs to be part of the input", 
+   "and output.", 
+   "* libsvn_delta/default_editor.c: revamp the old editor default", 
+   "functions (coalesce duplicate and rename). implement new editor", 
+   "default functions. implement wrapper editor."
+  ], 
+  "revision_id": "841448"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2002-02-24T19:17:04.912475Z", 
+  "msg": [
+   "* packages/rpm/subversion.spec, expat.patch : Fixed up subversion.spec and", 
+   "expat patch to use a sed script to change libexpat to -lexpat so I don't", 
+   "have to keep making changes to the expat.patch every time someone changes", 
+   "build.conf."
+  ], 
+  "revision_id": "841447"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2002-02-24T18:52:56.188185Z", 
+  "msg": [
+   "* packages/rpm/subversion.spec : Track changes to build.conf."
+  ], 
+  "revision_id": "841446"
+ }
+]

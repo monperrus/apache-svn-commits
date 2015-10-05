@@ -1,0 +1,81 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2007-04-06T11:31:29.589186Z", 
+  "msg": [
+   "Fix erroneous references to 'next-id' in the BDB code. The special key name is", 
+   "actually 'next-key'.", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "Issue: 2629", 
+   "* subversion/libsvn_fs_base/bdb/txn-table.c", 
+   "(svn_fs_bdb__open_transactions_table): Fix comment.", 
+   "(svn_fs_bdb__get_txn_list): Fix comment and local variable name.", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.c", 
+   "(svn_fs_bdb__open_copies_table, svn_fs_bdb__reserve_copy_id): Fix comments.", 
+   "* subversion/libsvn_fs_base/bdb/nodes-table.c", 
+   "(svn_fs_bdb__open_nodes_table): Fix comment."
+  ], 
+  "revision_id": "864555"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-04-06T08:54:41.504721Z", 
+  "msg": [
+   "When running DAV tests on Windows, don't try to load mod_authn_core for", 
+   "Apache 2.2, as that module only exists in 2.3.", 
+   "* win-tests.py", 
+   "(Httpd.__init__): Only load mod_authn_core.so for Apache versions 2.3+."
+  ], 
+  "revision_id": "864554"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-04-06T06:54:59.987864Z", 
+  "msg": [
+   "My thoughts are many and conflicting.  Remove the 'trail-free-bdb' branch."
+  ], 
+  "revision_id": "864553"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-04-06T06:51:54.493109Z", 
+  "msg": [
+   "On the 'trail-free-bdb' branch:", 
+   "Instead of storing a flag in the filesystem private data structure", 
+   "that says whether or not we're in a BDB-transaction-protected state or", 
+   "not, just store the transaction pointer itself.  Trails are now", 
+   "basically just a convenience structure for carrying a filesystem", 
+   "pointer and a pool.", 
+   "* subversion/libsvn_fs_base/fs.h", 
+   "(base_fs_data_t): Replace 'in_txn_trail' boolean with a 'db_txn'", 
+   "pointer to the active transaction.", 
+   "(FS_DB_TXN): New macro.", 
+   "* subversion/libsvn_fs_base/trail.h", 
+   "(struct trail_t): Remove 'db_txn' member.", 
+   "* subversion/libsvn_fs_base/trail.c", 
+   "(begin_trail, abort_trail, commit_trail): Check and set the FS's new", 
+   "'db_txn' member instead of the now-missing 'in_txn_trail' flag.", 
+   "* subversion/libsvn_fs_base/bdb/txn-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/reps-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/locks-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/uuids-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/strings-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/lock-tokens-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/rev-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/nodes-table.c,", 
+   "* subversion/libsvn_fs_base/bdb/changes-table.c", 
+   "Use FS_DB_TXN() macro instead of looking for a 'db_txn' in the trail."
+  ], 
+  "revision_id": "864552"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-04-06T05:44:28.634839Z", 
+  "msg": [
+   "Create new 'trail-free-bdb' branch for playing around with a libsvn_fs_base", 
+   "that doesn't have the word 'trail' scattered all over the place."
+  ], 
+  "revision_id": "864551"
+ }
+]

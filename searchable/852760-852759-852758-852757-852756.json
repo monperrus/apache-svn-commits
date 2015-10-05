@@ -1,0 +1,88 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2005-01-12T20:16:06.839629Z", 
+  "msg": [
+   "Fix issue 1708 (part 1 of 2):", 
+   "Allow exporting of single files from working copy paths.", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_one_versioned_file): New function, abstracted out from...", 
+   "(copy_versioned_files): ...here. Rearrange to deal with single files."
+  ], 
+  "revision_id": "852760"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-12T20:06:51.225839Z", 
+  "msg": [
+   "Locking branch:  merge (trunk, r12663:12684) to branch.", 
+   "Doing this to prepare for lundblad's big RA trunk changes.", 
+   "Backport the changes using this tiny tweak:", 
+   "* libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__lock, svn_ra_dav__unlock):  use 'svn_ra_dav__session_t' now."
+  ], 
+  "revision_id": "852759"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-12T19:58:06.832288Z", 
+  "msg": [
+   "Locking branch:  make ne_copy() print detailed errors from the server.", 
+   "cmpilato requested this, after he saw me using the same technique for", 
+   "my calls to ne_lock() and ne_unlock().  It's just a matter of", 
+   "attaching ra_dav's custom <D:error> parser to neon's request.", 
+   "* libsvn_ra_dav/commit.c", 
+   "(struct copy_baton):   new context...", 
+   "(pre_send_hook):       ...for use with this new callback.", 
+   "(commit_add_dir):      register the callback with neon, check for new err.", 
+   "(commit_add_file):     do the same.", 
+   "* mod_dav_svn/repos.c", 
+   "(dav_svn_copy_resource):  call dav_new_error_tag() instead of", 
+   "dav_new_error(), so that a <D:error> is generated."
+  ], 
+  "revision_id": "852758"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-01-12T19:18:44.550226Z", 
+  "msg": [
+   "Change all apr_file_* calls to use their corresponding", 
+   "svn_io_file_* function, plus a small fix.", 
+   "* libsvn_fs_fs/lock.c: Use svn_io_file_* instead of apr_file_*.", 
+   "(write_lock_to_file): Remove bogus APR_STATUS_IS_ENOENT check."
+  ], 
+  "revision_id": "852757"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-01-12T16:03:28.147301Z", 
+  "msg": [
+   "Apply many fixes from Philip Martin's code review of r12676.  Start", 
+   "the process of turning apr_file_FOO calls into svn_io_file_FOO calls", 
+   "to eliminate all those extra \"if (status)...\" clauses.", 
+   "* libsvn_fs_fs/lock.c (merge_paths, abs_path_to_lock_digest_file,", 
+   "make_digest, abs_path_to_lock_file, base_path_to_lock_file,", 
+   "abs_path_to_lock_token_file): Add Docstrings.", 
+   "(write_entries_file): Write entries file atomically.  Add extra tmp", 
+   "vars to avoid cast in apr_hash_this.  Check return of", 
+   "apr_file_close.", 
+   "(read_entries_file): Docstring fix, tab fixes.  Fix loop for reading", 
+   "entries to use apr_file_read_full instead of just apr_file_read, and", 
+   "check for EOF in the middle of the while loop.  Check return of", 
+   "apr_file_close.  Removed weird cut and paste garbage.", 
+   "(repository_abs_path): Return const char * instead of char *.", 
+   "Updated all callers.", 
+   "(add_hash_to_entries_file): Rework to eliminate unnecessary stat", 
+   "call.  Check return of file close.", 
+   "(read_lock_from_abs_path):  Check return of file close.", 
+   "(get_locks_under_path): Add extra tmp vars to avoid cast in", 
+   "apr_hash_this.  Check return of abs_path_to_lock_digest_file.", 
+   "Switch from using apr_file_read to svn_io_file_read_full.  Switch", 
+   "apr_file_seek to svn_io_file_seek and check return.  Check return of", 
+   "recursive call to get_locks_under_path.", 
+   "(svn_fs_fs__get_locks): Fix comment.  Check for strlen before", 
+   "accessing abs_path[-1]."
+  ], 
+  "revision_id": "852756"
+ }
+]

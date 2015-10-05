@@ -1,0 +1,71 @@
+[
+ {
+  "author": "mikem", 
+  "date": "2006-10-07T15:33:24.808290Z", 
+  "msg": [
+   "DERBY-1716", 
+   "contributed by Yip Ng", 
+   "patch: derby1716-trunk-diff03.txt", 
+   "Unlike other descriptors, when privilege(s) get revoked from user,", 
+   "the statement is not subject to recompilation, so then we are back to square one", 
+   "since the previous patch attempts to bring in the permission descriptor(s) into", 
+   "the permission cache at compilation time to avoid reading from system tables at", 
+   "execution time.", 
+   "I believe the proper proposal fix is to use internal nested read-only transaction", 
+   "when the system is reading permission descriptors from the system tables. At a", 
+   "high level, a statement undergoes the following typical steps for it to get executed", 
+   "by the system:", 
+   "1. Statement Compilation Phase", 
+   "a) Parse the statement", 
+   "b) Bind the statement and collects required permissions for it to be executed.", 
+   "c) Optimize the statement", 
+   "d) Generate the activation for the statement", 
+   "2. Statement Execution Phase", 
+   "a) Check if the authoration id has the required privileges to execute the statement.", 
+   "b) Execute the statement", 
+   "The problem lies in permissions checking step at statement execution phase. Before a statement can be executed in SQL authorization mode, the authorization id's privileges needs to be check against the permission cache or if the privileges are not available in the cache, the system needs to read this metadata information from the system tables. But the system is using *user transaction* to do this, so the shared locks that got acquired by the user transaction may not get released immediately; therefore, leading to lock timeout when the grantor attempts to revoke the user's privilege. To resolve this issue, the system now will start an internal read-only nested transaction(same lock space as the parent transaction) to read permission related info from the system tables and release the shared locks", 
+   "as soon as the permissions check is completed before statement execution. This tackles the root of the stated problem."
+  ], 
+  "revision_id": "453935"
+ }, 
+ {
+  "author": "danielf", 
+  "date": "2006-10-07T15:33:08.014653Z", 
+  "msg": [
+   "Modified the cocoon-blocks-fw-sample, so that it works with the new blocks fw and made it available in the cocoon-webapp.", 
+   "Made the DemoServlet use the block protocol. Part II"
+  ], 
+  "revision_id": "453934"
+ }, 
+ {
+  "author": "danielf", 
+  "date": "2006-10-07T15:32:19.853590Z", 
+  "msg": [
+   "Modified the cocoon-blocks-fw-sample, so that it works with the new blocks fw and made it available in the cocoon-webapp.", 
+   "Made the DemoServlet use the block protocol."
+  ], 
+  "revision_id": "453933"
+ }, 
+ {
+  "author": "pcl", 
+  "date": "2006-10-07T15:31:16.586620Z", 
+  "msg": [
+   "added more details to error message; made OpenJPA startup banner configurable"
+  ], 
+  "revision_id": "453932"
+ }, 
+ {
+  "author": "danielf", 
+  "date": "2006-10-07T15:26:58.953417Z", 
+  "msg": [
+   "Spring based block framework:", 
+   "* Got (thanks to Carsten's help) the context handling working in the SitemapServlet", 
+   "* Created a block source (by modifying the previous OSGi based URL), and removed the configuration of the previous simple block protocol from core as their named clashed, this might affect some sample", 
+   "* Created a block path module (that translates block URI:s to absolute URI:s)", 
+   "* Created a block property module", 
+   "* Changed name on the property blocksServletClass to servletClass in the BlockServlet for the embedded ServletContextWrapper.java", 
+   "* Removed the dependency on OSGi for the blocks fw"
+  ], 
+  "revision_id": "453931"
+ }
+]

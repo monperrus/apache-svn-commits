@@ -1,0 +1,112 @@
+[
+ {
+  "author": "faywang", 
+  "date": "2010-08-17T23:39:23.335783Z", 
+  "msg": [
+   "OPENJPA-735: OpenJPA support for SolidDB"
+  ], 
+  "revision_id": "986525"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-08-17T23:36:49.363108Z", 
+  "msg": [
+   "Big changes are:", 
+   "Renamed HBaseExcecutorService as ExcecutorService; undid its staticness", 
+   "so minicluster tests would work (the first server to exit was killing", 
+   "the executor service on others still running)", 
+   "Made it so cluster shuts down gracefully keyed off state of the", 
+   "cluster shutdown flag up in zk.  As soon as it is set, RSs start closing", 
+   "all user regions WITHOUT updating zk and using close handlers", 
+   "exclusively (now only one way to close a region rather than one way", 
+   "per type of operation)  If the RS was NOT carrying a catalog table", 
+   "when all user tables closed, it just shuts itself down.  When master", 
+   "notices that all but <= 2 regionservers remain, it tells them they", 
+   "can close.  This mimics the quiesce state we used to have.  Master", 
+   "will shut himself down when no more regionservers.  Shutdown of", 
+   "regionservers is now handled by zk expireserver watcher only where", 
+   "before we watched rss w/ zk and then processed them with HMsgs on", 
+   "hearbeat... now only the one means of handling rs expiration.", 
+   "M src/test/java/org/apache/hadoop/hbase/HBaseTestingUtility.java", 
+   "Fixes so can restart cluster inside same Test; wasn't working.", 
+   "M src/test/java/org/apache/hadoop/hbase/master/TestRestartCluster.java", 
+   "Made this test pass. Changed order of the tests because I was working", 
+   "on the second one last; otherwise just formatted it same as other", 
+   "tests.", 
+   "M src/main/java/org/apache/hadoop/hbase/zookeeper/ZooKeeperWatcher.java", 
+   "M src/main/java/org/apache/hadoop/hbase/zookeeper/ZKUtil.java", 
+   "M src/main/java/org/apache/hadoop/hbase/zookeeper/ZKAssign.java", 
+   "Formatting of log messages.", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/HRegionServer.java", 
+   "Added watcher on cluster status flag.", 
+   "Lots of refactoring -- lots of small coherent methods added in", 
+   "place of long reams of code -- and cleanup removing unused code.", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/handler/CloseRegionHandler.java", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/handler/CloseRootHandler.java", 
+   "M src/main/java/org/apache/hadoop/hbase/regionserver/handler/CloseMetaHandler.java", 
+   "Changed this so could flag it not to update zk", 
+   "M src/main/java/org/apache/hadoop/hbase/Server.java", 
+   "Removed master only methods; added getExecutorService so can add", 
+   "Events easy enough from any context (Mostly used on master-side).", 
+   "M src/main/java/org/apache/hadoop/hbase/HRegionInfo.java", 
+   "Added pretty print of root and meta names rather than output their hashes.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/ServerManager.java", 
+   "Added running of cluster shutdown.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/AssignmentManager.java", 
+   "Fixed bug by breaking up processStartup into two pieces... the clean of", 
+   "unassigned dir and then the assigning of all regions.  When together", 
+   "they were erasing legit state during startup.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/HMaster.java", 
+   "Mostly stuff around new format for ExecutorService.", 
+   "M src/main/java/org/apache/hadoop/hbase/executor/EventHandler.java", 
+   "Recast so not based on statics.", 
+   "A src/main/java/org/apache/hadoop/hbase/executor/ExecutorService.java", 
+   "Recast so not based on statics and rename of HBaseExecutorService.", 
+   "D src/main/java/org/apache/hadoop/hbase/executor/HBaseExecutorService.java", 
+   "Renamed.", 
+   "D src/main/java/org/apache/hadoop/hbase/executor/NamedThreadFactory.java", 
+   "Used guava version instead."
+  ], 
+  "revision_id": "986524"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2010-08-17T23:31:53.361071Z", 
+  "msg": [
+   "Merged the SearchRequest messages"
+  ], 
+  "revision_id": "986523"
+ }, 
+ {
+  "author": "suresh", 
+  "date": "2010-08-17T23:15:35.260059Z", 
+  "msg": [
+   "HDFS-1318. Add JMX interface for read access to namenode and datanode web UI information. Contributed by Tanping Wang."
+  ], 
+  "revision_id": "986522"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2010-08-17T23:11:13.237949Z", 
+  "msg": [
+   "Change serialized representation of pointers: instead of storing offsets", 
+   "relative to the whole buffer, store the offset relative to the (local) structure", 
+   "that immediately contains that pointer as an element.", 
+   "Also, store directory content hashes in lexicographical order of their names.", 
+   "This will soon be used to implement sub-entry cache access.", 
+   "* subversion/libsvn_subr/svn_temp_serializer.c", 
+   "(store_current_end_pointer): store the pointer target as offset relative to the", 
+   "current struct's start offset (instead of the global position in the buffer)", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(deserialize_id_private, svn_fs_fs__id_deserialize):", 
+   "resolve ptrs local to their containing struct", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(deserialize_svn_string, deserialize_checksum, deserialize_representation,", 
+   "deserialize_dir, svn_fs_fs__noderev_deserialize,", 
+   "svn_fs_fs__deserialize_txdelta_window): dito", 
+   "(hash_data_t, compare_dirent_id_names, serialize_dir):", 
+   "serialize hash entries sorted by the hash key, i.e. the name"
+  ], 
+  "revision_id": "986521"
+ }
+]

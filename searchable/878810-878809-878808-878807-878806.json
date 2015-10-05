@@ -1,0 +1,79 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-08-13T20:09:16.894214Z", 
+  "msg": [
+   "Make the update editor track absolute paths, as a small step to removing", 
+   "all access batons. Start using this for the url calculations to remove an", 
+   "access baton lookup.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(edit_baton): Add abspath for target and anchor.", 
+   "(dir_baton): Add local abspath.", 
+   "(get_entry_url): Use wc_db and abspath instead of access baton.", 
+   "(make_dir_baton): Set abspath in dir_baton and use it in url calculation.", 
+   "(complete_directory): Use cached abspath instead of recalculating and", 
+   "notify the abspath.", 
+   "(make_file_baton): Update call to get_entry_url.", 
+   "(make_editor): Get absolute anchor and target and store them in the", 
+   "editor baton."
+  ], 
+  "revision_id": "878810"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-13T18:48:03.507625Z", 
+  "msg": [
+   "Add a libsvn_wc API to fetch the children of a node back into the client.", 
+   "This is one of our testing-the-waters APIs to help determine what information", 
+   "the client really needs.", 
+   "Use this API in place of svn_wc_entries_read(), in an effort to remove an", 
+   "access baton.", 
+   "(Note: this has a negative performance impact, since get_entry() will", 
+   "actually re-read the all the entries everytime it is called.  However,", 
+   "eventually we won't be working with entries at all, and the performance hit", 
+   "disappears.)", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__node_get_children): New.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node_get_children): New.", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_versioned_files): Use svn_wc__node_get_children() to iterate over the", 
+   "children of a directory, and remove the now-obsolete access baton."
+  ], 
+  "revision_id": "878809"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-13T18:42:44.828183Z", 
+  "msg": [
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Refactor this function to:", 
+   "* only work with absolute paths (except where noted)", 
+   "* directly fetch entries, instead of using an access baton", 
+   "* use an iterpool to improve memory usage"
+  ], 
+  "revision_id": "878808"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-13T18:37:13.903221Z", 
+  "msg": [
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_repos_copy, try_copy): Directly fetch entries using", 
+   "svn_wc__get_entry_versioned()."
+  ], 
+  "revision_id": "878807"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-13T16:36:54.001537Z", 
+  "msg": [
+   "Wrap a few errors to assist in stack-trace debugging.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(extend_wc_mergeinfo, do_wc_to_wc_copies, repos_to_repos_copy,", 
+   "wc_to_repos_copy, repos_to_wc_copy, try_copy):", 
+   "Use svn_error_return() where appropriate."
+  ], 
+  "revision_id": "878806"
+ }
+]

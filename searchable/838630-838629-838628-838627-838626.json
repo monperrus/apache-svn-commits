@@ -1,0 +1,101 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2001-02-17T18:08:13.000000Z", 
+  "msg": [
+   "Cleaning stuff found by the careful eye of Greg S., in the following", 
+   "basic categories:", 
+   "1.  Editor add_* functions that should have copyfrom_path and", 
+   "copyfrom_revision instead of base_* or ancestor_*.", 
+   "2.  Editor replace_* functions that should have base_revision instead", 
+   "of ancestor_revision.", 
+   "3.  Editors that should have been created by instantiating a default", 
+   "editor and then overriding necessary functions, instead of the old", 
+   "way of everyone declaring their own static editor structure.", 
+   "4.  Uses of fixed-length char buffers which, while likely to be of", 
+   "safe size, would be better handled as dynamically allocated", 
+   "buffers of *always* safe size.", 
+   "---", 
+   "* client/trace-commit.c", 
+   "* client/trace-update.c", 
+   "(add_directory, add_file): Renamed ancestor_* arguments to", 
+   "copyfrom_*, also changing 'long int' to 'svn_revnum_t' type for", 
+   "copyfrom_revision.", 
+   "(replace_directory, replace_file): Changed 'long int' to", 
+   "'svn_revnum_t' type for base_revision.", 
+   "* include/svn_delta.h", 
+   "(svn_delta_edit_fns_t): Updated docstrings", 
+   "(svn_delta_edit_fns_t->add_directory, add_file): renamed", 
+   "base_revision and base_path to copyfrom_revision and copyfrom_path.", 
+   "* libsvn_delta/compose_editors.c", 
+   "* libsvn_delta/default_editor.c", 
+   "(add_directory, add_file): Renamed base_* arguments to copyfrom_*,", 
+   "also changing 'long int' to 'svn_revnum_t' type for", 
+   "copyfrom_revision.", 
+   "(replace_directory, replace_file): Changed 'long int' to", 
+   "'svn_revnum_t' type for base_revision.", 
+   "* libsvn_delta/xml_output.c", 
+   "(output_addreplace): Using SVN_DELTA__XML_ATTR_COPYFROM_PATH and", 
+   "SVN_DELTA__XML_ATTR_COPYFROM_REV for adds, *_BASE_REV for replaces", 
+   "(replace has no base_path).  Also, no longer using static buf[128]", 
+   "for intermediate number-to-string conversion.  Going with", 
+   "svn_string_createf instead per Greg S.' request.", 
+   "(replace_root): Using svn_string_createf instead of buf[128] per", 
+   "Greg S.' request.", 
+   "(add_directory, add_file): Renamed base_* arguments to copyfrom_*.", 
+   "* libsvn_delta/xml_parse.c", 
+   "(xml_handle_start): Looking for copyfrom-path and copyfrom-rev in", 
+   "add tags now, base-path and base-rev in other ones.", 
+   "* libsvn_ra_dav/commit.c", 
+   "(commit_add_dir, commit_add_file): Renamed ancestor_* arguments to", 
+   "copyfrom_*.", 
+   "(commit_rep_dir, commit_rep_file): Renamed ancestor_path to", 
+   "base_path.", 
+   "* libsvn_wc/get_editor.c", 
+   "(add_directory, add_file): Renamed base_* arguments to copyfrom_*.", 
+   "* tests/svn_test_editor.c", 
+   "(test_add_directory, test_add_file): Renamed base_* arguments to", 
+   "copyfrom_*, also changing 'long int' to 'svn_revnum_t' type for", 
+   "copyfrom_revision.", 
+   "(test_replace_directory, test_replace_file, add_or_replace_dir,", 
+   "add_or_replace_file): Changed 'long int' to 'svn_revnum_t' type for", 
+   "base_revision.", 
+   "* tests/xml/pipatch.xml", 
+   "Removed replace tag \"ancestor\" attributes, and renamed the \"ver\"", 
+   "attributes to \"base-rev\"."
+  ], 
+  "revision_id": "838630"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-17T13:42:43.000000Z", 
+  "msg": [
+   "apr_common just moved"
+  ], 
+  "revision_id": "838629"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-17T13:02:17.000000Z", 
+  "msg": [
+   "oops. a bit overaggressive there. we need apr_tables.h for the array_header."
+  ], 
+  "revision_id": "838628"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-17T12:49:55.000000Z", 
+  "msg": [
+   "Doc fix. Parameter name fix."
+  ], 
+  "revision_id": "838627"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-17T12:47:32.000000Z", 
+  "msg": [
+   "Be a bit more fine-grained about linking ra_local into the client."
+  ], 
+  "revision_id": "838626"
+ }
+]

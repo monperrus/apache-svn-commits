@@ -1,0 +1,83 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-08-06T20:15:10.540428Z", 
+  "msg": [
+   "* www/security/CVE-2009-2411-advisory.txt:", 
+   "Update to the latest information."
+  ], 
+  "revision_id": "878675"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-06T20:05:50.124895Z", 
+  "msg": [
+   "Announce the 1.6.4 and 1.5.7 releases.", 
+   "* www/release-history.html,", 
+   "www/getting.html,", 
+   "www/index.html,", 
+   "www/roadmap.html:", 
+   "Update website for 1.6.4/1.5.7."
+  ], 
+  "revision_id": "878674"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-06T19:53:51.608684Z", 
+  "msg": [
+   "Fix various issues (including security holes) related to integer overflow in", 
+   "svndiff decoding.", 
+   "Note that this does assume that nobody is sending us delta windows larger than", 
+   "the 100K (SVN_DELTA_WINDOW_SIZE) that we generate.  Since we only promise to be", 
+   "API-compatible, not wire-protocol compatible (ie, notes/svndiff is instructions", 
+   "to svn developers, not to reimplementors), this should be safe.  We did confirm", 
+   "that SVNKit uses the same window size.", 
+   "See CVE-2009-2411.", 
+   "* subversion/libsvn_delta/svndiff.c", 
+   "(MAX_ENCODED_INT_LEN, MAX_INSTRUCTION_LEN, MAX_INSTRUCTION_SECTION_LEN): New.", 
+   "(encode_int): Document that the buffer size must be at least", 
+   "MAX_ENCODED_INT_LEN, and assert that we are only writing that much.", 
+   "(append_encoded_int, window_handler): Use new constants for buffer", 
+   "sizes.", 
+   "(decode_file_offset, decode_size): Don't try to read more than", 
+   "MAX_ENCODED_INT_LEN bytes.", 
+   "(zlib_decode): Check return value from decode_size.  Enforce a limit", 
+   "on decoded data size.", 
+   "(count_and_verify_instructions): Switch distracting (unsigned_int <= 0) to", 
+   "just be (unsigned_int == 0).  Ensure that op.offset is not greater than", 
+   "sview_len for from-source operations.", 
+   "(decode_window): Pass appropriate size limits to zlib_decode.", 
+   "(write_handler, read_window_header): Ensure that the various lengths are not", 
+   "greater than the window size that Subversion code generates.", 
+   "* subversion/libsvn_delta/text_delta.c", 
+   "(size_buffer): Assert that the buffer we're allocating won't overflow in", 
+   "apr_palloc.  Make it return svn_error_t *.", 
+   "(apply_window): Adjust.", 
+   "Patch by: Matt Lewis <mattlewis@google.com>", 
+   "glasser", 
+   "ghudson", 
+   "djames", 
+   "stsp"
+  ], 
+  "revision_id": "878673"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-06T19:53:39.475162Z", 
+  "msg": [
+   "In an effort to ensure that the website is updated for the public announcement,", 
+   "add the text for the CVE-2009-2411 advisory.", 
+   "* www/security/CVE-2009-2411-advisory.txt:", 
+   "New."
+  ], 
+  "revision_id": "878672"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-06T19:52:14.453922Z", 
+  "msg": [
+   "Revert r38596, which should have been committed in multiple pieces."
+  ], 
+  "revision_id": "878671"
+ }
+]

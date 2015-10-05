@@ -1,0 +1,87 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-10T12:11:50.114659Z", 
+  "msg": [
+   "We no longer want to talk about a \"tree delta\" as a first-order concept.", 
+   "Experience shows there is coupling between driver/receiver, such that a", 
+   "tree delta is not an independent entity. The v2 interface is a", 
+   "prototypical pattern for describing a set of changes to edit a *known*", 
+   "target tree into a desired state. There will always be an underlying", 
+   "coupling, but the editor interface helps to establish a calling pattern", 
+   "and semantics which can be carried across these various pairings.", 
+   "* subversion/include/svn_editor.h:", 
+   "(...): in the docstrings, remove the \"producer\", \"consumer\", and the", 
+   "\"tree delta\" concepts. Only talk about series of operations between a", 
+   "driver and a receiver. Add some more history to place this interface."
+  ], 
+  "revision_id": "879290"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T11:49:58.020397Z", 
+  "msg": [
+   "* dev/notes/wc-ng-design: Remove reference to svn cleanup for upgrade"
+  ], 
+  "revision_id": "879289"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T11:13:36.380287Z", 
+  "msg": [
+   "Minor followup on r39213, renaming arguments. No functional change.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(send_status_structure, is_external_path, send_unversioned_item,", 
+   "get_dir_status, handle_dir_entry, handle_externals, get_dir_status):", 
+   "Following up on 39213, rename eb arguments to walk_status_batons to wb."
+  ], 
+  "revision_id": "879288"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T11:07:11.626342Z", 
+  "msg": [
+   "Make it possible to walk the status of a working copy without creating", 
+   "the status editor.", 
+   "Split the edit_baton into a walk_status_baton with only the working copy", 
+   "requirements and an edit_baton with the rest of the information.", 
+   "[[ This commit contains an accidental change to the svn_wc_get_pristine_contents", 
+   "prototype which will be fixed later today. ]]", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_walk_status): New function.", 
+   "(svn_wc_get_pristine_contents2): New prototype without implementation.", 
+   "(svn_wc_get_pristine_contents): Accidental deprecation.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status5): Only create an editor if looking at remote status.", 
+   "* subversion/libsvn_wc/revision_status.c", 
+   "(svn_wc_revision_status2): Use svn_wc_walk_status() instead of creating", 
+   "an editor.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(walk_status_baton): New structure.", 
+   "(edit_baton): Add wc_ctx and walk_status batons and remove the values", 
+   "now available in the walk_status_baton.", 
+   "(send_status_structure, is_external_path, send_unversioned_item,", 
+   "get_dir_status, handle_dir_entry, handle_externals, get_dir_status):", 
+   "Use a walk_status_baton instead of an edit_baton.", 
+   "(make_dir_baton, handle_statii, close_directory, close_file):", 
+   "Pass only the walk_status_baton.", 
+   "(close_edit): Call svn_wc_walk_status when the editor drive didn't", 
+   "walk the tree.", 
+   "(svn_wc_get_status_editor5): Fill both batons; use", 
+   "svn_wc_get_default_ignores instead of duplicating code.", 
+   "(svn_wc_walk_status): New function, based on the code removed from", 
+   "close_edit."
+  ], 
+  "revision_id": "879287"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T09:13:18.535303Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(BASE_NODE:checksum): Add note on relation to PRISTINE table.", 
+   "(PRISTINE): Ask more information. Need a MD5 alternative column?"
+  ], 
+  "revision_id": "879286"
+ }
+]

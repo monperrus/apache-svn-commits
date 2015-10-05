@@ -1,0 +1,74 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T12:58:23.849954Z", 
+  "msg": [
+   "Minor obvious speed-up.", 
+   "* tools/dev/wc-ng/count-proress.py:", 
+   "(count_terms_in): read the files *once*, and then count each term found", 
+   "within the file."
+  ], 
+  "revision_id": "932715"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T12:54:38.506316Z", 
+  "msg": [
+   "After r932713, libsvn_wc does not use LOG_ACCUM or the wq_add_loggy() call", 
+   "directly. Instead, svn_wc__loggy_* is the proxy for those \"bad\" calls.", 
+   "Adjust our metrics to just examine calls to the old loggy functions.", 
+   "* tools/dev/wc-ng/count-progress.py:", 
+   "(TERMS): remove two items, and add svn_wc__loggy as our new Marker of Bad."
+  ], 
+  "revision_id": "932714"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T12:51:23.475735Z", 
+  "msg": [
+   "Do the final conversion of all loggy operations to immediate queueing. The", 
+   "LOG_ACCUM concept is now private to log.c (yay!!).", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(SVN_WC__FLUSH_LOG_ACCUM): remove. no longer needed.", 
+   "(svn_wc__loggy_move, svn_wc__loggy_set_entry_timestamp_from_wc,", 
+   "svn_wc__loggy_set_entry_working_size_from_wc,", 
+   "svn_wc__loggy_set_readonly, svn_wc__loggy_set_timestamp): adjust", 
+   "params to remove LOG_ACCUM and RESULT_POOL, and add DB.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_append, svn_wc__loggy_translated_file,", 
+   "svn_wc__loggy_delete_entry, svn_wc__loggy_delete_lock): rename the", 
+   "BUF localvar to LOG_ACCUM for consistency.", 
+   "(svn_wc__loggy_move, svn_wc__loggy_set_entry_timestamp_from_wc,", 
+   "svn_wc__loggy_set_entry_working_size_from_wc,", 
+   "svn_wc__loggy_set_readonly, svn_wc__loggy_set_timestamp): adjust", 
+   "params, and internal logic to immediately queue operations.", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(merge_binary_file): remove LOG_ACCUM localvar, and adjust params to", 
+   "loggy_move().", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc__loggy_revert_props_create): remove LOG_ACCUM localvar, and", 
+   "adjust loggy calls' params.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(install_text_base, merge_file, svn_wc_add_repos_file4): adjust params", 
+   "to various loggy functions, remove calls to add_loggy, and remove the", 
+   "LOG_ACCUM localvar."
+  ], 
+  "revision_id": "932713"
+ }, 
+ {
+  "author": "lukaszlenart", 
+  "date": "2010-04-10T12:47:01.601351Z", 
+  "msg": [
+   "Resolved WW-3325 - do not serialize added by Javassist properties"
+  ], 
+  "revision_id": "932712"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2010-04-10T12:44:17.707224Z", 
+  "msg": [
+   "Remove generics added in r932276"
+  ], 
+  "revision_id": "932711"
+ }
+]

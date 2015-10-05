@@ -1,0 +1,60 @@
+[
+ {
+  "author": "lutter", 
+  "date": "2010-07-08T23:46:45.227774Z", 
+  "msg": [
+   "Fixed bug caused by wrong handling of extensions by respond_to"
+  ], 
+  "revision_id": "962330"
+ }, 
+ {
+  "author": "lutter", 
+  "date": "2010-07-08T23:46:41.763477Z", 
+  "msg": [
+   "Minor fix for server.rb - affects html case and those drivers where instance 'stop' equivalent to 'destroy'", 
+   "This is a minor fix in server.rb that affects only those drivers where stopping an instance also means destroying it and where html is the requested output. Basically, in the rackspace case once you stop an instance this gets destroyed *very* quickly. In server.rb and when html is required, all instance actions except destroy cause the driver to request the details of that instance; that is, when you 'reboot' or 'start' you get the details of that specific instance, rather than the index. When you destroy, you dont request details as the instance no longer exists and you automatically get the index.", 
+   "However server.rb was not catching the 'stop' case and so when stop actually means destroy, you end up requesting details for an instance you already killed. This problem has only manifested itself in rackspace since they seem to get rid of their instances very quickly (e.g. in other cases like terremark, you might request the instance after you destroy it, and still get it for some time period)."
+  ], 
+  "revision_id": "962329"
+ }, 
+ {
+  "author": "lutter", 
+  "date": "2010-07-08T23:46:38.601431Z", 
+  "msg": [
+   "Fixes to rimuhosting driver - mainly typos - added grabbing IP address from rimu response", 
+   "This patch contains minor edits to rimuhosting driver. Note that this relies on the rimuhosting driver already having been renamed (a previous patch did rimu/rimu_hosting_client/driver.rb ---> rimuhosting/rimuhosting_client/driver.rb... edits:", 
+   "Driver:", 
+   "* fix typo in hardware_profiles", 
+   "* add grabbing of IP address in convert_srv_to_instance", 
+   "Client:", 
+   "* edit initialize (credentials.provided? removed) to stop thin from exploding", 
+   "* typo in request (DeltaCloud ==> Deltacloud)"
+  ], 
+  "revision_id": "962328"
+ }, 
+ {
+  "author": "lutter", 
+  "date": "2010-07-08T23:46:34.541349Z", 
+  "msg": [
+   "Rename RimuHosting driver... rimu/rimu_hosting_driver.rb -> rimuhosting/rimuhosting_driver.rb", 
+   "This is necessary due to the way we instantiate a driver in drivers.rb... it was either rename this driver or change drivers.rb but the latter is already used by all other drivers as is."
+  ], 
+  "revision_id": "962327"
+ }, 
+ {
+  "author": "lutter", 
+  "date": "2010-07-08T23:46:29.722105Z", 
+  "msg": [
+   "Use the instance name as the \"ID\" for GoGrid.", 
+   "This is to avoid problems with newly created instances.", 
+   "GoGrid does not assign a real ID number to an instance", 
+   "until it has gone through some backend initialization.", 
+   "That means trying to look up an instance by ID that you", 
+   "just created will fail, which is pretty non-intuitive", 
+   "behavior.  Fix this by using the name as the ID, which", 
+   "probably should be unique enough for our purposes.", 
+   "Signed-off-by: Chris Lalancette <clalance@redhat.com>"
+  ], 
+  "revision_id": "962326"
+ }
+]

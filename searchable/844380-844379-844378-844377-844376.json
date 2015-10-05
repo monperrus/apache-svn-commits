@@ -1,0 +1,95 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-01-09T18:27:20.952544Z", 
+  "msg": [
+   "Delete autoversioning branch, the task is done for now."
+  ], 
+  "revision_id": "844380"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T12:45:18.857408Z", 
+  "msg": [
+   "Simplify the data structures in the ChangeCollector. It used to", 
+   "maintain a list each for adds, deletes, and changes. The caller then", 
+   "had to reassemble those for the diff generation, and it also used some", 
+   "complex logic to get \"source\" and \"dest\" paths.", 
+   "In the new model, we record enough information in the _change() object", 
+   "to determine the type of change. The code flow then works around these", 
+   "rather than basing a choice on what list it was on, or based on how", 
+   "params [to generate_diff] happened to be set up.", 
+   "* hook-scripts/mailer.py:", 
+   "(generate_content): grab the full set of changes from the editor and", 
+   "sort them once. pass this list, along with a selection filter", 
+   "function to generate_list() for each change type. strip out the", 
+   "complex logic to set up src/dst/change and just pass each change", 
+   "object to generate_diff().", 
+   "(_select_adds, _select_deletes, _select_modifies): filter functions", 
+   "for generate_list() to select a subset of the changes.", 
+   "(generate_list): apply the filter function. don't worry about", 
+   "sorting, as we assume the caller has done any sorting they may", 
+   "want to perform. note that we select changes, retaining the order.", 
+   "(generate_diff): don't worry about 'src' and 'dst' and just grab the", 
+   "relevant base or current-path from the _change object. use the", 
+   ".added flag to determine additions.", 
+   "(ChangeCollector.__init__): just init the .changes attr and fix a", 
+   "comment about what is in the thing.", 
+   "(ChangeCollector.delete_entry): add the 'path' and 'added' params to", 
+   "the _change construction. put it into .changes rather than .deletes", 
+   "(ChangeCollector.add_directory): put the new _change object into", 
+   ".changes rather than .adds. pass the 'path' and 'added' flags.", 
+   "(ChangeCollector.change_dir_prop): no need to look in .adds; it will", 
+   "be in the .changes list if anywhere. pass the extra params to the", 
+   "_change constructor.", 
+   "(ChangeCollector.add_file): pass new params to _change()", 
+   "(ChangeCollector.apply_textdelta): remove consideration for .adds", 
+   "and pass new params to _change()", 
+   "(ChangeCollector.change_file_prop): remove consideration for .adds", 
+   "and pass new params to _change().", 
+   "(class _change): add new slots and params to the constructor."
+  ], 
+  "revision_id": "844379"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T12:29:40.162234Z", 
+  "msg": [
+   "remove some debug stuff that crept in"
+  ], 
+  "revision_id": "844378"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T11:58:56.345198Z", 
+  "msg": [
+   "Add a regression test for the mailer.py script.", 
+   "* hook-scripts/tests: new directory", 
+   "* hook-scripts/tests/mailer-init.sh: initialize a repos for the", 
+   "testing run.", 
+   "* hook-scripts/tests/mailer-t1.sh: first test. generates \"mail\" for", 
+   "every revision, with the intent of comparing that to a known,", 
+   "reference output.", 
+   "* hook-scripts/tests/mailer-t1.output: the reference output", 
+   "* hook-scripts/tests/mailer-tweak.py: tweak the recorded dates on the", 
+   "revisions. now we don't have to worry about working around", 
+   "floating dates in the output."
+  ], 
+  "revision_id": "844377"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T11:56:11.395201Z", 
+  "msg": [
+   "Some additional tweaks.", 
+   "* hooks-scripts/mailer.py (generate_diff):", 
+   "- print out copied directories. other changes to dirs", 
+   "should also be printed, but this is a good start. might eliminate", 
+   "this, tho, and just show copy information up in the summary.", 
+   "- the root/path pairs were garbled on the Modified printout such", 
+   "that certain modifications across a copy borked it. fix the", 
+   "root/path pairings."
+  ], 
+  "revision_id": "844376"
+ }
+]

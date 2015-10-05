@@ -1,0 +1,101 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-08-08T06:50:17.317894Z", 
+  "msg": [
+   "Note another thing that should be fixed in the test suite:", 
+   "* subversion/tests/clients/cmdline/merge_tests.py (add_with_history):", 
+   "Add a FIXME: comment about unexpected singletons."
+  ], 
+  "revision_id": "842985"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-08-08T06:11:21.917261Z", 
+  "msg": [
+   "This is a partial fix for issue #838.", 
+   "Patch by: Philip Martin <philip@codematters.co.uk>", 
+   "Copy-with-history when adding new files and directories during a merge.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(struct merge_cmd_baton): Add target, path, revision and auth_baton", 
+   "members.", 
+   "(merge_file_added, merge_dir_added): Use svn_client_copy instead of", 
+   "svn_client_add.", 
+   "(svn_client_merge): Set new members in merge_cmd_baton.", 
+   "* subversion/tests/clients/cmdline/svntest/tree.py", 
+   "(build_tree_from_status): Fix bug in status parsing regex. If you", 
+   "expect to match a pattern, you shouldn't have a matcher that eats", 
+   "that pattern.", 
+   "* subversion/tests/clients/cmdline/merge_tests.py", 
+   "(add_with_history): New test."
+  ], 
+  "revision_id": "842984"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-08T05:53:12.348518Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_get_resource): Make sure fs_parent_path gets initialized,", 
+   "and micro-optimize to lose a redundant conditional later on.", 
+   "Thanks to Blair Zajac for noticing the warnings."
+  ], 
+  "revision_id": "842983"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-08-07T15:13:07.684023Z", 
+  "msg": [
+   "Fix compiler warning.", 
+   "* subversion/libsvn_fs/fs.c (default_warning_func): Add pool parameter", 
+   "required by rev 2907."
+  ], 
+  "revision_id": "842982"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-08-07T03:30:44.506248Z", 
+  "msg": [
+   "Some more cleanup of the error printing functions:", 
+   "- Prefix warning messages with \"svn: warning:\"", 
+   "- Don't restrict warning output to stderr.", 
+   "- When printing a stack of svn_error_t's, only print the error", 
+   "string for the child error's apr_err if it's different from the", 
+   "parent's.", 
+   "* subversion/include/svn_error.h (svn_handle_warning): Add a pool", 
+   "parameter, and require the baton to be a FILE*. Update the docstring.", 
+   "* subversion/include/svn_fs.h (svn_fs_warning_callback_t): Add a pool", 
+   "parameter, as above, and update the docstring.", 
+   "(svn_fs_set_warning_func): Update the docstring WRT svn_handle_warning.", 
+   "* subversion/libsvn_fs/fs.c (cleanup_fs_apr): Pass the fs pool to the", 
+   "warning function.", 
+   "* subversion/libsvn_subr/svn_error.c (handle_error): Renamed from", 
+   "svn_handle_error and made static.", 
+   "- Add parameters depth and parent_apr_err to control behaviour on", 
+   "recursion.", 
+   "- Rename buf and buf2 to errbuf and utfbuf, respectively, to give", 
+   "some indication of the usage.", 
+   "- Factor printing of the apr and source errors in SVN_DEBUG mode out", 
+   "of the condition.", 
+   "- Only print the description of err->apr_err if we're not recursing,", 
+   "of if the current error code is different than the parent", 
+   "error's. Pass on the error code and recursion depth when printing", 
+   "child errors.", 
+   "(svn_handle_error): New, replacement. Just call handle_error.", 
+   "(svn_handle_warning): Use a subpool of the new pool parameter for", 
+   "local allocations, and assume the baton is a FILE* stream. Call", 
+   "handle_error instead of svn_handle_error. Prefix the warning message", 
+   "with \"svn: warning: \".", 
+   "* subversion/mod_dav_svn/repos.c (log_warning): Accept the pool", 
+   "parameter to comply with the changed prototype, but ignore it, using", 
+   "the request pool as before.", 
+   "* subversion/clients/cmdline/add-cmd.c: Pick up stdio declarations.", 
+   "Pass the error's pool and stderr stream to svn_handle_warning.", 
+   "* subversion/clients/cmdline/resolve-cmd.c: Likewise.", 
+   "* subversion/tests/libsvn_ra_local/ra-local-test.c: Use stderr for the", 
+   "warning baton for svn_handle_warning.", 
+   "* subversion/tests/fs-helpers.c: Likewise."
+  ], 
+  "revision_id": "842981"
+ }
+]

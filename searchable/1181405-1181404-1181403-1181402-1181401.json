@@ -1,0 +1,121 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:48.702003Z", 
+  "msg": [
+   "Additional Logging to Find Append Outliers", 
+   "Summary:", 
+   "minor additions:", 
+   "1: enable debugging on DFSClient so we can see when new blocks are created", 
+   "2: add the data length to append LOG.warn messages so we can see if it's only", 
+   "large snapshots (ie: this might be too many array copies)", 
+   "Test Plan:", 
+   "mvn clean install -DskipTests", 
+   "DiffCamp Revision: 171230", 
+   "Reviewed By: kannan", 
+   "CC: kannan", 
+   "Tasks:", 
+   "#416824: Hbase Outliers in Dark launch", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181405"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:42.574849Z", 
+  "msg": [
+   "multiply assigned regions: createTable race condition", 
+   "Summary:", 
+   "Details explained in:", 
+   "https://issues.apache.org/jira/browse/HBASE-2881", 
+   "This also causes TestAdmin to fail intermittently.", 
+   "Confirmed in a reproducible manner that the race condition genuinely existed by", 
+   "putting a sleep of 2 mins prior to setting the region unassigned in master's", 
+   "in-memory state. By this time, the base scanner assigns out the region, and then", 
+   "setting the region unassigned in master's state after the sleep causes it to get", 
+   "\"unassigned\" once again, and hence assigned out again to a new region server.", 
+   "The fix basically no longer sets the newly created region unassigned in the", 
+   "master's in-memory state. Instead, after updating META (with region marked", 
+   "offline) for all the newly created regions, it simply schedules the meta scanner", 
+   "to be run immediately. So the regions get assigned without delay as before, but", 
+   "without the race condition.", 
+   "Test Plan:", 
+   "TestAdmin ran successfully a couple of times. Running all unit tests now. Will", 
+   "run bin/hbase verify as well on a small cluster.", 
+   "DiffCamp Revision: 170814", 
+   "Reviewed By: jgray", 
+   "CC: jgray, kannan, hbase@lists", 
+   "Tasks:", 
+   "#279154: HBASE-2881: TestAdmin intermittent failures: Race condition during", 
+   "createTable can result in region double assignment", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181404"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:40.053877Z", 
+  "msg": [
+   "minor bin/hbase verify changes", 
+   "Summary:", 
+   "* if -inputfile option is used, and regionsPerServer", 
+   "is not specified, the parseInt call was failing", 
+   "without a default.", 
+   "* changed default regions per region server to 5 from 7.", 
+   "Reviewed By:kranganathan", 
+   "Test Plan:ran verify and confirmed that it created 5 regions per region server."
+  ], 
+  "revision_id": "1181403"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:34.043024Z", 
+  "msg": [
+   "deadlock in RS shutdown sequence when ZK session expires", 
+   "Summary:", 
+   "There is a cycle of threads waiting on each other because System.exit(1)", 
+   "doesn't quite do an instant abort. It invokes the shutdown hooks, and there is a", 
+   "cycle of threads waiting on each other...", 
+   "This fix uses Runtime.getRuntime.halt() as a way to exit abrubtly, and avoid", 
+   "running the shutdown hooks when a region server's ZK session expires.", 
+   "Test Plan:", 
+   "On localhost, I ran with pseudo-distributed mode turned on. This ensures that", 
+   "RS gets spawned as its own process, and also that shutdown hooks are installed.", 
+   "Inserted a fake System.exit() at a suitable place to confirm that when hit, the", 
+   "deadlock indeed reproduced. And then changed the code to use", 
+   "Runtime.getRuntime.halt() and confirmed that the hooks did not get invoked, and", 
+   "the process didn't get stuck shutting down.", 
+   "Also running the unit tests now.", 
+   "DiffCamp Revision: 170412", 
+   "Reviewed By: kranganathan", 
+   "CC: kranganathan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181402"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:31.700710Z", 
+  "msg": [
+   "HBASE-3102: Add Compaction Time to JMX", 
+   "Summary:", 
+   "Added the ability to track compaction count + duration.  Since compactions are", 
+   "long running, the avg/opcount stats are should be reset longer than the polling", 
+   "period (60 sec).  Added the idea of a 'marathon', or a long duration after which", 
+   "some metrics should expire.  Compaction stats & all min/max stats expire after", 
+   "the marathon (1 hr).", 
+   "Test Plan:", 
+   "mvn clean install", 
+   "loaded on cluster", 
+   "DiffCamp Revision: 167960", 
+   "Reviewed By: kannan", 
+   "CC: nspiegelberg, kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181401"
+ }
+]

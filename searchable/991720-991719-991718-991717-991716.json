@@ -1,0 +1,77 @@
+[
+ {
+  "author": "jm", 
+  "date": "2010-09-01T21:54:02.215163Z", 
+  "msg": [
+   "auto-generated test rules"
+  ], 
+  "revision_id": "991720"
+ }, 
+ {
+  "author": "bsullivan", 
+  "date": "2010-09-01T21:53:53.318529Z", 
+  "msg": [
+   "Trinidad-1899", 
+   "Currently the SessionChangeManager when working with JSPs maintains a single list of changes to be applied and applies them in order. While the list does support collapsing attribute changes even across component moves, this approach has some performance limitations in and of itself and decreases our ability to make other performance improvements:", 
+   "1) Because some changes affect multiple components, we wait to the end of the document tag to apply the changes (so that all components exist). Unfortunately this means that when the tags are executing, they don't actually have any values that were modified by a change available to them. This prevents us from applying optimizations where we don't even execute the tags that are subtrees that won't be visited by the lifecycle (for example undisclosed tabs).", 
+   "2) Because the changes are not applied at the time of tag execution, we need to do a separate findComponent() for each change that we want to apply. This can get expensive for large numbers of changes.", 
+   "The solution is to group changes into", 
+   "1) Changes that apply to a single component", 
+   "a) Collapsible single changes", 
+   "2) Cross component changes", 
+   "a) Cross component changes that can change the identity of a component", 
+   "1) Changes that are applied to a single component are saved under the component's original scoped identifier. The collapsible changes are collapsed.", 
+   "2) Cross component changes are maintained in a single page wide list", 
+   "3) Cross component changes that change the identify of a component update a mapping from the new (current scoped identifier) for the component to the original scoped identifier so that as new changes are applied, they are applied to the correct entry in 1)", 
+   "4) For efficiency, the serialized form of the changes is a single list of changes with all collapsible entries collapsed, even across changes that change the identity. The rename maps and a single component changes can be rebuilt on demand from this list.", 
+   "The upshot of these changes are that:", 
+   "1) We can apply all of the single component changes to a component at tag execution time, even if that component had a change that moved it. This opens up optimizations where we don't execute child tags", 
+   "2) Since all collapsible changes, like attribute changes are collapsed, we have fewer changes to apply", 
+   "3) Only the rare, cross-component changes need to be applied using separate findComponent calls", 
+   "To apply the changes at tag execution time, we need a new api on ChangeManager:", 
+   "/**", 
+   "* Apply non-cross-component changes to a component in its original location. This is typically", 
+   "* only called by tags that need to ensure that a newly created component instance is", 
+   "* as up-to-date as possible.", 
+   "* @param context", 
+   "* @param component Component to apply the simple changes to", 
+   "*/", 
+   "public void applySimpleComponentChanges(FacesContext context, UIComponent component)"
+  ], 
+  "revision_id": "991719"
+ }, 
+ {
+  "author": "jcosters", 
+  "date": "2010-09-01T21:53:28.382245Z", 
+  "msg": [
+   "Backout ClassLoading changes"
+  ], 
+  "revision_id": "991718"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2010-09-01T21:52:45.528451Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c", 
+   "(load_actual_props): Remove function that only wrapped", 
+   "svn_wc__db_read_props.", 
+   "(svn_wc__get_actual_props,", 
+   "svn_wc__internal_propset,", 
+   "svn_wc__internal_propdiff): Update callers."
+  ], 
+  "revision_id": "991717"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2010-09-01T21:50:57.912805Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c", 
+   "(load_pristine_props): Remove function that only wraps", 
+   "svn_wc__db_read_pristine_props.", 
+   "(immediate_install_props,", 
+   "svn_wc__get_pristine_props,", 
+   "svn_wc__internal_propdiff): Update callers."
+  ], 
+  "revision_id": "991716"
+ }
+]

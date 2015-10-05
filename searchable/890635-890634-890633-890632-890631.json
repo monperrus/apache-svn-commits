@@ -1,0 +1,70 @@
+[
+ {
+  "author": "mrglavas", 
+  "date": "2009-12-15T04:28:32.536764Z", 
+  "msg": [
+   "Tagging xml-commons-external-1_2_06."
+  ], 
+  "revision_id": "890635"
+ }, 
+ {
+  "author": "kayyagari", 
+  "date": "2009-12-15T04:10:45.368668Z", 
+  "msg": [
+   "added tests for syntax deletion"
+  ], 
+  "revision_id": "890634"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2009-12-15T04:01:25.319289Z", 
+  "msg": [
+   "[CXF-1758] Add test case in simple frontend as well"
+  ], 
+  "revision_id": "890633"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2009-12-15T03:56:35.099851Z", 
+  "msg": [
+   "Aggressively flush during write if the buffer is full", 
+   "Instead of queuing up all data until the next flush() call made", 
+   "by the application, queue data until we reach either the allowed", 
+   "packet size or the current free window space, whichever limit is", 
+   "encountered first.  As soon as buffer reaches either capacity,", 
+   "send it immediately to the peer.", 
+   "By sizing the buffer during write() to fit the available window", 
+   "space we significantly reduce the chances that a buffer split and", 
+   "copy is needed during flush().  However, a buffer split could still", 
+   "occur if different threads are writing to two different streams on", 
+   "the same channel (e.g. one thread is writing to the stdout stream", 
+   "and a different thread is writing on the stderr stream).", 
+   "During write() we give ourselves a credit equal to the size of", 
+   "the last packet we successfully wrote out of this channel stream.", 
+   "This allows the application producer to race ahead of the network", 
+   "handshake by one packet and produce more data while waiting for", 
+   "the handshake to free up window space."
+  ], 
+  "revision_id": "890632"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2009-12-15T03:56:32.209705Z", 
+  "msg": [
+   "Allocate the next ChannelOutputStream buffer sized to last buffer", 
+   "If an output stream has just received a large burst of data from", 
+   "the application, its buffer will have needed to grow beyond the", 
+   "default buffer size of 512 bytes.  Its quite likely that there will", 
+   "be even more data from the application, filling the next buffer", 
+   "up to approximately the same size before we are forced to trigger", 
+   "another flush.  So allocate the next buffer sized to hold the last", 
+   "packet's complete length, or the data remaining if we had to split", 
+   "the buffered packet to fit into the available window space.", 
+   "Unfortunately most uses of createBuffer don't care about the size", 
+   "of the buffer, as they are one-shot requests which are often within", 
+   "the default size of 512 bytes.  Pass in 0 for these and allow them", 
+   "to use the default 512 byte size."
+  ], 
+  "revision_id": "890631"
+ }
+]

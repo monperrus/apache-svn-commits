@@ -1,0 +1,89 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-10-05T20:33:59.068508Z", 
+  "msg": [
+   "A merge branch for changes from trunk targetted for Subversion 1.3", 
+   "which enhances the svn_wc_status2_t data type, providing more complete", 
+   "server-side information about working copy items which are out of date", 
+   "in the repository."
+  ], 
+  "revision_id": "856570"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-10-05T20:26:28.752947Z", 
+  "msg": [
+   "Expose the \"out of date\" and URI fields now available from the", 
+   "svn_wc_status2_t data type to the JavaHL bindings via its Status", 
+   "class.", 
+   "* subversion/bindings/java/javahl/native/SVNClient.cpp", 
+   "(SVNClient::createJavaStatus): Add new parameters identifying the", 
+   "constructor for the Status class, extract the parameters from the", 
+   "svn_wc_status2_t, and pass'em along.  Use the new", 
+   "svn_wc_status2_t->url field (rather than", 
+   "svn_wc_status2_t->entry->url) for the constructor's \"url\"", 
+   "parameter.", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/Status.java", 
+   "(reposLastCmtRevision, reposLastCmtDate, reposKind,", 
+   "reposLastCmtAuthor): New private instance fields in which to store", 
+   "any \"out of date\" information from the repository.", 
+   "(Status): Added parameters for initialization of the new instance", 
+   "fields.", 
+   "(getUrl): Adjusted doc string for modified behavior of", 
+   "SVNClient.cpp, which now uses svn_wc_status2_t->url (rather than", 
+   "svn_wc_status2_t->entry->url).", 
+   "(getReposLastCmtRevision, getReposLastCmtDate, getReposKind,", 
+   "getReposLastCmtAuthor): New accesor methods.", 
+   "Review by: markphip"
+  ], 
+  "revision_id": "856569"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-10-05T20:20:03.289340Z", 
+  "msg": [
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_status2_t): Renamed ood_url to url, as it is now set to the", 
+   "URL of the item regardless of whether the working copy is out of", 
+   "date.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(dir_baton, file_baton, assemble_status, tweak_statushash,", 
+   "make_dir_baton, make_file_baton): Renamed ood_url to url.", 
+   "(assemble_status): Initialized url to entry->url.", 
+   "(tweak_statushash): If the file_baton or dir_baton contains an URI,", 
+   "use it instead of the default, as it may be more up to date.", 
+   "(find_dir_url): Moved upwards in the file to avoid forward", 
+   "reference.  No functional change.", 
+   "(make_dir_baton, make_file_baton): Initialize the baton's url and", 
+   "ood_kind to that of the item it's being created for.", 
+   "(change_dir_prop, change_file_prop): Remove initialization of url", 
+   "and ood_kind, which can be initialized upon edit baton creation,", 
+   "since they are not entryprops (roughly analogous to DAV liveprops).", 
+   "Review by: lundblad"
+  ], 
+  "revision_id": "856568"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-05T19:56:18.842834Z", 
+  "msg": [
+   "Follow-up to r16476.", 
+   "Patch by: Malcolm Rowe <malcolm-svn-dev@farside.org.uk>", 
+   "* subversion/libsvn_client/diff.c (unsupported_diff_summarize): Use void and", 
+   "not an empty argument list.  That's for my C++ background:-("
+  ], 
+  "revision_id": "856567"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-05T19:41:42.364758Z", 
+  "msg": [
+   "Merge r16468 from trunk to 1.3.x branch.", 
+   "Make VPATH (srcdir != builddir) doc-api builds work.", 
+   "Votes:", 
+   "+1: maxb, dlr, lundblad"
+  ], 
+  "revision_id": "856566"
+ }
+]

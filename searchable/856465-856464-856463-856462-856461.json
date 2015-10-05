@@ -1,0 +1,116 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-10-01T20:58:46.850383Z", 
+  "msg": [
+   "* STATUS: Nominate r16360.", 
+   "Suggested by: ehu"
+  ], 
+  "revision_id": "856465"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2005-10-01T20:25:05.372132Z", 
+  "msg": [
+   "Consolidate usage of apr_uid_name_get and apr_uid_homepath_get into svn", 
+   "wrapper functions, fixing a few bugs along the way.", 
+   "* subversion/svnadmin/main.c:", 
+   "Add #include \"svn_user.h\".", 
+   "(subcommand_rmlocks): Call svn_user_get_name(), and thus fix a latent bug", 
+   "where username could be used uninitialized.", 
+   "* subversion/include/svn_user.h:", 
+   "New file.", 
+   "* subversion/libsvn_subr/config_file.c:", 
+   "Add #include \"svn_user.h\".", 
+   "(svn_config__user_config_path): Call svn_user_get_homedir().", 
+   "* subversion/libsvn_subr/user.c:", 
+   "New file.", 
+   "* subversion/libsvn_client/username_providers.c:", 
+   "Add #include \"svn_user.h\".", 
+   "(username_first_creds): Call svn_user_get_name().", 
+   "* subversion/libsvn_client/simple_providers.c:", 
+   "Add #include \"svn_user.h\".", 
+   "(get_os_username): Move to subversion/libsvn_subr/user.c, refactor slightly.", 
+   "(simple_first_creds_helper): Call svn_user_get_name().", 
+   "(prompt_for_simple_creds): Call svn_user_get_name().", 
+   "* subversion/svnserve/serve.c:", 
+   "Remove #include <apr_user.h>.", 
+   "Add #include <svn_user.h>.", 
+   "(get_tunnel_user): Call svn_user_get_name(), and thus fix a latent bug due", 
+   "to missing utf8 conversion."
+  ], 
+  "revision_id": "856464"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-10-01T17:16:09.505736Z", 
+  "msg": [
+   "* STATUS: Yet more nominations from me."
+  ], 
+  "revision_id": "856463"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-10-01T17:13:05.024210Z", 
+  "msg": [
+   "Fix numerous bugs in the svn_fs_*berkeley*() APIs.", 
+   "Fix issue 2361 (recover on a FSFS repository errors if BDB not linked).", 
+   "Fix creation of BDB files in FSFS repositories by 'svnadmin recover',", 
+   "'svnadmin list-dblogs' and 'svnadmin list-unused-dblogs'.", 
+   "Fix improper design of placing bdb_set_errcall in the fs_library vtable, rather", 
+   "than in the fs vtable.", 
+   "Make svn_fs_open_berkeley(), svn_fs_delete_berkeley() and", 
+   "svn_fs_hotcopy_berkeley() capable of operating on non-berkeley repositories", 
+   "- this may seem strange, but is the easiest sane behaviour to give these", 
+   "functions, rather than blindly performing BDB-type operations. It is also", 
+   "what we ought to have done originally from a design perspective, to allow", 
+   "programs built on the 1.0 API to access FSFS repositories without recoding.", 
+   "***** FS module vtable change. If an old 1.3.0-dev build of libsvn_fs_foobar", 
+   "***** is picked up by a new 1.3.0-dev build of libsvn_fs, nasty stuff will", 
+   "***** happen - probably segfaults.", 
+   "***** (BTW, shouldn't trunk be 1.4.0-dev now?)", 
+   "* subversion/include/svn_fs.h (svn_fs_set_berkeley_errcall):", 
+   "Deprecate. Explain in doc why this function is redundant.", 
+   "(doxygen group svn_fs_bdb_deprecated): Document changed behaviour.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_library_vtable_t): Move member bdb_set_errcall out of this vtable...", 
+   "(fs_vtable_t): ...into this vtable.", 
+   "* subversion/libsvn_fs_base/fs.c (fs_vtable, library_vtable): Deal with above.", 
+   "* subversion/libsvn_fs_fs/fs.c (fs_vtable, library_vtable): Deal with above.", 
+   "(fs_logfiles):", 
+   "NULL is not a valid return value, return a zero-element array instead.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_hotcopy): Read the fs-type file only once, and cause a fs-type", 
+   "file to be added to the destination even if the source was a 1.0 repository", 
+   "created before the inception of fs-type files.", 
+   "(svn_fs_create_berkeley): Backport the 'make the \"db\" directory setgid'", 
+   "behaviour into this deprecated code path.", 
+   "(svn_fs_open_berkeley): Allow to correctly open any fs-type, rather than", 
+   "creating bogus Berkeley DB environment files inside a FS of any other type.", 
+   "(svn_fs_delete_berkeley): Turn into an alias of svn_fs_delete_fs(), rather", 
+   "than running the Berkeley delete code on the FS regardless of type.", 
+   "(svn_fs_hotcopy_berkeley): Turn into an alias of svn_fs_hotcopy(), rather", 
+   "than blindly attempting to perform a hotcopy in the Berkeley DB fashion", 
+   "regardless of fs-type.", 
+   "(svn_fs_berkeley_recover, svn_fs_berkeley_logfiles): Execute the appropriate", 
+   "API for the correct FS provider module, instead of always executing the", 
+   "BDB implementation, which resulted in the bogus creation of BDB environment", 
+   "files inside FSes of other types.", 
+   "(svn_fs_set_berkeley_errcall): Execute the appropriate API for the correct FS", 
+   "provider module, instead of always executing the BDB implementation, which", 
+   "resulted in memory corruption due to libsvn_fs_base being given another", 
+   "provider's fsap_data."
+  ], 
+  "revision_id": "856462"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-10-01T17:09:35.565616Z", 
+  "msg": [
+   "Fix issue 2406 - Do not pass URL-encoded hostname to ra_svn tunnel agent.", 
+   "* subversion/libsvn_ra_svn/client.c (find_tunnel_agent): URI-decode hostinfo", 
+   "portion of URL before using it to construct tunnel agent argv."
+  ], 
+  "revision_id": "856461"
+ }
+]

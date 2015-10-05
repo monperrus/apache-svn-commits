@@ -1,0 +1,117 @@
+[
+ {
+  "author": "pll", 
+  "date": "2003-09-04T19:47:28.443249Z", 
+  "msg": [
+   "* www/project_status.html", 
+   "updated for .29.0 release", 
+   "* CHANGES", 
+   "Added in rev number/date of release"
+  ], 
+  "revision_id": "847050"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2003-09-04T18:21:14.137781Z", 
+  "msg": [
+   "Removed \"custom\" attribute, which was originally used to specify", 
+   "custom build steps, but got hijacked for all sorts of other purposes.", 
+   "Instead added \"compile-cmd\" attribute and two new \"type\" values for", 
+   "apache modules and ra modules. These changes have no effect on the", 
+   "generated makefile or project files.", 
+   "* build/generator/gen_base.py", 
+   "(ObjectFile.__init__): added \"build_cmd\" member", 
+   "(SWIGUtilPython, SWIGUtilJava, SWIGUtilPerl, _custom_build):", 
+   "removed these ObjectFile subclasses", 
+   "(Target.__init__):", 
+   "removed \"is_ra_module\" and \"is_apache_mod\" members", 
+   "(TargetLinked.__init__):", 
+   "got rid of \"custom\" getter and added \"compile-cmd\" getter", 
+   "(TargetApacheMod, TargetRaModule, _build_types):", 
+   "added new target types for apache modules and ra modules.", 
+   "(TargetLib.__init__, TargetApacheMod.__init__):", 
+   "moved apache specific code into new apache class", 
+   "* build.conf", 
+   "(libsvn_ra_dav, libsvn_ra_svn, libsvn_ra_local, mod_dav_svn,", 
+   "mod_authz_svn):", 
+   "use new \"type\" values instead of \"custom\" attribute", 
+   "(libsvn_swig_py, libsvn_swig_java, libsvn_swig_perl):", 
+   "use new \"compile-cmd\" attribute instead of \"custom\" attribute", 
+   "* build/generator/gen_make.py", 
+   "(write_symbols):", 
+   "use \"isinstance(target, TargetRaModule)\" instead of", 
+   "\"target.is_ra_module\"", 
+   "* build/generator/gen_win.py", 
+   "(adjust_win_depends, get_win_defines, get_win_includes,", 
+   "get_win_lib_dirs, get_win_libs, get_win_sources):", 
+   "use \"isinstance(target, TargetApacheMod)\" instead of", 
+   "\"target.is_apache_mod\"", 
+   "* build/generator/gen_msvc_dsp.py", 
+   "* build/generator/gen_vcproj", 
+   "(Generator.write_project):", 
+   "use \"isinstance(target, TargetApacheMod)\" instead of", 
+   "\"target.is_apache_mod\""
+  ], 
+  "revision_id": "847049"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2003-09-04T18:17:32.389355Z", 
+  "msg": [
+   "Remove 'default_sources' member from TargetLinked classes. This change", 
+   "has no effect on output.", 
+   "* build/generator/gen_base.py", 
+   "(TargetExe, TargetLib, TargetDoc):", 
+   "remove \"default_sources\" static member", 
+   "(TargetLinked._get_sources):", 
+   "remove reference to \"default_sources\" member"
+  ], 
+  "revision_id": "847048"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2003-09-04T18:15:25.471300Z", 
+  "msg": [
+   "Get rid of default_install member on target classes. This change has", 
+   "no effect on the outputted makefiles and project files, it's just an", 
+   "attempt to reduce complexity.", 
+   "* build.conf", 
+   "(svn, libsvn_client, libsvn_diff, libsvn_ra, libsvn_wc,", 
+   "svnversion, svn-config):", 
+   "specify \"install\" option instead of relying on default values", 
+   "* build/generator/gen_base.py", 
+   "(TargetLinked.__init__):", 
+   "removed default \"install\" setting code", 
+   "(TargetExe, TargetScript, TargetLib, TargetDoc, TargetSWIG,", 
+   "TargetSWIGRuntime, TargetProject, TargetExternal, TargetUtility,", 
+   "TargetSWIGUtility):", 
+   "remove \"default_install\" static members", 
+   "(TargetSWIG.add_dependencies, TargetSWIGRuntime.add_dependencies):", 
+   "remove reference to \"install\" member", 
+   "(TargetSWIG, TargetSWIG.__init__): inherit from Target instead of", 
+   "TargetLinked, since SWIG code no longer has anything in common", 
+   "with TargetLinked", 
+   "* build/generator/gen_win.py", 
+   "(GeneratorBase.get_win_depends): remove reference to \"install\" member", 
+   "for SWIG targets"
+  ], 
+  "revision_id": "847047"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2003-09-04T18:13:18.535251Z", 
+  "msg": [
+   "Made get_win_depends function a little more general so other code with", 
+   "similar functionality could be eliminated. This change has no effect", 
+   "on the outputted project files, it's just a minor code clean up.", 
+   "* build/generator/gen_win.py", 
+   "(WinGeneratorBase.get_win_depends): added ability to retrieve lists", 
+   "of a target's dependencies minus its dependencies' dependencies,", 
+   "and ability to have lists filtered by class type", 
+   "(WinGeneratorBase.get_unique_win_depends): removed function", 
+   "(WinGeneratorBase.adjust_win_depends): replaced dependency", 
+   "computation with call to get_win_depends"
+  ], 
+  "revision_id": "847046"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "bentmann", 
+  "date": "2010-05-14T09:03:38.976845Z", 
+  "msg": [
+   "o Formatted code"
+  ], 
+  "revision_id": "944160"
+ }, 
+ {
+  "author": "kahatlen", 
+  "date": "2010-05-14T09:00:33.710685Z", 
+  "msg": [
+   "DERBY-4654: Restriction.toSQL() doesn't escape special characters", 
+   "Merged fix from trunk (revision 944152)."
+  ], 
+  "revision_id": "944159"
+ }, 
+ {
+  "author": "mgoulish", 
+  "date": "2010-05-14T08:56:45.908468Z", 
+  "msg": [
+   "Cluster + Security", 
+   "-----------------------------------", 
+   "* initial observation of a problem was a 2% failure rate in perftests", 
+   "of 20,000 messages against a cluster with security enabled.", 
+   "Problem was occasional receit of encrypted frames before the", 
+   "security codec had been enabled.  This is fixed with locking in", 
+   "cluster code (no new locks in broker code) and a callback that is", 
+   "fired by broker::ConnectionHandler::Handler to tell the cluster", 
+   "code when the opening handshake has finished.", 
+   "This was never a problem in the non-clustered broker before because", 
+   "everything happened in a single thread.", 
+   "* the brokers that \"shadow\" the connection must not have null", 
+   "authenticators rather than real ones, so that they go through all", 
+   "the motions but don't do anythig.  Only the directly-connected", 
+   "broker can perform the security handshake.", 
+   "* once the directly-connected broker receives the real user ID", 
+   "from its callback, it mcasts that ID to all other brokers.", 
+   "Otherwise the shadowing brokers will al think that the user ID", 
+   "is \"anonymous\".", 
+   "Check this by doing a substantial perftest, and using", 
+   "qpid-stat -c localhost:PORT", 
+   "to confirm that the brokers all have the same userID for the", 
+   "same connection.", 
+   "* the user ID, negotiated during the Sasl security startup, is", 
+   "communicated from the directly connected broker to all other", 
+   "cluster brokers.", 
+   "* If security is *not* being used, then this code should *not* tell", 
+   "the brokers anything about the userID -- or it will step on the value", 
+   "that is being set by other code pathways.", 
+   "* test program at cpp/src/tests/cluster_authentication_soak is not yet", 
+   "fully automated -- run it with something like", 
+   "\"sudo ./cluster_authentication_soak 500\""
+  ], 
+  "revision_id": "944158"
+ }, 
+ {
+  "author": "xiaming", 
+  "date": "2010-05-14T08:53:54.145915Z", 
+  "msg": [
+   "GERONIMO-5015 Use maven-maven-plugin to run testsuite in batch mode like in 2.1 branch, change some of cases to use failsafe plugin"
+  ], 
+  "revision_id": "944157"
+ }, 
+ {
+  "author": "spamassassin_role", 
+  "date": "2010-05-14T08:51:22.095063Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "944156"
+ }
+]

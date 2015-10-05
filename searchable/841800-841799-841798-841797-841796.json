@@ -1,0 +1,100 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-17T01:49:04.966634Z", 
+  "msg": [
+   "Make svn_repos_dir_delta responsible for the so-called \"entry props\".", 
+   "This is part 1 of a two-part change.  Ra-dav still needs to make use", 
+   "of the new functionality.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_dir_delta): Add 'entry_props' parameter.", 
+   "* subversion/include/svn_delta.h", 
+   "(struct svn_pipe_edit_baton, struct svn_pipe_dir_baton,", 
+   "struct svn_pipe_file_baton, struct svn_pipe_handler_wrapper,", 
+   "svn_delta_old_default_pipe_editor): Removed.", 
+   "* subversion/libsvn_delta/pipe_editors.c: Removed", 
+   "* subversion/libsvn_ra_local/ra_local.h", 
+   "(svn_ra_local__get_update_pipe_editor): Removed.", 
+   "* subversion/libsvn_ra_local/update_editor.c: Removed", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_update, svn_ra_local__do_switch): Remove pipe", 
+   "editor garbage.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(proplist_change_fn_t): Add 'entry_props' member.", 
+   "(svn_repos_dir_delta): Init 'entry_props' context member.", 
+   "(delta_proplists): Transmit entry props when so commanded.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(upd_change_xxx_prop): Ignore entry props that come through the", 
+   "editor interface (for now).", 
+   "Updated calls to svn_repos_dir_delta in the following places, using", 
+   "the values listed below as the new \"entry_props\" argument:", 
+   "* subversion/svnlook/main.c (generate_delta_tree): FALSE", 
+   "* subversion/mod_dav_svn/merge.c (dav_svn__merge_response): FALSE", 
+   "* subversion/libsvn_repos/reporter.c (svn_repos_finish_report): TRUE", 
+   "* subversion/libsvn_repos/log.c (svn_repos_get_logs): FALSE", 
+   "* subversion/tests/libsvn_repos/repos-test.c (dir_deltas): FALSE"
+  ], 
+  "revision_id": "841800"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-16T20:07:30.956270Z", 
+  "msg": [
+   "* svntest/main.py (chmod_tree): Use stat.ST_MODE to get the mode bits out of", 
+   "the stat structure, as Python 2.0 doesn't have the .st_mode attribute."
+  ], 
+  "revision_id": "841799"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-16T14:37:22.645844Z", 
+  "msg": [
+   "Get Python tests working on Windows.", 
+   "* svntest/main.py (windows): New global flag; true when running on Win32", 
+   "(_exe): Executable file extension; '.exe' on windows, empty otherwise.", 
+   "Replace os.path.abspath, os.path.join, os.path.normpath and os.path.dirname", 
+   "with implementations that return paths with forward slashes, because svn on", 
+   "windows doesn't support backslashes yet.", 
+   "(svn_binary, svnadmin_binary, svnlook_binary): Concatenate with _exe.", 
+   "(test_area_url): Make the URL correct for Windows.", 
+   "(run_svn, run_svnadmin): On Windows, args must be quoted with \", not '.", 
+   "(chmod_tree): New function: chmod recursively. Replaces all instances", 
+   "of \"os.system('chmod -R ...')\".", 
+   "* svntest/actions.py (guarantee_greek_repository): Windows doesn't have", 
+   "symbolic links, so just copy the whole repository.", 
+   "(run_and_verify_commit): Don't put quotes in the argument to run_svn, which", 
+   "already quotes the arguments."
+  ], 
+  "revision_id": "841798"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-16T12:17:34.299776Z", 
+  "msg": [
+   "Minor test script cleanup and bug fix:", 
+   "* tools/test-scripts/svntest/svntest.sh: Remove log files from previous runs.", 
+   "* tools/test-scripts/svntest/svntest-update.sh: Fix typos in log file names."
+  ], 
+  "revision_id": "841797"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-04-16T04:19:32.190268Z", 
+  "msg": [
+   "Re-vamp commandline inteface of 'svn diff';  allow 'svn diff' to", 
+   "compare two arbitrary URLs (just like merge does).", 
+   "[This isn't quite done yet.  I need to tweak do_diff a bit more to", 
+   "handle URL to URL single-file comparsions, and some other buglets.  If", 
+   "you try diffing URLs, YMMV at the moment.]", 
+   "* main.c (svn_cl__cmd_table): new 'svn diff' help description.", 
+   "* diff-cmd.c (svn_cl__diff): complete rewrite of logic to match new", 
+   "commandline interface.", 
+   "* svn_client.h (svn_client_diff):  change docstring to allow URLs, and", 
+   "unspecified revisions.", 
+   "* diff.c (do_diff):  for pure repository-side comparision, call", 
+   "RA->do_switch() instead of RA->do_update(), so it can compare two", 
+   "different URLs."
+  ], 
+  "revision_id": "841796"
+ }
+]

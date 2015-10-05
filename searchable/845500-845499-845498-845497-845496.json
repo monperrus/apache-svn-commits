@@ -1,0 +1,93 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-03-21T20:56:10.434947Z", 
+  "msg": [
+   "Make mod_dav_svn leak a little less.", 
+   "Patch by: Robert Pluim <rpluim@bigfoot.com>", 
+   "(From issue #1179.)", 
+   "(With feedback from Greg Stein <gstein@collab.net>, and a few filigrees by me.)", 
+   "* svn/subversion/mod_dav_svn/dav_svn.h:", 
+   "(dav_svn_getetag): Add pool argument.", 
+   "* svn/subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_getetag): Take new pool argument, use it to allocate the", 
+   "return value and for temporary work.", 
+   "(getetag_pathetic): New wrapper for dav_svn_getetag.", 
+   "(dav_svn_set_headers): Pass resource->pool to dav_svn_getetag.", 
+   "(dav_svn_hooks_repos): Use getetag_pathetic here.", 
+   "* svn/subversion/mod_dav_svn/liveprops.c", 
+   "(dav_svn_insert_prop): Pass the local subpool to dav_svn_getetag.", 
+   "This makes about 100k per prop get allocated in a subpool that gets", 
+   "cleared, rather than in resource->pool, thus reducing the peak", 
+   "size of the pool (and it's safe, since the result is always copied", 
+   "into the response pool)."
+  ], 
+  "revision_id": "845500"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-03-21T20:49:56.617739Z", 
+  "msg": [
+   "An initial draft of a module to extract function names from our", 
+   "headers. Comparing the output of this against running 'nm' on our", 
+   "libraries to see the actual exports produces a *very* close list.", 
+   "Additional refinements to close the gap will be committed RSN.", 
+   "* build/generator/extractor.py: new module", 
+   "(extract_funcs): new function to extract a list of function names", 
+   "for a given header file."
+  ], 
+  "revision_id": "845499"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-03-21T20:22:02.849890Z", 
+  "msg": [
+   "Add a --strict option to 'svn propget', and get some binary property", 
+   "testing in place (though, disable because it doesn't work over ra-dav).", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Add the --strict option to propget, and", 
+   "describe that subcommand's output a little better.  Also, clean up", 
+   "some other usage strings that ended in double-newlines (we only", 
+   "need one at the end of usage strings)", 
+   "* subversion/clients/cmdline/propget-cmd.c", 
+   "(stream_write): New helper.", 
+   "(svn_cl__propget): Use binary streams for output, and handle --strict.", 
+   "* subversion/tests/clients/cmdline/prop_tests.py", 
+   "(check_prop): Move this helper into the global context.  Make it", 
+   "use --strict so that newlines aren't appended to the property values.", 
+   "Also, make it call the run_command() itself with the binary flag", 
+   "set.", 
+   "(prop_value_conversion): check_prop() is now global, and we don't", 
+   "need the extra newlines on the property values now.", 
+   "(binary_props): New test.", 
+   "(test_list): Add binary_props() which currently doesn't run over DAV."
+  ], 
+  "revision_id": "845498"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-03-21T19:52:56.178216Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(run_command): Was _run_command, and now takes 'binary_mode' argument.", 
+   "Also, update all callers of this function to pass 0 for binary_mode."
+  ], 
+  "revision_id": "845497"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-21T19:24:15.258605Z", 
+  "msg": [
+   "Fix bug introduced in r5407, whereby committing changes to a working", 
+   "copy root can segfault.", 
+   "Patch by: Vladimir Prus <ghost@cs.msu.su>", 
+   "(Tweaked by me.)", 
+   "* subversion/clients/cmdline/util.c", 
+   "(svn_cl__get_log_message): Guarantee that path is non-null.", 
+   "* subversion/tests/clients/cmdline/commit_tests.py", 
+   "(from_wc_top_with_bad_editor): New test.", 
+   "(test_list): Run it."
+  ], 
+  "revision_id": "845496"
+ }
+]

@@ -1,0 +1,80 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-31T19:48:39.150958Z", 
+  "msg": [
+   "Adjust revert 17 a little bit to compensate for new behavior in wc-ng,", 
+   "according to errata wc003.", 
+   "* subversion/tests/cmdline/revert_tests.py:", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir):", 
+   "after the reverse-merge, the original A/D/G@1 is now copied into the", 
+   "working copy. the children are recorded as individual copies by the", 
+   "merge, but wc-ng coalesces them (per wc003), so they appear as a", 
+   "single copy and the children are not mentioned. however, there are", 
+   "still some problems with the wc-ng emulate of the old entries stuff,", 
+   "and this test does not (yet) pass. some additional comments and code", 
+   "org were made for future discrepancies that will probably arise in the", 
+   "'svn revert' output."
+  ], 
+  "revision_id": "876985"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-31T19:00:33.822376Z", 
+  "msg": [
+   "Our copyfrom deconstruction code relied on an entry's revision being", 
+   "\"correctly\" set when it decided to remove an extra copyfrom record.", 
+   "However, we altered the conditions around setting the revision in r36909", 
+   "and that had an unintended ripple effect.", 
+   "This clarifies a bunch of comments, and properly rewrites the entry into a", 
+   "mixed-revision node.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): ensure we set entry->revision when we elide copyfrom", 
+   "records to emulate the old mixed-rev copied subtrees."
+  ], 
+  "revision_id": "876984"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-31T18:06:12.986640Z", 
+  "msg": [
+   "Fix another set of wc-ng test failures.  This patch creates a couple of new", 
+   "test failures, but it is correct, and the net number of failures is", 
+   "decreasing.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): Unmark merge test 91 as passing with wc-ng.  As our emulation", 
+   "of the original svn_wc_entry_t struct gets better, we can expect the", 
+   "same failures as wc-1.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Only clobber the revision with the original revision if", 
+   "we don't already have a revision recorded."
+  ], 
+  "revision_id": "876983"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-31T17:24:00.054813Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Remove some development cruft that", 
+   "accidentally got in via r36880."
+  ], 
+  "revision_id": "876982"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-31T16:53:34.502483Z", 
+  "msg": [
+   "Merge r36783 from trunk:", 
+   "* r36783", 
+   "Dereference a pointer to a svn_revnum_t to check if it's a valid", 
+   "revision.", 
+   "Justification:", 
+   "Thorugh sheer luck it doesn't appear that this can cause any problems,", 
+   "see http://svn.haxx.se/dev/archive-2009-03/0746.shtml, but it is", 
+   "clearly wrong.", 
+   "Votes:", 
+   "+1: pburba, blair, stylesen"
+  ], 
+  "revision_id": "876981"
+ }
+]

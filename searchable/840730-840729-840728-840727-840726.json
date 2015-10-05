@@ -1,0 +1,97 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-12-17T20:09:09.448778Z", 
+  "msg": [
+   "Fix for issue #576: prevent accidentally using a versioned file as the", 
+   "log message file in \"svn ci -F\".", 
+   "Patch by: Garrett Rooney <rooneg@electricjellyfish.net>", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CL_LOG_MESSAGE_IS_VERSIONED_FILE): New error type.", 
+   "* subversion/client/cmdline/main.c (main): Check if the log message is", 
+   "under version control and if so, error out unless the user has", 
+   "specified --force.", 
+   "* subversion/tests/client/cmdline/log_tests.py", 
+   "(versioned_log_message): New test for this functionality.  Also add it", 
+   "to the test_list and remove a comment that says this file doesn't work", 
+   "and isn't run because it isn't in build.conf, since it does work, is", 
+   "run, and is in build.conf."
+  ], 
+  "revision_id": "840730"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-12-17T18:11:14.653199Z", 
+  "msg": [
+   "Renaming lock.c to repos.c"
+  ], 
+  "revision_id": "840729"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-12-17T18:03:17.779588Z", 
+  "msg": [
+   "Patch by: Justin Erenkrantz <jerenkrantz@ebuilt.com>", 
+   "* buildcheck.sh: Make libtool detection portable to Solaris /bin/sh."
+  ], 
+  "revision_id": "840728"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-12-17T17:31:29.699386Z", 
+  "msg": [
+   "* subversion/libsvn_fs/dag.c", 
+   "(svn_fs__dag_get_revision): Bug fix -- C-Mike forgot that skel_t's", 
+   "don't have null-terminated data.  You gotsta pay attention to the", 
+   "\"len\" field.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(struct node_created_rev_args, verify_path_revs, test_node_created_rev):", 
+   "New tests and helpers and stuff for testing svn_fs_node_created_rev.", 
+   "(test_funcs): Added reference to new test_node_created_rev function."
+  ], 
+  "revision_id": "840727"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-12-16T22:11:26.963056Z", 
+  "msg": [
+   "Allow the update-editor to receive special 'entry' props; these are", 
+   "specially-prefixed properties that go right into a file's entry (such", 
+   "as last-changed-revision, author, and date.)  This is entry", 
+   "information that will be cached in the entries file for use with", 
+   "keyword expansion (among other possible future uses, like 'svn", 
+   "status'.)", 
+   "[ 'entry props' aren't normal user properties.  Really, they're not", 
+   "properties at all; they're untweakable metadata that are being", 
+   "communicated via the editor's prop-mechanism.  They have the same", 
+   "importance as arguments to editor calls, but are too specific to the", 
+   "update-editor; therefore they're not part of the editor API, and thus", 
+   "-only- the update-editor looks for them. ]", 
+   "* line_endings_and_keywords.txt:  update some notes.", 
+   "* svn_types.h (SVN_PROP_ENTRY_PREFIX): new property prefix ('svn:entry:')", 
+   "* svn_wc.h (svn_wc_is_normal_prop): new func.  The callers of this", 
+   "func (trace editors) want to know if a property was a normal,", 
+   "user-visible property.  This function can now act as a single point", 
+   "to filter out any update properties that are *not* normal -- such as", 
+   "wcprops ('svn:wc:') or props meant for entries files ('svn:entry').", 
+   "(svn_wc_is_entry_prop):  new func, to be used by the update editor,", 
+   "along with its cousin svn_wc_is_wc_prop.", 
+   "* props.c (svn_wc_is_normal_prop, svn_wc_is_entry_prop):  new funcs.", 
+   "(svn_wc__strip_entry_prefix): new func.", 
+   "* wc.h (svn_wc__strip_entry_prefix):  declare new func.", 
+   "* status_editor.c (change_dir_prop, change_file_prop): use", 
+   "svn_wc_is_normal_prop to filter from now on.", 
+   "* trace-update.c (change_dir_prop, change_file_prop): use", 
+   "svn_wc_is_normal_prop to filter from now on.", 
+   "* get_editor.c (change_dir_prop, change_file_prop): use", 
+   "svn_wc_is_entry_prop.", 
+   "(struct file_baton): new fields entryprop_changed and entrypropchanges.", 
+   "(make_file_baton): intitialize entrypropchanges array.", 
+   "(close_file):  if we have entry props, append them to the log via", 
+   "LOG_MODIFY_ENTRY commands.", 
+   "(change_dir_prop):  if we get an entry prop, flush it to the", 
+   "directory's entry."
+  ], 
+  "revision_id": "840726"
+ }
+]

@@ -1,0 +1,98 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-04-17T03:26:08.349138Z", 
+  "msg": [
+   "Fix a little buglet in ra-svn (using the wrong protocol command token", 
+   "for diffs).  Probably a copy-n-past-o, but fixed now, regardless.", 
+   "* subversion/svnserve/serve.c", 
+   "(diff): Pass TRUE for the text_deltas parameter of svn_repos_begin_report().", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_diff): Use the \"diff\" command for diffs (not \"switch\")."
+  ], 
+  "revision_id": "845730"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-04-17T01:38:09.061760Z", 
+  "msg": [
+   "Hopefully, this should fix mod_dav_svn. The \"foreign\" code goes into", 
+   "different subdirectories.", 
+   "* build/generator/gen_win.py:", 
+   "(WinGeneratorBase.get_win_sources): take a new prefix which is used", 
+   "to later the relative directory. this parameter is used for the", 
+   "mod_dav_svn's inclusion of foreign code, resulting in their", 
+   "objects going into unique directories. this method now returns", 
+   "source files and relative dirs as a list of tuples.", 
+   "* build/generator/gen_vcnet_vcproj.py:", 
+   "(Generator.writeProject): deal with the tuples returned by", 
+   ".get_win_sources() and no more need to str() the source file.", 
+   "* build/generator/gen_msvc_dsp.py:", 
+   "(Generator.write_project): toss out all the reldir computatoin and", 
+   "just use the values returned by .get_win_sources()."
+  ], 
+  "revision_id": "845729"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-04-17T00:44:58.723366Z", 
+  "msg": [
+   "* build/generator/gen_vcnet_vcproj.py:", 
+   "(Generator.writeProject): apply str() to the sources to ensure that", 
+   "we get a filename rather than a SourceFile instance."
+  ], 
+  "revision_id": "845728"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-04-17T00:36:45.123319Z", 
+  "msg": [
+   "Do some work to put subdir-based source files into subdir-based object", 
+   "directories. Specifically, this appears to help out libsvn_fs and is a", 
+   "precursor to some fixes for mod_dav_svn.", 
+   "* build/generator/gen_base.py:", 
+   "(GeneratorBase.__init__): add some comments to the target_dirs", 
+   "computation. switch to looking for '/' rather than os.sep.", 
+   "(GeneratorBase.compute_hdr_deps): use the fname attribute now that", 
+   "the source files are SourceFile instances.", 
+   "(class SourceFile): new class to represent a source file (for", 
+   "compilation, then linking). note that, in many cases, this can be", 
+   "used in the place of a filename string (which is actually a", 
+   "feature of the DependencyNode classes).", 
+   "(TargetLinked.add_dependencies): _get_sources() (by virtue of a", 
+   "modified _collect_paths) now returns source files and where they", 
+   "occur relative to the target's path. unpack the tuples, and also", 
+   "use this information for instantiating SourceFile objects.", 
+   "(TargetSWIG.add_dependencies): unpack the source file tuple from", 
+   "_collect_paths().", 
+   "(_collect_paths): if a path is provided, then return information", 
+   "about where the sources were found relative to that path.", 
+   "* build/generator/gen_make.py:", 
+   "(Generator.write): map the str() function across the dependencies of", 
+   "DT_OBJECT. this will turn SourceFile instances into filenames, and", 
+   "leave plain filename strings alone. also use str() before passing", 
+   "a source to os.path.join().", 
+   "* build/generator/gen_msvc_dsp.py:", 
+   "(Generator.write_project): if the source is a SourceFile, then", 
+   "extract its relative-dir for passing along to the template. revamp", 
+   "the sorting of the sources to account for _item instances rather", 
+   "than plain strings.", 
+   "* build/generatoe/msvc_dsp.ezt:", 
+   "- insert custom Intermediate_dir directives for files which don't", 
+   "reside in a target's base path (those sources with a reldir)."
+  ], 
+  "revision_id": "845727"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-04-16T21:59:31.953179Z", 
+  "msg": [
+   "* generator/gen_vcnet_vcproj.py:", 
+   "(Generator.writeProject): use self.get_win_sources() to make this", 
+   "code similar to gen_msvc.py. this resulted in more inputs to", 
+   "mod_dav_svn, which is actually (somewhat) desirable, but no", 
+   "changes for other build targets."
+  ], 
+  "revision_id": "845726"
+ }
+]

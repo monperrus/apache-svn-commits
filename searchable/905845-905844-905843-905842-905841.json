@@ -1,0 +1,99 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2010-02-03T00:04:58.219347Z", 
+  "msg": [
+   "For wc-ng, switch to manual upgrade up the schema, rather than using the", 
+   "\"upgrade_sql\" feature of svn_sqlite__open(). We need fine-grained control", 
+   "in some cases. This also gives us an explicit set of statements for our", 
+   "current schema (plus mods to convert older schemas to current). This is", 
+   "clearer than a big, old schema, plus mods to update it.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(STMT_CREATE_SCHEMA): new statement, replacing the format 12 set of", 
+   "commands. later formats' changes have been folded in, as detailed", 
+   "below. this statement ends with setting the user_version to 16.", 
+   "(PRISTINE): add the md5_checksum column", 
+   "(ACTUAL_NODE): add the conflict_data and *_checksum columns", 
+   "(WORK_QUEUE, WC_LOCK): pull these out of their format NN sections. add", 
+   "the 'locked_levels' column to WC_LOCK.", 
+   "(STMT_UPGRADE_TO_13, STMT_UPGRADE_TO_14, STMT_UPGRADE_TO_15,", 
+   "STMT_UPGRADE_TO_16): new statements, based on old format sections.", 
+   "each statements ends with setting the user_version appropriately.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(): include the wc-metadata file to glom *all* statements into one table", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(): no need to include wc-metadata.h any more", 
+   "(upgrade_sql): removed. no longer used.", 
+   "(open_db): no longer pass a format version or the upgrade_sql to the", 
+   "sqlite_open call.", 
+   "(create_db): create the schema after the sdb has been created", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(): include wc-queries.h rather than wc-metadata.h. we need the schema", 
+   "creation statements.", 
+   "(data_loading_sql): removed. the extra statement to load data are in ...", 
+   "(TESTING_DATA): new constant for loading data into the sdb. since the", 
+   "ACTUAL_NODE table is immediately constructed with all current columns,", 
+   "we need to adjust one INSERT to account for that.", 
+   "(create_fake_wc): after the sdb is created, construct the schema and", 
+   "load some testing data.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(svn_wc__upgrade_sdb): error out if we reach the auto-schema-upgrade", 
+   "code. this isn't ready yet.", 
+   "* Makefile.in:", 
+   "(wc-queries.h): add an explicit dep on wc-metadata.sql", 
+   "* build.conf:", 
+   "(wc-metadata): remove this build rule. no longer needed."
+  ], 
+  "revision_id": "905845"
+ }, 
+ {
+  "author": "dennisl", 
+  "date": "2010-02-03T00:04:41.260177Z", 
+  "msg": [
+   "o Update version and date for maven-resources-plugin."
+  ], 
+  "revision_id": "905844"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2010-02-02T23:54:46.050893Z", 
+  "msg": [
+   "Use property for ${tuscany.version}"
+  ], 
+  "revision_id": "905843"
+ }, 
+ {
+  "author": "mikedd", 
+  "date": "2010-02-02T23:52:58.486952Z", 
+  "msg": [
+   "OPENJPA-1328:", 
+   "Check cacheability in ClassMetaData instead of AbstractDataCache.", 
+   "Based on patch for 1.2.x by Jody Grassel"
+  ], 
+  "revision_id": "905842"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-02-02T23:51:33.112411Z", 
+  "msg": [
+   "For the FSFS uses of sqlite, don't use the \"upgrade\" mechanism for the", 
+   "schema. Just create it explicitly using exec_statements().", 
+   "* libsvn_fs_fs/rep-cache-db.sql:", 
+   "* libsvn_fs_fs/revprops-db.sql:", 
+   "(STMT_CREATE_SCHEMA): new statement for the schema creation commands.", 
+   "make sure to end with a bump for the schema version.", 
+   "* libsvn_fs_fs/fs_fs.c:", 
+   "(REVPROPS_SCHEMA_FORMAT, upgrade_sql): removed. no longer used.", 
+   "(svn_fs_fs__open, upgrade_body, svn_fs_fs__create): stop passing", 
+   "upgrade_sql and a format version to svn_sqlite__open. for the two", 
+   "calls where we create the database, follow it up with a call to", 
+   "construct the schema.", 
+   "* libsvn_fs_fs/rep-cache.c:", 
+   "(upgrade_sql): removed. no longer used.", 
+   "(svn_fs_fs__open_rep_cache): do not pass upgrade_sql to the sdb open", 
+   "call. examine the version, and if the schema has not been constructed,", 
+   "then do so."
+  ], 
+  "revision_id": "905841"
+ }
+]

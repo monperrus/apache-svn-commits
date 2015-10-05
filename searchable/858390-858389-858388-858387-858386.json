@@ -1,0 +1,102 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2006-02-02T01:32:55.380090Z", 
+  "msg": [
+   "Fix issue #2015: Add a --summarize option to 'svn diff', which allows diff", 
+   "to avoid showing the actual line-by-line differences, and just display a", 
+   "summary of what has been modified.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__summarize): New option identifier.", 
+   "(svn_cl__opt_state_t): Add a summarize flag.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Add summarize.", 
+   "(svn_cl__cmd_table): Add summarize to diff.", 
+   "(main): Handle the --summarize option.", 
+   "* subversion/svn/diff-cmd.c", 
+   "(text_mod_char): New helper function.", 
+   "(summarize_func): Callback to print the summary data for a file/dir.", 
+   "(svn_cl__diff): If we've been given the --summarize option call the", 
+   "summarize variant of the appropriate diff function."
+  ], 
+  "revision_id": "858390"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-02-01T22:53:34.449460Z", 
+  "msg": [
+   "Fix issue #2188: svn_client_copy/move should error out if target exists.", 
+   "This change introduces new copy/move public functions with the same argument", 
+   "lists, but with the semantic change that they always fail if the destination", 
+   "exists.  The command line client implements the old behaviour of copying the", 
+   "source as a child of an existing target.", 
+   "This change has the side effect of not special-casing copying a WC diretory", 
+   "to itself which was allowed since r14401.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_copy3, svn_client_move4): New versions of these functions that", 
+   "always fail if the destination exists.  Update docstrings accordingly.", 
+   "(svn_client_copy2, svn_client_move3): Deprecate.", 
+   "* subversion/libsvn_client/copy.c: Update general description of the", 
+   "copy operation with new semantics.", 
+   "(wc_to_wc_copy): Always fail if the destination exists.  Produce a clear", 
+   "error message if the parent of the destination is not a directory.", 
+   "(repos_to_repos_copy): Always fail if destination exists.", 
+   "(wc_to_repos_copy): Always fail if destination exists.  Fix indentation.", 
+   "(repos_to_wc_copy): Always fail if destionation exists.  Produce celar error", 
+   "messae if the parent of the destination is not a directory.  Remove a long", 
+   "comment that was out-of-date, and now became obsolete...", 
+   "(svn_client_copy3): Rename from svn_client_copy2.", 
+   "(svn_client_move4): Rename from svn_client_move3.", 
+   "(svn_client_copy2, svn_client_move3): New compat wrappers, emulating the", 
+   "old behaviour when the destination exists.", 
+   "* subversion/tests/cmdline/copy_tests.py (wc_copy_dir_to_itself): Expect", 
+   "failure instead of success when copy a WC dir to itself.", 
+   "* subversion/svn/move-cmd.c (svn_cl__move):", 
+   "* subversion/svn/copy-cmd.c (svn_cl__copy):", 
+   "Use new API function, taking care of the case where the destination", 
+   "exists ourselves."
+  ], 
+  "revision_id": "858389"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-02-01T18:29:08.938975Z", 
+  "msg": [
+   "* STATUS: Fix inverted dependency wording which confused me, and kfogel too."
+  ], 
+  "revision_id": "858388"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-01T05:15:56.642703Z", 
+  "msg": [
+   "ra_serf: Refactor XML parsing serf handlers to a common function", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_xml_parser): New function that will feed expat and set a bool when", 
+   "it is done.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(handle_report): Use handle_xml_parser", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(handle_propfind): Use handle_xml_parser", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(handle_xml_parser): Declare new function."
+  ], 
+  "revision_id": "858387"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-01T05:00:08.258393Z", 
+  "msg": [
+   "ra_serf: Minor bug fix and refactor a small function.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(svn_ra_serf__do_update): Init ->done and ->free_info in report_context_t.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(wait_for_props): Move implementation to...", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(context_run_wait): here; use a pointer to a boolean.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(context_run_wait): Declare new function."
+  ], 
+  "revision_id": "858386"
+ }
+]

@@ -1,0 +1,103 @@
+[
+ {
+  "author": "jalkanen", 
+  "date": "2009-05-10T18:14:07.901822Z", 
+  "msg": [
+   "Added a FIXME"
+  ], 
+  "revision_id": "773375"
+ }, 
+ {
+  "author": "kurdalen", 
+  "date": "2009-05-10T18:08:40.202465Z", 
+  "msg": [
+   "skipping pdo appender test if not pdo_sqlite is available on the system"
+  ], 
+  "revision_id": "773374"
+ }, 
+ {
+  "author": "edwardsmj", 
+  "date": "2009-05-10T17:52:29.645788Z", 
+  "msg": [
+   "Added missing MANIFEST entry for org.apache.tuscany.sca.contributions.namespace, required by the ContributionDependencyBuilderTestCase"
+  ], 
+  "revision_id": "773373"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2009-05-10T17:46:12.871694Z", 
+  "msg": [
+   "mod_watchdog: mappers -> core forgotten in", 
+   "Makefile.win."
+  ], 
+  "revision_id": "773372"
+ }, 
+ {
+  "author": "chabotc", 
+  "date": "2009-05-10T17:44:49.743610Z", 
+  "msg": [
+   "This patch completes proxied content, and adds basic support for os-template, os-data parsing, and jsp el evaluation.", 
+   "What's in this patch (skip down to 'what's missing' to see what remains to be done, and 'design choices' to see the how and why):", 
+   "- Proxied content now fully working, this includes", 
+   "- posting social data to the proxied content section's href end-point", 
+   "- evaluating dynamic tags using the same jsp el implementation as the templating implementation uses", 
+   "- identical caching behavior to java-shindig (ie: caching POST's using the remote content's headers)", 
+   "- Data-pipelining", 
+   "- Same implementation used both for the proxied content and os-templates implementations", 
+   "- uses the same jsp el evaluation for supporting dynamic tags in the requests", 
+   "- os-templates & os-data", 
+   "- Uses the generic data-pipelining for os-data data fetching & injects it into JS space", 
+   "- Parses and evaluates all templates script blocks that can be server rendered", 
+   "- blocks with a name are evaluated, but left in", 
+   "- if all the data keys specified in the @require attribute it will be rendered, otherwise left in", 
+   "- if @autoUpdate = true, the template will not be evaluated and left in", 
+   "- disableAutoProcessing in the feature param is true, no templates will be rendered server sided", 
+   "- Supports @if and @repeat attributes in dom elements", 
+   "- Supports os:Repeat and os:If statements", 
+   "- JSP EL evaluation", 
+   "- Supports all the specified global variables (Cur, Top, My & Context)", 
+   "- Supports variable element expressions (Foo.Bar.Element)", 
+   "- Supports all JSP EL specified math expressions:", 
+   "'+', '-', '/', '^', '%', '!', '<', '>', '*', '=', '&', '|', 'lt', 'gt', 'le', 'ge', '==', '!=', 'eq', 'ne', 'or', '>=', '<=', '||', '&&', 'and', 'not', 'div', 'mod', 'and', 'eq', 'gt', 'true', 'instanceof', 'or', 'ne', 'le', 'false', 'empty', 'not', 'lt', 'ge', 'null', 'div', 'mod' & 'empty'", 
+   "- Supports basic math statements (ie: ${Foo * Bar / (12 mod 4) + 12 ne 44})", 
+   "What's missing:", 
+   "- JSP EL: Unary evaluation (ie: ${Bar * -Foo} and ${!Bar})", 
+   "- JSP EL: Array support (ie: ${Bar[Foo]})", 
+   "- Tweak expression behavior to iron out the last JSP EL inconsistencies ((string) A + (int) 2) should be an exception for instance)", 
+   "- Support for the disableAutoProcessing feature param", 
+   "- os-templates: Support for named templates (xmlns:myapp=\"foo\" tag=\"myapp:Bar\" script blocks)", 
+   "- os-templates: Support for template libraries (section 13 of templating spec)", 
+   "- osml: Support for basic and extension tags:", 
+   "- os:Name, os:PeopleSelector, os:Badge, os:Html, os:Render", 
+   "- osx:Flash, osx:NavigateToApp, osx:NavigateToPerson, osx:ParseJson, osx:DecodeBase64, osx:UrlDecode, osx:UrlEncode", 
+   "Implementation details:", 
+   "Implementing support for os-templates and jsp el has been full of challanges, and in the end resulted in a 'decently working, but", 
+   "not entirely optimal' solution. Below are some of the things that have been tried, and what it ended up being:", 
+   "- The first prototype i've build was based on a os-templates to php translation. This is a trick that many php template libraries", 
+   "employ for the simple reason that you can cache the php interpretation to disk, and let PHP and the opcode cache do it's thing", 
+   "to make template execution incredibly fast. In the end it was a combination of how XML'ish the templating language is (having", 
+   "control structures in attributes and not as tags, ie having <tag if=\"\"> instead of <if><tag></if>, and the way that templating", 
+   "libraries, rendering and named template blocks with namespaces worked, made this to tricky to implement in a reasonable time frame.", 
+   "This would still be the prefered way of implementing os-templates, but it requires someone with the proper amount of time available", 
+   "and the will to go the length to make it secure to do this. (If you are reading this and think this might be you, let us know!)", 
+   "- The second and third prototypes were based on trying to evaluate the entire gadget document in one pass, this would save memory", 
+   "and be reasonably efficient and fast, however in the end the fact that the XML/HTML parsing library in php (libxml2 based) can", 
+   "either support *only* interpreting everything as HTML 4, without any knowledge of name spacing, and mangling the html tags in script", 
+   "blocks meant the html mode wouldn't work and couldn't be made to work. Doing a single pass on the document in XML mode also was", 
+   "not sustainable, since there's to many gadgets with 'broken html' out there to make this feasable.", 
+   "- So the final solution was a bit of a ducktape one, the gadget's content is regex'd to see if it includes any os-data and os-template", 
+   "script blocks, and if so they are extracted and replaced with 'magic markers'.", 
+   "Then the template blocks are each parsed using the XML parsing (so the content of the template blocks have to be valid xhtml, even", 
+   "if the main document is not), and evaluated.", 
+   "Then the gadget document (this is without the templates, but including the magic markers) is parsed using the HTML parser to apply", 
+   "rewriting where applicable, and injecting the proper java script, css and html tags to build the real gadget document.", 
+   "After the HTML parsing is done, the magic tags are replaced with the evaluated templates.", 
+   "The down side of this solution is that it's slightly more fragile due to the regex's and other ducktape solutions, and the performance", 
+   "is lower then either of the other 2 alternatives, however it still performs decently, where a proxied content view with os-data", 
+   "and os-template tags is 'only' 50% slower then a normal rendering action, so the performance is still quite usable and worth the", 
+   "latency gains for the end-users.", 
+   "If there are any questions about the implementation, please feel free to ping me directly or preferably, the shindig-dev list."
+  ], 
+  "revision_id": "773371"
+ }
+]

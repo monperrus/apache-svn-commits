@@ -1,0 +1,123 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-01-18T00:35:58.816668Z", 
+  "msg": [
+   "JavaHL: Followup to r28944.  Add support for depth multiple changelists to", 
+   "removeFromChangelists() and addToChangelist().", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_removeFromChangelists,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_addToChangelist):", 
+   "Add depth and changelist parameters.", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(addToChangelist, removeFromChangelists): Add depth and changelist", 
+   "parameters, use them for the C APIs.", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientInterface.java", 
+   "(addToChangelist, removeFromChangelists): Add parameters.", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java:", 
+   "Update tests."
+  ], 
+  "revision_id": "869020"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-01-17T22:45:32.003867Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Instead of calculating paths that are too long and doing fiddly path", 
+   "math to shrink them back down, use a new helper to make relative paths", 
+   "out of parent_path_t items.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(parent_path_relpath): New helper.", 
+   "(get_mergeinfo_hash_for_path): Use helper.", 
+   "Patch by: cmpilato", 
+   "me", 
+   "Poem by: cmpilato"
+  ], 
+  "revision_id": "869019"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-17T21:06:22.850819Z", 
+  "msg": [
+   "Add --depth and --quiet support to 'svn changelist'.", 
+   "NOTE:  I had to put a kluge into changelist-cmd.c to deal with a", 
+   "separate notification function/baton issue that cropped up while", 
+   "testing.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Add --quiet (-q) and --depth to 'svn changelist'.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_set_changelist): Trade list 'paths' for single 'path'.  Add", 
+   "'adm_access' parameter.  Drop 'changelist_name' parameter.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_add_to_changelist): Add 'changelists' and 'depth' parameters.", 
+   "(svn_client_remove_from_changelists): Was svn_client_remove_from_changelist.", 
+   "Lose single 'changelist' in favor of a list of 'changelists'; add", 
+   "'depth' parameter.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_set_changelist): Reduce the reach of this function.  Handle", 
+   "only a single path, let callers manage adminstrative access, and", 
+   "now return errors for unversioned and directory items.  Also,", 
+   "defer changelist comparison to callers, too.", 
+   "* subversion/libsvn_client/changelist.c", 
+   "(struct set_cl_fe_baton): New callback baton structure.", 
+   "(set_entry_changelist): New callback function.", 
+   "(set_cl_entry_callbacks): New vtable implementation.", 
+   "(svn_client_add_to_changelist): Add 'changelists' and 'depth'", 
+   "parameters.  Now implement as a driver for an entries walk.", 
+   "(svn_client_remove_from_changelists): Was svn_client_remove_from_changelist.", 
+   "Lose single 'changelist' in favor of a list of 'changelists'; add", 
+   "'depth' parameter.  Now implement as a driver for an entries walk.", 
+   "(struct get_cl_fe_baton): Was 'struct fe_baton'; consumers updated.", 
+   "(get_entry_changelist): Was found_an_entry; consumers updated.", 
+   "(get_cl_entry_callbacks): Was entry_callbacks; consumers update.", 
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(add_remove_changelists): New test.", 
+   "(test_list): Add reference to new test.", 
+   "* subversion/svn/changelist-cmd.c", 
+   "(svn_cl__changelist): Massage this to make use of the revamped", 
+   "svn_client_remove_from_changelists() and svn_client_add_to_changelist()", 
+   "APIs.  Add --depth and --quiet support.", 
+   "* subversion/notes/changelist-design.txt", 
+   "Update feature revamp status."
+  ], 
+  "revision_id": "869018"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-17T15:27:33.726813Z", 
+  "msg": [
+   "Follow-up to r28933, fix spurious changelist_tests.py 4 failure on Win32.", 
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(diff_with_changelists): svn diff output is one of the few places that", 
+   "Win32 uses '/' path separators, so expect that."
+  ], 
+  "revision_id": "869017"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-16T22:26:06.849142Z", 
+  "msg": [
+   "Don't elide or inherit mergeinfo across a mixed revision working copy.", 
+   "* subversion/include/svn_mergeinfo.h: Add a blurb to the mergeinfo prop", 
+   "overview about the limitations of inheritance and elision in mixed rev WCs.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Don't crawl to a parent looking for", 
+   "inherited mergeinfo if that parent is at a different working revision than", 
+   "the child.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo,", 
+   "svn_client__get_wc_or_repos_mergeinfo ): Tweak doc strings.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_elision, no_mergeinfo_from_no_op_merge):", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(mergeinfo_update_elision): Put some updates in before subtree merges so", 
+   "elision and inheritance can still occur."
+  ], 
+  "revision_id": "869016"
+ }
+]

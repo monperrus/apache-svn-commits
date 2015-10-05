@@ -1,0 +1,74 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-07-30T01:18:20.759030Z", 
+  "msg": [
+   "Store moved-to relpaths in the BASE tree (op_depth = 0) instead of", 
+   "nodes_current. All move operations are relative to the BASE, so having", 
+   "moved-to information in op_depth layer 0 is semantically more correct.", 
+   "It will also make it easier to deal with stuff like cyclic moves and", 
+   "replacements later. E.g. before this commit moved-to information was lost", 
+   "if the delete-half of a move was replaced, and fixing this as a special", 
+   "case in the code that adds the replacing node would have been ugly.", 
+   "Also, clear moved-to relpaths from the BASE tree during 'revert' so", 
+   "we don't leave phantom moved-to information in the DB (are there any", 
+   "other places where we need to clear it?).", 
+   "With help, ideas, testing, and lots of sanity-checking by Neels.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_INSERT_DELETE_NODE): Drop MOVED_TO parameter, we don't use this", 
+   "query anymore for adding moved-to relpaths because this query does not", 
+   "operate on BASE.", 
+   "(STMT_SELECT_MOVED_FROM_RELPATH,", 
+   "STMT_SELECT_MOVED_HERE_CHILDREN): Look in BASE instead of nodes_current.", 
+   "(STMT_UPDATE_MOVED_TO_RELPATH): Update BASE instead of nodes_current.", 
+   "(STMT_CLEAR_MOVED_TO_RELPATH,", 
+   "STMT_CLEAR_MOVED_TO_RELPATH_RECURSIVE): New statements for op_revert", 
+   "and op_revert_recursive.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(op_revert_txn, op_revert_recursive_txn): Clear moved-to relpaths in BASE.", 
+   "(op_delete_txn): Use STMT_UPDATE_MOVED_TO_RELPATH instead of", 
+   "STMT_INSERT_DELETE_NODE to insert/update moved-to relpaths.", 
+   "Patch by: me", 
+   "neels"
+  ], 
+  "revision_id": "1152410"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2011-07-30T01:00:50.420083Z", 
+  "msg": [
+   "Merge r1151911 from trunk:", 
+   "* r1151911", 
+   "Fix description of svndumpfilter's --targets option.", 
+   "Votes:", 
+   "+1: cmpilato, hwright, rhuijben"
+  ], 
+  "revision_id": "1152409"
+ }, 
+ {
+  "author": "erans", 
+  "date": "2011-07-30T00:38:30.577238Z", 
+  "msg": [
+   "Junit4 package."
+  ], 
+  "revision_id": "1152408"
+ }, 
+ {
+  "author": "randall", 
+  "date": "2011-07-30T00:37:37.649734Z", 
+  "msg": [
+   "Backport of r1152399 from trunk", 
+   "add an etap test for btree traversal callbacks"
+  ], 
+  "revision_id": "1152407"
+ }, 
+ {
+  "author": "randall", 
+  "date": "2011-07-30T00:37:32.626894Z", 
+  "msg": [
+   "Backport of r1152398 from trunk", 
+   "Fix COUCHDB-1076 - views skip empty btree branches"
+  ], 
+  "revision_id": "1152406"
+ }
+]

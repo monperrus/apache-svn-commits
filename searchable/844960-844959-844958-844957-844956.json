@@ -1,0 +1,72 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-02-13T22:09:53.517443Z", 
+  "msg": [
+   "Fix issue #1134: make 'svn cat -r PREV' work.", 
+   "* subversion/clients/cmdline/cl.h, subversion/clients/cmdline/util.c", 
+   "(svn_cl__get_url_from_target): Move from here ...", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_url_from_path): ... to here ...", 
+   "* subversion/libsvn_client/url.c: New file.", 
+   "(svn_client_url_from_path): ... and here.  All callers changed.", 
+   "* subversion/include/svn_client.h, subversion/libsvn_client/cat.c", 
+   "(svn_client_cat): Do url conversion here, instead of depending on", 
+   "caller to do it, and pass the potential path along to", 
+   "svn_client__get_revision_number so we can get local revisions.", 
+   "Update documentation accordingly.", 
+   "* subversion/clients/cmdline/cat-cmd.c", 
+   "(svn_cl__cat): Don't do url conversion here, since svn_client_cat", 
+   "takes care of that now."
+  ], 
+  "revision_id": "844960"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-02-13T21:10:52.149636Z", 
+  "msg": [
+   "Fix issue #1066: don't bomb out just because the working file is", 
+   "absent.  Thanks to Mike Pilato for eyes and neurons.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__open_props, svn_wc__close_props): Use safer logic to", 
+   "determine where to find the property file.", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(prop_update_on_scheduled_delete): New test.", 
+   "(test_list): Run it."
+  ], 
+  "revision_id": "844959"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-02-13T19:47:19.445954Z", 
+  "msg": [
+   "Revert accidental commit of revision 4883."
+  ], 
+  "revision_id": "844958"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-02-13T19:42:31.064833Z", 
+  "msg": [
+   "log msg"
+  ], 
+  "revision_id": "844957"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-02-13T19:15:48.791710Z", 
+  "msg": [
+   "Fix \"The Checksum\" bug.", 
+   "apr_md5_final() may be called more than once if we ever retry_txn().", 
+   "This invalidates our apr_md5_ctx_t structure, causing a bogus checksum", 
+   "to be produced (& stored) on the second call to apr_md5_final().", 
+   "The solution is always call apr_md5_final() on a temporary copy of the", 
+   "structure... inspired by a patch from Brandon Ehle.", 
+   "BTW:  this change allows me to run three simultaneous stress.pl", 
+   "processes with no problems, for an indefinite amount of time.", 
+   "* reps-strings.c (txn_body_write_close_rep): always call apr_md5_final()", 
+   "on a temporary copy of the apr_md5_cxt_t."
+  ], 
+  "revision_id": "844956"
+ }
+]

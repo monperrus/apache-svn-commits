@@ -1,0 +1,103 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-06T11:39:57.451331Z", 
+  "msg": [
+   "Resolve two svn_path_*() deprecation warnings.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Use uri canonicalization", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__edit_string_externally): Use dirent joining."
+  ], 
+  "revision_id": "879230"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-06T00:50:47.918364Z", 
+  "msg": [
+   "Following up on r39154, revert accidental commit of deprecated.c", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_get_status_editor4): Revert accidental commit."
+  ], 
+  "revision_id": "879229"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-06T00:47:59.666903Z", 
+  "msg": [
+   "[The deprecated.c part of this patch was reverted in r39155]", 
+   "Remove the usage of access batons from the status editor. This", 
+   "switches some entry functions to the new wc_db functions.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(handle_dir_entry): Assume the passed entry is the full entry.", 
+   "(get_dir_status): Load childnodes directly from wc-db. Use an extra", 
+   "hash to collapse all status call updates in a single loop.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_get_status_editor4): Accidental commit of prototype change."
+  ], 
+  "revision_id": "879228"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-05T18:26:48.216325Z", 
+  "msg": [
+   "[[ Reverted in r39153, see discussion on list.", 
+   "*", 
+   "*  The possible solution for keeping backwards compatibility", 
+   "*  'making access baton close a no-op' doesn't work because", 
+   "*  in that case we can never close wc.db files before deleting", 
+   "*  a working copy with an independent access baton in the same", 
+   "*  parent pool.", 
+   "]]", 
+   "When opening access batons, recursively lock all its subdirectories to an", 
+   "infinite depth as well.  In wc-ng, we don't have the notion of recursively", 
+   "opening a database; it's either open or it's not.  By making this change now,", 
+   "we can remove the existing complexity of determining how many levels to lock", 
+   "and where to lock them.", 
+   "We also gain another advantage.  When attempting to open a baton, we can check", 
+   "and see if that baton is already opened, and just return it if it is.  By", 
+   "always recursively locking, we can guarantee that a found baton is also", 
+   "recursively locked, which is what the original caller may have intended.", 
+   "All this simplifies our current access baton usage, and the path to removal.", 
+   "Oh, and it incidentally fixes copy test 76.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(commit_copy_depth_empty): Remove comment.", 
+   "(test_list): Mark test as passing.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(open_single): Check and see if a baton exists before opening a new one.", 
+   "(do_open): Always recursively lock to an infinite depth.  Also, don't", 
+   "duplicate the missing placeholder in the shared set."
+  ], 
+  "revision_id": "879227"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-05T12:45:22.508504Z", 
+  "msg": [
+   "Remove all access baton and entry handing in svn (the commandline client)", 
+   "The new node api makes it possible to check if files are part of a", 
+   "working copy without opening an access baton.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__revprop_prepare): Add ctx argument.", 
+   "* subversion/svn/main.c", 
+   "(includes): Add private/svn_wc_private.h.", 
+   "(main): Move initialization of the client context up and use this context", 
+   "for retrieving the node kind of arguments passed with -F.", 
+   "* subversion/svn/propdel-cmd.c", 
+   "(svn_cl__propdel): Pass ctx.", 
+   "* subversion/svn/propedit-cmd.c", 
+   "(includes): Add private/svn_wc_private.h.", 
+   "(svn_cl__propedit): Pass ctx and use the wc-node api instead of an", 
+   "access baton and entries.", 
+   "* subversion/svn/propget-cmd.c", 
+   "(svn_cl__propget): Pass ctx.", 
+   "* subversion/svn/proplist-cmd.c", 
+   "(svn_cl__proplist): Pass ctx.", 
+   "* subversion/svn/props.c", 
+   "(svn_cl__revprop_prepare): Pass new ctx to svn_client_url_from_path2.", 
+   "* subversion/svn/propset-cmd.c", 
+   "(svn_cl__propset): Pass ctx."
+  ], 
+  "revision_id": "879226"
+ }
+]

@@ -1,0 +1,96 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2011-10-11T02:34:42.444584Z", 
+  "msg": [
+   "Add enddate column"
+  ], 
+  "revision_id": "1181610"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-10-11T02:32:16.183133Z", 
+  "msg": [
+   "Revert the removal of the calculations of repository paths of remotely added", 
+   "nodes in r953751, by reintroducing similar code using repository relative paths.", 
+   "This should fix the javahl test failure recently introduced by markphip.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(dir_baton, file_baton): Add repos_relpath field.", 
+   "(tweak_statushash): Fill repos_relpath from baton if not already read from", 
+   "the working copy.", 
+   "(make_dir_baton, make_file_baton): Calculate and store repos_relpath.", 
+   "Found by: markphip", 
+   "philip"
+  ], 
+  "revision_id": "1181609"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:27:07.707534Z", 
+  "msg": [
+   "Avoid doing two ROWCOL Bloom filter lookups for single-column gets", 
+   "Summary: We optimized multi-column scans using Bloom filters in D276188, but", 
+   "this resulted in checking Bloom filters twice for single-row (\"get\") scans with", 
+   "only one column: first, when selecting the set of storefiles to scan, and", 
+   "second, when checking whether a seek should be done on each selected storefile", 
+   "for the given column. Here, we are getting rid of the redundant check by not", 
+   "using the multi-get Bloom filter optimization in case of a scan with only one", 
+   "column.", 
+   "Test Plan: Unit tests. HBaseTest on 5-node cluster. Restart one regionserver on", 
+   "prod cluster with the new jar and check OpenTSDB stats.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, liyintang", 
+   "CC: hbase@lists, , kannan", 
+   "Revert Plan: OK", 
+   "Differential Revision: 281907"
+  ], 
+  "revision_id": "1181608"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:27:04.774894Z", 
+  "msg": [
+   "Enhanced the MapReduce TableInputFormat to support any number of mappers per region.", 
+   "Summary:", 
+   "Current TableInputFormat based MR jobs create exactly one mapper per region", 
+   "where each mapper sets one Scan with appropriate start/stop row keys. This", 
+   "change allows jobs to be run with any number of mappers per region, so that", 
+   "when a mapper fails, there will be less data to be reprocessed.", 
+   "In general, each pair of consecutive dividing row keys is divided using", 
+   "BigInteger math, and on edgy regions, the interval of the finer splits is used", 
+   "to approximate the split dividing keys.", 
+   "Added a unit test TestTableInputFormatNMappersPerRegion for TableInputFormat", 
+   "to the MapReduce package.", 
+   "Test Plan: Passed unit tests in mapreduce package.", 
+   "Reviewers: kannan, kranganathan, nspiegelberg", 
+   "Reviewed By: kannan", 
+   "Commenters: kannan", 
+   "CC: aaiyer, jgray", 
+   "Differential Revision: 279530", 
+   "Task ID: 620261"
+  ], 
+  "revision_id": "1181607"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:25:15.938650Z", 
+  "msg": [
+   "fix TestHRegion:testBasicSplit() unit test failure", 
+   "Summary:", 
+   "compactStores() wasn't compacting all stores in the region if a split had been", 
+   "requested for the region. After compacting the first store, it would notice that", 
+   "a split had been requested, and then return with the midkey without compacting", 
+   "the remaining stores.", 
+   "This isn't safe if there are reference (half file references) to parent regions", 
+   "in some of the column families.", 
+   "Also fixed flush code path. If a split has been requested, but there are half", 
+   "file references in the region, we still need to compact.", 
+   "Test Plan: Unit tests. TestHRegion now passes. Running all unit tests.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: mbautin, nspiegelberg, kranganathan", 
+   "CC: hbase@lists, nspiegelberg", 
+   "Differential Revision: 282246"
+  ], 
+  "revision_id": "1181606"
+ }
+]

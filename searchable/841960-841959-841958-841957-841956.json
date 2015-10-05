@@ -1,0 +1,84 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-06T18:27:56.569823Z", 
+  "msg": [
+   "This affects issue #656 (and continues the work in revision #1851).", 
+   "Continue the work of separating the internal filesystem structures from", 
+   "the list/string skeleton library routines.  This is a requirement for", 
+   "pluggable database backends, and will (I think) assist in the", 
+   "conversion to the new NodeId interface.", 
+   "--", 
+   "* subversion/libsvn_fs/fs.h", 
+   "(svn_fs__node_revision_header_t): Removed.", 
+   "(svn_fs__node_revision_kind_t): Removed.", 
+   "(svn_fs__node_revision_t): Remove the unnecessary union heirarchy.", 
+   "(svn_fs__rep_delta_window_t): Removed.", 
+   "(svn_fs__rep_delta_chunk_t): Add members of svn_fs__rep_delta_window_t.", 
+   "* subversion/libsvn_fs/fs_skels.c", 
+   "(is_valid_noderev_header_skel, is_valid_node_revision_skel): New,", 
+   "copied with minor mods, and renamed, from nodes-table.c", 
+   "(svn_fs__unparse_node_revision_skel, svn_fs__parse_node_revision_skel): New.", 
+   "(svn_fs__unparse_entries_skel, svn_fs__parse_entries_skel): New.", 
+   "(svn_fs__parse_representation_skel, svn_fs__unparse_representation_skel):", 
+   "Update to reflect changes to svn_fs__representation_t structure.", 
+   "* subversion/libsvn_fs/fs_skels.h", 
+   "(svn_fs__parse_proplist_skel): Modify promise.", 
+   "(svn_fs__unparse_node_revision_skel, svn_fs__parse_node_revision_skel): New.", 
+   "(svn_fs__unparse_entries_skel, svn_fs__parse_entries_skel): New.", 
+   "* subversion/libsvn_fs/reps-strings.c", 
+   "(delta_string_keys, rep_read_range, svn_fs__rep_contents_size,", 
+   "svn_fs__rep_deltify): No more skels."
+  ], 
+  "revision_id": "841960"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-06T17:33:36.904097Z", 
+  "msg": [
+   "Make the dump-editor recognize replacements.", 
+   "* dump.c", 
+   "(struct dir_baton):  hold a hash of deleted entrynames, and a pool.", 
+   "(make_dir_baton): initialize hash.", 
+   "(delete_entry): add items to the hash.", 
+   "(add_file, add_directory):  if already deleted, dump with 'replace' flag.", 
+   "(close_directory):  new func. dump any paths left in the hash.", 
+   "(get_dump_editor):  use close_directory."
+  ], 
+  "revision_id": "841959"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-06T15:54:43.643779Z", 
+  "msg": [
+   "Bugfix in 'svn merge':  the target wcpath was being ignored, always", 
+   "defaulting to '.'", 
+   "(But the trace-update editor is still printing wonky paths, even", 
+   "though the merge is correct now.  I'll fix this soon, see issue #700.)", 
+   "* repos_diff.c (make_dir_baton, make_file_baton):  prepend the", 
+   "edit_baton's \"anchor\" to all paths coming into the editor."
+  ], 
+  "revision_id": "841958"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-06T12:51:05.148002Z", 
+  "msg": [
+   "* project_faq.html:  add FAQ about global revision number.  the", 
+   "response is an edited version of Bill Tutt's recent email reply."
+  ], 
+  "revision_id": "841957"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-06T12:42:33.314001Z", 
+  "msg": [
+   "Fix bug where incorrect use of 'svn diff' was dying silently.", 
+   "* main.c (main): why on earth does this function just exit(1) silently", 
+   "whenever it might potentially handle a SVN_ERR_CL_ARG_PARSING_ERROR?", 
+   "Why is that particular error ignored, but all others printed?", 
+   "Whatever the case, at least print help on the subcommand."
+  ], 
+  "revision_id": "841956"
+ }
+]

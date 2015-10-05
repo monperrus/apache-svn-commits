@@ -1,0 +1,71 @@
+[
+ {
+  "author": "schor", 
+  "date": "2010-06-08T01:35:58.026859Z", 
+  "msg": [
+   "[UIMA-1809] cancelled first release attempt"
+  ], 
+  "revision_id": "952495"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2010-06-08T01:32:51.885439Z", 
+  "msg": [
+   "[UIMA-1794] add documentation for new parameters for JMS Service descriptor"
+  ], 
+  "revision_id": "952494"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-06-08T00:47:22.161885Z", 
+  "msg": [
+   "The query that we used to fetch all children in BASE_NODE and WORKING_NODE", 
+   "used a UNION between two SELECT statements. The idea was to have SQLite", 
+   "remove all duplicates for us in a single query. Unfortunately, this caused", 
+   "SQLite to create an ephemeral (temporary) table and place the results of", 
+   "each query into that table. It created an index to remove dupliates. Then", 
+   "it returned the values in that ephemeral table. For large numbers of", 
+   "nodes, the construction of the table and its index becomes very costly.", 
+   "This change rebuilds gather_children() in wc_db.c to do the duplicate", 
+   "removal manually using a hash table. It does some simple scanning straight", 
+   "into an array when it knows duplicates cannot exist (one of BASE or", 
+   "WORKING is empty).", 
+   "The performance problem of svn_wc__db_read_children() was first observed", 
+   "in issue #3499. The actual performance improvement is untested so far, but", 
+   "I'm assuming pburba can pick up this change and try in his scenario.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(count_children): new helper to count the number of children of a given", 
+   "PARENT_RELPATH within a specific table.", 
+   "(add_children_to_hash): new helper to scan children, placing their names", 
+   "into a hash table as keys (and the mapped values).", 
+   "(union_children): new helper to scan both BASE_NODE and WORKING_NODE and", 
+   "manually create a union of the resulting names using a hash table.", 
+   "(single_table_children): new helper to return the children from a single", 
+   "table.", 
+   "(gather_children): rebuilt in terms of the above helpers", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_COUNT_BASE_NODE_CHILDREN, STMT_COUNT_WORKING_NODE_CHILDREN): new", 
+   "statements to count the number of children for a given parent_relpath", 
+   "(STMT_SELECT_WORKING_CHILDREN): removed", 
+   "(STMT_SELECT_WORKING_NODE_CHILDREN): like STMT_SELECT_BASE_NODE_CHILDREN,", 
+   "this scan all children in WORKING_NODE for a given parent_relpath"
+  ], 
+  "revision_id": "952493"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2010-06-07T23:54:51.076094Z", 
+  "msg": [
+   "CTR: add ASL license comment to the *.sh files and to a *.properties file"
+  ], 
+  "revision_id": "952492"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2010-06-07T23:52:50.335903Z", 
+  "msg": [
+   "Forgot to change the poi references"
+  ], 
+  "revision_id": "952491"
+ }
+]

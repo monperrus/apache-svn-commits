@@ -1,0 +1,82 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2004-12-10T22:57:34.646488Z", 
+  "msg": [
+   "Locking branch:  fix some locking bugs in mod_dav_svn and fs locking backends.", 
+   "* mod_dav_svn/lock.c", 
+   "(dav_svn_append_locks, dav_svn_refresh_locks): trap", 
+   "SVN_ERR_FS_NO_USER, and convert it to \"401 Unauthorized\" so http", 
+   "clients know to prompt and re-try the request.", 
+   "(dav_svn_remove_lock):  do what the vtable API says -- if a NULL token", 
+   "is passed in, then discover any existing lock and remove it.", 
+   "Also convert SVN_ERR_FS_NO_USER to \"401 Unauthorized.\"", 
+   "* include/svn_fs.h", 
+   "(svn_fs_attach_lock):  docstring tweak:  require that lock->owner be", 
+   "filled in!", 
+   "* libsvn_fs_base/lock.c", 
+   "(txn_body_attach_lock):  don't allow an empty lock->owner.", 
+   "* libsvn_fs_fs/lock.c", 
+   "(svn_fs_fs__attach_lock):  same."
+  ], 
+  "revision_id": "852350"
+ }, 
+ {
+  "author": "marcosc", 
+  "date": "2004-12-10T22:53:33.597877Z", 
+  "msg": [
+   "Brazilian portuguese translation update.", 
+   "* subversion/po/pt_BR.po", 
+   "Update translation to r12274.", 
+   "Fixed 63 fuzzy, 45 untranslated and 1 incomplete translated messages."
+  ], 
+  "revision_id": "852349"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-12-10T21:32:12.460604Z", 
+  "msg": [
+   "Locking branch: The username of an filesystem access descriptor must not be", 
+   "NULL.  Guaranteeing this simplyfies the uses of this object in other places.", 
+   "* subversion/include/svn_fs.h (svn_fs_create_access): Mention in the docstring", 
+   "that username must not be NULL.", 
+   "* subversion/libsvn_fs/access.c (svn_fs_create_access): Assert that username", 
+   "is non-NULL."
+  ], 
+  "revision_id": "852348"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-12-10T18:50:05.767750Z", 
+  "msg": [
+   "Fix bug reported by Jim Correia <jim.correia@pobox.com> in", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=users&msgNo=22572.", 
+   "A file with a space in its name could break 'svn ls' like so:", 
+   "$ svnadmin create repos", 
+   "$ svn co file:///`pwd`/repos/ wc", 
+   "$ cd wc", 
+   "$ touch \"new file\"", 
+   "$ svn add \"new file\"", 
+   "$ svn ci -m \"Add a file with space in its name.\"", 
+   "$ svn up", 
+   "$ svn ls -v \"new file\"", 
+   "'file:///blah/blah/blah/new%20file' non-existent in that revision", 
+   "$", 
+   "* subversion/libsvn_client/ls.c", 
+   "(svn_client_ls2): Don't uri-encode base_name, because it is not", 
+   "uri-encoded in parent's entries list."
+  ], 
+  "revision_id": "852347"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-12-10T17:51:22.300106Z", 
+  "msg": [
+   "Book tweaks.", 
+   "Suggested by: Eric Paire <eric.paire@st.com>", 
+   "* doc/book/book/ch03.xml, ch09,xml:  clarify meaning of ~ symbol in 'svn st'.", 
+   "* doc/book/TODO:  reorg the format of this file a little bit."
+  ], 
+  "revision_id": "852346"
+ }
+]

@@ -1,0 +1,92 @@
+[
+ {
+  "author": "torehalset", 
+  "date": "2008-04-21T22:23:12.906444Z", 
+  "msg": [
+   "ObjEntity changed name on the client to ClientObjEntity"
+  ], 
+  "revision_id": "650300"
+ }, 
+ {
+  "author": "pauls", 
+  "date": "2008-04-21T22:23:12.165517Z", 
+  "msg": [
+   "Update NOTICE file to new layout, update documentation to match new style, delete redundant NOTICE and LICENSE files, prepare changelog for 1.0.1 release, and update dependencies to 1.1.0-SNAPSHOT."
+  ], 
+  "revision_id": "650299"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2008-04-21T22:19:30.189152Z", 
+  "msg": [
+   "HBASE-586 HRegion runs HStore memcache snapshotting -- fix it so only HStore", 
+   "knows about workings of memcache", 
+   "HStore knows about workings of memcache", 
+   "This patch moves the running of mecache snapshots out of the control", 
+   "of HRegion and hides the memcache details in HStore.   This patch also", 
+   "does a bunch of work on the merge tool fixing a bug in the metautils along", 
+   "the way.  The merge tool test was failing.  We weren't setting into the", 
+   "HLog the maximum sequence id after we'd opened a region -- as HRS does --", 
+   "so were losing edits. On the way, refactored the merge tool test to get", 
+   "rid of duplicated code.  Finally, cleans up logging in HStore to aid", 
+   "debugging; e.g. we always refer to the sequence id as the 'sequence id'", 
+   "in log messages rather than as seqId or 'sequence record' so can sort", 
+   "log as see state of sequence id transitions.", 
+   "Version 2 changes the order in which things are run in memcache.  532", 
+   "made it so flushing did snapshot and then cleared the snapshot.  Now,", 
+   "we snapshot before we flush a store, then inside in the store flush,", 
+   "we call getSnapshot and then clearSnapshot.", 
+   "M  src/test/org/apache/hadoop/hbase/regionserver/TestHMemcache.java", 
+   "How snapshotting changed.  Change test in accordance.", 
+   "M  src/test/org/apache/hadoop/hbase/regionserver/TestHLog.java", 
+   "Use accessor to get file number.", 
+   "M  src/test/org/apache/hadoop/hbase/util/TestMergeTool.java", 
+   "Refactored to remove duplicated code so could tell what was going on.", 
+   "(mergeAndVerify, verifyMerge): Addd.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/Memcache.java", 
+   "(snapshot): Changed so it no longer returns snapshot.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HStore.java", 
+   "Changed log messages removing the useless and adding info to others.", 
+   "(this.maxSeqId): We used to add 1 to this in here in HStore.  Let", 
+   "HRegion do it.  Its the one that does the machinations w/ sequenceids", 
+   "anyways.  Make flushes return the amount flushed.  Use this updating", 
+   "the regions memcacheSize accounting.", 
+   "(snapshot): Added method for the region to call.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HLog.java", 
+   "Made data members private.", 
+   "(getFileNum): Added accessor for tests.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HRegion.java", 
+   "Added info to logs..", 
+   "(snapshotMemcaches): removed.", 
+   "(internalFlushcache): No longer takes startime.  Internally now does", 
+   "some of what used happen in snapshotMemcaches including sending of", 
+   "message to stores to snapshot.", 
+   "(getEntrySize): Added method for calculating size of an update. Used", 
+   "by HRegion and flushing so both come up w/ same answer.", 
+   "M  src/java/org/apache/hadoop/hbase/util/Merge.java", 
+   "Add logging of whats happening during merges and fail earlier than we", 
+   "used if stuff is not right.", 
+   "Renamed local variables from region1 to r1, etc., so didn't clash", 
+   "with data members of same name.", 
+   "M  src/java/org/apache/hadoop/hbase/util/MetaUtils.java", 
+   "Added a TODO"
+  ], 
+  "revision_id": "650298"
+ }, 
+ {
+  "author": "pauls", 
+  "date": "2008-04-21T22:17:48.265740Z", 
+  "msg": [
+   "Update NOTICE file to new layout, update documentation to match new style, delete redundant NOTICE and LICENSE files, prepare changelog for 1.0.1 release, and update dependencies to 1.1.0-SNAPSHOT."
+  ], 
+  "revision_id": "650297"
+ }, 
+ {
+  "author": "pauls", 
+  "date": "2008-04-21T22:16:09.924953Z", 
+  "msg": [
+   "Update dependency on obr service interfaces to 1.1.0-SNAPSHOT."
+  ], 
+  "revision_id": "650296"
+ }
+]

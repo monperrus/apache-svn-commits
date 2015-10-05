@@ -1,0 +1,84 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2007-07-01T21:21:55.691237Z", 
+  "msg": [
+   "Add a mechanism to choose one of multiple authentication protocols based on", 
+   "the authentication header as sent by the http server. Add an interface(vtable)", 
+   "so new authentication protocols can easily be plugged in later. Note that the", 
+   "interface currently only provides an initialization and a handling function,", 
+   "which is sufficient for Basic authentication, but it might not be enough for", 
+   "future protocol implementations.", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(serf_auth_protocols): new global variable, defines the list of supported", 
+   "authentication protocols.", 
+   "(init_basic_connection): new function, initializes the Basic authn protocol", 
+   "for a new connection.", 
+   "(handle_auth): load the protocol from serf_auth_protocols based on the", 
+   "name provided in the header.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(struct svn_ra_serf__session_t): new auth_protocol field, stores the current", 
+   "authentication protocol for this session, if any.", 
+   "(svn_serf__auth_handler_func_t,", 
+   "svn_serf__init_conn_func_t): new function declarations, to be implemented", 
+   "by authentication protocol providors.", 
+   "(serf_auth_protocol_t): an object of this type is to be defined for each", 
+   "authentication protocol providor.", 
+   "(handle_auth): more comments", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(finish_report): not all authentication protocols allow reuse of authn", 
+   "headers on a new connection, so move this to an authn protocol specific", 
+   "initialization function."
+  ], 
+  "revision_id": "865680"
+ }, 
+ {
+  "author": "sage", 
+  "date": "2007-07-01T20:55:07.810748Z", 
+  "msg": [
+   "Typo fixes and stylistic cleanups to the WC diff method.", 
+   "Changes suggested by David James.", 
+   "Patch by: David James", 
+   "*csvn/wc.py", 
+   "(diff): Stylistic cleanups and typos fixes."
+  ], 
+  "revision_id": "865679"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-01T20:06:36.543638Z", 
+  "msg": [
+   "Move the code for Basic authentication in its own function.", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(handle_auth): remove the code for Basic authentication as first step in", 
+   "making this function a dispatcher for different authentication handlers.", 
+   "(handle_basic_auth): new function, provides Basic authentication.", 
+   "Removed an unneeded loop over authentication header tokens."
+  ], 
+  "revision_id": "865678"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-01T19:29:00.560113Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "Update copyright years."
+  ], 
+  "revision_id": "865677"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-01T19:17:21.971951Z", 
+  "msg": [
+   "Move auth function(s) out of util.c.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_auth): move this function to ...", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(handle_auth): ... here", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(handle_auth): added declaration."
+  ], 
+  "revision_id": "865676"
+ }
+]

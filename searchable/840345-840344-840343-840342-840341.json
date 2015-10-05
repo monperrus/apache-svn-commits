@@ -1,0 +1,68 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-10-19T20:19:08.384405Z", 
+  "msg": [
+   "* index.html:  update to M5", 
+   "* inconveniences.html:  update information.", 
+   "* project_source.html:  remove M3-specific stuff.", 
+   "* project_tasks.html:  update information.", 
+   "* project_status.html:  update to M5"
+  ], 
+  "revision_id": "840345"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2001-10-19T20:17:09.225281Z", 
+  "msg": [
+   "Fixed documentation to point to .svn directory instead of SVN directory."
+  ], 
+  "revision_id": "840344"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-19T20:07:26.342783Z", 
+  "msg": [
+   "Fix issue 535."
+  ], 
+  "revision_id": "840343"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-19T19:07:58.439683Z", 
+  "msg": [
+   "Make dist.sh detect the revnum again."
+  ], 
+  "revision_id": "840342"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-19T18:37:53.893316Z", 
+  "msg": [
+   "Karl is writing a Tolstoyan essay on the theoretical problems we have", 
+   "with directories being out-of-date.  In the meantime, we can make", 
+   "Hudson test #11 pass over dav by making the *client* side enforce the", 
+   "rule: \"dir propchanges are only committable on up-to-date dirs\".", 
+   "The commit-driver now uses a callback (from the RA layer) to get the", 
+   "latest revision number from the repository, so it can do an up-to-date", 
+   "check on any directory with propchanges.  For now, this means that any", 
+   "commit that contains changes directory props results in one extra", 
+   "network turnaround (in the case of multiple dirs having propchanges,", 
+   "the latest revision number is cached).  We can live with this.", 
+   "* svn_ra.h (svn_ra_get_latest_revnum_func_t):  new function type.", 
+   "* svn_wc.h (svn_wc_crawl_local_mods):  add this function type to this", 
+   "declaration.", 
+   "* adm_crawler.c (svn_wc_crawl_local_mods):  take new function type,", 
+   "and 'youngest_rev' cache field.", 
+   "(svn_wc__crawl_local_mods):  take new function type and youngest_rev", 
+   "(crawl_dir): same; actually use the new function and cache variable", 
+   "to check directory out-of-dateness.", 
+   "* commit.c (send_to_repos):  pass RA->get_latest_revnum to the", 
+   "crawler, or NULL in the xml commit case.", 
+   "* commit-test.c (main): pass NULL to the crawler here. (it's an xml test)", 
+   "* commit_tests.py (hudson_part_2):  make commit-test #11 look for the", 
+   "new error message."
+  ], 
+  "revision_id": "840341"
+ }
+]

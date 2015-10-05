@@ -1,0 +1,91 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-21T10:15:14.636015Z", 
+  "msg": [
+   "Rewrite the erase from wc code to work without access batons and without", 
+   "entries.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(erase_from_wc): Take db and abspath. Use db apis instead of entries.", 
+   "(svn_wc_delete4): Update caller."
+  ], 
+  "revision_id": "879555"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-21T04:51:19.495419Z", 
+  "msg": [
+   "Remove the install_props_file() function since it did little more than", 
+   "wrap the svn_wc__write_properties() function.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(install_props_file): removed", 
+   "(svn_wc__install_props): rejigger to compute a couple propfile paths", 
+   "earlier, and then directly call write_properties() instead of the old", 
+   "install_props_file() function."
+  ], 
+  "revision_id": "879554"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-21T04:25:21.307331Z", 
+  "msg": [
+   "Pass a bunch of paths rather than access batons to some property handling", 
+   "code. Also eliminate an unused prop function.", 
+   "* subversion/libsvn_wc/props.h:", 
+   "(svn_wc__has_special_property): removed. unused.", 
+   "(svn_wc__install_props): pass ADM_ABSPATH and LOCAL_ABSPATH rather than", 
+   "a baton and relative path.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(install_props_file): accept ADM_ABSPATH and LOCAL_ABSPATH instead. derive", 
+   "the kind, and adjust call to write_properties().", 
+   "(svn_wc__install_props): accept ADM_ABSPATH and LOOCAL_ABSPATH instead.", 
+   "pass these along to install_props_file(), and other calls.", 
+   "(svn_wc__merge_props): adjust param values to install_props()", 
+   "(svn_wc__has_special_property): removed. unused.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(accumulate_entry_props): take ADM_ABSPATH rather than a baton. adjust", 
+   "calls to the loggy functions.", 
+   "(prop_hash_from_array): constify the PROP_LIST param", 
+   "(close_directory, merge_props): adjust params to accumulate_entry_props()", 
+   "(install_added_props): use prop_hash_from_array to reduce code. pass", 
+   "ADM_ABSPATH and LOCAL_ABSPATH as appropriate to accumulate... and to", 
+   "svn_wc__install_props.", 
+   "(svn_wc_add_repos_file4): pass localvar DIR_ABSPATH as the ADM_ABSPATH", 
+   "parameter to a bunch of sub-calls."
+  ], 
+  "revision_id": "879553"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-21T04:19:23.452559Z", 
+  "msg": [
+   "Remove some unused code that I accidentally left in.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(revert_entry): remove some #if'd out code."
+  ], 
+  "revision_id": "879552"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-21T04:05:21.354788Z", 
+  "msg": [
+   "Simplify some logic when opening an access baton, and fix a potential bug.", 
+   "The old code would close the baton (aka \"lock\") that it was working on, if", 
+   "a problem occurred when opening a child (or a cancellation). The close", 
+   "operation is recursive, so it *could* close a \"third party\" baton (which", 
+   "may have been the cause of the error, btw). Rather than closing the", 
+   "in-progress lock, we now just return an error. The \"rollback list\" will", 
+   "close all batons that were opened as part of this operation, and it does", 
+   "so in a non-recursive fashion.", 
+   "Note: the above situation is theoretical since all client code must be", 
+   "aware of its opened/locked batons, and will never overlap them like this.", 
+   "But if it *does*, then we don't want to close something this operation did", 
+   "not open. Simply bailing out and relying on the rollback Works.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(do_open): simplify the error exits -- don't bother to close the lock", 
+   "being opened. The caller's rollback handling will deal with that. Also", 
+   "provide a shorter-life pool (iterpool) to a function for its scratch."
+  ], 
+  "revision_id": "879551"
+ }
+]

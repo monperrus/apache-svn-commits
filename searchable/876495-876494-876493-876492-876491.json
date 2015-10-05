@@ -1,0 +1,93 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-08T23:49:34.377248Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(apply_textdelta): Following up on r36389, use the local checksum", 
+   "as primary checksum to compare the txdelta source. Use an optional", 
+   "ra provided checksum to verify txdelta sources that don't have a", 
+   "local checksum."
+  ], 
+  "revision_id": "876495"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-08T21:51:36.805433Z", 
+  "msg": [
+   "In an attempt to hopefully fix the swig build on our buildbots, move", 
+   "some svnpatch helpers out of svn_wc.h into a private header.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc_write_number, svn_wc_write_string, svn_wc_write_cstring,", 
+   "svn_wc_write_word, svn_wc_write_proplist, svn_wc_start_list,", 
+   "svn_wc_end_list, svn_wc_write_tuple, svn_wc_write_cmd,", 
+   "svn_wc_read_item, svn_wc_parse_tuple, svn_wc_read_tuple):", 
+   "Temporarily move these functions here, waiting for further", 
+   "cleanup.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_write_number, svn_wc_write_string, svn_wc_write_cstring,", 
+   "svn_wc_write_word, svn_wc_write_proplist, svn_wc_start_list,", 
+   "svn_wc_end_list, svn_wc_write_tuple, svn_wc_write_cmd,", 
+   "svn_wc_read_item, svn_wc_parse_tuple, svn_wc_read_tuple):", 
+   "Remove these functions from our public wc header. They", 
+   "are not part of the working copy public api.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(): Include private/svn_wc_private.h.", 
+   "* subversion/libsvn_wc/patch.c", 
+   "(): Include private/svn_wc_private.h."
+  ], 
+  "revision_id": "876494"
+ }, 
+ {
+  "author": "mf", 
+  "date": "2009-03-08T20:39:53.879609Z", 
+  "msg": [
+   "Add support for relative incremental dumps.", 
+   "* tools/server-side/svn-backup-dumps.py:", 
+   "(): Update documentation.", 
+   "(SvnBackup.__init__): Set new option self.__relative_incremental.", 
+   "(SvnBackup.get_last_dumped_rev): New function.", 
+   "(SvnBackup.export_relative_incremental): New function.", 
+   "(SvnBackup.execute): Call export_relative_incremental if requested.", 
+   "(\"__main__\"): Add option \"-i\" to OptionParser.", 
+   "Patch by: Mark Stead <mark@stead.id.au>"
+  ], 
+  "revision_id": "876493"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-08T20:30:11.468216Z", 
+  "msg": [
+   "read_entries() sometimes needs to distinguish between reading a subdir", 
+   "entry via the parent access baton and via the subdir's access baton. When", 
+   "performing a checkout, the subdir might have a new database while the", 
+   "parent says the subdir is DELETED.", 
+   "If a subdir is being read via the parent, yet the parent says the subdir", 
+   "is not-present, then override any information discovered and return a", 
+   "DELETED entry.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(enum statement_keys, statements[]): add a new query to look for", 
+   "not-present nodes.", 
+   "(read_entries): for subdirs, see if this directory's wc.db has a", 
+   "not-present entry for it. convert to DELETED, as appropriate."
+  ], 
+  "revision_id": "876492"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-08T20:16:44.550311Z", 
+  "msg": [
+   "Filter out lines that start with DBG: from output used to build trees or", 
+   "used as stdout comparison. This allows code to generate debug output", 
+   "without causing test failures.", 
+   "* subversion/tests/cmdline/svntest/verify.py:", 
+   "(compare_and_display_lines): filter DBG lines before comparing", 
+   "* subversion/tests/cmdline/svntest/tree.py:", 
+   "(...): whitespace fixes. remove some spurious parens in \"if\" statements.", 
+   "(build_tree_from_checkout, build_tree_from_commit,", 
+   "build_tree_from_status, build_tree_from_skipped,", 
+   "build_tree_from_diff_summarize): filter DBG lines"
+  ], 
+  "revision_id": "876491"
+ }
+]

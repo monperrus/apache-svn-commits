@@ -1,0 +1,91 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2003-05-14T04:01:57.530240Z", 
+  "msg": [
+   "Ignore generated version.xml"
+  ], 
+  "revision_id": "846005"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-05-14T03:48:18.239778Z", 
+  "msg": [
+   "Automatically include a version number in renditions of the book,", 
+   "as reported by svnversion.", 
+   "Patch by: Bruce A. Mah <bmah@packetdesign.com>", 
+   "me", 
+   "* doc/book/Makefile", 
+   "($(BOOK_VERSION_SOURCE)):  Generate a version.xml", 
+   "file that defines the output of svnversion as an XML entity.", 
+   "($(BOOK_HTML_TARGET), book-html-chunk, $(BOOK_PDF_TARGET),", 
+   "$(BOOK_PS_TARGET)):  Depend on the generated version.xml file.", 
+   "book-clean:  Remove the generated version.xml file.", 
+   "* doc/book/book/book.xml:  Include the generated version.xml file", 
+   "and insert its svn.version entity in an appropriate place in the", 
+   "title page."
+  ], 
+  "revision_id": "846004"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-05-14T01:28:00.635609Z", 
+  "msg": [
+   "Continue work on issue #730:  restartable checkouts.", 
+   "A couple cleanups from gstein's review of r5928.", 
+   "* libsvn_wc/update_editor.c (add_directory): create entry in parent", 
+   "*after* an entry existence check in parent.  and just set the kind", 
+   "field, nothing else.", 
+   "(open_root, open_directory): remove useless flag variable."
+  ], 
+  "revision_id": "846003"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-05-13T21:59:06.845972Z", 
+  "msg": [
+   "Continue work on issue #730:  restartable checkouts.", 
+   "Phase 2: make sure that an interrupted checkout (or update) leaves", 
+   "behind enough information for 'svn up' to finish the job.", 
+   "This means changing update-editor's mechanics: open_dir() marks the", 
+   "directory as target-revnum and 'incomplete'.  add_dir() creates a new", 
+   "directory with the same features, and immediately links it to the", 
+   "parent.  close_dir() removes the 'incomplete' flag when a dir's", 
+   "refcount hits 0.", 
+   "* svn_wc.h (svn_wc_entry_t): new 'incomplete' field.", 
+   "* libsvn_wc/entries.h (SVN_WC__ENTRY_ATTR_INCOMPLETE): new xml", 
+   "attribute for an entry in the entries file.", 
+   "(SVN_WC__ENTRY_MODIFY_INCOMPLETE): new bitflag value.", 
+   "(svn_wc__entries_init):  take a new 'initial_rev' argument.", 
+   "* libsvn_wc/entries.c (svn_wc__atts_to_entry): parse the 'incomplete'", 
+   "xml attribute into the entry_t structure.", 
+   "(svn_wc__entries_init): take a new 'initial_rev' argument and use", 
+   "it.  also make sure a new THIS_DIR entry has 'incomplete=true'.", 
+   "(write_entry): if set, write the 'incomplete' xml attribute into the", 
+   "entry string.", 
+   "(fold_entry): if bitflag is set, absorb 'incomplete' value.", 
+   "* libsvn_wc/adm_files.c (init_adm): take new 'initial_rev' argument,", 
+   "pass to svn_wc__entries_init().", 
+   "(svn_wc__ensure_adm): pass revision into init_adm().", 
+   "* update_editor.c (add_directory): create entry for new directory in", 
+   "parent immediately, then create the new directory.", 
+   "(open_directory): bump the revnum of the directory to the", 
+   "update-target revnum, and mark it as 'incomplete'.", 
+   "(open_root): for an update, do the same thing as open_directory, as", 
+   "long as the wc root is the main thing being updated (i.e. the update", 
+   "target is NULL).", 
+   "(maybe_bump_dir_info): when refcount hits 0, remove the 'incomplete'", 
+   "flag, and do nothing more."
+  ], 
+  "revision_id": "846002"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-05-13T20:53:50.760980Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "(generate_label): Eliminate uninitialized variable warning."
+  ], 
+  "revision_id": "846001"
+ }
+]

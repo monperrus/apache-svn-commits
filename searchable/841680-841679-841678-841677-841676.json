@@ -1,0 +1,96 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-03-28T17:42:20.847232Z", 
+  "msg": [
+   "Fixups/improvements/suggestions from gstein, regarding recent 'svn", 
+   "merge' work.  Thanks!", 
+   "* log.c (log_do_merge): if we do the merge in a subpool, it makes", 
+   "sense to construct the path arguments in that subpool too.", 
+   "* repos_diff.c (struct file_baton):  oops, we want the parent_baton", 
+   "field completely removed, not just temporarily commented out.", 
+   "(make_dir_baton, make_file_baton): simplify by taking a full path,", 
+   "not a basename or parent path.  no need to take an edit baton", 
+   "either, if parent baton already has it.", 
+   "[when converting the editor, I was trying to make the smallest", 
+   "change possible, but greg is right -- the original interfaces", 
+   "are now crufty.  :-) ]", 
+   "(open_root): build an initial dir_baton using \"\".", 
+   "(delete_entry, add_file, open_file): simplify call to make_file_baton.", 
+   "(add_directory, open_directory):  simplify call to make_dir_baton."
+  ], 
+  "revision_id": "841680"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-03-27T20:19:55.909988Z", 
+  "msg": [
+   "Have 'svn merge' use a genuine trace editor.", 
+   "* diff.c (diff_or_merge):  if an after-editor was passed in, compose", 
+   "it with the diff editor.", 
+   "(merge_cmd):  stop dumping printfs."
+  ], 
+  "revision_id": "841679"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-03-27T19:13:46.916155Z", 
+  "msg": [
+   "Convert the repository-diff editor to the new editor interface;  part", 
+   "of work on 'svn merge'.", 
+   "* libsvn_client/client.h (svn_client__get_diff_editor):  change", 
+   "prototype to return svn_delta_editor_t.", 
+   "* libsvn_client/repos_diff.c (svn_client__get_diff_editor): return", 
+   "new-style editor.", 
+   "(struct file_baton):  remove pointer to parent dir_baton.  in the", 
+   "new system, we need to account for the fact that file batons might", 
+   "outlive their parent dir batons.  use a (const char *) for internal", 
+   "path.", 
+   "(struct dir_baton):  use const char * for internal path.", 
+   "(make_dir_baton): take a const char *path. allocate dir_baton", 
+   "directly in the pool passed in.  the dir_baton remembers the pool", 
+   "it's allocated in.", 
+   "(make_file_baton): take a pool and edit_baton argument.  no longer", 
+   "take a parent baton, but just a const char *path instead.  allocate", 
+   "the file_baton directly in the passed-in pool, and remember it.", 
+   "(open_root): take a pool arg, allocate dir baton in that pool.", 
+   "(delete_entry): take a pool arg.  use this pool to perform the", 
+   "deletion callback, and trust the driver to free it.  no more", 
+   "basename passed in, but a full relative path.", 
+   "(add_directory, open_directory, add_file, open_file): take a pool", 
+   "arg, and take a path relative to the editor's anchor instead of a", 
+   "basename.  allocate the baton in this pool.", 
+   "(close_directory): removed, no longer needed.  we're trusting the", 
+   "driver to destroy the pool the dir_baton is allocated in, so the", 
+   "default no-op function is sufficient.", 
+   "(close_file):  no need to free the file_baton, driver will do so.", 
+   "(run_diff_cmd): comment the callback args", 
+   "* libsvn_client/diff.c (diff_or_merge): temporarily wrap the editor so", 
+   "that it appears to be \"old\" style, so that it can still be used by", 
+   "our unconverted drivers.", 
+   "* notes/editor-conversion.txt:  mark this editor conversion DONE."
+  ], 
+  "revision_id": "841678"
+ }, 
+ {
+  "author": "bcollins", 
+  "date": "2002-03-27T04:09:48.779773Z", 
+  "msg": [
+   "* libsvn_client/ra.c:", 
+   "(svn_client__open_ra_session): Set get_wc_prop callback to NULL if", 
+   "!use_admin. This was preventing imports."
+  ], 
+  "revision_id": "841677"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-26T23:26:44.407759Z", 
+  "msg": [
+   "* packages/freebsd/subversion/Makefile", 
+   "just use the PORTVERSION variable when defining WRKSRC, rather than", 
+   "hardcoding the same value in two places.", 
+   "Pointed out by: gstein"
+  ], 
+  "revision_id": "841676"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2007-02-05T08:19:44.047561Z", 
+  "msg": [
+   "Remove unnecessary file removes when installing properties.", 
+   "Suggested by: Henner Zeller <h.zeller@acm.org>", 
+   "me", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__install_props): Only remove the props files if they weren't there", 
+   "before according to the entry of the path."
+  ], 
+  "revision_id": "863420"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-04T23:33:51.708132Z", 
+  "msg": [
+   "Don't pay for what we already bought once -", 
+   "or - avoid a redundant checksuming of the text base while updating.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(merge_file): Add digest parameter and use it to set the entry", 
+   "checksum.", 
+   "(close_file): Pass the digest from the file baton to the above function."
+  ], 
+  "revision_id": "863419"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-04T22:26:35.099804Z", 
+  "msg": [
+   "Remove unnecessary code.  We haven't been using props timestamps", 
+   "for some time now...", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(merge_props): Don't write log command to set properties timestamp, which,", 
+   "in the end, won't be written out anyway."
+  ], 
+  "revision_id": "863418"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-04T21:54:30.371170Z", 
+  "msg": [
+   "Remove redundant code.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(merge_file, merge_props): Don't allow content_state, prop_state or", 
+   "lock_state to be NULL, since our one and only caller always passes non-NULL", 
+   "values."
+  ], 
+  "revision_id": "863417"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2007-02-04T20:09:32.869450Z", 
+  "msg": [
+   "For checkout/update etc., avoid creating one working copy 'log' file per", 
+   "versioned file by accumulating log entries in memory, flushing it", 
+   "when closing the directory and before going into subdirectories.", 
+   "For large working copies, this saves a lot of creation/reading/removing small", 
+   "files, which turns out to be rather expensive, especially on remote", 
+   "filesystems.", 
+   "Suggested by: Henner Zeller <h.zeller@acm.org>", 
+   "me", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct dir_baton): Add log_accum field.", 
+   "(make_dir_baton): Initialize the log_accum field.", 
+   "(flush_log): New function.", 
+   "(cleanup_dir_baton): Flush the current log before running logs.", 
+   "(open_directory, add_directory): Flush parent directory's log before", 
+   "opening the new directory.", 
+   "(close_directory): Write to the accumulated log of the dir baton instead", 
+   "of a local strinbuf.  Flush the accumulated log before running the logs.", 
+   "(close_file): Write to the accumulated log of the parent directory instead", 
+   "of creating our own log file."
+  ], 
+  "revision_id": "863416"
+ }
+]

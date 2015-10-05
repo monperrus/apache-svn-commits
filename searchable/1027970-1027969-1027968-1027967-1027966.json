@@ -1,0 +1,115 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2010-10-27T14:16:37.646906Z", 
+  "msg": [
+   "Disallow merges into mixed-revision working copies by default.", 
+   "Merging into mixed-rev WCs has always been considered bad practice.", 
+   "The Subversion Book is discouraging it. 'svn merge' will now ask the", 
+   "user to run 'svn update' if the merge target is a mixed-rev WC.", 
+   "A new option --allow-mixed-revisions has been added for those who", 
+   "really need to merge into a mixed-rev WC for some reason.", 
+   "Using it is not recommended. It was used to fix failing regression tests", 
+   "which merge into mixed-rev WCs. This helps us maintain the current degree", 
+   "of test coverage of merges into mixed-rev WCs.", 
+   "Reintegrate merges into mixed-revision working copies have always been", 
+   "disallowed, so the new option cannot be used with --reintegrate.", 
+   "All types of merges are affected by this change, including --dry-run", 
+   "and --no-ancestry merges.", 
+   "See for related discussion:", 
+   "Date: Fri, 1 Oct 2010 00:40:35 +0200", 
+   "From: Stefan Sperling", 
+   "To: dev@", 
+   "Subject: disallow merges into mixed-rev WCs by default?", 
+   "Message-ID: <20100930224035.GA5816@ted.stsp.name>", 
+   "http://svn.haxx.se/dev/archive-2010-10/0000.shtml", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Reject --allow-mixed-revisions in combination with", 
+   "--reintegrate. Call svn_client_merge_peg4() and svn_client_merge4().", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add 'allow_mixed_rev'.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t): Add 'opt_allow_mixed_revisions'.", 
+   "(svn_cl__options): Define new --allow-mixed-revisions option and add it", 
+   "to 'svn merge'.", 
+   "(main): Handle new --allow-mixed-revisions option.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_merge4, svn_client_merge_peg4): Declare.", 
+   "(svn_client_merge3, svn_client_merge_peg3): Deprecate.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_merge3, svn_client_merge_peg3): Re-implement as wrappers", 
+   "around newer revisions of these functions.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(ensure_wc_is_suitable_merge_target): New, replacing and based on ...", 
+   "(ensure_wc_reflects_repository_subtree): ... this function.", 
+   "(merge_locked, merge_peg_locked): Add 'allow_mixed_rev' parameter.", 
+   "Check the merge target with the ensure_wc_is_suitable_merge_target()", 
+   "helper function before carrying out the merge.", 
+   "(merge_baton, merge_cb, merge_peg_baton, merge_peg_cb): Add 'allow_mixed_rev'.", 
+   "(svn_client_merge4, svn_client_merge_peg4): Add 'allow_mixed_rev' parameter", 
+   "and pass it into the callback baton.", 
+   "* subversion/tests/cmdline/mergeinfo_tests.py", 
+   "(mergeinfo_on_pegged_wc_path): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(merge_file_into_symlink): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/merge_tree_conflict_tests.py", 
+   "(three_way_merge_add_of_existing_binary_file): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(svn_merge): Accept a varargs parameter ARGS which is used to pass additional", 
+   "options to 'svn merge'.", 
+   "(textual_merges_galore, merge_binary_file, merge_skips_obstructions,", 
+   "merge_into_missing, merge_dir_branches, merge_file_replace_to_mixed_rev_wc,", 
+   "merge_ignore_whitespace, merge_ignore_eolstyle,", 
+   "merge_to_path_with_switched_children, new_subtrees_should_not_break_merge,", 
+   "dont_add_mergeinfo_from_own_history, reverse_merge_away_all_mergeinfo,", 
+   "merge_two_edits_to_same_prop, merge_an_eol_unification_and_set_svn_eol_style,", 
+   "merge_automatic_conflict_resolution, committed_case_only_move_and_revert,", 
+   "foreign_repos_del_and_props): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/tree_conflict_tests.py", 
+   "(ensure_tree_conflict): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(merge_history_repos): Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/resolve_tests.py", 
+   "(automatic_conflict_resolution):  Allow merge into mixed-rev WC.", 
+   "* subversion/tests/cmdline/merge_reintegrate_tests.py", 
+   "(reintegrate_fail_on_modified_wc, reintegrate_fail_on_mixed_rev_wc,", 
+   "reintegrate_fail_on_switched_wc): Adjust expected stderr.", 
+   "(reintegrate_with_subtree_mergeinfo,", 
+   "multiple_reintegrates_from_the_same_branch): Allow merges into mixed-rev WC."
+  ], 
+  "revision_id": "1027970"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2010-10-27T14:14:17.651357Z", 
+  "msg": [
+   "[UIMA-1910][UIMA-1907][UIMA-1796] create new top level README file, consolidating the other two, update old file in readme_src dir to indicate it's unused (will remove later, perhaps) and remove the one in src/main/readme.  Move RELEASE_NOTES to top level, update it to point to generated issuesFixed/jira-report.html, update it for 2.3.1"
+  ], 
+  "revision_id": "1027969"
+ }, 
+ {
+  "author": "cwiklik", 
+  "date": "2010-10-27T14:11:40.000562Z", 
+  "msg": [
+   "UIMA-1915 Removed double synchronization from stop() method."
+  ], 
+  "revision_id": "1027968"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2010-10-27T14:06:39.688329Z", 
+  "msg": [
+   "[UIMA-1914] change poms to refer to new parent-pom.  Add needed marker-files.  Update those needing ibm-notice with property to cause this. Add marker-file to RAT exclusion where needed."
+  ], 
+  "revision_id": "1027967"
+ }, 
+ {
+  "author": "grandyho", 
+  "date": "2010-10-27T13:57:37.280047Z", 
+  "msg": [
+   "ETCH-106", 
+   "fix for C Binding: double-free bug for structs containing structs containing strings, clone now sets cloned object to \"static_content\" -> no double free on clone / original destruction"
+  ], 
+  "revision_id": "1027966"
+ }
+]

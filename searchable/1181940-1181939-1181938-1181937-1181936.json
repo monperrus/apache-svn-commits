@@ -1,0 +1,105 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:43:12.079572Z", 
+  "msg": [
+   "Modify the webUI so that default values of column families are not shown", 
+   "Summary:", 
+   "Display a column family attribute only if it has a non-default value.", 
+   "Display all the default values below.", 
+   "Test Plan:", 
+   "tested on dev cluster", 
+   "Link to dev server with these changes:", 
+   "http://***:60010/master.jsp", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg", 
+   "Commenters: kannan", 
+   "CC: hbase@lists, kannan, nspiegelberg, nileema", 
+   "Differential Revision: 307041"
+  ], 
+  "revision_id": "1181940"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:43:08.956077Z", 
+  "msg": [
+   "Fix LoadBalancer while processing RS crash (V2)", 
+   "Summary:", 
+   "RS Split Log processing (which is a really long operation) and", 
+   "updating region status in META are processed by the same queue.  This", 
+   "causes load balancing problems when the crashed server restarts because", 
+   "load balancing is only queued and not processed.  Disable load balancing", 
+   "during server log recovery to avoid this issue.  NOTE: On 7/4/11, one of our", 
+   "production cells had 80% of its regions unassigned because of this bug.", 
+   "This patch was checked in previously, then ran into unit test failures &", 
+   "was reverted.  This version addresses those failures.  Namely, removed", 
+   "\"synchronized\" from", 
+   "isEmpty().  This was not necessary because both queues are immutable +", 
+   "threadsafe classes.   The synchronized RegionServerOperationQueue.process() is", 
+   "called", 
+   "heavily, and was causing 30 second stalls that prevented META from being", 
+   "quickly assigned on startup.", 
+   "Test Plan: - mvn test", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, kranganathan, mbautin", 
+   "CC: hbase@lists, nspiegelberg, kannan", 
+   "Differential Revision: 298625", 
+   "Task ID: 622748"
+  ], 
+  "revision_id": "1181939"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:43:05.073542Z", 
+  "msg": [
+   "Prevent leaks of MonitoredTasks", 
+   "Summary: At each use of a MonitoredTask that was not already cleaned up using a", 
+   "try ... finally block, I added such a failsafe against leaks.", 
+   "Test Plan: Compiled and run on dev server.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg, kannan", 
+   "CC: hbase@lists, nspiegelberg", 
+   "Differential Revision: 305954"
+  ], 
+  "revision_id": "1181938"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:43:02.575806Z", 
+  "msg": [
+   "Replace jettison JSON encoder use with jackson for consistency with open source.", 
+   "Summary: The open source trunk is using the jackson JSON encoder", 
+   "(http://jackson.codehaus.org/) internally. This appears to be better maintained", 
+   "and faster than jettison. Both for this reason and for consistency with open", 
+   "source and my slow query log and show processlist patches, I replaced our few", 
+   "uses of jettison with jackson.", 
+   "Test Plan: Compiled and ran both the HLogPrettyPrinter and the", 
+   "HFilePrettyPrinter in JSON mode, validating the JSON.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg", 
+   "CC: hbase@lists, nspiegelberg", 
+   "Differential Revision: 306195"
+  ], 
+  "revision_id": "1181937"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:42:59.830834Z", 
+  "msg": [
+   "fix stuck IPC client in HBase-trunk", 
+   "Summary:", 
+   "Port Hairong's fix in Hadoop-ipc into hbase trunk", 
+   "https://phabricator.fb.com/D185014", 
+   "Not sure this bug is the root cause of ipc dead lock in server", 
+   "But we'd better port this fix to our trunk.", 
+   "Test Plan: Running all the unit tests", 
+   "Reviewed By: pkhemani", 
+   "Reviewers: nspiegelberg, kranganathan, gqchen, mbautin, pritam, hkuang, jgray,", 
+   "pkhemani", 
+   "Commenters: jgray", 
+   "CC: hbase@lists, , dhruba, jgray, pkhemani, liyintang", 
+   "Differential Revision: 292784"
+  ], 
+  "revision_id": "1181936"
+ }
+]

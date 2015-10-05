@@ -1,0 +1,92 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-04-17T19:22:28.824197Z", 
+  "msg": [
+   "* svn/subversion/mod_dav_svn/util.c (dav_svn_simple_parse_uri): Correct", 
+   "error message text."
+  ], 
+  "revision_id": "841805"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-04-17T17:33:52.219662Z", 
+  "msg": [
+   "This Perl script is designed to load a number of directories into", 
+   "Subversion.  This is useful if you have previously released a number", 
+   "of .zip's or tar.{Z,gz,bz}'s for a particular package and want to load", 
+   "them into Subversion.  This assumes that these packages were not", 
+   "previously in a source control system, in particular CVS, because then", 
+   "you would use another script to migrate the repository over, and in", 
+   "CVS' case, you would use cvs2svn.  This script will properly tag each", 
+   "release in the tags directory if you use the -t command line option.", 
+   "* tools/client-side/svn_load_dirs.pl", 
+   "New file.  The script that does all the work.", 
+   "* tools/client-side/svn_load_dirs.README", 
+   "New file.  Documents all the steps required to set up the", 
+   "directories to load into Subversion and how to run the script."
+  ], 
+  "revision_id": "841804"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-17T15:45:41.341204Z", 
+  "msg": [
+   "Make mass removals more memory efficient.  Thanks to Nathan Fiedler", 
+   "<nfiedler@bluemarsh.com> for noticing the problem.", 
+   "Side note:", 
+   "I tested this by creating a new subdir in a working copy, and", 
+   "`touch'ing 1700 files in it.  I `svn add'ed the subdir (which took a", 
+   "minute or so), then committed.  The commit took about a minute, but", 
+   "the post-commit took around 10 minutes! (that's 1700 loops of write", 
+   "log file; read log file; read entries file; install text-base; write", 
+   "entries file)  It was slow, but at least it succeeded (sussman and I", 
+   "are already toying with ideas on how to fix that mess).", 
+   "Then, before my fixes were compiled in, I `svn rm'd the subdir.  Well,", 
+   "it only took about 3 seconds for the svn process to shoot up to 64M of", 
+   "usage (hey, when your entries file is 450K alone...)  I killed the", 
+   "process, compiled and installed the following patch, restored backups", 
+   "of my working copy and repository, and re-ran the removal.", 
+   "Ah...holding steady at 8M of usage.  Not beautiful, but soooooo much", 
+   "better.", 
+   "I also tried `svn rm subdir/*' after my patch.  That held at around", 
+   "7M, which is consistent with the above.", 
+   "* subversion/clients/cmdline/delete-cmd.c", 
+   "(svn_cl__delete): Use a subpool for this iteration.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(mark_tree): Use subpool for entry modifications (this bug is my", 
+   "fault, fallout from the big svn_wc_entry_t reworking last month).", 
+   "Also, use svn_stringbuf_chop instead of svn_stringbuf_set -- it's", 
+   "more efficient."
+  ], 
+  "revision_id": "841803"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-17T05:34:22.980101Z", 
+  "msg": [
+   "Make svn_repos_dir_delta responsible for the so-called \"entry props\".", 
+   "This is part 2 of a two-part change -- although now I see that a third", 
+   "part could exist (at the cost of a flag day, let's not go there today).", 
+   "This should position us for forthcoming changes to support updates of", 
+   "working copies with tainted heirarchies (typically resultant from the", 
+   "use of `svn switch').", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(item_baton_t): Added 'committed_rev', 'committed_date', 'last_author'.", 
+   "(close_helper): Get commit-info data from the baton.", 
+   "(upd_change_xxx_prop): Handle entry props in a special way."
+  ], 
+  "revision_id": "841802"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-04-17T02:17:09.704655Z", 
+  "msg": [
+   "* subversion/libsvn_delta/libsvn_delta.dsp", 
+   "(SOURCE): Remove pipe_editors.c", 
+   "* subversion/libsvn_ra_local/libsvn_ra_local.dsp", 
+   "(SOURCE): Remove update_editor.c"
+  ], 
+  "revision_id": "841801"
+ }
+]

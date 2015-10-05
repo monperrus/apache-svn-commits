@@ -1,0 +1,95 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-04-11T17:41:50.177364Z", 
+  "msg": [
+   "JavaHL: Revert parts of r24274 and r24290.  These were cleanups to the", 
+   "info code which attempted to consolidate info() and info2() implementations.", 
+   "However, they proved to be more trouble than they were worth, and after", 
+   "consultation on irc, it was suggested that separate implementations are", 
+   "preferred in this case.", 
+   "Note that this isn't a straight-forward revert due to changes to the info", 
+   "handling code which have happened between now and r24290.  Specifically,", 
+   "this change maintains the callback-based implementation for info2 added in", 
+   "r24349 and the cleanups in r24491.", 
+   "This also reverts the XFAIL test added in r24492.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_info): Resurrect from r24274.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_info2): Call SVNClient::info2(),", 
+   "instead of SVNClient::info().", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(info2): Renamed from info(), since there are now separate implementations.", 
+   "Remove wcPath caching calls to InfoCallback.", 
+   "(info, info_baton, createJavaInfo): Resurrect as found in r24274.", 
+   "* native/InfoCallback.h,", 
+   "native/InfoCallback.cpp", 
+   "(wcPath): Remove.", 
+   "(setWCPath): Remove.", 
+   "(createJavaInfo2): Remove datastructures which were required for backward", 
+   "compatibility with the Info class.", 
+   "* src/org/tigris/subversion/javahl/tests/BasicTests.java", 
+   "(testBasicInfo2): Remove XFAIL.", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java", 
+   "(info): Revert back to the native implementation.", 
+   "* src/org/tigris/subversion/javahl/Info2.java", 
+   "(Info2): Unextend from Info, and re-add datastructures which are required", 
+   "as a result."
+  ], 
+  "revision_id": "864605"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-11T17:22:21.753687Z", 
+  "msg": [
+   "JavaHL: Improve implementation of WC state regression test API.", 
+   "Note: This commit accidentally injected an incorrect change which", 
+   "causes test failures.  It was corrected in r24532.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* src/org/tigris/subversion/javahl/tests/WC.java", 
+   "(check): Cleanup formatting and improve error messages."
+  ], 
+  "revision_id": "864604"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-11T17:05:50.879254Z", 
+  "msg": [
+   "A follow-up to r24510, fixing the semantics of svn_client_list() API", 
+   "to equate non-recursive with svn_depth_immediates (rather than", 
+   "svn_depth_files), thus retaining compatibility with previous behavior.", 
+   "* subversion/libsvn_client/list.c", 
+   "(svn_client_list): Explicitly convert RECURSE to depth, rather than", 
+   "using the SVN_DEPTH_FROM_RECURSE() macro, which equates", 
+   "non-recursive with svn_depth_files.", 
+   "Found by: markphip", 
+   "pburba"
+  ], 
+  "revision_id": "864603"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2007-04-11T12:09:52.796256Z", 
+  "msg": [
+   "French translation update.", 
+   "* subversion/po/fr.po: po-update + fixes"
+  ], 
+  "revision_id": "864602"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2007-04-11T08:51:01.744008Z", 
+  "msg": [
+   "Remove an unused function which was intended to be used when trying", 
+   "to change the unchangeable named transaction in the filesystem.", 
+   "* subversion/libsvn_fs_fs/err.c", 
+   "svn_fs_fs__err_txn_not_mutable(): Remove.", 
+   "* subversion/libsvn_fs_fs/err.h", 
+   "svn_fs_fs__err_txn_not_mutable(): Remove.", 
+   "Patch by: bhuvan", 
+   "Reviewed by: jszakmeister"
+  ], 
+  "revision_id": "864601"
+ }
+]

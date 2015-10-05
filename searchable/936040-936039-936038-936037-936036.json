@@ -1,0 +1,75 @@
+[
+ {
+  "author": "rickhall", 
+  "date": "2010-04-20T19:31:41.480457Z", 
+  "msg": [
+   "Some minor code cleanup. (FELIX-2035)"
+  ], 
+  "revision_id": "936040"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-20T19:31:20.738656Z", 
+  "msg": [
+   "Factor the core of the entries reading loop out to a function that reads a", 
+   "single entry from wc_db.", 
+   "Alter how entries.c borrows an SDB reference from wc_db.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries_new): renamed into ...", 
+   "(read_one_entry): ... this. the parameters have been adjusted for", 
+   "single-entry reading, and the lead-in setup for iterating over", 
+   "children has been removed. a few localvars have been created to", 
+   "\"rename\" parameters according to the names the original code used, to", 
+   "minimize all impact on that code. some of the setup at the start of", 
+   "the core block (assigning entry->name and parent_entry) have been", 
+   "altered in favor of the new params. move the SDB borrowing down to the", 
+   "innermost block where it is used. remove a \"continue\" and put in an", 
+   "SVN_ERR_MALFUNCTION because that shouldn't have ever been reached.", 
+   "return the new entry, rather than shoving it into a hash.", 
+   "(read_entries_new): resuscitated from the original. it is now just the", 
+   "loop setup, initializing the PARENT_ENTRY localvar (and inserting into", 
+   "the hash), and gutting the loop to use the new read_one_entry. we", 
+   "don't need the SDB here, nor any monkeying of the CHILDREN array. we", 
+   "can also toss HANDLE_POOL since we'll be borrowing SDB references", 
+   "instead of allocating them ourself. wrap up the function with", 
+   "inserting the entries into the hash, and returning the hash.", 
+   "(write_one_entry): adjust how SDB references are borrowed.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_temp_get_sdb): renamed to ...", 
+   "(svn_wc__db_temp_borrow_sdb): ... this. the ALWAYS_OPEN and RESULT_POOL", 
+   "arguments are removed since we always open an SDB (or use an", 
+   "already-opened one) and all long-lasting items are allocated within", 
+   "the DB itself. added a MODE parameter to indicate readonly/write.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_temp_get_sdb): renamed to ...", 
+   "(svn_wc__db_temp_borrow_sdb): ... this. now we just use", 
+   "parse_local_abspath to do all the work, and return the wcroot's SDB."
+  ], 
+  "revision_id": "936039"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2010-04-20T19:29:09.336396Z", 
+  "msg": [
+   "added a JAXB based generator"
+  ], 
+  "revision_id": "936038"
+ }, 
+ {
+  "author": "namit", 
+  "date": "2010-04-20T19:28:09.147926Z", 
+  "msg": [
+   "HIVE-1315. Bug in sort-merge join", 
+   "(Ning Zhang via namit)"
+  ], 
+  "revision_id": "936037"
+ }, 
+ {
+  "author": "calavera", 
+  "date": "2010-04-20T19:20:42.112442Z", 
+  "msg": [
+   "Allowing to use a custom XMLReader to parse documents. Thanks to Dan Beaulieu."
+  ], 
+  "revision_id": "936036"
+ }
+]

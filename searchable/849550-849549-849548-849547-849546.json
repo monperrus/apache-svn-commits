@@ -1,0 +1,104 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2004-04-24T07:39:29.049424Z", 
+  "msg": [
+   "Fix link to SSPI auth document", 
+   "Patch by: Alex Holst <a@mongers.org>", 
+   "* www/project_faq.html: Fix link to TortoiseSVN's document on", 
+   "SSPI authentication."
+  ], 
+  "revision_id": "849550"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-24T03:59:36.673203Z", 
+  "msg": [
+   "* libsvn_fs_fs/README: Note step 10 complete and issue #1 resolved."
+  ], 
+  "revision_id": "849549"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-24T03:52:54.083982Z", 
+  "msg": [
+   "Make fsfs dumpfile converter output deltified windows, primarily to", 
+   "serve as an example for the real FSFS code.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(struct rep_poiner): Add text_len field to separate rep length", 
+   "from expanded length.  (Should have been done last time.)", 
+   "(struct parse_baton): Add delta_start field to track beginning of", 
+   "rep, since header now has variable length.  Add text_len to track", 
+   "expanded length.  Add delta_pool field since we're now allocating a", 
+   "lot of memory for a contents operation.  Eliminate the empty_stream", 
+   "field, which is no longer needed.", 
+   "(struct rep_state): New structure to track state as we read a single", 
+   "representation.", 
+   "(struct contents_baton): New structure to track the state as we", 
+   "expand a representation; contain.", 
+   "(init_rep): Initialize text_len field.", 
+   "(repstr): Output expanded length properly.", 
+   "(write_hash_rep): Set text_len field (same as len, in this case).", 
+   "(open_and_seek_rev): Convenience function to open a rev file at a", 
+   "specific offset.", 
+   "(parse_base_rep): Parse the contents of a DELTA header which", 
+   "specifies a delta base.", 
+   "(build_rep_list): Build a list of the delta reps leading up to a", 
+   "plain text or self-compressed delta rep.", 
+   "(get_combined_window): Compose the corresponding delta windows of", 
+   "the rep list until we reach one that doesn't need a delta source,", 
+   "or until we reach the end.", 
+   "(contents_read): Stream read handler for retrieving rep contents,", 
+   "using above helper functions.", 
+   "(get_contents): Produce a stream using the above read handler.", 
+   "(choose_delta_base): Walk the predecessor list of an entry to choose", 
+   "the appropriate base using the skip-delta algorithm.", 
+   "(text_write): Update text_len field.", 
+   "(text_close): Set text_len field.  Destroy the delta pool.", 
+   "(set_fulltext): Deltify against a base, using choose_delta_base and", 
+   "get_contents to retrieve the contents.  Create a pool for the", 
+   "delta.  Initialize the text_len field.", 
+   "(main): Don't initialize empty_stream, since we've punted it."
+  ], 
+  "revision_id": "849548"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-24T03:39:31.335703Z", 
+  "msg": [
+   "Add primitives to read or skip one svndiff window at a time from an", 
+   "svndiff stream.  This is primarily for libsvn_fs_fs, but the read", 
+   "primitive could be used to simplify libsvn_fs/reps-strings.c", 
+   "considerably.", 
+   "* include/svn_delta.h (svn_txdelta_read_svndiff_window,", 
+   "svn_txdelta_skip_svndiff_window): Declare.", 
+   "* libsvn_delta/svndiff.c", 
+   "(count_and_verify_instructions): No need to initialize op.", 
+   "(decode_window): New function to factor out the work of decoding", 
+   "the instructions of an svndiff window.", 
+   "(write_handler): Use decode_window.", 
+   "(read_one_byte, read_one_size, read_window_header): Functions to", 
+   "decode a window header by pulling bytes.", 
+   "(svn_txdelta_read_svndiff_window, svn_txdelta_skip_svndiff_window):", 
+   "Implement using above convenience functions."
+  ], 
+  "revision_id": "849547"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-24T00:21:49.734622Z", 
+  "msg": [
+   "Add support for hotcopy to FSFS.  For now it just uses the same BDB", 
+   "function name so that it can run in the existing codebase.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(svn_fs_hotcopy_berkeley): Implement using FSFS APIs.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs__fs_hotcopy): New, implements the hotcopy.", 
+   "(get_youngest): New, factorized from svn_fs__fs_youngest", 
+   "revision.", 
+   "(svn_fs__fs_youngest_revision): Use the new get_youngest call."
+  ], 
+  "revision_id": "849546"
+ }
+]

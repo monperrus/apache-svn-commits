@@ -1,0 +1,78 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-12-06T18:51:01.323200Z", 
+  "msg": [
+   "* STATUS: Remove r19808 group, merged in r28305."
+  ], 
+  "revision_id": "868380"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-12-06T18:50:24.468920Z", 
+  "msg": [
+   "Merge r19808-19810 and r22853 from trunk.  This synchonizes license text and", 
+   "bumps copyright years to 2007.", 
+   "Approved by: +1: malcolm, dlr, hwright"
+  ], 
+  "revision_id": "868379"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-12-06T18:44:42.409150Z", 
+  "msg": [
+   "* STATUS: Re-add r22853 to the r19808 group, and move to approved."
+  ], 
+  "revision_id": "868378"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-06T18:26:12.210433Z", 
+  "msg": [
+   "On the 'mo-betta-two-url-merges' branch, take a different approach to", 
+   "the two-url merge problem.  So, given a situation like this:", 
+   "+-----------> (A)", 
+   "/", 
+   "-----+-------------> (B)", 
+   "(C)", 
+   "Say we wish to merge the diff between A and B to some target.", 
+   "Rather than do two mergeinfo-recording merges (A:C, C:B) like code in", 
+   "the branch on which is branch is based does, we instead do one", 
+   "mergeinfo-not-recording merge A:B, and then two record-only merges", 
+   "(A:C, C:B).", 
+   "Initial results are much better than the previous approach.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Rename 'sources_related' field to 'sources_ancestral'.", 
+   "Track field rename through this file.", 
+   "(do_merge): Rename 'sources_related' parameter to 'sources_ancestral'.", 
+   "Then, re-add a new 'sources_related' parameter that means something", 
+   "different.  Update call to do_file_merge().", 
+   "(do_file_merge): Add 'sources_related' parameter, and use it (instead of", 
+   "the merge baton's sources_ancestral field) to determine if this is a", 
+   "text-n-props merge or a delete-n-add merge.", 
+   "(svn_client_merge3): Rather than traverse two edges of a merge", 
+   "triangle, only traverse the single third edge (with no", 
+   "mergeinfo).  But then *record* mergeinfo as if we'd gone the long", 
+   "way 'round.  Calculate both is-ancestral and is-related, and update", 
+   "calls to do_merge().", 
+   "(svn_client_merge_peg3): Update calls to do_merge().", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_binary_with_common_ancestry): Update test expectations.", 
+   "Sooooo much better..."
+  ], 
+  "revision_id": "868377"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-12-06T17:54:23.699307Z", 
+  "msg": [
+   "Fix compiler warnings on Windows: Cast away const-ness.", 
+   "* subversion/libsvn_diff/diff_file.c,", 
+   "subversion/libsvn_ra_svn/client.c,", 
+   "subversion/libsvn_fs_fs/fs_fs.c:", 
+   "Fix a couple of calls to functions which require pointers to mutable data,", 
+   "but that we have declared const."
+  ], 
+  "revision_id": "868376"
+ }
+]

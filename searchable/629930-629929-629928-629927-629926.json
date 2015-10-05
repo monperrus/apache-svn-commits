@@ -1,0 +1,82 @@
+[
+ {
+  "author": "jcarman", 
+  "date": "2008-02-21T18:50:52.019475Z", 
+  "msg": [
+   "Added javadocs"
+  ], 
+  "revision_id": "629930"
+ }, 
+ {
+  "author": "sobryan", 
+  "date": "2008-02-21T18:49:27.678093Z", 
+  "msg": [
+   "Move the core branches directory"
+  ], 
+  "revision_id": "629929"
+ }, 
+ {
+  "author": "covener", 
+  "date": "2008-02-21T18:49:22.585151Z", 
+  "msg": [
+   "vote for mod_substitute backport"
+  ], 
+  "revision_id": "629928"
+ }, 
+ {
+  "author": "sobryan", 
+  "date": "2008-02-21T18:47:58.795998Z", 
+  "msg": [
+   "These will be moved in"
+  ], 
+  "revision_id": "629927"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-02-21T18:47:17.243426Z", 
+  "msg": [
+   "DERBY-3304", 
+   "The main purpose of this patch is to fix the rollback handling for resultsets that do not", 
+   "return rows. An example case for this is a java procedure which has a Connection.rollback", 
+   "inside it. When the user calls the java procedure, and Connection.rollback is made inside", 
+   "of it, Derby should not be closing the resultset assoicated with the java procedure call", 
+   "(that resultset is a CallStatementResultSet). In other words, a user initiated rollback", 
+   "through JDBC Connection object should leave the resultsets that do not return rows open. In", 
+   "order to implement this, I had to make changes to ignore resultsets that do not return rows", 
+   "in", 
+   "GenericLanguageConnectionContext.endTransactionActivationHandling. As a result of this", 
+   "change, for the eg case given above, the activation assoicated with the java procedure", 
+   "will not be reset (which also means that, CallStatementResultSet.close will not be called)", 
+   "inside GenericLanguageConnectionContext.endTransactionActivationHandling.", 
+   "But the code inside CallStatementResultset.close() took care of the closed dynamic resultset", 
+   "and it took out the closed dynamic resultset from the list of resultsets that would be", 
+   "available to user through the Statement.getResultSet api. With my changes through this", 
+   "patch, we are going to skip the CallStatementResultset.close during", 
+   "GenericLanguageConnectionContext.endTransactionActivationHandling which means that we have", 
+   "to deal with those closed dynamic resultsets on our own. I did that part of logic", 
+   "changes in EmbedStatement.processDynamicResults", 
+   "EmbedStatement.processDynamicResults used to check if the JDBC Resultset is closed by", 
+   "directly checking the field isClosed in the EmbedResultSet. But it is not sufficient to", 
+   "check only JDBC Resultset. We need to check the underlying language Resultset too to", 
+   "determine if the dynamic resultset is closed. There is no direct api on EmbedResultset", 
+   "which will return a boolean after checking the JDBC Resultset and language Resulset. Instead,", 
+   "there is a method called EmbedResultSet.checkIfClosed. This method will throw an exception", 
+   "if it finds the JDBC ResultSet or language ResultSet closed. So, my changes in", 
+   "EmbedStatement.processDynamicResults make a call to EmbedResultSet.checkIfClosed and if", 
+   "there is an exception thrown, then we know that the resultset is closed and hence we should", 
+   "move to the next resultset.", 
+   "In addition to these code changes, I have added a new test to LangProcedureTest. The new", 
+   "java procedure is defined to return 2 dynamic resultsets. One of these resultsets is", 
+   "created before Connection.rollback inside the java procedure. The other dynamic resultset", 
+   "is created after Connection.rollback. As as result of Connection.rollback, the first", 
+   "dynamic resultset will be closed but the second one will remain open. The test makes sure", 
+   "that only one dynamic resultset is returned by the java procedure.", 
+   "Also, made one minor change in LangProcedureTest for an existing test. The test at line 804", 
+   "was getting a resultset from the Statement object without asserting that there are no more", 
+   "resultsets. The resultset object would have been null anyways in this test because there", 
+   "are no open resulsets from the Java procedure. Because of this, I took out the redundant", 
+   "code of getting null resultset object from Statement using getResultset,"
+  ], 
+  "revision_id": "629926"
+ }
+]

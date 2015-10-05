@@ -1,0 +1,97 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2010-03-10T20:45:46.931634Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release servicemix-truezip-2010.01"
+  ], 
+  "revision_id": "921560"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2010-03-10T20:38:02.739262Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "921559"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2010-03-10T20:37:51.620783Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag servicemix-snmp-2010.01"
+  ], 
+  "revision_id": "921558"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2010-03-10T20:37:37.627016Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release servicemix-snmp-2010.01"
+  ], 
+  "revision_id": "921557"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2010-03-10T20:37:13.775908Z", 
+  "msg": [
+   "Fix all callers of svn_wc_get_pristine_contents2() and", 
+   "svn_wc__get_pristine_contents(): make them able to cope with a returned NULL", 
+   "stream pointer in *CONTENTS, as advertised by that function.", 
+   "All current callers would have broken when svn_wc_get_pristine_contents2() was", 
+   "returning NULL in *CONTENTS as described in the comment. That's probably", 
+   "because the current implementation in effect assumes the text-base file to be", 
+   "always present and never successfully returns NULL in *CONTENTS.", 
+   "This patch adds sensitivity for a NULL returned in *CONTENTS to all callers,", 
+   "to prepare for a patch that fixes svn_wc_get_pristine_contents2().", 
+   "* subversion/libsvn_client/cat.c", 
+   "(cat_local_file):", 
+   "Handle a return value of *CONTENT == NULL by returning", 
+   "SVN_ERR_ILLEGAL_TARGET. (Previously failed with an error complaining about", 
+   "a non-existing text-base file.)", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_one_versioned_file):", 
+   "Remove a condition that tried to avoid getting a non-existing base and", 
+   "instead use svn_wc_get_pristine_contents2()'s NULL return value to achieve", 
+   "the same. This also skips export for replaced files that have no base,", 
+   "where previously only added files were checked.  Add TODO comment to ask", 
+   "for proper treatment of replaced files (previously possibly failed with an", 
+   "error complaining about a non-existing text-base file).", 
+   "(copy_versioned_files):", 
+   "Fix a condition that avoids getting a non-existing base to also check", 
+   "replaced files (was checking only added files), and to not skip files that", 
+   "were copied-/moved-here. (This function can skip more stuff than", 
+   "copy_one_versioned_file(), so taking a different approach here.) Comment.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(restore_file):", 
+   "Handle a return value of *CONTENT == NULL by skipping restoration for such", 
+   "nodes. (Previously possibly failed with an error complaining about a", 
+   "non-existing text-base file.)", 
+   "(svn_wc__internal_transmit_text_deltas):", 
+   "Handle a return value of *CONTENT == NULL by using an empty stream", 
+   "instead (in two places).", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively):", 
+   "Fix a condition that avoids getting a non-existing base to also check", 
+   "replaced files (was checking only added files), and to not skip files that", 
+   "were copied-/moved-here. Add two assertions to make sure we have covered", 
+   "all cases. Add TODO comment to ask for proper treatment of replaced files.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(apply_textdelta):", 
+   "Handle a return value of *CONTENT == NULL by using an empty stream", 
+   "instead.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__internal_text_modified_p):", 
+   "Handle a return value of *CONTENT == NULL by returning *MODIFIED_P = TRUE.", 
+   "(Previously possibly failed with an error complaining about a non-existing", 
+   "text-base file.)", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_file_with_history):", 
+   "Add assertion to verify that this code only hits nodes that have a base.", 
+   "(apply_textdelta):", 
+   "Handle a return value of *CONTENT == NULL by using an empty stream", 
+   "instead."
+  ], 
+  "revision_id": "921556"
+ }
+]

@@ -1,0 +1,117 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2006-09-29T00:10:51.481948Z", 
+  "msg": [
+   "Merged revisions 21612-21710 via svnmerge from", 
+   "http://svn.collab.net/repos/svn/trunk on the incomplete-directories branch."
+  ], 
+  "revision_id": "861785"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2006-09-29T00:05:29.491152Z", 
+  "msg": [
+   "On the incomplete-directories branch: Convert everybody involved in", 
+   "client/server communications from 'recurse' booleans to 'depth' enums.", 
+   "Note: The branch does not build after this change.  This will be fixed", 
+   "in followup commits.", 
+   "Note from the future: This revision failed to change the RECURSE", 
+   "parameter to a DEPTH parameter for the svn_ra_dav__do_diff(),", 
+   "svn_ra_dav__do_switch(), svn_ra_dav__do_update(), and", 
+   "svn_ra_dav__do_status() APIs in the ra_dav.h.  This has been fixed on", 
+   "trunk -- subsequent to the merge of this branch -- in r24064 and", 
+   "r24065.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_begin_report2): New prototype.", 
+   "(svn_repos_begin_report): Deprecate.", 
+   "(svn_repos_set_path3, svn_repos_link_path3, svn_repos_delete_path,", 
+   "svn_repos_finish_report, svn_repos_abort_report): Update doc strings.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(report_baton_t): Have a depth field, instead of a recurse field.", 
+   "(svn_repos_begin_report2): New function, based off svn_repos_begin_report.", 
+   "(svn_repos_begin_report): Implement by calling svn_repos_begin_report2.", 
+   "(update_entry): Take a depth parameter instead of a recurse parameter.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(make_reporter): Take depth parameter instead of recurse, pass it", 
+   "along to svn_repos_begin_report2.", 
+   "(svn_ra_local__do_update, svn_ra_local__do_switch,", 
+   "svn_ra_local__do_status, svn_ra_local__do_diff): Take depth", 
+   "parameter instead of recurse, pass it along to make_reporter.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(make_reporter): Take depth paremeter instead of recurse, and send", 
+   "'depth' element instead of 'recursive' element.", 
+   "(svn_ra_dav__do_update, svn_ra_dav__do_switch,", 
+   "svn_ra_dav__do_status, svn_ra_dav__do_diff): Take depth paremeter", 
+   "instead of recurse, pass it to make_reporter.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_context_t): New depth field replaces recurse.", 
+   "(set_path, link_path): Add comment about proper depth handling.", 
+   "(make_update_reporter): Take depth parameter instead of recurse, set", 
+   "it in the report context.", 
+   "(svn_ra_serf__do_update, svn_ra_serf__do_switch,", 
+   "svn_ra_serf__do_status, svn_ra_serf__do_diff): Take depth parameter", 
+   "instead of recurse, pass it along to make_update_reporter.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): Handle 'depth' element now, passing depth", 
+   "along to svn_repos_begin_report2.  Continue to handle 'recursive'", 
+   "element, in a backward-compatible way.  Leave a comment about", 
+   "suspicions surrounding svn_repos_dir_delta.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(FOLD_FROM_DEPTH): New macro.", 
+   "(ra_svn_update, ra_svn_switch, ra_svn_status, ra_svn_diff): Take", 
+   "depth parameter instead of recurse, and transmit it along with", 
+   "a mocked-up recurse boolean derived from depth.", 
+   "* subversion/svnserve/serve.c", 
+   "(MAYBE_UNFOLD_TO_DEPTH): New macro.", 
+   "(accept_report): Take depth parameter instead of recurse, pass it", 
+   "along to svn_repos_begin_report2.", 
+   "(update, switch_cmd, status, diff): Optionally receive new depth", 
+   "parameter from the client, else derive depth from recurse, and", 
+   "pass depth along to accept_report.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(UNFOLD_TO_DEPTH): New macro.", 
+   "(svn_ra__vtable_t): Take depth instead of recurse parameter in", 
+   "do_update, do_switch, do_status, and do_diff.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_do_update2, svn_ra_do_switch2, svn_ra_do_status2, svn_ra_do_diff3):", 
+   "Take depth instead of recurse parameter.", 
+   "(svn_ra_do_update, svn_ra_do_switch, svn_ra_do_status,", 
+   "svn_ra_do_diff2, svn_ra_do_diff): Convert recurse parameter to", 
+   "depth before passing to vtable function.", 
+   "* subversion/libsvn_ra/wrapper_template.h", 
+   "(compat_do_update, compat_do_switch, compat_do_status, compat_do_diff):", 
+   "Convert recurse parameter to depth before passing to vtable function.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(rmlocks): Call svn_repos_begin_report2 instead of svn_repos_begin_report."
+  ], 
+  "revision_id": "861784"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2006-09-29T00:02:18.305498Z", 
+  "msg": [
+   "On the incomplete-directories branch:", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(set_path): Remove obsolete comment, as should have done in r21361."
+  ], 
+  "revision_id": "861783"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-28T23:51:06.778594Z", 
+  "msg": [
+   "On the merge-tracking branch: Bring up to date with trunk's r21697,", 
+   "accomodating svn_hash__clear() API adjustment."
+  ], 
+  "revision_id": "861782"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-28T23:48:15.709365Z", 
+  "msg": [
+   "* STATUS: Add r21705 to the issue #2533 group."
+  ], 
+  "revision_id": "861781"
+ }
+]

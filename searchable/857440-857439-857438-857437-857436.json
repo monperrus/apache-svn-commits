@@ -1,0 +1,92 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2005-11-15T21:56:06.793940Z", 
+  "msg": [
+   "Make svn_io_file_rename behave the same on Windows and Unix:", 
+   "overwrite readonly files while retaining readonlyness on the", 
+   "source file.", 
+   "Also remove svn_wc__prep_for_replacements() and all calls to it", 
+   "because we don't need it with new svn_io_file_rename() behavior.", 
+   "Note: Windows allows source file to be read-only file and", 
+   "forbiddens destination to be read-only on rename.", 
+   "See discussion here:", 
+   "http://svn.haxx.se/dev/archive-2005-11/0785.shtml", 
+   "Patch by: ehu", 
+   "me", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_file_rename): Retain readonlyness on the *source*", 
+   "instead of the target.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "* subversion/libsvn_wc/log.c", 
+   "(restore_file, file_xfer_under_path, log_do_committed): Remove", 
+   "calls to svn_wc__prep_file_for_replacement()", 
+   "* subversion/libsvn_wc/adm_files.h", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(sync_adm_file, close_adm_file): Remove calls to", 
+   "svn_wc__prep_file_for_replacement().", 
+   "(svn_wc__prep_file_for_replacement): Remove function."
+  ], 
+  "revision_id": "857440"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-11-15T20:54:33.793614Z", 
+  "msg": [
+   "* Makefile.in (clean-swig-headers, clean-swig-py): Check whether we are in a", 
+   "VPATH build by comparing $(abs_builddir) = $(abs_srcdir), instead of checking", 
+   "$(top_srcdir) = . This change fixes the clean-swig-* rules when configure", 
+   "was invoked with an absolute path.", 
+   "Suggested by: maxb"
+  ], 
+  "revision_id": "857439"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-11-15T20:20:07.471487Z", 
+  "msg": [
+   "* subversion/libsvn_wc/README: Remove references to README.txt in .svn/."
+  ], 
+  "revision_id": "857438"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-11-15T19:43:11.169171Z", 
+  "msg": [
+   "* subversion/libsvn_wc/questions.c (svn_wc_text_modified_p2): Doc adjustment."
+  ], 
+  "revision_id": "857437"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-11-15T19:36:57.011591Z", 
+  "msg": [
+   "Disambiguate file (de)translation and abstract common translation uses", 
+   "into svn_wc_translated_file2.", 
+   "At the same time extend svn_wc_translated_file2 to be able to", 
+   "perform all common translation operations.  Before this change", 
+   "translations were done by calling svn_subst_copy_and_translate3", 
+   "directly meaning that knowledge about how to do that is scattered", 
+   "over a (large) number of call-sites throughout libsvn_wc.  Now", 
+   "that knowledge is centralized in this function.", 
+   "* subversion/include/svn_wc.h", 
+   "* subversion/libsvn_wc/translate.c", 
+   "(SVN_WC_TRANSLATE_FROM_NF, SVN_WC_TRANSLATE_TO_NF,", 
+   "SVN_WC_TRANSLATE_SPECIAL_ONLY, SVN_WC_TRANSLATE_FORCE_COPY,", 
+   "SVN_WC_TRANSLATE_DEL_TMP_ON_POOL_CLEANUP): New. Flags for function below.", 
+   "(svn_wc_translated_file2): Update to support translation both ways,", 
+   "introduce a 'flags' field to eliminate the large number of boolean", 
+   "parameters.  Also delegate 'knowledge' about the Normal Form to", 
+   "the recently created svn_subst_translate_to_normal_form().", 
+   "* subversion/libsvn_wc/questions.c", 
+   "* subversion/libsvn_wc/diff.c", 
+   "* subversion/libsvn_wc/merge.c", 
+   "* subversion/libsvn_wc/log.c", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "Update callers to svn_wc_translated_file and", 
+   "svn_wc_translated_file2, removing superseeded static functions."
+  ], 
+  "revision_id": "857436"
+ }
+]

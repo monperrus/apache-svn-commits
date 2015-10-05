@@ -1,0 +1,85 @@
+[
+ {
+  "author": "brane", 
+  "date": "2006-01-27T07:37:53.171940Z", 
+  "msg": [
+   "* STATUS:", 
+   "Add r18170, r18171, r18184 to r18144, etc.", 
+   "Propose r18254 and note dependency between these two proposals."
+  ], 
+  "revision_id": "858335"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-27T06:10:02.574677Z", 
+  "msg": [
+   "ra_serf: Perform the REPORT request for update, but do not parse the correctly", 
+   "returned response yet.", 
+   "This code is reaching the point where there are obvious opportunities to", 
+   "refactor, optimize, and move code around, but we're not ready to do that until", 
+   "we can sucessfully drive a checkout.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__open): Use a subpool so that the pool lifetimes are correct", 
+   "(report_context_t): new structure to store report information", 
+   "(add_tag_buckets): helper function to add XML taggy buckets", 
+   "(start_report, end_report, cdata_report): abort() stubs", 
+   "(handle_report): implement handler for REPORT request", 
+   "(set_path): implement by adding buckets for this path", 
+   "(delete_path, link_path, abort_report): abort() stubs", 
+   "(finish_report): fetch the VCC props and send off our REPORT request", 
+   "(ra_serf_reporter): vtable for new functions", 
+   "(svn_ra_serf__do_update): init the report and return the reporter vtable"
+  ], 
+  "revision_id": "858334"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-27T03:02:35.466447Z", 
+  "msg": [
+   "ra_serf: Minor cleanups.", 
+   "* subversion/libsvn_ra_serf/serf.c:", 
+   "(svn_ra_serf__open): Call right register cleanup function.", 
+   "(expand_ns): Use case-sensitive string compares.", 
+   "(start_propfind, end_propfind, cdata_propfind): Use strmemdup since we know", 
+   "we have len chars; use TRUE/FALSE; use case-sensitive compares;", 
+   "(handle_propfind, fetch_props): use TRUE/FALSE", 
+   "(svn_ra_serf__check_path): use case-sensitive compares"
+  ], 
+  "revision_id": "858333"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-27T02:30:32.324005Z", 
+  "msg": [
+   "ra_serf: Implement reparent, check_path, get_uuid, repos_root.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(serf_session_t): Add char*/apr_uri_t pairs for repos_url and our repos root.", 
+   "(cleanup_serf_session): Add cleanup function (does not work right yet).", 
+   "(svn_ra_serf__open): store char* of repos_url; register cleanup.", 
+   "(end_propfind): Support empty attributes", 
+   "(fetch_props): Switch to repos_url instead of root_url", 
+   "(svn_ra_serf__reparent, svn_ra_serf__check_path, svn_ra_serf__get_uuid,", 
+   "svn_ra_serf__get_repos_root): Implement."
+  ], 
+  "revision_id": "858332"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-27T00:29:10.914917Z", 
+  "msg": [
+   "ra_serf: more work on improving how we parse the XML response.", 
+   "(The prop cache now entirely avoids the 2nd series of round trips.  Yay.)", 
+   "* libsvn_ra_serf/serf.c", 
+   "(ns_t): Change the struct name to ns_t; call the ns value 'url' instead", 
+   "(propfind_context_t): Add serf_session, make the attr names explicit", 
+   "(define_ns, expand_ns): Update for field changes", 
+   "(start_propfind): Don't destroy name arg so end_propfind can work", 
+   "(end_propfind): if we don't see a CDATA element, put in the tag name for now", 
+   "minus the namespace tag; update our cache props too.", 
+   "(cdata_propfind): Update for field changes", 
+   "(fetch_props): Allow access to the serf session", 
+   "(svn_ra_serf__get_latest_revnum): abort() if we don't get a version-name."
+  ], 
+  "revision_id": "858331"
+ }
+]

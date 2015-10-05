@@ -1,0 +1,101 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-12-15T22:38:38.930588Z", 
+  "msg": [
+   "A follow-up to r22715, fixing the SWIG bindings to account for the", 
+   "rename of the svn_client_commit_item3_t's wcprop_changes field to", 
+   "incoming_prop_changes, and the addition of the outgoing_prop_changes", 
+   "field.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(convert_svn_client_commit_item3_t): Rename local variable", 
+   "wcprop_changes to incoming_prop_changes, and refer to the field of", 
+   "the same name on the svn_client_commit_item3_t data structure.  Add", 
+   "handling for the outgoing_prop_changes field.", 
+   "* subversion/bindings/swig/svn_client.i", 
+   "Replace \"%typemap(out) apr_array_header_t *wcprop_changes\" with", 
+   "typemaps for incoming_prop_changes and outgoing_prop_changes.", 
+   "Protect both against a possibly NULL svn_client_commit_item3_t field", 
+   "when doing data type conversions.", 
+   "* subversion/bindings/swig/perl/native/Client.pm", 
+   "(_p_svn_client_commit_info_t): Rename the incoming_prop_changes()", 
+   "API from wcprop_changes(), and improve its doc string.  Add", 
+   "documentation for outgoing_prop_changes().", 
+   "* subversion/bindings/swig/perl/native/t/3client.t", 
+   "Add a new test for the outgoing_prop_changes() API.  Rename local", 
+   "variable $wcprop_changes to $prop_changes, using it to test both the", 
+   "incoming_prop_changes() and outgoing_prop_changes() APIs.", 
+   "Found by: ehu"
+  ], 
+  "revision_id": "862795"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-15T22:37:09.326476Z", 
+  "msg": [
+   "In preparation of reducing pre-commit-i/o in working copies, create", 
+   "2 new public stream interfaces.", 
+   "* subversion/include/svn_subst.h", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_stream_translated_to_normal_form): New. Like", 
+   "svn_subst_translate_to_normal_form, but creates a stream output", 
+   "parameter instead of a new file on disk.", 
+   "(svn_subst_stream_from_specialfile): Translates a special file into", 
+   "stream contents which represents the special file in 'repository", 
+   "normal form'.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(detranslate_special_file_to_stream): New.  Helper routine to convert a", 
+   "special file from disk to repository normal form.", 
+   "(detranslate_special_file): Reimplement using the _to_stream helper.", 
+   "(create_special_file_from_stringbuf): New. Helper routine to convert a", 
+   "repository normal form into a special file on disk.", 
+   "(create_special_file): Reimplement using the _from_stringbuf helper.", 
+   "(read_handler_special,", 
+   "write_handler_special,", 
+   "close_handler_special): New. Callbacks for special file", 
+   "(de)translating streams."
+  ], 
+  "revision_id": "862794"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-12-15T21:18:25.407089Z", 
+  "msg": [
+   "Incorporate comments by malcolm.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "Docstring updates.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "Comment + docstring updates.", 
+   "(svn_ra_dav__do_proppatch): Make the proppatch failure the topmost", 
+   "failure instead of the deepest (most hard to reach) failure."
+  ], 
+  "revision_id": "862793"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-15T19:24:15.401913Z", 
+  "msg": [
+   "A follow-up to r22715, fixing a type cast.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(push_wc_prop): Use \"svn_prop_t *\" in conjunction with", 
+   "APR_ARRAY_PUSH() to item->incoming_prop_changes.", 
+   "Found by: hwright"
+  ], 
+  "revision_id": "862792"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2006-12-15T08:47:29.138360Z", 
+  "msg": [
+   "On the merge-tracking branch: Correct in-line comment.", 
+   "* subversion/libsvn_fs_util/merge-info-sqlite-index.c", 
+   "(svn_fs_merge_info__update_index): Adjust comment, removing", 
+   "reference to FSFS, and accounting for the fact that we cleanup", 
+   "the records leftover from earlier failed commits.", 
+   "Approved by: dlr"
+  ], 
+  "revision_id": "862791"
+ }
+]

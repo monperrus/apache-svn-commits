@@ -1,0 +1,100 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-23T19:40:53.596968Z", 
+  "msg": [
+   "Rewrite svn_wc__tweak_entry() in terms of other entry-modifying functions", 
+   "rather than calling entries_write() itself. It also removes some access", 
+   "baton and entries-hash reading code for bonus happy points.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__tweak_entry): adjust the params to help us out with a call to", 
+   "get_entry(). the caller has this data, so passing it is good. remove", 
+   "the entries hash and fetch the target entry for reading. any changes", 
+   "go into a standard TMP_ENTRY/MODIFY_FLAGS set for later passing to", 
+   "entry_modify2(). don't modify the entry in-place, but do entries", 
+   "modifications via modify2() and entry_remove().", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__tweak_entry): follow the param adjustments", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(tweak_entries): when modifying THIS_DIR, pass the proper (new) flags", 
+   "for the tweak_entry call. for non-recursing children, adjust the flags", 
+   "properly, noting that we'll be modifying the parent stub for dirs.", 
+   "(svn_wc__do_update_cleanup): don't skip the parent stub by absorbing the", 
+   "error from get_entry(). do the explicit change. adjust/clarify the", 
+   "error handling. adjust the params for the non-recursive file case."
+  ], 
+  "revision_id": "879620"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2009-09-23T18:36:47.375413Z", 
+  "msg": [
+   "Compatibility fix for emacs21.3", 
+   "Patch by Kousik Nandy <kousiknandy@gmail.com>", 
+   "* trunk/contrib/client-side/emacs/psvn.el:", 
+   "(svn-expand-filename-for-remote-access): Handle the case when", 
+   "file-remote-p is not defined", 
+   "(svn-local-filename-for-remote-access): Handle the case when", 
+   "file-remote-p is not defined", 
+   "(svn-fixup-tramp-output-maybe): Handle the case when", 
+   "file-remote-p is not defined"
+  ], 
+  "revision_id": "879619"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-23T18:36:00.775425Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(set_copied_callback): Update prototype to svn_wc__node_found_func_t", 
+   "and use abspath apis.", 
+   "(schedule_existing_item_for_re_add): Take abspath. Remove several", 
+   "access batons and add a note on why this code needs a redesign.", 
+   "(do_entry_deletion): Update caller."
+  ], 
+  "revision_id": "879618"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-23T15:48:17.356376Z", 
+  "msg": [
+   "Following up on r39539, perform some cleanups.", 
+   "Suggested by: gstein", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(check_tree_conflict): Reduce scope of hidden.", 
+   "(do_entry_deletion): Join the path to the anchor_abspath to get an absolute", 
+   "path.", 
+   "(add_directory,", 
+   "open_directory,", 
+   "close_directory,", 
+   "add_file): Remove local_abspath variable and use the baton.", 
+   "(open_file): Remove local_abspath variable and use the baton and", 
+   "remove unused kind variable", 
+   "(apply_textdelta,", 
+   "merge_file,", 
+   "close_file): Remove local_abspath variable and use the baton."
+  ], 
+  "revision_id": "879617"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-23T14:49:47.971900Z", 
+  "msg": [
+   "Add a few db helper functions to work with 'conflict victims'.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_dir_status): Retrieve the list of conflict victims, instead of", 
+   "the tree conflicts.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_ACTUAL_CONFLICT_VICTIMS,", 
+   "STMT_SELECT_ACTUAL_TREE_CONFLICT,", 
+   "STMT_SELECT_CONFLICT_DETAILS): New queries.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_read_conflict_victims): New function.", 
+   "(svn_wc__db_read_conflicts): New function.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_conflict_victims): New function.", 
+   "(svn_wc__db_read_conflicts): New function."
+  ], 
+  "revision_id": "879616"
+ }
+]

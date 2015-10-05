@@ -1,0 +1,123 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-10-02T14:09:39.356645Z", 
+  "msg": [
+   "Remove all doc string references to adm_access that no longer exist.", 
+   "Comment changes only.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_self_referential_mergeinfo,", 
+   "files_same_p,", 
+   "inherit_implicit_mergeinfo_from_parent,", 
+   "ensure_implicit_mergeinfo,", 
+   "calculate_remaining_ranges,", 
+   "record_skips,", 
+   "insert_parent_and_sibs_of_sw_absent_del_entry,", 
+   "get_mergeinfo_paths,", 
+   "process_children_with_new_mergeinfo,", 
+   "record_mergeinfo_for_added_subtrees): None of these have", 
+   "svn_wc_adm_access_t arguments anymore."
+  ], 
+  "revision_id": "879835"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-02T14:02:37.970562Z", 
+  "msg": [
+   "Remove a few more access batons from libsvn_wc that were only used", 
+   "for carrying paths.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_added_dir_administratively,", 
+   "copy_file_administratively): Tweak obsolete comments.", 
+   "(svn_wc_copy3): Use db api for checking if a node exists.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_merge_props3): Only retrieve access baton when needed.", 
+   "(maybe_generate_propconflict): Remove unused variable."
+  ], 
+  "revision_id": "879834"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-02T14:01:29.575321Z", 
+  "msg": [
+   "Do my part in removing access batons for the week.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(remove_revert_files): Remove the access baton in favor or the dir_abspath", 
+   "and a wc_db.", 
+   "(process_committed_leaf): Update the caller."
+  ], 
+  "revision_id": "879833"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-02T13:42:20.951777Z", 
+  "msg": [
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(upgrade_to_wcng): Instead of manually setting the lock, wait until after", 
+   "we bump the sdb version, and just use the wclock setting API."
+  ], 
+  "revision_id": "879832"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-10-02T13:16:42.722185Z", 
+  "msg": [
+   "Switch walk for svn:mergeinfo from svn_wc_walk_entries3 to", 
+   "svn_wc__node_walk_children, doing away with a few more svn_wc_adm_access_t", 
+   "and svn_wc_entry_t in libsvn_client/merge.c.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__node_is_status_delete,", 
+   "svn_wc__node_is_status_obstructed,", 
+   "svn_wc__node_is_status_absent,", 
+   "svn_wc__node_is_status_present): Four new additions to the temporary API", 
+   "section to aid in the transition from wc-1 to wc-ng.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node_is_status_delete,", 
+   "svn_wc__node_is_status_obstructed,", 
+   "svn_wc__node_is_status_absent,", 
+   "svn_wc__node_is_status_present): New.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Require TARGET member to be absolute, renaming it to", 
+   "reflect this.", 
+   "(make_conflict_versions,", 
+   "mergeinfo_behavior,", 
+   "merge_file_added,", 
+   "merge_dir_added,", 
+   "notification_receiver,", 
+   "fix_deleted_subtree_ranges,", 
+   "populate_remaining_ranges,", 
+   "record_skips,", 
+   "remove_children_with_deleted_mergeinfo,", 
+   "insert_parent_and_sibs_of_sw_absent_del_entry,", 
+   "record_mergeinfo_for_dir_merge,", 
+   "log_noop_baton_t,", 
+   "log_noop_revs,", 
+   "remove_noop_subtree_ranges):", 
+   "Tweak code and comments as needed to reflect that merge command baton", 
+   "TARGET member is absolute and has a new name.", 
+   "(get_mergeinfo_walk_baton): Require MERGE_TARGET_PATH be absolute, renaming", 
+   "it to reflect this.", 
+   "(get_mergeinfo_walk_cb): Change from svn_wc_entry_callbacks2_t", 
+   "found_entry() callback to a svn_wc__node_found_func_t callback.  Use new", 
+   "svn_wc__node_is* APIs to get the information we previously obtained", 
+   "from the svn_wc_entry_callbacks2_t found_entry callback's", 
+   "svn_wc_entry_t argument.  Also adjust for merge_cmd_baton_t's renamed", 
+   "member.", 
+   "(get_mergeinfo_paths): Remove entry and adm_access arguments and use two", 
+   "pool paradigm.  Also adjust for merge_cmd_baton_t's and", 
+   "get_mergeinfo_walk_baton's renamed members.", 
+   "(do_directory_merge): Update call to get_mergeinfo_paths and adjust for", 
+   "merge_cmd_baton_t's renamed member.", 
+   "(do_merge): Require that WC target argument be absolute.", 
+   "(merge_cousins_and_supplement_mergeinfo): Require that WC target argument", 
+   "be absolute.  Update calls to do_merge().", 
+   "(svn_client_merge3,", 
+   "svn_client_merge_reintegrate,", 
+   "svn_client_merge_peg3):", 
+   "Update calls to do_merge() and merge_cousins_and_supplement_mergeinfo(),", 
+   "sending absolute paths; also use an absolute path when obtaining the adm", 
+   "accesses sent to those functions."
+  ], 
+  "revision_id": "879831"
+ }
+]

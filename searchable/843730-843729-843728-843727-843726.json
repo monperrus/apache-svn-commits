@@ -1,0 +1,93 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-11-05T13:01:50.753694Z", 
+  "msg": [
+   "* doc/book/outline.txt:  move 'vendor branches' to ch06, Advanced", 
+   "Topics.  Remove it from both ch04 and ch05.  Reorganize ch04", 
+   "outline.  Put 'svn import examples' into the first section of ch05."
+  ], 
+  "revision_id": "843730"
+ }, 
+ {
+  "author": "dwhedon", 
+  "date": "2002-11-05T08:19:33.830449Z", 
+  "msg": [
+   "Fix issue #881", 
+   "Patch by: Daniele Nicolodi <daniele@grinta.net>", 
+   "(Tweaked by Gustavo Niemeyer <niemeyer@conectiva.com> and me.)", 
+   "* configure.in", 
+   "Include support for --enable-all-static option.", 
+   "* Makefile.in", 
+   "Revert order of $(LT_LDFLAGS) $(CC), to $(LT_LDFLAGS) $(CC),", 
+   "so that -all-static is received in the right place.", 
+   "* INSTALL", 
+   "Add note about the difference between --disable-shared and", 
+   "--enable-all-static"
+  ], 
+  "revision_id": "843729"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-11-05T01:52:00.621681Z", 
+  "msg": [
+   "Shift some logic around and some minor cleanup.", 
+   "* gen_base.py", 
+   "(GeneratorBase.__init__): collect the test script stuff here, rather", 
+   "than in the MakefileGenerator.", 
+   "(GeneratorBase.compute_hdr_deps): new method to compute the header", 
+   "dependencies. moved from MakefileGenerator.write_depends(). the", 
+   "header deps are now written into the dep graph.", 
+   "(dep_types): add DT_INCLUDE", 
+   "(_scan_for_includes): use 'h' rather than match.group(1) again", 
+   "* gen_make.py", 
+   "(MakefileGenerator.write): remove some shortcut variables and just", 
+   "refer to target_ob attributes instead. remove the test prog", 
+   "collecting.", 
+   "(MakefileGenerator.write_depends): call the new compute_hdr_deps()", 
+   "method and then generate the full dependency output for object", 
+   "files."
+  ], 
+  "revision_id": "843728"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-11-04T23:54:11.446572Z", 
+  "msg": [
+   "More usage of the graph.", 
+   "Note: we're switching to the graph, and front-loading it as much as", 
+   "possible, so that the resulting deps can be shared by the makefile and", 
+   "the DSP generators.", 
+   "* gen_base.py", 
+   "(GeneratorBase.__init__): no more file_deps. add dependencies for .o", 
+   "files on their .c files, and link targets on the .o files. remove", 
+   "self.inst_outputs and the code to fill it.", 
+   "(dep_types): add comments for the types. rename DT_LIBRARY to DT_LINK", 
+   "* gen_make.py", 
+   "(MakefileGenerator.write): just pull the objects from the", 
+   "dependencies for the target, rather than computing them. grab the", 
+   "installation outputs from the DT_INSTALL target objects' output", 
+   "instead of relying on the base class to monkey this data around", 
+   "for us.", 
+   "(MakefileGenerator.write_depends): get the objects and source files", 
+   "from the graph rather than self.file_deps."
+  ], 
+  "revision_id": "843727"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-11-04T23:04:14.737097Z", 
+  "msg": [
+   "Initial work on a general dependency graph.", 
+   "* gen_base.py", 
+   "(GeneratorBase.__init__): remove the 'install' instance variable.", 
+   "add and use a DT_INSTALL dependency to the graph instead.", 
+   "(class DependencyGraph): new class to record various dependencies", 
+   "(dep_types): the known dependency types", 
+   "(DT_*): symbolic constants for the types", 
+   "* gen_make.py", 
+   "(MakefileGenerator.write): use the graph rather than self.install"
+  ], 
+  "revision_id": "843726"
+ }
+]

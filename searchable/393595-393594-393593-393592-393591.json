@@ -1,0 +1,48 @@
+[
+ {
+  "author": "ekoneil", 
+  "date": "2006-04-12T20:30:10.185480Z", 
+  "msg": [
+   "Fix a NetUI deadlock problem that can occur very occasionally when the accept changes and ensure failover steps of the DeferredSessionStorageHandler are interleaved by two threads.  This problem is tracked in BEEHIVE-1099 and discussed in this thread:", 
+   "http://mail-archives.apache.org/mod_mbox/beehive-dev/200603.mbox/%3ce9ac83540603290941p3c614c9dn2c65f57dec8dfafe@mail.gmail.com%3e", 
+   "The problem basically occurs when Thread1 sets A.jpf in the session during accept changes, Thread2 overwrites it with B.jpf during accept changes, and Thread1 then re-sets A.jpf in the session causing the Page Flow \"destroy\" lifecycle method to run on B.jpf.  This \"destroy\" call does not synchronize on B.jpf and can result in deadlock with another thread interacting with the same JPF.", 
+   "This change makes this accept changes process atomic on the HttpSession thus serializing updates of NetUI attributes to the session.", 
+   "BB: self", 
+   "Test: NetUI pass"
+  ], 
+  "revision_id": "393595"
+ }, 
+ {
+  "author": "jheymans", 
+  "date": "2006-04-12T20:26:27.097454Z", 
+  "msg": [
+   "version typo"
+  ], 
+  "revision_id": "393594"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2006-04-12T20:24:27.186028Z", 
+  "msg": [
+   "DERBY-805: Apply phase 4 changes to implement join-predicate pushdown. See attached write up in JIRA for details. Changes have been extensively documented there.", 
+   "Submitted by Army Brown (qozinx@gmail.com)"
+  ], 
+  "revision_id": "393593"
+ }, 
+ {
+  "author": "jheymans", 
+  "date": "2006-04-12T20:21:47.275061Z", 
+  "msg": [
+   "adding core test-jar dependency (why are we carrying this block over to trunk anyway?)"
+  ], 
+  "revision_id": "393592"
+ }, 
+ {
+  "author": "plightbo", 
+  "date": "2006-04-12T20:20:52.260825Z", 
+  "msg": [
+   "proper DWR now"
+  ], 
+  "revision_id": "393591"
+ }
+]

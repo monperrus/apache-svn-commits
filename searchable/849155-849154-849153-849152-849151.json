@@ -1,0 +1,116 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-03-16T18:27:59.935654Z", 
+  "msg": [
+   "Fix a crash bug in svndiff-test (which is generally unused).", 
+   "* tests/libsvn_delta/svndiff-test.c (main): Initialize APR before", 
+   "making any APR calls."
+  ], 
+  "revision_id": "849155"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2004-03-16T16:54:07.611537Z", 
+  "msg": [
+   "Integrated more of the SWIG/Java build into the gen_make.py system,", 
+   "and added test code.  Added automation to the gen_make.py system to", 
+   "JAR up .class files.", 
+   "* Makefile.in", 
+   "(SWIG_EXTRA_JAVA_DIR, SWIG_EXTRA_SWIG_DIR, SWIG_JAVA_SOURCES):", 
+   "Removed, obviated by configuration in build.conf.", 
+   "(INSTALL_EXTRA_SWIG_JAVA): Reduced to only true installation", 
+   "operations.  Compilation and JAR'ing are now handled by the", 
+   "Makefile generator.", 
+   "(INSTALL_EXTRA_JAVAHL_JAVA, INSTALL_EXTRA_SWIG_JAVA): Commented on", 
+   "how these rules can be generated.", 
+   "(swig_java_tests_CLASSPATH): To get JUnit and our test code into the", 
+   "classpath, use this macro to hook into the Makefile generator.", 
+   "(swig-java-setup): New target derived from code from the", 
+   "INSTALL_EXTRA_SWIG_JAVA macro.", 
+   "(check-swig-java): New target for running the SWIG/Java regression", 
+   "tests.", 
+   "* build.conf", 
+   "(swig-java-api): New target for building the implementation-agnostic", 
+   "SVN Java API.  Currently coupled to the SWIG/Java implementation", 
+   "targets, this will either be decoupled or merged in the future.", 
+   "(swig-java-java): New target for building the SWIG-dependent Java", 
+   "code.", 
+   "(swig-java-tests): New target for building the SWIG-dependent Java", 
+   "testing code.", 
+   "(javahl-java, javahl-tests): Added \"package-roots\" config parameter", 
+   "for correct dependency list generation and JAR'ing of .class", 
+   "files.", 
+   "* build/generator/gen_base.py", 
+   "(TargetJava.__init__): Added new \"packages\" and \"jar\" instance", 
+   "members, respectively set by the \"package-roots\" and \"jar\" config", 
+   "params.", 
+   "(TargetJava.add_dependencies): As .class files are likely not", 
+   "generated into the same directory as the source files, the object", 
+   "path may need adjustment.  To this effect, take \"target_ob.classes\"", 
+   "into account.  This fixes a problem with the generation of the", 
+   "path to the .class files, used in places like \"javahl_java_DEPS\"", 
+   "in build-outputs.mk.  The algorithm I used could misinterpret the", 
+   "path information, but is \"good enough\" for the code we have today.", 
+   "This change impacts the JavaHL bindings along with the SWIG/Java", 
+   "bindings.", 
+   "(TargetJavaClasses.add_dependencies): Use os.sep instead of", 
+   "hard-coded '/'.", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write): Use the \"classes\" rather than \"path\" field for", 
+   "TargetJava generation (I'm worried this could break something),", 
+   "working around an assertion failure triggered by", 
+   "TargetJava.add_dependencies()'s adjustment of the path to .class", 
+   "files.  This change impacts the JavaHL bindings along with the", 
+   "SWIG/Java bindings.", 
+   "Added a TODO for passing -g to javac when --enable-maintainer-mode", 
+   "is in effect.", 
+   "Broke long line.", 
+   "When a TargetJava instance has its \"jar\" member set, automate", 
+   "JAR'ing of .class files (only lightly tested).  I not yet turned", 
+   "on for JavaHL.", 
+   "* subversion/bindings/swig/java/org/tigris/subversion/test", 
+   "* subversion/bindings/swig/java/org/tigris/subversion/test/SVNTests.java", 
+   "* subversion/bindings/swig/java/org/tigris/subversion/test/BasicTests.java", 
+   "Used modified copies of JavaHL's test cases as starting points for", 
+   "SWIG/Java testing."
+  ], 
+  "revision_id": "849154"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-03-16T14:57:11.310111Z", 
+  "msg": [
+   "Use the POSIX archiver pax instead of cpio to produce tarballs.", 
+   "GNU cpio is broken because it creates incorrect timestamps. See", 
+   "http://www.contactor.se/~dast/svn/archive-2004-03/0845.shtml", 
+   "* dist.sh", 
+   "Use pax instead of cpio to produce the tarballs."
+  ], 
+  "revision_id": "849153"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2004-03-16T06:04:19.330485Z", 
+  "msg": [
+   "mod_authz_svn: Don't do unnecessary checks.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(access_checker): Expand some comments for clarity.  Don't run the", 
+   "anonymous access check if there is evidence of an authentication", 
+   "attempt, in the form of an Authorization header."
+  ], 
+  "revision_id": "849152"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2004-03-16T05:35:34.094270Z", 
+  "msg": [
+   "Fix issue #1786: mod_dav_svn accepts multiple authors, only records one", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_prep_working): Set the txn author if not previously set.  Protect", 
+   "against multi-author commits by verifying authenticated user associated", 
+   "with the current request is the same as the txn author."
+  ], 
+  "revision_id": "849151"
+ }
+]

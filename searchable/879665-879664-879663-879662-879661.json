@@ -1,0 +1,97 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T08:25:32.054882Z", 
+  "msg": [
+   "Alter the signature of svn_wc__db_op_mark_resolved() to allow it to mark", 
+   "(clear) different types of conflicts on the specified node. Implement it", 
+   "for text and property conflicts. Then use it in a few places to clear out", 
+   "conflicts.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_op_mark_resolved): add RESOLVED_TEXT, RESOLVED_PROPS, and", 
+   "RESOLVED_TREE parameters to indicate which conflict states to clear", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_op_mark_resolved): update the params and implement.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_CLEAR_TEXT_CONFLICT, STMT_CLEAR_PROPS_CONFLICT): new two UPDATE", 
+   "statements to clear conflict markers.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(attempt_deletion): adjust the semantics a bit: allow a NULL value for", 
+   "the BASE_NAME parameter. only set the WAS_PRESENT OUT parameter if we", 
+   "located a file.", 
+   "(resolve_conflict_on_node): adjust logic for tracking which conflict", 
+   "files were found and cleared. rewrite the clearing of the conflict", 
+   "markesr using the new wc_db function.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_committed): clear out the conflict markers using the new wc_db", 
+   "function (rather than entry_modify2).", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(maybe_remove_conflict): helper function to possibly remove a conflict", 
+   "file during the revert process.", 
+   "(run_revert): remove a bunch of code that was factored out into", 
+   "maybe_remvoe_conflict. BUGFIX: now it properly removes the merge_file.", 
+   "use the new wc_db API to clear the resolved states."
+  ], 
+  "revision_id": "879665"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T08:16:58.042718Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__walk_entries_and_tc): fix a const compilation warning"
+  ], 
+  "revision_id": "879664"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-09-25T07:11:49.088549Z", 
+  "msg": [
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_BAD_TOKEN): Improve error message."
+  ], 
+  "revision_id": "879663"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T06:49:19.210648Z", 
+  "msg": [
+   "Delete a changelist from a node using the wc_db API rather than the old", 
+   "entry_modify2() function.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_delete_changelist): switch to svn_wc__db_op_set_changelist()", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(SVN_WC__ENTRY_MODIFY_CHANGELIST): removed. obsolete.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(fold_entry): remove section that modifies the changelist"
+  ], 
+  "revision_id": "879662"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T06:37:05.131971Z", 
+  "msg": [
+   "Constify a number of the parameters in the commit functions.", 
+   "Note: we can add const to parameters in the API because it doesn't change", 
+   "the signature -- it just tells the caller we're going to be doing less", 
+   "with the values than we may have before.", 
+   "* subversion/libsvn_wc/svn_wc.h:", 
+   "(svn_wc_process_committed4, svn_wc_process_committed3,", 
+   "svn_wc_process_committed2, svn_wc_process_committed): add const to", 
+   "the wcprop_changes parameter.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(committed_queue_item_t): add const to the 'wcprop_changes' and", 
+   "'checksum' members of the struct.", 
+   "(process_committed_leaf): constify the WCPROP_CHANGES and CHECKSUM", 
+   "parameters. do a slight dance if we have to convert an entry's digest", 
+   "to a checksum.", 
+   "(process_committed_internal): constify WCPROP_CHANGES and CHECKSUM", 
+   "(svn_wc_process_committed4): constify WCPROP_CHANGES param, and add", 
+   "const to the internal checksum localvar.", 
+   "* subversion/libsvn_wc/deprecated.c:", 
+   "(svn_wc_process_committed3, svn_wc_process_committed2,", 
+   "svn_wc_process_committed): add const to the wcprop_changes param"
+  ], 
+  "revision_id": "879661"
+ }
+]

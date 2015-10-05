@@ -1,0 +1,75 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2004-07-21T22:31:26.101040Z", 
+  "msg": [
+   "Phase 1 of a series of refactorings of the build generator code, intended to", 
+   "make it easier to understand the architecture of Target and Section classes.", 
+   "No change to generated output.", 
+   "* build/generator/gen_base.py (throughout):", 
+   "Consolidation of state storage and reference into the Generator class.", 
+   "Class Config was a data structure holding just 2 items of state. It is", 
+   "eliminated, with its attributes being merged into the Generator class,", 
+   "where all other state was already being held.", 
+   "The Target and Section classes were taking various pieces of information", 
+   "stored in Generator as parameters. Instead, just pass the Generator object,", 
+   "allowing the Target and Section classes to reference the attributes they need,", 
+   "thereby simplifying the method calls.", 
+   "Target.add_dependencies() and Section.create_targets() are second-stage", 
+   "initialization functions. Previously, the parameters to initialize one of", 
+   "these objects were split amongst both __init__ and second-stage functions.", 
+   "Consolidate to __init__, making the second-stage functions parameterless.", 
+   "Also, adopt a common order of arguments for both Target and Section.", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write, Generator.write_symbols): Adapt to Config change above.", 
+   "* build/generator/gen_win.py", 
+   "(WinGeneratorBase.create_fake_target): Adapt to argument list changes above.", 
+   "(WinGeneratorBase.get_output_name): Adapt to Config change above."
+  ], 
+  "revision_id": "850455"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-07-21T22:21:45.586327Z", 
+  "msg": [
+   "Correction, everything that assumes that it can run by using the shebang", 
+   "line needs to be in LF.", 
+   "* build/get-neon-ver.sh", 
+   "* build/buildcheck.sh", 
+   "* build/PrintPath", 
+   "* gen-make.py", 
+   "Set svn:eol-style to LF."
+  ], 
+  "revision_id": "850454"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-07-21T21:48:33.164580Z", 
+  "msg": [
+   "Shell scripts should always be LF because bash really doesn't like CRLF.", 
+   "Needed so that dist.sh can export with CRLF line endings and still produce", 
+   "an autogen.sh that will work to generate windows project files.", 
+   "* autogen.sh", 
+   "Set svn:eol-style to LF."
+  ], 
+  "revision_id": "850453"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-07-21T17:05:41.000994Z", 
+  "msg": [
+   "* STATUS:  done with r10368."
+  ], 
+  "revision_id": "850452"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-07-21T17:02:32.507699Z", 
+  "msg": [
+   "Merge r10368 from trunk to 1.1.x branch.", 
+   "Don't segfault when following history and we find an empty revision.", 
+   "Approved by:  +1: breser, sussman, cmpilato"
+  ], 
+  "revision_id": "850451"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "erwan", 
+  "date": "2010-04-22T13:50:24.040133Z", 
+  "msg": [
+   "Enabling localization for portal page names, adding the CommonPortalEntityLabels file"
+  ], 
+  "revision_id": "936845"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-04-22T13:49:14.794969Z", 
+  "msg": [
+   "Hopefully fix issue #3616, \"Mark/seek in svn_subst_stream_translated() -", 
+   "needs to restore translation state\"", 
+   "\"Hopefully\" because an apparent bug in the translation stream prevents", 
+   "a new test which attempts to verify the fix from passing.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(keywords_hash_deep_copy, dup_translation_baton): New helper functions.", 
+   "(mark_translated_t): New type.", 
+   "(translated_stream_mark, translated_stream_seek): Save translation state", 
+   "upon mark, and restore it upon seek.", 
+   "(svn_subst_stream_translated): Drive-by comment fix, and call the new", 
+   "keywords_hash_deep_copy() helper which is based on code which used to", 
+   "live here.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(): Include svn_subst.h.", 
+   "(test_funcs): Add new test.", 
+   "(test_stream_seek_translated): New test. Currently XFail because of", 
+   "aforementioned bug, which was discussed on IRC as follows:", 
+   "<stsp> svn_subst_stream_translated() does not expand keywords if", 
+   "they're not read in their entirety by the caller", 
+   "<stsp> is that a bug?", 
+   "<stsp> i would expect that, if I have the input containing a keyword", 
+   "such as One$MyKeyword$Two, which expands to \"my keyword expanded\",", 
+   "and I read up to the position of the character K, the result would", 
+   "be \"Onemy\"", 
+   "<stsp> but what is actually returned from svn_stream_read is One$My", 
+   "<stsp> that makes setting a mark within a keyword rather pointless", 
+   "<julianf> stsp: ew, that's an ugly bug in stream_translated.", 
+   "<julianf> That's just waiting to blow up.", 
+   "<stsp> julianf, yeah I think it should read ahead, expand the keyword,", 
+   "and return part of the expansion", 
+   "<julianf> +1", 
+   "Review by: julianfoad", 
+   "philip"
+  ], 
+  "revision_id": "936844"
+ }, 
+ {
+  "author": "hindessm", 
+  "date": "2010-04-22T13:48:38.728950Z", 
+  "msg": [
+   "Reconcile SocketChannelImpl.write and FileChannelImpl.writev differences:", 
+   "* short cut socket writev if nothing is left to write (or buffer", 
+   "array is 0 length).", 
+   "* Use a long count in shortcut calculation in both socket and file", 
+   "writev versions to avoid the unlikely two buffer lengths summing to", 
+   "int 0 case.", 
+   "* socket writevImpl return a long since the syscall returns long on", 
+   "unix (int on windows so don't expect large buffer cases to work", 
+   "there).", 
+   "* add buffer.hasArray == true case from file writev to socket writev.", 
+   "* rename some variables", 
+   "* Initialise noffset properly in Linux natives to fix one error case.", 
+   "* Remove unnecessary initialisation of toBeReleasedBuffers in windows natives.", 
+   "* use ssize_t for linux syscall return and cast to jlong on return."
+  ], 
+  "revision_id": "936843"
+ }, 
+ {
+  "author": "hughesj", 
+  "date": "2010-04-22T13:47:19.730215Z", 
+  "msg": [
+   "ARIES-173 correcting scm location"
+  ], 
+  "revision_id": "936842"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2010-04-22T13:45:50.582964Z", 
+  "msg": [
+   "Add some more tests to the ServerSocket test suite and implement some more of the options in TcpSocket"
+  ], 
+  "revision_id": "936841"
+ }
+]

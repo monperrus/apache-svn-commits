@@ -1,0 +1,114 @@
+[
+ {
+  "author": "yoshiki", 
+  "date": "2001-11-16T11:26:34.919271Z", 
+  "msg": [
+   "Synch with rev 462 change, ancestor -> url renaming.", 
+   "* wc.c", 
+   "(wc_entry_url): Renamed from wc_entry_ancestor.", 
+   "(svn_ruby_init_wc): Rename Svn::WcEntry:ATTR_ANCESTOR to Svn::WcEntry:ATTR_URL.", 
+   "Rename instance method ancestor to url.", 
+   "* error.c", 
+   "(svn_ruby_init_error): Rename exception Svn::Error::WcEntryMissingAncestry", 
+   "to Svn::Error:WcEntryMissingURL."
+  ], 
+  "revision_id": "840540"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-11-16T05:43:45.283498Z", 
+  "msg": [
+   "Okay, I've been secretly sitting on this for over a week, just a", 
+   "little experiment.  Thought I'd commit it for everyone's amusement.", 
+   ":-)", 
+   "Try this with a local repository:  'svnadmin shell repos', and then", 
+   "type 'help'.", 
+   "* svnadmin.h:  new header file.  contains #includes that were in main.c.", 
+   "* main.c:      move #includes to svnadmin.h;  add new \"shell\" subcommand.", 
+   "* shell.c:     implement a simple, exploratory shell."
+  ], 
+  "revision_id": "840539"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2001-11-15T22:54:24.368393Z", 
+  "msg": [
+   "subversion.spec, Makefile: Changes to automatically pick up the", 
+   "SVN_VER_MAJOR, SVN_VER_MINOR, SVN_VER_MICRO from the include/svn_version.h", 
+   "file."
+  ], 
+  "revision_id": "840538"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-11-15T21:58:39.376221Z", 
+  "msg": [
+   "Added new file for Win32 build.", 
+   "* clients/cmdline/subversion_client.dsp: Add switch-cmd.c."
+  ], 
+  "revision_id": "840537"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2001-11-15T19:58:18.513220Z", 
+  "msg": [
+   "Rename the `ancestor' part of an entry to `url'.  Note that this may not", 
+   "change all appropriate comments, or variable/argument names.  These should", 
+   "be looked specifically in include/svn_wc.h, libsvn_wc/wc.h, and", 
+   "libsvn_wc/entries.c", 
+   "* subversion/include/svn_error_codes.h: Rename SVN_ERR_WC_MISSING_ANCESTRY to", 
+   "SVN_ERR_WC_MISSING_URL.", 
+   "* subversion/include/svn_wc.h: Rename `SVN_WC_ENTRY_ATTR_ANCESTOR' to", 
+   "SVN_WC_ENTRY_ATTR_URL.", 
+   "(svn_wc_entry_t): Rename `ancestor' member to `url'.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__entries_init): s/SVN_WC_ENTRY_ATTR_ANCESTOR/SVN_WC_ENTRY_URL/", 
+   "(svn_wc__atts_to_entries): replace ancestor field with url field.", 
+   "(take_from_entry): ditto.", 
+   "(resolve_to_defaults): Replace ancestor field with url field, and use", 
+   "SVN_ERR_WC_MISSING_URL instead of SVN_ERR_WC_MISSING_ANCESTRY if not", 
+   "found.", 
+   "(normalize_entry): s/SVN_WC_ENTRY_ATTR_ANCESTOR/SVN_WC_ENTRY_URL/, and", 
+   "use url field instead of ancestor field.", 
+   "(write_entry): Keep comments in sync with ancestor->url rename, use", 
+   "SVN_WC_ENTRY_ATTR_URL instead of SVN_WC_ENTRY_ATTR_ANCESTOR, and rename", 
+   "replace the ancestor field with url fields in svn_wc_entry_t references.", 
+   "(fold_entry): Change from ancestor to url.", 
+   "(svn_wc__entry_dup): Change from ancestor to url.", 
+   "(svn_wc__recursively_rewrite_ancestry): Change from", 
+   "SVN_WC__ENTRY_MODIFY_ANCESTOR to SVN_WC__ENTRY_MODIFY_URL.", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(copy_file_adminstratively): use src_entry->url instead of", 
+   "src_entry->ancestor.", 
+   "* subversion/libsvn_wc/wc.h: Rename SVN_WC__ENTRY_MODIFY_ANCESTOR to", 
+   "SVN_WC_ENTRY_MODIFY_URL.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_modify_entry): Use entry->url instead of entry->ancestor.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(add_to_revision_control): Use anc_entry->url, p_entry->url, and", 
+   "parent_entry->url,  instead of anc_entry->ancestor, p_entry->ancestor,", 
+   "and paren_entry->url.", 
+   "* subversion/libsvn_wc/get_editor.c:", 
+   "(add_directory): Use parent_entry->url instead of parent_entry->ancestor.", 
+   "(svn_wc_is_wc_root): Use the url field instead of the ancestor field.", 
+   "* subversion/libsvn_client/log.c:", 
+   "(svn_client_log): Use entry->url instead of entry->ancestor.  If it's not", 
+   "there, use SVN_ERR_WC_MISSING_URL instead of SVN_ERR_WC_MISSING_ANCESTRY.", 
+   "While we're at use svn_stringbuf_dup instead of svn_stringbuf_create, to", 
+   "save a strlen call.", 
+   "* subversion/libsvn_client/update.c:", 
+   "(svn_client_update): Use entry->url instead of entry->ancestor.  If it's not", 
+   "there, use SVN_ERR_WC_MISSING_URL instead of SVN_ERR_WC_MISSING_ANCESTRY.", 
+   "While we're at use svn_stringbuf_dup instead of svn_stringbuf_create, to", 
+   "save a strlen call.", 
+   "* subversion/libsvn_client/status.c:", 
+   "(svn_client_status): Use entry->url instead of entry->ancestor.  If it's not", 
+   "there, use SVN_ERR_WC_MISSING_URL instead of SVN_ERR_WC_MISSING_ANCESTRY.", 
+   "While we're at use svn_stringbuf_dup instead of svn_stringbuf_create, to", 
+   "save a strlen call.", 
+   "* subversion/libsvn_client/commit.c:", 
+   "(send_to_repos): Use entry->url instead of entry->ancestor."
+  ], 
+  "revision_id": "840536"
+ }
+]

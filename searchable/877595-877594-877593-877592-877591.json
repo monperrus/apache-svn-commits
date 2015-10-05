@@ -1,0 +1,89 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-04-30T22:15:06.654198Z", 
+  "msg": [
+   "Always populate the children_with_mergeinfo array in merge.c with at least", 
+   "one element describing the merge taking place.", 
+   "Also, a tiny bit o' refactoring for a beastly merge.c function -- more to", 
+   "come, but this has some logic changes too so is being done separately.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(THE CHILDREN_WITH_MERGEINFO ARRAY): Tweak this global comment to reflect", 
+   "some new requirements.", 
+   "(do_mergeinfo_unaware_dir_merge): New, factored out of", 
+   "do_directory_merge().  Small logic change from the original code:", 
+   "Previously when merging unrelated changes from a foreign repository we", 
+   "didn't populate the   children_with_mergeinfo array with anything.  This", 
+   "was the *only* time we didn't do that, and honestly it seems like dumb", 
+   "luck that this hasn't been a problem.  So in the name of consistency we", 
+   "now put one element describing the merge.", 
+   "(do_directory_merge): Factor out a small bit of code to", 
+   "new do_mergeinfo_unaware_dir_merge().  Another small logic change:", 
+   "Previously we only called this chunk of code if the merge sources were", 
+   "unrelated or during a foreign repository merge, but this change expands", 
+   "that to any time we are not honoring mergeinfo."
+  ], 
+  "revision_id": "877595"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-30T20:20:32.344402Z", 
+  "msg": [
+   "Add a helper function to wc_db which answers the question:", 
+   "\"does this node exist, and if so, what is it's kind?\"  This is different", 
+   "from read_info(), in that it catches the \"path not found\" error, and", 
+   "returns an unknown kind, instead.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(load_props, svn_wc__merge_props, svn_wc_prop_list, svn_wc_get_prop_diffs):", 
+   "Use the new helper function (and avoid fetching an entry!)", 
+   "* subversion/libsvn_wc/wc_db.c,", 
+   "subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_check_node): New."
+  ], 
+  "revision_id": "877594"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-30T19:32:07.846027Z", 
+  "msg": [
+   "Stop merge of difference between two different repositories from", 
+   "occasionally \"working\".", 
+   "Previously, given URL_X and URL_Y which point to two completely different", 
+   "repositories, the merge,", 
+   "svn merge URL_X@M URL_Y@N TARGET_WC", 
+   "might actually succeed and merge URL_X@M:URL_X@N to TARGET_WC.", 
+   "^       ^", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_youngest_common_ancestor): Note assumption that path/urls", 
+   "being examined are assumed to point to the same repos.  This function can", 
+   "find a \"common\" ancestor between two *different* repositories which have", 
+   "similar path structures.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client_merge3): Raise an error immediately when trying to merge the", 
+   "difference between different repositories, don't let things proceed", 
+   "because svn_client__get_youngest_common_ancestor's limitations might allow", 
+   "some strange (and incorrect) results."
+  ], 
+  "revision_id": "877593"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-30T19:23:46.701372Z", 
+  "msg": [
+   "Push the db/local_abspath arg pair a bit further down the properties API stack.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(load_props): Take a db/abs_path pair.", 
+   "(svn_wc__load_props, svn_wc_props_modified_p): Update callers."
+  ], 
+  "revision_id": "877592"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-30T18:58:10.608341Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_props_modified_p): Remove an extraneous block.  No functional change."
+  ], 
+  "revision_id": "877591"
+ }
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-04-17T18:33:41.344100Z", 
+  "msg": [
+   "If we've enabled stack tracing, use it when we encounter an abort().", 
+   "* subversion/libsvn_subr/error.c", 
+   "(svn_error_abort_on_malfunction): If tracing is enabled, wrap and", 
+   "return the error, so we can get a stack trace of the abort failure.", 
+   "[ Note: reverted in r37340. ]"
+  ], 
+  "revision_id": "877410"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-17T18:31:36.467802Z", 
+  "msg": [
+   "Make svn patch send a 'merged' notification if the patch target had", 
+   "local modifications that merged cleanly.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(patch_target_t): New member 'local_mods'.", 
+   "(init_patch_target): Check the target for local modifications.", 
+   "(apply_one_patch): Send a 'merged' notification if appropriate."
+  ], 
+  "revision_id": "877409"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-17T18:22:01.950929Z", 
+  "msg": [
+   "Make sure svn patch handles absolute paths correctly, and does not", 
+   "modify files outside the working copy.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff_absolute_paths): New test.", 
+   "(test_list): Add new test.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(svn_client_patch): Pass access baton to apply_textdiffs.", 
+   "While here, make this function close the access baton it is", 
+   "using after patch application has been done.", 
+   "(patch_target_t): Add 'path' and 'abs_path' members.", 
+   "(report_skipped_target, resolve_target_path): New functions.", 
+   "(init_patch_target): Revise docstring. Add access baton and client context", 
+   "parameters. Use resolve_target_path() to resolve relative and absolute", 
+   "paths of the patch target, and fail if they cannot be resolved.", 
+   "Add a TODO comment and rename a local variable while here.", 
+   "(apply_one_patch): Add access baton parameter, and rely on init_patch_target()", 
+   "to deal with issues such as whether the target file exists. Use the", 
+   "relative path as determined by init_patch_target() during notifications.", 
+   "(apply_textdiffs): Add access baton parameter, and pass it down to", 
+   "apply_one_patch()."
+  ], 
+  "revision_id": "877408"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-17T18:18:54.313382Z", 
+  "msg": [
+   "Don't worry about the merge tracking complexities of non-inheritable", 
+   "mergeinfo and missing subtrees if we are *not* honoring mergeinfo.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_mergeinfo_paths): The doc string says: \"If HONOR_MERGEINFO is FALSE,", 
+   "then...only criteria 7 is applied\".  So do that!  Previously we were", 
+   "applying criteria 3, 4, and 5."
+  ], 
+  "revision_id": "877407"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-17T17:48:46.084741Z", 
+  "msg": [
+   "Fix upgrade tests 1 and 2 on wc-ng.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_temp_reset_format): If we're upgrading to wc-ng, force the wc", 
+   "db to repopulate the pdh->wcroot member, which ensures the sqlite database", 
+   "gets loaded.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_upgrade_format): Shuffle statements around so that we read the", 
+   "entries, set the format, and then do the write."
+  ], 
+  "revision_id": "877406"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-12T21:52:44.292685Z", 
+  "msg": [
+   "Implement the first half of issue #840: teach ra_dav to understand", 
+   "both old and new property namespaces.  Patch by Ben Collins-Sussman", 
+   "with tweaks and fixes by cmpilato.", 
+   "* svn_dav.h", 
+   "(SVN_DAV_PROP_NS_SVN, SVN_DAV_PROP_NS_DAV,", 
+   "SVN_DAV_PROP_NS_CUSTOM): define three new property namespaces.", 
+   "* ra_dav.h", 
+   "(SVN_RA_DAV__PROP_BASELINE_RELPATH_OLD,", 
+   "SVN_RA_DAV__PROP_BASELINE_RELPATH): define an \"old\" version of the", 
+   "baseline-relative-path property, to contrast against the correct,", 
+   "new one.  It turns out that this is actually the *only* renegade", 
+   "network-generated property that is \"polluting\" the svn: namespace.", 
+   "(ELEM_baseline_relpath_old):  new enum.", 
+   "* props.c", 
+   "(elem_definitions, neon_descriptions): mention old and new", 
+   "relpath props in these lists.", 
+   "(validate_element): allow either old- or new- style baseline_relpath.", 
+   "(starting_props):  try to fetch *both* old and new baseline_relpath props.", 
+   "(process_results, add_to_hash): when parsing a multistatus PROPFIND", 
+   "response, only store the properties that were actually found.  At", 
+   "this point, we know that at least one of the baseline_relpath props", 
+   "will be a 404, and that's totally fine.", 
+   "(svn_ra_dav__get_baseline_info): try to pull the new-style", 
+   "baseline-relpath property from the hash;  if that fails, query for", 
+   "the old-style one instead.  Only die if both are unavailable.", 
+   "* fetch.c", 
+   "(add_props): this is the main filter that pushes props at", 
+   "libsvn_wc.  Recognize both old and new 'custom' namespaces.", 
+   "Recognize both old and new 'svn' namespaces, filtering out the", 
+   "baseline-rel-path only in the old namespace.", 
+   "(svn_ra_dav__get_file, svn_ra_dav__get_dir): apply the same logic", 
+   "here.  This fixes a huge bug: can you believe that these functions", 
+   "were completely ignoring 'svn:' properties up till now?!  Oy.  This", 
+   "might fix issue #591.  Also, while we're here, fix the bug in 'svn", 
+   "ls', whereby __get_dir() wasn't looking in the correct namespaces to", 
+   "decide if an entry had props or not."
+  ], 
+  "revision_id": "843030"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-12T21:26:06.862346Z", 
+  "msg": [
+   "* www/project_status.html: Describe the interim release schedule, to", 
+   "make Beta be less of a leap from whatever comes before it."
+  ], 
+  "revision_id": "843029"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-08-12T21:13:47.023578Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "843028"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-12T20:31:26.155203Z", 
+  "msg": [
+   "Thanks to Blair Zajac for spotting the uninitialized var warning that", 
+   "led to this:", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_revert): Handle the fall-thru case of a entry that is", 
+   "neither file nor dir."
+  ], 
+  "revision_id": "843027"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-08-12T19:39:44.572291Z", 
+  "msg": [
+   "* tools/client-side/svn_all_diffs.pl:", 
+   "(read_from_process): If a spawned process fails, do not wait for the", 
+   "user to hit return before quitting the script."
+  ], 
+  "revision_id": "843026"
+ }
+]

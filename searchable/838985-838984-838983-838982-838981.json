@@ -1,0 +1,73 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-03-20T03:24:53.000000Z", 
+  "msg": [
+   "Starting hacking out a code path for updates.  (This commit should cover", 
+   "everything ra_local needs to do for an update.)", 
+   "* svn_ra.h (do_update): change declaration and promises of RA routine.", 
+   "We don't need to pass in a list of targets to update; instead, the", 
+   "RA layer will update *one* target: whatever path happens to be in", 
+   "the session URL.  (If the client has many targets to update, it can", 
+   "open an independent RA session & update for each one.  Remember that", 
+   "an update command isn't atomic; only commits are.)", 
+   "* ra_local.h (svn_ra_local__set_directory, svn_ra_local__set_file,", 
+   "svn_ra_local__finish_report): declare in private header.", 
+   "(svn_ra_local__report_baton_t):  new baton type for reporter vtable.", 
+   "* ra_plugin.c (set_directory, set_file, finish_report):  remove", 
+   "declarations.", 
+   "(ra_local_reporter):  use new function names.", 
+   "(do_update):  flesh this out for the first time.", 
+   "* update.c:  new file.", 
+   "(svn_ra_local__set_directory):  new func, adds to the transaction.", 
+   "(svn_ra_local__set_file):  new func, adds to the transaction.", 
+   "Note:  we should merge the above 2 funcs into set_path(), unless", 
+   "gstein objects.  No need for both of them.", 
+   "(svn_ra_local__finish_report):  new func, calls svn_fs_dir_delta to", 
+   "drive the update editor, then aborts the transaction.", 
+   "* Makefile.am:  compile update.c", 
+   "* delta.c (svn_fs_dir_delta):  put some reminder comments in here."
+  ], 
+  "revision_id": "838985"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-03-19T21:26:52.000000Z", 
+  "msg": [
+   "* libsvn_fs/editor.c", 
+   "(replace_directory, replace_file): No need to delete before doing", 
+   "the svn_fs_copy (anymore).", 
+   "* libsvn_fs/tree.c", 
+   "(txn_body_copy): Fixed to not restrict copies to only things that", 
+   "didn't previously exist.  A bit too much aggression on my part, I", 
+   "must confess."
+  ], 
+  "revision_id": "838984"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-03-19T18:39:01.000000Z", 
+  "msg": [
+   "* libsvn_fs/editor.c", 
+   "(close_edit): Bug fix.  If an attempt to commit fails, we should", 
+   "probably return that failure to the caller."
+  ], 
+  "revision_id": "838983"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-03-19T14:02:17.000000Z", 
+  "msg": [
+   "Pork, the other white meat."
+  ], 
+  "revision_id": "838982"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-19T12:58:33.000000Z", 
+  "msg": [
+   "Bug trackin for M2."
+  ], 
+  "revision_id": "838981"
+ }
+]

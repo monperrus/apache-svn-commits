@@ -1,0 +1,113 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-03-26T20:43:44.738026Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Don't record mergeinfo on any *subtree* not", 
+   "touched by the merge.  The merge target still always gets mergeinfo set", 
+   "describing the merge.", 
+   "Patch by: Danil Shopyrin <danil@visualsvn.com>", 
+   "Tweaked by: Me", 
+   "Causes the following test failures due to mergeinfo no longer being set on", 
+   "some subtrees:", 
+   "FAIL:  merge_authz_tests.py 1: skipped paths get overriding mergeinfo", 
+   "FAIL:  merge_tests.py 1: performing a merge, with mixed results", 
+   "FAIL:  merge_tests.py 43: use subtree's mergeinfo to avoid repeated merge", 
+   "FAIL:  merge_tests.py 44: drive reporter api in depth first order", 
+   "FAIL:  merge_tests.py 45: target inherits mergeinfo from nearest ancestor", 
+   "FAIL:  merge_tests.py 46: mergeinfo elides to ancestor with identical info", 
+   "FAIL:  merge_tests.py 50: merge to path with switched children", 
+   "FAIL:  merge_tests.py 52: mergeinfo can explicitly be empty", 
+   "FAIL:  merge_tests.py 62: subtrees can lose non-inheritable ranges", 
+   "FAIL:  merge_tests.py 63: merge to sparse directories", 
+   "FAIL:  merge_tests.py 69: command line supports cherry picked merge ranges", 
+   "FAIL:  merge_tests.py 70: merge of propchange on subdir raises conflict", 
+   "FAIL:  merge_tests.py 77: subtrees added after start of merge range are ok", 
+   "FAIL:  merge_tests.py 79: merge --reintegrate with renamed file on branch", 
+   "FAIL:  merge_tests.py 96: don't explicitly record implicit mergeinfo", 
+   "FAIL:  merge_tests.py 98: subtree ranges might not intersect with target", 
+   "FAIL:  merge_tests.py 99: subtree merge source might not exist", 
+   "FAIL:  merge_tests.py 106: target and subtrees need nonintersecting revs", 
+   "FAIL:  merge_tests.py 126: merge --reintegrate with subtree mergeinfo", 
+   "FAIL:  update_tests.py 36: mergeinfo does not elide after update", 
+   "FAIL:  log_tests.py 27: log -g and explicit mergeinfo replacing inherited", 
+   "* subversion/libsvn_client/merge.c", 
+   "(path_is_subtree, subtree_touched_by_merge): New.", 
+   "(do_directory_merge): Don't reprocess the first child with mergeinfo, that", 
+   "is the merge target and has already been processed.  Don't set mergeinfo on", 
+   "any path that was modified by the merge.  Currently \"modified\" includes", 
+   "skips and additions to a path or one of its subtrees."
+  ], 
+  "revision_id": "876875"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-26T20:30:43.188518Z", 
+  "msg": [
+   "Propose r36799 for backport."
+  ], 
+  "revision_id": "876874"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-26T20:23:19.560700Z", 
+  "msg": [
+   "Do some syntax jigglin' and jugglin' to satisfy strict C89 compilers.", 
+   "* subversion/libsvn_subr/cache-memcache.c", 
+   "(svn_cache__create_memcache): Individually set a function pointer", 
+   "and a baton pointer to 0 instead of NULL.", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(path_type_t): Lose comma after last enum value.  Works for Python,", 
+   "not for ANSI C.", 
+   "* subversion/tests/libsvn_subr/opt-test.c", 
+   "(test_svn_opt_args_to_target_array2): Initialize stack-allocated", 
+   "structures that have non-static member values to { 0 }, then", 
+   "populate their members explicitly post-declaration.", 
+   "* subversion/tests/libsvn_client/client-test.c", 
+   "(test_args_to_target_array): Same.", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__merge_file_externally): Same.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_walk_entries2): Same.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_status3): Same.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__elide_mergeinfo_catalog): Same.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_file_changed, get_mergeinfo_paths): Same.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client__get_copy_source): Same.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__pack): Same.", 
+   "Patch by: Matthew Woehlke <mw_triad{_AT_}users.sourceforge.net>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "876873"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-26T19:56:32.760654Z", 
+  "msg": [
+   "Another test legitimately fixed by wc-ng: merge tests 91.", 
+   "Since I'm not that familiar with the merge tests, I called in the big guns to", 
+   "help me evaluate this.  According to pburba, the test is fixed by wc-ng, so", 
+   "we just remove the XFAIL for wc-ng.", 
+   "The root of the problem is that wc-ng don't report children of copied", 
+   "directories as added, but wc-old does.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): Pass merge_added_subtree on wc-ng."
+  ], 
+  "revision_id": "876872"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-26T19:06:11.463650Z", 
+  "msg": [
+   "More ignoring of DBG: lines in the test suite.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(run_command_stdin): Filter out stdout lines starting with DBG: before", 
+   "returning them."
+  ], 
+  "revision_id": "876871"
+ }
+]

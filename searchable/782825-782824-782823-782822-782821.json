@@ -1,0 +1,94 @@
+[
+ {
+  "author": "bojan", 
+  "date": "2009-06-09T00:03:36.028759Z", 
+  "msg": [
+   "Backport r782824 from the trunk.", 
+   "Make sure --without-ldap works.", 
+   "Patch by Arfrever Frehtes Taifersar Arahesis <arfrever.fta gmail.com>."
+  ], 
+  "revision_id": "782825"
+ }, 
+ {
+  "author": "bojan", 
+  "date": "2009-06-09T00:00:17.789966Z", 
+  "msg": [
+   "Make sure --without-ldap works.", 
+   "Patch by Arfrever Frehtes Taifersar Arahesis <arfrever.fta gmail.com>."
+  ], 
+  "revision_id": "782824"
+ }, 
+ {
+  "author": "lryan", 
+  "date": "2009-06-08T23:21:36.216505Z", 
+  "msg": [
+   "Rewrite of osapi to factor out the RPC transport mechanism and support a", 
+   "gadgets.rpc based transport in addition to the json-rpc one. This is a pretty", 
+   "extensive rewrite but hopefully the code is a little simpler and more extensible", 
+   "now. It should be fairly trivial to add a REST transport instead of the json-rpc", 
+   "one for instance.", 
+   "There is now a container-side osapi.js which container can be used as a basis for", 
+   "exposing additional osapi services using the new gadgets.rpc transport. See", 
+   "/javascript/container/osapi.js.", 
+   "To enable this feature in your container config you can either have the set of", 
+   "services introspected at gadget render-time using", 
+   "{ \"gadget.features\" ...", 
+   "{ \"osapi.services\" :", 
+   "{\"gadgets.rpc\" : [\"container.listMethods\"]}", 
+   "}", 
+   "}", 
+   "or if you want to avoid introspection and just list out the container methods to", 
+   "expose and exclude \"container.listMethods\". E.g.", 
+   "{ \"gadget.features\" ...", 
+   "{ \"osapi.services\" :", 
+   "{\"gadgets.rpc\" :", 
+   "[\"requestShareApp\", \"requestPermission\", ...]}", 
+   "}", 
+   "}", 
+   "In your container to expose new methods to gadgets simply bind them to the osapi namespace.", 
+   "E.g.", 
+   "osapi.newservice = {};", 
+   "osapi.newservice.do = function (request, callback) {", 
+   "callback(<data>);", 
+   "}", 
+   "will expose osapi.newservice.do inside any gadget on the page if introspection", 
+   "is enabled, if introspection is disabled it needs to be added to the container", 
+   "config.", 
+   "The samplecontainer is updated to support introspection", 
+   "In addition the container config now supports declaring the set of available", 
+   "methods for a json-rpc endpoint directly too so that Shindig doesnt have to call", 
+   "system.listMethods against each endpoint. Instead you can directly add", 
+   "{ \"gadget.features\" ...", 
+   "{ \"osapi.services\" :", 
+   "{\"http://%host%/social/rpc\" :", 
+   "[\"people.get\", \"activities.get\", ...]}", 
+   "}", 
+   "}", 
+   "Other minor changes..", 
+   "- makeNonProxiedRequest now returns error \"rc\" and \"text\" fields", 
+   "- osapi introspection over gadgets.rpc can delay the gadget onload callback by", 
+   "a max of 300ms.", 
+   "- osapi.ui is removed. The sample container exposes \"activities.requestCreate\",", 
+   "\"messages.requestSend\", \"requestShareApp\", \"requestPermission\" as examples only.", 
+   "This is subject to change as these are not standardized", 
+   "Thanks to Sachin Senoy for his initial work on the gadgets.rpc transport."
+  ], 
+  "revision_id": "782823"
+ }, 
+ {
+  "author": "sabob", 
+  "date": "2009-06-08T22:56:59.538958Z", 
+  "msg": [
+   "updated prototype to 1.6.1RC2 and roadmap"
+  ], 
+  "revision_id": "782822"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2009-06-08T22:30:44.379292Z", 
+  "msg": [
+   "fix lint errors in sandboxes"
+  ], 
+  "revision_id": "782821"
+ }
+]

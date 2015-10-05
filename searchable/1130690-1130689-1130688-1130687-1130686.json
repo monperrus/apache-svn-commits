@@ -1,0 +1,117 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2011-06-02T17:50:15.863877Z", 
+  "msg": [
+   "Last fix for issue #3896 'mergeinfo syntax errors should be treated", 
+   "gracefully': Tolerate invalid mergeinfo on the client side to the extent", 
+   "possible.", 
+   "This allows 'svn mergeinfo' to function in the presence of of invalid", 
+   "mergeinfo in the working copy.  It also allows 'svn merge' to function if", 
+   "invalid mergeinfo is inherited by a merge target from within the working", 
+   "copy.  In both cases the invalid mergeinfo is treated as if it doesn't exist.", 
+   "Merge tracking aware merges still fail if the merge target or one of its", 
+   "subtrees has invalid mergeinfo, but a more precise error is now raised", 
+   "describing the offending paths and allowing the client to recommend a", 
+   "course of action.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CLIENT_INVALID_MERGEINFO_NO_MERGETRACKING): New error code", 
+   "describing a more precise type of SVN_ERR_MERGEINFO_PARSE_ERROR, i.e.", 
+   "that invalid mergeinfo exists in a merge target and cannot be parsed, so", 
+   "merge-tracking is not possible.  Clients can use this to make suggestions", 
+   "as to how to fix the problem.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(update_wc_mergeinfo): Update call to svn_client__get_wc_mergeinfo(),", 
+   "keeping existing intolerance for invalid mergeinfo.", 
+   "(get_mergeinfo_paths): Wrap any SVN_ERR_MERGEINFO_PARSE_ERROR errors", 
+   "in the new SVN_ERR_CLIENT_INVALID_MERGEINFO_NO_MERGETRACKING error", 
+   "and add the offending path to the error message.  Update call to", 
+   "svn_client__get_wc_mergeinfo(), keeping existing intolerance for", 
+   "invalid mergeinfo when handling switched subtrees.", 
+   "(do_file_merge): Wrap any SVN_ERR_MERGEINFO_PARSE_ERROR errors", 
+   "in the new SVN_ERR_CLIENT_INVALID_MERGEINFO_NO_MERGETRACKING error", 
+   "and add the offending path to the error message.", 
+   "(process_children_with_new_mergeinfo,", 
+   "record_mergeinfo_for_added_subtrees,", 
+   "svn_client__elide_mergeinfo): Update calls to", 
+   "svn_client__get_wc_mergeinfo(), keeping existing intolerance for", 
+   "invalid mergeinfo.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo,", 
+   "svn_client__get_wc_mergeinfo_catalog,", 
+   "svn_client__get_wc_or_repos_mergeinfo_catalog): Add new argument to", 
+   "optionally ignore invalid mergeinfo", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Add new argument to optionally ignore", 
+   "explicit invalid mergeinfo on the target.  Ignore inherited invalid", 
+   "mergeinfo by default.", 
+   "(svn_client__get_wc_mergeinfo_catalog): Add new argument to optionally", 
+   "ignore invalid mergeinfo.  Pass it along to", 
+   "svn_client__get_wc_mergeinfo().", 
+   "(svn_client__get_wc_or_repos_mergeinfo): Update call to", 
+   "svn_client__get_wc_or_repos_mergeinfo_catalog(), keeping existing", 
+   "intolerance for invalid mergeinfo.", 
+   "(svn_client__get_wc_or_repos_mergeinfo_catalog): Add new argument to", 
+   "optionally ignore invalid mergeinfo.  Pass it along to", 
+   "svn_client__get_wc_mergeinfo_catalog().", 
+   "(get_mergeinfo): Add new argument to optionally ignore invalid mergeinfo.", 
+   "Pass it along to svn_client__get_wc_or_repos_mergeinfo_catalog().", 
+   "(svn_client_mergeinfo_get_merged): Update call to get_mergeinfo(), keeping", 
+   "existing intolerance for invalid mergeinfo.", 
+   "(svn_client_mergeinfo_log,", 
+   "svn_client_suggest_merge_sources): Update calls to get_mergeinfo(),", 
+   "tolerating invalid mergeinfo.  Note: Both these APIs date back to 1.5.", 
+   "We no longer use either so leaving both with the earlier behavior (for", 
+   "now).", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): If 'svn merge' blows up due to invalid mergeinfo in the", 
+   "merge target, then offer some advice on how to address this."
+  ], 
+  "revision_id": "1130690"
+ }, 
+ {
+  "author": "eyang", 
+  "date": "2011-06-02T17:50:12.642399Z", 
+  "msg": [
+   "CHUKWA-585. Enable HICC server to bind to all IP addresses. (Eric Yang)"
+  ], 
+  "revision_id": "1130689"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2011-06-02T17:49:36.988593Z", 
+  "msg": [
+   "A partial fix for issue #3896 'mergeinfo syntax errors should be treated", 
+   "gracefully': Tolerate invalid mergeinfo in the repository.", 
+   "This allows 'svn mergeinfo' to function in the presence of of invalid", 
+   "mergeinfo in the repository.  It also allows 'svn merge' to function if", 
+   "invalid mergeinfo is inherited by a merge target and the repository must", 
+   "be contacted to find this inherited mergeinfo.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(txn_body_get_mergeinfo_data_and_entries,", 
+   "txn_body_get_mergeinfo_for_path): If invalid mergeinfo is present on a", 
+   "node or inherited from a parent node, then ignore it rather than", 
+   "raising a parse error.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(crawl_directory_dag_for_mergeinfo,", 
+   "get_mergeinfo_for_path): Same as above."
+  ], 
+  "revision_id": "1130688"
+ }, 
+ {
+  "author": "gpetracek", 
+  "date": "2011-06-02T17:46:55.211113Z", 
+  "msg": [
+   "EXTCDI-177 cleanup"
+  ], 
+  "revision_id": "1130687"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2011-06-02T17:46:53.217515Z", 
+  "msg": [
+   "updated commands to run catalog sample"
+  ], 
+  "revision_id": "1130686"
+ }
+]

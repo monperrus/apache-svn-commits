@@ -1,0 +1,94 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-12-01T17:30:04.493979Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c (conflicting_propchanges_p): Remove unused", 
+   "function."
+  ], 
+  "revision_id": "857660"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2005-12-01T15:37:43.877821Z", 
+  "msg": [
+   "Miscellaneous cleanups for libsvn_fs_fs/fs_fs.c.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_youngest): Fix an insignificant buffer overflow: if the 'current'", 
+   "file was 80 (or more) bytes long, we'd overflow the buffer when", 
+   "adding a NUL terminator.  Fix by lengthening the buffer by one byte.", 
+   "(get_root_changes_offset): This function parses a buffer of the form", 
+   "\"...\\n12345 6789\\n\".  Make the following changes:", 
+   "- Reduce the buffer from 65 bytes to 64.  We never did anything", 
+   "with the last byte, but its existence gave the casual reader the", 
+   "impression that the buffer was NUL terminated, which it's not.", 
+   "Also, use sizeof(buf) where appropriate.", 
+   "- After finding the position of the earlier of the two newlines,", 
+   "move to the next position so that we call apr_atoi64() with", 
+   "\"12345 ...\" rather than \"\\n12345 ...\".  (That function ignores", 
+   "leading whitespace, but since we know that the whitespace is there,", 
+   "we may as well skip it - and we already do so when reading the", 
+   "second number).", 
+   "- When searching for the space between the numbers, continue the", 
+   "search up to the third-to-last character, not the fourth-to-last.", 
+   "As well as being 'more correct' (the second number could conceivably", 
+   "contain only a single digit), this (more importantly) makes the", 
+   "error handling work: prior to this, a buffer of \"\\n12345\\n\" would", 
+   "be parsed into '12345' and '5', and no error would have been raised.", 
+   "- Add a comment to explicitly note that the call to apr_atoi64() will", 
+   "not read past the end of the buffer, since this isn't immediately", 
+   "obvious to the casual reader.", 
+   "(move_into_place): Remove, as this function exactly duplicates", 
+   "svn_fs_fs__move_into_place().  This function was renamed to", 
+   "svn_fs_fs__move_into_place() in r12690 on the locking branch; was", 
+   "moved earlier in the file (as move_into_place()) in r12736 on trunk;", 
+   "and was accidentally duplicated via a merge from trunk to the locking", 
+   "branch in r12759.", 
+   "(svn_fs_fs__set_revision_proplist): Update call to move_into_place()", 
+   "to use svn_fs_fs__move_into_place() instead."
+  ], 
+  "revision_id": "857659"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-12-01T14:43:27.726178Z", 
+  "msg": [
+   "* /branches/wc-propcaching: Remove just merged branch."
+  ], 
+  "revision_id": "857658"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-12-01T14:41:36.177871Z", 
+  "msg": [
+   "Merge wc-propcaching branch to trunk.", 
+   "This is an enhancement to improve performance for WC operations that", 
+   "need property information.  It does the following:", 
+   "- Makes sure there is no prop-base file if there are no base", 
+   "properties.", 
+   "- Makes sure there is no working props file unless there are property", 
+   "modifications.", 
+   "- Introduces the following new fields in the .svn/entries file to", 
+   "avoid disk I/O when checking for property modifications, reading the", 
+   "values of certain svn: properties or checking for property", 
+   "existence:", 
+   "* has-props", 
+   "* has-prop-mods", 
+   "* cachable-props", 
+   "* present-props.", 
+   "- Bumps the WC format to 6 and introduces loggy auto-upgrading.", 
+   "See the individual log messages on the branch for more details."
+  ], 
+  "revision_id": "857657"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-12-01T14:17:15.726223Z", 
+  "msg": [
+   "On wc-propcaching branch: Follow-up to r17223.", 
+   "* contrib/client-side/svnmerge_test.py: Remove conflict stuff that accidentally", 
+   "wasn't removed while merging from trunk."
+  ], 
+  "revision_id": "857656"
+ }
+]

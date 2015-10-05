@@ -1,0 +1,92 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2007-12-03T05:47:11.941335Z", 
+  "msg": [
+   "Partial fix issue #3029, Prevent mergeinfo with paths mapped to empty ranges.", 
+   "* subversion/include/svn_mergeinfo.h", 
+   "(svn_mergeinfo_remove_empty_rangelists): New.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(update_wc_mergeinfo): Remove paths mapped to empty rangelists before", 
+   "updating mergeinfo prop.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(svn_mergeinfo_remove_empty_rangelists): New.", 
+   "* subversion/tests/cmdline/merge_authz_tests.py", 
+   "(mergeinfo_and_skipped_paths): Tweak test expectations to reflect", 
+   "new behavior.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_to_target_with_copied_children, empty_rev_range_mergeinfo): Tweak", 
+   "test expectations to reflect new behavior.", 
+   "(test_list): Set empty_rev_range_mergeinfo as XFail.  It now triggers the", 
+   "reopened issue #2877."
+  ], 
+  "revision_id": "868275"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-12-03T05:31:29.887139Z", 
+  "msg": [
+   "If a path has empty mergeinfo but overrides no parent, the mergeinfo elides.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__elide_mergeinfo): Tweak doc string.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(elide_mergeinfo): Elide empty mergeinfo to nothing."
+  ], 
+  "revision_id": "868274"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-03T01:39:00.255653Z", 
+  "msg": [
+   "On the sqlite-deep-copies branch:", 
+   "Refactor the crawl-fs-for-mergeinfo function to run an arbitrary", 
+   "action instead of just the \"collect and combine filtered mergeinfo\"", 
+   "that svn_fs_get_mergeinfo_for_tree uses.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(crawler_action_t): New typedef for an action taken while crawling", 
+   "for nodes with mergeinfo.", 
+   "(crawl_directory_dag_for_mergeinfo): Refactor to take an action to", 
+   "perform on nodes with mergeinfo.  Clarify in comment that it does", 
+   "not perform the action on the node that it is given, only on its", 
+   "descendants.", 
+   "(filter_and_collect_mergeinfo, facm_baton): New action (and baton)", 
+   "implementing the action that crawl_directory_dag_for_mergeinfo used", 
+   "to do.", 
+   "(get_mergeinfo_hash_for_tree): Adjust."
+  ], 
+  "revision_id": "868273"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-03T01:00:03.122355Z", 
+  "msg": [
+   "On the sqlite-deep-copies branch:", 
+   "In FSFS, instead of using a temporary transaction property", 
+   "\"svn:contains-mergeinfo\" to figure out if a transaction changed", 
+   "mergeinfo, just use the presence of the mergeinfo changes file.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_txn_mergeinfo): Instead of filling in a provided hash, create", 
+   "and return a new hash, or NULL if there is no changed mergeinfo", 
+   "file.", 
+   "(svn_fs_fs__change_txn_props): Adjust.", 
+   "(commit_body): Adjust, and stop paying attention to", 
+   "SVN_FS__PROP_TXN_CONTAINS_MERGEINFO.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(SVN_FS__PROP_TXN_CONTAINS_MERGEINFO): Remove."
+  ], 
+  "revision_id": "868272"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-03T00:30:39.107812Z", 
+  "msg": [
+   "On the sqlite-deep-copies branch:", 
+   "Cherrypickily reverse-merge r28148 from the", 
+   "sqlite-mergeinfo-without-mergeinfo branch.", 
+   "That is, this branch now has all of the in-FS metadata that the other", 
+   "branch has, but it also has a method of communicating mergeinfo", 
+   "changes to sqlite (via svn_fs_mergeinfo__update_index)."
+  ], 
+  "revision_id": "868271"
+ }
+]

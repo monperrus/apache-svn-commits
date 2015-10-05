@@ -1,0 +1,109 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-03-23T22:44:25.709357Z", 
+  "msg": [
+   "On the tree-conflicts branch, add support for detection of use cases 4 and 6.", 
+   "Patch by: Stephen Butler <sbutler@elego.de>", 
+   "Log message by me.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_t): Remove the tree_state member, we can use", 
+   "the content_state member instead.", 
+   "(svn_wc_add_tree_conflict_data): Declare new function.", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__add_tree_conflict_data): This needs to be called from", 
+   "the client library, hence it has been split into ...", 
+   "(svn_wc_add_tree_conflict_data): ... this function, which is public", 
+   "and a wrapper around ...", 
+   "(svn_wc__loggy_add_tree_conflict_data): ... this one.", 
+   "This function expects a log accumulator and is therefore suitable", 
+   "for use from within libsvn_wc, but is otherwise equivalent to its", 
+   "public wrapper.", 
+   "* subversion/libsvn_wc/tree_conflicts.h", 
+   "(svn_wc__add_tree_conflict_data): Remove declaration, this function", 
+   "has been superseded, see above.", 
+   "(svn_wc__loggy_add_tree_conflict_data): Declare new function.", 
+   "* subversion/libsvn_wc/util.c", 
+   "(svn_wc_create_notify): Track removal of tree_state member of", 
+   "svn_wc_notify_t.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(do_entry_deletion, do_entry_deletion, open_file): Track replacement", 
+   "of svn_wc__add_tree_conflict_data, see above.", 
+   "(close_directory): Track removal of tree_state member of svn_wc_notify_t.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(close_directory): We want notifications about the state of directories", 
+   "if they are tree-conflicted, so don't hard-code the notification state", 
+   "to \"inapplicable\".", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Add new member tree_conflicted_dirs.", 
+   "(add_parent_to_tree_conflicted_dirs, is_tree_conflicted_dir_p):", 
+   "New functions.", 
+   "(merge_file_changed): Detect a use case 4 tree conflict.", 
+   "(merge_file_deleted): Detect a use case 6 tree conflict.", 
+   "Also, add a bit of code for detecting a use case 5 tree conflict.", 
+   "This is not yet complete, and commented out for now. We'll extend", 
+   "and enable this code later.", 
+   "(merge_dir_closed): If a tree conflict happened during a merge", 
+   "into a directory, set the notification state appropriately.", 
+   "(do_merge): Initialise the merge baton's new tree_conflicted_dirs member.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(set_up_tree_conflicts_for_merge): New helper function.", 
+   "* subversion/tests/cmdline/merge_tests.py:", 
+   "(merge_catches_nonexistent_target): This test causes a tree conflict.", 
+   "Update it so it does not fail because of this.", 
+   "(verify_lines): New helper function.", 
+   "(tree_conflicts_in_merged_files): New test. Currently, it tests for", 
+   "use case 4 and 6 only. Expected output related to use case 5 is", 
+   "also present, but commented out for now.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Track removal of tree_state member of svn_wc_notify_t.", 
+   "Also, now that directories can be in a conflicted state just as", 
+   "well as files, we need less special-casing here and can simplify", 
+   "the code for update notification. Hooray!"
+  ], 
+  "revision_id": "870090"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-03-23T20:13:13.511193Z", 
+  "msg": [
+   "* www/hacking.html: In the \"Crediting\" section, be more explicit", 
+   "about the preferred way of listing committers.", 
+   "Approved by: kfogel"
+  ], 
+  "revision_id": "870089"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-03-23T14:39:44.302895Z", 
+  "msg": [
+   "On the tree-conflicts branch, merge outstanding changes from trunk,", 
+   "up to r30013."
+  ], 
+  "revision_id": "870088"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-03-23T06:57:00.291091Z", 
+  "msg": [
+   "Transfer some useful stuff over from my .emacs.", 
+   "The entry points here are `svn-faq-url' and `svn-hacking-url'.", 
+   "See also `svn-source-tree-top', which you might need to customize.", 
+   "* tools/dev/svn-dev.el:", 
+   "(svn-source-tree-top, svn-faq-file, svn-hacking-file,", 
+   "svn-url-base, svn-faq-url, svn-hacking-url, svn-html-get-targets,", 
+   "svn-url-completing-read, svn-faq-history-list, svn-hacking-history-list,", 
+   "svn-faq-url, svn-hacking-url): New."
+  ], 
+  "revision_id": "870087"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-03-23T01:44:06.143663Z", 
+  "msg": [
+   "* configure.ac:", 
+   "Autoconf 2.58 or later is now required so always call AC_PROG_EGREP."
+  ], 
+  "revision_id": "870086"
+ }
+]

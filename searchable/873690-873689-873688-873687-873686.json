@@ -1,0 +1,77 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-13T16:03:30.897503Z", 
+  "msg": [
+   "Add new svn_io_sleep_for_timestamps() that sleeps until the timestamp for a", 
+   "filesystem has changed. This is implemented by using the original sleep time", 
+   "to determine if the filesystem has subsecond precision and if it has delay", 
+   "for a shorter time.", 
+   "Callers of svn_sleep_for_timestamps will have to be changed to take advantage", 
+   "of this speedup.", 
+   "* subversion/include/svn_io.h", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_sleep_for_timestamps): New function that sleeps until the filesystem", 
+   "containing path gives a newer timestamp than the current one. If we can't", 
+   "determine the timestamp resolution or encounter an error wait until the", 
+   "next second.", 
+   "(SVN_SLEEP_ENV_VAR): Moved here from time.c", 
+   "* subversion/include/svn_time.h", 
+   "* subversion/libsvn_subr/time.c", 
+   "(svn_sleep_for_timestamps): Deprecate function. Reimplement by calling", 
+   "svn_io_sleep_for_timestamps with path and pool NULL.", 
+   "(SVN_SLEEP_ENV_VAR): Moved define to io.c"
+  ], 
+  "revision_id": "873690"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-10-13T15:33:40.694739Z", 
+  "msg": [
+   "Fix documentation of svn_path_is_canonical.", 
+   "Suggested by: gstein", 
+   "* subversion/include/svn_path.h", 
+   "(svn_path_is_canonical): Document pool usage. Even though the pool won't be", 
+   "used anymore in 1.6, it'll still be needed when using <1.5 libs."
+  ], 
+  "revision_id": "873689"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2008-10-13T12:11:16.122600Z", 
+  "msg": [
+   "On the 1.5.x-issue2489 branch:", 
+   "Merge from 1.5.x branch to 1.5.x-issue2489 branch to bring it up-to-date", 
+   "with 1.5.3 release.", 
+   "svn merge -r32768:33570 http://svn.collab.net/repos/svn/branches/1.5.x"
+  ], 
+  "revision_id": "873688"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-13T12:01:20.960880Z", 
+  "msg": [
+   "Fix (possible) memory corruption bug. The txstream's resulting checksum", 
+   "was allocated in an iteration pool rather than the requested result pool.", 
+   "* subversion/libsvn_delta/text_delta.c:", 
+   "(txdelta_next_window): allocate the checksum from b->result_pool"
+  ], 
+  "revision_id": "873687"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-13T11:51:59.022795Z", 
+  "msg": [
+   "Add a new test, based on an email from Joe Swatosh <joe.swatosh@gmail.com>", 
+   "In the Ruby bindings, a digest was coming out wrong, so we now have a test", 
+   "to ensure that a txdelta stream is producing the target digest properly.", 
+   "TODO: test some invariants of the windows that are generated.", 
+   "* build.conf:", 
+   "(window-test): new test target", 
+   "* subversion/tests/libsvn_delta:", 
+   "(svn:ignore): ignore the new window-test executable", 
+   "* subversion/tests/libsvn_delta/window-test.c: new file"
+  ], 
+  "revision_id": "873686"
+ }
+]

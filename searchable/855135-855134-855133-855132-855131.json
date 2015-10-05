@@ -1,0 +1,112 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-06-14T20:24:44.590580Z", 
+  "msg": [
+   "Get rid of an svn_io_check_path (stat) call when reading property files.", 
+   "This reduces the number of system calls on Linux by about 7 % when running", 
+   "\"svn status\" in a Subversion working copy checked out from trunk.  The", 
+   "speed improvement is minimal, but measurable.  This might be different", 
+   "on other platforms.", 
+   "* subversion/libsvn_wc/props.c (svn_wc__load_prop_file): Just open the", 
+   "props file, ignoring the \"does not exist\" errors instead of checking", 
+   "for existence first."
+  ], 
+  "revision_id": "855135"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-06-14T20:23:38.087717Z", 
+  "msg": [
+   "Port of svn propdel, propget, propset, and proplist via file:/// for OS/400.", 
+   "svn propedit is disabled on the iSeries since external editors are not", 
+   "currently supported in the ebcdic port.", 
+   "When setting a property value on the command line with propset, the propval is", 
+   "interpreted as utf-8 regardless of the propname.  If -F file is used to for the", 
+   "propval, the file must be encoded in utf-8 for svn:* propnames, regardless of", 
+   "the file's CCSID.", 
+   "The --encoding option for svn propset is disabled as we have no plans to", 
+   "support that in the port.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Disable svn propedit and --encoding option for svn", 
+   "propset.", 
+   "* subversion/clients/cmdline/propdel-cmd.c", 
+   "Include svn_ebcdic.h", 
+   "(svn_cl__propdel): Use SVN_CMDLINE_PRINTF2 rather than svn_cmdline_printf to", 
+   "output ebcdic from utf-8 var args.  svn_error_createf requires utf-8 var args.", 
+   "* subversion/clients/cmdline/proplist-cmd.c", 
+   "Include svn_ebcdic.h", 
+   "(svn_cl__proplist): Use SVN_CMDLINE_PRINTF2.", 
+   "* subversion/clients/cmdline/props.c", 
+   "Include svn_utf.h", 
+   "(svn_cl__print_prop_hash): Even if a prop name doesn't start with", 
+   "svn:*, if its propval is valid utf-8, convert the propval to ebcdic before", 
+   "displaying it.", 
+   "* subversion/clients/cmdline/propset-cmd.c", 
+   "Include svn_ebcdic.h", 
+   "(svn_cl__propset): Translate svn:* propvals coming from a file to ensure", 
+   "consistent line endings.  Use SVN_CMDLINE_FPRINTF2.  svn_error_createf", 
+   "requires utf-8 var args.  Use svn_cmdline_printf_ebcdic2 explicitly rather", 
+   "than SVN_CMDLINE_FPRINTF2 where the macro won't work.", 
+   "* subversion/include/svn_types.h", 
+   "(SVN_KEYWORD_REVISION_LONG, SVN_KEYWORD_REVISION_SHORT,", 
+   "SVN_KEYWORD_REVISION_MEDIUM, SVN_KEYWORD_DATE_LONG, SVN_KEYWORD_DATE_SHORT,", 
+   "SVN_KEYWORD_AUTHOR_LONG, SVN_KEYWORD_AUTHOR_SHORT, SVN_KEYWORD_URL_LONG,", 
+   "SVN_KEYWORD_URL_SHORT, SVN_KEYWORD_ID): Hex escape with ascii values."
+  ], 
+  "revision_id": "855134"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-06-14T20:10:11.446167Z", 
+  "msg": [
+   "Follow up to r15051, based on feedback from Julian Foad.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_delete_entry): Don't use SVN_ERR when calling", 
+   "svn_ra_dav__request_dispatch(), to avoid a problem whereby some", 
+   "compilers can't handle a preprocessor conditional in a macro call.", 
+   "(simple_request): For the same reason, don't use SVN_ERR.  But here", 
+   "we can just return the value of the last call directly, which is", 
+   "standard practice anyway."
+  ], 
+  "revision_id": "855133"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-06-14T19:57:44.244445Z", 
+  "msg": [
+   "Some minor bug fixes for the ebcdic port.", 
+   "Fix encoding on some svn blame and svnadmin error messages which go to stderr", 
+   "and must be in ebcdic.", 
+   "New substitution macro for svn_cmdline_fprintf that outputs ebcdic from utf-8", 
+   "var args.", 
+   "Fix pattern matching bug with svn:ignore introduced in r14846.", 
+   "* subversion/clients/cmdline/blame-cmd.c", 
+   "(svn_cl__blame): Use SVN_CMDLINE_FPRINTF2 rather than SVN_CMDLINE_FPRINTF.", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_fprintf_ebcdic2): New function declaration.", 
+   "* subversion/include/svn_ebcdic.h", 
+   "(SVN_CMDLINE_FPRINTF2): New substitution macro.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_fprintf_ebcdic2): New function definition.", 
+   "* subversion/svnadmin/main.c", 
+   "(main): Use SVN_CMDLINE_FPRINTF2 rather than SVN_CMDLINE_FPRINTF.", 
+   "* subversion/libsvn_subr/svn_string.c", 
+   "(svn_cstring_match_glob_list): apr_fnmatch needs ebcdic args.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_build_keywords): Split on keywords_val on ' ' too.", 
+   "(svn_subst_detranslate_string): Use SVN_UTF8_NEWLINE_STR rather than", 
+   "ebcdic APR_EOL_STR."
+  ], 
+  "revision_id": "855132"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-06-14T19:01:59.636298Z", 
+  "msg": [
+   "* www/faq.html: Add \"<meta http-equiv=...>\" element.", 
+   "Suggested by: Greg Thomas <thomasgd@omc.bt.co.uk>"
+  ], 
+  "revision_id": "855131"
+ }
+]

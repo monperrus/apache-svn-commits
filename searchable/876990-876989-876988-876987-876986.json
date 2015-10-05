@@ -1,0 +1,77 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-04-01T07:19:53.821011Z", 
+  "msg": [
+   "Follow up r36894.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(get_parent_path): We have a URI to split not a dirent.", 
+   "Suggested by: rhuijben", 
+   "gstein"
+  ], 
+  "revision_id": "876990"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-31T22:05:29.029104Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Sync merge from trunk, r36880-36914."
+  ], 
+  "revision_id": "876989"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-31T21:55:20.366749Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Handle the one case where the merge code", 
+   "sets mergeinfo on a path before the final block \"Record mergeinfo\" block in", 
+   "do_directory_merge.", 
+   "As part of the fix for issue #2839 and issue #3823 (r26229) if a subtree", 
+   "has no explicit mergeinfo prior to the merge but has a parent with", 
+   "non-inheritable mergeinfo, then we set override mergeinfo on the subtree", 
+   "equal to the inheritable portion (if any) from the parent.  This change", 
+   "prevents this \"override\" mergeinfo from remaining as a local change if the", 
+   "subtree was untouched by the merge.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__merge_path_t): New member child_of_noninheritable.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_mergeinfo_paths): Set child_of_noninheritable to true if criteria 3", 
+   "in the doc string is met.", 
+   "(do_directory_merge): Remove override mergeinfo set by get_mergeinfo_paths", 
+   "if the subtree was not touched by the merge."
+  ], 
+  "revision_id": "876988"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2009-03-31T21:22:56.740252Z", 
+  "msg": [
+   "Fix race condition in ra_serf which can cause infinite-loop during a commit.", 
+   "Diagnosis and patch by Jon Trowbridge <jon@trowbridge.org>.", 
+   "After initializing the parser, we were attempting to make it parse", 
+   "response data.  Apparently up till now, the server response was always", 
+   "\"fast enough\" such that 100% of the response was waiting in the", 
+   "buffer, ready to be parsed, and so __handle_xml_parser() always", 
+   "succeeded.", 
+   "But if you introduce latency into the server's response then parsing", 
+   "might fail (the data may not be available yet), which means", 
+   "'parser.done' doesn't get set.  But then we *never* re-enter the", 
+   "initialization block on subsequent calls, which means 'done' never", 
+   "gets set, which means we're in an infinite loop waiting for 'done'.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__handle_multistatus_only): separate parser", 
+   "initialization from the \"is parser done?\" check.  And actually examine", 
+   "the status result of __handle_xml_parser()!"
+  ], 
+  "revision_id": "876987"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-31T20:39:01.699278Z", 
+  "msg": [
+   "* notes/api-errata/wc003.txt:", 
+   "Fix grammaro."
+  ], 
+  "revision_id": "876986"
+ }
+]

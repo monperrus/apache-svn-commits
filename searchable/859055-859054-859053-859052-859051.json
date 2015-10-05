@@ -1,0 +1,87 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-22T02:24:47.383533Z", 
+  "msg": [
+   "ra_serf: Pass update test #12 (receive prop update to file scheduled for", 
+   "deletion) by not fetching a file unless told to do so.", 
+   "Before this, we would always fetch the file even though it didn't necessarily", 
+   "change - therefore, our status output for this test case would be 'UU' instead", 
+   "of the expected ' U'.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_info_t): Add fetch_file boolean and store our propfind.", 
+   "(report_context_t): Add a list of files that only have propchanges.", 
+   "(handle_propchange_only): New helper that handles the bare minimum case", 
+   "when only properties change on a file but not the content.", 
+   "(fetch_file): Store our propfind in the report_info_t structure; if we don't", 
+   "need the content, then don't fetch the file - but do note it for later use.", 
+   "(start_report): Set fetch_file flag when we're adding a file or the server", 
+   "explicitly tells us that the file has changed.", 
+   "(finish_report): When pruning our propfinds, check to see if this is a", 
+   "case where only the properties have changed (and we won't be issuing a", 
+   "GET) - if so, then invoke handle_propchange_only now."
+  ], 
+  "revision_id": "859055"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-03-22T02:24:19.045151Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "Followup to r18978. Update move_plus_copy_test to check that the history works", 
+   "correctly after multiple copies and moves.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(move_plus_copy_test): Verify that the revision history for the file we", 
+   "modified works correctly.", 
+   "(test_funcs): Change move_plus_copy_test back to XFAIL."
+  ], 
+  "revision_id": "859054"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2006-03-21T22:29:43.835890Z", 
+  "msg": [
+   "Followup to r18701. Eliminate unnecessary caching of blockprops in", 
+   "svnmerge.py. Add more documentation on property caching. Fix typo in", 
+   "docstring.", 
+   "Suggested by: blair", 
+   "* contrib/client-side/svnmerge.py", 
+   "(blockprops): Remove variable.", 
+   "(RevisionLog.__init__): Fix typo in docstring.", 
+   "(analyze_revs, main): Don't maintain blockprops dictionary.", 
+   "(VersionedProperty): Add documentation."
+  ], 
+  "revision_id": "859053"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-03-21T22:20:04.435975Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "It turns out there are some situations where just using the saved move id", 
+   "as our new copy id causes problems, since it's possible to get in situations", 
+   "where more than one instance of a directory with an entry tagged with that", 
+   "move id exists because of copies.  To account for this, always introduce a", 
+   "soft copy when we encounter such a situation.  This is NOT the final solution", 
+   "to this problem, but it seems better to get up and limping soon rather than", 
+   "sitting around trying to figure out the perfect solution.  Hopefully a good", 
+   "way to avoid introducing tons of soft copies will become clear soon.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(make_path_mutable): Create new soft copies in the copy_id_inherit_fixed", 
+   "case.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(test_funcs): Mark move_plus_copy_test PASS."
+  ], 
+  "revision_id": "859052"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-21T03:05:07.871373Z", 
+  "msg": [
+   "ra_serf: Pass update tests #26 (update dir with xml-unsafe name).", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(make_update_reporter): XML-escape src_path, dest_path, and update_target."
+  ], 
+  "revision_id": "859051"
+ }
+]

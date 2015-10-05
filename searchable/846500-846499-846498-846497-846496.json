@@ -1,0 +1,70 @@
+[
+ {
+  "author": "djh", 
+  "date": "2003-07-10T02:45:33.894715Z", 
+  "msg": [
+   "Small patch to update the vcproj generator.", 
+   "* build/generator/vcnet_vcproj.ezt:", 
+   "Added new \"sources.user_deps\" property, changed debug symbols", 
+   "file to match target name rather than project name, and fixed", 
+   "some path quoting in the swig stuff."
+  ], 
+  "revision_id": "846500"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-07-09T23:23:15.715835Z", 
+  "msg": [
+   "Re-work the copy hunt algorithm.  Again.  This time, I think we have a", 
+   "working algorithm.  The belief is that all that remain are", 
+   "optimizations, but some testing against real-world data in the near", 
+   "future might reveal otherwise.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(sort_keys): New.", 
+   "(find_relevant_copies): Add 'start_txn_id' and 'end_txn_id'", 
+   "arguments, and change this function to loop over committed transactions", 
+   "(revisions_changed_callback, txn_body_revisions_changed): Update", 
+   "calls to find_relevant_copies().", 
+   "(svn_fs_revisions_changed): Disallow non-revision roots.", 
+   "(txn_body_copy): Change the unsupported feature error to, well,", 
+   "SVN_ERR_UNSUPPORTED_FEATURE."
+  ], 
+  "revision_id": "846499"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-07-09T20:19:23.921533Z", 
+  "msg": [
+   "* configure.in (APR_VER_REGEX, APU_VER_REGEX): require apr/apu 0.9.4.", 
+   "That's the version that ships in both httpd-2.0.46 and 2.0.47."
+  ], 
+  "revision_id": "846498"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-07-09T20:00:10.057730Z", 
+  "msg": [
+   "Save the in-progress manual verification stuff:", 
+   "* tools/cvs2svn/test-data/verification/: New directory and files."
+  ], 
+  "revision_id": "846497"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-07-09T19:28:52.759257Z", 
+  "msg": [
+   "Fix huge memory leak in libsvn_ra_dav commits, with cmpilato.", 
+   "This was triggered whenever an http:// commit added thousands of files", 
+   "to the repository.  The MERGE response would stream back thousands of", 
+   "<response> elements, and libsvn_ra_dav was using a *single* baton pool", 
+   "to write all the vr-url's into the working copy.  So in the", 
+   "post-commit processing, the svn client would grow to ~600M.  Yikes.", 
+   "* libsvn_ra_dav/merge.c (merge_ctx_t): add scratchpool field.", 
+   "(svn_ra_dav__merge_activity): initialize scratchpool as subpool of mc->pool.", 
+   "(bump_resource, handle_resource): take a pool arg, use it.", 
+   "(end_element): pass mc->scratchpool to each call to handle_resource,", 
+   "and clear it when done."
+  ], 
+  "revision_id": "846496"
+ }
+]

@@ -1,0 +1,122 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-01T17:53:10.116603Z", 
+  "msg": [
+   "* subversion/include/svn_path.h", 
+   "(svn_path_basename, svn_path_dirname, svn_path_split):", 
+   "Following up on r36219, deprecate these functions properly."
+  ], 
+  "revision_id": "876295"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-01T17:26:45.402887Z", 
+  "msg": [
+   "The copyfrom_repos_path is a relative path -- relative to the root of the", 
+   "repository specified by copyfrom_repos_id. Make it relative when we write", 
+   "out a WORKING_NODE.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(insert_working_node): test the copyfrom_repos_path rather than the", 
+   "value of copyfrom_repos_id.", 
+   "(write_entry): only fill in values for copyfrom_* if we *have* some", 
+   "copyfrom data. also, make copyfrom_repos_path relative to the", 
+   "repository root. use \"\" in case they copy the root :-P"
+  ], 
+  "revision_id": "876294"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-01T17:05:15.435207Z", 
+  "msg": [
+   "For issue #1711 and #2556: In libsvn_wc, update all usages of svn_path_split,", 
+   "svn_path_dirname and svn_path_basename to either svn_dirent_* (local paths)", 
+   "or svn_uri_* (urls or repository paths).", 
+   "This prepares the WC library to behave correctly on working copies in Windows", 
+   "drive and UNC network share roots.", 
+   "* subversion/libsvn_subr/props.c", 
+   "(open_reject_tmp_stream, install_props_file,", 
+   "svn_wc__loggy_revert_props_create, maybe_generate_propconflict,", 
+   "svn_wc__merge_props, wcprop_get, svn_wc__wcprop_set, svn_wc_prop_list,", 
+   "svn_wc_prop_set3, svn_wc_get_prop_diffs):", 
+   "* subversion/libsvn_subr/crop.c", 
+   "(svn_wc_crop_tree)", 
+   "* subversion/libsvn_subr/util.c", 
+   "(svn_wc__ensure_directory, svn_wc__path_switched):", 
+   "* subversion/libsvn_subr/adm_ops.c", 
+   "(svn_wc__do_update_cleanup, svn_wc_maybe_set_repos_root, svn_wc_delete3,", 
+   "svn_wc_add3, revert_entry, revert_internal,", 
+   "svn_wc_remove_from_revision_control, resolve_found_entry_callback):", 
+   "* subversion/libsvn_subr/status.c", 
+   "(assemble_status, get_dir_status, tweak_statushash, make_dir_baton", 
+   "make_file_baton, delete_entry, svn_wc_status2):", 
+   "* subversion/libsvn_subr/adm_files.c", 
+   "(svn_wc__sync_text_base, svn_wc__text_base_path, svn_wc__text_revert_path", 
+   "svn_wc__prop_path, svn_wc__open_writable_base, svn_wc__write_old_wcprops):", 
+   "* subversion/libsvn_subr/lock.c", 
+   "(probe, svn_wc_adm_probe_retrieve, svn_wc_adm_open_anchor):", 
+   "* subversion/libsvn_subr/update_editor.c", 
+   "(in_deleted_tree, in_skipped_tree, make_dir_baton, make_file_baton", 
+   "already_in_a_tree_conflict, set_copied_callback,", 
+   "schedule_existing_item_for_re_add, do_entry_deletion, delete_entry,", 
+   "add_directory, absent_file_or_dir, locate_copyfrom, choose_base_paths", 
+   "merge_file, check_wc_root, svn_wc_get_actual_target,", 
+   "svn_wc_add_repos_file3)", 
+   "* subversion/libsvn_subr/questions.c", 
+   "(svn_wc__text_modified_internal_p, svn_wc_conflicted_p2):", 
+   "* subversion/libsvn_subr/translate.c", 
+   "(svn_wc_translated_file2):", 
+   "* subversion/libsvn_subr/merge.c", 
+   "(create_name_preserving_tmp_file, preserve_pre_merge_files,", 
+   "merge_binary_file, svn_wc__merge_internal):", 
+   "* subversion/libsvn_subr/tree_conflicts.c", 
+   "(svn_wc__write_tree_conflicts, svn_wc__tree_conflict_exists,", 
+   "svn_wc__loggy_del_tree_conflict, svn_wc__get_tree_conflict):", 
+   "* subversion/libsvn_subr/diff.c", 
+   "(apply_textdelta):", 
+   "* subversion/libsvn_subr/entries.c", 
+   "(svn_wc_entry, visit_tc_too_error_handler, svn_wc_mark_missing_deleted):", 
+   "* subversion/libsvn_subr/copy.c", 
+   "(get_copyfrom_url_rev_via_parent):", 
+   "* subversion/libsvn_subr/adm_crawler.c", 
+   "(restore_file, svn_wc_crawl_revisions4):", 
+   "* subversion/libsvn_subr/log.c", 
+   "(log_do_committed, log_do_add_tree_conflict, handle_killme):", 
+   "Update svn_path_split, svn_path_dirname and svn_path_basename", 
+   "calls and include svn_dirent_uri.h where needed.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(in_deleted_tree, in_skipped_tree): Also check for other roots.", 
+   "* subversion/include/svn_path.h", 
+   "(svn_path_basename, svn_path_dirname, svn_path_split): Temporary deprecate", 
+   "these functions. (Cleaned up in r36221)."
+  ], 
+  "revision_id": "876293"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-01T15:21:52.455395Z", 
+  "msg": [
+   "* subversion/libsvn_wc/old-and-busted.c", 
+   "(take_from_entry): Stop using the deprecated svn_path_url_add_component", 
+   "function."
+  ], 
+  "revision_id": "876292"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-01T15:05:28.148597Z", 
+  "msg": [
+   "Rebuild read_entries() around the db_read_children() and db_read_info()", 
+   "interfaces. It still peeks into the database on its own, but only for some", 
+   "very limited information that isn't exposed by wc_db (yet?).", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(find_working_add_entry_url_stuffs): removed. wc_db does this now.", 
+   "(read_entries): rebuilt. primarily, the second loop over the WORKING", 
+   "nodes is no longer performed since we now have those children in our", 
+   "list (from read_children). there are still quite a few hacks and other", 
+   "oddities to overcome expectations/impedance between the entries and", 
+   "wc_db interfaces, but those will (hopefully) disappear over time."
+  ], 
+  "revision_id": "876291"
+ }
+]

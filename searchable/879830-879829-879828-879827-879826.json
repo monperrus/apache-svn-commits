@@ -1,0 +1,99 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-02T13:08:25.800606Z", 
+  "msg": [
+   "Following up on r39756, fix segfaults on non-64-bit machines caused by", 
+   "passing a 32 bit integer instead of a 64 bit integer. This fixes the", 
+   "upgrade tests for me that previously segfaulted.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(upgrade_to_wcng): Pass an integer as apr_int64_t to match the expected", 
+   "bindf values."
+  ], 
+  "revision_id": "879830"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2009-10-02T13:06:46.482869Z", 
+  "msg": [
+   "JavaHL: The cleanup test relied on an understanding of the internals", 
+   "of the working copy, which would now require manipulating the DB to", 
+   "simulate a lock.  So now the method just verifies that cleanup can", 
+   "be called successfully and we trust that the implementation works.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testBasicCleanup): Removed dependency on WC internals."
+  ], 
+  "revision_id": "879829"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-02T12:55:08.729032Z", 
+  "msg": [
+   "Following up on r39753, use the db api in the ambient depth filter to", 
+   "allow removing all access batons from the diff code.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_wc_wc): Remove now unused access batons.", 
+   "(diff_repos_wc): Calculate target with svn_wc_get_actual_target2 and", 
+   "remove access batons.", 
+   "* subversion/libsvn_wc/ambient_depth_filter_editor.c", 
+   "(edit_baton): Remove access baton.", 
+   "(make_dir_baton, make_file_baton,", 
+   "open_root, delete_entry, open_directory):", 
+   "Calculate absolute path and call the db apis for retrieving the", 
+   "available and hidden status.", 
+   "(svn_wc__ambient_depth_filter_editor): Don't store the access baton."
+  ], 
+  "revision_id": "879828"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-02T12:07:07.399191Z", 
+  "msg": [
+   "Remove all access batons from libsvn_wc's diff editor, by using", 
+   "the wc_db based entry apis.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_get_diff_editor6): Update prototype to take working copy context", 
+   "and relative paths. Move arguments to match common order.", 
+   "(svn_wc_diff6): Take working copy context and relative target path.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_wc_wc, diff_repos_wc): Update callers.", 
+   "* subversion/libsvn_wc/ambient_depth_filter_editor.c", 
+   "(includes): Include lock.h.", 
+   "(edit_baton): Add db and abspath variables.", 
+   "(svn_wc__ambient_depth_filter_editor): Take db argument and use this", 
+   "to find an access baton. Fill new values.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_get_diff_editor5): Update wrapper.", 
+   "(svn_wc_diff5): Update wrapper.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(edit_baton): Move comment and remove anchor access baton.", 
+   "(make_edit_baton): Take db and anchor path.", 
+   "(file_diff): Use path from baton.", 
+   "(directory_elements_diff, report_wc_file_as_added", 
+   "report_wc_directory_as_added): Use paths from batons. Remove access baton", 
+   "arguments where necessary.", 
+   "(delete_entry): Retrieve entry from db.", 
+   "(close_directory): Use paths in baton.", 
+   "(apply_textdelta,", 
+   "close_file): Retrieve entry when possible.", 
+   "(svn_wc_get_diff_editor6, svn_wc_diff6): Update prototypes for working copy", 
+   "context.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(make_editor): Update caller.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__ambient_depth_filter_editor): Update prototype."
+  ], 
+  "revision_id": "879827"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-02T11:10:38.674521Z", 
+  "msg": [
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__open_ra_session_internal): Assert a condition specified in", 
+   "the doc string."
+  ], 
+  "revision_id": "879826"
+ }
+]

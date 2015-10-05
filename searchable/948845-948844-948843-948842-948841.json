@@ -1,0 +1,60 @@
+[
+ {
+  "author": "arkurth", 
+  "date": "2010-05-27T14:15:03.403468Z", 
+  "msg": [
+   "Changes to Windows.pm:", 
+   "VCL-336", 
+   "Commented out section in post_load() which disables IPv6.  This isn't necessary.  Things should work if IPv6 is enabled as long as the computer is able to get an IPv4 address.  Also added an enable_ipv6 subroutine for future use.", 
+   "VCL-298", 
+   "Added calls to the new update_ssh_known_hosts() and update_public_ip_address() subroutines in post_load().", 
+   "Updated the timing in reboot() because the delays were too long for some VM host's which are able to reboot a VM very fast.  Removed 5 second delay after reboot is initiated, before checks for unresponsive ping begin.  Updated call to check for unresponsive ping to check every 3 seconds.  Updated delay after computer becomes unresponsive from 15 to 5 seconds, before it begins checking for a ping response.  Reduced delay between ping and SSH checks from 15 to 5 seconds.", 
+   "Added get_private_mac_address() and get_public_mac_address() subroutines.  These are used to match up a vmx file to a running VM when a base image is captured.", 
+   "VCL-196", 
+   "Updated all commands which specify System32 to use get_system32_path() so that Sysnative is used if the OS is 64-bit.", 
+   "Updated is_64_bit() subroutine to not rely on a PROCESSOR_IDENTIFIER Windows environment variable to be set.  This variable is not showing up on Windows 2008 when connecting via SSH through the Cygwin shell.  Changed the subroutine to check the registry directly.", 
+   "VCL-337", 
+   "Fixed a bug in delete_files_by_pattern where unintended files could be deleted if the base directory contained an environment variable which isn't set on the target computer.  The environment variable is first extracted from the path and then cygpath.exe is called with the variable as an argument.  This detects whether or not the variable is defined.", 
+   "VCL-195", 
+   "Changed 2008.pm to not use newsid.exe if Sysprep is disable.  Newsid.exe doesn't seem to work on Windows 2008.", 
+   "Other", 
+   "Added retry loop in shutdown() because shutdown.exe occasionally displays a \"Windows is processing another action\" and a shutdown or reboot fails.  The loop makes a few attempts before calling the provisioning module's power_off subroutine.", 
+   "Added check for 'does not exist' in the output of schtasks.exe in disable_scheduled_task() so that a warning isn't displayed if an attempt is made to disable a nonexistent task.", 
+   "Moved firewall_enable_sessmgr() from Windows.pm to Version_5.pm because it doesn't apply to Windows 6.x.", 
+   "Updated get_network_configuration() to not try to parse info for ignored adapter names.  Also added 6to4, isatap, and teredo to the list of ignored adapters."
+  ], 
+  "revision_id": "948845"
+ }, 
+ {
+  "author": "gsingers", 
+  "date": "2010-05-27T14:12:08.822584Z", 
+  "msg": [
+   "MAHOUT-400: move to utils"
+  ], 
+  "revision_id": "948844"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2010-05-27T14:10:47.607329Z", 
+  "msg": [
+   "Allow the database implementation to control the driver class name and database url."
+  ], 
+  "revision_id": "948843"
+ }, 
+ {
+  "author": "dwoods", 
+  "date": "2010-05-27T14:07:17.209116Z", 
+  "msg": [
+   "add missing license headers"
+  ], 
+  "revision_id": "948842"
+ }, 
+ {
+  "author": "jawarner", 
+  "date": "2010-05-27T14:00:07.110128Z", 
+  "msg": [
+   "Update report generation methods to handle the web profile part 2."
+  ], 
+  "revision_id": "948841"
+ }
+]

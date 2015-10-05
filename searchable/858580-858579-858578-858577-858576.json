@@ -1,0 +1,86 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2006-02-17T19:55:19.637069Z", 
+  "msg": [
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(struct svn_fs_t): Doc fix -- be more specific about what the pool does."
+  ], 
+  "revision_id": "858580"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-17T19:31:33.989023Z", 
+  "msg": [
+   "ra_serf: Gracefully handle the case where the server drops us in the middle of", 
+   "a response which is changing a file (\"lost response\" with lingering close bug).", 
+   "Since libsvn_delta doesn't have a way to 'restart' a file, we have to block", 
+   "the next iteration's responses until we catch up to where we were when we", 
+   "lost the response.", 
+   "(In theory, we might be able to do a byterange GET request, but mod_dav_svn may", 
+   "not support that in all cases; we'll take this route for now.)", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_fetch_t): Add in aborted_read, aborted_read_size, read_size fields.", 
+   "(handle_fetch): If we are aborting the request and we've already opened", 
+   "the file batons and we actually read data, then set the ->aborted_read flag;", 
+   "when we're processing the response, keep track of how much we read in", 
+   "case we have to prematurely abort later; handle the case where we had an", 
+   "aborted response and don't pass anything to the editors until we catch up", 
+   "to where we were before the server aborted on us."
+  ], 
+  "revision_id": "858579"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-02-17T19:26:27.589268Z", 
+  "msg": [
+   "Add svnauthz-validate, a tool for validating the correctness of an authz", 
+   "config file.", 
+   "Patch by: Lieven Govaerts <lgo@mobsol.be>", 
+   "(Tweaked by me.)", 
+   "* tools/client-side/svnauthz-validate.c: New file."
+  ], 
+  "revision_id": "858578"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-02-17T10:11:05.293149Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/update.c", 
+   "Whitespace-related formatting adjustments."
+  ], 
+  "revision_id": "858577"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-17T09:43:27.719717Z", 
+  "msg": [
+   "ra_serf: Optimize how we check for completed responses.", 
+   "Instead of searching every open request to see whether they are done when we're", 
+   "idle/network data exhausted, each request will add themselves to a list when", 
+   "they are done.  This removes our need to search every open request of which", 
+   "there are 2*<number of files in checkout> initially.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(ra_serf_list_t): Linked list of items.", 
+   "(propfind_context_t): Add in a pointer to a done_list, allocate a 'done item'", 
+   "as part of this structure and keep a pointer to our previous element in the", 
+   "open list.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(handle_propfind): If we're done and our caller has a done_list, add", 
+   "ourselves to it so they can pick us up.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_fetch_t): See propfind_context_t.", 
+   "(report_context_t): Create a 'done' list for fetches and propfinds; remove", 
+   "the pending_dir_close field.", 
+   "(push_state): Ensure our ->propfind value is set to NULL at allocation (it", 
+   "will only be set when we see the close tag).", 
+   "(close_dir): Abort if we try to close a dir with open references.", 
+   "(handle_fetch): Update our done_list when we're done...", 
+   "(fetch_file, end_report): Give GET and PROPFIND a hint where the done_list", 
+   "will be; store our previous item so we can change its next value later.", 
+   "(finish_report): Greatly simplify our cleanup logic now that each", 
+   "response will add itself to our done list when they are complete."
+  ], 
+  "revision_id": "858576"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "mhagger", 
+  "date": "2006-04-08T23:30:51.230960Z", 
+  "msg": [
+   "Rewrite XFail to wrap a TestCase instead of inheriting from _Predicate.", 
+   "Previously, XFail inherited from _Predicate, and due to the peculiar", 
+   "implementation of _Predicate, this only allowed XFail to wrap", 
+   "_Predicates or naked functions, but not arbitrary TestCases.", 
+   "This commit changes XFail to inherit directly from TestCase and to", 
+   "wrap an arbitrary instance of TestCase.  Most methods are delegated to", 
+   "the wrapped TestCase, and some are implemented in XFail to modify the", 
+   "behavior.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (XFail): Rewritten as", 
+   "described above."
+  ], 
+  "revision_id": "859350"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-08T23:26:19.569230Z", 
+  "msg": [
+   "Add client-side support for SSL in the Subversion protocol.", 
+   "Note: this implementation won't be useful until server-side", 
+   "support is added.", 
+   "Patch by: Sigfred H\u00e5versen <bsdlist@mumak.com>", 
+   "(Tweaked by me.)", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_SVN_SSL_INIT, SVN_ERR_RA_SVN_SSL_ERROR): New errors.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_CAP_STARTTLS): New macro.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_session_baton_t): Add \"hostname\" member.", 
+   "(do_auth): Handle \"STARTTLS\" mechanism.", 
+   "(open_session): Store uri->hostname in sess, and present", 
+   "SVN_RA_SVN_CAP_STARTTLS to the server as a capability.", 
+   "* subversion/libsvn_ra_svn/ssl.c: New file.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h:", 
+   "#include \"svn_auth.h\"", 
+   "(svn_ra_svn__conn_ssl_client): New function prototype."
+  ], 
+  "revision_id": "859349"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-08T23:23:15.281690Z", 
+  "msg": [
+   "Don't check type of func redundantly.", 
+   "If func is an instance of _Predicate, then it's func member has", 
+   "necessarily already been checked to be a pure function, so skip that", 
+   "test.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (_Predicate.__init__):", 
+   "Don't test the type of func if it was taken from another _Predicate", 
+   "instance."
+  ], 
+  "revision_id": "859348"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-08T23:12:40.848578Z", 
+  "msg": [
+   "Don't wrap something that is already a TestCase.", 
+   "This modification allows any user-created class that inherit from", 
+   "TestCase to be used as a test (though such tests may not yet be", 
+   "wrapped in XFail or Skip).", 
+   "* subversion/tests/cmdline/svntest/testcase.py (create_test_case):", 
+   "Check if func is already an instance of TestCase.  If so, don't wrap", 
+   "it."
+  ], 
+  "revision_id": "859347"
+ }, 
+ {
+  "author": "mhagger", 
+  "date": "2006-04-08T22:55:00.777456Z", 
+  "msg": [
+   "Pull up definitions of list_mode() and run_text() from _Predicate to TestCase.", 
+   "* subversion/tests/cmdline/svntest/testcase.py (TestCase._result_text,", 
+   "TestCase._list_mode_text): New members (pulled up from _Predicate).", 
+   "(TestCase.list_mode, TestCase.run_text): Pulled up definitions of", 
+   "these methods from _Predicate."
+  ], 
+  "revision_id": "859346"
+ }
+]

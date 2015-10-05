@@ -1,0 +1,77 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-01-12T18:19:37.000000Z", 
+  "msg": [
+   "Add stack items from Bill Tutt, so can have the satisfaction later of", 
+   "popping them off."
+  ], 
+  "revision_id": "838350"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-01-12T12:22:57.000000Z", 
+  "msg": [
+   "fill in the new pool argument of the dav_walk_resource."
+  ], 
+  "revision_id": "838349"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-01-12T00:23:30.000000Z", 
+  "msg": [
+   "Changes cascaded from fixing svn_pool_clear() to handle an orphaned", 
+   "error pool:", 
+   "With the advent of svn_error_init_pool(), it became possible to have", 
+   "an initial error pool created on a non-tippy-topmost pool, that is, on", 
+   "a pool whose parent is not null.  Therefore, we now store some extra", 
+   "information to indicate whether an error pool is a subpool of the pool", 
+   "to which we found it attached, as opposed to being a subpool of", 
+   "someone farther up the chain.", 
+   "(svn_error__set_error_pool, svn_error__get_error_pool): New funcs.", 
+   "(svn_pool__inherit_error_pool): Replaces svn_pool__attach_error_pool.", 
+   "Demand a parent who has an error pool.  All callers changed.", 
+   "(svn_error__make_error_pool): New func.", 
+   "(SVN_ERROR_POOL_ROOTED_HERE): New #define string constant.", 
+   "(svn_error_init_pool): Implement using above new helpers; note that", 
+   "the pool is rooted here.  Also, use APR_STATUS_IS_SUCCESS macro", 
+   "instead of direct comparison.", 
+   "(svn_pool_create): Either init an error pool or inherit one, but not both.", 
+   "(svn_pool_clear): Make sure there's an error pool to reattach, i.e.,", 
+   "handle the case in which the error pool got destroyed when its parent", 
+   "was cleared.  Also, don't assume pool is not tippy-topmost, rather,", 
+   "handle the null parent case."
+  ], 
+  "revision_id": "838348"
+ }, 
+ {
+  "author": "rassilon", 
+  "date": "2001-01-11T21:29:24.000000Z", 
+  "msg": [
+   "svn_wc_text_modified_p was assuming that just because we could", 
+   "construct a string variable that might point to the text-base version of", 
+   "the file, that the actual file exists.", 
+   "* questions.c:  (svn_wc_text_modified_p): Check for existance of text-base file.", 
+   "Submitted by: Bill Tutt", 
+   "Reviewed by: Karl Fogel"
+  ], 
+  "revision_id": "838347"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-01-11T21:21:08.000000Z", 
+  "msg": [
+   "Add casts away from const, to get rid of compiler warnings.", 
+   "We have const strings being passed into functions that take non-const", 
+   "strings, but -- if I understand correctly -- we don't want those", 
+   "functions promising the incoming data will never be changed.  After", 
+   "all, the functions are just storing the data directly (non-copying)", 
+   "into skels, and it would be too restrictive if all skels had to", 
+   "promise never to modify the data in their strings.", 
+   "If this is wrong, and skels can make such a promise, then we should do", 
+   "this change the other way, adding const to the string parameters of", 
+   "svn_fs__str_atom(), svn_fs__parse_skel(), and svn_fs__str_to_dbt()."
+  ], 
+  "revision_id": "838346"
+ }
+]

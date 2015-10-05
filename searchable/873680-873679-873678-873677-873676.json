@@ -1,0 +1,90 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-12T15:32:31.571156Z", 
+  "msg": [
+   "Move a parameter into a baton, for tidiness. A follow-up to r33602.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Add a field 'use_sleep'.", 
+   "(drive_merge_report_editor, do_file_merge, do_directory_merge): Use the", 
+   "'use_sleep' field in the baton instead of taking it as a separate", 
+   "parameter.", 
+   "(do_merge): Initialise the 'use_sleep' field in the baton."
+  ], 
+  "revision_id": "873680"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-12T15:17:31.830325Z", 
+  "msg": [
+   "Fix the test suite's parsing of \"svn status\" output. It went wrong when the", 
+   "working revision field was \"?\", e.g. on an item whose status is \"missing\".", 
+   "No tests seem to have been adversely affected by this.", 
+   "* subversion/tests/cmdline/svntest/tree.py", 
+   "(build_tree_from_status): Skip white space before the working revision", 
+   "field with the regex \" +\" rather than accidentally eating other", 
+   "characters with the regex \"   [^0-9-]*\"."
+  ], 
+  "revision_id": "873679"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-12T13:47:20.984006Z", 
+  "msg": [
+   "In the test suite, avoid explicit reference to the test base directory from", 
+   "within tests. This is a code improvement, not a functional change.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(make_diff_header): New function.", 
+   "(diff_base_to_repos, diff_schedule_delete, diff_mime_type_changes,", 
+   "diff_repos_wc_add_with_props, diff_repos_working_added_dir,", 
+   "diff_weird_author, diff_ignore_whitespace, diff_ignore_eolstyle,", 
+   "diff_in_renamed_folder, diff_backward_repos_wc_copy): Use", 
+   "make_diff_header() instead of writing out the header long-hand. Pass an", 
+   "existing path variable instead of writing out the path long-hand.", 
+   "(diff_external_diffcmd): Run the test within its WC directory so as to", 
+   "avoid references to the WC directory in the expected output.", 
+   "* subversion/tests/cmdline/import_tests.py", 
+   "(import_eol_style): Run the test within its WC directory so as to", 
+   "avoid references to the WC directory in the expected output.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(diff_symlink_to_dir): Run the test within its WC directory so as to", 
+   "avoid references to the WC directory in the expected output."
+  ], 
+  "revision_id": "873678"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-12T11:21:24.501988Z", 
+  "msg": [
+   "Tweak some documentation in the test suite.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_update): Document that OUTPUT_TREE and DISK_TREE are", 
+   "optional."
+  ], 
+  "revision_id": "873677"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-12T10:48:03.548534Z", 
+  "msg": [
+   "Stop sleeping after each individual merge when batching several merges in", 
+   "a single command (Cherry picking)", 
+   "Implement this by passing a svn_boolean_t* use_sleep to all function that", 
+   "require a sleep for timestamp integrity. The calling function will then call", 
+   "svn_sleep_for_timestamps() when use_sleep is set to TRUE.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(drive_merge_report_editor, do_file_merge): Add use_sleep parameter and set", 
+   "its value to TRUE instead of calling svn_sleep_for_timestamps().", 
+   "(do_directory_merge, do_merge, merge_cousins_and_supplement_mergeinfo):", 
+   "Add use_sleep parameter and pass it to functions now requiring this", 
+   "parameter.", 
+   "(svn_client_merge3, svn_client_merge_reintegrate, svn_client_merge_peg3):", 
+   "Pass use_sleep parameters to functions and call svn_sleep_for_timestamps() if", 
+   "this value is TRUE. Also check for use_sleep if the function returns", 
+   "an error.", 
+   "Found by: Sander Rijken <sander@open.collab.net>", 
+   "(and the 'very sleepy' profiler)"
+  ], 
+  "revision_id": "873676"
+ }
+]

@@ -1,0 +1,89 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-02-14T20:29:00.551761Z", 
+  "msg": [
+   "In FSFS, when recreating a fulltext, instead of combining all deltas, apply", 
+   "one delta against a fulltext or the empty stream and combine the rest.", 
+   "This avoids a lot of quadratic behaviour in the delta combiner, especially when", 
+   "xdelta was used to create the stored deltas.  Since vdelta is still used", 
+   "for deltas against the empty stream, the first delta will still trigger", 
+   "the bad behaviour of the combiner without this change.  ghudson suggested", 
+   "this way of avoiding the slowdown and reviewed.  Daniel Berlin", 
+   "<dberlin@dberling.org> confirmed my timings.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c: Include assert.h.", 
+   "(read_window): New.", 
+   "(get_combined_window): Don't combine with the last window in the rep list.", 
+   "Factor out the skipping and reading of a delta window to read_window.", 
+   "(get_contents): Apply the last delta in the rep list directly to the source", 
+   "plaintext or empty stream.  Allocate the buffers using apr_palloc instead of", 
+   "apr_pcalloc."
+  ], 
+  "revision_id": "853090"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2005-02-14T20:19:32.323909Z", 
+  "msg": [
+   "Added user setting: svn-status-svn-environment-var-list", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "svn-status-svn-executable: New variable that specifies the name of the svn", 
+   "executable", 
+   "svn-status-svn-environment-var-list: New variable to specify some environment", 
+   "variables that are specific to the svn process", 
+   "(svn-run-svn): Use the two variables above"
+  ], 
+  "revision_id": "853089"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2005-02-14T18:05:08.033514Z", 
+  "msg": [
+   "* HACKING: Clarify the 80-column line length restriction, to make it", 
+   "clear that lines of exactly 80 columns are not kosher."
+  ], 
+  "revision_id": "853088"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-02-14T17:10:09.645793Z", 
+  "msg": [
+   "Fix up some non-ideal style in the SWIG interface files.", 
+   "This was pointed out by Kouhei Sutou's SWIG-Ruby bindings patch, but is in", 
+   "fact a problem across all languages - just tickled a little more frequently by", 
+   "the SWIG Ruby language module. We already had a couple of kludges in place in", 
+   "core.i and svn_client.i for this problem, which I have now turned into the", 
+   "uniform style throughout all eight modules.", 
+   "Since I was modifying the #include stanzas anyway, I merged a tiny bit of the", 
+   "Ruby patch whilst I was working on them.", 
+   "* subversion/bindings/swig/NOTES: Document the issue.", 
+   "* subversion/bindings/swig/core.i:", 
+   "* subversion/bindings/swig/svn_client.i:", 
+   "* subversion/bindings/swig/svn_delta.i:", 
+   "* subversion/bindings/swig/svn_fs.i:", 
+   "* subversion/bindings/swig/svn_ra.i:", 
+   "* subversion/bindings/swig/svn_repos.i:", 
+   "* subversion/bindings/swig/svn_types.i:", 
+   "* subversion/bindings/swig/svn_wc.i:", 
+   "Apply the newly documented guidelines to all eight files."
+  ], 
+  "revision_id": "853087"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-02-14T17:01:04.820800Z", 
+  "msg": [
+   "Continue work on implementing the behaviors of the svn:needs-lock", 
+   "property: When locking and unlocking a file, flip the perms on the", 
+   "file if it has the svn:needs-lock property.", 
+   "(This is essentially r12974, but implemented in libsvn_wc instead of", 
+   "libsvn_client.)", 
+   "* subversion/libsvn_wc/adm_ops.c (svn_wc_add_lock): If svn:needs-lock", 
+   "is set on a path that was just locked, change the file to", 
+   "read-write.", 
+   "(svn_wc_remove_lock): If svn:needs-lock is set on a path that was", 
+   "just unlocked, change the file to read-only."
+  ], 
+  "revision_id": "853086"
+ }
+]

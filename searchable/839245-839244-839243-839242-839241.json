@@ -1,0 +1,99 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-04-24T23:18:09.000000Z", 
+  "msg": [
+   "Check in a bunch of work from the plane: basically a first pass at \"update\"", 
+   "functionality via DAV.", 
+   "WARNING: it compiles, but is untested, and other stuff may have been broken.", 
+   "* fetch.c (vsn_url_helper, dir_item_t, report_baton_t, report_head,", 
+   "report_tail, report_elements, validate_element, start_element,", 
+   "end_element, get_attr, push_dir): buncha new stuff for updates", 
+   "(store_vsn_url, simple_store_vsn_url): refactor", 
+   "(fetch_file, simple_fetch_file): refactor", 
+   "(reporter_set_path, reporter_finish_report, svn_ra_dav__do_update): new", 
+   "implementation.", 
+   "* libsvn_ra_dav/merge.c (copy_href): moved to util.c::svn_ra_dav__copy_href", 
+   "(end_element): change to new svn_ra_dav__copy_href name", 
+   "(svn_ra_dav__merge_activity): use new MAKE_BUFFER macro", 
+   "* ra_dav.h (ELEM_*): add new element identifiers", 
+   "(MAKE_BUFFER): new macro for creating svn_string_t to be used as a buffer", 
+   "(svn_ra_dav__copy_ref): new declaration", 
+   "* dav_svn.h (dav_svn__update_report, dav_svn_find_ns): new declarations", 
+   "(dav_svn_insert_all_liveprops): ap_text_header -> apr_text_header", 
+   "* mod_dav_svn/merge.c (make_child_baton): make the baton in the correct", 
+   "subpool.", 
+   "(dav_svn__merge_response): construct a single \"rootpath\" string.", 
+   "* mod_dav_svn/util.c (dav_svn_find_ns): new function", 
+   "* mod_dav_svn/version.c (avail_reports[]): new array", 
+   "(dav_svn_avail_reports, dav_svn_get_report): implement", 
+   "* svn_repos.h (struct svn_repos_report_baton_t): moved to", 
+   "libsvn_repos/reporter.c; no need for this to be public.", 
+   "(svn_repos_begin_report): new function to create a reporter baton.", 
+   "* ra_plugin.c (do_update): replace a bunch of code with the new", 
+   "svn_repos_begin_report() function.", 
+   "* reporter.c (struct svn_repos_report_baton_t): new structure, copied from", 
+   "svn_repos.h (no change).", 
+   "(svn_repos_set_path): simplify the sanity check. eliminate a cast.", 
+   "(svn_repos_finish_report): call close_edit.", 
+   "(svn_repos_begin_report): new function", 
+   "* libsvn_client/update.c (svn_client_update): don't call close_edit -- that", 
+   "is the responsibility of the update process(!)", 
+   "* libsvn_ra_dav/Makefile.am: add util.c and Expat includes", 
+   "* mod_dav_svn/Makefile.am: add update.c"
+  ], 
+  "revision_id": "839245"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-24T19:19:17.000000Z", 
+  "msg": [
+   "* libsvn_wc/entries.c", 
+   "(svn_wc_entry): Bug fix.  Once we split off the basename of a path,", 
+   "the remain directory can't be the empty string, at least in the eyes", 
+   "of APRs stat routines."
+  ], 
+  "revision_id": "839244"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-24T19:06:27.000000Z", 
+  "msg": [
+   "* libsvn_repos/delta.c", 
+   "(svn_repos_update): Doh!  Bug fix."
+  ], 
+  "revision_id": "839243"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-24T14:43:46.000000Z", 
+  "msg": [
+   "* tests/greek-repos", 
+   "New directory, with a pristine greek tree present.  This is NOT", 
+   "meant to be edited (can you mark something as read-only in CVS?), but", 
+   "will be used in tests."
+  ], 
+  "revision_id": "839242"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-23T14:43:32.000000Z", 
+  "msg": [
+   "* include/svn_repos.h", 
+   "* libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Updated docstring.  Change charstring args to", 
+   "svn_string_t.", 
+   "(svn_repos_update): New function.", 
+   "* libsvn_repos/reporter.c", 
+   "(svn_repos_finish_report): Changed charstring arguments to", 
+   "svn_repos_dir_delta to svn_string_t.", 
+   "* tests/libsvn_repos/repos-test.c", 
+   "(dir_deltas): Changed charstring arguments to svn_repos_dir_delta to", 
+   "svn_string_t.", 
+   "* mod_dav_svn/merge.c", 
+   "(dav_svn__merge_response): Changed charstring arguments to", 
+   "svn_repos_dir_delta to svn_string_t."
+  ], 
+  "revision_id": "839241"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-20T18:26:55.316977Z", 
+  "msg": [
+   "Fix Issue #1318 -- export fails over svn://.  Some silly pool usage,", 
+   "and some sillier-still sanity checking were to blame.  (with sussman).", 
+   "* subversion/libsvn_client/export.c", 
+   "(struct file_baton): Add 'pool' member.", 
+   "(add_file): Stuff the pool into the baton.", 
+   "(apply_textdelta): Use the file baton's pool to store the tmpfile", 
+   "and its path.", 
+   "(close_file): Do sanity check *before* doing insane things."
+  ], 
+  "revision_id": "846070"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-20T17:58:47.163962Z", 
+  "msg": [
+   "In response to Issue #1159 (update getting properties that haven't", 
+   "changed), make a couple of improvements:", 
+   "(1)  Don't bother making a transaction to mirror the working copy", 
+   "state if that state can be expressed by a pristine revision", 
+   "tree.", 
+   "(2)  Teach the dir_delta() logic that it doesn't always have to call", 
+   "open_root(), namely, when the compared trees are identical.", 
+   "The rest of this change involves teaching client code to allow editor", 
+   "drives that don't call open_root().  There is a compatibility step", 
+   "included as part of this change, so initially, clients won't actually", 
+   "see a difference in the behavior.  But aside from that, the code is", 
+   "complete (to the best of my, gcc's, and the test suite's knowledge).", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_report_baton_t): Add 'txn_base_rev' member.", 
+   "(begin_txn): New helper.", 
+   "(svn_repos_set_path, svn_repos_link_path, svn_repos_delete_path):", 
+   "Delay the creation of a transaction until we know it is necessary.", 
+   "(svn_repos_begin_report): Initialize txn_base_rev member.", 
+   "(svn_repos_finish_report): Use a different metric to determine a", 
+   "failed report.  Also, if no transaction was ever made, just diff", 
+   "the revision root on which that transaction would have been based.", 
+   "(svn_repos_abort_report): Just some little cleanups here.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Rewrite the main code to delay calling", 
+   "open_root() until we know it is necessary.  But then add a little", 
+   "compatibility section to toss then back in until ra-dav clients", 
+   "learn to not complain about an editor drive in which no", 
+   "open_root() occured.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(end_element): Move the closing of the editor to where", 
+   "</update-report> is handled.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct edit_baton): Add 'root_opened' member.", 
+   "(open_root): Note that this wasn't an empty edit drive.", 
+   "(close_edit): Only do the working copy entries update if this wasn't", 
+   "an empty edit drive.", 
+   "(make_editor): Use apr_pcalloc() to init the baton structure.", 
+   "Suffer the negligible performance cost for developer sanity.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(struct edit_baton): Add 'root_opened' member.", 
+   "(open_root): Note that the root was opened.", 
+   "(close_edit): Make someone's dream a reality."
+  ], 
+  "revision_id": "846069"
+ }, 
+ {
+  "author": "ballbach", 
+  "date": "2003-05-20T17:21:20.351468Z", 
+  "msg": [
+   "* README: Add some more installation notes.", 
+   "Patch by: Mark Proctor <mproctor@cisco.com>"
+  ], 
+  "revision_id": "846068"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-05-20T09:43:38.738406Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "846067"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-05-20T08:37:32.051178Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "846066"
+ }
+]

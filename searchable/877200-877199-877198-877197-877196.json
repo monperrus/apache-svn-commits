@@ -1,0 +1,73 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-09T00:44:12.551401Z", 
+  "msg": [
+   "Continued cleaning/reorg of the access baton code. The current goal is", 
+   "to strongly isolate the access->shared structure. It will eventually", 
+   "disappear in favor of simply using the wc_db.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(pool_cleanup): adjust call to do_close()", 
+   "(get_from_shared): new helper to grab an access baton from the shared", 
+   "set of batons.", 
+   "(svn_wc_adm_open3): use get_from_shared", 
+   "(svn_wc__adm_retrieve_internal): use get_from_shared. reorg control flow", 
+   "for clarity.", 
+   "(join_batons): doc an important note", 
+   "(do_close): remove RECURSE parameter. all callers passed TRUE, once we", 
+   "started using close_single instead of truly recursing. screw the whole", 
+   "sorting stuff. all that is important is closing *only* descendents. if", 
+   "we fail, then we  fail. we don't have to close the \"deepest ones first\".", 
+   "(svn_wc_adm_close2): adjust call to do_close", 
+   "(svn_wc__adm_missing): use new get_from_shared helper."
+  ], 
+  "revision_id": "877200"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T23:45:48.205317Z", 
+  "msg": [
+   "Shift some functionality around for open/close of a single access baton.", 
+   "The recursion aspects are kept separately.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(check_format_upgrade): accept a wc_format rather than fetching it.", 
+   "(open_single): factored out of do_open(). tweaked to use two-pools.", 
+   "(close_single): factored out of do_close().", 
+   "(do_open): shift functionality to open_single", 
+   "(do_close): shift functionality to close_single. remove wickedly", 
+   "obsolete comment in the docstring."
+  ], 
+  "revision_id": "877199"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-08T22:47:52.899932Z", 
+  "msg": [
+   "* STATUS: Vote on r37117, \"Clear that pool!\""
+  ], 
+  "revision_id": "877198"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-08T22:14:04.585910Z", 
+  "msg": [
+   "* STATUS: Nominate r37121 for 1.6.2"
+  ], 
+  "revision_id": "877197"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T22:00:30.747574Z", 
+  "msg": [
+   "Some tweaks to svn_wc_adm_open_anchor to make it a bit clearer. Not a lot", 
+   "of hope here, but whatevs.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(child_is_disjoint): concept and a bit of the pattern pulled out of", 
+   "svn_wc_adm_open_anchor. a bit longer, but hopefully clearer. this will", 
+   "probably change faster (and more easily) as we move to wc_db", 
+   "(svn_wc_adm_open_anchor): rejigger a bit of logic for clarity, and move", 
+   "some code to child_is_disjoint."
+  ], 
+  "revision_id": "877196"
+ }
+]

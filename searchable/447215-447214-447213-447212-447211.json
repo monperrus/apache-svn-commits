@@ -1,0 +1,80 @@
+[
+ {
+  "author": "carlos", 
+  "date": "2006-09-18T03:34:18.645966Z", 
+  "msg": [
+   "Add test for project removal"
+  ], 
+  "revision_id": "447215"
+ }, 
+ {
+  "author": "carlos", 
+  "date": "2006-09-18T03:33:34.634829Z", 
+  "msg": [
+   "Return added/updated object for notifiers and build definitions"
+  ], 
+  "revision_id": "447214"
+ }, 
+ {
+  "author": "carlos", 
+  "date": "2006-09-18T03:33:00.941055Z", 
+  "msg": [
+   "Reformat"
+  ], 
+  "revision_id": "447213"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-09-18T03:25:34.046675Z", 
+  "msg": [
+   "DERBY-1706", 
+   "contributed by Mamta Satoor", 
+   "This fix addresses the null pointer reported in DERBY-1706.", 
+   "SESSION schema is a special schema which is used for global temporary tables.", 
+   "In order to handle global temporary table, Derby creates a in-memory SESSION", 
+   "schema descriptor which does not have any uuid associated with it. A physical", 
+   "SESSION schema(with it's uuid set properly) will be created *only* if there is", 
+   "a persistent object created in it by a user. Global temporary tables can only", 
+   "reside in SESSION schema and Derby documentation recommends that SESSION schema", 
+   "should not be used for other persistent objects. This is because the same", 
+   "object name could be referencing different objects within SESSION schema", 
+   "depending on in what order they got created.", 
+   "For instance", 
+   "create table session.t1(c11 int);", 
+   "-- the following select will get data from the persistent table t1 in SESSION schema", 
+   "select * from session.t1;", 
+   "declare global temporary table session.t1(c11 int, c12 int) on commit delete rows not logged;", 
+   "-- the following select this time will return data from the temporary table t1 rather than persistent table t1", 
+   "-- This is because, at any time, if there is a global temporary table by the table referenced by a statement,", 
+   "-- then Derby will always pick up the global temporary table. If no global temporary table by that name is", 
+   "-- found, then Derby will look for persistent table in SESSION schema. If none found, then error will be thrown", 
+   "select * from session.t1;", 
+   "-- following will drop the temporary table t1 and not the persistent table t1", 
+   "drop table session.t1;", 
+   "-- the following select will get data from the persistent table t1 in SESSION schema because temporary table", 
+   "-- doesn't exist anymore", 
+   "select * from session.t1;", 
+   "So, as can be seen from the example above, the statements referencing SESSION schema objects could have different meanings depending on what kind of objects exist in SESSION schema. Because of this, the compiled plans of statements referencing SESSION schema are not saved in the statement cache, rather they get compiled everytime they are executed. In order to enforce this, in the compilation phase, Derby checks if the statement at hand is referencing a SESSION schema object by calling referencesSessionSchema method. If this method returns true, the statement's compiled plan will not be saved in the statement cache.", 
+   "Now, taking the script provided by Yip which results in NPE", 
+   "set schema session;", 
+   "create table t1 (i int);", 
+   "Derby calls referencesSessionSchema while compiling \"create table t1 (i int); \" to see if it references SESSION schema object. Since, there is no schema associated with the table t1, Derby will check for the compilation schema which in this case is SESSION schema because we used \"set schema session; \". (This happens in QueryTreeNode.getSchemaDescriptor(String schemaName, boolean raiseError) line 1486). The method", 
+   "then tries to call an equal method on the UUID associated with the SESSION schema descriptor but since it is null(because no physical SESSION schema has been created yet), we end up with a null pointer exception. This will happen only if no physical SESSION schema has been created yet and user tries to create a first persistent object inside SESSION schema after doing a set schema session.", 
+   "Following will not give a NPE because user hand created SESSION schema before doing set schema SESSION and creating an object inside it.", 
+   "create schema session;", 
+   "set schema session;", 
+   "create table t1 (i int);", 
+   "The hand creation of SESSION schema causes Derby to have a schema descriptor for SESSION schema with it's uuid set correctly.", 
+   "The fix for the NPE is simple and that is to check if the UUID is null."
+  ], 
+  "revision_id": "447212"
+ }, 
+ {
+  "author": "ddewolf", 
+  "date": "2006-09-18T03:19:40.847731Z", 
+  "msg": [
+   "Updating pom with repo"
+  ], 
+  "revision_id": "447211"
+ }
+]

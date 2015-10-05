@@ -1,0 +1,94 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-12-04T02:52:48.988760Z", 
+  "msg": [
+   "Issue 869, Phase 1 - Skip (with a warning) .svn dirs during an import.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Add 'svn_wc_notify_skip' type.", 
+   "* subversion/clients/cmdline/feedback.c", 
+   "(notify): Add handling for new svn_wc_notify_skip type.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(import_dir): Skip admin dirs during import, and report such to the", 
+   "client program."
+  ], 
+  "revision_id": "844055"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2002-12-04T02:39:14.392812Z", 
+  "msg": [
+   "Fix bugs identified by the test suite.", 
+   "* libsvn_client/commit.c", 
+   "(get_ra_editor, svn_client_import): If it looks like we'll need the", 
+   "head revision, get it before getting the commit editor.  The", 
+   "previous order wasn't explicitly prohibited by the ra interface, but", 
+   "it doesn't work with ra_svn (once you get a commit editor the", 
+   "protocol has gone into editor-land and you can't make other requests", 
+   "until you're done editing), and this way is arguably more elegant.", 
+   "It's also the only case of this mis-ordering identified by the test", 
+   "suite.", 
+   "We accomplish this by adding an optional latest_rev argument to", 
+   "get_ra_editor; if it is set, get_ra_editor fills it in with the", 
+   "result of get-latest-rev.", 
+   "* libsvn_ra_svn/client.c (ra_svn_get_file, ra_svn_get_dir): Fix test", 
+   "for when to fill in fetched_rev.", 
+   "* libsvn_ra_svn/editor.c", 
+   "(ra_svn_change_dir, ra_svn_change_file, ra_svn_handle_change_dir,", 
+   "ra_svn_handle_change_file): Value should be optional.", 
+   "(ra_svn_apply_textdelta, ra_svn_handle_apply_textdelta): Give the", 
+   "receiver a chance to forego the delta data.", 
+   "* protocol: Update for editor.c changes.", 
+   "* svnserve/main.c", 
+   "(sigchld_handler): Empty signal handler to force accept() to", 
+   "interrupt when we get a SIGCHLD.", 
+   "(main): Don't wait for child processes upon return from fork; that", 
+   "makes us single-threaded just as if we didn't fork.  Instead,", 
+   "collect processes when accept() returns.  Set a signal handler for", 
+   "SIGCHLD to force accept() to interrupt when a child dies.", 
+   "* svnserve/serve.c (log_receiver): Fix tuple specification for", 
+   "changed-path copyfrom data.", 
+   "* tests/clients/cmdline/trans_tests.py", 
+   "(keywords_from_birth): Allow svn:// URLs."
+  ], 
+  "revision_id": "844054"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-12-04T02:36:58.628533Z", 
+  "msg": [
+   "Duh, actually add the Doxygen config file to the repository...", 
+   "* doc/doxygen.conf: Doxygen configuration file for the public APIs"
+  ], 
+  "revision_id": "844053"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-12-04T02:35:37.245472Z", 
+  "msg": [
+   "Set up things to generate Doxygen documentation.", 
+   "* doc/doxygen.conf: Doxygen configuration file for the public APIs", 
+   "* subversion/include/svn_time.h: Add markup for Doxygen.", 
+   "* doc: Ignore the doxygen subdir where the Doxygen files are generated."
+  ], 
+  "revision_id": "844052"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-12-04T01:53:40.262494Z", 
+  "msg": [
+   "Finish issue #943: \"svn prop* should be able to operate on URLs\".", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(pristine_or_working_propval, pristine_or_working_props,", 
+   "push_props_on_list, remote_propget, remote_proplist): New functions.", 
+   "(recursive_propget, recursive_proplist, add_to_proplist): Add new", 
+   "`pristine' flag, factorize some code, and document.", 
+   "(svn_client_propget, svn_client_proplist): Use new helpers to handle", 
+   "remote and local cases.  Also, remove a double initialization.", 
+   "(maybe_convert_to_url): Check for committed rev too.", 
+   "* subversion/include/svn_wc.h, subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_get_ancestry): Allow null return parameters."
+  ], 
+  "revision_id": "844051"
+ }
+]

@@ -1,0 +1,95 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-07-19T17:05:17.000000Z", 
+  "msg": [
+   "(svn_fs__skels_are_equal): Doc fix."
+  ], 
+  "revision_id": "839740"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-19T17:03:02.000000Z", 
+  "msg": [
+   "(svn_fs__skels_are_equal): New func, for Ben."
+  ], 
+  "revision_id": "839739"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-07-19T00:17:27.000000Z", 
+  "msg": [
+   "Trying to catch up the Win32 build again.  NOTE:  I was not entirely", 
+   "successful, since the getdate.c (generated from getdate.y) has no way", 
+   "of appearing under non-cygwin Win32 at this point in time.", 
+   "* subversion/clients/cmdline/subversion_client.dsp", 
+   "(cleanup-cmd.c, propdel-cmd.c): Added to Win32 Source Files", 
+   "* subversion/libsvn_client/libsvn_client.dsp", 
+   "(cleanup.c): Added to Win32 Source Files", 
+   "* subversion/libsvn_wc/libsvn_wc.dsp", 
+   "(local_changes.c): Removed from Win32 Source Files"
+  ], 
+  "revision_id": "839738"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-07-18T21:42:52.000000Z", 
+  "msg": [
+   "* commit_tests.py (hudson_part_1, hudson_part_1_variation_1,", 
+   "hudson_part_1_variation_2):   new tests for the first part of the", 
+   "\"Greg Hudson\" directory versioning problem.", 
+   "NOTE:  the last test is currently known to fail, due to a bug in", 
+   "the logic of the fs's merge() routine.  Karl/Mike will fix this bug", 
+   "tomorrow."
+  ], 
+  "revision_id": "839737"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-07-18T20:30:55.000000Z", 
+  "msg": [
+   "Solve the \"Greg Hudson Paradox\", part 1.  Tests forthcoming.", 
+   "* log.c (log_do_committed): new code for marking \"existence=deleted\"", 
+   "whenever a committed, deleted object has a different version number", 
+   "than its parent directory.  If the revisions are the same, however,", 
+   "then it's safe to remove the object's entry completely.", 
+   "* adm_ops.c (svn_wc__ensure_uniform_revision): if an updated item", 
+   "still has a `deleted' flag, remove the whole entry from revision", 
+   "control.", 
+   "* svn_wc.h (svn_wc_entry, svn_wc_entries_read):", 
+   "Change ALL callers of these two routines, especially those that loop", 
+   "over entries.  Make sure that they are properly ignoring `deleted'", 
+   "entries:", 
+   "/* If the entry's existence is `deleted', skip it. */", 
+   "if (entry->existence == svn_wc_existence_deleted)", 
+   "continue;  /* or maybe return an error instead */", 
+   "List of changed callers (most callers changed, but not all):", 
+   "* adm_ops.c (svn_wc__ensure_uniform_revision, mark_tree,", 
+   "svn_wc_delete, svn_wc_add_directory, svn_wc_add_file)", 
+   "* props.c (svn_wc__get_existing_prop_reject_file)", 
+   "* status.c (svn_wc_statuses, svn_wc_status)", 
+   "* adm_crawler.c (verify_tree_deletion, crawl_dir, svn_wc_crawl_local_mods)", 
+   "* commit.c (send_to_repos)", 
+   "* status.c (svn_client_status)", 
+   "* update.c (svn_client_update)", 
+   "* entries.c (svn_wc__atts_to_entry):  fix copy-and-paste-o from Mike. :-)", 
+   "* status.c (assemble_status):  status `D' for existence==deleted, not", 
+   "just schedule==delete.", 
+   "(svn_wc_statuses, svn_wc_status): `deleted' entries are no longer", 
+   "printed by recursive status commands; they can only be seen if they", 
+   "are the direct target of `svn st'.  However, if entry is `deleted'", 
+   "and scheduled for `add' simultaneously, then it's ok to show.", 
+   "* svn_wc.h, status.c (svn_wc_statuses):  if any children of PATH are", 
+   "`deleted', do *not* return them in the hash.", 
+   "* get_editor.c (add_or_replace_file): add comments.  If the user", 
+   "updates to a tree where a `deleted' file exists again, the", 
+   "update-editor should simply re-create the entry.", 
+   "* adm_crawler.c (report_single_mod):  if a target is both `deleted'", 
+   "and schedule for addition, then the crawler must delete() and add()", 
+   "to ensure a correct transaction.", 
+   "(report_revisions):  if an entry is `deleted', report it as missing", 
+   "to the transaction."
+  ], 
+  "revision_id": "839736"
+ }
+]

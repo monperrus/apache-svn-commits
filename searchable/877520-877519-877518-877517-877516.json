@@ -1,0 +1,81 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-04-23T19:47:34.922718Z", 
+  "msg": [
+   "Remove another direct modification of the entry.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(complete_directory): Use svn_wc__set_depth() in place of directly", 
+   "modifying the entry.", 
+   "[ Accidental changes to subversion/tests/cmdline/depth_tests.py were reverted", 
+   "in r37447. ]"
+  ], 
+  "revision_id": "877520"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-23T19:28:15.464243Z", 
+  "msg": [
+   "Remove another call site of svn_wc__entries_write(), by replacing it with", 
+   "svn_wc__set_depth().", 
+   "This uncovers an bug in svn_wc__set_depth() wherein we set the exclude value", 
+   "on the stub of a parent, but we never reset that value on the parent if it", 
+   "changes for the child.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(complete_directory): Use svn_wc__set_depth() in place of directly modifying", 
+   "the entry.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__set_depth): Make sure that if the stub entry in the parent was", 
+   "previously excluded, we reset it."
+  ], 
+  "revision_id": "877519"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2009-04-23T17:52:48.546729Z", 
+  "msg": [
+   "French translation update for r37442.", 
+   "* subversion/po/fr.po: po-udapte, 15 fuzzy and 2 new."
+  ], 
+  "revision_id": "877518"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-23T17:30:09.248819Z", 
+  "msg": [
+   "Revert changes made to Makefile.in in r37369 and r37376, as they", 
+   "appear to break some very typical builds.", 
+   "For reasons I do not yet fully understand, the changes cause the", 
+   "installation of libtool wrapper scripts instead of real binaries into", 
+   "my prefix_dir.  This means that when then running the \"binaries\"", 
+   "post-install, I get errors like this:", 
+   "$ svn st", 
+   "mkdir: cannot create directory `/usr/local/subversion/bin/.libs': Perm\\", 
+   "ission denied", 
+   "/usr/bin/ld: cannot open output file /usr/local/subversion/bin/.libs/1\\", 
+   "9248-lt-svn: No such file or directory", 
+   "* Makefile.in", 
+   "(transform-libtool-scripts): Remove this rule.", 
+   "(local-all): Don't depend on 'transform-libtool-scripts' rule."
+  ], 
+  "revision_id": "877517"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-23T15:56:09.625435Z", 
+  "msg": [
+   "Revamp some CROP functionality to avoid modifying entries in-place in the", 
+   "hash, and to avoid access batons in some places.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__set_depth): new utility function to set the depth on a directory", 
+   "* subversion/libsvn_wc/crop.c:", 
+   "(crop_children): take a DB rather than an access baton. don't create a", 
+   "subpool (but keep the iterpool). use the new set_depth function.", 
+   "(svn_wc_crop_tree): fetch the parent_entry using get_entry() to avoid", 
+   "the need for an access baton, and to simplify the lookup. use the new", 
+   "set_depth function."
+  ], 
+  "revision_id": "877516"
+ }
+]

@@ -1,0 +1,67 @@
+[
+ {
+  "author": "samisa", 
+  "date": "2006-09-17T04:33:42.630650Z", 
+  "msg": [
+   "Put back -Werror into configure.ac files.", 
+   "Fixed errors caused by enabling -Werror"
+  ], 
+  "revision_id": "447015"
+ }, 
+ {
+  "author": "felicity", 
+  "date": "2006-09-17T04:32:19.113092Z", 
+  "msg": [
+   "do a bunch of work on the Received header parsing code, catch all of my unparseable ham headers, streamline the received header test, add in more headers to test, etc.  make more of an API for parse_received_header(), return undef for failed to parse, 0 for parsed and ignored, and a hash reference if parsed."
+  ], 
+  "revision_id": "447014"
+ }, 
+ {
+  "author": "vgritsenko", 
+  "date": "2006-09-17T04:23:54.145877Z", 
+  "msg": [
+   "fix throws clauses"
+  ], 
+  "revision_id": "447013"
+ }, 
+ {
+  "author": "vgritsenko", 
+  "date": "2006-09-17T04:22:34.427565Z", 
+  "msg": [
+   "use locatable exception in DomHelper"
+  ], 
+  "revision_id": "447012"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-09-17T03:57:05.311555Z", 
+  "msg": [
+   "DERBY-1707", 
+   "contributed by       Mamta A. Satoor", 
+   "Basically, FromBaseTable.verifyProperties method had following if condition", 
+   "if (constraintSpecified)", 
+   "{", 
+   "ConglomerateDescriptor cd =", 
+   "dDictionary.getConglomerateDescriptor(", 
+   "consDesc.getConglomerateId());", 
+   "String indexName = cd.getConglomerateName();", 
+   "tableProperties.remove(\"constraint\");", 
+   "tableProperties.put(\"index\", indexName);", 
+   "}", 
+   "The if condition above did not do null check for consDesc. In Sunitha's case,", 
+   "her sql statement looked as follows", 
+   "SELECT * FROM t1 --DERBY-PROPERTIES constraint=null;", 
+   "When null value is supplied for constraint property, consDesc will be null and the code inside the if condition above should not be executed. I changed the if condition above as follows", 
+   "if (constraintSpecified && consDesc != null)", 
+   "and now constraint=nulll does not result in null pointer exception. I added a", 
+   "test case for this in lang/optimizerOverrides.sql and noticed that", 
+   "constraint=null resulted in an index scan. There is already a test which", 
+   "checks for index=null and that property results in a table scan. This behavior", 
+   "seems to be in line with the documentation in Tuning Derby Guide for 10.2", 
+   "(section name Overriding the default optimizer behavior) which says that if", 
+   "null is specified for property index, a table scan will be performed on the", 
+   "table. It does not say anything about a table scan for constraint=null"
+  ], 
+  "revision_id": "447011"
+ }
+]

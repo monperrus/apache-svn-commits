@@ -1,0 +1,116 @@
+[
+ {
+  "author": "jaz", 
+  "date": "2010-12-15T17:43:40.056196Z", 
+  "msg": [
+   "moved schedule service to seed-initial file; to stop duplicates when re-loading seed data"
+  ], 
+  "revision_id": "1049650"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2010-12-15T17:43:00.784017Z", 
+  "msg": [
+   "merge from 0.6"
+  ], 
+  "revision_id": "1049649"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2010-12-15T17:42:38.573660Z", 
+  "msg": [
+   "backport CASSANDRA-1862 from 0.7"
+  ], 
+  "revision_id": "1049648"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2010-12-15T17:38:01.907370Z", 
+  "msg": [
+   "Clarify where ack needs to go to"
+  ], 
+  "revision_id": "1049647"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2010-12-15T17:24:16.353832Z", 
+  "msg": [
+   "Fix issue #3755 (\"svnadmin and svnrdump should error on non-UTF8 log", 
+   "messages, authors, etc.\").  This commit causes 'svnadmin setrevprop',", 
+   "'svnadmin setlog', and 'svnrdump load' to use codepaths which validate", 
+   "property changes before they are applied to the target repository.", 
+   "(Though, I suspect 'svnrdump load' already did this server-side...).", 
+   "It also teaches 'svnadmin load' to do so by default, but provides a new", 
+   "--bypass-prop-validation option so that these checks can be avoided at", 
+   "the administrator's discretion.", 
+   "NOTE: I took the quick-n-dirty way out on the JavaHL bindings, simply", 
+   "passing a hardcoded value to svn_repos_load_fs3() in the", 
+   "SVNRepos.load() function rather than exposing the new boolean", 
+   "through the API.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_load_fs3, svn_repos_get_fs_build_parser3): Add", 
+   "'validate_props' parameter.", 
+   "(svn_repos_load_fs2, svn_repos_get_fs_build_parser2): Update docstrings.", 
+   "* subversion/include/private/svn_repos_private.h", 
+   "(svn_repos__validate_prop): New function prototype.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos__validate_prop): Was static validate_prop().", 
+   "(svn_repos_fs_change_node_prop, svn_repos_fs_change_txn_props,", 
+   "svn_repos_fs_change_rev_prop4): Track renamed validate_prop() function.", 
+   "* subversion/libsvn_repos/load-fs-vtable.c", 
+   "(struct parse_baton): Add 'validate_props' member.", 
+   "(change_rev_prop, change_node_prop): New helper functions which", 
+   "account for the desire (or lack thereof) of propery validation.", 
+   "(set_revision_property, close_revision): Maybe use", 
+   "svn_repos_fs_change_txn_prop() instead of svn_fs_change_txn_prop(),", 
+   "depending on whether property validation is desired.  Also, use", 
+   "the change_rev_prop() helper.", 
+   "(set_node_property, delete_node_property, remove_node_props): Use", 
+   "change_node_prop() helper.", 
+   "(svn_repos_get_fs_build_parser3): Add 'validate_props' parameter,", 
+   "used to populate the similarly named baton member.", 
+   "(svn_repos_load_fs3): Add 'validate_props' parameter, passed to", 
+   "updated call to svn_repos_get_fs_build_parser3().", 
+   "* subversion/libsvn_repos/deprecated.c", 
+   "(svn_repos_load_fs2): Update call to svn_repos_load_fs3().", 
+   "(svn_repos_get_fs_build_parser2): Update call to", 
+   "svn_repos_get_fs_build_parser3().", 
+   "* subversion/svnrdump/load_editor.c", 
+   "(set_revision_property, set_node_property, delete_node_property,", 
+   "close_revision): Validate properties before passing them off to the", 
+   "RA layer.", 
+   "* subversion/svnadmin/main.c", 
+   "(svnadmin__bypass_prop_validation): New enum value.", 
+   "(options_table): Add record for new --bypass-prop-validation option.", 
+   "(cmd_table): Make 'load' accept --bypass-prop-validation.", 
+   "(struct svnadmin_opt_state): Add 'bypass_prop_validation' member.", 
+   "(set_revprop): Always use svn_repos_fs_change_rev_prop4() now.", 
+   "(subcommand_load): Update call to svn_repos_load_fs3().", 
+   "(main): Handle --bypass-prop-validation.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_load): Add 'bypass_prop_validation' param and handling.", 
+   "(load_repo): Update call to run_and_verify_load().", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(load_bad_props): New test.", 
+   "(test_list): Add reference to new test.", 
+   "* subversion/tests/cmdline/svnrdump_tests.py", 
+   "(run_dump_test): Add 'bypass_prop_validation' parameter, passed to", 
+   "updated call to run_and_verify_load().", 
+   "(copy_bad_line_endings_dump): Update call to run_dump_test(),", 
+   "with bypass_prop_validation=True.", 
+   "* subversion/tests/cmdline/svnlook_tests.py", 
+   "(info_bad_newlines): Update call to load_repo(), with", 
+   "bypass_prop_validation=True.", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(setup_and_sync): Add 'bypass_prop_validation' parameter, passed to", 
+   "updated call to run_and_verify_load().", 
+   "(run_test): Add 'bypass_prop_validation' parameter, passed to", 
+   "updated call to setup_and_sync().", 
+   "(copy_bad_line_endings): Update call to run_test(), with", 
+   "bypass_prop_validation=True.", 
+   "* subversion/bindings/javahl/native/SVNRepos.cpp", 
+   "(SVNRepos::load): Update call to svn_repos_load_fs3()."
+  ], 
+  "revision_id": "1049646"
+ }
+]

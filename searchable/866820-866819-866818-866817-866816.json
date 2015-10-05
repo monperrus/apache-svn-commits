@@ -1,0 +1,102 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2007-09-22T07:07:40.807859Z", 
+  "msg": [
+   "Follow up to r25383 with an overlooked caller upgrade:", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(restore_file): Call svn_wc_resolved_conflict3."
+  ], 
+  "revision_id": "866820"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-09-22T06:44:33.289800Z", 
+  "msg": [
+   "Implement 'svn propset --depth' and 'svn propget --depth'.", 
+   "This is part of issue #2847 ('depthy APIs') and issue #2844 ('take", 
+   "care of \"TODO(sd)\" comments').", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_propset3): Take depth instead of recurse.", 
+   "(svn_client_propset2): Adjust documentation accordingly.", 
+   "(svn_client_propget4, svn_client_propget3): Do the deprecation dance.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_prop_from_wc): Take depth instead of recurse.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client_propset3): Take depth instead of recurse.", 
+   "(svn_client_propset2): Adjust pass-through code accordingly.", 
+   "(svn_client_propget4, svn_client_propget3): Do the deprecation dance.", 
+   "(remote_propget, svn_client__get_prop_from_wc): Take depth instead", 
+   "of recurse, use it to control descent.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Same.  Also, test for the root cause", 
+   "of any error sustained while checking mergeinfo on path or its", 
+   "children, instead of looking just at the topmost error.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__parse_mergeinfo, svn_client__get_wc_or_repos_mergeinfo):", 
+   "Pass svn_depth_empty instead of recurse=FALSE to", 
+   "svn_client__get_prop_from_wc.", 
+   "* subversion/svn/propdel-cmd.c", 
+   "(svn_cl__propdel): Pass opt_state->depth to svn_client_propset3.", 
+   "* subversion/svn/propset-cmd.c", 
+   "(svn_cl__propset): Pass opt_state->depth to svn_client_propset3.", 
+   "* subversion/svn/propget-cmd.c", 
+   "(svn_cl__propget): Call svn_client_propget4.", 
+   "* subversion/svn/propedit-cmd.c", 
+   "(svn_cl__propedit): Pass svn_depth_empty instead of recurse=FALSE in", 
+   "call to svn_client_propset3 and new call to svn_client_propget4.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client__switch_internal): Pass depth instead of recurse=TRUE in", 
+   "call to svn_client__get_prop_from_wc."
+  ], 
+  "revision_id": "866819"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-09-22T06:36:08.296579Z", 
+  "msg": [
+   "Use svn_prop_name_is_valid to block invalid property names in some", 
+   "commands (propedit already does this).", 
+   "* subversion/svn/main.c", 
+   "(parse_revprop): Convert property name to UTF8 and block invalid", 
+   "property names.", 
+   "* subversion/svn/propdel-cmd.c", 
+   "(svn_cl__propdel): Note that there's little sense in blocking invalid", 
+   "property names here, and possible advantage in allowing them.", 
+   "* subversion/svn/propget-cmd.c", 
+   "(svn_cl__propget): Block invalid property names.", 
+   "* subversion/svn/propset-cmd.c", 
+   "(svn_cl__propset): Block invalid property names.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(invalid_propnames): Test prop* handling of invalid propnames."
+  ], 
+  "revision_id": "866818"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-09-22T04:47:53.941964Z", 
+  "msg": [
+   "Follow up to r21887 with an overlooked caller upgrade:", 
+   "* subversion/svn/propget-cmd.c", 
+   "(svn_cl__propget): Call svn_client_propget3."
+  ], 
+  "revision_id": "866817"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-09-22T03:21:15.954076Z", 
+  "msg": [
+   "Fix regression to (at least) svn_client_mergeinfo_get_merged()", 
+   "(injected in r26678), where the repository root isn't retrieved for WC", 
+   "paths which aren't the WORKING or BASE peg revision (e.g. HEAD).  This", 
+   "bug exhibited itself as a segfault in an API call from the JavaHL", 
+   "binding's BasicTests.acquireMergeInfoAndAssertEquals() test.", 
+   "* subversion/libsvn_client/util.c", 
+   "(svn_client__get_repos_root): Set *REPOS_ROOT to NULL when not", 
+   "attemnpting to pull it from the entry for PATH_OR_URL, so that the", 
+   "subsequent \"if (*repos_root == NULL)\" check isn't examining a", 
+   "potentially bogus value."
+  ], 
+  "revision_id": "866816"
+ }
+]

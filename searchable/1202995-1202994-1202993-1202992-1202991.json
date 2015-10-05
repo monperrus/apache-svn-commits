@@ -1,0 +1,109 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:33.665989Z", 
+  "msg": [
+   "Fix TestHQuorumPeer for non-default values of hbase.tmp.dir", 
+   "Summary: TestHQuorumPeer currently fails if hbase.tmp.dir is different from", 
+   "/tmp/hbase-<username>. However, for our internal parallel test runner we use a", 
+   "different temporary HBase directory. This fixes the unit test to use", 
+   "hbase.tmp.dir.", 
+   "Reviewed at https://reviews.facebook.net/D297", 
+   "Test Plan: Run TestHQuorumPeer with customized hbase.tmp.dir in", 
+   "hbase-default.xml.", 
+   "Reviewers: liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: liyintang"
+  ], 
+  "revision_id": "1202995"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:26.745627Z", 
+  "msg": [
+   "Use a random ZK client port in unit tests so we can run them in parallel", 
+   "Summary:", 
+   "The hard-coded ZK client port has long been a problem for running HBase test", 
+   "suite in parallel. The mini ZK cluster should run on a random free port, and", 
+   "that port should be passed to all parts of the unit tests that need to talk to", 
+   "the mini cluster. In fact, randomizing the port exposes a lot of places in the", 
+   "code where a new configuration is instantiated, and as a result the client tries", 
+   "to talk to the default ZK client port and times out.", 
+   "The fix for 89-fb is at https://reviews.facebook.net/D255 (this is very similar", 
+   "to that). The fix for open-source HBase trunk is at", 
+   "https://reviews.facebook.net/D279. I guess it should be OK to check this into", 
+   "the internal branch, since a patch for the trunk is available.", 
+   "Test Plan: Run unit tests. Deploy on a dev cluster.", 
+   "Reviewers: kannan, liyintang, kranganathan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@lists, davejwatson, liyintang", 
+   "Differential Revision: 356873", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1202994"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:46:57.083335Z", 
+  "msg": [
+   "list tables and CFs in a cell", 
+   "Summary:", 
+   "This is a quick and convenient way to get a list of all tables in a cell, along", 
+   "with their column families (need this for backups)", 
+   "First JRuby script I've written.  Open to other ideas if folks have any.", 
+   "Karthik, Kannan, Jerry, what list should I send diffs like this to?  There was", 
+   "talk about a Hbase-diffs list today but I don't see it in phabricator. (yet?)", 
+   "Test Plan:", 
+   "HASHOUT001-ASH3 output:", 
+   "[hadoop@hbasectrl005.ash3 ~/HASHOUT001-ASH3-HBASE/bin]$ ./hbase org.jruby.Main", 
+   "list_cfs.rb  2>/dev/null", 
+   "hashout_general_purpose\tappid,soft", 
+   "hashout_general_purpose_test\tappid", 
+   "test_table\tmy_cf", 
+   "ERIS002-SNC4 output: https://our.intern.facebook.com/intern/paste/?pid=40913", 
+   "Reviewers: kranganathan, kannan, paultuckfield, gqchen", 
+   "Reviewed By: kannan", 
+   "CC: hbase-ops@lists, madhuvaidya, kannan, hbase-eng@lists, kranganathan, ryan", 
+   "Differential Revision: 354434"
+  ], 
+  "revision_id": "1202993"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:46:47.792453Z", 
+  "msg": [
+   "Split dead server's log in parallel", 
+   "Summary:", 
+   "When one region server goes down, the master will shutdown the region server", 
+   "and split its log.", 
+   "However, splitting log is a blocking call and it would take some time.", 
+   "If more than one region server go down, the master will split its log one by", 
+   "one, which is not efficient.", 
+   "Since we have the distributed log split, we could split these logs from the", 
+   "dead servers in parallel.", 
+   "Thanks Prakash, Mikhail, Karthik and Kannan review the original diff in the", 
+   "open source during the weekend.", 
+   "https://reviews.facebook.net/D237", 
+   "Test Plan: Running all the unit tests and test it on the dev cluster.", 
+   "Reviewers: pkhemani, mbautin", 
+   "Reviewed By: pkhemani", 
+   "CC: hbase-eng@lists, pkhemani", 
+   "Differential Revision: 356996"
+  ], 
+  "revision_id": "1202992"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:46:33.618131Z", 
+  "msg": [
+   "reverting D355592", 
+   "Summary: it was not a bug.", 
+   "Test Plan: added another test to verify that the behavior is OK", 
+   "Reviewers: liyintang, kannan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@lists, liyintang", 
+   "Differential Revision: 356369"
+  ], 
+  "revision_id": "1202991"
+ }
+]

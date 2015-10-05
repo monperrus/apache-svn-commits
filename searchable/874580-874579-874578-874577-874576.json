@@ -1,0 +1,83 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2008-12-01T17:45:39.949659Z", 
+  "msg": [
+   "Fix a few bugs (one which can lead to a crash and one to an incorrect", 
+   "error) in the BDB implementation of node-origin-rev calculation.", 
+   "These bugs should have been caught by the C tests for", 
+   "svn_fs_node_origin_rev, but the code is practically dead code: it's", 
+   "essentially only used for legacy repositories, since any node created", 
+   "in a 1.5-era repository will immediately have its origin ID stored in", 
+   "the node-origins cache.  To reveal these bugs, go into", 
+   "svn_fs_bdb__get_node_origin, and comment out the \"if (db_err ==", 
+   "DB_NOTFOUND)\" line (ie, make it always be a cache miss).", 
+   "Then run fs-test 34: you'll get a segfault in the last svn_path_join", 
+   "of prev_location.  This is because \"path\" isn't canonicalized (\"A/D\")", 
+   "but \"copy_path\" is (\"/A/D\"), so the svn_path_is_child call returns", 
+   "NULL for remainder.  The first change to base_node_origin_rev fixes", 
+   "this.  (Though perhaps the correct answer is to change the test to", 
+   "always pass absolute paths?  It's unclear to me if", 
+   "base_node_origin_rev's use of relative paths is actually legal.)", 
+   "However, you then end up with a \"File not found: revision 7, path", 
+   "'/A/D2'\" error; this is because the loop calling prev_location", 
+   "accidentally fails to update the revision that it's looking at with", 
+   "the revision returned from prev_location, despite a comment to the", 
+   "contrary.  The second change to base_node_origin_rev fixes this.  Now", 
+   "the test happily passes without the cache, and you can remove the hack", 
+   "to svn_fs_bdb__get_node_origin.", 
+   "This change was tested by running \"make check FS_TYPE=bdb\" with the", 
+   "svn_fs_bdb__get_node_origin hack still in.  Modifying the C test suite", 
+   "so that it manages to test this code without a manual hack is left as", 
+   "an exercise to the reader.  (OK, that's a lie: after about 8 hours of", 
+   "running the test suite on my Mac (with no failures, and fs-test having", 
+   "passed) I got bored of waiting and killed it.  Then I asked on dev@,", 
+   "and people said that bdb tests were just known to be slow on OS X, so", 
+   "I decided to try it on my Linux box instead.  But after 45 minutes of", 
+   "trying to figure out how to build trunk Subversion on a Dapper box", 
+   "with SQLite 3.2 installed in /usr/lib and failing, I figured I might", 
+   "as well just commit this fix.  It's not like anybody noticed the", 
+   "segfault bug in the past year.  Maybe nobody uses fs_base anymore", 
+   "anyway.  I don't know why they would.)", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(base_node_origin_rev): Canonicalize the input path as an absolute", 
+   "path.  Actually update a revision variable in a loop instead of", 
+   "staying stuck on the revision it started with."
+  ], 
+  "revision_id": "874580"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-12-01T17:15:13.943207Z", 
+  "msg": [
+   "* TODO-1.6: Point out that complete build instructions are a release blocker."
+  ], 
+  "revision_id": "874579"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-12-01T17:04:37.472120Z", 
+  "msg": [
+   "* www/svn_1.6_releasenotes.html", 
+   "(filesystem-improvements): Remove [BRANCH] designation on fsfs packing."
+  ], 
+  "revision_id": "874578"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-12-01T17:00:22.819787Z", 
+  "msg": [
+   "Remove fsfs-pack branch, merged to trunk in r34502."
+  ], 
+  "revision_id": "874577"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-12-01T16:59:39.540590Z", 
+  "msg": [
+   "Merge the fsfs-pack branch to trunk.", 
+   "For a complete log, please see log messages on the branch."
+  ], 
+  "revision_id": "874576"
+ }
+]

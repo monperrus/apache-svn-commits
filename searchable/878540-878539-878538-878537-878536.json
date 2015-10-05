@@ -1,0 +1,84 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-07-22T08:15:11.591673Z", 
+  "msg": [
+   "On the 1.6.x branch:", 
+   "* STATUS: Vote and approve r38101 group."
+  ], 
+  "revision_id": "878540"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2009-07-22T07:36:22.775844Z", 
+  "msg": [
+   "* subversion/libsvn_subr/prompt.c", 
+   "(svn_cmdline_auth_ssl_client_cert_prompt): Fix deprecated warning of", 
+   "'svn_path_get_absolute' usage."
+  ], 
+  "revision_id": "878539"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-22T04:36:43.511521Z", 
+  "msg": [
+   "Create a temporary function for opening the wc_db.  It is only for consumption", 
+   "by entries.c, which currently hits the db directly in a few places.  The point", 
+   "of this is so that we can do nifty stuff like not having to keep the", 
+   "upgrade_sql structures in sync or redeclare possible upgrade functions.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(upgrade_sql): Remove.", 
+   "(db_path): Remove.", 
+   "(read_entries_new): Call the new function.", 
+   "(entries_write): Call the new function.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_temp_get_sdb): New.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_temp_get_sdb): New."
+  ], 
+  "revision_id": "878538"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-22T01:22:53.848317Z", 
+  "msg": [
+   "Add a way to migrate data during an sqlite format upgrade by providing a", 
+   "callback for callers to optionally provide.", 
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(upgrade_baton): Add the callback and its baton.", 
+   "(upgrade_format): Call the callback.  As an added bonus, use an iterpool in", 
+   "an effort to contain memory explosions.", 
+   "(check_format): Take the upgrade func/baton and put it in its own baton.", 
+   "(svn_sqlite__open): Take an upgrade func/baton and pass them along.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(create_fake_wc): Provide a fake upgrade function/baton.", 
+   "* subversion/include/private/svn_sqlite.h", 
+   "(svn_sqlite__upgrade_func_t): New.", 
+   "(svn_sqlite__open): Add the func/baton args, and update docs.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries_new, entries_write): Update the calls to svn_sqlite__open().", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(parse_local_abspath, svn_wc__db_init): Same.", 
+   "* subversion/libsvn_fs_fs/rep-cache.c", 
+   "(svn_fs_fs__open_rep_cache): Same."
+  ], 
+  "revision_id": "878537"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-22T00:48:18.684229Z", 
+  "msg": [
+   "Do sqlite db format upgrades inside a transaction.  Yay for atomicity!", 
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(upgrade_baton): New.", 
+   "(upgrade_format): Convert to implement svn_sqlite__transaction_callback_t by", 
+   "using a baton.", 
+   "(check_format): Create and initialize the baton before wrapping the upgrade", 
+   "function call in a transaction.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "Don't wrap the format 13 upgrade code in a transaction, since we now do that", 
+   "within the sqlite library."
+  ], 
+  "revision_id": "878536"
+ }
+]

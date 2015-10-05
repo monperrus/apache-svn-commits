@@ -1,0 +1,64 @@
+[
+ {
+  "author": "mcooper", 
+  "date": "2010-09-10T16:52:08.877887Z", 
+  "msg": [
+   "TRINIDAD-1889 Issue with Trinidad UIXCollection class 'createCollectionModel' method", 
+   "The Trinidad UIXCollection class contains an abstract method called 'createCollectionModel'. Subclasses are supposed to override this method and use it to create a CollectionModel instance for use by the component.", 
+   "Currently subclasses like UIXTable and UIXTree use 'createCollectionModel' to get the component's 'value' attribute and wrap the object in the 'value' attribute in a CollectionModel/TreeModel instance (if necessary) .", 
+   "UIXTable and UIXTree also perform other initializations in 'createCollectionModel. For example, SelectedRowKeys and DisclosedRowKeys sets are initialized in 'createCollectionModel'.", 
+   "The issue with the current design is that the component's reference to the CollectionModel is not fully initialized until 'createCollectionModel' returns a CollectionModel instance and the resulting model is stored in the component's state by UIXCollection.", 
+   "So for example, UIXTable and UIXTree should not be performing initialization of component's attribute that depend on a fully initialized CollectionModel reference inside the 'createCollectionModel'.", 
+   "The SelectedRowKeys and DisclosedRowKeys sets require a fully initialized CollectionModel before they should be referenced. Otherwise if these attributes are EL-bound and a backing bean logic references the CollectionModel in the getter method for SelectedRowKeys and DisclosedRowKeys, the backing bean may get an uninitialized CollectionModel reference.", 
+   "The proposal is to add the following method to UIXCollection:", 
+   "/**", 
+   "* Called after <code>createCollectionModel</code> when the model is fully initialized", 
+   "* Subclasses can use this method to perform initialization of component attributes", 
+   "* that should occur only after the CollectionModel is fully initialized in", 
+   "* <code>createCollectionModel</code>", 
+   "* This is a do nothing implementation to avoid breaking existing code", 
+   "* * @see #createCollectionModel", 
+   "* @param model", 
+   "*/", 
+   "protected void postCreateCollectionModel(CollectionModel model)", 
+   "{", 
+   "// do nothing", 
+   "}", 
+   "This method will be called by UIXCollection after 'createCollectionModel' returns and the component's reference to the CollectionModel is fully initialized. Any initialization of model-dependent attributes can then occur in 'postCreateCollectionModel'", 
+   "Thanks to Kamran Kashanian for the patch."
+  ], 
+  "revision_id": "995865"
+ }, 
+ {
+  "author": "sf", 
+  "date": "2010-09-10T16:51:32.658616Z", 
+  "msg": [
+   "mark apr_brigade_putstrs() with attribute sentinel"
+  ], 
+  "revision_id": "995864"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2010-09-10T16:49:41.187974Z", 
+  "msg": [
+   "LUCENE-2639: remove random juggling in tests, add -Dtests.seed"
+  ], 
+  "revision_id": "995863"
+ }, 
+ {
+  "author": "pete", 
+  "date": "2010-09-10T16:47:54.280434Z", 
+  "msg": [
+   "some clarification on truncation Last-Modified down to the nearest second for modification check"
+  ], 
+  "revision_id": "995862"
+ }, 
+ {
+  "author": "sf", 
+  "date": "2010-09-10T16:43:49.008793Z", 
+  "msg": [
+   "Correctly document the handling of trailing \\0 characters"
+  ], 
+  "revision_id": "995861"
+ }
+]

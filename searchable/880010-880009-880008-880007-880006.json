@@ -1,0 +1,83 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-10T23:32:57.612017Z", 
+  "msg": [
+   "Following up on r39934, fix our build for non Microsoft compilers.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_one_entry_cb): Remove assumption on execution ordering of arguments.", 
+   "Found by: gstein"
+  ], 
+  "revision_id": "880010"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-10T23:15:25.685141Z", 
+  "msg": [
+   "Remove the #ifdef SVN_DEBUG from the test functions in debug.c, to allow", 
+   "the linker to find these functions in release builds.", 
+   "These functions are only for development use, so no references to these", 
+   "functions should ever exist in our code.", 
+   "The reason for this commit is that our Windows build environment declares", 
+   "that the not static functions in this file should be exported as DLL", 
+   "functions. But for this to work they must be available in release versions.", 
+   "* subversion/libsvn_subr/debug.c", 
+   "(global): Remove #ifdef SVN_DEBUG around this file. Add some more details", 
+   "to the top level comment about why this code should not be used in", 
+   "release builds."
+  ], 
+  "revision_id": "880009"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-10T22:57:11.022836Z", 
+  "msg": [
+   "Instead of rewriting all records in base, working and actual on a call to", 
+   "svn_wc__entry_modify2(), just rewrite the entries for the specific node. And", 
+   "at the same time add support for keeping the in-db property data available", 
+   "over a rewriting cycle with this new function.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_base_get_info,", 
+   "svn_wc__db_read_info): Update offset of lock columns.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_BASE_NODE): Add properties column", 
+   "(STMT_SELECT_BASE_NODE_WITH_LOCK): Insert properties column before", 
+   "lock data.", 
+   "(STMT_UPDATE_BASE_PROPS): New query.", 
+   "(STMT_UPDATE_WORKING_PROPS): New query.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): Add options to never create locks and to always create an", 
+   "actual record.", 
+   "(entries_write_new_cb): Update caller.", 
+   "(write_one_entry_baton): New struct.", 
+   "(write_one_entry_cb): New function.", 
+   "(write_one_entry): New function.", 
+   "(svn_wc__entry_modify2): Use write_one_entry() instead of rewriting all", 
+   "entries."
+  ], 
+  "revision_id": "880008"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-10T22:12:39.400381Z", 
+  "msg": [
+   "Validate relative paths in old entry files as relpaths, instead of as uris.", 
+   "* subversion/libsvn_wc/old-and-busted.c", 
+   "(read_path): Check whether read paths are valid relative paths."
+  ], 
+  "revision_id": "880007"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T20:44:50.833480Z", 
+  "msg": [
+   "Simplify the code a bit by including run_existing_logs() directly into its", 
+   "single call point.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(run_existing_logs): folded into ...", 
+   "(cleanup_internal): ... here. also uses the iterpool as a scratch pool", 
+   "for some additional calls"
+  ], 
+  "revision_id": "880006"
+ }
+]

@@ -1,0 +1,102 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-16T21:20:29.262885Z", 
+  "msg": [
+   "ra_serf: Rationalize our pool usage when XML parsing (especially for update", 
+   "reports); support hierarchical namespaces.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(expand_ns): Remove pool parameter.", 
+   "* subversion/libsvn_ra_serf/xml.c", 
+   "(define_ns): Don't redeclare a namespace if we already have it.", 
+   "(expand_ns): Don't allocate the expansions in the pool.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_xml_parser): Read in larger chunks.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(start_log, end_log): Remove pool parameter to expand_ns.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(start_propfind): Remove pool parameter to expand_ns; copy in the attr_name", 
+   "if we need it.", 
+   "* subversion/libsvn_ra_serf/getloc.c", 
+   "(start_getloc, end_getloc): Remove pool parameter to expand_ns.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_dir_t): Add in base_name (no directory name) and a dedicated ns_list", 
+   "allocated out of this pool.", 
+   "(report_info_t): Add in base_name, rename file_name/file_name_buf to", 
+   "name/name_buf.", 
+   "(report_state_list_t): Add in a temporary pool and namespace list.", 
+   "(push_state): Create a pool for this state and clear it when we reclaim it;", 
+   "update the ns_list for our directory; attach the ns_list to our parent to", 
+   "begin with (we'll add new elements to our head).", 
+   "(open_dir): Adjust ->name/->base_name; Expand our names now.", 
+   "(close_dir): Adjust to the baton_pool for property walking and use base_name.", 
+   "(handle_fetch): Make our chunks a bit bigger; Expand our ->name now if we", 
+   "haven't done so already; adjust for ->file_name/_name and use ->base_name to", 
+   "fetch the REPORT-provided props.", 
+   "(fetch_file): Look up in ->base_name for the checked-in property.", 
+   "(start_report): Use our state pool for temporary allocations; set ->base_name", 
+   "fields to delay expanding the paths; copy any long-term props to the right", 
+   "pool;", 
+   "(end_report): Delay expand_ns until we need to do so; use ->base_name;", 
+   "Force expansion of dir names if we need the full path to get the delta_base;", 
+   "Be smarter about allocating space to store properties in our props hash.", 
+   "(cdata_report): Allocate the temporary space in our temporary state pool."
+  ], 
+  "revision_id": "858560"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2006-02-16T21:20:11.537513Z", 
+  "msg": [
+   "Remove an unnecessary \"#include\" that implied a circular logical dependency,", 
+   "and add the necessary one instead.", 
+   "* subversion/libsvn_subr/opt.c", 
+   "Include <apr_file_info.h> instead of \"svn_wc.h\"."
+  ], 
+  "revision_id": "858559"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-02-16T20:50:22.074141Z", 
+  "msg": [
+   "* tools/bin/find-xsl.py: Rewrite to allow glob patterns as candidate paths,", 
+   "and add support for Gentoo.", 
+   "Suggested by: Lares Moreau <lares.moreau@gmail.com>"
+  ], 
+  "revision_id": "858558"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2006-02-16T19:34:35.993967Z", 
+  "msg": [
+   "Remove apparent support for \"copy from\" info in the \"diff summarize\" feature,", 
+   "because the diff mechanism does not in fact supply this information, and", 
+   "document the latter.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_do_diff2): Mention that it does not supply \"copy from\" info.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_diff_summarize_t): Remove copyfrom_path and copyfrom_rev fields.", 
+   "* subversion/libsvn_client/repos_diff_summarize.c", 
+   "(ensure_summarize, delete_entry, add_directory): Don't set \"copyfrom\" fields.", 
+   "* subversion/svn/diff-cmd.c", 
+   "(summarize_func): Remove printing of a \"+\" flag for copied items."
+  ], 
+  "revision_id": "858557"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-02-16T17:36:10.728543Z", 
+  "msg": [
+   "Followup to r18462 - do not introduce circular dependencies between libraries.", 
+   "This does not work for DLL platforms - i.e. Cygwin (now) and Windows (if/when", 
+   "we get our buildsystem making shared libraries there).", 
+   "* subversion/libsvn_fs_base/tree.c, subversion/libsvn_fs_fs/tree.c", 
+   "(fs_same_p): New, inlined version of svn_fs__same_p().", 
+   "(copy_helper): Use fs_same_p() instead of svn_fs__same_p().", 
+   "Use direct svn_fs_t member access instead of svn_fs_path().", 
+   "* subversion/libsvn_fs/fs-loader.h, subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs__same_p): Remove."
+  ], 
+  "revision_id": "858556"
+ }
+]

@@ -1,0 +1,117 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-03-29T21:29:13.644254Z", 
+  "msg": [
+   "JavaHL: Add depth parameters to APIs which use them.  This removes all usage of", 
+   "the SVN_DEPTH_FROM_RECURSE() in the C++ layer, and pushs the parameter up to", 
+   "the Java layer.", 
+   "[ in subversion/bindings/java/javahl/ ]", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(status, checkout, update, doExport, doSwitch, merge, merge, diff, diff,", 
+   "diff, diffSummarize, diffSummarize):", 
+   "Change the 'recurse' parameter to 'depth', and update calls to the relevant", 
+   "C APIs.", 
+   "* org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_status,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_checkout,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_update,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_doExport,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_doSwitch):", 
+   "Update parameters from boolean recurse values to integer depth values.", 
+   "Update calls to SVNClient member functions.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZZZZ):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZIZZ):", 
+   "...to this.  Update parameters.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZZZZ):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZIZZ):", 
+   "...to this.  Update parameters.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZZZZ):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2IZZZ):", 
+   "...to this.  Update parameters.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZZZZ):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2IZZZ):", 
+   "...to this.  Update parameters.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diffSummarize__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2ZZLorg_tigris_subversion_javahl_DiffSummaryReceiver_2):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diffSummarize__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2IZLorg_tigris_subversion_javahl_DiffSummaryReceiver_2):", 
+   "...to this.  Update parameters.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diffSummarize__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2ZZLorg_tigris_subversion_javahl_DiffSummaryReceiver_2):", 
+   "Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diffSummarize__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2IZLorg_tigris_subversion_javahl_DiffSummaryReceiver_2):", 
+   "...to this.  Update parameters.", 
+   "* src/org/tigris/subversion/javahl/Depth.java", 
+   "(Depth): New final class for representing the different types of depth.", 
+   "(fromRecurse): A Java implementation of the SVN_DEPTH_FROM_RECURSE() macro.", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java,", 
+   "src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(status, doExport, merge, merge, diff, diff):  New APIs with the depth", 
+   "parameter.", 
+   "(checkout, update, update, doSwitch, merge, diffSummarize, diffSummarize):", 
+   "Update these existing new APIs to use the depth parameter.", 
+   "* src/org/tigris/subversion/javahl/tests/BasicTests.java:", 
+   "Update current users of the new APIs to pass a Depth parameter."
+  ], 
+  "revision_id": "864340"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-03-29T20:54:40.908065Z", 
+  "msg": [
+   "JavaHL: Improve exception thrown when an invalid (negative) revision", 
+   "number is provided to construct a Revision object.", 
+   "[ in subversion/bindings/java/javahl/ ]", 
+   "* src/org/tigris/subversion/javahl/Revision.java", 
+   "(Number.Number): Include invalid revision number in the exception text."
+  ], 
+  "revision_id": "864339"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2007-03-29T20:46:42.285549Z", 
+  "msg": [
+   "* subversion/bindings/java/org/: Delete. The former contents of this directory", 
+   "were 12 Java interfaces and 2 trivial Java classes which attempted to", 
+   "sketch out an implementation neutral interface to Subversion client", 
+   "operations from Java. However, they were incomplete and unused."
+  ], 
+  "revision_id": "864338"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-03-29T20:15:46.721981Z", 
+  "msg": [
+   "JavaHL: Add native library line numbers (from svn_error_t *'s) to", 
+   "exception output.", 
+   "[ in subversion/bindings/java/javahl/ ]", 
+   "* native/JNIUtil.h", 
+   "(throwNativeException): Improve doc string.  Rename \"fileName\"", 
+   "parameter to \"source\".", 
+   "* native/JNIUtil.cpp", 
+   "(throwNativeException): Rename \"fileName\" parameter to \"source\".", 
+   "(handleSVNError): Assemble and use a \"source\" value of \"file:line\".", 
+   "* src/org/tigris/subversion/javahl/NativeException.java", 
+   "(source): Clarify JavaDoc."
+  ], 
+  "revision_id": "864337"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2007-03-29T18:38:48.569248Z", 
+  "msg": [
+   "* notes/merge-tracking.txt (Phase 1): Add TODO's for three new API's.", 
+   "- retrieve list of unmerged revisions", 
+   "- libsvn_client support for supplying arbitrary revision ranges", 
+   "to the merge API.  Better support for cherry-picking.", 
+   "- notification message or callback routine to provide adequate messaging", 
+   "to user when the merge has to abort because of conflicts."
+  ], 
+  "revision_id": "864336"
+ }
+]

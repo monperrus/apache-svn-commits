@@ -1,0 +1,81 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-02-14T23:47:57.587443Z", 
+  "msg": [
+   "Follow up to r8642 with some more documentation:", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(METADATA_DB): Precisely describe the keys and values."
+  ], 
+  "revision_id": "848720"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-14T18:52:46.621141Z", 
+  "msg": [
+   "Fixup the documentation about restoring default configuration values.", 
+   "* doc/book/book/ch07.xml", 
+   "(Configuration Area Layout): Make the appropriate edits.", 
+   "* doc/book/TODO:", 
+   "Remove the relevant TODO."
+  ], 
+  "revision_id": "848719"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-02-14T15:47:23.159391Z", 
+  "msg": [
+   "Remove the code to use a hash in the Database class since it does not", 
+   "work because of python's shallow hash copies.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(Database.__init__): Remove hash code. Add a mode argument.", 
+   "(Database.__getitem__, Database.__setitem__): Remove hash code.", 
+   "(CollectData.__init__, CollectData.set_revision_info, pass4): Use", 
+   "the Database class for the metadata.", 
+   "(RepositoryMirror.__init__, SymbolicNameTracker.__init__, main):", 
+   "Update code to match new Database constructor."
+  ], 
+  "revision_id": "848718"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-02-14T12:56:23.898344Z", 
+  "msg": [
+   "Clean up the cvs2svn.py database handling by creating a new class that", 
+   "looks like a regular hash (or anydbm), but does the marshalling", 
+   "implicitly.", 
+   "* tools/cvs2svn/cvs2svn.py:", 
+   "(Database): New class.", 
+   "(RepositoryMirror.__init__, RepositoryMirror._stabilize_directory,", 
+   "RepositoryMirror.probe_path, RepositoryMirror.change_path,", 
+   "RepositoryMirror.delete_path, RepositoryMirror.is_prunable,", 
+   "SymbolicNameTracker.__init__, SymbolicNameTracker.probe_path,", 
+   "SymbolicNameTracker.bump_rev_count, SymbolicNameTracker.enroot_names,", 
+   "SymbolicNameTracker.close_names, SymbolicNameTracker.cleanup_entries,", 
+   "SymbolicNameTracker.copy_descend, SymbolicNameTracker.fill_name,", 
+   "SymbolicNameTracker.finish, main): Use the new Database class and remove", 
+   "the calls to mashal.loads and marshal.dumps."
+  ], 
+  "revision_id": "848717"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-02-14T11:38:53.602274Z", 
+  "msg": [
+   "Speed up cvs2svn by storing the metadata (author and log) in a DB in", 
+   "pass1, and using that DB in pass4 instead of parsing a whole RCS file", 
+   "for each commit.", 
+   "* tools/cvs2svn/cvs2svn.py:", 
+   "(METADATA_DB): New global variable.", 
+   "(CollectData.__init__): Create the metadata DB.", 
+   "(CollectData.set_revision_info): Store the author and log in the DB.", 
+   "(Commit.__init__): Add author and log as constructor arguments.", 
+   "(Commit.get_metadata): Remove.", 
+   "(Commit.commit): Remove call to self.get_metadata.", 
+   "(pass4): Open the metadata DB. Load the metadata for a commit when", 
+   "creating the new Commit item.", 
+   "(pass5): Remove the metadata DB."
+  ], 
+  "revision_id": "848716"
+ }
+]

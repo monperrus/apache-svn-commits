@@ -1,0 +1,117 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-15T19:16:30.068076Z", 
+  "msg": [
+   "Continue working on issue #654.", 
+   "### Until further notice, this branch should NOT be expected to build.", 
+   "### Should one be so lucky as to build it, one should note that the", 
+   "### use of this branch WILL CAUSE the emergence, at an unnatural rate,", 
+   "### of gray hairs and ulcers.", 
+   "* subversion/libsvn_fs/fs.h", 
+   "(svn_fs__txn_id_t, svn_fs__copy_id_t, svn_fs__node_id_t): New.", 
+   "(SVN_FS__TXN_ID_T_FMT, SVN_FS__NODE_ID_T_FMT, SVN_FS__COPY_ID_T_FMT): New.", 
+   "(svn_fs__revision_t): Add 'txn_id' member.", 
+   "(svn_fs__transaction_t): Add 'revision' member, and modify comments.", 
+   "(svn_fs__node_revision_t): Remove 'ancestor_path', 'ancestor_rev',", 
+   "and 'revision' members.  Add 'predecessor_id' member.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_id_distance): Removed.", 
+   "(svn_fs_check_related): Remove 'related', 'fs', and 'pool' parameters,", 
+   "and now return an int.", 
+   "* subversion/libsvn_fs/node-rev.h", 
+   "(svn_fs__stable_node): Removed.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_TRANSACTION_NOT_MUTABLE): New error code.", 
+   "* subversion/libsvn_fs/err.h", 
+   "(svn_fs__err_txn_not_mutable): New.", 
+   "* subversion/libsvn_fs/fs_skels.c", 
+   "(is_valid_transaction_skel, svn_fs__parse_transaction_skel,", 
+   "svn_fs__unparse_transaction_skel): Handle new committed transaction skel.", 
+   "(is_valid_revision_skel, svn_fs__parse_revision_skel,", 
+   "svn_fs__unparse_revision_skel): Update to handle new svn_fs__revision_t.", 
+   "(is_valid_node_revision_header_skel, svn_fs__parse_node_revision_skel,", 
+   "svn_fs__unparse_node_revision_skel): Update to hande new", 
+   "svn_fs__node_revision_t.", 
+   "* subversion/libsvn_fs/structure", 
+   "Small mods to definition of committed transaction and NODE-REVISION skels.", 
+   "* subversion/libsvn_fs/txn-table.c", 
+   "(is_committed, svn_fs__commit_txn): New.", 
+   "(svn_fs__create_txn): Update to new svn_fs__transaction_t type.", 
+   "(svn_fs__delete_txn, svn_fs__set_txn_root, svn_fs__set_txn_base,", 
+   "txn_body_txn_prop, txn_body_txn_proplist, svn_fs__set_txn_prop):", 
+   "Don't operate on committed transactions.", 
+   "(svn_fs__get_txn_list): Drop a todo to make this filter out", 
+   "committed transactions.", 
+   "* subversion/libsvn_fs/id.h", 
+   "(struct svn_fs_id_t): Remove 'digits' member, add 'node_id',", 
+   "'copy_id', and 'txn_id' members.  Do some docstring re-writing.", 
+   "(svn_fs__id_length, svn_fs__precede_id, svn_fs__id_predecessor): Removed.", 
+   "* subversion/libsvn_fs/id.c", 
+   "(svn_fs__id_length, svn_fs_id_distance, distance_from_prefix): Remove.", 
+   "(svn_fs__id_eq, svn_fs__id_copy): Rework to new svn_fs_id_t type and", 
+   "semantics.", 
+   "(svn_fs_check_related): Remove 'related', 'fs', and 'pool'", 
+   "parameters, and now return an int.  Rework to new svn_fs_id_t type", 
+   "and semantics.", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "(svn_fs__stable_node): Removed.", 
+   "* subversion/libsvn_fs/err.c", 
+   "(svn_fs__err_txn_not_mutable): New.", 
+   "* subversion/libsvn_fs/txn-table.h", 
+   "(svn_fs__get_txn_list): Add todo comment.", 
+   "(svn_fs__set_txn_prop, svn_fs__set_txn_base, svn_fs__set_txn_root,", 
+   "svn_fs__get_txn_ids, svn_fs__delete_txn): Edit promise.", 
+   "(svn_fs__commit_txn): New."
+  ], 
+  "revision_id": "842040"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-15T16:56:38.591170Z", 
+  "msg": [
+   "Tweak on issue #658 (\"reinstate 'deleted' flag\").", 
+   "It turns out that it's possible for an entry to simultaneously be", 
+   "flagged as 'deleted' and 'scheduled for addition':", 
+   "svn rm foo.c", 
+   "svn ci foo.c", 
+   "touch foo.c", 
+   "svn add foo.c", 
+   "In such a case, 90% of all callers of svn_wc_entries_read *do* in fact", 
+   "still need to see such an entry.  So we tweak the screening process:", 
+   "* svn_wc.h (svn_wc_entries_read, svn_wc_entry):  change promise of", 
+   "'show_deleted' argument:  only screen out entries that are deleted", 
+   "and also *not* scheduled for re-addition.", 
+   "* entries.c (handle_start_tag): the new screening test."
+  ], 
+  "revision_id": "842039"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-05-15T14:59:20.932614Z", 
+  "msg": [
+   "Fix a memory problem identified by valgrind.", 
+   "* subversion/clients/cmdline/trace-commit.c (close_edit): Access", 
+   "baton before destroying the pool."
+  ], 
+  "revision_id": "842038"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-15T13:19:12.720227Z", 
+  "msg": [
+   "Merge r1961 from /trunk into this branch.", 
+   "(Fix some memory problems identified by valgrind.)"
+  ], 
+  "revision_id": "842037"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-15T13:15:51.151397Z", 
+  "msg": [
+   "Merge r1959 and r1960 from /trunk into this branch.", 
+   "(Constify some of the svn_fs_id_t variables and remove some casts.)"
+  ], 
+  "revision_id": "842036"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-05-09T12:02:03.078382Z", 
+  "msg": [
+   "In FSFS, correctly handle an end-of-file before seeing the END or", 
+   "PROPS-END identifier.  If a malformed hash was being read, this could", 
+   "have returned no error when in fact there was one.", 
+   "Suggested by: Mike Henderson <michael.d.henderson@lmco.com>", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(hash_read): Only ignore eof if it is the first thing we read."
+  ], 
+  "revision_id": "849735"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-09T11:32:51.809675Z", 
+  "msg": [
+   "In FSFS, do not let the temporary file associated with each", 
+   "transaction be delete on close.  Instead, delete it by hand when the", 
+   "transaction is purged.  This was the intended behavior but through a", 
+   "confusion of mine in the APR docstrings it has always been broken.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__create_txn): apr_file_mktemp uses DELONCLOSE by default,", 
+   "unless you specifically pass flags to use for open.  Pass those", 
+   "flags.", 
+   "(svn_fs_fs__purge_txn): Delete the temporary file associated with", 
+   "the transaction at the same time as deleting the transaction."
+  ], 
+  "revision_id": "849734"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-05-09T06:01:01.977051Z", 
+  "msg": [
+   "Subversion Book fixes.", 
+   "* doc/book/TODO", 
+   "Un-TODO some stuff done to-night.", 
+   "* doc/book/book/ch05.xml", 
+   "(Creating the Layout, and Importing Initial Data): Use 'svn list' to", 
+   "show the results of the import.", 
+   "* doc/book/book/ch07.xml", 
+   "(Advanced Topics): Kill joke about refunds.", 
+   "(Config): Why do people keep calling these things regular", 
+   "expressions?  Patterns, people, patterns.", 
+   "(Special Properties): Fix capitalization of section title.  Move", 
+   "some svn:mime-type auto-setting info to ...", 
+   "(Automatic Property Setting): ... a New section.", 
+   "(Externals Definitions): Clarify how to set the property, and stop", 
+   "using the term \"auxiliary working copies.\"", 
+   "(General Vendor Branch Management Procedure): Clarify some vague", 
+   "stuff (you know, vague like this log message entry)."
+  ], 
+  "revision_id": "849733"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-09T00:42:36.284873Z", 
+  "msg": [
+   "Fix a bug in the handling of transaction-opening errors in the", 
+   "libsvn_repos commit editor.", 
+   "* libsvn_repos/commit.c (open_root): It is unwise to assume that", 
+   "svn_repos_fs_begin_txn_for_commit will leave its first argument", 
+   "alone in case of error.  We don't want to clean up a", 
+   "partially-constructed transaction if something goes wrong, so", 
+   "pass a pointer to a temporary variable and only assign it to", 
+   "eb->txn on success."
+  ], 
+  "revision_id": "849732"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-09T00:38:45.900556Z", 
+  "msg": [
+   "In FSFS, fix spurious commit failures with \"Transaction out of date\"", 
+   "errors.", 
+   "* libsvn_fs_fs/tree.c", 
+   "(svn_fs_fs__commit_txn): After merging changes, reset the base_rev", 
+   "of the transaction to youngish_rev so that svn_fs_fs__commit can", 
+   "properly check for an out-of-date transaction."
+  ], 
+  "revision_id": "849731"
+ }
+]

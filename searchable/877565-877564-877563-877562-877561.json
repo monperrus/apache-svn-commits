@@ -1,0 +1,110 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-04-27T23:16:50.081786Z", 
+  "msg": [
+   "Another merge performance improvement, follow-up to r36509: Reduce contacts", 
+   "with server when a subtree with mergeinfo has non-inheritable mergeinfo and", 
+   "the subtree's immediate children have no explicit mergeinfo.", 
+   "In r36509 we deferred contacting the server to find out about a subtree's", 
+   "implicit mergeinfo until absolutely necessary.  Turns out there is a case", 
+   "where we can avoid asking this question altogether; specifically, when a", 
+   "subtree has no pre-existing mergeinfo but gets mergeinfo set by the merge", 
+   "logic because it has an immediate parent with non-inheritable mergeinfo.", 
+   "If a subtree with non-inheritable mergeinfo has a large number of immediate", 
+   "children with no mergeinfo this change will avoid contacting the server for", 
+   "each of those children, a potentially costly set of operations avoided.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_full_mergeinfo): Docstring tweak noting long held behavior, no", 
+   "logic change.", 
+   "(inherit_implicit_mergeinfo_from_parent): New.", 
+   "(filter_merged_revisions): Add parent svn_client__merge_path_t * argument.", 
+   "Use parent's implicit mergeinfo to calculate child's implicit mergeinfo", 
+   "rather than contacting the server.", 
+   "(calculate_remaining_ranges): Pass parent to filter_merged_revisions()", 
+   "call.", 
+   "(calculate_remaining_ranges): Update call to filter_merged_revisions().", 
+   "(get_mergeinfo_paths): Clarify existing behavior in doc string.  Set new", 
+   "svn_client__merge_path_t member child_of_noninheritable to true if", 
+   "applicable; apr_pcalloc ensures all boolean members are initialized false", 
+   "otherwise.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(adjust_mergeinfo_source_paths): Removed and replaced with...", 
+   "(svn_client__adjust_mergeinfo_source_paths): ...This.  Allocate everything", 
+   "out of the passed in pool rather than from the hash argument's pool,", 
+   "addressing a long standing comment in the code about potential differences", 
+   "in pool lifetimes.", 
+   "(svn_client__get_wc_mergeinfo, should_elide_mergeinfo): Replace calls to", 
+   "adjust_mergeinfo_source_paths() with", 
+   "svn_client__adjust_mergeinfo_source_paths().", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__merge_path_t): Add new boolean member child_of_noninheritable.", 
+   "(svn_client__adjust_mergeinfo_source_paths): New declaration."
+  ], 
+  "revision_id": "877565"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-27T19:41:41.715084Z", 
+  "msg": [
+   "Maintain our Python 2.4 compatibility by skipping tests which require", 
+   "the python sqlite module to check our working copy format.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(has_sqlite): New.", 
+   "(test_list): Mark appropriate tests as SkipUnless."
+  ], 
+  "revision_id": "877564"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-27T18:42:50.085052Z", 
+  "msg": [
+   "Nuke wcprops_modify_allowed().  We don't need this function, since we now", 
+   "error when opening a too-old working copy.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(wcprops_modify_allowed): Remove.", 
+   "(delete_wcprops, svn_wc__wcprop_set): Remove call to the above function."
+  ], 
+  "revision_id": "877563"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-27T18:19:41.562410Z", 
+  "msg": [
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(test_list): Mark a test as passing.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc_cleanup3): Don't attempt to run the logs if we are doing an", 
+   "upgrade."
+  ], 
+  "revision_id": "877562"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-27T18:06:11.165041Z", 
+  "msg": [
+   "Enable wc-ng as the standard working copy metadata format on trunk.", 
+   "See http://svn.haxx.se/dev/archive-2009-04/0942.shtml for further", 
+   "information.", 
+   "* subversion/tests/cmdline/revert_tests.py,", 
+   "subversion/tests/cmdline/entries_tests.py,", 
+   "subversion/tests/cmdline/upgrade_tests.py,", 
+   "subversion/tests/cmdline/switch_tests.py,", 
+   "subversion/tests/cmdline/diff_tests.py,", 
+   "subversion/tests/cmdline/update_tests.py,", 
+   "subversion/tests/cmdline/info_tests.py,", 
+   "subversion/tests/cmdline/merge_tests.py:", 
+   "Remove the wc-1 specific test expectations.", 
+   "* subversion/tests/cmdline/svntest/sandbox.py,", 
+   "subversion/tests/cmdline/svntest/main.py:", 
+   "Remove tests for wc-ng.", 
+   "* subversion/tests/libsvn_wc/db-test.c,", 
+   "subversion/libsvn_wc/wc.h,", 
+   "subversion/libsvn_wc/lock.c,", 
+   "subversion/libsvn_wc/old-and-busted.c,", 
+   "subversion/libsvn_wc/entries.h:", 
+   "Remove BLAST_FORMAT_11 wrappers."
+  ], 
+  "revision_id": "877561"
+ }
+]

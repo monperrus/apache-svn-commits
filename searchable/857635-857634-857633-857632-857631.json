@@ -1,0 +1,123 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2005-11-30T00:13:38.288098Z", 
+  "msg": [
+   "Eliminate stdio calls by using the new EOL-translating stream.", 
+   "Suggested by: brane", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(parse_context_t): Replace the FILE pointer with a stream.  Also,", 
+   "add fields required for emulating ungetc().", 
+   "(parser_getc, parser_ungetc):  Emulate behaviour available for FILEs,", 
+   "but not for streams, since we switched to streams now.", 
+   "(parser_getc, parser_ungetc,", 
+   "skip_whitespace, skip_to_eoln): Return svn_error_t pointers and take", 
+   "a ctx argument to be able to call parser_getc().", 
+   "(parse_value, parse_option, parse_section_name,", 
+   "svn_config__parse_file): Replace FILE related with stream related code,", 
+   "cleaning up where possible."
+  ], 
+  "revision_id": "857635"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2005-11-30T00:08:56.852553Z", 
+  "msg": [
+   "FSFS: Remove APR file buffering from cases where it's not needed -", 
+   "where we open a file, perform a single read or write operation, and then", 
+   "immediately close the file again.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__open): Remove the APR_BUFFERED flag from what is,", 
+   "essentially, an existence check for the 'current' file (we don't", 
+   "read or write the file at all, just close it).", 
+   "(get_youngest): Remove the APR_BUFFERED flag: we read the complete", 
+   "contents of the 'current' file in a single read.", 
+   "(svn_fs_fs__create_txn, write_next_ids, svn_fs_fs__set_entry): Remove", 
+   "the APR_BUFFERED flag: in each case we open a file only to perform", 
+   "a single write, via svn_stream_printf()."
+  ], 
+  "revision_id": "857634"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-11-29T23:00:42.091244Z", 
+  "msg": [
+   "Introduce a stream type which does EOL translation", 
+   "and keyword expansion on the fly.", 
+   "* include/svn_subst.h", 
+   "* libsvn_subr/subst.c", 
+   "(svn_subst_stream_translated):  New.  Returns a read/write stream", 
+   "doing keyword and eol translation, proxying another stream.", 
+   "* libsvn_subr/subst.c", 
+   "(translate_chunk): New.  Abstracted from svn_subst_translate_stream3,", 
+   "adapted to use the 'const char' buffer argument required for write", 
+   "stream translation and store translation states in a baton.", 
+   "(translation_baton): New.  Structure for use with translate_chunk", 
+   "to store intermediate state.", 
+   "(create_translation_baton): New local function to create and initialize", 
+   "a translation_baton.", 
+   "(translated_stream_baton):  New.  Baton to hold values associated with", 
+   "a translating stream.", 
+   "(translated_stream_read, translated_stream_write,", 
+   "translated_stream_close):  New.  Stream callbacks for translated streams.", 
+   "(svn_subst_translate_stream3): Reimplement using translate_chunk()."
+  ], 
+  "revision_id": "857633"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-29T22:51:59.468021Z", 
+  "msg": [
+   "* /branches/wc-propcaching/TODO: Remove.  The rest of the items in this file", 
+   "fall outside the scope of this branch."
+  ], 
+  "revision_id": "857632"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-29T22:23:10.981109Z", 
+  "msg": [
+   "On wc-propcachin branch: Make the caching of presence/absence of", 
+   "certain properties generic in the sense that each entries file stores which", 
+   "properties are cached.  This makes it possible to change the set of cached", 
+   "properties without a WC format bump.", 
+   "Suggested by: julianfoad", 
+   "ghudson", 
+   "(Thanks, thanks, thanks, for opening my eyes!:-)", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_entry_t): Add cachable_props member and rename cached_props to", 
+   "present_props; users updated.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(build_present_props): Rename from svn_wc__build_cached_props and make", 
+   "static.  Don't allow props to be NULL.  Use SVN_WC__CACHABLE_PROPS.", 
+   "(svn_wc__install_props): Always set cachable_props member of entry.", 
+   "Don't overwrite present_props with value for baseprops if we write", 
+   "baseprops.", 
+   "(svn_wc_prop_get): Return NULL value if the path has no entry.", 
+   "Use the per-entry cachable_props to determine if property presence is", 
+   "cached.  Combine two if statements.", 
+   "(svn_wc__cached_props): Remove, move value to SVN_WC__CACHABLE_PROPS.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__cached_props, svn_wc__build_cached_props): Remove declarations.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__entries_init): Add cachable-props field to the new directory", 
+   "entry.", 
+   "(svn_wc__atts_to_entry): Copy new cachable_props attribute.  Fix comments.", 
+   "(take_from_entry): Inherit cachable_props field.", 
+   "(write_entry): Write cachable_props field.", 
+   "(fold_entry, svn_wc_entry_dup): Handle cachable_props field.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(SVN_WC__ENTRY_ATTR_CACHABLE_PROPS): New macro.", 
+   "(SVN_WC__ENTRY_ATTR_PRESENT_PROPS): Rename from", 
+   "SVN_WC__ENTRY_ATTR_CACHED_PROPS.", 
+   "(SVN_WC__ENTRY_MODIFY_CACHABLE_PROPS): New macro.", 
+   "(SVN_WC__ENTRY_MODIFY_PRESENT_PROPS): Rename from", 
+   "SVN_WC__ENTRY_MODIFY_CACHED_PROPS.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(SVN_WC__CACHABLE_PROPS): New macro.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__loggy_entry_modify): Modify cachable_props field."
+  ], 
+  "revision_id": "857631"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-06-05T20:05:30.985245Z", 
+  "msg": [
+   "Update the recommended apr and apr-util versions.  This comes as a response to", 
+   "CVE-2009-???? which is the result as a bug in apr, but manifests itself as a", 
+   "DoS attack against public Subversion mod_dav_svn servers.", 
+   "* tools/dist/construct-rolling-environment.sh:", 
+   "Update recommended versions of apr and apr-util."
+  ], 
+  "revision_id": "878015"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-06-05T14:54:49.549373Z", 
+  "msg": [
+   "STATUS: Nominating r37939."
+  ], 
+  "revision_id": "878014"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-06-05T14:40:07.996292Z", 
+  "msg": [
+   "Fix segfault from r37795 and add regression test.", 
+   "The segfault occurs when svnsync encounters deletion of an", 
+   "\"svn:*\" property.", 
+   "* subversion/svnsync/main.c", 
+   "(normalize_string): Check for NULL pointer.", 
+   "* subversion/tests/cmdline/svnsync_tests_data/delete-svn-props.dump:", 
+   "New dump file for svnsync cmdline tests that involves the removal of", 
+   "an \"svn:eol-style\" file-property (s.b.).", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(delete_svn_props): New test for this segfault, using the dump file.", 
+   "The dump file above was created with the lines:", 
+   "[[[", 
+   "set -x", 
+   "dir=repos", 
+   "url=\"file://`pwd`/$dir\"", 
+   "propname=svn:eol-style", 
+   "propval=LF", 
+   "rm -rf ./$dir", 
+   "rm -rf ./WC", 
+   "svnadmin create $dir", 
+   "svn co $url WC", 
+   "echo file-content > WC/file", 
+   "svn add WC/file", 
+   "svn ps $propname $propval WC/file", 
+   "svn ci -m \"adding file with prop '$propname'\" WC", 
+   "svn pd $propname WC/file", 
+   "svn ci -m \"removing prop '$propname' from file\" WC", 
+   "svnadmin dump $dir > delete-svn-props.dump", 
+   "]]]"
+  ], 
+  "revision_id": "878013"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-05T14:19:08.696976Z", 
+  "msg": [
+   "* CHANGES: Fix description of issue #3347 fix."
+  ], 
+  "revision_id": "878012"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-05T12:21:51.540043Z", 
+  "msg": [
+   "Add another condition to an sqlite where clause.  There's not point to doing", 
+   "the filtering manually when we can let sqlite do it for us.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(statements.STMT_SELECT_REPOSITORY): Select the repo id by uuid and root.", 
+   "(create_repos_id): Bind the extra select argument, and remove the filtering", 
+   "we now let sqlite do."
+  ], 
+  "revision_id": "878011"
+ }
+]

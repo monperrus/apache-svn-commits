@@ -1,0 +1,107 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-31T04:23:39.112582Z", 
+  "msg": [
+   "Disable the `svnadmin deltify' and its core function, svn_fs_deltify,", 
+   "until the latter is re-implemented.", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "(svn_fs_deltify): Disable this function.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(undeltify_deltify): Disable the \"deltify\" portion of this test.", 
+   "* subversion/svnadmin/main.c", 
+   "(usage, parse_command): Disable the `deltify' subcommand."
+  ], 
+  "revision_id": "842120"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-30T22:23:02.696559Z", 
+  "msg": [
+   "Simplify our fs dumping/loading.  When dumping, have dir_delta send", 
+   "abbreviated, intelligent copy descriptions, and print warnings about", 
+   "copy-sources that are beyond the scope of the dumpfile.  When loading,", 
+   "just load things verbatim -- no need to ignore nodes below a copied", 
+   "subtree anymore.", 
+   "* svn_repos.h", 
+   "(svn_repos_dump_fs): add feedback_stream arg, just like", 
+   "svn_repos_load_fs has.", 
+   "* dump.c", 
+   "(svn_repos_dump_fs): take new feedback_stream arg.  call dir_delta", 
+   "in \"intelligent\" mode, so it automatically sends copy history and", 
+   "abbreviates copies.", 
+   "(get_dump_editor, struct edit_baton): new feedback_stream and", 
+   "oldest_dumped_rev args/fields.", 
+   "(dump_node): duh, simplify -- just take an edit_baton as input,", 
+   "instead of the majority of eb's fields. Take copyfrom_path and rev", 
+   "as well.  Change all callers to dump_node accordingly.  Also, print", 
+   "a warning to feedback_stream if we encounter a copyfrom_rev older", 
+   "than the oldest_dumped_rev.", 
+   "* load.c:", 
+   "REVERT all r2035 changes to this file, which was making the parser", 
+   "deliberately ignore all nodes underneath copied subtrees (see r2035", 
+   "log message.)", 
+   "* svnadmin/main.c", 
+   "(usage): update docstring about dump feedback.", 
+   "(main):  update call to svn_repos_dump_fs, passing stderr for feedback."
+  ], 
+  "revision_id": "842119"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-30T22:13:02.892466Z", 
+  "msg": [
+   "* www/project_status.html: Move pre-alpha date, to account", 
+   "for the delays of 2024, and for unexpected wrinkles in the", 
+   "dumper/loader coding."
+  ], 
+  "revision_id": "842118"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-30T21:29:29.189128Z", 
+  "msg": [
+   "Merge some recent pool changes that were committed to /trunk into my", 
+   "branch.  The original commits were as follows:", 
+   "--", 
+   "Author: striker", 
+   "New Revision: 2017", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(svn_pool_create): Use the new functionality in APR to set", 
+   "a maximum on the total amount of memory kept in the freelist.", 
+   "I've choosen to set it to 4MB without any justification, so", 
+   "it might very well be that this number needs to be tweaked.", 
+   "--", 
+   "Author: striker", 
+   "New Revision: 2037", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(svn_pool_create): Catch up with the renames in APR.", 
+   "--", 
+   "Author: striker", 
+   "New Revision: 2038", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(svn_pool_clear): If we clear the top level svn pool, make sure", 
+   "we recreate a mutex for our own allocator.", 
+   "--", 
+   "Author: brane", 
+   "New Revision: 2042", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(allocator_reset_mutex): New function.", 
+   "(svn_pool_create, svn_pool_clear): Register it as a pool cleanup if a", 
+   "mutex has been registered in the pool allocator."
+  ], 
+  "revision_id": "842117"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-05-30T20:46:50.764244Z", 
+  "msg": [
+   "Fix for pool cleanup.", 
+   "Suggested by: Sander Striker <striker@apache.org>", 
+   "* libsvn_subr/svn_error.c (allocator_reset_mutex): New function.", 
+   "(svn_pool_create, svn_pool_clear): Register it as a pool cleanup if a", 
+   "mutex has been registered in the pool allocator."
+  ], 
+  "revision_id": "842116"
+ }
+]

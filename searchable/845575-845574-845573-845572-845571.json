@@ -1,0 +1,96 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-03-31T06:11:34.028037Z", 
+  "msg": [
+   "Use svn_stream_for_stdout(), instead of manually constructing an", 
+   "apr_file_t from stdout and then streamifying it.  This simplifies code", 
+   "by removing extra variables and centralizing error checks.", 
+   "* subversion/tests/libsvn_delta/svndiff-test.c", 
+   "(main): As described above.", 
+   "* subversion/clients/cmdline/propget-cmd.c", 
+   "(svn_cl__propget): Same.", 
+   "* subversion/clients/cmdline/cat-cmd.c", 
+   "(svn_cl__cat): Same, and move the stream creation outside the", 
+   "loop over targets.", 
+   "* subversion/svnadmin/main.c", 
+   "(create_stdio_stream): Remove obsolete comment."
+  ], 
+  "revision_id": "845575"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-31T05:43:28.373642Z", 
+  "msg": [
+   "Fill in missing svnlook functionality: add \"cat\", \"propget\", and", 
+   "\"proplist\" commands, and the -v/--verbose option.", 
+   "Now svnlook can inspect file contents and properties.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_PROPERTY_NOT_FOUND): New error code.", 
+   "* subversion/include/svn_io.h, subversion/libsvn_subr/stream.c", 
+   "(svn_stream_for_stdout): New func.  Note that there are many places", 
+   "in Subversion which should probably use this.  But for now, only", 
+   "the new svnlook code below calls it.", 
+   "* subversion/svnlook/main.c", 
+   "(struct svnlook_opt_state): New fields arg1, arg2, and verbose.", 
+   "(cmd_table): Add \"cat\", \"propget\", \"proplist\", and synonyms.", 
+   "(verify_path): New helper function.", 
+   "(do_cat, do_plist, do_pget): New command helper functions.", 
+   "(subcommand_cat, subcommand_plist, subcommand_pget): New commands.", 
+   "(svn_opt_subcommand_t): Add subcommand_cat, subcommand_pget, and", 
+   "subcommand_plist.", 
+   "(main): Parse arg1, arg2, and verbose into opt_state."
+  ], 
+  "revision_id": "845574"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-03-31T02:22:40.259945Z", 
+  "msg": [
+   "Followup on commit 5498: Remove a couple of \"FIXME: svn_filesize_t\" comments.", 
+   "* subversion/libsvn_fs/reps-strings.c (rep_undeltify_range): Remove", 
+   "obsolete comment now that 'cb.window->sview_offset' is an svn_filesize_t.", 
+   "(svn_fs__rep_deltify): Make 'tview_off' an svn_filesize_t, and remove the", 
+   "comment when assigning it to 'ww->text_off'."
+  ], 
+  "revision_id": "845573"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-03-31T01:51:15.773575Z", 
+  "msg": [
+   "Get the delta code to use svn_filesize_t or apr_size_t instead of", 
+   "apr_off_t. This fixes issue 639.", 
+   "* subversion/include/svn_delta.h (svn_txdelta_window_t::sview_offset):", 
+   "Use svn_filesize_t instead of apr_off_t.", 
+   "* subversion/libsvn_delta/compose_delta.c: Replace all uses of apr_off_t", 
+   "with apr_size_t. All offsets and sizes in the delta combiner are", 
+   "relative to the window size, and that always fits into and apr_size_t.", 
+   "(search_offset_index): Remove useless assert now that 'offset' is unsigned.", 
+   "* subversion/libsvn_delta/delta.h (svn_txdelta__compose_ctx_t::sview_offset):", 
+   "Use svn_filesize_t instead of apr_off_t.", 
+   "(svn_txdelta__insert_op): Make 'offset' and 'length' apr_size_t instead", 
+   "of apr_off_t, since that's what goes into the delta op.", 
+   "* subversion/libsvn_delta/svndiff.c (encode_int, append_encoded_int):", 
+   "Use svn_filesize_t instead of apr_off_t.", 
+   "(decode_baton): Make last_sview_offset an svn_filesize_t.", 
+   "(decode_int): Use svn_filesize_t instead of apr_off_t. Wherever we decode", 
+   "an apr_size_t value, add a cast and a comment.", 
+   "* subversion/libsvn_delta/vdelta.c (store_mapping): Store an apr_size_t,", 
+   "not an apr_off_t. All uses were already passing apr_size_t's.", 
+   "* subversion/libsvn_delta/text_delta.c (svn_txdelta_stream_t::pos):", 
+   "Use svn_filesize_t instead of apr_off_t.", 
+   "(apply_baton::sbuf_offset): Likewise.", 
+   "(svn_txdelta__insert_op): Make 'offset' and 'length' apr_size_t."
+  ], 
+  "revision_id": "845572"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-03-30T17:34:43.427225Z", 
+  "msg": [
+   "* configure.in: Add $srcdir to svn_version line to handle VPATH builds."
+  ], 
+  "revision_id": "845571"
+ }
+]

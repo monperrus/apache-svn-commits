@@ -1,0 +1,108 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-13T15:34:58.000000Z", 
+  "msg": [
+   "* feedback.c", 
+   "(report_added_item, report_unadded_item, report_deleted_item,", 
+   "report_undeleted_item): Stop caring about file/directory-ness of the", 
+   "reported item."
+  ], 
+  "revision_id": "839920"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-13T15:15:24.000000Z", 
+  "msg": [
+   "* svn_io.h", 
+   "(svn_io_detect_mimetype): New function.", 
+   "* io.c", 
+   "(svn_io_detect_mimetype): New function.", 
+   "* svn_pools.h", 
+   "(svn_pool_feedback_t): Added new callback functions --", 
+   "report_added_item(), report_unadded_item(), report_deleted_item(),", 
+   "report_undeleted_item().", 
+   "* feedback.c", 
+   "(report_added_item, report_unadded_item, report_deleted_item,", 
+   "report_undeleted_item): New functions.", 
+   "(svn_cl__init_feedback_vtable): Initialize function pointers to new", 
+   "functions.", 
+   "* svn_types.h", 
+   "(SVN_PROP_MIME_TYPE, SVN_PROP_CHARSET): New property #defines.", 
+   "* adm_ops.c", 
+   "(mark_tree): Call feedback functions for reporting schedule changes.", 
+   "(svn_wc_add_file): Detect mimetype and store as a property on the", 
+   "file, then call the report_added_item() feedback function.", 
+   "(svn_wc_add_directory): Call report_added_item() feedback function.", 
+   "(svn_wc_unadd): Call report_unadded_item() feedback function.", 
+   "(svn_wc_undelete): Call report_undeleted_item() feedback function.", 
+   "(svn_wc_delete): Call report_deleted_item() feedback fction.", 
+   "* svn_error.c", 
+   "(report_added_item, report_unadded_item, report_deleted_item,", 
+   "report_undeleted_item): New dummy functions.", 
+   "(svn_error_init_pool): Initialize new callback function pointers", 
+   "with new dummies."
+  ], 
+  "revision_id": "839919"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-13T11:02:19.000000Z", 
+  "msg": [
+   "Send the log message to the server via a property on the working baseline.", 
+   "* mod_dav_svn/dav_svn.h (dav_svn_root): add the FS transaction handle for", 
+   "later use.", 
+   "* mod_dav_svn/deadprops.c (dav_svn_db_open): baselines now have properties,", 
+   "so allow them in. add a check for a R/W against R/O sources.", 
+   "(dav_svn_db_fetch, dav_svn_db_exists, dav_svn_db_firstkey): fetch", 
+   "properties from transaction and revision roots when applicable.", 
+   "(dav_svn_db_store, dav_svn_db_remove): remove properties from transactions", 
+   "when applicable.", 
+   "* mod_dav_svn/repos.c (dav_svn_prep_working): set up working baselines.", 
+   "remember the FS transaction handle.", 
+   "* libsvn_ra_dav/commit.c (log_message_prop): new property name for the log", 
+   "message (to be used in a PROPPATCH).", 
+   "(do_proppatch): use DEBUG_CR rather than EOL. minor formatting nits.", 
+   "(get_baseline_url): no longer needed; folded into apply_log_message", 
+   "(apply_log_message): new function to transfer the log message to the", 
+   "server.", 
+   "(svn_ra_dav__get_commit_editor): shift baseline fetching and checkout to", 
+   "the new apply_log_message function.", 
+   "* libsvn_ra_dav/fetch.c, ra_dav.h (DEBUG_CR): move from fetch.c to ra_dav.h"
+  ], 
+  "revision_id": "839918"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-08-13T03:46:55.000000Z", 
+  "msg": [
+   "* svnadmin/main.c: #include \"db.h\", for DB_RUNRECOVERY check.", 
+   "(main.c): Ignore DB_RUNRECOVERY when opening fs.  Also, open db", 
+   "lockfile for writing/appending, so the resulting filehandle is", 
+   "suitable for obtaining an exclusive lock.  This resolves issue #429,", 
+   "though I must admit I don't understand why the flags on the filehandle", 
+   "should affect the type of lock you can get.  Add new comment regarding", 
+   "issue #430."
+  ], 
+  "revision_id": "839917"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-08-13T03:13:11.000000Z", 
+  "msg": [
+   "Finish db recovery code, at least in theory.  Thanks to Greg Stein for", 
+   "answering many questions.", 
+   "In practice, whenever I run `svnadmin recover' on a repository --", 
+   "which should be a successful no-op when there's nothing to recover", 
+   "from -- `svnadmin' fails in apr_file_lock(), which in turn fails", 
+   "because fcntl() is returning -1, with errno set indicating \"Bad file", 
+   "descriptor\".  I don't know why; the lockfile is certainly there.  Any", 
+   "thoughts, folks?", 
+   "* svnadmin/main.c (main, usage): New `recover' subcommand.", 
+   "* svn_fs.h (svn_fs_db_env_path): Declare new func.", 
+   "(svn_fs_repository): Doc fix.", 
+   "* fs.c (create_locks): Fix explanatory text in lockfile."
+  ], 
+  "revision_id": "839916"
+ }
+]

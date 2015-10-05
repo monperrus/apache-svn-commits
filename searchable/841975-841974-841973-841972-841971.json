@@ -1,0 +1,101 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-05-08T03:10:07.682051Z", 
+  "msg": [
+   "More work on dumpfile parser.  Saving work incrementally, to avoid the", 
+   "power-plant effect.", 
+   "* dump.c (close_directory): duh, don't forget to clear the subpool.", 
+   "* svn_repos.h (svn_repos_parse_dumpstream): take a global parse_baton.", 
+   "(svn_repos_parse_fns_t):  have new_revision_record take a", 
+   "parse_baton, and have new_node_record take a revision_baton.", 
+   "* load.c (struct parse_baton):  new baton type.", 
+   "(struct revision_baton): point to a parse_baton.", 
+   "(make_revision_baton): take parse_baton.", 
+   "(new_revision_record): take parse_baton.", 
+   "(new_node_record):  take revision_baton.", 
+   "(make_node_baton):  take revision_baton.", 
+   "(get_parser): new constructor func.", 
+   "(svn_repos_load_fs): call get_parser.", 
+   "(parser_callbacks):  delete static vtable."
+  ], 
+  "revision_id": "841975"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-07T21:02:41.773533Z", 
+  "msg": [
+   "Continue skeletal work on dumpfile-stream parser.", 
+   "* libsvn_repos.dsp:  out of kindness to win32 folks, add 'load.c'", 
+   "* dump.c : rename all node_action_* into svn_node_action_*.", 
+   "(enum node_action):  remove from here...", 
+   "* svn_repos.h", 
+   "(enum svn_node_action):  re-add here, so parser vtables can use it too.", 
+   "(svn_repos_parse_dumpstream):  take a const vtable.", 
+   "(svn_repos_parse_fns_t): make two separate propset funcs, and two", 
+   "separate close funcs, just like in our editor.  The vtable", 
+   "implementor shouldn't have to figure out what kind of baton is", 
+   "coming in.", 
+   "* load.c", 
+   "(svn_repos_load_fs): man, this routine just puts 1 and 1 together!", 
+   "(svn_repos_parse_dumpstream):  new skeleton.", 
+   "(parser_callbacks):  define the skeleton of a vtable for the parser."
+  ], 
+  "revision_id": "841974"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-07T19:47:55.821615Z", 
+  "msg": [
+   "No more electric shocks every time we branch the trunk.", 
+   "With Mike Pilato, start work on issue #582 (making svnlook's commit", 
+   "email diffs show copies as copies, instead of as twenty terabyte", 
+   "adds).  End goal is to make svn_repos_dir_delta send copyfrom_args to", 
+   "the editor, and thereunder express only differences against the copy", 
+   "source.  Note that this does not address issue #503 (making", 
+   "server->client traffic use copyfrom args so we can send smaller deltas", 
+   "over the wire).", 
+   "This change just removes the old support for copyfrom_args, since it", 
+   "was disabled and wasn't going to fully address issue #503 anyway.", 
+   "With Mike Pilato:", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_dir_delta): New use_copy_history param replaces", 
+   "use_copyfrom_args; change interface promise regarding copyfrom", 
+   "history.  Consistify tense in rest of doc string.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(struct context): It's use_copy_history now, not use_copyfrom_args.", 
+   "(svn_repos_dir_delta): Same, and remove preprocessor conditional.", 
+   "Also, fix typo.", 
+   "(add_file_or_dir): Remove source_parent and source_entry parameters.", 
+   "(find_nearest_entry): Removed."
+  ], 
+  "revision_id": "841973"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-07T19:24:45.958787Z", 
+  "msg": [
+   "Begin work on a general parser for a dumpfile-formatted stream.", 
+   "* fs_dumprestore.txt:  tweak dumpfile spec a hair.", 
+   "* load.c:  new file, nothing in there yet.", 
+   "* dump.c", 
+   "(make_dir_baton): fix brain-o spotted by gstein.  :-)", 
+   "(SVN_REPOS_DUMPFILE_*): move all RFC822 header defines from here...", 
+   "* svn_repos.h", 
+   "(SVN_REPOS_DUMPFILE_*): ...to here, now public, so people can write", 
+   "different vtable back-ends for our dumpfile parser.", 
+   "(svn_repos_load_fs):  declare.", 
+   "(svn_repos_parser_fns_t): new vtable, driven by the dumpfile parser.", 
+   "(svn_repos_parse_dumpstream):  declare the parser."
+  ], 
+  "revision_id": "841972"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-07T18:31:13.011841Z", 
+  "msg": [
+   "New branch, for issue 654 work (\"switch our NodeRevID representation\")."
+  ], 
+  "revision_id": "841971"
+ }
+]

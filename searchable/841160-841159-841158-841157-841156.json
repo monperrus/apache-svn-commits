@@ -1,0 +1,120 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-01-28T04:57:52.191386Z", 
+  "msg": [
+   "Fix some pool lifetime issues with the svn_wc_statuses() function.", 
+   "Specifically, we were reading entries into a subpool, placing those", 
+   "into the output statushash, and then destroying the subpool. (oops!)", 
+   "After changing the code to read the entries into the main pool, I", 
+   "found the subpool was quite useless, so I deleted it altogether.", 
+   "Some minor updates to entries.c to limit the scope of the 'path'", 
+   "argument (with the subpool, it had a different lifetime, so I wanted", 
+   "to limit the propagation of things with different lives as a way to", 
+   "verify propriety).", 
+   "* libsvn_wc/status.c (svn_wc_statuses): eliminate the use of a subpool", 
+   "for this function. also simplify the case where we're getting the", 
+   "status for a single file -- we can just use svn_wc_entry().", 
+   "* libsvn_wc/entries.c (struct entries_accumulator): remove the 'path'", 
+   "member; it wasn't used anywhere.", 
+   "(resolve_to_defaults): remove the PATH argument; it was unused.", 
+   "(read_entries): don't set accum->path. omit PATH from the call to", 
+   "resolve_to_defaults().", 
+   "(svn_wc_entry): add a comment for a future optimization"
+  ], 
+  "revision_id": "841160"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-28T03:54:41.442438Z", 
+  "msg": [
+   "Fix copy/paste problems: link in the right library."
+  ], 
+  "revision_id": "841159"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-28T03:15:03.963408Z", 
+  "msg": [
+   "Remove some more stringbuf stuff from svn_delta.h.", 
+   "* include/svn_delta.h (svn_txdelta_send_string): change the STRING", 
+   "parameter from 'svn_stringbuf_t *' to 'const svn_string_t *'", 
+   "(svn_delta_make_xml_parser): change BASE_PATH arg to 'const char *'", 
+   "(svn_delta_xml_auto_parse): change BASE_PATH arg to 'const char *'", 
+   "Change all callers for above API changes.", 
+   "* libsvn_delta/delta.h (struct svn_xml__digger_t): change base_path", 
+   "member from a stringbuf to a 'const char *'", 
+   "* libsvn_delta/xml_parse.c (xml_handle_start): change construction of", 
+   "the ancestor_path member in the digger structure.", 
+   "(svn_delta_make_xml_parser): update the BASE_PATH parameter's", 
+   "type. copy it into our pool to remain independent of caller.", 
+   "(svn_delta_xml_auto_parse): update BASE_PATH param type.", 
+   "* libsvn_delta/text_delta.c (svn_txdelta_send_string): update the type", 
+   "of the STRING parameter and how it gets placed into the window.", 
+   "* libsvn_client/checkout.c (svn_client_checkout): update call", 
+   "* libsvn_client/apply_edits.c (apply_delta): update call", 
+   "* libsvn_client/update.c (svn_client_update): update call", 
+   "* tests/libsvn_wc/checkout-test.c (apply_delta): update call", 
+   "* tests/libsvn_delta/deltaparse-test.c (main): add new BASE_PATH macro", 
+   "and change how we use the base path as a parameter to", 
+   "svn_test_get_editor() and svn_delta_xml_auto_parse()", 
+   "* tests/fs-helpers.c (svn_test__set_file_contents): change how the", 
+   "incoming CONTENTS param is passed to svn_txdelta_send_string().", 
+   "* tests/libsvn_fs/fs-test.c (file_integrity_helper): revamp", 
+   "construction and handling of the 'contents' buffer, and its use in", 
+   "calls to svn_txdelta_send_string().", 
+   "* bindings/swig/python/setup.py: enable build of _delta module"
+  ], 
+  "revision_id": "841158"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2002-01-28T02:20:07.220668Z", 
+  "msg": [
+   "Update our documentation.  It now hopefully answers", 
+   "recurring questions we were seeing from users that", 
+   "were setting up a Subversion server.", 
+   "Review by: Greg Stein <gstein@lyra.org>", 
+   "* INSTALL", 
+   "Formatting changes so everything lines up consistently.", 
+   "(Section V): Give some hints on access control in the", 
+   "configuration.  Add some references to Apaches online", 
+   "documentation."
+  ], 
+  "revision_id": "841157"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-28T01:33:24.980404Z", 
+  "msg": [
+   "The txdelta stream's subpool wasn't used for anything beyond storing", 
+   "itself and to \"free\" itself (i.e. it wasn't a parent of other subpools", 
+   "or any other complicated pool logic). Instead, simply allocate the", 
+   "stream in the provided pool and remove the \"free\" concept.", 
+   "Per a suggestion from Greg Hudson <ghudson@MIT.EDU>, the BUILD_BATON", 
+   "arguments in the delta construction functions were changed to an", 
+   "explict type (rather than void *) for type safety.", 
+   "* include/svn_delta.h (svn_txdelta_free): removed", 
+   "* libsvn_wc_adm_crawler.c (do_apply_textdelta): remove call to", 
+   "svn_txdelta_free().", 
+   "* tests/libsvn_delta/vdelta-test.c (main): ditto.", 
+   "* tests/libsvn_delta/svndiff-test.c (main): ditto.", 
+   "* tests/libsvn_delta/random-test.c (random_test): ditto.", 
+   "* libsvn_repos/delta.c (delta_files): ditto.", 
+   "* libsvn_delta/delta.h (svn_txdelta__insert_op): change BUILD_BATON", 
+   "argument to a 'struct build_ops_baton_t *' for type safety.", 
+   "(svn_txdelta__vdelta): ditto.", 
+   "* libsvn_delta/vdelta.c (vdelta): change BUILD_BATON argument to a", 
+   "'struct build_ops_baton_t *' for type safety.", 
+   "(svn_txdelta__vdelta): ditto.", 
+   "* libsvn_delta/text_delta.c (struct svn_txdelta_stream_t): remove the", 
+   "'pool' member.", 
+   "(svn_txdelta__insert_op): change BUILD_BATON argument to a", 
+   "'struct build_ops_baton_t *' for type safety.", 
+   "(svn_txdelta): do not construct a subpool for the stream, but place", 
+   "it directly into the provided pool.", 
+   "(svn_txdelta_free): removed."
+  ], 
+  "revision_id": "841156"
+ }
+]

@@ -1,0 +1,97 @@
+[
+ {
+  "author": "kkolinko", 
+  "date": "2010-01-09T02:50:41.947661Z", 
+  "msg": [
+   "Trivial: comment-out untranslated messages, so that the English ones could be used"
+  ], 
+  "revision_id": "897375"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2010-01-09T02:45:47.675068Z", 
+  "msg": [
+   "SSHD-73: Avoid infinite loop when the window is full", 
+   "If the window has no more free space, we can't flush any more data", 
+   "until we receive a window adjust from the peer and get more space.", 
+   "If we still have data to write, but there is no data in our local", 
+   "buffer, we can't rely on flush() to wait for the window to get more", 
+   "free space.  Calling flush would do nothing, and we'd spin in a hard", 
+   "loop without releasing the processor until the window adjust came in.", 
+   "Instead of spinning, fall sleep on the Window until there is at", 
+   "least one byte free for us to write into.", 
+   "The only way for this case to arise is for both lastSize and", 
+   "bufferLength to be equal to 0, and for the Window to have no space.", 
+   "This can only happen if the application has written sufficient data", 
+   "to one OutputStream (stdout or SSH_MSG_CHANNEL_DATA) to cause the", 
+   "Window to have no space, and then it performs the first write on", 
+   "the other OutputStream (stderr or SSH_MSG_CHANNEL_EXTENDED_DATA).", 
+   "This can happen if the first stream throws an exception, and the", 
+   "application catches it and tries to print the stack trace to the", 
+   "second stream.", 
+   "When the 2nd output stream starts its first write, both lastSize and", 
+   "bufferLength are 0 as we have never sent a packet from this stream.", 
+   "We spin hard in the write-flush loop, and never actually fall asleep", 
+   "to wait for the window adjust."
+  ], 
+  "revision_id": "897374"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2010-01-09T02:45:45.497033Z", 
+  "msg": [
+   "Correctly compute the lastSize member in ChannelOutputStream", 
+   "If we have to split the current Buffer, because its too large for", 
+   "the session's window or packet size, don't give ourselves a credit", 
+   "equal to the left over portion.  Instead use the actual number of", 
+   "bytes we transmit inside of flush.", 
+   "However, because we know the new Buffer needs to hold at least", 
+   "a certain size, we can allocate it in advance to that target,", 
+   "to avoid needing to grow it while doing the split."
+  ], 
+  "revision_id": "897373"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2010-01-09T02:45:39.546578Z", 
+  "msg": [
+   "SSHD-73: Remove pointless newBuffer during flush", 
+   "During flush we invoke newBuffer() to ensure that the Buffer we pass", 
+   "down into the outgoing encode and transmit queue is independent of", 
+   "the Buffer we continue to use for subsequently written data.", 
+   "However, there is no need to invoke newBuffer() again at the end", 
+   "of the flush method.", 
+   "If the method completes normally, the loop broke out because the", 
+   "bufferLength member is equal to 0, which means the current Buffer", 
+   "instance is in use only by ourselves, and is empty.  We don't need", 
+   "to allocate yet another empty Buffer to replace it.", 
+   "If the method crashes due to an exception, we have only two cases", 
+   "to worry about:", 
+   "case 1:  before the newBuffer call", 
+   "In this case, the only state changes we have done is to write", 
+   "the current buffer length into the existing Buffer instance.", 
+   "Nobody else has our Buffer.  If we crash with a RuntimeException", 
+   "during this phase and come back here again during a future write", 
+   "we'll just overwrite the same section with a new length.", 
+   "case 2:  after the newBuffer call", 
+   "After the newBuffer invocation we could crash while trying to", 
+   "send the old Buffer out.  We've already replaced the Buffer with", 
+   "a fresh one, so all that happens is the old Buffer gets garbage", 
+   "collected, possibly causing a gap in the application data stream.", 
+   "So this use of newBuffer during the finally is unnecessary and", 
+   "is not needed to ensure our future instance state is sane if an", 
+   "exception occurs."
+  ], 
+  "revision_id": "897372"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2010-01-09T02:39:19.669674Z", 
+  "msg": [
+   "Trivial corrections to the French and Japanese resource files of Jasper:", 
+   "- correct Jasper version mentioned in a message", 
+   "- comment-out untranslated messages in the French file, so that the English ones could be used"
+  ], 
+  "revision_id": "897371"
+ }
+]

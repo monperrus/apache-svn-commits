@@ -1,0 +1,77 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2007-08-27T20:15:37.588483Z", 
+  "msg": [
+   "Replace svn_path_uri_encode()/svn_path_join() pairs with", 
+   "svn_path_url_add_component() which is designed to do the same thing.", 
+   "* libsvn_wc/adm_crawler.c (report_revisions_and_depths)", 
+   "* libsvn_wc/util.c (svn_wc__path_switched):", 
+   "Use svn_path_url_add_component()."
+  ], 
+  "revision_id": "866415"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-27T19:30:12.556561Z", 
+  "msg": [
+   "Avoid leaking connections to the sqlite database when an error occurs.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(MAYBE_CLEANUP): New macro which goes to the \"cleanup\" label when", 
+   "the local variable \"err\" is not SVN_NO_ERROR.", 
+   "(close_db): New wrapper function for sqlite3_close() which handles", 
+   "propagation of errors which triggered the need to close the", 
+   "connection.", 
+   "(svn_fs_mergeinfo__create_index, svn_fs_mergeinfo__update_index,", 
+   "svn_fs_mergeinfo__get_mergeinfo, svn_fs_mergeinfo__get_mergeinfo_for_tree):", 
+   "Use new close_db() function in lieu of sqlite3_close().  Where necessary,", 
+   "use a local svn_error_t *, plus the new MAYBE_CLEANUP() macro, to propagate", 
+   "errors encountered before closing the database connection.", 
+   "Found by: lgo"
+  ], 
+  "revision_id": "866414"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2007-08-27T19:12:22.354699Z", 
+  "msg": [
+   "Fix issue 2889 - mergeinfo REPORT requests are ignoring peg revisions.", 
+   "Following bug is exposed by the fix to #2889.", 
+   "a)To 'get_wc_or_repos_mergeinfo' we pass ra_session which is not related", 
+   "to Working copy target on which we merge.", 
+   "* subversion/libsvn_ra_neon/mergeinfo.c", 
+   "(svn_ra_neon__get_mergeinfo): Run the merge-info REPORT request on a", 
+   "baseline url.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_merge, do_single_file_merge): reparent the ra_session corresponding to", 
+   "working copy target before calling 'get_wc_or_repos_mergeinfo'.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_catches_nonexistent_target): Fix the wrong comment about revision", 
+   "number.", 
+   "(test_list): Remove XFail marker from", 
+   "'merge_fails_if_subtree_is_deleted_on_src'."
+  ], 
+  "revision_id": "866413"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-08-27T18:37:05.315711Z", 
+  "msg": [
+   "* subversion/include/private/svn_client_private.h", 
+   "(svn_client__suggest_merge_sources): Remove this prototype, which", 
+   "should have happened in concert with the other changes in r26336."
+  ], 
+  "revision_id": "866412"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-27T18:21:24.934792Z", 
+  "msg": [
+   "Improve exception handling.", 
+   "* subversion/bindings/javahl/native/SVNClient.cpp", 
+   "(getChangelist): Test whether an exception is thrown after calling", 
+   "JNIUtil::makeJString()."
+  ], 
+  "revision_id": "866411"
+ }
+]

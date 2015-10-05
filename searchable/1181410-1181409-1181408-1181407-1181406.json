@@ -1,0 +1,109 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:06:07.065397Z", 
+  "msg": [
+   "rolling restart and misc fixes", 
+   "Summary:", 
+   "(1) Always sleep 2 mins before restarting masters during rolling restart.", 
+   "(2) Backup master always stalls 2 mins, giving primary a fair chance.", 
+   "Previously it was doing this only if the /hbase/master ZNODE did not exist.", 
+   "Sometimes the ZNODE exists even after a restart if cluster hasn't been properly", 
+   "shutdown. So, doing this ensures that in the common case the primary will indeed", 
+   "be the primary.", 
+   "(3) bin/stop-hbase.sh doesn't need to kill backup masters, because cluster stop", 
+   "via the admin API itself triggers all region servers as well as backup masters", 
+   "to be shutdown. This is what was previously causing this confusing error:", 
+   "bin/stop-hbase.sh", 
+   "stopping hbase.............: no master to stop", 
+   "because kill -0 of pid 19014 failed with status 1", 
+   "4) In rolling-restart.sh, as a marginal improvement, shutting down the backup", 
+   "master first and then the primary master. This is to avoid the backup trying to", 
+   "take over if we kill the primary first. [Ideally the order should be dynamically", 
+   "determined, but deferring that for future.]", 
+   "Test Plan:", 
+   "Ran various full and rolling restart tests on dev cluster.", 
+   "DiffCamp Revision: 173364", 
+   "Reviewed By: kranganathan", 
+   "CC: kranganathan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181410"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:06:03.025335Z", 
+  "msg": [
+   "Fix failing TestHeapSize on automated build tests", 
+   "Summary:", 
+   "TestHeapSize has been failing for a while because HRegion had a new object", 
+   "introduced and the heap size overhead was not updated.", 
+   "Simple fix.", 
+   "Test Plan:", 
+   "Ran TestHeapSize and it passes now.", 
+   "DiffCamp Revision: 172380", 
+   "Reviewed By: kannan", 
+   "CC: kannan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181409"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:58.967368Z", 
+  "msg": [
+   "Stale reads from ZK can break the atomic CAS operations", 
+   "Summary:", 
+   "Adds a sync(path) method to ZKWrapper and calls it from RSZKUpdater before we", 
+   "do the initial read.", 
+   "Test Plan:", 
+   "Need to run test suite.  Currently testing this on the new master.", 
+   "DiffCamp Revision: 172365", 
+   "Reviewed By: kranganathan", 
+   "CC: kranganathan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181408"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:56.398390Z", 
+  "msg": [
+   "Rolling Upgrade: Configurable Per-RS Sleep", 
+   "Summary:", 
+   "Stop hardcoding HBASE_SLAVE_SLEEP", 
+   "Test Plan:", 
+   "./bin/rolling-upgrade.sh", 
+   "./bin/rolling-upgrade.sh --sleep 10", 
+   "DiffCamp Revision: 171503", 
+   "Reviewed By: kannan", 
+   "CC: nspiegelberg, kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181407"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:05:53.030414Z", 
+  "msg": [
+   "Use lightweight append", 
+   "Summary:", 
+   "HLog splitting uses the new lightweight append API to recover lease.", 
+   "Test Plan:", 
+   "TBD", 
+   "DiffCamp Revision: 170368", 
+   "Reviewed By: kannan", 
+   "Commenters: dhruba", 
+   "CC: dhruba, hkuang, kannan, hbase@lists", 
+   "Tasks:", 
+   "#416425: Use the lightweight append", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181406"
+ }
+]

@@ -1,0 +1,81 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-02-15T07:05:00.444675Z", 
+  "msg": [
+   "* tools/cvs2svn/cvs2svn.py (METADATA_DB): That's \"tuple\" not \"list\"."
+  ], 
+  "revision_id": "848725"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-15T04:16:55.027117Z", 
+  "msg": [
+   "More Subversion book work.  This time, we take on Chapter 5!", 
+   "* doc/book/TODO:", 
+   "Remove the relevant TODOs.", 
+   "* doc/book/book/ch05.xml", 
+   "Rework some parts of this chapter.  Add a new \"Berkeley DB\" section", 
+   "under \"Repository Basics\", add a placeholder for \"svndumpfilter\"", 
+   "documentation, and do a bunch of other juggling around of stuffs.", 
+   "* doc/book/book/ch09.xml", 
+   "Tracking a moving xref across the plains of Rohan."
+  ], 
+  "revision_id": "848724"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-02-15T01:33:09.344868Z", 
+  "msg": [
+   "Make a cvs2svn test skip instead of crashing when locale can't be set.", 
+   "This involved adding a \"SKIP\" result to the main test framework.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(nonascii_filenames): Raise svntest.Skip when locale can't be set.", 
+   "* subversion/tests/clients/cmdline/svntest/__init__.py", 
+   "(Skip): New base class for skip exceptions.", 
+   "* subversion/tests/clients/cmdline/svntest/testcase.py", 
+   "(TestCase.run): Handle new Skip exception.", 
+   "(_Predicate.run_text): Print \"PASS\", \"FAIL\", or \"SKIP\" based on error."
+  ], 
+  "revision_id": "848723"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-02-15T01:17:33.331198Z", 
+  "msg": [
+   "Fix cvs2svn test cleanup problem introduced in r8634:", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(pass5): Delete live reference to db before removing its file."
+  ], 
+  "revision_id": "848722"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-02-15T00:31:08.295073Z", 
+  "msg": [
+   "Fix a problem with cvs2svn.py introduced by r8587 that caused lots of", 
+   "extra copies when creating tags and branches. The problem is in the", 
+   "function SymbolicNameTracker.cleanup_entries, which was added in r8587", 
+   "tries to remove sub-components that are not copied using the optimal", 
+   "revision.", 
+   "If the parent has an optimal range of revs N-M, N is selected as the", 
+   "best rev. The child has another optimal range I-J. If the intervals", 
+   "overlap for revision N, i.e. I < N and J >= N, then N is an optimal", 
+   "revision for the parent as well as the child. The problem is that", 
+   "SymbolicNameTracker.cleanup_entries simply compares N and I, which is", 
+   "too strict. This patch verifies that N is inside the child's optimal", 
+   "interval using the new function SymbolicNameTracker.is_best_rev.", 
+   "* tools/cvs2svn/cvs2svn.py:", 
+   "(SymbolicNameTracker.is_best_rev): New function.", 
+   "(SymbolicNameTracker.cleanup_entries): Add a limit_rev arg.  Use", 
+   "is_best_rev when filtering out components.", 
+   "(SymbolicNameTracker.copy_descend): Supply dumper.revision to", 
+   "cleanup_entries.", 
+   "* tools/cvs2svn/run-tests.py:", 
+   "(simple_tags): Update the rev numbers to match the updated", 
+   "cvs2svn.py. It is now the same as before r8587 (modulo another", 
+   "unrelated change that has happened since then)."
+  ], 
+  "revision_id": "848721"
+ }
+]

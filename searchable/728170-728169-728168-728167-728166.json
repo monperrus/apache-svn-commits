@@ -1,0 +1,44 @@
+[
+ {
+  "author": "drewbai", 
+  "date": "2008-12-19T21:51:31.466594Z", 
+  "msg": [], 
+  "revision_id": "728170"
+ }, 
+ {
+  "author": "rederpj", 
+  "date": "2008-12-19T21:51:28.102823Z", 
+  "msg": [
+   "Backport of doc change from PR 45987 to clarify Location doc."
+  ], 
+  "revision_id": "728169"
+ }, 
+ {
+  "author": "drewbai", 
+  "date": "2008-12-19T21:48:29.467680Z", 
+  "msg": [
+   "intial commit (second solution)"
+  ], 
+  "revision_id": "728168"
+ }, 
+ {
+  "author": "pauls", 
+  "date": "2008-12-19T21:48:20.217734Z", 
+  "msg": [
+   "Refactor the URLHandlers implementation to address several issue.", 
+   "First, there is a Linkage-Error when felix is embedded inside tomcat due to the WebAppClassloader creating urls while creating url handlers which gets us into a recursive attempt to create a handler resulting in the error (see FELIX-842). This patch address this by creating a couple of known built-in handlers up front (i.e., http, https, ftp, jar, file) which we can fallback to in case we get a Linkage-Error while trying to create the handler. Furthermore, a couple of classes are forced to be loaded eagerly.", 
+   "Second, setting a security manager when the framework already was started was causing a recursive lookup of handlers as well as a) not all security sensitive calls where done from inside a doPriv and b) invoking built-in handlers was causing a recursive attempt to create the url to the policy file (see FELIX-837). This patch adds the doPrivs and does make sure to only use setAccessible where needed and then (if possible) before the URLHandlers are registered. Additionally, we create urls for the known built-in handler up front to be able to set the handler of a new url without causing a security check.", 
+   "Third, rmi is sending the urls inside the URLclassloader that loaded the class of the object to be send together with the object. This creates a problem when the server doesn't have it's own rmi codesource set because then the urls are deserialized and one of them is our extension url (i.e., the url we added to the classloader that loaded felix to enable extension bundles). The problem is that the server doesn't have a handler for the protocol of that url (see FELIX-844). The fix is to use an http: url which points to an invalid address and port 9 (Discard). This way the url can be created on the server (it just doesn't work but thats ok).", 
+   "Finally, the URLHandlers didn't restore the previous URLStreamHandlerFactory after stopping Felix. This was a design limitation which should now be fixed (see FELIX-827)."
+  ], 
+  "revision_id": "728167"
+ }, 
+ {
+  "author": "drewbai", 
+  "date": "2008-12-19T21:48:13.023012Z", 
+  "msg": [
+   "intial commit (second solution)"
+  ], 
+  "revision_id": "728166"
+ }
+]

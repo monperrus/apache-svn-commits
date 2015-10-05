@@ -1,0 +1,83 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2007-06-29T21:45:26.080541Z", 
+  "msg": [
+   "Follow-up to r25514, note in merge test that we don't yet handle missing dirs.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_and_skipped_paths): Be specific about what this test *doesn't*", 
+   "cover."
+  ], 
+  "revision_id": "865665"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-06-29T21:44:29.041480Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py (setup_branch): Fix comments.", 
+   "Follow-up to r25547, Note that the revs the file mods take place are", 
+   "based on the number of branches created."
+  ], 
+  "revision_id": "865664"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-06-29T21:38:02.724354Z", 
+  "msg": [
+   "Ignore branching revisions when running 'svn log -g'.", 
+   "To do this, we basically duplicate the implicit mergeinfo calculation from", 
+   "libsvn_client/copy.c:get_implied_mergeinfo(), and check it against the current", 
+   "mergeinfo to \"guess\" that the path and revision in question is a branching", 
+   "revision, and ignore it for generating the mergeinfo diffs.", 
+   "Because of layering issues, and circular dependencies, this is implemented as a", 
+   "filter callback function passed to svn_fs_mergeinfo_for_tree().", 
+   "Note:  This fixes one problem at the expense of creating a less serious one,", 
+   "hence the marking of log_tests 19 as XFail.  The cause is known and a solution", 
+   "under investigation.  (This was fixed in r25594.)", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(get_mergeinfo_for_children, svn_fs_mergeinfo__get_mergeinfo_for_tree):", 
+   "Add filter_func arguments and filter each path mergeinfo is found on.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_mergeinfo_filter_func_t): New interface.", 
+   "(svn_fs_get_mergeinfo_for_tree): Accept filter_func and filter_func_baton", 
+   "parameters, and document their use.", 
+   "* subversion/include/private/svn_fs_mergeinfo.h", 
+   "(svn_fs_mergeinfo__get_mergeinfo_for_tree): Add filter_func and", 
+   "filter_func_baton parameters.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_get_mergeinfo_for_tree): Add and propogate filter_func and", 
+   "filter_func_baton parameters.", 
+   "* subverion/tests/cmdline/log_tests.py", 
+   "(test_list): Unmark merge_sensitive_log_branching_revision() as XFail,", 
+   "and mark merge_sensitive_log_branching_revision() as XFail.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(filter_baton): New baton structure.", 
+   "(calculate_branching_copy_mergeinfo): New function.", 
+   "(branching_copy_filter): New function.", 
+   "(get_combined_mergeinfo): Use branching_copy_filter() to remove extra", 
+   "mergeinfo when search for child log messages."
+  ], 
+  "revision_id": "865663"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-06-29T21:27:35.996706Z", 
+  "msg": [
+   "* www/faq.html", 
+   "(website-auto-update): Refer to #hook-debugging for further tips."
+  ], 
+  "revision_id": "865662"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-06-29T21:25:18.296457Z", 
+  "msg": [
+   "Refactor code for clarity and efficiency.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_revert2): For regular prop and text edits or deletions and", 
+   "replacements, use a \"switch\" flow-control statement, nesting extra", 
+   "handling for replacements inside of the handling for svn_node_dirs."
+  ], 
+  "revision_id": "865661"
+ }
+]

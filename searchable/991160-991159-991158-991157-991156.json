@@ -1,0 +1,81 @@
+[
+ {
+  "author": "philip", 
+  "date": "2010-08-31T11:50:01.332886Z", 
+  "msg": [
+   "Make single-db upgrades write to a temporary admin directory.  This is", 
+   "a work-in-progress and the code is ugly, but it passes the tests.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(svn_wc__write_upgraded_entries): Rename two parameters.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(entries_write_baton): Rename two members.", 
+   "(entries_write_new_cb): Adjust relpath calculation to handle", 
+   "temporary admin dir.", 
+   "(svn_wc__write_upgraded_entries): Rename two parameters.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(migrate_node_props, migrate_props): Rename a parameter, adjust relpath", 
+   "calculation.", 
+   "(migrate_text_bases): Rename a parameter for consistency with other", 
+   "functions.", 
+   "(upgrade_to_wcng): Construct db in temporary dir.", 
+   "(svn_wc_upgrade): Move db and pristine to final location."
+  ], 
+  "revision_id": "991160"
+ }, 
+ {
+  "author": "dsavage", 
+  "date": "2010-08-31T11:30:00.326118Z", 
+  "msg": [
+   "stop runtime exception on duplicate uri FELIX-2565"
+  ], 
+  "revision_id": "991159"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2010-08-31T11:13:08.985398Z", 
+  "msg": [
+   "Fix revert_tests.py 21 by making svn_wc_revert4 check if a revert is", 
+   "possible with only impact at the specified depth.", 
+   "Before WC-NG libsvn_client didn't take a recursive lock if the specified", 
+   "depth was less than infinity and some revert operations then failed on", 
+   "not having a lock. But this didn't fix that you could do a depth empty", 
+   "revert on a directory which then removes an added (child-of-copy) file.", 
+   "As far as I can see there is no sane way to keep the original behavior or", 
+   "reimplement the old behavior inside one of the deprecated wrappers.", 
+   "svn_wc_revert3 receives an access baton and a depth and failed the revert", 
+   "if the lock in the access baton wasn't deep enough. (Not on a depth value).", 
+   "svn_client_revert2 doesn't document it's error behavior, so I think it is", 
+   "safe to return a different error here, but this might need a later update", 
+   "to wrap the error with SVN_ERR_WC_NOT_LOCKED to fix clients that handle", 
+   "this error like we did in svn before this patch.", 
+   "See also", 
+   "http://svn.haxx.se/dev/archive-2010-08/0763.shtml", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_WC_INVALID_OPERATION_DEPTH): New error code.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(verify_revert_depth): New function.", 
+   "(revert_internal): Add depth verification step.", 
+   "* subversion/svn/revert-cmd.c", 
+   "(svn_cl__revert): Update error code check.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(test_list): Remove XFail marking from revert_added_tree."
+  ], 
+  "revision_id": "991158"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2010-08-31T11:06:52.950404Z", 
+  "msg": [
+   "2.1: Add missing svn:eol-style settings."
+  ], 
+  "revision_id": "991157"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2010-08-31T11:06:00.547686Z", 
+  "msg": [
+   "Fixing test issues with JMX in the same JVM could cause CamelContext id clashes."
+  ], 
+  "revision_id": "991156"
+ }
+]

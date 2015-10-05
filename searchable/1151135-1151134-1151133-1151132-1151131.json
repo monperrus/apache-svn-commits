@@ -1,0 +1,88 @@
+[
+ {
+  "author": "dag", 
+  "date": "2011-07-26T15:27:04.703050Z", 
+  "msg": [
+   "DERBY-5325 Checkpoint fails with ClosedChannelException in InterruptResilienceTest", 
+   "Back-ported patch derby-5325a as:", 
+   "svn merge -c 1148354 https://svn.apache.org/repos/asf/db/derby/code/trunk", 
+   "Patch derby-5325a:", 
+   "With NIO, writeRAFHeader has two methods leading to interruptible IO:", 
+   "- getEmbryonicPage", 
+   "- writeHeader", 
+   "Currently, getEmbryonicPage may throw InterruptDetectedException and", 
+   "hence, so may writeRAFHeader.", 
+   "writeHeader may throw ClosedByInterruptException,", 
+   "AsynchronousCloseException and ClosedChannelException because", 
+   "writeHeader does not use RAFContainer4#writePage, but rather uses", 
+   "RAFContainer4#writeAtOffset, which does not currently attempt to", 
+   "recover after interrupt.", 
+   "So currently, clients of writeRAFHeader need to be prepared for all of", 
+   "InterruptDetectedException, ClosedByInterruptException,", 
+   "AsynchronousCloseException and ClosedChannelException.", 
+   "writeRAFHeader is used in three locations:", 
+   "- RAFContainer#clean", 
+   "- RAFContainer#run(CREATE_CONTAINER_ACTION)", 
+   "- RAFContainer#run(STUBBIFY_ACTION)", 
+   "RAFContainer#clean is prepared for InterruptDetectedException", 
+   "only. The issue shows that ClosedChannelException may also occur, and", 
+   "it is not prepared for that (this bug).", 
+   "RAFContainer#run(CREATE_CONTAINER_ACTION) is prepared for", 
+   "ClosedByInterruptException and AsynchronousCloseException. Since IO", 
+   "during container creation is single-threaded, this is sufficient: it", 
+   "should never need to handle", 
+   "ClosedChannelException/InterruptDetectedException, both of which", 
+   "signal that another thread saw interrupt on the container channel.", 
+   "RAFContainer#run(STUBBIFY_ACTION) is part of the removeContainer", 
+   "operation which should happen after the container is closed, so it", 
+   "should be single-threaded on the container as well(?). It should", 
+   "handle ClosedByInterruptException and AsynchronousCloseException and", 
+   "do retry, but doesn't, currently.", 
+   "If we let writeAtOffset clean up just like writePage,", 
+   "RAFContainer4#writeAtOffset (i.e.also writeHeader) would only only", 
+   "throw InterruptDetectedException, i.e. another thread saw interrupt,", 
+   "so retry. This would simplify logic in RAFContainer: we could remove", 
+   "the retry logic from RAFContainer#run(CREATE_CONTAINER_ACTION). This", 
+   "could also cover retry logic for RAFContainer#run(STUBBIFY_ACTION) wrt", 
+   "its use of writeRAFHeader.", 
+   "Next, RAFContainer#clean is already handling", 
+   "InterruptDetectedException and would with this change no longer see", 
+   "ClosedByInterruptException, AsynchronousCloseException or", 
+   "ClosedChannelException. This should solve DERBY-5325 (this bug)."
+  ], 
+  "revision_id": "1151135"
+ }, 
+ {
+  "author": "sergeyb", 
+  "date": "2011-07-26T15:22:00.169999Z", 
+  "msg": [
+   "[CXF-3677] Some refactoring of encryption tests"
+  ], 
+  "revision_id": "1151134"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2011-07-26T15:20:00.425127Z", 
+  "msg": [
+   "Import the BinarySecurity element to prevent signature validation failure."
+  ], 
+  "revision_id": "1151133"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2011-07-26T15:19:41.650296Z", 
+  "msg": [
+   "Setting clone of SecurityTokenReference correctly."
+  ], 
+  "revision_id": "1151132"
+ }, 
+ {
+  "author": "dkazimirchyk", 
+  "date": "2011-07-26T15:17:44.653066Z", 
+  "msg": [
+   "CAY-1469 Modeler: dbRelationships renaming problem", 
+   "we need to update dbAttributePaths of all flattened ObjAttributes on dbRelationshipChanged event"
+  ], 
+  "revision_id": "1151131"
+ }
+]

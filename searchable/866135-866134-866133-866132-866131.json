@@ -1,0 +1,99 @@
+[
+ {
+  "author": "cacknin", 
+  "date": "2007-08-13T21:37:14.066926Z", 
+  "msg": [
+   "Fix some repos/wc discrepancies and add two repos/repos tests.", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(include apr_md5.h to calculate file checksums)", 
+   "(transmit_prop_deltas): new function to help dump property changes", 
+   "editor commands, in repos/wc diffs.", 
+   "(svnpatch_delete_entry): test reverse_order before writing command.", 
+   "(path_driver_cb_func): wrap a call to svnpatch_delete_entry with a", 
+   "fancy workaround.", 
+   "(add_directory): fix token creation and make use of reverse_order to", 
+   "deduce between add or del.", 
+   "(close_directory, close_file): make use of transmit_prop_deltas.", 
+   "(close_file): overwrite the text_checksum argument with a new one we", 
+   "calculate with svn_io_file_checksum against base-text or temp file.", 
+   "(add_file): check against reverse_order too, for accuracy.", 
+   "(change_dir_prop, change_file_prop): remove calls to diff_editor", 
+   "functions; we're doing this in close_directory and close_file now", 
+   "since we need some processing before being able to choose the right", 
+   "direction.", 
+   "* subversion/tests/cmdline/diff_tests.py:", 
+   "(diff_svnpatch): a two repos/repos tests, and fix some previous", 
+   "repos/wc tests."
+  ], 
+  "revision_id": "866135"
+ }, 
+ {
+  "author": "sage", 
+  "date": "2007-08-13T21:31:18.042723Z", 
+  "msg": [
+   "Add list method and supporting methods to python ctypes WC class. Allows the user", 
+   "access to the svn_client_list function, as well as supporting callbacks.", 
+   "* (csvn/wc.py):", 
+   "(__init__): Add code to set up callbacks.", 
+   "(_list_wrapper): Private method to wrap user callbacks", 
+   "(set_list_func): Method to allow the user to set the callback to be used.", 
+   "(list): Method to call the list callback with information about items."
+  ], 
+  "revision_id": "866134"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-08-13T20:59:01.843109Z", 
+  "msg": [
+   "Introduce diff/merge option support for in-memory data diffing/merging.", 
+   "Finishes issue #2865 and opens up the way for resolution of issue #1493.", 
+   "* subversion/include/svn_diff.h", 
+   "(svn_diff_file_options_t): Note that this type is also used for", 
+   "in-memory diff/merge.", 
+   "* subversion/include/svn_diff.h", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(svn_diff_mem_string_diff,", 
+   "svn_diff_mem_string_diff3,", 
+   "svn_diff_mem_string_diff4): Add the options parameter.  Calculate and", 
+   "allocate normalization buffers.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(mem_baton_t): Add options parameter and pointers to 2 normalization buffers.", 
+   "(data_source_get_next_token): Normalize before calculating the hash.", 
+   "(token_compare): Normalize before comparing lengths and contents.", 
+   "(alloc_normalization_bufs): Calculate the maximum size of a normalized token", 
+   "to prevent memory re-allocation.", 
+   "* subversion/libsvn_diff/diff-diff3-test.c", 
+   "(two_way_diff, three_way_merge): No longer test in-memory operations", 
+   "conditionally.  They support options now."
+  ], 
+  "revision_id": "866133"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-08-13T20:39:44.869799Z", 
+  "msg": [
+   "Followup to r26049: Fix libsvn_diff breakage with normalized diff/merge.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(svn_diff__file_token_t::norm_offset): Add field to record start of", 
+   "the normalized token.", 
+   "(datasource_get_next_token): Set the norm_offset after normalizing.", 
+   "Also, calculate the hash based on the location of the *normalized* data.", 
+   "(token_compare): If the token is in-memory, calculate its position in", 
+   "the buffer based on the norm_offset.", 
+   "* subversion/tests/libsvn_diff/diff-diff3-test.c", 
+   "(test_three_way_merge_no_overlap): Add a test-case for the observed breakage."
+  ], 
+  "revision_id": "866132"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-13T20:04:18.326779Z", 
+  "msg": [
+   "JavaHL: Actually use the ignoreMimeTypes parameter for svn_client_blame3().", 
+   "* subversion/bindings/javahl/native/SVNClient.cpp", 
+   "(blame): The caller provides an ignoreMimeTypes value, so lets use it to", 
+   "call the client library."
+  ], 
+  "revision_id": "866131"
+ }
+]

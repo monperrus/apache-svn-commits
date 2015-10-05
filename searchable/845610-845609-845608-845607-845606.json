@@ -1,0 +1,79 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-04-03T01:53:55.339976Z", 
+  "msg": [
+   "svn_auth.h changes, eventually working towards issue #1087 (\"store", 
+   "auth data in ~/.subversion\").", 
+   "Poof -- all 'first_creds()' functions now take realmstring arguments.", 
+   "This goes for both the public API as well as individual provider", 
+   "implementations.  No providers are using them yet, though.", 
+   "* svn_auth.h (svn_auth_first_credentials):  take a realmstring argument.", 
+   "(svn_auth_provider_t):  a provider's first_credentials()", 
+   "func now takes a realmstring argument as well.", 
+   "* libsvn_subr/auth.c (svn_auth_first_credentials):  pass the", 
+   "realmstring into the provider's first_creds(), and store the realm", 
+   "in the public iter_baton as well.", 
+   "(struct svn_auth_iterstate_t): new realmstring field.", 
+   "(svn_auth_next_credentials): pass realmstring to provider's first_creds().", 
+   "* libsvn_wc/providers.c (simple_first_creds, username_first_creds):", 
+   "take realmstring arguments, but don't use them yet.", 
+   "* libsvn_client/auth.c (simple_prompt_first_creds,", 
+   "username_prompt_first_creds, server_ssl_file_first_credentials,", 
+   "client_ssl_cert_file_first_credentials,", 
+   "client_ssl_pw_file_first_credentials,", 
+   "client_ssl_pw_prompt_first_cred, client_ssl_prompt_first_cred,", 
+   "server_ssl_prompt_first_cred): same.", 
+   "* libsvn_ra_dav/session.c (request_auth):  construct a realmstring by", 
+   "concatenating {schema, host, port, http realm} together, and pass to", 
+   "svn_auth_first_creds.", 
+   "(server_ssl_callback, client_ssl_keypw_callback,", 
+   "client_ssl_callback): pass dummy \"none\" realmstrings for now.  will", 
+   "talk with david waite about this later.  :-)", 
+   "* libsvn_ra_local/ra_plugin.c (svn_ra_local__open): open the svn_fs_t", 
+   "first, then pass its UUID as a realmstring for svn_auth_first_creds()."
+  ], 
+  "revision_id": "845610"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2003-04-02T23:47:06.805370Z", 
+  "msg": [
+   "* configure.in:", 
+   "Require apr 0.9.3 or greater for several reasons: 1) svn head works", 
+   "only with 0.9.3 or a *late* CVS 0.9.2; 2) it may force people to", 
+   "download httpd 2.0.45 which includes apr 0.9.3 and its security fix."
+  ], 
+  "revision_id": "845609"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-04-02T23:14:54.027010Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_nonextant_urls): Check all output for error message."
+  ], 
+  "revision_id": "845608"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-04-02T22:55:23.990712Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "845607"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-04-02T22:53:24.127085Z", 
+  "msg": [
+   "Destroy libsvn_auth -- move its one C file into libsvn_subr.  Note", 
+   "that svn_auth.h is unchanged.  (Don't forget to re-run either", 
+   "gen-make.py or autogen.sh.)", 
+   "* libsvn_subr/auth.c:  copied from libsvn_auth/", 
+   "* libsvn_auth/:  delete this whole directory.", 
+   "* build.conf:  remove all references to libsvn_auth."
+  ], 
+  "revision_id": "845606"
+ }
+]

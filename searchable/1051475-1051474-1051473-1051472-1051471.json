@@ -1,0 +1,68 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2010-12-21T12:45:31.340423Z", 
+  "msg": [
+   "Enforce in the WC DB schema that a pristine text checksum always references", 
+   "a pristine text that is in the store.  To accord with this, change the", 
+   "1.6-to-1.7 upgrade code so that it populates the pristine store before the", 
+   "NODES table, and so that it always writes the SHA-1 checksum (not the MD-5)", 
+   "into the NODES table.", 
+   "The assertions in write_entry are a bit ugly and in one case incomplete.", 
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(ACTUAL_NODE): Declare 'older_checksum', 'left_checksum', 'right_checksum'", 
+   "as referencing a pristine text.", 
+   "(NODES): Declare 'checksum' as referencing a pristine text.", 
+   "(format: 99): Note these changes.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): Receive the text-base checksums through a new 'text_base_info'", 
+   "parameter and use them in the NODES table rows.", 
+   "(entries_write_baton, entries_write_new_cb, svn_wc__write_upgraded_entries):", 
+   "Pass the text base info down the call stack to write_entry().", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(svn_wc__text_base_file_info_t, svn_wc__text_base_info_t): New structs.", 
+   "(svn_wc__write_upgraded_entries): Take a 'text_bases_info' parameter.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(migrate_text_bases): Return the checksums of all the files. Remove the", 
+   "'dir_relpath' parameter and the code that filled in checksum columns in", 
+   "existing NODES rows.", 
+   "(upgrade_to_wcng): Migrate the text bases before the 'entries', and pass", 
+   "all the text-base checksums from the former to the latter.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(replaced_files): Expect SHA-1 instead of MD-5 checksums after upgrade."
+  ], 
+  "revision_id": "1051475"
+ }, 
+ {
+  "author": "shankar", 
+  "date": "2010-12-21T12:44:56.619091Z", 
+  "msg": [
+   "Fixing RAMPART-310"
+  ], 
+  "revision_id": "1051474"
+ }, 
+ {
+  "author": "samisa", 
+  "date": "2010-12-21T12:37:24.903162Z", 
+  "msg": [
+   "Fixed the problem of org.apache.rahas.client.STSClient.org.apache.rahas.processIssueResponse failing if SamlAssertion is issued - RAMPART-154"
+  ], 
+  "revision_id": "1051473"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2010-12-21T12:36:23.705306Z", 
+  "msg": [
+   "Set timeout for test"
+  ], 
+  "revision_id": "1051472"
+ }, 
+ {
+  "author": "danhaywood", 
+  "date": "2010-12-21T12:06:15.704360Z", 
+  "msg": [
+   "splitting out RuntimeContext (ISIS-62)"
+  ], 
+  "revision_id": "1051471"
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "author": "snoopdave", 
+  "date": "2007-05-19T01:48:39.890825Z", 
+  "msg": [
+   "Fixing broken build"
+  ], 
+  "revision_id": "539670"
+ }, 
+ {
+  "author": "sisbell", 
+  "date": "2007-05-19T01:45:46.714832Z", 
+  "msg": [
+   "Test"
+  ], 
+  "revision_id": "539669"
+ }, 
+ {
+  "author": "taylor", 
+  "date": "2007-05-19T01:39:12.658566Z", 
+  "msg": [
+   "Changing the way that get methods are transactioned in the DB Page Manager", 
+   "Looking at the db-page-manager.xml, I see that all get* methods require tx:", 
+   "<prop key=\"*\">PROPAGATION_SUPPORTS</prop>", 
+   "<prop key=\"get*\">PROPAGATION_REQUIRED,-org.apache.jetspeed.page.document.NodeException</prop>", 
+   "Changing to:", 
+   "<prop key=\"get*\">PROPAGATION_SUPPORTS</prop>", 
+   "and remove the * entirely", 
+   "With a 300 user load test, we are running out of PB Brokers as the propagation supports methods auto create a new PB.", 
+   "We can resolve this by either upping the the PB connections", 
+   "# maximum number of brokers that can be borrowed from the", 
+   "# pool at one time. When non-positive, there is no limit.", 
+   "maxActive=100", 
+   "or growing the connections", 
+   "# specifies the behaviour of the pool when broker capacity is", 
+   "# exhausted (see maxActive above)", 
+   "# 0 - fail", 
+   "# 1 - block", 
+   "# 2 - grow", 
+   "whenExhaustedAction=2", 
+   "WHile this does seem to work, we are needlessly creating PB brokers and causing resource usage where not needed", 
+   "This solution does not to start a tx on read"
+  ], 
+  "revision_id": "539668"
+ }, 
+ {
+  "author": "jaz", 
+  "date": "2007-05-19T01:38:16.737918Z", 
+  "msg": [
+   "forgot to remove the old one"
+  ], 
+  "revision_id": "539667"
+ }, 
+ {
+  "author": "jaz", 
+  "date": "2007-05-19T01:37:26.519042Z", 
+  "msg": [
+   "added initialEstimateAmt to the percent calc; also moved the percent calc to the end so all estimates get included"
+  ], 
+  "revision_id": "539666"
+ }
+]

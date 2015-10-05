@@ -1,0 +1,119 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2004-05-13T16:17:32.079517Z", 
+  "msg": [
+   "Begin list of new 1.1 changes/features that need to be documented in book.", 
+   "(Did I forget any?)", 
+   "* doc/book/TODO:  start listing 1.1 changes."
+  ], 
+  "revision_id": "849775"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-13T01:41:56.097030Z", 
+  "msg": [
+   "Make the way we do repos-to-wc diffs closer to the way we do other", 
+   "report operations.  Probably fixes a not-yet-discovered bug when the", 
+   "wc path involves a switched directory.", 
+   "* libsvn_client/diff.c (diff_repos_wc): Instead of converting path2 to", 
+   "a URL and maintaining parallel local and remote anchor/target pairs,", 
+   "use svn_wc_get_actual_target and then fetch the URL for the anchor."
+  ], 
+  "revision_id": "849774"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-13T00:49:24.528084Z", 
+  "msg": [
+   "Make diffs involving a working copy behave the same way as repository", 
+   "to repository diffs.", 
+   "Diffs involving a working copy no longer are forced to notice node", 
+   "ancestry, but accept ignore_ancestry parameters so that", 
+   "--notice-ancestry functions correctly.  Also, change repository to", 
+   "working copy diffs to use the RA function do_diff instead of", 
+   "do_update.  This fixes several inconsistencies when performing diffs", 
+   "of renamed paths.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_get_diff_editor2): New variant of svn_wc_get_diff_editor,", 
+   "accepts the ignore_ancestry parameter.", 
+   "(svn_wc_diff2): New variant of svn_wc_diff, accepts the", 
+   "ignore_ancestry parameter.", 
+   "(svn_wc_get_diff_editor, svn_wc_diff): Deprecate", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(struct edit_baton): Add an ignore_ancestry field.", 
+   "(make_editor_baton): Populate the ignore_ancestry field of the edit", 
+   "baton.", 
+   "(file_diff): If ignore_ancestry is TRUE, then ignore paths scheduled", 
+   "for replace and treat them just as modified.", 
+   "(svn_wc_get_diff_editor2): Renamed from svn_wc_get_diff_editor.", 
+   "Accept the ignore_ancestry parameter.", 
+   "(svn_wc_get_diff_editor): Implement deprecated function using", 
+   "svn_wc_get_diff_editor2, always setting ignore_ancestry to FALSE.", 
+   "(svn_wc_diff2): Renamed from svn_wc_diff.  Accept the", 
+   "ignore_ancestry parameter.", 
+   "(svn_wc_diff): Implement deprecated function using svn_wc_diff2,", 
+   "always setting ignore_ancestry to FALSE.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_wc_wc): Accept and use the ignore_ancestry parameter with", 
+   "svn_wc_diff2.", 
+   "(diff_repos_wc): Use the RA function do_diff instead of do_update,", 
+   "use the new svn_wc_get_diff_editor2, and pass the ignore_ancestry", 
+   "parameter to it.", 
+   "(do_diff): Pass the ignore_ancestry parameter to diff_wc_wc.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(check_replace_a_file): By default, ignore_ancestry is TRUE, which", 
+   "means that a path scheduled to be replaced should be reported as a", 
+   "modification.  The old behavior, with ignore ancestry defaulting", 
+   "to FALSE, was to report a delete followed by an add."
+  ], 
+  "revision_id": "849773"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-13T00:18:32.470503Z", 
+  "msg": [
+   "Simplify svn_client_switch.", 
+   "* libsvn_client/switch.c (svn_client_switch): Behave more like", 
+   "svn_client_update.  There's nothing wrong with anchoring a directory", 
+   "switch operation outside the directory, whether or not the trailing", 
+   "path component is the same.", 
+   "* libsvn_client/ra.c (invalidate_wc_props): Make this work when the", 
+   "specified path is non-empty, although only if it's a directory path."
+  ], 
+  "revision_id": "849772"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2004-05-12T22:57:31.647755Z", 
+  "msg": [
+   "Second cut of the version query and compatibility check system.  This", 
+   "iteration removes all prototype generating macros, simplifies the", 
+   "interfaces, and adds helper functions to easily run a set of", 
+   "compatibility checks.", 
+   "* subversion/include/svn_version.h", 
+   "(SVN_VER_GEN_PROTO, SVN_VER_GEN_IMPL): Remove.", 
+   "(SVN_VERSION_DEFINE, SVN_VERSION_BODY): New.", 
+   "(svn_ver_callback_compatible): Remove.", 
+   "(svn_ver_compatible): Make the arguments symmetric.", 
+   "(SVN_VER_COMPATIBLE, SVN_VER_CALLBACK_COMPATIBLE): Remove.", 
+   "(svn_version_checklist_t, svn_ver_error_generator_t): New types.", 
+   "(svn_ver_check_list): New.", 
+   "(svn_subr_version): Spell out the prototype.", 
+   "Also sdd and update lots of docstrings.", 
+   "* subversion/include/svn_client.h (svn_client_version): Spell out the", 
+   "prototype and update the docstring.", 
+   "* subversion/libsvn_subr/version.c: Include svn_error.h.", 
+   "(svn_subr_version): Reimplement using SVN_VERSION_BODY.", 
+   "(svn_ver_compatible): Update to match changed prototype. Docstring moved", 
+   "to the prototype declaration.", 
+   "(svn_ver_callback_compatible): Remove.", 
+   "(svn_ver_check_list): Implement.", 
+   "* subversion/libsvn_client/version.c (svn_client_version): Reimplement", 
+   "using SVN_VERSION_BODY.", 
+   "* subversion/clients/cmdline/main.c (check_lib_versions): Reimplement", 
+   "using SVN_VERSION_DEFINE and svn_ver_check_list."
+  ], 
+  "revision_id": "849771"
+ }
+]

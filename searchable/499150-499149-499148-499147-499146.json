@@ -1,0 +1,90 @@
+[
+ {
+  "author": "kris", 
+  "date": "2007-01-23T21:57:09.656899Z", 
+  "msg": [
+   "Fix for 17388"
+  ], 
+  "revision_id": "499150"
+ }, 
+ {
+  "author": "taylor", 
+  "date": "2007-01-23T21:55:33.882605Z", 
+  "msg": [
+   "Two fixed bugs:", 
+   "1. Sometimes, JSF demo portlet throws exceptions in parallel mode as follows:", 
+   "2007-01-23 15:57:28 ApplicationDispatcher[/jsf-demo] Servlet.service() for servlet jsp threw", 
+   "exception", 
+   "java.lang.IllegalStateException: parent is null?", 
+   "at javax.faces.webapp.UIComponentTag.findComponent(UIComponentTag.java:367)", 
+   "at javax.faces.webapp.UIComponentTag.doStartTag(UIComponentTag.java:219)", 
+   "at", 
+   "org.apache.jsp.WEB_002dINF.view.calendar_002dview_jsp._jspx_meth_h_outputText_0(calendar_002dview_jsp.java:210)", 
+   "...", 
+   "--> The old implementation of org.apache.jetspeed.engine.servlet.ServletRequestImpl put", 
+   "attributes both into the worker context and into http request.", 
+   "Meanwhile, the javax.faces.webapp.UIComponentTag class retrieves the parent UI component and store", 
+   "child count into that.", 
+   "If a worker store a UIComponent into the request, then another parallel worker can steal the", 
+   "UIComponent of other worker. In this case, the javax.faces.webapp.UIComponentTag throws an", 
+   "exception.", 
+   "I modified the org.apache.jetspeed.engine.servlet.ServletRequestImpl class not to put attributes", 
+   "into the request when the current context is under an asynchoronous worker. Under an asynchronous", 
+   "worker, the attributes are stored only in the current context and retrieved from the current", 
+   "context.", 
+   "When I tested this modification, it seems working correctly.", 
+   "2. In the first visit under parallel mode just after Tomcat's restart, some portlet throws", 
+   "NoClassDefFoundError as follows:", 
+   "2007-01-23 16:07:22 ApplicationDispatcher[/jsf-demo] Servlet.service() for servlet jsp threw", 
+   "exception", 
+   "java.lang.NoClassDefFoundError: org.apache.myfaces.taglib.html.HtmlCommandButtonTag", 
+   "at org.apache.jsp.greeting_jsp.class$(greeting_jsp.java:97)", 
+   "at org.apache.jsp.greeting_jsp._jspx_meth_h_commandButton_0(greeting_jsp.java:261)", 
+   "...", 
+   "--> Actually, I could not figure out why this problem occurred in detail. However, I found that", 
+   "this symptom occurs only when the tag pool serialization file (tldCache.ser) of Tomcat exists.", 
+   "If we remove the file before restarting Tomcat, this symptom does not occur any more.", 
+   "Therefore, I concluded that this problem should be investigated in the Tomcat side hereafter.", 
+   "Anyway, after the second visit, this symptom does not occur.", 
+   "Some improved codes:", 
+   "1. MockRenderJob.java was modified to implement the new RenderingJob interface, which was modified", 
+   "in the last patch.", 
+   "2. AsynchPageAggregatorImpl.java now checks if the rendering job is not null; sometimes a portlet", 
+   "entity is pointed to invalid portlet definition for some reason, such as wrong psml file.", 
+   "PortletRendererImpl.java and WorkerMonitorImpl.java check that also.", 
+   "3. WorkerMonitorImpl now puts timeout workers into a temporary collection, and after that, it", 
+   "tries to kill jobs. Because job killing during iteration corrupt the collection itself, I changed", 
+   "this class.", 
+   "contribution from Woonsan Ko"
+  ], 
+  "revision_id": "499149"
+ }, 
+ {
+  "author": "isilval", 
+  "date": "2007-01-23T21:54:46.268289Z", 
+  "msg": [
+   "Fix for compile error caused by r499126, apologies. I still think that mvn should have", 
+   "caught this without having to explicitly say mvn clean ..."
+  ], 
+  "revision_id": "499148"
+ }, 
+ {
+  "author": "hindessm", 
+  "date": "2007-01-23T21:53:08.876493Z", 
+  "msg": [
+   "Fix to stop initialization of portlib from segfaulting.  This really", 
+   "needs fixing properly."
+  ], 
+  "revision_id": "499147"
+ }, 
+ {
+  "author": "awiner", 
+  "date": "2007-01-23T21:49:53.592608Z", 
+  "msg": [
+   "ADFFACES-358: Improvement to plugins to generate generic metadata in faces-config for the custom component attributes", 
+   "The patch generated a lot more diffs than expected in the base metadata, but happily these", 
+   "changes were all improvements.  In particular, facet-metadata is now much more correctly generated."
+  ], 
+  "revision_id": "499146"
+ }
+]

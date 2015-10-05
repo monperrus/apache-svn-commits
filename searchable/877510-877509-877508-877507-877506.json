@@ -1,0 +1,118 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-23T12:58:13.010266Z", 
+  "msg": [
+   "* subversion/libsvn_client/ra.c", 
+   "(set_wc_prop): Use svn_dirent_*() api on working copy directories."
+  ], 
+  "revision_id": "877510"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-23T12:57:26.751859Z", 
+  "msg": [
+   "* subversion/include/svn_dirent_uri.h", 
+   "(svn_uri_internal_style, svn_uri_local_style, svn_uri_dirname,", 
+   "svn_uri_is_absolute, svn_uri_is_root, svn_uri_canonicalize,", 
+   "svn_uri_is_canonical, svn_uri_get_longest_ancestor, svn_uri_is_child,", 
+   "svn_uri_is_ancestor):", 
+   "Document as new in 1.7, as these functions were made private before", 
+   "releasing Subversion 1.6."
+  ], 
+  "revision_id": "877509"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-23T09:07:03.461572Z", 
+  "msg": [
+   "Create an internal variant of svn_wc_check_wc() that takes a DB parameter,", 
+   "rather than creating one. Much of this code will probably get reorganized,", 
+   "but we *do* have to get away from the public svn_wc_check_wc() API since", 
+   "it implies a creation of a DB. Reusing one is *so* much better.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__internal_check_wc): new function to fetch the working copy", 
+   "format, plus some extra checky shtuff.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc_check_wc): renamed to ...", 
+   "(svn_wc__internal_check_wc): ... this. and alter the params to take a DB", 
+   "and an abspath.", 
+   "(svn_wc_check_wc): new func to do some basic, then call the internal", 
+   "(probe): take a DB, and pass it to svn_wc__inernal_check_wc rather than", 
+   "the old svn_wc_check_wc.", 
+   "(open_single): adjust call -- use internal_check_wc instead.", 
+   "(svn_wc_adm_probe_open3): when calling probe(), we need a DB. use the", 
+   "one from associated, or (sigh) create one on the fly.", 
+   "(svn_wc_adm_probe_retrieve): use the associated's DB for passing to the", 
+   "internal variant of check_wc.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc_cleanup3): pass the newly-created DB to the internal_check_wc", 
+   "function", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc_ensure_adm3): create a DB and pass it along to the internal", 
+   "check_wc() function."
+  ], 
+  "revision_id": "877508"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-23T06:39:49.162811Z", 
+  "msg": [
+   "Shove some code around. Minor modifications.", 
+   "* subversion/libsvn_wc/questions.h: Removed.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(check_format): moved here from svn_wc__check_format in questions.c", 
+   "(svn_wc_check_wc): moved here from questions.c (same name)", 
+   "(upgrade_format_old, svn_wc__upgrade_format, check_format_upgrade):", 
+   "track rename of svn_wc__check_format to check_format()", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(svn_wc_check_wc, svn_wc__check_format): removed. moved to lock.c", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(entry_has_local_mods): remove SCHEDULE parameter, let the callers take", 
+   "care of that situation.", 
+   "(modcheck_found_entry): check schedule value manually, and don't bother", 
+   "passing it to entry_has_local_mods(). simplify some error logic.", 
+   "(check_tree_conflict): check schedule manually.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(svn_wc_add3): tweak some indentation", 
+   "* subversion/libsvn_wc/props.c:", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(): remove unused \"questions.h\" include"
+  ], 
+  "revision_id": "877507"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-23T05:43:31.571313Z", 
+  "msg": [
+   "Revamp some property queries to use the new internal_getprop interface.", 
+   "* subversion/libsvn_wc/props.h:", 
+   "(svn_wc__marked_as_binary): new declaration for a function that examines", 
+   "the mime-type property.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_has_binary_props): marked as SVN_DEPRECATED. only WC functions", 
+   "were using this, and it takes an access baton (which is heading for", 
+   "the execution block). kill it now.", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(svn_wc_has_binary_prop): guts altered and renamed to ...", 
+   "(svn_wc__marked_as_binary): ... this. take an abspath and a DB as", 
+   "parameters.", 
+   "* subversion/libsvn_wc/deprecated.c:", 
+   "(svn_wc_has_binary_prop): grab a DB from the access baton, convert the", 
+   "path into an abspath, and call marked_as_binary.", 
+   "* subversion/libsvn_wc/translate.c:", 
+   "(svn_wc__get_eol_style, svn_wc__get_keywords, svn_wc__get_special,", 
+   "svn_wc__maybe_set_executable, svn_wc__maybe_set_read_only): convert", 
+   "the incoming path to an abspath, grab the DB from the access baton,", 
+   "and call internal_propget() rather than svn_wc_prop_get().", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(detranslate_wc_file, svn_wc__merge_internal): grab the DB from the", 
+   "access baton, compute an abspath, and call marked_as_binary.", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(path_driver_cb_func): grab the DB from the access baton, compute an", 
+   "abspath, and call marked_as_binary."
+  ], 
+  "revision_id": "877506"
+ }
+]

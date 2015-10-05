@@ -1,0 +1,68 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-01-02T22:46:51.144069Z", 
+  "msg": [
+   "Fix bug whereby running 'svn log -rN SOMEPATH' would result in an xml", 
+   "protocol error if there were no changes in revision N underneath", 
+   "SOMEPATH.  This problem was introduced in revision 3811, which didn't", 
+   "cover the case where svn_repos_get_logs might invoke log_receiver zero", 
+   "times.  Since the reciever never ran, the lrb->needs_header flag never", 
+   "got cleared.  Control would proceed without error to the end of", 
+   "dav_svn__log_report(), which would send a closing tag even though no", 
+   "opening tag had ever been sent.", 
+   "* subversion/mod_dav_svn/log.c", 
+   "(maybe_send_header): New helper function.", 
+   "(log_receiver): Use above new helper instead of inline code.", 
+   "(dav_svn__log_report): Use above new helper to conditionally start", 
+   "the log report, in case log_receiver never ran.", 
+   "* subversion/tests/clients/cmdline/log_tests.py", 
+   "(log_where_nothing_changed): New test.", 
+   "(test_list): Run it."
+  ], 
+  "revision_id": "844305"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-01-02T22:29:26.150257Z", 
+  "msg": [
+   "New regression test for issue #863.", 
+   "* schedule_tests.py (unschedule_missing_added):  schedule dirs and", 
+   "files for addition, destroy them, then unschedule the additions", 
+   "anyway using 'svn rm' and 'svn revert'."
+  ], 
+  "revision_id": "844304"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-02T21:40:07.897290Z", 
+  "msg": [
+   "Revert revision 4228.  You can see in the unfinished code how it", 
+   "accidentally committed to my real working copy when I ran it, instead", 
+   "of to the test repository :-)."
+  ], 
+  "revision_id": "844303"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-02T21:37:02.579647Z", 
+  "msg": [
+   "Accidental commit, reverted in revision 4229."
+  ], 
+  "revision_id": "844302"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-02T20:45:54.914770Z", 
+  "msg": [
+   "Fix issue #1058:", 
+   "* subversion/clients/cmdline/propedit-cmd.c", 
+   "(svn_cl__propedit): Error if target is a URL.  This is friendlier to", 
+   "the user than falling into svn_client_propget with a null auth_baton", 
+   "and seg faulting.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client_propset): Error if target is a URL."
+  ], 
+  "revision_id": "844301"
+ }
+]

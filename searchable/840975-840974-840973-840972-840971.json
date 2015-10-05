@@ -1,0 +1,105 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-01-15T20:27:13.313338Z", 
+  "msg": [
+   "* libsvn_wc: add translate-test to svn:ignore prop"
+  ], 
+  "revision_id": "840975"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-15T20:07:24.926623Z", 
+  "msg": [
+   "Move keyword stuff from libsvn_io to libsvn_wc.", 
+   "Also, handle the edge case whereby setting the svn:keywords property", 
+   "on a file that doesn't have the prop, but which does contain keyword", 
+   "strings, implies a backhanded local mod on the file, since it will now", 
+   "differ from its text-base at commit time.  We have to invalidate the", 
+   "timestamp for the local mod to be detected correctly.  Worked with", 
+   "Mike Pilato <cmpilato@collab.net> on this one.", 
+   "This passes \"make check\", but whether or not it actually fixes the", 
+   "abovementioned case has not yet been verified.  Committing first", 
+   "because others are waiting for the update.", 
+   "* subversion/include/svn_io.h (svn_io_keywords_t,", 
+   "svn_io_copy_and_translate): Moved to svn_wc.h and renamed, see below.", 
+   "* subversion/include/svn_wc.h (svn_wc_keywords_t,", 
+   "svn_wc_copy_and_translate): Received from svn_io.h and renamed, see", 
+   "above.  All callers changed.", 
+   "(svn_wc_keywords_differ): New func.", 
+   "* subversion/libsvn_subr/io.c (SVN_TRANSLATE, translate_err,", 
+   "translate_write, translate_keyword_subst, translate_keyword_subst,", 
+   "translate_newline): Moved to new file libsvn_wc/translate.c.", 
+   "(svn_io_copy_and_translate): Same, and renamed.", 
+   "* subversion/libsvn_wc/translate.c (SVN_TRANSLATE, translate_err,", 
+   "translate_write, translate_keyword_subst, translate_keyword_subst,", 
+   "translate_newline): Received from libsvn_subr/io.c above.", 
+   "(svn_wc_copy_and_translate): Same, and renamed.", 
+   "(svn_wc_keywords_differ): New function.", 
+   "* build.conf (translate-test): Replaces subst-test.", 
+   "* subversion/libsvn_wc/wc.h (svn_wc__get_keywords): Doc fix.  Change", 
+   "`optional_value' parameter to `force_list' for clarity.", 
+   "(svn_wc__entry_modify): Doc fixes.", 
+   "* subversion/libsvn_wc/props.c: Remove some whitespace acreage from", 
+   "near the end of the file.", 
+   "(expand_keyword): New parameter `is_valid_p'.  Doc fixes.", 
+   "(svn_wc__get_keywords): Consistify return convention by taking", 
+   "advantage of new parameter to expand_keyword.  Don't allocate a", 
+   "keyword structure unless we absolutely have to.  Doc fixes.", 
+   "(svn_wc_prop_set): If setting a translation property, possibly", 
+   "invalidate the `entries' text timestamp.", 
+   "* subversion/libsvn_wc/questions.c (timestamps_equal_p): Remove check", 
+   "for impossible condition.", 
+   "Unrelated:", 
+   "* subversion/tests/clients/cmdline/trans_tests.py", 
+   "(setup_working_copy): Set up more files.  Doc tweak."
+  ], 
+  "revision_id": "840974"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-15T19:54:25.361421Z", 
+  "msg": [
+   "* subversion/libsvn_wc/get_editor.c", 
+   "(close_file): If the \"new value\" we got from the repository is NULL,", 
+   "then we are removing the keywords property, meaning we are", 
+   "effectively turning off keyword support...so just set keywords to", 
+   "NULL.  Also, pass '-f' to `patch` so it never asks the user", 
+   "questions such as \"Reversed (or previously applied) patch detected!", 
+   "Assume -R?\""
+  ], 
+  "revision_id": "840973"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-15T19:38:13.681459Z", 
+  "msg": [
+   "Bugfix:  we were placing eol literals like \"\\n\" into our xml log commands.", 
+   "Unfortunately, expat parses them all into a space, and we were ending up", 
+   "with translated working copy files that had no eol's at all, just spaces!", 
+   "* props.c (svn_wc__eol_value_from_string): new reverse-parser helper.", 
+   "* wc.h (svn_wc__eol_value_from_string):  declare.", 
+   "* get_editor.c (close_file): once we decide on a value of eol_str,", 
+   "use new routine to re-encode it (for burying in xml)", 
+   "* log.c (log_do_file_xfer): parse the xml eol encoding into a real eol", 
+   "string, using the same parser that is used when parsing the value of", 
+   "'svn:eol-style'."
+  ], 
+  "revision_id": "840972"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-15T18:15:22.286287Z", 
+  "msg": [
+   "Buf fix (with test to verify it).", 
+   "* subversion/libsvn_ra_local/commit_editor.c", 
+   "(change_file_prop): Doh!  Don't dereference NULL pointers.", 
+   "* subversion/tests/clients/cmdline/prop_tests.py", 
+   "(downdate_props): Finish this test.", 
+   "(remove_props): New test.", 
+   "(test_list): Added (or uncommented) references to downdate_props and", 
+   "remove_props."
+  ], 
+  "revision_id": "840971"
+ }
+]

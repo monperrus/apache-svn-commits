@@ -1,0 +1,80 @@
+[
+ {
+  "author": "abrown", 
+  "date": "2007-03-07T22:02:53.833754Z", 
+  "msg": [
+   "DERBY-47 (partial): Code generation patch that does the following:", 
+   "1 - Moves the code for generating a list of IN values into a new method,", 
+   "InListOperatorNode.generateListAsArray()\". The new method is then called", 
+   "from two places:", 
+   "A. InListOperatorNode.generateExpression(): the \"normal\" code-path for", 
+   "generating IN-list bytecode (prior to DERBY-47 changes).", 
+   "B. PredicateList.generateInListValues(): new method for generating the IN-list", 
+   "values that will serve as the execution-time index \"probe\" values. This", 
+   "method also generates a boolean to indicate whether or not the values", 
+   "are already sorted (i.e. if we sorted them at compile time, which means", 
+   "they all must have been constants).", 
+   "2 - Adds code to ParameterNode that allows generation of a \"place-holder\"", 
+   "value (instead of the ParameterNode itself) for probe-predicates. This is", 
+   "required because a probe predicate has the form \"column = ?\" where the right", 
+   "operand is an internally generated parameter node that does not actually", 
+   "correspond to a user parameter. Since that parameter node is \"fake\" we can't", 
+   "really generate it; instead we need to be able to generate a legitimate", 
+   "ValueNode--either a constant node or a \"real\" parameter node--to serve as", 
+   "the place-holder.", 
+   "3 - Updates the generateExpression() method of BinaryOperatorNode to account", 
+   "for situations where the optimizer chooses a plan for which a probe pred is", 
+   "*not* a useful start/stop key and thus is not being used for execution-time", 
+   "index probing. In this case we simply \"revert\" the probe predicate back to", 
+   "the InListOperatorNode from which it was created. Or put another way, we", 
+   "\"give up\" on index multi-probing and simply generate the original IN-list", 
+   "as a regular restriction.  This patch also removes the now unnecessary", 
+   "\"revertToSourceInList()\" calls from PredicateList.java.", 
+   "4 - Adds logic to NestedLoopJoinStrategy to generate a new type of result set,", 
+   "MultiProbeTableScanResultSet, for probing an index at execution time. The", 
+   "new result set does not yet exist (incremental development) but the code to", 
+   "generate such a result set is added as part of this patch.", 
+   "5 - Adds a new method, \"getMultiProbeTableScanResultSet()\", to the", 
+   "ResultSetFactory interface. Also adds a corresponding stub method to", 
+   "GenericResultSetFactory. The latter is just a dummy method and will be", 
+   "filled in with the appropriate code as part of a subsequent patch."
+  ], 
+  "revision_id": "515795"
+ }, 
+ {
+  "author": "reinhard", 
+  "date": "2007-03-07T22:02:22.665928Z", 
+  "msg": [
+   "- make it possible to exclude artifacts from the RCL by", 
+   "setting %exclude-lib property referencing groupId:artifactId", 
+   "- unit test"
+  ], 
+  "revision_id": "515794"
+ }, 
+ {
+  "author": "fuzzylogic", 
+  "date": "2007-03-07T22:01:37.445509Z", 
+  "msg": [
+   "DERBY-2400 (partial): Replace references to Cloudscape with Derby. This commit", 
+   "takes care of the rest of the separate source trees, except for engine, build", 
+   "and testing."
+  ], 
+  "revision_id": "515793"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2007-03-07T22:00:29.843031Z", 
+  "msg": [
+   "DERBY-2403 Disable ParameterMappingTest for JSR169 for now."
+  ], 
+  "revision_id": "515792"
+ }, 
+ {
+  "author": "ab", 
+  "date": "2007-03-07T21:59:07.819743Z", 
+  "msg": [
+   "Upgrade to Hadoop 0.11.2 and Lucene 2.1.0 releases."
+  ], 
+  "revision_id": "515791"
+ }
+]

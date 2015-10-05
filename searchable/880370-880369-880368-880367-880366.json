@@ -1,0 +1,85 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-10-29T17:56:52.962607Z", 
+  "msg": [
+   "Fix issue #3519 - ra_serf using Label header unsupported by mod_dav_svn.", 
+   "NOTE: This bug is triggered by switch_tests.py 19 on the 1.6.x branch.", 
+   "It isn't exhibited in stock trunk testing because the HTTPv2 logic", 
+   "doesn't attempt the kind of CHECKOUT request that tickles the problem.", 
+   "And while it *should* show up in trunk with \"SVNAdvertiseV2Protocol", 
+   "off\" set in httpd.conf, it currently doesn't because of an entirely", 
+   "different bug (related to wcprops, and also currently causing ra_neon", 
+   "to fail in the same way).  Confused?", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(get_version_url): Don't call svn_ra_serf__deliver_props() in a way", 
+   "that would cause it to use a Label header (because mod_dav_svn", 
+   "doesn't do recognize the header at all)."
+  ], 
+  "revision_id": "880370"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-29T17:48:24.619709Z", 
+  "msg": [
+   "Make sure svn_io_temp_dir() always returns an absolute path.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(init_temp_dir): Make the path absolute before putting it in the", 
+   "global pool."
+  ], 
+  "revision_id": "880369"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-10-29T17:43:24.551711Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__conn_setup): Remove unused local variable."
+  ], 
+  "revision_id": "880368"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-29T17:26:04.230388Z", 
+  "msg": [
+   "Some initial work to solve our pool lifetime and cleanup issues around the", 
+   "access batons and the DB.", 
+   "This revision separates the access baton cleanup into two functions,", 
+   "dependent upon whether the baton holds a write-lock.", 
+   "There is also a notion of whether the DB is available for performing work,", 
+   "or that it is closed/closing. This is currently defined-out, but will be", 
+   "used in a future commit.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__db_is_closing): stub macro", 
+   "(pool_cleanup): renamed to ...", 
+   "(pool_cleanup_locked): ... this. a test is performed on whether the DB", 
+   "is closed, and a separate line of logic is used to close/unlock the", 
+   "access baton (primarily by substituting a temporary helper DB). we", 
+   "also switch from do_close() to close_single(). if the access batons", 
+   "are being cleaned up, then the child batons will be cleaned up. there", 
+   "is no need to (proactively) close the child batons.", 
+   "(pool_cleanup_readonly): new function to close an access baton used for", 
+   "reading. the task is easy for a closed baton, or a closed DB.", 
+   "otherwise, we call close_single() to close this one baton, leaving the", 
+   "children/other batons for the pool cleanup.", 
+   "(pool_cleanup_child): kill both pool cleanup functions, with the intent", 
+   "that _one_ of them will work.", 
+   "(adm_access_alloc): register the appropriate cleanup", 
+   "(do_close, svn_wc_adm_close2): use svn_error_return()"
+  ], 
+  "revision_id": "880367"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-29T17:21:27.468260Z", 
+  "msg": [
+   "Following up on r40291, implement svn_wc__db_temp_op_set_pristine_props", 
+   "and add a very simple test on it in the db tests.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_temp_op_set_pristine_props): Write implementation.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(validate_node): Write base properties for status normal nodes."
+  ], 
+  "revision_id": "880366"
+ }
+]

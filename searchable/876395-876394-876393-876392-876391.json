@@ -1,0 +1,89 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-04T19:48:54.393376Z", 
+  "msg": [
+   "More error-handling cleanups in ra-serf.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_response): When setting a pending_error, also set the", 
+   "returnable status and discard the body."
+  ], 
+  "revision_id": "876395"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-04T19:24:13.961896Z", 
+  "msg": [
+   "Close the wc_db when closing it's associated access baton.  Also close the", 
+   "underlying sqlite dbs when closing the wc_db.  This fixes several bugs where", 
+   "svn complains about having too many open files.", 
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(close_apr): Just no-op if the db has already been closed.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(do_close): If the associated set for the baton is empty, close the", 
+   "shared wc_db object.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_close): Implement."
+  ], 
+  "revision_id": "876394"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-04T19:18:57.009732Z", 
+  "msg": [
+   "For issue #2028, #2556 (and probably a few others), remove the use of", 
+   "svn_path_is_child in libsvn_wc. This function breaks paths at possibly", 
+   "invalid locations.  (E.g. it fails on \"A:file\" style paths)", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(have_recursive_parent): Use svn_dirent_is_child().", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): Use svn_uri_is_child().", 
+   "* subversion/libsvn_wc/log.c", 
+   "(loggy_path): Use svn_dirent_is_child().", 
+   "* subversion/libsvn_wc/merge.c", 
+   "(preserve_pre_merge_files, merge_binary_file):", 
+   "Use svn_dirent_is_child().", 
+   "* subversion/libsvn_wc/props.c", 
+   "(install_props_file, svn_wc__install_props,", 
+   "svn_wc__props_delete, svn_wc__merge_props):", 
+   "Use svn_dirent_is_child().", 
+   "* subversion/libsvn_wc/status.c", 
+   "(is_external_path): Use svn_dirent_is_child().", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(check_tree_conflict, locate_copyfrom) Use svn_uri_is_child."
+  ], 
+  "revision_id": "876393"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-04T18:47:04.936027Z", 
+  "msg": [
+   "In, HTTP v2, we don't have CHECKOUTs to tell us that something is out", 
+   "of date.  Sometimes the message we get back is just that the item we", 
+   "wanted to change isn't there any more, which could be due to", 
+   "out-of-dateness, or could be due to something else.  Note that this is", 
+   "consistent with the way svnserve works, too.", 
+   "Granted, seeing 'not found' isn't as ideal as seeing 'out of date',", 
+   "but masking potentially more harmful conditions with an XFail-ing test", 
+   "is the greater sin in my book.  (We can always work to improve error", 
+   "messages later.)", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(commit_out_of_date_deletions): Allow 'not found' as well as 'out of", 
+   "date' in the expected error message.", 
+   "(test_list): Remove XFail() for commit_out_of_date_deletions()."
+  ], 
+  "revision_id": "876392"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-04T17:47:43.486797Z", 
+  "msg": [
+   "Fix directory copies in HTTP v2.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(setup_copy_dir_headers): If using HTTP v2, use the already known", 
+   "transaction root resource URL of the directory as its COPY", 
+   "destination."
+  ], 
+  "revision_id": "876391"
+ }
+]

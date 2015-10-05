@@ -1,0 +1,77 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2008-02-08T00:43:41.768703Z", 
+  "msg": [
+   "Fix the same problem fixed by r29230 from another angle.  (Fortunately", 
+   "these two changes are two great tastes that taste great together.)", 
+   "In two cases where svn_ra_neon__request_destroy is called, make sure", 
+   "that it gets called even if errors occur.  This means that we don't", 
+   "actually have to put any requirements on the pool passed to", 
+   "svn_ra_neon__parsed_request, as threatened in the log message for", 
+   "r29230.", 
+   "There's another handful of svn_ra_neon__request_create/destroy pairs", 
+   "scattered across the library that probably need this treatment as", 
+   "well.", 
+   "* subversion/libsvn_ra_neon/util.c", 
+   "(parsed_request): Add a request argument and move request creation", 
+   "and destruction to...", 
+   "(svn_ra_neon__parsed_request): ... here, so that the destruction", 
+   "always happens.", 
+   "(svn_ra_neon__simple_request): For good measure, make this", 
+   "function destroy its request even when errors are thrown, too."
+  ], 
+  "revision_id": "869305"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-02-08T00:13:39.466933Z", 
+  "msg": [
+   "Fix a segfault on global pool cleanup after merge which has been", 
+   "occurring on some platforms since r28442.  It appears that, due to the", 
+   "ne_decompress destruction in the request cleanup handler,", 
+   "svn_ra_neon__parsed_request must always be called with a pool whose", 
+   "lifetime is no longer than the RA session pool's.  (This will be", 
+   "documented in a future revision.  (Update: actually, r29231 fixes", 
+   "this in a different way.))", 
+   "* subversion/libsvn_ra_neon/get_location_segments.c", 
+   "(svn_ra_neon__get_location_segments): Run everything (including", 
+   "svn_ra_neon__parsed_request) in a subpool."
+  ], 
+  "revision_id": "869304"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-02-07T22:40:19.428459Z", 
+  "msg": [
+   "Nominate r29106."
+  ], 
+  "revision_id": "869303"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-07T20:11:37.754632Z", 
+  "msg": [
+   "* subversion/svn/conflict-callbacks.c", 
+   "(svn_cl__conflict_handler): Use more human-friendly phrasing and", 
+   "formatting in the interactive conflict resolution prompt.  The", 
+   "new longest prompt looks like this:", 
+   "\"Select: (p)ostpone, all of (M)ine, all of (T)heirs, (r)esolved,", 
+   "(h)elp for more options:\"", 
+   "Suggested by: cmpilato", 
+   "epg", 
+   "Unsolicited musical interlude by: glasser"
+  ], 
+  "revision_id": "869302"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-02-07T18:57:20.679531Z", 
+  "msg": [
+   "Merge r29220 from trunk: Fix test framework issue that considers no actual", 
+   "output as OK, even if there's output expected.", 
+   "Approved by: +1: lgo, cmpilato"
+  ], 
+  "revision_id": "869301"
+ }
+]

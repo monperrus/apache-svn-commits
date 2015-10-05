@@ -1,0 +1,97 @@
+[
+ {
+  "author": "jdillon", 
+  "date": "2008-04-23T19:25:47.291497Z", 
+  "msg": [
+   "(GERONIMO-3651) Give commands which spawn java processes a --profile|-P flag to users to pass in additional information to be handled by rc.d scripts to say append debug flags or whatever"
+  ], 
+  "revision_id": "651020"
+ }, 
+ {
+  "author": "jbohn", 
+  "date": "2008-04-23T19:22:19.410539Z", 
+  "msg": [
+   "merge r650583-r650636 from branches/2.1.1 - updates to support staging a server release"
+  ], 
+  "revision_id": "651019"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2008-04-23T19:22:15.191868Z", 
+  "msg": [
+   "HBASE-588 Still a 'hole' in scanners, even after HBASE-532"
+  ], 
+  "revision_id": "651018"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2008-04-23T19:21:26.215846Z", 
+  "msg": [
+   "HBASE-588 Still a 'hole' in scanners, even after HBASE-532", 
+   "Add a ChangedReadersObserver interface.  HStore notifies registered", 
+   "observers when list of HStoreFile Readers changes -- at flush time", 
+   "and at compaction time.  Scanners are only current observers.", 
+   "Also fix a deadlock flushing by changing lock types and moving flush", 
+   "request out from under lock.", 
+   "M  src/test/org/apache/hadoop/hbase/MultiRegionTable.java", 
+   "(getCacheFlushListern): Renamed as getFlushRequester", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HStore.java", 
+   "Added synchronizations on this.storefiles.", 
+   "(activeScanners, newScannerLock): Removed.  We no longer try to", 
+   "block out scanners when compacting (Turns out same functionality", 
+   "for blocking scanners is up in HRegion used around closing/split).", 
+   "(changedReadersObservers): Added.", 
+   "(updateReaders): New method that manages the insertion of new", 
+   "reader on flush.  Also calls new notifyChangedReadersObservers.", 
+   "(notifyChagnedReadersObservers, addChangedReadersObserver,", 
+   "deleteChangedReadersObservers): Added.", 
+   "(completeCompaction): Previous deleting old store files, we'd", 
+   "remove from this.storefiles and delete all in one step; now we", 
+   "do the remove first, notify all observers of readers, and then", 
+   "do the delete so observers have a chance to clean up any old", 
+   "references to files about to be deleted.  Removed all the lockout", 
+   "of new scanner creation and wait on old scanners to come int.", 
+   "(updateActiveScanners): Removed.", 
+   "(getStorefiles): Accessor.  Added.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/StoreFileScanner.java", 
+   "Added implementation of new ChangedReadersObserver interface.", 
+   "Added a lock that we hold when 'nexting' and when changing the", 
+   "set of readers out from under the scanner.", 
+   "Changed the constructor moving bulk into new openReaders method", 
+   "that we reuse when list of Readers changes.", 
+   "(next): Moved head of this method into new getNextViableRow (used", 
+   "to be called chosenRow and chosenTimestamp).  New method returns", 
+   "simple datastructure of row and timestamp (ViableRow).", 
+   "(close): On close, remove ourselves as ChangedReadersObserver (we", 
+   "added ourselves in the constructor).", 
+   "(updateReaders): Changed the set of Readers out from under the", 
+   "Scanner.", 
+   "A  src/java/org/apache/hadoop/hbase/regionserver/ChangedReadersObserver.java", 
+   "Added.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/Flusher.java", 
+   "Changed name of the interface we implement from CacheFlushListener to", 
+   "FlushRequester.", 
+   "D  src/java/org/apache/hadoop/hbase/regionserver/CacheFlushListener.java", 
+   "Renamed as FlushRequester.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HStoreScanner.java", 
+   "Remove update of activeScanners.", 
+   "A  src/java/org/apache/hadoop/hbase/regionserver/FlushRequester.java", 
+   "Added.  Rename of CacheFlushListener.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HRegionServer.java", 
+   "Renamed method getCacheFlushListener as getFlushRequester.", 
+   "M src/java/org/apache/hadoop/hbase/regionserver/HAbstractScanner.java", 
+   "Formatting.", 
+   "M  src/java/org/apache/hadoop/hbase/regionserver/HRegion.java", 
+   "CacheFlushListener was renamed as FlushListener."
+  ], 
+  "revision_id": "651017"
+ }, 
+ {
+  "author": "clombart", 
+  "date": "2008-04-23T19:20:50.515272Z", 
+  "msg": [
+   "bug fix for JCR-1548"
+  ], 
+  "revision_id": "651016"
+ }
+]

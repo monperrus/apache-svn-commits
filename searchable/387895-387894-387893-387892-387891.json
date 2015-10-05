@@ -1,0 +1,58 @@
+[
+ {
+  "author": "bpendleton", 
+  "date": "2006-03-22T17:23:09.352309Z", 
+  "msg": [
+   "DERBY-428: PreparedStatement.executeBatch hangs if batch is too large", 
+   "This patch contains a server-side change, a client-side change, and a test.", 
+   "The server-side change is to call ensureLength() in DDMWriter.startDDM().", 
+   "The DDMWriter working buffer is designed to dynamically grow to accomodate", 
+   "the data being written; this dynamic growth is implemented using a coding", 
+   "rule which requires that all DDMWriter internal routines must call", 
+   "ensureLength to communicate the buffer size requirements prior to writing", 
+   "bytes into the buffer. StartDDM was missing the call to ensureLength.", 
+   "The client-side change is due to the fact that DRDA imposes a hard limit", 
+   "of 65535 elements in a single correlated request because the correlation", 
+   "identifier is a two byte unsigned integer. Prior to this change, the", 
+   "correlation identifiers would wrap around when we added the 65536th", 
+   "element into the batch, which breaks the DRDA protocol rule that requires", 
+   "correlation IDs in a single request be always increasing. This change", 
+   "causes the client to throw an exception if it is asked to execute a batch", 
+   "containing more than 65534 elements. The reason for the number 65534,", 
+   "rather than 65535, is that the value 0xFFFF is reserved for special use."
+  ], 
+  "revision_id": "387895"
+ }, 
+ {
+  "author": "chinthaka", 
+  "date": "2006-03-22T17:21:48.242803Z", 
+  "msg": [
+   "Fixing typos in two jsps"
+  ], 
+  "revision_id": "387894"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2006-03-22T17:19:27.393352Z", 
+  "msg": [
+   "fix for http://jira.activemq.org/jira//browse/AMQ-654"
+  ], 
+  "revision_id": "387893"
+ }, 
+ {
+  "author": "sandymac", 
+  "date": "2006-03-22T17:13:02.437575Z", 
+  "msg": [
+   "Updated README with a release notes summary."
+  ], 
+  "revision_id": "387892"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2006-03-22T17:00:31.967506Z", 
+  "msg": [
+   "minor improvement, better separation of proxy object locking"
+  ], 
+  "revision_id": "387891"
+ }
+]

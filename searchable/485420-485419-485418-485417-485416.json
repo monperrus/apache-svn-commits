@@ -1,0 +1,72 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2004-09-26T13:34:36.304373Z", 
+  "msg": [
+   "* mod_speedyfeed.c", 
+   "(build_etag_header): new helper function, for turning a set of md5 strings", 
+   "into an ETag header.", 
+   "(speedyfeed_filter): set up new ETag header."
+  ], 
+  "revision_id": "485420"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-09-26T13:09:09.742360Z", 
+  "msg": [
+   "* TODO: note problem with Content-Type handling."
+  ], 
+  "revision_id": "485419"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-09-26T13:07:47.979143Z", 
+  "msg": [
+   "Minor cleanups to the feed type plugin system.", 
+   "* mod_speedyfeed.c", 
+   "(plugin_t): used to be driver_t from speedyfeed_insert_filters.", 
+   "(speedyfeed_ctx): store a pointer to a plutin_t instead of storing each of", 
+   "it's constituent parts.", 
+   "(speedyfeed_filter): account for presence of plugin pointer in context.", 
+   "(speedyfeed_insert_filters): s/driver/plugin/, move plugin to file scope,", 
+   "init plugin pointer in the context instead of copying it's contents."
+  ], 
+  "revision_id": "485418"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-09-26T02:35:33.104909Z", 
+  "msg": [
+   "Slight corrections to ETag logic.", 
+   "* mod_speedyfeed.c", 
+   "(handle_etags_atom): always set each fragment in the tags_to_send hash, we", 
+   "want to send a full ETag back to the client even if we drop some entries.", 
+   "(speedyfeed_filter): note where we should be checking If-None-Match to see", 
+   "if we should return 304."
+  ], 
+  "revision_id": "485417"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-09-26T02:14:35.393490Z", 
+  "msg": [
+   "Start work on handling ETags.  This doesn't work yet, but it also doesn't", 
+   "break anything, so hey, what's the harm...", 
+   "* mod_speedyfeed.c", 
+   "(handle_etags_t): typedef for a function pointer that knows how to harvest", 
+   "etag fragments from a parsed xml doc and revove entries we have already", 
+   "sent based on the etag fragments we got from the client.", 
+   "(md5_text): helper function for running an md5 over the text contained in", 
+   "a list of apr_text fragments.", 
+   "(handle_etags_atom): partially completed implementation of handle_etags_t", 
+   "for atom feeds.", 
+   "(speedyfeed_ctx): add a tags_received hash and a handle_etags function.", 
+   "(speedyfeed_filter): call handle_etags, note where we should be setting", 
+   "up the ETag header.", 
+   "(speedyfeed_insert_filters): add handle_etags functions to our driver", 
+   "table, initialize new fields in speedyfeed_ctx, note where we should", 
+   "be parsing the If-None-Match header."
+  ], 
+  "revision_id": "485416"
+ }
+]

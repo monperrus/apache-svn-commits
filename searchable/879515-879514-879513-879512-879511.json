@@ -1,0 +1,95 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-09-18T19:35:09.388617Z", 
+  "msg": [
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Touch up the help text for 'svn patch' a little."
+  ], 
+  "revision_id": "879515"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-18T18:42:30.637544Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_patch): Ooops, don't MALFUNCTION() on unversioned obstructions."
+  ], 
+  "revision_id": "879514"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-18T18:16:11.185549Z", 
+  "msg": [
+   "Re-implement the way 'svn patch' does file content merging.", 
+   "We used to merge hunks individually and stitch a patched result together", 
+   "in a temporary file, which was then renamed on top of the patch target", 
+   "in the working copy. That sort of worked but there had to be a better", 
+   "way to do it...", 
+   "The new approach is to create two temporary files, both matching the", 
+   "entire patch target, except that one contains the original text of every", 
+   "hunk, and the other contains the modified text of every hunk, at appropriate", 
+   "places. Equipped with these two files we now ask svn_wc_merge3() to", 
+   "merge the patched content into the working file for us.", 
+   "This approach is simpler, avoids code duplication, and it gives 'svn patch'", 
+   "interactive conflict resolution and causes conflicts to be recorded", 
+   "persistently in the WC just like during update/merge.", 
+   "As a side-effect, it fixes most of issue #3491, \"svn patch uses", 
+   "svn_io_* API to move/copy to versioned files\".", 
+   "* subversion/libsvn_client/patch.c", 
+   "(): Include more headers.", 
+   "(hunk_tempfiles_t): Remove, no longer needed.", 
+   "(patch_target_t): Remove RESULT, RESULT_PATH, and TEMPFILES members.", 
+   "Superseded by new membes PATCHED, PATCHED_RAW, PATCHED_PATH,", 
+   "ORIGINAL, ORIGINAL_RAW, ORIGINAL_PATH,", 
+   "(init_patch_target): Remove TEMPFILES parameter. Initialise the", 
+   "new members of patch_target_t. Leave a TODO comment, contracting", 
+   "keywords in patched and original tempfiles does not work yet.", 
+   "(try_stream_write): New helper.", 
+   "(copy_lines_to_target): Copy lines to both the patched and original", 
+   "targets.", 
+   "(read_lines_from_target): Renamed to ...", 
+   "(skip_lines_from_target):  ... this, and remove the LINES output parameter.", 
+   "We don't need to read the target text anymore here, skipping is enough.", 
+   "(copy_hunk_text): Add docstring. Replace FILE parameter with a TARGET", 
+   "stream and an ABSPATH. No need for two different EOL-styles anymore,", 
+   "so this now just takes on EOL_STR instead of a TARGET_EOL_STR and", 
+   "a PATCH_EOL_STR.", 
+   "(copy_latest_text, merge_hunk): Remove.", 
+   "(apply_one_hunk): Instead of merging hunks here, just write them out", 
+   "to the two patched and original temporary files.", 
+   "(apply_one_patch): Remove TEMPFILES parameter. Jive with the new way of", 
+   "doing things, most importantly calling svn_wc_merge3() to merge file", 
+   "content into the patch target. Rename local variables NEW_FILE and OLD_FILE", 
+   "to PATCHED_FILE and WORING_FILE for clarity. Leave a TODO comment about", 
+   "passing the user's merge-options to svn_wc_merge3().", 
+   "(apply_textdiffs): Don't bother with TEMPFILES anymore, either."
+  ], 
+  "revision_id": "879513"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-09-18T18:00:10.986469Z", 
+  "msg": [
+   "Address, in what I *think* is the correct way, some deprecation", 
+   "warnings.", 
+   "* subversion/libsvn_delta/path_driver.c", 
+   "(svn_delta_path_driver): Use svn_relpath_get_longest_ancestor()", 
+   "instead of the now-deprecated svn_path_get_longest_ancestor().", 
+   "* subversion/libsvn_subr/opt.c", 
+   "(svn_opt__arg_canonicalize_url): Use svn_uri_canonicalize() instead", 
+   "of the now-deprecated svn_path_canonicalize()."
+  ], 
+  "revision_id": "879512"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-09-18T17:48:51.336671Z", 
+  "msg": [
+   "Follow-up to r39382:", 
+   "* subversion/bindings/swig/python/tests/client.py", 
+   "(SubversionClientTestCase.tearDown): Use loop instead of map() for compatibility with Python 3."
+  ], 
+  "revision_id": "879511"
+ }
+]

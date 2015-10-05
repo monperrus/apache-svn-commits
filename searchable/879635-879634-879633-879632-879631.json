@@ -1,0 +1,84 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-09-24T14:48:18.826833Z", 
+  "msg": [
+   "* subversion/libsvn_client/merge.c", 
+   "(tree_conflict_on_add): Do not ever try to add new tree conflicts", 
+   "before removing existing ones. The old logic would try to do this", 
+   "in some cases since it did not consider the \"existing_conflict != NULL\"", 
+   "case in isolation. This might fix issue #3495, I can't verify this", 
+   "myself since I cannot reproduce the issue.", 
+   "(merge_file_added): If there are no obstructions or missing nodes,", 
+   "but there is no node on disk, only add the new file if no tree", 
+   "conflict has been flagged at this path yet. Otherwise, branch out", 
+   "to tree_conflict_on_add().", 
+   "If there are no obstructions or missing nodes, and a file is already", 
+   "present on disk, flag a tree conflict as before, but do not consider", 
+   "the existing file's schedule as an indicator for the tree conflict", 
+   "reason. Rather, just flag the conflict with reason \"added\", based", 
+   "on the assumption that an add must have happened in the history of", 
+   "the branch."
+  ], 
+  "revision_id": "879635"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-24T14:44:33.679775Z", 
+  "msg": [
+   "* subversion/libsvn_subr/dso.c", 
+   "(svn_dso_initialize2): Wrap declaration of 'status' variable in", 
+   "#if APR_HAS_THREADS, as all code that uses it is also wrapped in it.", 
+   "Avoids 'unused variable' warning during compilation with non-threaded APR."
+  ], 
+  "revision_id": "879634"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-24T13:49:33.481137Z", 
+  "msg": [
+   "Remove the wc_db member from the pdh struct.  It was put there for potential", 
+   "future use, but it appears that that future will never materialize.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_pdh_t): Remove db member.", 
+   "(get_or_create_pdh, parse_local_abspath): Don't set or test the pdh db", 
+   "member.", 
+   "(navigate_to_parent): Explicitly provide a db parameter, instead of relying", 
+   "on one in the child_pdh.", 
+   "(svn_wc__db_temp_op_remove_entry, svn_wc__db_temp_op_set_dir_depth,", 
+   "svn_wc__db_scane_addition, svn_wc__db_scan_deletion):", 
+   "Update callers to the above."
+  ], 
+  "revision_id": "879633"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-24T13:47:58.461306Z", 
+  "msg": [
+   "Rename name argument of write_entry() to local_relpath, as that is", 
+   "what the value is used for.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): Rename 'name' argument to local_relpath, and calculate", 
+   "parent_relpath instead of making a shortcut."
+  ], 
+  "revision_id": "879632"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-09-24T11:23:52.546352Z", 
+  "msg": [
+   "Fix issue #2713, \"add --auto-props, adds file with mixed eol then aborts\".", 
+   "When adding a file with mixed EOL style, with auto-props setting svn:eol-style,", 
+   "svn treats this as an error and aborts. Previously, it marked the file for", 
+   "addition and applied an indeterminate subset of the auto-props before aborting.", 
+   "Instead, if any auto-prop setting fails, abort without marking the file for", 
+   "addition.", 
+   "* subversion/libsvn_client/add.c", 
+   "(add_file): If we fail to set a property on the added file, revert the add.", 
+   "* subversion/tests/cmdline/autoprop_tests.py", 
+   "(fail_add_mixed_eol_style): New test.", 
+   "(test_list): Add the new test."
+  ], 
+  "revision_id": "879631"
+ }
+]

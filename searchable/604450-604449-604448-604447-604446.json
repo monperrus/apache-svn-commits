@@ -1,0 +1,57 @@
+[
+ {
+  "author": "rjung", 
+  "date": "2007-12-15T16:32:47.949571Z", 
+  "msg": [
+   "Don't retry in case of client errors."
+  ], 
+  "revision_id": "604450"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2007-12-15T16:19:36.212022Z", 
+  "msg": [
+   "* Tag the pools appropriately to ease memory debugging."
+  ], 
+  "revision_id": "604449"
+ }, 
+ {
+  "author": "cdoremus", 
+  "date": "2007-12-15T16:15:49.145282Z", 
+  "msg": [
+   "Applied patch described in PLUTO-447. Thank you Eric!"
+  ], 
+  "revision_id": "604448"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2007-12-15T16:15:04.042047Z", 
+  "msg": [
+   "* Fix a SEGFAULT by ensuring that buckets that may have been buffered in the", 
+   "network filters get flushed to the network. This is needed since", 
+   "these buckets have been created with the bucket allocator of the", 
+   "backend connection. This allocator either gets destroyed if", 
+   "conn->close is set or the worker address is not reusable which", 
+   "causes the connection to the backend to be closed or it will be used", 
+   "again by another frontend connection that wants to recycle the", 
+   "backend connection.", 
+   "In this case we could run into nasty race conditions (e.g. if the", 
+   "next user of the backend connection destroys the allocator before we", 
+   "sent the buckets to the network).", 
+   "Remark 1: Doing a setaside does not help here as the buckets remain", 
+   "created by the wrong allocator in this case.", 
+   "Remark 2: Yes, this creates a possible performance penalty in the case", 
+   "of pipelined requests as we may send only a small amount of data over", 
+   "the wire."
+  ], 
+  "revision_id": "604447"
+ }, 
+ {
+  "author": "matzew", 
+  "date": "2007-12-15T16:05:27.635548Z", 
+  "msg": [
+   "forgot the includes :-)"
+  ], 
+  "revision_id": "604446"
+ }
+]

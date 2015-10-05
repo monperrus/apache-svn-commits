@@ -1,0 +1,104 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2003-02-13T01:40:54.611331Z", 
+  "msg": [
+   "* subversion/bindings/swig/apr.i", 
+   "Greg Stein points out that the apr_file_t ** input typemap isn't", 
+   "Python-specific, and urges us to take care with language-specific", 
+   "typemaps."
+  ], 
+  "revision_id": "844940"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-02-13T01:23:40.841930Z", 
+  "msg": [
+   "Don't sleep immediately when updating svn:externals, delay until the", 
+   "entire operation is complete and only sleep once if required.  This", 
+   "both enables the r4862 behaviour and avoids the r4684 problem.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__update_internal, svn_client__checkout_internal): Change", 
+   "timestamp_sleep parameter to be a pointer to an svn_boolean_t.", 
+   "(svn_client__handle_externals): Add timestamp_sleep parameter.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_external_item_change_baton): Add timestamp_sleep member.", 
+   "(handle_external_item_change): Pass baton's timestamp_sleep member", 
+   "to svn_client_checkout and svn_client_update.", 
+   "(struct handle_externals_desc_change_baton): Add timestamp_sleep member.", 
+   "(handle_externals_desc_change): Set timestamp_sleep member in item baton.", 
+   "(svn_client__handle_externals): Add timestamp_sleep parameter.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Change timestamp_sleep parameter to be", 
+   "a pointer to an svn_boolean_t.  Sleep only if required by an error or", 
+   "a NULL timestamp_sleep parameter.  ### Add question about recursive", 
+   "behaviour.", 
+   "(svn_client_checkout): Pass a NULL timestamp_sleep parameter.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Change timestamp_sleep parameter to be", 
+   "a pointer to an svn_boolean_t.  Sleep only if required by an error or", 
+   "a NULL timestamp_sleep parameter.", 
+   "(svn_client_update): Pass a NULL timestamp_sleep parameter.", 
+   "* subversion/libsvn_client/switch.c (svn_client_switch): Pass a dummy", 
+   "timestamp_sleep parameter to svn_client__handle_externals."
+  ], 
+  "revision_id": "844939"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-02-13T00:07:16.014129Z", 
+  "msg": [
+   "Disable the r4862 optimisation, it's not always valid.  The problem", 
+   "case is when the svn:externals \"need\" a sleep and the main working", 
+   "copy does not.  This is quick fix so that the client operation is", 
+   "correct, if slow.  I'm working on a modification that will allow me", 
+   "to enable the optimisation again.", 
+   "* subversion/libsvn_client/externals.c (handle_external_item_change): Always", 
+   "sleep for timestamp integrity on svn:externals."
+  ], 
+  "revision_id": "844938"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-12T22:39:23.207385Z", 
+  "msg": [
+   "Get rid of some signed/unsigned mismatch warnings on Windows.", 
+   "* subversion/libsvn_subr/io.c (svn_io_read_version_file): Make 'i' an", 
+   "apr_size_t, same as 'len'.", 
+   "* subversion/tests/libsvn_fs/skel-test.c (check_atom,", 
+   "gen_implicit_length_all_chars, put_explicit_length,", 
+   "check_explicit_length, try_explicit_length): Change length parameters from", 
+   "int to apr_size_t; Adjust all callers and printf formats."
+  ], 
+  "revision_id": "844937"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-02-12T21:38:42.459391Z", 
+  "msg": [
+   "Don't sleep when checking out or updating svn:externals.  This saves", 
+   "about 90 seconds when running the regression tests on my machine.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__checkout_internal, svn_client__update_internal): These", 
+   "declarations existed but the functions were not defined.  Now they", 
+   "have new signatures and are defined.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Renamed from svn_client_update with", 
+   "added boolean parameter.", 
+   "(svn_client_checkout): New wrapper that calls svn_client__checkout_internal.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Renamed from svn_client_update with", 
+   "added boolean parameter.", 
+   "(svn_client_update): New wrapper that calls svn_client__update_internal.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(handle_external_item_change): Call svn_client__checkout_internal and", 
+   "svn_client__update_internal instead of svn_client_checkout and", 
+   "svn_client_update.", 
+   "* subversion/libsvn_client/commit.c: Add missing svn_time.h include.", 
+   "* subversion/libsvn_client/revert.c:  ditto", 
+   "* subversion/libsvn_client/switch.c:  ditto", 
+   "* subversion/libsvn_client/copy.c:    ditto"
+  ], 
+  "revision_id": "844936"
+ }
+]

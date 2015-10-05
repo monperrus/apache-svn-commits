@@ -1,0 +1,118 @@
+[
+ {
+  "author": "bcollins", 
+  "date": "2002-03-31T23:13:34.593989Z", 
+  "msg": [
+   "\"Please pass the cheese diff\". Simple little feature patch for a", 
+   "SVNRepoName directive in mod_dav_svn. I have several repos on one server,", 
+   "and it's nice to have a descriptive name when browsing it.", 
+   "* mod_dav_svn/dav_svn.h", 
+   "(dav_svn_dir_conf): Add repo_name member.", 
+   "(dav_svn_repo_name)(dav_svn_get_repo_name): New functions to pass the", 
+   "repository name from the configuration.", 
+   "* mod_dav_svn/dav_svn.h", 
+   "(dav_svn_repos): Add repo_name member.", 
+   "* mod_dav_svn/mod_dav_svn.c:", 
+   "(dav_svn_get_resource): Prepend SVNRepoName to the \"Revision\" line, if", 
+   "present in the per-repo config."
+  ], 
+  "revision_id": "841685"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-03-29T21:34:59.506553Z", 
+  "msg": [
+   "Reorganize the way 'svn diff' and 'svn merge' share a common diff", 
+   "editor: instead of a single overloaded callback function to do", 
+   "diff-related things, use a cleaner vtable.  This allows us to smoothly", 
+   "deal with directory additions and removals, and with propchanges.", 
+   "('svn merge' can make use of the entire table, while 'svn diff'", 
+   "implements only part of the table for now.)", 
+   "* svn_types.h", 
+   "(svn_diff_action_t, svn_diff_cmd_t):  remove these prototypes...", 
+   "* svn_delta.h", 
+   "(svn_diff_callbacks_t): ... in favor of a cleaner, less confusing,", 
+   "less overloaded vtable.", 
+   "* libsvn_client/diff.c", 
+   "(diff_file_changed, diff_file_added, diff_file_deleted,", 
+   "diff_dir_added, diff_dir_deleted, diff_prop_changed): new vtable", 
+   "funcs for 'svn diff'...", 
+   "(diff_callbacks):  ...placed in here.", 
+   "(diff_cmd): removed.  this functionality migrated into diff_file_changed.", 
+   "(merge_file_changed, merge_file_added, merge_file_deleted,", 
+   "merge_dir_added, merge_dir_deleted, merge_prop_changed): new vtable", 
+   "funcs for 'svn merge'...", 
+   "(merge_callbacks):  ...placed in here.", 
+   "(merge_cmd): removed.  this functionality migrated into merge_file_changed.", 
+   "(diff_or_merge): take an svn_diff_callbacks_t table and baton,", 
+   "instead of an svn_diff_cmd_t.", 
+   "(svn_client_diff, svn_client_merge): pass appropriate vtable to", 
+   "diff_or_merge.", 
+   "* libsvn_client/repos_diff.c", 
+   "(svn_client__get_diff_editor, struct edit_baton): take a callback", 
+   "table instead of a single callback.", 
+   "(delete_entry):  invoke deletion callbacks for both files *and* dirs.", 
+   "(add_directory):  invoke dir_added callback.", 
+   "(close_file):  invoke either file_changed or file_added callback.", 
+   "(change_file_prop, change_dir_prop): new editor funcs, call", 
+   "prop_changed callback.", 
+   "(run_diff_cmd):  removed, no longer needed.", 
+   "* libsvn_client/client.h", 
+   "(svn_client__get_diff_editor): take a callback table instead of a", 
+   "single callback.", 
+   "* svn_wc.h", 
+   "(svn_wc_diff, svn_wc_get_diff_editor): take a callback table instead", 
+   "of a single callback.", 
+   "* libsvn_wc/diff.c", 
+   "(svn_wc_diff, svn_wc_get_diff_editor, struct edit_baton,", 
+   "make_editor_baton): take a callback table instead of a single", 
+   "callback.", 
+   "(file_diff): call either file_changed, file_added, file_deleted callback.", 
+   "(delete_entry):  call file_added callback.", 
+   "(close_file):  call either file_deleted or file_changed callback."
+  ], 
+  "revision_id": "841684"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-03-29T03:53:39.311967Z", 
+  "msg": [
+   "Convert `svn_stringbuf_t *' to `const char *', so the config code", 
+   "internals now match the public API:", 
+   "* subversion/libsvn_subr/config.c", 
+   "(struct cfg_option_t): Change value and x_value to `const char *'.", 
+   "(merge_callback, make_string_from_option): Use value and xvalue now,", 
+   "not value->data and xvalue->data.", 
+   "(svn_config_set): Adjust initialization of opt->value.", 
+   "* subversion/libsvn_subr/config_impl.h", 
+   "(struct svn_config_t): Add comment explaining why we continue to", 
+   "use a stringbuf here."
+  ], 
+  "revision_id": "841683"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-03-29T03:10:42.316756Z", 
+  "msg": [
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Describe syntax as INI format, rather than", 
+   "saying that it's what Python's ConfigParser module handles."
+  ], 
+  "revision_id": "841682"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-03-29T02:46:42.049889Z", 
+  "msg": [
+   "Support the `no_proxy' exception to proxy defaults:", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(match_in_list): New func.", 
+   "(search_groups): Replace inline code with call to match_in_list.", 
+   "(get_proxy): Recognize `no_proxy' for defaults.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Mention the \"no_proxy\" trick in the template", 
+   "for proxies files."
+  ], 
+  "revision_id": "841681"
+ }
+]

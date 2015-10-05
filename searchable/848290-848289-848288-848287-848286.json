@@ -1,0 +1,115 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T18:29:36.628936Z", 
+  "msg": [
+   "For consistency, use \"\" instead of NULL for a no-op target.", 
+   "Patch by Greg Hudson, see 1.0-cand issue #999.", 
+   "* libsvn_wc/update_editor.c, include/svn_wc.h (svn_wc_get_actual_target):", 
+   "Set target to empty (not NULL) when anchor is subject.", 
+   "* include/svn_repos.h (svn_repos_begin_report, svn_repos_dir_delta),", 
+   "include/svn_wc.h (svn_wc_get_status_editor, svn_wc_get_update_editor,", 
+   "svn_wc_get_switch_editor),", 
+   "include/svn_ra.h (do_update, do_switch, do_status, do_diff):", 
+   "Expect target to be empty (not NULL) when anchor is subject.", 
+   "* libsvn_wc/diff.c (directory_elements_diff),", 
+   "libsvn_wc/status.c (delete_entry, close_directory):", 
+   "libsvn_wc/update_editor.c (make_dir_baton, complete_directory,", 
+   "open_root, close_edit),", 
+   "libsvn_client/diff.c (diff_wc_wc, diff_repos_wc),", 
+   "libsvn_client/commit.c (adjust_rel_targets, svn_client_commit),", 
+   "mod_dav_svn (dav_svn__update_report),", 
+   "clients/cmdline/commit-cmd.c (svn_cl__commit),", 
+   "libsvn_repos/delta.c (svn_repos_dir_delta),", 
+   "libsvn_ra_dav/fetch.c (end_element, make_reporter):", 
+   "Test for emptiness of target, rather than nullity.", 
+   "* libsvn_client/switch.c (svn_client_switch),", 
+   "libsvn_client/export.c (svn_client_export),", 
+   "libsvn_client/diff.c (do_merge, diff_repos_repos, diff_repos_wc),", 
+   "mod_dav_svn (dav_svn__update_report),", 
+   "tests/libsvn_repos/repos-test.c (dir_deltas):", 
+   "Pass empty target (not NULL) when anchor is subject.", 
+   "* libsvn_wc/diff.c (svn_wc_diff),", 
+   "libsvn_wc/update_editor.c (do_entry_deletion),", 
+   "mod_dav_svn/update.c (dav_svn__update_report),", 
+   "libsvn_ra_dav/fetch.c (start_element),", 
+   "libsvn_repos/reporter.c (svn_repos_set_path, svn_repos_link_path,", 
+   "svn_repos_delete_path, finish_report,", 
+   "svn_repos_begin_report):", 
+   "Simplify code by assuming that target is not NULL.", 
+   "* libsvn_ra_svn/client.c (ra_svn_update, ra_svn_switch, ra_svn_status,", 
+   "ra_svn_diff),", 
+   "svnserve/serve.c (update, switch_cmd, status, diff):", 
+   "Stop translating NULL to \"\" and back over the wire."
+  ], 
+  "revision_id": "848290"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T18:27:57.074754Z", 
+  "msg": [
+   "Add a pool parameter to the finish_report and abort_report families of", 
+   "signatures.  Patch by Scott Collins, see 1.0-cand issue #1671.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_finish_report, svn_repos_abort_report): Added pool parameter.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_reporter_t): Added pool parameter to the finish_report and", 
+   "abort_report members.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(reporter_finish_report, reporter_abort_report): Added a pool", 
+   "parameter and fixed their calls to svn_repos_finish_report and", 
+   "svn_repos_abort_report to pass the pool.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(finish_report, svn_repos_finish_report, svn_repos_abort_report):", 
+   "Added a pool parameter.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_finish_report, ra_svn_abort_report): Added a pool parameter.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(reporter_finish_report, reporter_abort_report): Added a pool parameter.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "* subversion/libsvn_client/export.c", 
+   "* subversion/libsvn_client/diff.c", 
+   "* contrib/client-side/svn-push/svn-push.c", 
+   "* subversion/mod_dav_svn/update.c", 
+   "* subversion/svnserve/serve.c: Fixed all callers."
+  ], 
+  "revision_id": "848289"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T18:27:16.795617Z", 
+  "msg": [
+   "Constify svn_fs_dirent_t.", 
+   "* include/svn_fs.h (svn_fs_dirent_t): Constify name and id field.", 
+   "Patch by Greg Hudson, see 1.0-cand issue #1677."
+  ], 
+  "revision_id": "848288"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T18:26:52.856350Z", 
+  "msg": [
+   "Rename the authz function type, as it may be used for more than just", 
+   "read checks.  See 1.0-cand issue #1668.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_authz_func_t): Replace svn_repos_authz_read_func_t, and", 
+   "update documentation.", 
+   "* subversion/libsvn_repos/delta.c,", 
+   "subversion/mod_dav_svn/update.c,", 
+   "subversion/libsvn_repos/reporter.c: All callers changed."
+  ], 
+  "revision_id": "848287"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-01-09T18:25:36.476104Z", 
+  "msg": [
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_reporter_t): Document requirements for reports which had", 
+   "previously been established by collusion between libsvn_wc and", 
+   "libsvn_repos.  Require that reports be given in depth-first order.", 
+   "Patch by Greg Hudson, see 1.0-cand issue #1678."
+  ], 
+  "revision_id": "848286"
+ }
+]

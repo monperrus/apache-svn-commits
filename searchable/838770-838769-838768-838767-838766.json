@@ -1,0 +1,93 @@
+[
+ {
+  "author": "jimb", 
+  "date": "2001-02-28T21:25:22.000000Z", 
+  "msg": [
+   "Change the common test framework to indicate failure by returning a", 
+   "Subversion error.  This means that:", 
+   "- we can use SVN_ERR in the usual way to report a failure whenever a", 
+   "library call fails,", 
+   "- use svn_handle_error to print out the messages,", 
+   "- set a breakpoint on svn_error_create to stop the process before we", 
+   "lose the context in which the failure was detected.", 
+   "* tests/TEST-FRAMEWORK: Update documentation.", 
+   "* tests/svn_tests_main.c (test_funcs): This is an array of functions", 
+   "returning Subversion errors, not ints.", 
+   "(do_test_num): Expect a Subversion error, not an int.  Tighten up some", 
+   "of the message formatting.", 
+   "* tests/libsvn_fs/skel-test.c (fail): Take printf-style arguments, and", 
+   "return an svn_error_t.  All callers fixed.", 
+   "(parse_implicit_length, try_explicit_length, parse_explicit_length,", 
+   "parse_invalid_atoms, parse_list, unparse_implicit_length,", 
+   "unparse_list): Return Subversion errors, not ints.", 
+   "(test_funcs): Adjust to match declaration in `svn_tests_main.c'.", 
+   "* tests/libsvn_subr/hashdump-test.c (check): New function.", 
+   "(test1, test2, test3): Return Subversion errors, not ints.", 
+   "(test_funcs): Adjust to match declaration in `svn_tests_main.c'.", 
+   "* tests/libsvn_subr/stringtest.c (fail): New function.", 
+   "(test1, test2, test3, test4, test5, test6, test7, test8, test9,", 
+   "test10, test11, test12): Return Subversion errors, not ints.", 
+   "(test_funcs): Adjust to match declaration in `svn_tests_main.c'.", 
+   "* include/svn_error.h (SVN_ERR_TEST_FAILED): New error code."
+  ], 
+  "revision_id": "838770"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-02-28T21:10:50.000000Z", 
+  "msg": [
+   "* libsvn_subr/svn_error.c (svn_handle_error): Don't print err->message", 
+   "unless it's non-zero.  In some cases (e.g., Subversion errors wrapping", 
+   "APR errors), we can get the message from the error code alone."
+  ], 
+  "revision_id": "838769"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-02-28T21:09:15.000000Z", 
+  "msg": [
+   "* libsvn_subr/hashdump.c (svn_hash_write, read_length_line,", 
+   "svn_hash_read): Since we return an apr_status_t, not an svn_error_t,", 
+   "return APR_SUCCESS, not SVN_NO_ERROR."
+  ], 
+  "revision_id": "838768"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-02-28T20:44:53.000000Z", 
+  "msg": [
+   "Major rewrite of fs automated tests, to fix isolation issues.", 
+   "Everything should be smaller and leaner now; each test creates its own", 
+   "repository.  Removed all tests of \"implementation details\"; we're only", 
+   "testing straight API promises now.", 
+   "Also: jimb has changed our testing system so that each automated test", 
+   "return an svn_error_t.  This allows us to use the SVN_ERR macro", 
+   "everywhere, and get detailed errors in `make check`'s logfile.  (He's", 
+   "about to check this in.)", 
+   "(fail):  no longer need this func;  see note above.  If you need an", 
+   "equivalent breakpoint, break on svn_error_create() instead. :)", 
+   "(repository):  deleted global name.", 
+   "(check_filesystem_root_id):  internal implementation check; no longer", 
+   "needed, so we remove it.", 
+   "(create_fs_and_repos):  new factorized helper func.", 
+   "(create_berkeley_filesystem):   call helper func.", 
+   "(open_berkeley_filesystem):  call helper func.", 
+   "(fetch_youngest_rev):  broke this out into a new standalone test.", 
+   "(trivial_transaction): call helper func.", 
+   "(reopen_trivial_transaction): call helper func, and reopen *by name* now.", 
+   "(create_file_transaction): call helper func.", 
+   "(verify_txn_list):  rename of (list_live_transactions);  better list testing."
+  ], 
+  "revision_id": "838767"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-02-28T20:16:28.000000Z", 
+  "msg": [
+   "Revert previous change.  I was wrong: dag.c is complaining about", 
+   "SVN_ERR_FS_NOT_SINGLE_PATH_COMPONENT, but that error is declared here,", 
+   "so dag.c must be smoking something else."
+  ], 
+  "revision_id": "838766"
+ }
+]

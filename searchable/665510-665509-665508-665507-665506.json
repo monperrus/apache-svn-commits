@@ -1,0 +1,80 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-02-27T01:55:05.000000Z", 
+  "msg": [
+   "Make the Java generator dynamic.", 
+   "- Modify the Java generator constructor to fit the new generic interface.", 
+   "- Register the Java genrator with the central registry.", 
+   "- Deprecate the old way of invoking the Java generator.", 
+   "- main.cc no longer includes t_java_generator.h."
+  ], 
+  "revision_id": "665510"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-02-27T01:54:59.000000Z", 
+  "msg": [
+   "Remove t_cpp_generator.h.", 
+   "t_cpp_generator.h is no longer included anywhere, because", 
+   "the C++ generator uses the new dynamic generator framework.", 
+   "Therefore, we can collapse the class definition into the .cc file.", 
+   "Also cleaned up its includes a little bit."
+  ], 
+  "revision_id": "665509"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-02-27T01:54:55.000000Z", 
+  "msg": [
+   "Make the C++ generator dynamic.", 
+   "- Modify the C++ generator constructor to fit the new generic interface.", 
+   "- Register the C++ genrator with the central registry.", 
+   "- Deprecate the old way of invoking the C++ generator.", 
+   "- main.cc no longer includes t_cpp_generator.h."
+  ], 
+  "revision_id": "665508"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-02-27T01:54:51.000000Z", 
+  "msg": [
+   "Infrastructure for loading code generators a bit more dynamically.", 
+   "Add a generic and easy-to-use mechanism for Thrift code generators to", 
+   "register themselves centrally.  The central registry is used to", 
+   "obtain documentation for the options accepted by individual generators", 
+   "and get instances of individual generators.  It also does a little bit of", 
+   "option parsing that will be useful for all generators.", 
+   "Obviously, this change cannot be tested on its own.  I can only say", 
+   "that Thrift still builds and runs correctly.  Subsequent changes", 
+   "will apply this infrastructure to specific code generators.", 
+   "Steve Grimm has assured me that this is standard Git practice.", 
+   "In fact, I ran this test after converting the C++ and Java generators:", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test$ mkdir old new", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test$ cd old", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test/old$ ../../compiler/cpp/thrift -cpp -dense -java -javabean ../DebugProtoTest.thrift", 
+   "[WARNING::1] -cpp is deprecated.  Use --gen cpp", 
+   "[WARNING::1] -java is deprecated.  Use --gen java", 
+   "[WARNING::1] -javabean is deprecated.  Use --gen java:beans", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test/old$ cd ../new/", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test/new$ ../../compiler/cpp/thrift --gen cpp:dense --gen java --gen java:beans ../DebugProtoTest.thrift", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test/new$ cd ..", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test$ diff -ur old/ new/", 
+   "dreiss@dreiss-vmware:dynamic_generators:thrift/test$"
+  ], 
+  "revision_id": "665507"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-02-27T01:54:47.000000Z", 
+  "msg": [
+   "Make warnings from the Thrift compiler a little clearer.", 
+   "Reviewed by: mcslee", 
+   "Warning and error messages from the Thrift compiler include", 
+   "the file currently being parsed and the line number.", 
+   "This change sets those to dummy values for stages that", 
+   "have nothing to do with parsing."
+  ], 
+  "revision_id": "665506"
+ }
+]

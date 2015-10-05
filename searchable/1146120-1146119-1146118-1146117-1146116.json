@@ -1,0 +1,76 @@
+[
+ {
+  "author": "cbartlett", 
+  "date": "2011-07-13T16:37:30.139766Z", 
+  "msg": [
+   "Addition of text to IllegalArgumentExceptions explaining the underlying problems."
+  ], 
+  "revision_id": "1146120"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-07-13T16:33:12.317365Z", 
+  "msg": [
+   "Start recording the difference between a copy and a move in wc.db.", 
+   "With this commit we set the existing 'moved_here' boolean flag in", 
+   "the NODES table on the node which is the add-half of a copy (as well", 
+   "as any children of this node) if a copy was in fact a move.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_INSERT_WORKING_NODE_COPY_FROM_BASE,", 
+   "STMT_INSERT_WORKING_NODE_COPY_FROM_WORKING,", 
+   "STMT_INSERT_WORKING_NODE_COPY_FROM_DEPTH): Fill the 'moved_here' column", 
+   "from a new query parameter.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_versioned_file, copy_versioned_dir): New parameter IS_MOVE which", 
+   "indicates whether the copy is in fact a move. Call the appropriate", 
+   "svn_wc__db_op interface function depending on this parameter.", 
+   "(copy_or_move): New, contains most code from svn_wc_copy3(). Pass IS_MOVE", 
+   "parameter down to copy_versioned_file() and copy_versioned_dir().", 
+   "(svn_wc_copy3): Reimplement as a thin wrapper around copy_or_move().", 
+   "(svn_wc_move): Call copy_or_move() instead of svn_wc_copy3().", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_one_entry): Treat status 'moved-here' the same as status 'copied'", 
+   "so that moved nodes appear as normal copies to old code.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(db_op_copy): Add new parameter IS_MOVE, which is passed into DB queries", 
+   "as appropriate.", 
+   "(op_copy_baton): New field IS_MOVE.", 
+   "(op_copy_txn): Pass IS_MOVE from copy baton to db_op_copy().", 
+   "(svn_wc__db_op_copy): Initialise new field IS_MOVE in copy baton.", 
+   "(db_op_copy_shadowed_layer): Pass 0 for 'moved_here' query parameter", 
+   "while creating in-DB copies of nodes shadowed by a copy/move operation.", 
+   "(svn_wc__db_op_move): Implement. Set IS_MOVE in the copy baton so that", 
+   "the copy code will treat this operation as a move.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_op_copy_shadowed_layer): Tweak docstring.", 
+   "(svn_wc__db_op_move): Make signature match that of svn_wc__op_copy()", 
+   "and tweak the docstring."
+  ], 
+  "revision_id": "1146119"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2011-07-13T16:28:16.245801Z", 
+  "msg": [
+   "add BytesReadTracker.java"
+  ], 
+  "revision_id": "1146118"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2011-07-13T16:24:31.066035Z", 
+  "msg": [
+   "single-pass streaming", 
+   "patch by Yuki Morishita; reviewed by jbellis for CASSANDRA-2677"
+  ], 
+  "revision_id": "1146117"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2011-07-13T16:23:08.740394Z", 
+  "msg": [
+   "JCR-3021: AbstractRepositoryService.createSessionInfo should handle null credentials"
+  ], 
+  "revision_id": "1146116"
+ }
+]

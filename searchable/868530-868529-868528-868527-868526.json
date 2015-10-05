@@ -1,0 +1,119 @@
+[
+ {
+  "author": "kameshj", 
+  "date": "2007-12-13T14:00:46.556368Z", 
+  "msg": [
+   "On the issue-2897 branch:", 
+   "Fix: get_commit_and_merge_ranges API to give merge ranges grouped for", 
+   "each commit_rev.", 
+   "For the dataset of,", 
+   "Merged r30, r32, r36 from /source to /target at r50", 
+   "Merged r40, r42, r46 from /source to /target at r51", 
+   "Prior to this commit api gave,", 
+   "commit_rangelist  = [50, 50, 50, 51, 51, 51]", 
+   "merge_ranges_list  = [30, 32, 36, 40, 42, 46]", 
+   "After this commit it would give", 
+   "commit_rangelist  = [50, 51]", 
+   "merge_ranges_list  = [[30, 32, 36], [40, 42, 46]]", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(get_commit_and_merge_ranges):", 
+   "Clarify the doc string about the type of data stored by 'commit_rangelist'", 
+   "and 'merge_ranges_list'. Implement the merge range grouping for a commit", 
+   "revision.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_get_commit_and_merge_ranges):", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_get_commit_and_merge_ranges):", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_commit_and_merge_ranges):", 
+   "* subversion/include/private/svn_fs_mergeinfo.h", 
+   "(svn_fs_mergeinfo__get_commit_and_merge_ranges):", 
+   "Clarify the doc string about the type of data stored by 'commit_rangelist'", 
+   "and 'merge_ranges_list'.", 
+   "* subversion/include/private/svn_dav_protocol.h", 
+   "(SVN_DAV__COMMIT_MERGE_INFO, SVN_DAV__COMMIT_REV): New macros.", 
+   "(SVN_DAV__COMMIT_RANGES): Deleted.", 
+   "* subversion/mod_dav_svn/reports/mergeinfo.c", 
+   "(dav_svn__get_commit_and_merge_ranges_report): Fix the Report response", 
+   "XML to serve the new format of data.", 
+   "* subversion/libsvn_ra_serf/commit_and_merge_ranges.c", 
+   "(mergeinfo_state_e): Deleted COMMIT_RANGES. Added COMMIT_MERGE_INFO,", 
+   "COMMIT_REV.", 
+   "(mergeinfo_context_t): Change the type of 'merge_ranges_list' and", 
+   "'commit_rangelist' to 'apr_array_header_t *'.", 
+   "(start_element, cdata_handler): Fix for the parsing logic for new protocol", 
+   "change.", 
+   "(svn_ra_serf__get_commit_and_merge_ranges): Fix as per change in", 
+   "'mergeinfo_context_t'.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(ELEM_commit_revm ELEM_commit_mergeinfo): Added new constants.", 
+   "(ELEM_commit_ranges): Deleted.", 
+   "* subversion/libsvn_ra_neon/commit_and_merge_ranges.c", 
+   "(struct mergeinfo_baton): Change the type of 'merge_ranges_list' and", 
+   "'commit_rangelist' to 'apr_array_header_t *'.", 
+   "(commit_and_merge_ranges_report_elements): Add 'SVN_DAV__COMMIT_MERGE_INFO',", 
+   "SVN_DAV__COMMIT_REV as accepted XML tags in response. Remove", 
+   "SVN_DAV__COMMIT_RANGES as a valid XML tag in response.", 
+   "(cdata_handler): Fix for the parsing logic for new protocol change.", 
+   "(svn_ra_neon__get_commit_and_merge_ranges): Fix as per change in", 
+   "'struct mergeinfo_baton'.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "([Main Command Set].get-commit-and-merge-ranges): Document the new response.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_commit_and_merge_ranges): Fix the protocol to serve new format of data.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_get_commit_and_merge_ranges): Fix the parameter name", 
+   "'commit_rev_rangelist'-> 'commit_rangelist'. Fix the reponse parsing", 
+   "as per new protocol change."
+  ], 
+  "revision_id": "868530"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-13T13:26:08.803209Z", 
+  "msg": [
+   "On the 'correct-copy-mergeinfo' branch, fix some more test expectations.", 
+   "(Currently still failing due to out-of-date expectations are", 
+   "merge-tests 63, 65, and 69.)", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(empty_mergeinfo, merge_old_and_new_revs_from_renamed_dir,", 
+   "merge_old_and_new_revs_from_renamed_file): Update test expectations."
+  ], 
+  "revision_id": "868529"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-13T13:16:03.497776Z", 
+  "msg": [
+   "On the 'correct-copy-mergeinfo' branch, merge outstanding changes from trunk.", 
+   "(Merged -r28402-r28453.)"
+  ], 
+  "revision_id": "868528"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-13T01:16:50.096067Z", 
+  "msg": [
+   "* subversion/svn/main.c", 
+   "In r28452, we shortened the identifiers for long option names; this", 
+   "commit does whitespace-only reformatting to make better use of", 
+   "space."
+  ], 
+  "revision_id": "868527"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-13T01:09:46.978699Z", 
+  "msg": [
+   "Now that the option names are file-local, rename them to something", 
+   "shorter:", 
+   "$ perl -pi -e 's/svn_cl__([a-z_]+)_opt\\b/opt_$1/g' main.c", 
+   "$ perl -pi -e 's/svn_cl__(no_diff_deleted|summarize)/opt_$1/g' main.c", 
+   "Whitespace will be cleaned up in the next commit.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__*_opt): Rename to opt_*.", 
+   "(svn_cl__no_diff_deleted, svn_cl__summarize): These too."
+  ], 
+  "revision_id": "868526"
+ }
+]

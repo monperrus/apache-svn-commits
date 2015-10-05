@@ -1,0 +1,86 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-11-19T18:34:52.869093Z", 
+  "msg": [
+   "On the moves-scan-log branch, change the way data about server-side moves", 
+   "is returned from the log history scanner.", 
+   "Before this change, a given sequence of moves which happened in", 
+   "given revisions, such as:", 
+   "rA: mv x->z", 
+   "rA: mv a->b", 
+   "rB: mv b->c", 
+   "rC: mv c->d", 
+   "resulted in a map of original source paths to a list of all moves", 
+   "of this node:", 
+   "'x' : [(rA, x->z)]", 
+   "'a' : [(rA, a->b), (rB, b->c), (rC, c->d)]", 
+   "This is impractical. During updates the base revision of the working copy", 
+   "is arbitrary so we might not know the nodes 'a' and 'x' under these names.", 
+   "So, instead, build a map of revision numbers to all moves which happened", 
+   "in the given revision, which looks as follows:", 
+   "rA : [(rA, x->z), (rA, a->b)]", 
+   "rB : [(rB, b->c),]", 
+   "rC : [(rC, c->d),]", 
+   "This will later allow an update to find relevant moves based on the base", 
+   "revision of a node. Additionally, all moves pertaining to the same node", 
+   "are chained into a doubly-linked list via 'next' and 'prev' pointers.", 
+   "This way, an update can look up all moves relevant to a node, forwards", 
+   "or backwards in history, once it has located a relevant move in the chain.", 
+   "This can be visualized as follows:", 
+   "rA : [(rA, x->z, prev=>NULL, next=>NULL),", 
+   "(rA, a->b, prev=>NULL, next=>(rB, b->c))]", 
+   "rB : [(rB, b->c), prev=>(rA, a->b), next=>(rC, c->d)]", 
+   "rC : [(rC, c->d), prev=>(rB, c->d), next=>NULL]", 
+   "The update editor still does not use this information. But it will soon.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_repos_move_info_t): Add copyfrom_rev, prev, and next. Add docstrings.", 
+   "* subversion/libsvn_client/update.c", 
+   "(scan_moves_log_receiver_baton): Semantics of the moves hash map change as", 
+   "described above. Add moves_by_target_path hash map which allows quick", 
+   "lookup of possible prior moves of the same node.", 
+   "(copy_info): New struct to fully describe a copy operation.", 
+   "(check_ancestry): New helper function, split off from ...", 
+   "(scan_moves_log_receiver): ... this function, because it needs to perform", 
+   "ancestry checks in two different cases: Once to establish ancestry between", 
+   "the delete-half and copied-half of a new move, and to establish ancestry", 
+   "in case a node is moved more than once within the log history being scanned.", 
+   "Make sure all paths stored in the moves map are relative, i.e. with no", 
+   "leading slash. Paths are returned with leading slashes from the log but", 
+   "paths used during conflict resolution in the update editor are relative.", 
+   "(get_repos_moves): Initalise the new moves_by_target_path map in the baton.", 
+   "Convert the debug print statement to expect new move info map semantics."
+  ], 
+  "revision_id": "1204035"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2011-11-19T18:27:51.153561Z", 
+  "msg": [
+   "HBASE-4789 On split, parent region is sticking around in oldest sequenceid to region map though not online; we don't cleanup WALs"
+  ], 
+  "revision_id": "1204034"
+ }, 
+ {
+  "author": "norman", 
+  "date": "2011-11-19T18:11:45.641327Z", 
+  "msg": [
+   "Move to james-project 1.8-SNAPSHOT"
+  ], 
+  "revision_id": "1204033"
+ }, 
+ {
+  "author": "norman", 
+  "date": "2011-11-19T18:09:59.656702Z", 
+  "msg": [
+   "Move to james-project 1.8-SNAPSHOT"
+  ], 
+  "revision_id": "1204032"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2011-11-19T18:05:13.646649Z", 
+  "msg": [], 
+  "revision_id": "1204031"
+ }
+]

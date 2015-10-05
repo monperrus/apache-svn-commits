@@ -1,0 +1,77 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2006-08-07T16:56:48.369327Z", 
+  "msg": [
+   "Make --enable-dso work in the face of global bdb environment caching.", 
+   "Really this time.", 
+   "This adds a custom wrapper for APR's dso loading code, which loads the", 
+   "DSOs into a global pool that will persist long enough that we don't risk", 
+   "having the DSO unloaded before any cleanup functions it registered are", 
+   "called.  Note that this only works if the new initialization function is", 
+   "called early enough, otherwise we are still vulnerable to the problem.", 
+   "Note that I have marked the new functions as being added in 1.4.0, if we", 
+   "do not backport this revision to 1.4.x then this will have to be changed.", 
+   "* subversion/include/svn_dso.h: New header.", 
+   "* subversion/libsvn_subr/dso.c: New function, holds the DSO wrapper code.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "Stop including apr_dso.h.  Include svn_dso.h.", 
+   "(load_ra_module): Use svn_dso_load instead of apr_dso_load.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "Remove include of apr_dso.h, add include of svn_dso.h.", 
+   "(load_module): Use svn_dso_load, not apr_dso_load.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "Include svn_dso.h.", 
+   "(svn_cmdline_init): Call svn_dso_initialize.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "Include svn_dso.h.", 
+   "(init_dso): New hook function.", 
+   "(register_hooks): Register init_dso to be called as early as possible."
+  ], 
+  "revision_id": "861070"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-08-07T16:02:55.478028Z", 
+  "msg": [
+   "* contrib/hook-scripts/svn2feed.py: Very minor tweaks:", 
+   "Stop outputting irrelevant whitespace.", 
+   "Use feed title calculated by base class instead of repeating calculation in", 
+   "derived class."
+  ], 
+  "revision_id": "861069"
+ }, 
+ {
+  "author": "marcosc", 
+  "date": "2006-08-06T16:18:49.507275Z", 
+  "msg": [
+   "Brazilian portuguese translation update.", 
+   "* subversion/po/pt_BR.po:", 
+   "Update translation to r20993.", 
+   "Fixed 11 fuzzy translations and 5 untranslated messages."
+  ], 
+  "revision_id": "861068"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-08-05T17:46:56.136131Z", 
+  "msg": [
+   "* contrib/hook-scripts/svn2feed.py: Add some TODOs."
+  ], 
+  "revision_id": "861067"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-08-05T17:31:57.552490Z", 
+  "msg": [
+   "* tools/examples/svnshell.py", 
+   "(SVNShell.do_ls): Sacrifice the angle brackets around node-rev-ids to gain", 
+   "two more characters of horizontal space for the node-rev-id field.", 
+   "(SVNShell.do_setrev): Stop dying on invalid input.", 
+   "Accept 'HEAD' as a parameter.", 
+   "Patch by: Bhuvaneswaran Arumugam <bhuvan@collab.net>", 
+   "me"
+  ], 
+  "revision_id": "861066"
+ }
+]

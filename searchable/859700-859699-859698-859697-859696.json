@@ -1,0 +1,70 @@
+[
+ {
+  "author": "giovannibajo", 
+  "date": "2006-05-12T16:33:18.712144Z", 
+  "msg": [
+   "Fix a bug with XML regexp parsing: the path information interpolated within", 
+   "the regular expression must be correctly escaped.", 
+   "* contrib/client-side/svnmerge.py:", 
+   "(get_copyfrom): Use re.escape to interpolate the path within the regular", 
+   "expression."
+  ], 
+  "revision_id": "859700"
+ }, 
+ {
+  "author": "giovannibajo", 
+  "date": "2006-05-12T16:31:05.929926Z", 
+  "msg": [
+   "Speedup common paths in svnmerge.py using the Repository Root information", 
+   "returned by \"svn info\" even on local paths since SVN 1.3.", 
+   "svnmerge.py needs to compute the repository root several times. Right now", 
+   "the flow of code is very contorted, and I plan to clean it up so that it", 
+   "computes it once and reuse it everywhere (instead of relying on memoization).", 
+   "Anyway, this path cleans up many paths of code so to request the repository", 
+   "root through a local path when possible, so that it can be computed without", 
+   "remote access.", 
+   "* contrib/client-side/svnmerge.py:", 
+   "(get_repo_root): Instead of converting immediately to URL, try running", 
+   "\"svn info\" on a local directory before, since it is faster.", 
+   "(url_to_rlpath): Rename to...", 
+   "(target_to_rlpath): New function. Accepts both an URL and a local directory,", 
+   "and convert it to repository-relative path. If a local directory is", 
+   "provided (and the client is at least 1.3), this can be done without any", 
+   "remote access.", 
+   "(RevisionLog.__init__, get_copyfrom, get_default_head, analyze_head_revs,", 
+   "main): Use target_to_rlpath, and provide a local directory instead of", 
+   "an URL when available."
+  ], 
+  "revision_id": "859699"
+ }, 
+ {
+  "author": "giovannibajo", 
+  "date": "2006-05-12T16:11:06.914476Z", 
+  "msg": [
+   "Fix computation of local URL (file://) from local path, under Windows. Given an", 
+   "absolute path, it is not sufficient to replace backslashes with forward", 
+   "slashes, as an absolute path under Windows does not start with any slash, but", 
+   "rather the driver latter.", 
+   "* contrib/client-side/svnmerge_test.py:", 
+   "(abspath_to_url): New function.", 
+   "(TestCase_TestRepo.setUp): Use it."
+  ], 
+  "revision_id": "859698"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-05-11T21:25:41.117716Z", 
+  "msg": [
+   "* STATUS (r19620): Nominate and vote, adding dlr's vote per IRC discussion."
+  ], 
+  "revision_id": "859697"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-05-11T21:19:41.260587Z", 
+  "msg": [
+   "* STATUS: Vote for r19620."
+  ], 
+  "revision_id": "859696"
+ }
+]

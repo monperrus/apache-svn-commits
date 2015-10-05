@@ -1,0 +1,96 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-06-13T23:41:37.987903Z", 
+  "msg": [
+   "Improve presentation of conflicts involving multi-line property values", 
+   "in the property conflicts reject file.", 
+   "We used to present property conflicts in the reject file in simple", 
+   "sentences, like this:", 
+   "Trying to change property 'foo' from 'bar' to 'baz',", 
+   "but it has been locally deleted.", 
+   "This format has obvious shortcomings when the property value spans", 
+   "multiple lines, such as with svn:externals or svn:ignore.", 
+   "The new format retains the descriptive messages explaining the conflict,", 
+   "but uses diff3 output with conflict markers to show conflicts in property", 
+   "values, if possible. If it falls back to showing full property values,", 
+   "each value is shown on a line of its own, preceded by a line explaining", 
+   "which value follows.", 
+   "Example of the new output (a conflict diff with one trailing line of context):", 
+   "Trying to change property 'svn:externals'", 
+   "but the local property value conflicts with the incoming change.", 
+   "<<<<<<< (local property value)", 
+   "^/trunk/alpha ta", 
+   "=======", 
+   "^/branch/beta bb", 
+   ">>>>>>> (incoming property value)", 
+   "^/foo/bar bar-ext", 
+   "If we fall back to printing full values, it looks like this:", 
+   "Trying to add new property 'add.diff'", 
+   "but the property already exists.", 
+   "Local property value:", 
+   "foo", 
+   "Incoming property value:", 
+   "bar", 
+   "Note that the new format does not include the local or incoming base", 
+   "values anymore. We don't show those for normal text conflicts either,", 
+   "and they can easily be obtained if needed ('svn diff' for the base of", 
+   "a local prop change, and 'svn propget' or 'svn diff' for the base of", 
+   "an incoming change).", 
+   "One remaining problem is that we will happily try to run diff3 on", 
+   "binary property values. This will be addressed in a future commit.", 
+   "This problem also existed with the old format.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(append_prop_conflict): Adjust for changes to prop_conflict_from_skel().", 
+   "(generate_conflict_message): Stop including property values in messages.", 
+   "Rephrase messages slightly for consistency. Return a stringbuf instead of", 
+   "a string since most of the time the caller will have to append more data.", 
+   "(message_from_skel): Rename to ...", 
+   "(prop_conflict_from_skel): ... this, because it will now return more", 
+   "than just a simple message. Add a new output parameter CONFLICT_DESC", 
+   "to allow this function to return an svn_error_t. As before, get a conflict", 
+   "description message from generate_conflict_message(). But also run diff3", 
+   "on the property values to generate a diff with conflict markers.", 
+   "If that fails, print available property values in their entirety.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(simple_property_merges, property_merge_undo_redo): Adjust expected output.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(prop_reject_grind): More substantial changes were needed for this test.", 
+   "The code that checked the output relied on the structure of the old", 
+   "format (2 lines per message) and had to be rewritten."
+  ], 
+  "revision_id": "1135340"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2011-06-13T23:37:44.156682Z", 
+  "msg": [
+   "MYFACES-3173 #{cc} inside f:event is not resolved correctly"
+  ], 
+  "revision_id": "1135339"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2011-06-13T23:37:12.609729Z", 
+  "msg": [
+   "MYFACES-3173 #{cc} inside f:event is not resolved correctly"
+  ], 
+  "revision_id": "1135338"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2011-06-13T23:31:28.198278Z", 
+  "msg": [
+   "HBASE-3983 list command in shell seems broken"
+  ], 
+  "revision_id": "1135337"
+ }, 
+ {
+  "author": "igalic", 
+  "date": "2011-06-13T23:29:07.107090Z", 
+  "msg": [
+   "new committer: zym!"
+  ], 
+  "revision_id": "1135336"
+ }
+]

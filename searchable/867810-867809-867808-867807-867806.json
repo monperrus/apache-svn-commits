@@ -1,0 +1,89 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-09T01:58:51.906587Z", 
+  "msg": [
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "Note that transaction-current has to deal with the ESTALE issue", 
+   "too."
+  ], 
+  "revision_id": "867810"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-09T01:50:29.169583Z", 
+  "msg": [
+   "Lock the FSFS 'transaction-current' file under its own", 
+   "'txn-current-lock' file instead of 'write-lock', so that new", 
+   "transactions and commits don't block each other.", 
+   "In order to do so, abstract out the locking code a little more.  While", 
+   "we're at it, make the locking code do \"lock,(error:create,lock)\"", 
+   "instead of \"stat,(missing:create),lock\", to save a stat in the common", 
+   "case.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_TXN_CURRENT_LOCK): New filename.  (And reflow the block.)", 
+   "(fs_fs_shared_data_t): If thready, add a txn_current_lock mutex", 
+   "field to protect the transaction-current file from concurrent", 
+   "access by multiple threads of one process.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_serialized_init): Create the txn_current_lock mutex, if thready.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_txn_current): New  helper function for getting the path of the", 
+   "transaction-current file.", 
+   "(path_txn_current_lock): New  helper function for getting the path of the", 
+   "txn-current-lock file.", 
+   "(get_lock_on_filesystem): Rename from get_write_lock, and generalize", 
+   "to lock a given file instead of 'write-lock'.  (Also move earlier", 
+   "in the file.)  Remove the stat (see above).", 
+   "(with_some_lock): Extract most of svn_fs_fs__with_write_lock into", 
+   "this function, which takes as argument a lock filename and (if", 
+   "threading) a mutex, instead of a svn_fs_t.", 
+   "(svn_fs_fs__with_write_lock): Now just a wrapper around", 
+   "with_some_lock (and moved earlier in the file).", 
+   "(with_txn_current_lock): New function which runs its body with the", 
+   "txn-current-lock file (and mutex) locked.", 
+   "(get_and_increment_txn_key_body): Use new path_txn_current helper", 
+   "function.", 
+   "(create_txn_dir): Call get_and_increment_txn_key_body using", 
+   "with_txn_current_lock instead of svn_fs_fs__with_write_lock (this", 
+   "change is the whole point of the revision).", 
+   "(svn_fs_fs__create): Create the txn-current-lock file when creating", 
+   "the repo., and use the path_txn_current helper.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Layout of the FS directory): Document that transaction-current is", 
+   "modified under the lock of txn-current-lock.", 
+   "Review by: malcolm", 
+   "(earlier version, helpful suggestions)"
+  ], 
+  "revision_id": "867809"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-08T23:16:33.731691Z", 
+  "msg": [
+   "* CHANGES: Add backported r26115 to 1.4.6 section."
+  ], 
+  "revision_id": "867808"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-08T22:18:34.688342Z", 
+  "msg": [
+   "Remove now-merged normalize-merge-sources branch."
+  ], 
+  "revision_id": "867807"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-08T21:55:15.544487Z", 
+  "msg": [
+   "Improve the job 'svn copy' does of initializing mergeinfo on the target.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(get_implied_mergeinfo): Use svn_client__get_implicit_mergeinfo() to", 
+   "get full implicit mergeinfo for a copy source, instead of a", 
+   "somewhat arbitrary subset based only the most recent location of", 
+   "the source."
+  ], 
+  "revision_id": "867806"
+ }
+]

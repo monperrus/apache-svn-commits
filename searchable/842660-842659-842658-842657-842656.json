@@ -1,0 +1,101 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-07-18T22:26:35.577895Z", 
+  "msg": [
+   "Remove `--enable-utf8' configuration flag and the SVN_UTF8 #define.", 
+   "Instead, use a graceful degradation strategy at run time: if unable to", 
+   "translate, don't fail until actually encounter data that demands", 
+   "translation.", 
+   "* subversion/libsvn_subr/utf.c: Remove all SVN_UTF8 conditonals.", 
+   "(get_ntou_xlate_handle, get_uton_xlate_handle): Just return a null", 
+   "convset, if unable to procure a live one.", 
+   "(svn_utf_stringbuf_to_utf8,", 
+   "svn_utf_string_to_utf8,", 
+   "svn_utf_cstring_to_utf8_stringbuf,", 
+   "svn_utf_cstring_to_utf8,", 
+   "svn_utf_stringbuf_from_utf8,", 
+   "svn_utf_string_from_utf8,", 
+   "svn_utf_cstring_from_utf8,", 
+   "svn_utf_cstring_from_utf8_stringbuf,", 
+   "svn_utf_cstring_from_utf8_string,", 
+   "svn_utf_utf8_to_native): If unable to procure a convset, fall back", 
+   "to a check for unsafe input data.", 
+   "* configure.in: Remove --enable-utf8 option."
+  ], 
+  "revision_id": "842660"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-18T21:16:14.263983Z", 
+  "msg": [
+   "Many times, our python tests will fail during the initial 'svn import'", 
+   "of guarantee_greek_repository().  This should make bug diagnosis a bit", 
+   "easier.", 
+   "* actions.py:  if the import output isn't what we expected, print both", 
+   "trees to the screen."
+  ], 
+  "revision_id": "842659"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-18T21:13:53.706670Z", 
+  "msg": [
+   "Part of #494: do case-canonicalization and path-separator-conversion", 
+   "in our commandline client.  Patch started by kfogel, finished by", 
+   "sussman.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__args_to_target_array): Doc fix.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): Add comment about necessity of early UTF-8 conversion, where", 
+   "handle the --targets option.", 
+   "* subversion/clients/cmdline/util.c", 
+   "(svn_cl__args_to_target_array): Major rewrite of this func, which is", 
+   "called by every foo-cmd.c routine.  Place all apr_getopt and", 
+   "--targets into a single array of natively encoded targets.  Loop", 
+   "over the array: for urls, convert to utf8 and strip trailing '/';", 
+   "for wc-paths, let apr canonicalize case and convert all separators", 
+   "to '/', then convert to utf8."
+  ], 
+  "revision_id": "842658"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-07-18T20:14:30.743951Z", 
+  "msg": [
+   "Fix issue #687.  Make  'svn rm --force wc_dir/' remove uncommitted dirs", 
+   "under wc_dir/.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(mark_tree): Don't attempt to schedule svn:this_dir for deletion if it", 
+   "represents an uncommitted directory.", 
+   "* subversion/tests/clients/cmdline/basic_tests.py", 
+   "(basic_delete): Add delete of directory with uncommitted child dir.", 
+   "* CHANGES: Add this bug number."
+  ], 
+  "revision_id": "842657"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-07-18T20:08:51.934183Z", 
+  "msg": [
+   "Tweaks, based on Marcus Comsted's review of the application of his", 
+   "UTF-8 patches (see revisions 2388, 2424, 2428, 2436, and 2441):", 
+   "* subversion/libsvn_client/diff.c: Include svn_utf.c.", 
+   "(display_prop_diffs): Assume that values of \"svn:\" properties are in", 
+   "utf8, thus transcode to native for printing.  Also, check for error", 
+   "from svn_io_file_printf.", 
+   "(diff_file_changed): Check for error from svn_io_file_printf.", 
+   "* subversion/libsvn_delta/diff_file.c", 
+   "(svn_diff_file_output_unified): Check for error from", 
+   "svn_io_file_printf.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(apply_textdelta): Restore comment mistakenly removed in rev 2388.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__options): Fix documentation for --message-encoding option.", 
+   "* subversion/libsvn_subr/utf.c: Include apr_lib.h.", 
+   "(check_non_ascii): Use APR's character test functions for", 
+   "portability, at Brane's suggestion."
+  ], 
+  "revision_id": "842656"
+ }
+]

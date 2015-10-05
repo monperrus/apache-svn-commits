@@ -1,0 +1,115 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-26T06:26:50.277673Z", 
+  "msg": [
+   "Expand my svn:externals TODO."
+  ], 
+  "revision_id": "848915"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-02-26T05:32:12.808844Z", 
+  "msg": [
+   "Rewrite the svn_repos reporter implementation to use a temporary file", 
+   "instead of a database transaction.  Should significantly improve", 
+   "performance for large reports.", 
+   "* libsvn_repos/reporter.c", 
+   "(add_to_path_map, get_from_path_map, gut_directory, begin_txn): Remove.", 
+   "(path_info_t): New structure to represent a", 
+   "set_path/link_path/delete_path operation as a data item.", 
+   "(report_baton_t): Reorganize a bit.  Add fields for the temporary file", 
+   "which stores the report, a lookahead path info structure, and a cache", 
+   "of FS roots.", 
+   "(read_number, read_string, read_rev, read_path_info, relevant,", 
+   "fetch_path_info, skip_path_info, any_path_info): New functions to", 
+   "read path info from the temporary file and manage them according to", 
+   "whether they're relevant to the path prefix being operated on.", 
+   "(get_source_root): New function to manage the cache of source FS", 
+   "roots.", 
+   "(change_dir_prop, change_file_prop, delta_proplists, compare_files,", 
+   "delta_files, check_auth, fake_dirent, update_entry, delta_dirs,", 
+   "drive): A reimplementation of svn_repos_dir_delta() from delta.c", 
+   "which has been generalized to operate on a streamed report rather", 
+   "than a single source transaction.  (And de-generalized so that it", 
+   "can only operate on revision roots, not on transactions; perhaps", 
+   "there's a way to reverse that so that svn_repos_dir_delta() can be", 
+   "implemented in terms of this new code.)", 
+   "(finish_report): Rewrite to rewind the temporary file, initialize", 
+   "the pathinfo lookahead and FS root cache, and call drive().", 
+   "(write_path_info): New function to save a report operation to the", 
+   "temporary file.", 
+   "(svn_repos_set_path, svn_repos_link_path, svn_repos_delete_path):", 
+   "Rewrite to use write_path_info to save the operations to the", 
+   "temporary file.", 
+   "(svn_repos_finish_report, svn_repos_abort_report): Cleanup is now", 
+   "just a matter of closing the temporary file (which is set", 
+   "delete-on-close).", 
+   "(svn_repos_begin_report): Adjust for the reorganized saved fields,", 
+   "and also open the temporary file here."
+  ], 
+  "revision_id": "848914"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-25T22:57:41.361102Z", 
+  "msg": [
+   "Finish Issue #1756 - import doesn't handle svn:eol-style or svn:keywords.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_auto_props): Update the docstring.", 
+   "* subversion/libsvn_client/add.c", 
+   "(auto_props_enumerator): Use 'svn_string_t *' values in the", 
+   "properties hash, instead of 'const char *'.", 
+   "(svn_client__get_auto_props, add_file): Expect (and write)", 
+   "'svn_string_t *' values in the properties hash.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(send_file_contents): Add 'properties' argument, and do", 
+   "detranslation of keywords and EOL styles before importing files that", 
+   "need this work done.", 
+   "(import_file): Track changes to data types used by", 
+   "svn_client__get_auto_props().  Update call to send_file_contents()."
+  ], 
+  "revision_id": "848913"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-25T20:51:32.071627Z", 
+  "msg": [
+   "Finish issue #1750 - \"svn export [url] doesn't exports any svn:externals\".", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__fetch_externals): New.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_external_item_change_baton,", 
+   "struct handle_externals_desc_change_baton): Add 'is_export' member.", 
+   "(svn_client__fetch_externals): New.", 
+   "(svn_client__handle_externals): Populate the new 'is_export' baton member.", 
+   "(handle_externals_desc_change): Copy 'is_export' between batons.", 
+   "(handle_external_item_change): If 'is_export' baton member is TRUE,", 
+   "do an export instead of a checkout.", 
+   "* subversion/libsvn_client/export.c", 
+   "(add_externals): New.", 
+   "(copy_versioned_files): Re-org (to reduce a couple levels of", 
+   "indentation), and capture svn:externals properties.", 
+   "(struct edit_baton): Add 'externals' structure member.", 
+   "(struct dir_baton): New.", 
+   "(add_directory): Make real dir_batons.", 
+   "(change_dir_prop): New.", 
+   "(svn_client_export): Add some braces for balance.  Init the new", 
+   "'traversal_info' edit baton member.  Link in the new", 
+   "change_dir_prop() function.  Finally, handle externals in", 
+   "the URL export case.", 
+   "* subversion/tests/clients/cmdline/externals_tests.py", 
+   "(export_with_externals): New test.", 
+   "(test_list): Add reference to new test."
+  ], 
+  "revision_id": "848912"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-25T20:44:20.247806Z", 
+  "msg": [
+   "Point the \"Version Control\" link directly to our ViewCVS installation."
+  ], 
+  "revision_id": "848911"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-03-27T18:05:58.000000Z", 
+  "msg": [
+   "mod_dav_svn:  try it at home, kids\\!"
+  ], 
+  "revision_id": "839050"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-27T17:59:16.000000Z", 
+  "msg": [
+   "Comment out libsvn_ra_dav temporarily.", 
+   "gstein, something you did last night prevents tests/libsvn_ra_dav from", 
+   "linking.  But I don't have time to figure it out.  :)"
+  ], 
+  "revision_id": "839049"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-27T17:40:35.000000Z", 
+  "msg": [
+   "(svn_fs_merge): Clarify issues in a todo item."
+  ], 
+  "revision_id": "839048"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-27T14:32:33.000000Z", 
+  "msg": [
+   "Get DAV-based checkouts to work. (yeah!)", 
+   "* fetch.c (starting_props[]): fetch the resourcetype so we can verify that", 
+   "the accessed resource is a collection.", 
+   "(fetch_file): add a placeholder error return to catch problems", 
+   "(begin_checkout): add placeholder error returns. print out the", 
+   "intermediate URLs as we track down the BC.", 
+   "(svn_ra_dav__do_checkout): compare against bc_root rather than ras->root", 
+   "to determine whether we're at/in the root.", 
+   "* props.c (create_private): clean trailing slashes from the URL; use a", 
+   "non-const variable (url_path) while working on the URL, then copy into", 
+   "r->url.", 
+   "(end_element): restructure so that we don't punt on DAV_ELM_href right off", 
+   "the bat. we need to process that special. *then* look up non-href", 
+   "elements' definitions.", 
+   "(svn_ra_dav__get_props): set up the pool variable in the context. use", 
+   "APR_EGENERAL in the placeholder errors rather than 0 (which is success).", 
+   "(svn_ra_dav__get_props_resource): use \"url\" consistently rather than", 
+   "ras->root.", 
+   "* session.c (svn_ra_open): clean trailing slashes from the root path."
+  ], 
+  "revision_id": "839047"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-27T14:19:50.000000Z", 
+  "msg": [
+   "Various bugfixes.", 
+   "* dav_svn.h (dav_svn_build_uri): add new \"add_href\" parameter", 
+   "* liveprops.c (SVN_PROPID_baseline_relative_path): start this value at 1", 
+   "rather than zero. The latter means \"not found\" (so the property wasn't", 
+   "working at all)", 
+   "(dav_svn_insert_prop): use new add_href parameter to dav_svn_build_uri", 
+   "* repos.c (dav_svn_prep_version): use new add_href parameter", 
+   "(dav_svn_walk): repos_path can be null for resources without a", 
+   "corresponding FS resource. watch out when we try to walk these. note", 
+   "that a \"walk\" is implicitly depth==0; these resources have no children", 
+   "since they are purely logical.", 
+   "* util.c (dav_svn_build_uri): implement new \"add_href\" parameter. this will", 
+   "wrap the constructed URI in DAV:href elements."
+  ], 
+  "revision_id": "839046"
+ }
+]

@@ -1,0 +1,69 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2006-08-10T23:12:50.850270Z", 
+  "msg": [
+   "update forward tool doc"
+  ], 
+  "revision_id": "430580"
+ }, 
+ {
+  "author": "agilliland", 
+  "date": "2006-08-10T22:58:57.271915Z", 
+  "msg": [
+   "add slash to end of site url, otherwise when the app is at the root context you don't get a valid url."
+  ], 
+  "revision_id": "430579"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-08-10T22:57:40.790426Z", 
+  "msg": [
+   "DERBY-1661, submitted by Sunitha", 
+   "Cause:", 
+   "--On linux on the machine where the problem was hit, the default number for open file descriptors allowed is 1024.", 
+   "-- The problem lies in the sort code. The create index step involves the external merge sort.  There are some knobs in the code for the maximum number of input runs  to be used at a time. This is given by DEFAULT_MAX_MERGE_RUN in ExternalSortFactory.java. The default value is 1024.", 
+   "--If the number of merge runs exceeds the limit given by DEFAULT_MAX_MERGE_RUN (lets call it 'x'), we combine the x number of runs into one larger run.  This process involves opening the x number of tmp files which is required to do the merge.", 
+   "In this particular issue, when opening the 974th merge run, the too many files open is hit on this machine.", 
+   "See code:", 
+   "org.apache.derby.impl.store.access.sort.MergeScan.init()", 
+   "// Open a scan on each merge run.", 
+   "int scanindex = 0;", 
+   "Enumeration e = mergeRuns.elements();", 
+   "while (e.hasMoreElements())", 
+   "{", 
+   "// get the container id", 
+   "long id = ((Long) e.nextElement()).longValue();", 
+   "Transaction rawTran = tran.getRawStoreXact();  // get raw transaction", 
+   "int segmentId = StreamContainerHandle.TEMPORARY_SEGMENT;", 
+   "openScans[scanindex++] =", 
+   "rawTran.openStreamContainer(segmentId, id, hold);   // <---------  This call throws the FileNotFoundException.", 
+   "}", 
+   "Workaround:", 
+   "Increase the open file descriptor limit on the OS to a higher number. This solves the problem without any changes to derby.But this requires the user to explicitly change this limit on the machine, not a good option.", 
+   "E.g on linux, the command to change the open file descriptor limit to 2048,", 
+   "$ulimit -n 2048", 
+   "To see the new /all limits, the command is", 
+   "$ulimit -a", 
+   "Fix to the problem:", 
+   "1)change the DEFAULT_MAX_MERGE_RUN to 512."
+  ], 
+  "revision_id": "430578"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2006-08-10T22:51:20.803899Z", 
+  "msg": [
+   "apply patch by Tom Antony"
+  ], 
+  "revision_id": "430577"
+ }, 
+ {
+  "author": "jdcasey", 
+  "date": "2006-08-10T22:49:50.932352Z", 
+  "msg": [
+   "Rearranging ITs"
+  ], 
+  "revision_id": "430576"
+ }
+]

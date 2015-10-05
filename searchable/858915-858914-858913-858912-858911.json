@@ -1,0 +1,106 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2006-03-11T02:11:52.847521Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "Make history tracing work with multiple renames by stashing the source rev", 
+   "in the copy record.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(make_path_mutable): Pass SVN_INVALID_REVNUM to svn_fs_bdb__create_copy as", 
+   "the source rev.", 
+   "(txn_body_move): Pass the source rev in to svn_fs_bdb__create_copy.", 
+   "(txn_body_history_prev): Grab the source rev out of the copy.", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(svn_fs_base__dag_move): Add source rev argument.", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.c", 
+   "(svn_fs_bdb__create_copy): Take a source rev, init source rev member of", 
+   "the copy.", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.h", 
+   "(svn_fs_bdb__create_copy): Add source rev argument.", 
+   "* subversion/libsvn_fs_base/fs.h", 
+   "(copy_t): Add source rev member and note that the source txn id should be", 
+   "renamed since sometimes it's the dest txn id.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(txn_body_dag_init_fs): Pass SVN_INVALID_REVNUM to svn_fs_bdb__create_copy.", 
+   "(svn_fs_base__dag_copy): Ditto.", 
+   "(svn_fs_base__dag_move): Take source rev, pass it to svn_fs_bdb__create_copy.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.c", 
+   "(is_valid_copy_skel): Deal with source rev in copy record.", 
+   "(svn_fs_base__parse_copy_skel): Add source rev for moves.", 
+   "(svn_fs_base__unparse_copy_skel): Handle source rev.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(test_funcs): Mark move_history_test PASS."
+  ], 
+  "revision_id": "858915"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-03-11T00:14:05.042452Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "Instead of iterating over the changes entries to figure out where a moved", 
+   "node came from just stash the dest path for the copy in the copies record", 
+   "for the move.", 
+   "Suggested by: cmpilato", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(make_path_mutable): Pass a NULL dest path into svn_fs_bdb__create_copy.", 
+   "(txn_body_move): Pass the dest path into svn_fs_bdb__create_copy.", 
+   "(txn_body_history_prev): Use the path we've cached in the copy record,", 
+   "note a problem that occurs with multiple moves of a given node.", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(svn_fs_base__dag_move): Take the target path as an argument.", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.c", 
+   "(svn_fs_bdb__create_copy): Take the dest path as an argument, use it", 
+   "to initialize the dest path member of the copy.", 
+   "* subversion/libsvn_fs_base/bdb/copies-table.h", 
+   "(svn_fs_bdb__create_copy): Add dest path argument.", 
+   "* subversion/libsvn_fs_base/fs.h", 
+   "(copy_t): Add dest path member.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_copy): Pass NULL dest path into svn_fs_bdb__create_copy.", 
+   "(svn_fs_base__dag_move): take target path argument, pass it on to", 
+   "svn_fs_bdb__create_copy.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.c", 
+   "(is_valid_copy_skel): Look for the new dest path in move records.", 
+   "(svn_fs_base__parse_copy_skel): Parse the dest path out of the skel.", 
+   "(svn_fs_base__unparse_copy_skel): Add the dest path if it's there."
+  ], 
+  "revision_id": "858914"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-03-10T23:48:52.819110Z", 
+  "msg": [
+   "* STATUS: Nominate r18504 and r18509."
+  ], 
+  "revision_id": "858913"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-10T23:17:59.107769Z", 
+  "msg": [
+   "ra_serf: Handle authentication challenges when we issue MKACTIVITY request.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(mkactivity_context_t): Remove unneeded fields folded into handler struct.", 
+   "(handle_status_only): Disregard possibly erroneous status message.", 
+   "(setup_mkactivity): Remove.", 
+   "(open_root): Create handler structure and call svn_ra_serf__request_create();", 
+   "don't set the log message in the root dir's property hashes but use a", 
+   "separate hash instead for revprops."
+  ], 
+  "revision_id": "858912"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-10T23:14:01.860709Z", 
+  "msg": [
+   "ra_serf: Match neon's realm strings as it will strip quotes from the realm", 
+   "string and always have a port.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_auth): Always add a port and strip quotes from realm string if", 
+   "present."
+  ], 
+  "revision_id": "858911"
+ }
+]

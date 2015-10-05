@@ -1,0 +1,116 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-31T22:15:10.921981Z", 
+  "msg": [
+   "Make all property operations work on both the current property files", 
+   "and on the new in database properties. Add #ifdef-disabled code to", 
+   "check whether the retrieved values are always identical.", 
+   "When I enable these checks and run the test suite it shows that we can", 
+   "handle the properties in the database correctly. (0 failing tests). But", 
+   "before we can enable the database properties as primary properties, we", 
+   "must first add upgrade code.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(TEST_DB_PROPS): Add commented #define", 
+   "(svn_wc__prop_pristine_is_working): Add temporary helper to determine in", 
+   "which table properties must be installed for a node, to allow running", 
+   "side by side with the old code. This function can be removed after", 
+   "switching to only in-db properties.", 
+   "(svn_wc__load_props): Add #ifdef'd checks to confirm in-db and file", 
+   "properties are identical.", 
+   "(svn_wc__install_props): Rename some arguments and add boolean to force", 
+   "installing in base properties from the update editor.", 
+   "(immediate_install_props): Take db and local_abspath arguments and also", 
+   "install the passed values in the database.", 
+   "(svn_wc_merge_props3): Update caller.", 
+   "(svn_wc__internal_propset): Update caller.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__install_props): Update prototype and documentation.", 
+   "(svn_wc__prop_pristine_is_working): New function prototype.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(set_copied_callback): Fix whitespace and move properties from BASE_NODE", 
+   "to WORKING_NODE.", 
+   "(schedule_existing_item_for_re_add):", 
+   "Move pristine properties to WORKING_NODE.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(run_revert): Clear WORKING_NODE (if replaced) and ACTUAL_NODE props.", 
+   "(run_prepare_revert_files): Make WORKING_NODE properties empty to stop", 
+   "inheriting BASE_NODE properties.", 
+   "(run_install_properties,", 
+   "svn_wc__wq_add_install_properties): Allow forcing the pristine values", 
+   "to go in BASE_NODE, because some update editor scenarios can't determine", 
+   "the right table to use.", 
+   "(svn_wc__db_scan_deletion fails on an incomplete parent)", 
+   "* subversion/libsvn_wc/workqueue.h", 
+   "(svn_wc__wq_add_install_properties): Update prototype."
+  ], 
+  "revision_id": "880405"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-31T21:50:35.255154Z", 
+  "msg": [
+   "Make svn_wc_copy migrate database properties from BASE/WORKING_NODE to", 
+   "WORKING_NONE. This in preparation for moving the properties into the", 
+   "database.", 
+   "Yes, copying is fixed by updating svn_wc_add4() and its helpers...", 
+   "Read the documentation in svn_wc.h on why svn_wc_add4() is used for", 
+   "implementing this case.", 
+   "See also:", 
+   "http://subversion.tigris.org/ds/viewMessage.do?dsForumId=462&dsMessageId=2413285", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(mark_tree_copied, svn_wc_add4):", 
+   "Read BASE/WORKING properties before setting the copied flag on a node.", 
+   "And then reapply the properties after updating the database."
+  ], 
+  "revision_id": "880404"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-31T21:35:22.107766Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_temp_op_set_pristine_props):", 
+   "Extend error message to be a bit more debugging friendly."
+  ], 
+  "revision_id": "880403"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-10-31T17:03:28.305531Z", 
+  "msg": [
+   "In preparation for the change in the pristine store, start calculating", 
+   "SHA-1 hashes of files in the update editor.  They aren't yet used for", 
+   "anything.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(handler_baton): Add a sha1 checksum and source stream.", 
+   "(file_baton): Add a sha1 checksum, and one for the copied contents as well.", 
+   "(window_handler): Close the sha1 checksum stream (which also closes the", 
+   "md5 checksum stream).", 
+   "(add_file_with_history): Wrap the md5 checksum stream with one which", 
+   "calculates the sha1 as well.", 
+   "(apply_textdelta): Wrap the md5 checksum stream with a sha1 stream.", 
+   "(close_file): Populate the checksum field with the correct sha1 value."
+  ], 
+  "revision_id": "880402"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-31T16:48:58.576898Z", 
+  "msg": [
+   "Apply some band-aid to prevent 'svn diff' with files added as children of", 
+   "copied directories from erroring out with", 
+   "\"svn: Can't open file '....svn/text-base/foo.svn-revert'\"", 
+   "The catch: Files added as children of copied directories only appear in", 
+   "the output of 'svn diff' if the --show-copies-as-adds option is passed.", 
+   "To fix this properly I need to know how to tell apart files added inside", 
+   "copied parent directories from files copied with the parent directory.", 
+   "This problem was introduced in r40087.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(file_diff): If the revert base does not exist either, then don't", 
+   "use a text base at all.", 
+   "Found by: arfrever"
+  ], 
+  "revision_id": "880401"
+ }
+]

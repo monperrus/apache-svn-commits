@@ -1,0 +1,68 @@
+[
+ {
+  "author": "gpetracek", 
+  "date": "2011-07-23T13:06:13.321747Z", 
+  "msg": [
+   "EXTCDI-198 and EXTCDI-209 cleanup"
+  ], 
+  "revision_id": "1150100"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-07-23T12:52:09.546848Z", 
+  "msg": [
+   "Remove svn_wc__db_op_move() and merge its functionality into", 
+   "svn_wc__db_op_copy(). The only difference was the value of the boolean", 
+   "flag IS_MOVE, which is now a parameter of svn_wc__db_op_copy().", 
+   "svn_wc_move() will present an atomic move operation to the client layer.", 
+   "In order to reuse existing code between svn_wc_move() and wc_db we need", 
+   "to split up the move into a copy and delete operation at the wc_db interface.", 
+   "Thus a move in wc_db is performed by calling svn_wc__db_op_copy() with", 
+   "IS_MOVE=TRUE and svn_wc__db_op_delete() with MOVED_FROM=source_path", 
+   "(the latter still needs to be implemented).", 
+   "This means that we'll need to deal with the problem where the move operation", 
+   "is interrupted mid-way so that the copy succeeds but the delete fails.", 
+   "I am not sure yet whether having an atomic move operation at the db layer", 
+   "is better but there is still some time to experiment until we release 1.8.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_versioned_file, copy_versioned_dir): Call svn_wc__db_op_copy()", 
+   "passing IS_MOVE as an argument instead of svn_wc__db_op_move().", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(db_op_copy): Remove mention of svn_wc__db_op_move() from docstring.", 
+   "(svn_wc__db_op_copy): Add IS_MOVE parameter, which is passed verbatim", 
+   "into the op_copy_baton.", 
+   "(svn_wc__db_op_move): Remove. The only difference to svn_wc__db_op_copy()", 
+   "was that op_copy_baton.is_move was set to TRUE instead of FALSE.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_op_copy): Adjust declaration and docstring.", 
+   "(svn_wc__db_op_copy_shadowed_layer): Remove mention of", 
+   "svn_wc__db_op_move() from docstring.", 
+   "(svn_wc__db_op_move): Remove declaration."
+  ], 
+  "revision_id": "1150099"
+ }, 
+ {
+  "author": "not", 
+  "date": "2011-07-23T12:46:56.673995Z", 
+  "msg": [
+   "CMS commit to aries by not"
+  ], 
+  "revision_id": "1150098"
+ }, 
+ {
+  "author": "gpetracek", 
+  "date": "2011-07-23T12:42:17.379218Z", 
+  "msg": [
+   "EXTCDI-198 and EXTCDI-209 optional simple service provider"
+  ], 
+  "revision_id": "1150097"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2011-07-23T12:41:55.269513Z", 
+  "msg": [
+   "reduce PMD whining"
+  ], 
+  "revision_id": "1150096"
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-07T06:31:45.164539Z", 
+  "msg": [
+   "More libsvn_fs API cleanup.  Make the svn_fs_txn_t objects adhere to", 
+   "the object lifetime policies employed elsewhere in Subversion.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_txn_fs, svn_fs_txn_pool, svn_fs_close_txn): Remove.", 
+   "(svn_fs_abort_txn, svn_fs_commit_txn): Add 'pool' parameter.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_commit_txn): Add 'pool' parameter.", 
+   "* subversion/libsvn_fs/txn.h", 
+   "(svn_fs__txn_id, svn_fs__txn_fs, svn_fs__txn_pool): Remove.", 
+   "(svn_fs_txn_t): Move here from txn.c.", 
+   "* subversion/libsvn_fs/txn.c", 
+   "(svn_fs_txn_t): Move from here to txn.h.", 
+   "(struct svn_fs_txn_t): Remove the 'pool' member.", 
+   "(make_txn): Track distinct lack of a pool member for txn object.", 
+   "(svn_fs_begin_txn): Remove unnecessary level of braces.", 
+   "(txn_body_abort_txn): Expect the txn object as the baton, and don't", 
+   "call a stupid function just to find the name of the thing.", 
+   "(struct abort_txn_args, svn_fs_txn_fs, svn_fs_txn_pool,", 
+   "svn_fs__txn_id, svn_fs__txn_fs, svn_fs__txn_pool,", 
+   "svn_fs_close_txn): Remove.", 
+   "(svn_fs_list_transactions): Just some whitespace mods.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_commit_txn): Add 'pool' parameter, and stop calling", 
+   "now-defunct FS API functions.  Update call to svn_fs_commit_txn().", 
+   "(svn_repos_fs_begin_txn_for_commit, svn_repos_fs_begin_txn_for_update):", 
+   "Remove an unnecessary level of braces.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(txn_body_txn_root, svn_fs_txn_root, txn_body_merge,", 
+   "txn_body_commit): Access txn object fields directly.", 
+   "(svn_fs_commit_txn): Add 'pool' parameter, and access txn object", 
+   "fields directly.", 
+   "* subversion/libsvn_fs/revs-txns.c", 
+   "(svn_fs_txn_proplist, svn_fs_change_txn_prop, svn_fs_txn_prop):", 
+   "Access txn object fields directly.", 
+   "In the following locations, track all the function changes and", 
+   "removals described in this log message:", 
+   "* subversion/libsvn_repos/commit.c (close_edit, abort_edit)", 
+   "* subversion/libsvn_repos/delta.c (svn_repos_dir_delta)", 
+   "* subversion/libsvn_repos/load.c (close_revision)", 
+   "* subversion/libsvn_repos/reporter.c (svn_repos_abort_report)", 
+   "* subversion/svnadmin/main.c (subcommand_rmtxns)", 
+   "* subversion/mod_dav_svn/activity.c (dav_svn_delete_activity)", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(dav_svn_uncheckout, dav_svn_checkin, dav_svn_merge)", 
+   "In the following files (whose list of modified functions is just far", 
+   "too great to list), track all the function changes and removals", 
+   "described in this log message, and introduce subpools in some places", 
+   "to better control the lifetime of txn objects:", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "* subversion/tests/libsvn_repos/repos-test.c"
+  ], 
+  "revision_id": "847740"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-07T04:35:54.304937Z", 
+  "msg": [
+   "* subversion/libsvn_fs/tree.c", 
+   "(struct parent_path_t): Document the 'copy_src_path' member.", 
+   "(examine_copy_inheritance): Add some more running commentary in the code."
+  ], 
+  "revision_id": "847739"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-07T03:14:04.483803Z", 
+  "msg": [
+   "* subversion/libsvn_fs/tree.c", 
+   "(examine_copy_inheritance): Lose out-of-date restrictive commentary."
+  ], 
+  "revision_id": "847738"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-07T03:04:43.826693Z", 
+  "msg": [
+   "* subversion/libsvn_fs/tree.c", 
+   "(txn_body_history_prev): Lose an else case that can't be hit.  Duh."
+  ], 
+  "revision_id": "847737"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-11-07T00:26:45.384209Z", 
+  "msg": [
+   "Fix a crash in 'svn status' when the user does not have read access to a file", 
+   "that has a timestamp that indicates it needs to be examined closer to see if", 
+   "it has been modified.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__versioned_file_modcheck): verify that svn_io_remove_file actually", 
+   "returned an error before we call svn_error_compose with its return value."
+  ], 
+  "revision_id": "847736"
+ }
+]

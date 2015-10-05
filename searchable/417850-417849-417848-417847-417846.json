@@ -1,0 +1,68 @@
+[
+ {
+  "author": "toback", 
+  "date": "2006-06-28T19:22:38.500519Z", 
+  "msg": [
+   "Small fix to clarify where to get the db scripts from."
+  ], 
+  "revision_id": "417850"
+ }, 
+ {
+  "author": "janb", 
+  "date": "2006-06-28T19:19:50.203925Z", 
+  "msg": [
+   "Getting closer, still won't run; temporarily disabled compile (hopefully) of Tomcat related modules because they won't work with the newer servlet2.5 stuff"
+  ], 
+  "revision_id": "417849"
+ }, 
+ {
+  "author": "sviens", 
+  "date": "2006-06-28T19:06:24.977386Z", 
+  "msg": [
+   "Changed default maxXxx values to -1 indicating that there are no maximum number of business entities, business services, binding templates or tmodels published per user."
+  ], 
+  "revision_id": "417848"
+ }, 
+ {
+  "author": "taylor", 
+  "date": "2006-06-28T19:00:15.015617Z", 
+  "msg": [
+   "Problem", 
+   "==========", 
+   "Using the Ajax API, the user can specify the row to add a portlet.", 
+   "If that row is greater than the current number of rows,", 
+   "then an ArrayOutOfBounds exception will be thrown and the portlet will not be added.", 
+   "It seems like better behavior might be to just add the portlet at the end of the column", 
+   "even if it doesn't match the request.", 
+   "So just to make it clear, if there are 3 portlets on the page and the user requests that", 
+   "a new portlet be added at row 6, it should actually be added at row 4 (index 3 since it is zero based)", 
+   "Solution", 
+   "===========", 
+   "The solution is to check the row before attempting to add it to the Vector.", 
+   "If the row exceeds the size of the Vector, then just add the portlet to the end", 
+   "of the Vector rather than trying to insert it.", 
+   "The new code is found within PortletPlacementContextImpl.add(\u2026)  and is shown below:", 
+   "// Make sure that the column has room to add the row", 
+   "if(row < 0 || row > column.size()) {", 
+   "// Add to the end", 
+   "column.addElement(fragment);", 
+   "row = column.size()-1;", 
+   "} else {", 
+   "column.add(row, fragment);", 
+   "}", 
+   "I've tested it out and it seems to work just fine.", 
+   "Note that the row needed to be adjusted so that the xml response to the", 
+   "user would indicate where the portlet was actually added.", 
+   "Contributed by David Gurney"
+  ], 
+  "revision_id": "417847"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2006-06-28T18:53:07.252343Z", 
+  "msg": [
+   "Removed parameters unused in HttpCore"
+  ], 
+  "revision_id": "417846"
+ }
+]

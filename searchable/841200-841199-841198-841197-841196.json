@@ -1,0 +1,91 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-01-31T22:06:06.942073Z", 
+  "msg": [
+   "For 'svn switch', don't worry about splitting the path into", 
+   "anchor/target.  The only reason we do this for regular updates is", 
+   "because the target might need to be deleted, and thus the", 
+   "update-editor needs to be anchored on the parent dir.  But for a", 
+   "switch, this shouldn't happen.  If the URL we're switching to doesn't", 
+   "exist, an error will be returned anyway.", 
+   "The *real* reason we're doing this: it has the nice effect of causing", 
+   "the wc directory to be transformed into a different directory *without*", 
+   "being removed or renamed.  Ahhhh.", 
+   "* switch.c (svn_client_switch): for a switch, don't split path; anchor", 
+   "the update editor directly on the path.", 
+   "* svn_ra.h (do_switch): remove smelly 'anchor_target_split' flag.", 
+   "* ra_plugin.c (do_switch): remove split flag;  anchor pipe editor", 
+   "directly on 2nd half of switch_url."
+  ], 
+  "revision_id": "841200"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-31T21:46:06.128468Z", 
+  "msg": [
+   "* svn/subversion/libsvn_subr/io.c (apr_transfer_file_contents): Use", 
+   "APR_FINFO_PROT to get perms, fix comment.  See thread on dev list", 
+   "\"Subject: apr_copy_file and apr_transfer_file_contents\" for more on", 
+   "this."
+  ], 
+  "revision_id": "841199"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-31T18:49:41.789888Z", 
+  "msg": [
+   "Found another place where keyword values are gathered.  Abstractify", 
+   "date truncation, and use it in both places where date is obtained:", 
+   "* svn/subversion/libsvn_wc/wc.h, svn/subversion/libsvn_wc/translate.c", 
+   "(svn_wc__friendly_date): New func.", 
+   "* svn/subversion/libsvn_wc/log.c (log_do_file_xfer): Use it.", 
+   "* svn/subversion/libsvn_wc/props.c (expand_keyword): Same, replacing", 
+   "the inline code committed in revision 1095."
+  ], 
+  "revision_id": "841198"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-31T17:20:14.578258Z", 
+  "msg": [
+   "* subversion/svn-dev.el (svn-bug-url): New func."
+  ], 
+  "revision_id": "841197"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-31T17:18:00.517281Z", 
+  "msg": [
+   "A few followup changes to revision 1114:", 
+   "* svn/subversion/libsvn_wc/adm_ops.c (svn_wc_revert): Add parens to", 
+   "clarify precedence in a conditional.", 
+   "* svn/subversion/clients/cmdline/feedback.c", 
+   "(svn_cl__notify_added_item): Print a warning if a problem arises,", 
+   "instead of returning silently.", 
+   "* svn/subversion/clients/cmdline/cl.h (SVN_CL_NOTIFY): Removed.  This", 
+   "macro saved some space, but it obscured references to the", 
+   "opt_state->quiet flag and to the notification functions.  For example,", 
+   "suppose you're updating a baton, and need to do a search for all", 
+   "occurrences of the given function/baton pair?  Badness.  But, since", 
+   "this change makes saving space even more important, remove \"_item\"", 
+   "suffix from notification functions:", 
+   "(svn_cl__notify_unversioned): Replaces svn_cl__notify_unversioned_item.", 
+   "(svn_cl__notify_added): Replaces svn_cl__notify_added_item.", 
+   "(svn_cl__notify_deleted): Replaces svn_cl__notify_deleted_item.", 
+   "(svn_cl__notify_restored): Replaces svn_cl__notify_restored_item.", 
+   "(svn_cl__notify_reverted): Replaces svn_cl__notify_reverted_item.", 
+   "* svn/subversion/clients/cmdline/feedback.c: Adjust accordingly.", 
+   "* svn/subversion/clients/cmdline/add-cmd.c (svn_cl__add): Adjust for", 
+   "above changes to cl.h and feedback.c", 
+   "* svn/subversion/clients/cmdline/mkdir-cmd.c (svn_cl__mkdir): Same.", 
+   "* svn/subversion/clients/cmdline/copy-cmd.c (svn_cl__copy): Same.", 
+   "* svn/subversion/clients/cmdline/delete-cmd.c (svn_cl__delete): Same.", 
+   "* svn/subversion/clients/cmdline/move-cmd.c (svn_cl__move): Same.", 
+   "* svn/subversion/clients/cmdline/revert-cmd.c (svn_cl__revert): Same.", 
+   "* svn/subversion/clients/cmdline/switch-cmd.c (svn_cl__switch): Same.", 
+   "* svn/subversion/clients/cmdline/update-cmd.c (svn_cl__update): Same."
+  ], 
+  "revision_id": "841196"
+ }
+]

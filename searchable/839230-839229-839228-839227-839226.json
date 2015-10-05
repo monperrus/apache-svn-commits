@@ -1,0 +1,98 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-04-18T21:36:12.000000Z", 
+  "msg": [
+   "(make_file_baton):  duh, initialize wcprop array.", 
+   "(close_file): move wcprop dumping to the end, *after* the log running", 
+   "guarantees that the file already exists."
+  ], 
+  "revision_id": "839230"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-04-18T21:22:20.000000Z", 
+  "msg": [
+   "Whoops, we get an error when we try to immediately dump a wc-prop to", 
+   "disk for a newly added file (during checkout.)   Why?  Because the", 
+   "file doesn't actually exist outside of SVN/tmp/ until close_file() is", 
+   "called.   This means that when change_file_prop(wcprop) is called, it", 
+   "fails a sanity check, because it can't find the file.", 
+   "(This doesn't happen with change_dir_prop(wcprop), since newly added", 
+   "dirs are created immediately.)", 
+   "The solution is to cache the wcprops in file_baton, just like we cache", 
+   "regular props.  Then write them all out when we close_file().", 
+   "* get_editor.c (struct file_baton): new wcpropchanges array and", 
+   "associated flag.", 
+   "(change_file_prop):  push wcprops to the new array.", 
+   "(close_file):  if flag is set, dump the wcprops.", 
+   "* props.c (wcprop_list):  fix error description typos."
+  ], 
+  "revision_id": "839229"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2001-04-18T18:38:25.000000Z", 
+  "msg": [
+   "Renable (dynamic) building of the test tree.", 
+   "* tests/libsvn_subr/Makefile.am - Add @SVN_LIBSVN_FS_LIBS@ if building", 
+   "the filesystem.  (This is because of the new fs-helpers.c in", 
+   "libsvn_test.la)", 
+   "* tests/libsvn_delta/Makefile.am - Add @SVN_LIBSVN_FS_LIBS@ if building", 
+   "the filesystem.  (This is because of the new fs-helpers.c in", 
+   "libsvn_test.la)", 
+   "* tests/libsvn_wc/Makefile.am - Add @SVN_LIBSVN_FS_LIBS@ if building", 
+   "the filesystem.  (This is because of the new fs-helpers.c in", 
+   "libsvn_test.la)", 
+   "* tests/libsvn_delta/deltaparse-test.c - Add empty definition of", 
+   "test_funcs variable, required by the new combined libsvn_test.la", 
+   "* tests/libsvn_wc/commit-test.c - Add empty definition of", 
+   "test_funcs variable, required by the new combined libsvn_test.la"
+  ], 
+  "revision_id": "839228"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-04-18T18:14:34.000000Z", 
+  "msg": [
+   "Finish implementing \"wc props\".", 
+   "* adm_ops.c (svn_wc_get_wc_prop, svn_wc_set_wc_prop): make these", 
+   "existing funcs call the new, private svn_wc__wcprop_[gs]et funcs.", 
+   "* get_editor.c (is_wc_prop): new helper func.", 
+   "(change_dir_prop, change_file_prop): grep for \"svn:wc:\" on incoming", 
+   "properties.  If present, just call svn_wc__wcprop_set() instead of", 
+   "storing them as regular props.", 
+   "* ra_dav.h (SVN_RA_DAV__LP_NAMESPACE):  add \"svn:wc\" to all wc props", 
+   "coming from ra_dav.  (gstein, did I get this right?)"
+  ], 
+  "revision_id": "839227"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-04-18T16:35:07.000000Z", 
+  "msg": [
+   "Re-implement \"wc props\" as an independent thing in the SVN", 
+   "administrative area.", 
+   "Because wc props aren't under the user's control, nor are they", 
+   "versioned in the repository fs, it's cleaner to keep them independent.", 
+   "It keeps updates and commits more theoretcially pure.", 
+   "(gstein:  not quite there yet, hold on.)", 
+   "* wc.h (SVN_WC__ADM_DPROP_BASE):  kill crufty old #define.", 
+   "(SVN_WC__ADM_WCPROPS, SVN_WC__ADM_DIR_WCPROPS):  new administrative", 
+   "files to hold wc-props.", 
+   "(svn_wc__wcprop_path): new func to get path to wcprops/foo or", 
+   "dir-wcprops.", 
+   "(svn_wc__wcprop_get): get a single wcprop.", 
+   "(svn_wc__wcprop_set): set a single wcprop.", 
+   "* README:  add description of 'wcprops/' and 'dir-wcprops'.", 
+   "* adm_files.c (init_adm):  create these new items when initializing a", 
+   "working copy.", 
+   "(svn_wc__wcprop_path): new func to get path to wcprops/foo or", 
+   "dir-wcprops.", 
+   "* props.c (wcprop_list): get list of all wcprops.", 
+   "(svn_wc__wcprop_get): get a single wcprop.", 
+   "(svn_wc__wcprop_set): set a single wcprop."
+  ], 
+  "revision_id": "839226"
+ }
+]

@@ -1,0 +1,85 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-09-18T20:03:03.159262Z", 
+  "msg": [
+   "Allow HTTP auth protocols to be configurable by way of a", 
+   "\"http-auth-types\" parameter.", 
+   "Neon 0.26 added support for selecting the auth protocols to use.  This", 
+   "change takes advantage of that support to allow the user to specify", 
+   "the auth protocols they want to use if they have a new enough Neon.", 
+   "The default protocols if no config is specified are \"basic\" and", 
+   "\"digest\" for HTTP, or \"basic\", \"digest\" and \"negotiate\" for HTTPS.", 
+   "\"negotiate\" will typically use GSSAPI/SSPI on Windows, enabling users", 
+   "-- on a secure network! -- to activate Windows auth over HTTP (the", 
+   "lack-thereof being a common gotcha reported by users of Neon 0.26.1).", 
+   "This change does not provide an implementation for ra_serf.", 
+   "* subversion/include/svn_config.h", 
+   "Add SVN_CONFIG_OPTION_HTTP_AUTH_TYPES symbol to the list of", 
+   "configuration parameters available for servers.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Write comments on the new \"http-auth-types\"", 
+   "parameter to the config file (if it doesn't already exist).", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(get_server_settings): Add neon_auth_types parameter and fill it in", 
+   "if we have a new enough Neon, and it has been set in the config file.", 
+   "(svn_ra_dav__open): If we have a new enough Neon, respect the HTTP", 
+   "auth types configuration, and use its list to specify the auth", 
+   "protocols to be used by Neon.", 
+   "Patch by: djh", 
+   "(Tweaked by me.)", 
+   "Reviewed by: me", 
+   "rooneg"
+  ], 
+  "revision_id": "861605"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2006-09-18T19:33:45.799169Z", 
+  "msg": [
+   "Added svn-status-mark-by-file-ext", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-status-mark-by-file-ext): New function to allow marking by", 
+   "file extension. This function is bound to \"* .\"."
+  ], 
+  "revision_id": "861604"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-18T18:27:50.173831Z", 
+  "msg": [
+   "Check that the credentials are valid as early as possible.", 
+   "Patch by: Vlad Georgescu <vgeorgescu@gmail.com>", 
+   "* subversion/libsvn_ra_svn/sasl_auth.c:", 
+   "(handle_interact): Don't check that the 'creds' variable is non-NULL here.", 
+   "(svn_ra_svn__do_auth): Instead do it here, right after the call to", 
+   "sasl_auth_next_credentials()."
+  ], 
+  "revision_id": "861603"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-18T17:38:24.641095Z", 
+  "msg": [
+   "Expose a transaction merge info retrieval API so that the newborn", 
+   "libsvn_fs_util module can consume and index the merge info.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(struct txn_vtable_t): Add 'get_mergeinfo' hook.", 
+   "* subversion/libsvn_fs_base/revs-txns.c", 
+   "(txn_vtable): Set 'NULL' as placeholder for 'get_mergeinfo' hook.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(txn_vtable): Set 'svn_fs_fs__txn_mergeinfo' for the 'get_mergeinfo' hook.", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "861602"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-18T15:27:09.356723Z", 
+  "msg": [
+   "* STATUS: Propose r21526."
+  ], 
+  "revision_id": "861601"
+ }
+]

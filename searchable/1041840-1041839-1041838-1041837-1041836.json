@@ -1,0 +1,81 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2010-12-03T14:36:59.369906Z", 
+  "msg": [
+   "* subversion/libsvn_repos/repos.c", 
+   "(create_hooks): Don't create pre- and post-", 
+   "obliterate hooks unless SVN_WITH_EXPERIMENTAL_OBLITERATE is defined."
+  ], 
+  "revision_id": "1041840"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2010-12-03T14:36:33.925933Z", 
+  "msg": [
+   "Follow-up to r1041068.", 
+   "In r1041068 I removed \".\" as the default path for \"\" to fix assertion error.", 
+   "This change is not consistent with our current behaviour(<1.6.x).", 
+   "In this commit I am reinstating the \".\" as the", 
+   "default path for \"\"(Revert r1041068.)", 
+   "And move default assignment of \".\" when path is \"\", after the functions", 
+   "that are not happy about \".\" are called.", 
+   "One optimization of avoiding recomputing 'path relative to repos_root' as one", 
+   "of the callers already has it computed.", 
+   "I do this optimization in this commit as that makes my movement of path=\".\"", 
+   "assignment easier otherwise I would still get the assert error.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(print_git_diff_header): Caller 'display_prop_diffs' has already computed", 
+   "the path relative to repos_root. So no need to do it again here.", 
+   "(display_prop_diffs): Fix the call to 'print_git_diff_header' as per", 
+   "above change.", 
+   "(diff_content_changed): Compute path relative to repos path as", 
+   "print_git_diff_header expects it.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_with_depth): Revert r1041068.", 
+   "(diff_git_with_props_on_dir): Fix it to accept \".\" for \"\".", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(diff_in_depthy_wc): Revert r1041068.", 
+   "Found by: stsp"
+  ], 
+  "revision_id": "1041839"
+ }, 
+ {
+  "author": "jens", 
+  "date": "2010-12-03T14:35:07.604122Z", 
+  "msg": [
+   "restructure source code so that it follows project conventions"
+  ], 
+  "revision_id": "1041838"
+ }, 
+ {
+  "author": "jens", 
+  "date": "2010-12-03T14:33:23.340725Z", 
+  "msg": [
+   "restructure source code so that it follows project conventions"
+  ], 
+  "revision_id": "1041837"
+ }, 
+ {
+  "author": "andygumbrecht", 
+  "date": "2010-12-03T14:32:13.051382Z", 
+  "msg": [
+   "Fixed (Possibly a Windows only issue) ClassLoader jar file locking issues which were caused by several factors.", 
+   "1. ClassLoaderUtil was using wrong key to remove and close cached jar files, so added a first (most common) and fall-back strategy to create a valid removal key. Also added private method to close jar file loaders.", 
+   "2. DeploymentLoader was not actually using the temp files it created to create the lookup ClassLoader.", 
+   "3. DeploymentLoader was trying to delete temp jar files before jar file references had been removed.", 
+   "The order of action is:", 
+   "Create temporary ClassLoader.", 
+   "Destroy temporary ClassLoader.", 
+   "System.gc() - required to ensure release.", 
+   "Delete temporary files.", 
+   "Create application ClassLoader.", 
+   "Deploy application.", 
+   "Undeploy application.", 
+   "Destroy application ClassLoader.", 
+   "System.gc() - required to ensure release.", 
+   "All files are now unlocked (and can be deleted) as expected. Previously it was necessary to restart OpenEJB to redeploy an application with the same name."
+  ], 
+  "revision_id": "1041836"
+ }
+]

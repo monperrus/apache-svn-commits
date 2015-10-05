@@ -1,0 +1,88 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-06-23T18:15:38.249356Z", 
+  "msg": [
+   "A hopefully final fix for issue #2580.", 
+   "We now use the fix originally proposed by Damien Miller.", 
+   "I've read through several discussions in various bug reports and", 
+   "mailing lists, and I agree that this is the best solution.", 
+   "This solution:", 
+   "- Does not cause issue #3430.", 
+   "- Avoids zombie processes left around by long-lived programs", 
+   "using libsvn_ra_svn.", 
+   "- Allows automatic ssh connection pooling to work as reliably", 
+   "as possible by allowing the connection pooling master to close", 
+   "its control socket when it receives a SIGTERM.", 
+   "- Should work with most ssh implementations. If people use an", 
+   "SSH implementation that does not use -q, they can override", 
+   "the command we use to spawn the ssh process.", 
+   "I hope this makes everyone happy.", 
+   "Patch by: Damien Miller <djm@mindrot.org>", 
+   "(tweaked by me, log message by me)", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(find_tunnel_agent): Pass -q option to ssh by default.", 
+   "(make_tunnel): Send SIGTERM to tunnel agent in order to reap", 
+   "child processes in an almost friendly way."
+  ], 
+  "revision_id": "878240"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-23T18:04:08.057419Z", 
+  "msg": [
+   "Followup to r38162: Fix a few test expectations.", 
+   "Found by: danielsh", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(info_moved_path): Use the right keys and number of expected info hashes."
+  ], 
+  "revision_id": "878239"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-23T17:39:34.562313Z", 
+  "msg": [
+   "Revert r38152, r38133, r38132, and r38120.", 
+   "Per our 'build breakage can be immediately reverted\" policy, I'm reverting", 
+   "these revisions which introduced feature regressions in various dependency", 
+   "detections at configure-time.  This is evidenced by at least one buildbot."
+  ], 
+  "revision_id": "878238"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-06-23T17:31:50.054567Z", 
+  "msg": [
+   "A minor improvement in the spirit of r38162.", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(repos_lock_with_info):", 
+   "Use run_and_parse_info()."
+  ], 
+  "revision_id": "878237"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-23T17:02:05.565434Z", 
+  "msg": [
+   "Update various tests to use run_and_verify_info(), instead of trying to", 
+   "manually parse and check the output of info.", 
+   "This also extends the info parser for lock comments.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(revert_file_merge_with_history),", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(repos_lock_with_info, info_moved_path),", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(nonrecursive_switching, failed_anchor_is_target, relocate_beyond_repos_root),", 
+   "* subversion/tests/cmdline/svnversion_tests.py", 
+   "(ignore_externals),", 
+   "* subversion/tests/cmdline/basic_tests.py", 
+   "(info_nonhead),", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(depth_empty_update_on_file):", 
+   "Use the new hotness in info parsing.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_parse_info): Parse any lock comments."
+  ], 
+  "revision_id": "878236"
+ }
+]

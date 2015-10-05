@@ -1,0 +1,120 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2007-01-21T18:30:35.252900Z", 
+  "msg": [
+   "* www/links.html", 
+   "(high-level-tools): Fix pluralization in scmbug entry.", 
+   "Patch by: Shlomi Fish <shlomif@iglu.org.il>"
+  ], 
+  "revision_id": "863225"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-01-21T18:11:35.422840Z", 
+  "msg": [
+   "Update some depth-style callers that invoke recurse-style functions,", 
+   "and fix some related documentation along the way.", 
+   "This does not make diff_tests.py 6 pass yet, but it does fix one of", 
+   "the bugs: 'diff -r 1 -N svn-test-work/working_copies/diff_tests-6/A/D'", 
+   "gets the correct result now, but 'diff -r HEAD ...' does not (it gets", 
+   "empty output when it should show diffs for gamma, tau, and psi).", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff): Call svn_client_diff_peg4, passing depth.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(svn_client_diff_summarize): Call successor, not self.  I mean, duh.", 
+   "(do_diff): Update long introductory comment.", 
+   "(display_prop_diffs, diff_cmd_baton): Update comment.", 
+   "(unsupported_diff_error): Fix error string.", 
+   "(diff_wc_wc, diff_repos_repos, diff_repos_wc):", 
+   "* subversion/libsvn_client/externals.c", 
+   "(handle_external_item_change): Call svn_client_export4 with depth.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_diff_summarize_func_t): Update doc string.", 
+   "(svn_client_diff_summarize_peg2): Update doc string.", 
+   "(svn_client_import2): Fix silly minor typo in doc string."
+  ], 
+  "revision_id": "863224"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-01-21T15:38:57.487140Z", 
+  "msg": [
+   "Fix issue #2701: checking out a symlink on Windows fails (regression vs 1.4.x).", 
+   "Followup to r22720: when creating a symlink on a platform that doesn't", 
+   "support them, don't use svn_io_file_create() to write out the special", 
+   "file's contents, since that function won't overwrite an existing file.", 
+   "Found by: Marc Haesen <Marc.Haesen@oneaccess-net.com>", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(create_special_file_from_stringbuf): Write out the contents of the", 
+   "temporary file using the file handle that was originally used to", 
+   "create it.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(test_list): checkout_repo_with_symlinks should now pass."
+  ], 
+  "revision_id": "863223"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-01-21T15:36:48.346408Z", 
+  "msg": [
+   "Followup to r23139,23145: correct the test condition for Windows platforms.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(checkout_repo_with_symlinks): Look for the correct contents depending", 
+   "on the platform: The symlink file isn't empty on Windows."
+  ], 
+  "revision_id": "863222"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2007-01-21T15:10:01.588244Z", 
+  "msg": [
+   "Implement Svn::Fs::FileSystem#close and Svn::Repos::ReposCore#close to", 
+   "be able to delete them on your timing.", 
+   "* subversion/bindings/swig/core.i (apr_pool_wrapper_t::destroy): New method.", 
+   "* subversion/bindings/swig/ruby/svn/util.rb", 
+   "(Svn::Util.set_methods): Use module_eval instead of define_method.", 
+   "* subversion/bindings/swig/ruby/svn/fs.rb", 
+   "(Svn::Fs): Remove needless Fs. prefix.", 
+   "(Svn::Fs::FileSystem.create, Svn::Fs::FileSystem.open): Support block.", 
+   "* subversion/bindings/swig/ruby/svn/repos.rb", 
+   "(Svn::Repos::ReposCore.create, Svn::Repos::ReposCore.open): Support block.", 
+   "* subversion/bindings/swig/ruby/svn/error.rb", 
+   "(Svn::Error::SvnError): New super class for Subversion errors.", 
+   "(Svn::Error::FsAlreadyClose, Svn::Error::ReposAlreadyClose):", 
+   "New error class.", 
+   "* subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.c,", 
+   "subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.h", 
+   "(svn_swig_rb_raise_svn_fs_already_close,", 
+   "svn_swig_rb_raise_svn_repos_already_close): New function.", 
+   "* subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.c", 
+   "(rb_svn_error_svn_error): New function.", 
+   "(svn_swig_rb_svn_error_new): Use Svn::Error::SvnError instead of Svn::Error.", 
+   "* subversion/bindings/swig/include/svn_types.swg", 
+   "(%typemap(argout) SWIGTYPE **OUTPARAM_WITH_BLOCK,", 
+   "%apply SWIGTYPE **OUTPARAM_WITH_BLOCK): Support block form object creattion", 
+   "that close the object automatically.", 
+   "(%raise_if_null(TYPE)): New typemap(check) macro.", 
+   "(%raise_if_null(fs), %raise_if_null(repos)): Add NULL check.", 
+   "(%define_close_related_methods(TYPE)): New macro that define close and", 
+   "closed? methods to TYPE class.", 
+   "* subversion/bindings/swig/svn_fs.i", 
+   "(%define_close_related_methods(fs)): Define Svn::Fs::FileSystem#close", 
+   "and Svn::Fs::FileSystem#closed?.", 
+   "* subversion/bindings/swig/svn_repos.i", 
+   "(%define_close_related_methods(repos)): Define Svn::Repos::ReposCore#close", 
+   "and Svn::Repos::ReposCore#closed?.", 
+   "* subversion/bindings/swig/ruby/test/util.rb", 
+   "(SvnTestUtil#teardown_repository): Ensure that a temporary repository is", 
+   "deleted for test.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#test_mkdir): Follow error class hierarchy changes.", 
+   "* subversion/bindings/swig/ruby/test/test_fs.rb", 
+   "(SvnFsTest#test_create): Use block style to close fs automatically.", 
+   "* subversion/bindings/swig/ruby/test/test_repos.rb", 
+   "(SvnReposTest#test_create): Use block style to close fs automatically.", 
+   "Suggested by: Joe Swatosh"
+  ], 
+  "revision_id": "863221"
+ }
+]

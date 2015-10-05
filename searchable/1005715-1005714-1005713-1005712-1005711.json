@@ -1,0 +1,69 @@
+[
+ {
+  "author": "stack", 
+  "date": "2010-10-08T06:06:17.366717Z", 
+  "msg": [
+   "HBASE-3074 Zookeeper test failing on hudson; forgot this change"
+  ], 
+  "revision_id": "1005715"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-10-08T06:04:35.807908Z", 
+  "msg": [
+   "HBASE-3074 Zookeeper test failing on hudson", 
+   "HConnections go stale if miniCluster is shutdown on them.  Make it", 
+   "so we make new HConnections on other side of a new cluster spin up.", 
+   "Was cause for failing of last few tests.", 
+   "M src/test/java/org/apache/hadoop/hbase/HBaseTestingUtility.java", 
+   "So if you shutdown a cluster and you have HConnections that were", 
+   "made using the HTUs Configuration, they'll all be stale --", 
+   "session expired -- and won't be of any use connecting to new cluster", 
+   "that comes up... now that HConnection is first class dependent on", 
+   "its own ZooKeeperWatcher instance.", 
+   "So, I went through this class and fixed it up so we use new", 
+   "Configurations when could be called either side of a mini cluster", 
+   "restart.  Added note to getConfiguration to be careful what you", 
+   "do with it because Configuration makes for an HConnection.", 
+   "M src/test/java/org/apache/hadoop/hbase/TestZooKeeper.java", 
+   "Don't use same Configuration everywhere.", 
+   "M src/test/java/org/apache/hadoop/hbase/master/TestRestartCluster.java", 
+   "Make new Configuration when we make new Cluster so we get fresh", 
+   "HConnection -- not one w/ stale data, disconnected.", 
+   "M src/main/java/org/apache/hadoop/hbase/master/ServerManager.java", 
+   "Check that new server that comes in on a regionServerReport", 
+   "doesn't have same port and host as one we have already registered", 
+   "as we do in reportForDuty call (This is preemtive bug fix).", 
+   "M src/main/java/org/apache/hadoop/hbase/client/HConnectionManager.java", 
+   "Save of an identifier for HCM and use it in log messages, particularly", 
+   "when we close -- helps debugging.", 
+   "M src/main/java/org/apache/hadoop/hbase/client/HBaseAdmin.java", 
+   "getConfiguration added."
+  ], 
+  "revision_id": "1005714"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-10-08T05:49:01.105099Z", 
+  "msg": [
+   "HBASE-3091 Fix TestKillingServersFromMaster in TRUNK; it just hangs since new master went in"
+  ], 
+  "revision_id": "1005713"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2010-10-08T04:59:58.007965Z", 
+  "msg": [
+   "r/m redundant Memtable.partitioner.  patch by jbellis"
+  ], 
+  "revision_id": "1005712"
+ }, 
+ {
+  "author": "lhazlewood", 
+  "date": "2010-10-08T04:54:30.568866Z", 
+  "msg": [
+   "Update foundation website linkes to include Apache Shiro.  Also updated ASF Export Classifications list since Shiro can utilize Java's JCE."
+  ], 
+  "revision_id": "1005711"
+ }
+]

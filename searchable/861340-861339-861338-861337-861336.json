@@ -1,0 +1,74 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2006-08-25T21:17:16.257868Z", 
+  "msg": [
+   "Handle the case when sasl_pool is destroyed before the connection pool,", 
+   "by making sure that:", 
+   "a) nothing allocated in sasl_pool is accessed after that pool is destroyed.", 
+   "b) sasl_done() is always called _after_ the last call to sasl_dispose().", 
+   "Note that detecting that sasl_pool has been destroyed by looking at the", 
+   "sasl_status variable is safe because it will only ever be changed once we", 
+   "hit single threaded mode during shutdown.", 
+   "Patch by: Vlad Georgescu <vgeorgescu@gmail.com>", 
+   "* subversion/include/private/svn_atomic.h", 
+   "(svn_atomic_inc, svn_atomic_dec): New macro definitions.", 
+   "* subversion/libsvn_ra_svn/sasl_auth.c", 
+   "(sasl_ctx_count): New static variable.", 
+   "(svn_ra_svn__sasl_common_init): Initialize sasl_ctx_count.", 
+   "(sasl_done_cb, sasl_dispose_cb): Decrement sasl_ctx_count. If it", 
+   "is 0, call sasl_done().", 
+   "(new_sasl_ctx): Increment sasl_ctx_count..", 
+   "(sasl_mutex_alloc_cb, sasl_mutex_lock_cb,", 
+   "sasl_mutex_unlock_cb, sasl_mutex_free_cb): Check the value of sasl_status", 
+   "before doing anything."
+  ], 
+  "revision_id": "861340"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2006-08-25T20:17:28.775787Z", 
+  "msg": [
+   "Provide useful values for paragraph-start, paragraph-separate", 
+   "Slightly edited patch from: Oscar Fuentes <oscarfv@telefonica.net>", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-log-edit-paragraph-start, svn-log-edit-paragraph-separate):", 
+   "New variables", 
+   "(svn-log-edit-use-log-edit-mode): Use svn-log-edit-paragraph-start", 
+   "as paragraph-start, use svn-log-edit-paragraph-separate as", 
+   "paragraph-separate"
+  ], 
+  "revision_id": "861339"
+ }, 
+ {
+  "author": "danderson", 
+  "date": "2006-08-25T19:01:02.630897Z", 
+  "msg": [
+   "Tag release 1.4.0-rc5 with svn_version.h matching tarball."
+  ], 
+  "revision_id": "861338"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-08-25T16:26:11.747007Z", 
+  "msg": [
+   "Update copyright years to reflect reality.", 
+   "* build/get-py-info.py:", 
+   "Update copyright year based on files actual history.", 
+   "Suggested by: Karl Fogel"
+  ], 
+  "revision_id": "861337"
+ }, 
+ {
+  "author": "bhuvan", 
+  "date": "2006-08-25T15:19:10.129527Z", 
+  "msg": [
+   "Approved by: cmpilato", 
+   "Suggested by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "Fix the unpythonic \"if\" conditions.", 
+   "* contrib/hook-scripts/check-case-insensitive.py", 
+   "(CheckCase.showfile): Fix the unpythonic \"if\" conditions."
+  ], 
+  "revision_id": "861336"
+ }
+]

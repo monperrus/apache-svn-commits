@@ -1,0 +1,85 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-09-30T16:37:11.747665Z", 
+  "msg": [
+   "* subversion/svnadmin/main.c", 
+   "(cmd_table): Fix description of --incremental's effect on 'svnadmin dump'."
+  ], 
+  "revision_id": "873435"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-30T15:34:27.881610Z", 
+  "msg": [
+   "On the fs-rep-sharing branch:", 
+   "Bring up-to-date with trunk."
+  ], 
+  "revision_id": "873434"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-30T15:24:28.350966Z", 
+  "msg": [
+   "Followup to r33105: Make sure that libsvn_subr links against sqlite, if it is", 
+   "present.", 
+   "This does not require that sqlite be detected, and it does not require that it be", 
+   "linked into libsvn_subr if it isn't being used.  What this *does* do is make", 
+   "sure that sqlite is linked if found.", 
+   "(I suspect the reason this hasn't been noticed before is that most folks working", 
+   "with sqlite have it linked to their apr-util, so we pull it in through the", 
+   "APR_UTIL_LIBS.  I just happen to be working with an sqlite-less apr-util.)", 
+   "* build.conf", 
+   "(libsvn_subr): Link against sqlite."
+  ], 
+  "revision_id": "873433"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-09-30T04:58:37.021083Z", 
+  "msg": [
+   "Separate out the handling of the pristine text base files in the APIS, and", 
+   "then begin some basic implementation within the model of todays per-dir", 
+   ".svn subdirectories.", 
+   "Note: no callers yet, so there is no effective change to svn's operation.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_pdh_t): new type for pristine directory handles", 
+   "(svn_wc__db_base_add_file): don't attempt to take a file's contents.", 
+   "callers should handle that thru the new \"pristine\" interface.", 
+   "(svn_wc__db_base_set_contents, svn_wc__db_base_get_writable_contents,", 
+   "svn_wc__db_base_get_contents): removed. no longer applicable.", 
+   "(svn_wc__db_base_get_info): return the checksum for this BASE file.", 
+   "(svn_wc__db_pristine_dirhandle, svn_wc__db_pristine_read,", 
+   "svn_wc__db_pristine_write, svn_wc__db_pristine_check,", 
+   "svn_wc__db_pristine_incref, svn_wc__db_pristine_decref):", 
+   "new functions for manipulating pristine files", 
+   "* subversion/libsvn_wc/wc_db.c: new file implementing some wc_db.h functions"
+  ], 
+  "revision_id": "873432"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-09-30T04:39:20.006540Z", 
+  "msg": [
+   "Continued evolution of the metadata schema.", 
+   "* subversion/libsvn_wc/wc-metadata.sql3:", 
+   "(NODE, NODE_CHANGES):", 
+   "- move the actual_size field to this table, from the TEXT_BASE table.", 
+   "two different nodes may share the same text base, but apply different", 
+   "EOL and/or keywords translations to it, thus having different sizes", 
+   "within the WORKING/ACTUAL trees.", 
+   "- place the checksum directly into this table, rather than a \"text_id\"", 
+   "field. due to operational issues, the text_id may not be a satisfiable", 
+   "foreign key (we may not want to insert a row). thus, the ideal foreign", 
+   "key is \"checksum\" which *may* exist in the TEXT_BASE table.", 
+   "(TEXT_BASE):", 
+   "- renamed from BASE_TEXT. we use \"text base\" more often.", 
+   "- drop the \"id\" field, and key off of checksum instead.", 
+   "- compression is now optional (rather than planning on a particular", 
+   "value to mean \"no compression\").", 
+   "- stored_size is now optional to detect when the pristine has been", 
+   "properly stored (or not)."
+  ], 
+  "revision_id": "873431"
+ }
+]

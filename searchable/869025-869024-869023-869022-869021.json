@@ -1,0 +1,117 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-18T19:18:53.590464Z", 
+  "msg": [
+   "Finish the --changelist feature revamp for the propset, propget,", 
+   "proplist, and propdel subcommands.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_propset3, svn_client_propget4, svn_client_proplist3):", 
+   "Add 'changelists' parameter.", 
+   "(svn_client_propset2, svn_client_propget3, svn_client_proplist2):", 
+   "Update docstrings.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_prop_from_wc): Add 'changelists' parameter.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(struct propset_walk_baton, struct propget_walk_cb,", 
+   "struct proplist_walk_baton): Add 'changelist_hash' member.", 
+   "(propset_walk_cb, propget_walk_cb, proplist_walk_cb): Consult the", 
+   "baton's new 'changelist_hash' before setting properties on the entry.", 
+   "(svn_client__get_prop_from_wc): Add 'changelists' parameter, and", 
+   "rework the logic here for readability and reduced variable scope.", 
+   "(svn_client_propset3): Add 'changelists' parameter, and use it to do", 
+   "changelist filtering.", 
+   "(svn_client_proplist3): Add 'changelists' parameter, and use it to", 
+   "do filtering.  While here, remove an unnecessary call to", 
+   "svn_client__get_revision_number().", 
+   "(svn_client_propget4): Add 'changelists' parameter, and update call", 
+   "to svn_client__get_prop_from_wc().", 
+   "(svn_client_propget3, svn_client_propset2, svn_client_proplist2):", 
+   "Update calls to revved interfaces.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__parse_mergeinfo, svn_client__get_wc_or_repos_mergeinfo):", 
+   "Update calls to svn_client__get_prop_from_wc().", 
+   "* subversion/svn/propdel-cmd.c", 
+   "(svn_cl__propdel): Update call to svn_client_propset3(), and lose", 
+   "changelist target crawl.", 
+   "* subversion/svn/propedit-cmd.c", 
+   "(svn_cl__propedit): Update calls to svn_client_propget4() and", 
+   "svn_client_propset3().", 
+   "* subversion/svn/propget-cmd.c", 
+   "(svn_cl__propget): Update call to svn_client_propget4(), and lose", 
+   "changelist target crawl.  While here, fix the output to always", 
+   "show path names when depth > empty.", 
+   "* subversion/svn/proplist-cmd.c", 
+   "(svn_cl__proplist): Update call to svn_client_proplist3(), and lose", 
+   "changelist target crawl.", 
+   "* subversion/svn/propset-cmd.c", 
+   "(svn_cl__propset): Update call to svn_client_propset3(), and lose", 
+   "changelist target crawl.", 
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(verify_pget_output): New helper.", 
+   "(propmods_with_changelists): New test.", 
+   "(test_list): Add reference to new test.", 
+   "* subversion/notes/changelist-design.txt", 
+   "Update status of feature revamp."
+  ], 
+  "revision_id": "869025"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-18T14:46:37.806153Z", 
+  "msg": [
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client_propset3): Re-work this function a little bit.  No logic changes."
+  ], 
+  "revision_id": "869024"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-18T03:12:00.928663Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(basic_reintegrate): Insert an update, so this test passes again,", 
+   "but include a comment questioning the sanity of the situation.", 
+   "[Followup: later testing showed that I was indeed insane, and that the", 
+   "update needed to come earlier, as Paul and I always thought it should.", 
+   "I have no idea why the test was passing unexpectedly (as described in", 
+   "the comment mentioned above), but am attributing it to cosmic rays", 
+   "(read \"pilot error\"), and have moved the update in r28964.]"
+  ], 
+  "revision_id": "869023"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-18T01:18:29.365752Z", 
+  "msg": [
+   "On the reintegrate branch, mark some tests as XFail, as per this thread:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=134309", 
+   "From: Karl Fogel <kfogel@red-bean.com>", 
+   "To: dev@subversion.tigris.org", 
+   "Subject: Re: failing tests on reintegrate branch", 
+   "Date: Wed, 16 Jan 2008 17:21:00 -0500", 
+   "Message-ID: <87r6ghl8dv.fsf@red-bean.com>", 
+   "Note that this still leaves merge_tests.py:basic_reintegrate() (that", 
+   "is, test 78 'basic merge --reintegrate support') failing for real,", 
+   "since there's really no excuse for the basic reintegrate test to be", 
+   "failing on the reintegrate branch :-).", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(test_list): XFail merge_sensitive_log_branching_revision.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): XFail merge_fails_if_subtree_is_deleted_on_src and", 
+   "new_subtrees_should_not_break_merge.", 
+   "* subversion/tests/cmdline/blame_tests.py", 
+   "(test_list): XFail blame_merge_info."
+  ], 
+  "revision_id": "869022"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-18T00:51:55.179238Z", 
+  "msg": [
+   "Bring reintegrate branch up to date with trunk.", 
+   "$ svn merge -r28930:28946 https://svn.collab.net/repos/svn/trunk ."
+  ], 
+  "revision_id": "869021"
+ }
+]

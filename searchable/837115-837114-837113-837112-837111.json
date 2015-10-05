@@ -1,0 +1,80 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2000-09-01T21:12:46.000000Z", 
+  "msg": [
+   "Revert advice about `local-variables' for Emacs.  It seems Emacs wants", 
+   "to see a consistent prefix, and putting it on the first line of the", 
+   "comment interferes with this."
+  ], 
+  "revision_id": "837115"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-09-01T21:03:21.000000Z", 
+  "msg": [
+   "Partially revert my change of 2000-08-31 15:29.  The svn_path library", 
+   "now side-effects its operands again; all callers changed to account", 
+   "for this, but not always exactly as they worked before.", 
+   "* path.c, path.h (add_component_internal): revert to 1.7 behavior, but", 
+   "also canonicalize result.", 
+   "(svn_path_add_component_nts, svn_path_add_component): revert to 1.7", 
+   "behavior.", 
+   "(svn_path_remove_component): revert to 1.7 behavior and prototype.", 
+   "* delta_parse.c (maybe_derive_ancestry): dup a new path and add name", 
+   "to it as a component, to get ancestor.", 
+   "* adm_files.c: revert to 1.5:", 
+   "(extend_with_adm_name): back to this name instead of `make_adm_path',", 
+   "callers changed accordingly.", 
+   "(chop_admin_name): restored, calls restored as well.", 
+   "* util.c (svn_wc__ensure_directory): dup a new path, then shorten it,", 
+   "when recursing.", 
+   "* apply_delta.c (maybe_prepend_dest, add_directory, add_file,", 
+   "finish_file): dup a new path, then operate on that.", 
+   "Also, changes to accommodate new names:", 
+   "* apply_delta.c (svn_wc_apply_delta): it's `svn_XML_parse' now, not", 
+   "`svn_delta_parse'."
+  ], 
+  "revision_id": "837114"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-09-01T16:53:49.000000Z", 
+  "msg": [
+   "MAJOR RENAME:  svn_delta_parse() is now renamed svn_XML_parse() !", 
+   "* svn_delta.h:  (svn_delta_parse): renamed to svn_XML_parse", 
+   "* delta_parse.c:  (svn_delta_parse): renamed to svn_XML_parse", 
+   "* deltaparse-test.c: (main):  call svn_XML_parse"
+  ], 
+  "revision_id": "837113"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-09-01T03:36:11.000000Z", 
+  "msg": [
+   "Fixed property-parsing buglets.  The trick was that xml_handle_end", 
+   "shouldn't remove a stackframe right at the outset;  instead it should", 
+   "first *validate* that the removal is ok, *then* call walker", 
+   "callbacks, *then* remove the stackframe.  I had implemented this", 
+   "correctly earlier, but I hadn't updated property-handling to reflect", 
+   "this change!", 
+   "* foo.delta:  added more prop-deltas to experiement.", 
+   "* delta_parse.c:", 
+   "(do_begin_propdelta): set current_propdelta fields to empty", 
+   "strings, not NULL.", 
+   "(do_propdelta_callback): if value is empty string, send NULL to", 
+   "callback.  Set name/value to empty (not null) when done.", 
+   "(xml_handle_end): check parent frame's tag for property deletions,", 
+   "duh."
+  ], 
+  "revision_id": "837112"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-09-01T03:22:55.000000Z", 
+  "msg": [
+   "add a comment. suggest the user of --with-maintainer-mode"
+  ], 
+  "revision_id": "837111"
+ }
+]

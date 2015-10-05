@@ -1,0 +1,80 @@
+[
+ {
+  "author": "pyang", 
+  "date": "2007-04-09T08:08:07.105903Z", 
+  "msg": [
+   "Remove tests.api.java.net.URLTest from luni/exclude.common, it should be part of patch for HARMONY-3422([classlib][testing]move tests.api.java.net.URLTest out of the exclude list)"
+  ], 
+  "revision_id": "526670"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2007-04-09T07:52:06.291138Z", 
+  "msg": [
+   "HADOOP-1218.  Make synchronization on TaskTracker's RunningJob object consistent.   Contributed by Devaraj Das."
+  ], 
+  "revision_id": "526669"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-04-09T07:49:18.058030Z", 
+  "msg": [
+   "I am committing an intermediate patch for language based ordering. This patch is also attached to DERBY-2534 as", 
+   "DERBY2534_getValue_On_StringDataValue_v1_diff.txt. The patch adds a new api to StringDataValue interface and the new api looks as follows", 
+   "public StringDataValue getValue(RuleBasedCollator collatorForComparison);", 
+   "The new api will be needed in quite a few different places. 2 distinct uses that I can see at this point are", 
+   "1)Store will have a format id and collation type when it is trying to construct a DVD template. Using the formatid, we will first", 
+   "always get the base class DVD for char datatypes namely SQLChar, SQLVarchar, SQLLongvarchar or SQLClob. But, if the collation type", 
+   "is not 0  ie it is not UCS_BASIC, then we want to use Collation sensitive DVDs of base char DVDs because we want to use the passed", 
+   "Collator for collation rather than the default UCS_BASIC Collator. The collation sensitive DVDs of char datatypes are CollatorSQLChar,", 
+   "CollatorSQLVarchar, CollatorSQLLongvarchar and CollatorSQLClob. In order to derive these collation sensitive DVDs of character datatypes,", 
+   "we will use this new api called getValue on base character DVDs. The getValue method will have the Collator object as parameter to it.", 
+   "If the Collator object is null, then we can continue to use the base DVD. But if the Collator object is not null, then we want to", 
+   "construct collation sensitive DVD. The new api on StringDataValue will help achieve this behavior.", 
+   "2)Another place which I can envision using this new api is in DataTypeDescriptor.getNull() method which returns a DVD. Currently, the", 
+   "implementation of this method looks as follows", 
+   "public DataValueDescriptor getNull() {", 
+   "return typeId.getNull();", 
+   "}", 
+   "So, if the typeid of DTD is character data type, this method will always return base char DVD, no matter what is the collation type of", 
+   "the DTD. But, if the DTD has a territory based collation set for it, then this method should return collation sensitive char DVD. This", 
+   "functionality can be achieved by using the new api on StringDataValue.", 
+   "I do not anticipate this new method ever getting called on collation sensitive DVDs in Derby 10.3 In future, when Derby will start", 
+   "supporting SQL standard COLLATE clause, this method might get called on the collation sensitive DVDs but for Derby 10.3, the new api", 
+   "in collation sensitive DVDs is just a place holder.", 
+   "Another change to note is I have changed all the collation sensitive subclasses to have their method setCollator changed from private to", 
+   "protected. This is so that the getValue method from their correspoding base classes can call the setCollator method on subclasses.", 
+   "The files changed by this commit are", 
+   "svn stat -q", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\SQLLongvarchar.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\StringDataValue.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\CollatorSQLChar.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\CollatorSQLClob.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\CollatorSQLVarchar.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\SQLChar.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\SQLClob.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\SQLVarchar.java", 
+   "M      java\\engine\\org\\apache\\derby\\iapi\\types\\CollatorSQLLongvarchar.java", 
+   "The code compiles ok with my changes. None of the tests should get impacted because currently, this new api on StringDataValue is", 
+   "not called by any other code in Derby.", 
+   "If anyone has any feedback, please let me know."
+  ], 
+  "revision_id": "526668"
+ }, 
+ {
+  "author": "pyang", 
+  "date": "2007-04-09T07:49:05.101804Z", 
+  "msg": [
+   "Apply patch for HARMONY-3422( [classlib][testing]move tests.api.java.net.URLTest out of the exclude list)"
+  ], 
+  "revision_id": "526667"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-04-09T07:47:14.190826Z", 
+  "msg": [
+   "Updated so the FileAppender includes time stamps by default.. ConversionPattern made the same as STDOUT and RollingFileAppender"
+  ], 
+  "revision_id": "526666"
+ }
+]

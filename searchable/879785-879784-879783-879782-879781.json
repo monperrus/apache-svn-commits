@@ -1,0 +1,107 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-09-30T16:30:55.861585Z", 
+  "msg": [
+   "Require the sqlite3 module for running the python testsuite.", 
+   "This most likely breaks the windows buildbot, as it does not currently have", 
+   "the python sqlite3 module installed.", 
+   "The discussion is here: http://svn.haxx.se/dev/archive-2009-09/0557.shtml", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "Import sqlite3 at the top level.", 
+   "(check_formt, check_dav_cache): Don't import sqlite3.", 
+   "(has_sqlite): Remove.", 
+   "(test_list): Don't make running tests conditional on the existence of the", 
+   "sqlite3 module (since we're now guaranteed to have it).", 
+   "* subversion/tests/cmdline/svntest/__init__.py:", 
+   "Attempt to import sqlite3, and if we can't, die a horrible death.", 
+   "(With a friendly error message, of course.)"
+  ], 
+  "revision_id": "879785"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-09-30T15:53:39.303611Z", 
+  "msg": [
+   "Remove the svnsync-obliterate branch: It's going nowhere."
+  ], 
+  "revision_id": "879784"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T15:34:01.713643Z", 
+  "msg": [
+   "Add accept_deleted boolean on directory baton as a replacement for the", 
+   "global hashtable collecting deletion roots. This removes all scratch", 
+   "allocations used by just looking in the hash.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(edit_baton): Remove deleted trees hash.", 
+   "(remember_deleted_tree,", 
+   "in_deleted_tree): Remove unused functions.", 
+   "(dir_baton): Add accept_deleted boolean.", 
+   "(make_dir_baton): Propagate accept_deleted to child baton.", 
+   "(do_entry_deletion): Update prototype, use normal argument ordering.", 
+   "(complete_directory): Update caller.", 
+   "(check_tree_conflict): Use accept_deleted instead of checking the", 
+   "deleted tree.", 
+   "(do_entry_deletion): Take accept_deleted flag.", 
+   "(delete_entry): Pass accept deleted from parent baton.", 
+   "(add_directory): Pass and update accept deleted.", 
+   "(add_file): Read accept deleted from parent baton.", 
+   "(open_file): Use accept deleted instead of hash.", 
+   "(close_edit): Update caller.", 
+   "(make_editor): Remove hash initialization."
+  ], 
+  "revision_id": "879783"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-30T14:56:07.546695Z", 
+  "msg": [
+   "Move the temp-dir finding code from adm_files to wc_db.  The difference,", 
+   "though, is that we now use the pdh to find the temp file location, which means", 
+   "that when we centralize metadata, all the temp-files get centralized at the", 
+   "same time.  It also adds the benefit of not worrying whether or not the", 
+   "wri_abspath is a directory or file when looking for the temp location.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(open_reject_tmp_stream): Update caller, and add a few required params.", 
+   "(svn_wc__merge_props): Update caller to open_reject_tmp_stream().", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_file_with_history): Call svn_wc__db_temp_wcroot_tempdir().", 
+   "* subversion/libsvn_wc/translate.c", 
+   "(svn_wc__internal_translated_file): Same.", 
+   "* subversion/libsvn_wc/merge.c", 
+   "(merge_text_file): Same.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(restore_file): Same.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(WCROOT_TEMPDIR_RELPATH): New.", 
+   "(svn_wc__db_temp_wcroot_tempdir): New.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_temp_wcroot_tempdir): New."
+  ], 
+  "revision_id": "879782"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T14:34:57.220082Z", 
+  "msg": [
+   "\"Two different strings, referring to the same entity, simply cannot *both*", 
+   "be called canonical.\"", 
+   "This change makes svn_dirent_is_canonical() return FALSE on Windows", 
+   "for lower case drive letters.", 
+   "Technically this is a bug fix, but it might have impact on clients that", 
+   "use svn_path_*() functions on Windows, where they really should use the", 
+   "dirent infrastructure.", 
+   "Suggested by: gstein", 
+   "julianfoad", 
+   "me", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(svn_dirent_is_canonical): Declare lower case drive letters and paths with", 
+   "a ':' anywhere but in the drive letter not-canonical.", 
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(test_dirent_is_canonical): Add 4 testcases."
+  ], 
+  "revision_id": "879781"
+ }
+]

@@ -1,0 +1,99 @@
+[
+ {
+  "author": "kameshj", 
+  "date": "2007-10-26T11:27:20.509051Z", 
+  "msg": [
+   "Code cleanup.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_single_file_merge): Record mergeinfo after merging all merge ranges."
+  ], 
+  "revision_id": "867490"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-10-26T10:59:10.284728Z", 
+  "msg": [
+   "Follow up r27412: Fix build on Windows.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client_merge_peg3): declare revrange at start of block."
+  ], 
+  "revision_id": "867489"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2007-10-26T09:41:07.329438Z", 
+  "msg": [
+   "Code cleanup.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(determine_merges_performed): Since r26803 merge is always on a target,", 
+   "and we run 'determine_merges_performed' only on the same target so no need", 
+   "to ensure it in the code again."
+  ], 
+  "revision_id": "867488"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-10-26T08:38:39.021140Z", 
+  "msg": [
+   "Small code improvement, no functional change.", 
+   "Suggested by: dlr", 
+   "* subversion/libsvn_ra_neon/commit.c", 
+   "(do_checkout):  set error to SVN_NO_ERROR after clearing."
+  ], 
+  "revision_id": "867487"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-26T08:17:59.212643Z", 
+  "msg": [
+   "In a nutshell, rework the changes made in r27133 by moving the", 
+   "iteration over revision ranges to just inside the", 
+   "svn_client_merge_peg3 API.", 
+   "The unfortunately reality is that this meant rolling this file back to", 
+   "r27132 and cherry-picking changes I wanted to re-apply from after that", 
+   "point, then reworking the basic notion of r27133.  This is for", 
+   "correctness -- having the main worker functions accept two URLs and", 
+   "range of revisions makes it extremely different for those worker", 
+   "functions to deal with merges from sources which suffered location", 
+   "changes (renames) somewhere between the first and last revisions", 
+   "merged.", 
+   "NOTE: r27133 seems to have actually been about two different changes.", 
+   "One of them was the change of the public merge API to accept a", 
+   "revision range list instead of just a pair of revisions -- that's what", 
+   "I meant to rework.  The second change is something to do with talking", 
+   "about 3-way-merges instead of rollbacks.  I don't know why the two", 
+   "changes had to be bundled.  And I don't why the fact that I reverted", 
+   "both changes and then reworked only the first hasn't caused the test", 
+   "suite to fail at all.  And I'm sad to say that I didn't even realize", 
+   "there was this dual change thing going on until I started composing", 
+   "this log message just prior to commit.  Something tells me that second", 
+   "change will need to be remade, but I'm going to defer that until", 
+   "another commit.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_hi_lo_revs_in_rangelist, merge_type_3_way_merge): Removed.", 
+   "(calculate_requested_ranges, determine_merges_performed,", 
+   "mark_mergeinfo_as_inheritable_for_a_range): Operate on a single", 
+   "range instead of a list thereof.", 
+   "(calculate_merge_ranges): Rename a parameter, and revert is_rollback", 
+   "-> is_three_way_merge changes.", 
+   "(update_wc_mergeinfo, grok_range_info_from_opt_revisions,", 
+   "remove_first_range_from_remaining_ranges,", 
+   "record_mergeinfo_for_record_only_merge): Revert is_rollback ->", 
+   "is_three_way_merge changes.", 
+   "(assume_default_rev_range): Add in/out youngest_rev parameter.", 
+   "(calculate_remaining_ranges, populate_remaining_ranges): Operate on", 
+   "a single range instead of a list thereof.  Revert is_rollback ->", 
+   "is_three_way_merge changes.", 
+   "(get_nearest_end_rev, get_farthest_end_rev): Lose previous_range parameter.", 
+   "(do_merge, do_single_file_merge, discover_and_merge_children):", 
+   "Operate on a pair of revisions instead of range list.  Revert", 
+   "is_rollback -> is_three_way_merge changes.", 
+   "(svn_client_merge3): Update calls to do_merge, do_single_file_merge,", 
+   "and discover_and_merge_children.", 
+   "(svn_client_merge_peg3): Handle iteration over revision ranges here.", 
+   "Update calls to do_merge, do_single_file_merge, and", 
+   "discover_and_merge_children."
+  ], 
+  "revision_id": "867486"
+ }
+]

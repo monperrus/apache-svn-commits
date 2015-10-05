@@ -1,0 +1,93 @@
+[
+ {
+  "author": "jhm", 
+  "date": "2010-03-19T05:58:34.004595Z", 
+  "msg": [
+   "Refactor: Extract Property (so Gump could override that value)"
+  ], 
+  "revision_id": "925100"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-03-19T05:43:02.777085Z", 
+  "msg": [
+   "Revamp some of the wc-ng property handling code.", 
+   "In particular, svn_wc__db_temp_op_set_pristine_props() used a boolean flag", 
+   "to alter semantics; this revision splits that into two separate functions", 
+   "to make it very clear which properties are being set (BASE or WORKING).", 
+   "Some of the wc_db property funcs were tightened up around their declared", 
+   "semantics (e.g must provide props; not NULL).", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_base_get_props, svn_wc__db_read_props,", 
+   "svn_wc__db_read_pristine_props): note that NULL will never be", 
+   "returned from these functions", 
+   "(svn_wc__db_temp_op_set_pristine_props): removed in favor of ...", 
+   "(svn_wc__db_temp_base_set_props, svn_wc__db_temp_working_set_props): ...", 
+   "these two new functions. they explicitly set the props for a BASE or a", 
+   "WORKING node. add explanation for why these should (not) exist.", 
+   "document the error if the underlying node does not exist.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_base_get_props): return an empty hash rather than NULL. note", 
+   "that we may want to turn this into a DB error instead.", 
+   "(svn_wc__db_temp_op_set_pristine_props): rename into ...", 
+   "(set_properties): ... this new private function and rejigger the", 
+   "arguments to pass a statement index and a table name for any error.", 
+   "(svn_wc__db_temp_base_set_props, svn_wc__db_temp_working_set_props): new", 
+   "functions to call set_properties() for the BASE and WORKING trees", 
+   "(svn_wc__db_pristine_props): if there is a WORKING row, then we never", 
+   "look at the BASE_NODE table. rejigger accordingly. note that a null", 
+   "properties column *may* be okay in WORKING_NODE. regardless, ensure", 
+   "that we always return an empty set of props rather than NULL.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(mark_item_copied, svn_wc_add4): use svn_wc__db_temp_working_set_props()", 
+   "explicitly rather than a flag to the old set_pristine_props. add some", 
+   "comments to svn_wc_add4 noting how the PROPS localvar is set/used.", 
+   "* subversion/libsvn_wc/props.h:", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc__prop_pristine_is_working): unused. removed.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(migrate_props): adjust doc and code: if the revert props exist, then we", 
+   "always used them (no need to look at DB state). when migrating", 
+   "\"base_props\" to wc-ng, we (now) attempt to write them to WORKING and,", 
+   "failing that, write them to BASE. no real need to look at the node", 
+   "status since (by definition) if a WORKING row exists, then the", 
+   "\"base_props\" file is associated with WORKING rather than the BASE", 
+   "tree. also use the new wc_db APIs for setting props.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(run_revert, run_prepare_revert_files): these two functions stored empty", 
+   "properties into the WORKING table, which is bogus. switch the function", 
+   "over, #if it out, and leave comments describing why this is wrong", 
+   "(run_install_properties): adjust the code to attempt to write to WORKING", 
+   "properties first, and then fall back to writing BASE properties. in", 
+   "the future, callers should already know *which* props to set, but this", 
+   "is the most compatible with current expectations.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(validate_note): remove spurious call to set_pristine_props"
+  ], 
+  "revision_id": "925099"
+ }, 
+ {
+  "author": "richter", 
+  "date": "2010-03-19T05:38:32.296407Z", 
+  "msg": [
+   "Embperl::Form example"
+  ], 
+  "revision_id": "925098"
+ }, 
+ {
+  "author": "nash", 
+  "date": "2010-03-19T05:36:56.297111Z", 
+  "msg": [
+   "Apply workaround for TUSCANY-3476 to workspace-distribution.xml and add inline comments referencing this JIRA"
+  ], 
+  "revision_id": "925097"
+ }, 
+ {
+  "author": "nash", 
+  "date": "2010-03-19T05:24:30.624677Z", 
+  "msg": [
+   "Fix typo in reference target component name"
+  ], 
+  "revision_id": "925096"
+ }
+]

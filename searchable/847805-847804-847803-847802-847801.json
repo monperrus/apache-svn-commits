@@ -1,0 +1,86 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-11-14T01:01:53.253603Z", 
+  "msg": [
+   "With Ben, make sure we get proper authorization for updates of", 
+   "disjointly switched working copies.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(authz_read): Handle txn roots.", 
+   "(dav_svn__update_report): Reactivate authz_read callback in calls to", 
+   "svn_repos_dir_delta."
+  ], 
+  "revision_id": "847805"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2003-11-14T00:59:07.166004Z", 
+  "msg": [
+   "Fix issue #1245: 'svn OP FILENAME' locks the whole tree for some operations.", 
+   "Thanks to Mike for keeping my sanity in check.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_commit): Stop recursively locking the working copy at the anchor.", 
+   "Instead non-recursively lock dirs that are ancestors to the targets and", 
+   "then recursively lock the targets themselves.", 
+   "Also fix a bug with respect to anchoring.  The selected anchor (base_dir)", 
+   "which would originally be locked recursively was one dir off in some cases.", 
+   "(remove_redundancies, adjust_rel_targets): New helper functions to", 
+   "help above Voodoo."
+  ], 
+  "revision_id": "847804"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2003-11-14T00:43:39.295082Z", 
+  "msg": [
+   "Fix issue 1440.", 
+   "I'm committing this because I'm quite confident that this is a", 
+   "correct fix, but a review would still be really nice since this", 
+   "code is new to me.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(RepositoryMirror.change_path): Do not try to find a live ancestor", 
+   "to copy from if the branch is rooted in a dead revision.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(phoenix_branch): Do not require copy with history for test to pass.", 
+   "Remove the XFail from the phoenix_branch test since the test now", 
+   "passes."
+  ], 
+  "revision_id": "847803"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-13T18:14:08.383626Z", 
+  "msg": [
+   "Start ignoring statuses (and in fact, cancel the rest of the status", 
+   "operation) at the first sign of those pesky svn:externals.  They will", 
+   "taint our version range calculation.", 
+   "* subversion/svnversion/main.c", 
+   "(struct status_baton): add 'done' parameter.", 
+   "(analyze_status): Return immediately if we're done.", 
+   "(notify, cancel): New.", 
+   "(main): Initialize the baton's new 'done' parameter, and register", 
+   "the new notification and cancellation functions/batons.  Also,", 
+   "check for the cancellation error return from svn_client_status(),", 
+   "which is non-fatal."
+  ], 
+  "revision_id": "847802"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-11-13T18:00:46.007749Z", 
+  "msg": [
+   "Merge the entire issue-1429-dev branch (-r7692:HEAD) into trunk.", 
+   "This adds the new \"fast http checkouts and updates\" feature.  After", 
+   "some initial constant number of PROPFIND requests, the entire", 
+   "checkout/update is delivered to the client in a single response... no", 
+   "more network turnarounds.  Our experience is that this brings http://", 
+   "checkouts much closer to CVS checkout speed.  The more latency your", 
+   "network has, the more you will notice the speedup.", 
+   "Note that this speedup *only* happens if a 'new' ra_dav client is", 
+   "speaking to a 'new' mod_dav_svn server.  Any other combination of", 
+   "client and server falls back to the old-style, multiple-turnaround", 
+   "system."
+  ], 
+  "revision_id": "847801"
+ }
+]

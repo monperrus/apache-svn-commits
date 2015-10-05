@@ -1,0 +1,114 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-01-06T11:00:30.085726Z", 
+  "msg": [
+   "Switch tree conflict storage over to skels, rather than a custom format.", 
+   "Solves issue #3343.", 
+   "Review and additional work by: hwright", 
+   "* subversion/libsvn_wc/tree_conflicts.h:", 
+   "(svn_wc__write_tree_conflicts): constify a parameter", 
+   "* subversion/libsvn_wc/tree_conflicts.c:", 
+   "(field_separator, desc_separator, escape_char, read_field_separator,", 
+   "read_desc_separator, read_string_field, write_string_field,", 
+   "write_integer_field): removed", 
+   "(is_valid_version_info_skel, is_valid_conflict_skel): new", 
+   "(read_enum_field): read the field from a skel, rather than a character", 
+   "start/end position. the pool param is no longer required.", 
+   "(read_node_version_info, read_one_tree_conflict): read from a skel", 
+   "instead of a string. split the single pool param into both scratch and", 
+   "result pools.", 
+   "(svn_wc__read_tree_conflicts): parse the input into a skel, and then", 
+   "walk that to construct the tree conflict structures.", 
+   "(write_enum_field): renamed to ...", 
+   "(skel_prepend_enum): ... this. prepend the mapped value to a given skel.", 
+   "(prepend_version_info_skel): build a skel for the version info, and", 
+   "prepend it to the provided skel.", 
+   "(svn_wc__write_tree_conflicts): constify a parameter, and switch to", 
+   "skel-based preparation.", 
+   "(svn_wc__loggy_del_tree_conflict): remove temp variable, writing the", 
+   "conflict data result directly into the entry (save a strdup).", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(run_log): remove temp variable, writing directly into the entry", 
+   "structure, saving a strdup.", 
+   "(svn_wc__loggy_add_tree_conflict): constify temp variable.", 
+   "* subversion/tests/libsvn_wc/tree-conflict-data-test.c:", 
+   "(test_read_tree_conflict, test_read_2_tree_conflicts): change the", 
+   "expected string representation of the tree conflicts.", 
+   "(test_write_tree_conflict, test_write_2_tree_conflicts): constify a", 
+   "param and change the expected string rep of the conflict.", 
+   "(test_write_invalid_tree_conflicts): constify a variable."
+  ], 
+  "revision_id": "875110"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2009-01-06T10:39:11.462707Z", 
+  "msg": [
+   "* tools/buildbot/slaves/ubuntu-x64", 
+   "Delete the spurious svn:mergeinfo property as per", 
+   "http://svn.haxx.se/dev/archive-2008-11/0532.shtml", 
+   "Review by: pburba", 
+   "hwright"
+  ], 
+  "revision_id": "875109"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-05T22:11:22.779945Z", 
+  "msg": [
+   "* TODO-1.6: Remove Ruby bindings test failures item.  The tests are passing, as", 
+   "of r35028."
+  ], 
+  "revision_id": "875108"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-05T18:04:39.070243Z", 
+  "msg": [
+   "Add notifications for fs packing.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(library_vtable_t): Pass a notify func/baton to pack_fs().", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_pack): Add notification parameters, and pass them to the vtable.", 
+   "* subversion/tests/libsvn_fs_fs/fs-pack-test.c", 
+   "(create_packed_filesystem): Use a NULL notification func/baton.", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_bdb_pack): Add notification func/baton parameters.", 
+   "* subversion/svnadmin/main.c", 
+   "(pack_notify): New.", 
+   "(subcommand_pack): Use pack_notify() as the notification function.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_pack_notify_action_t): New.", 
+   "(svn_fs_pack_notify_t): New.", 
+   "(svn_fs_pack): Add new notification parameters.", 
+   "* subversion/include/svn_repos.h,", 
+   "subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_pack): Add new notification parameters, pass them along.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(pack_shard): Add notification func/baton parameters, and notify caller", 
+   "when starting and finishing a shard.", 
+   "(pack_baton): Add notification func/baton members.", 
+   "(pack_body): Pass notification func/baton to pack_shard().", 
+   "(svn_fs_fs__pack): Add new parameters, and put them in the baton.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__pack): Add new notification parameters.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_pack): Add new notification parameters."
+  ], 
+  "revision_id": "875107"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-05T16:39:05.759940Z", 
+  "msg": [
+   "In the spirit of similar changes for FSFS in r34951, avoid SEGFAULTs", 
+   "caused by trying to get/set a 'checksum-rep' record when no SHA1", 
+   "checksum is available.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(maybe_store_checksum_rep): Only try to record checksum->rep", 
+   "mappings when there's a SHA1 checksum available for use."
+  ], 
+  "revision_id": "875106"
+ }
+]

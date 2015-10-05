@@ -1,0 +1,89 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T15:34:47.890430Z", 
+  "msg": [
+   "* subversion/libsvn_subr/target.c", 
+   "(svn_path_condense_targets): Rework this function for increased", 
+   "readability.  This is basically just an early exit up top and a", 
+   "4-column un-indent."
+  ], 
+  "revision_id": "846170"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T14:53:26.088713Z", 
+  "msg": [
+   "Implement a new generic path-based editor driver, and replace the", 
+   "current commit and repos-to-repos copy driver.", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_delta_path_driver_cb_func_t, svn_delta_path_driver): New.", 
+   "* subversion/libsvn_delta/path_driver.c", 
+   "New file.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "Change all debugging printf()s to fprintf(stderr)s.  Also:", 
+   "(svn_client__condense_commit_items): Add some quotes around a debug path.", 
+   "(do_item_commit): Lose a bunch of parameters -- most of them are now", 
+   "stored inside the new 'cb_baton' object that's passed in.  Also,", 
+   "don't do stack-y things -- just return any new dir_batons created.", 
+   "(struct path_driver_cb_baton, path_driver_cb_func): New.", 
+   "(init_stack, push_stack, pop_stack, count_components): Removed.", 
+   "(svn_client__do_commit): Convert to using the new path-based editor", 
+   "driver.", 
+   "(change_dir_prop): Rename 'file_baton' to 'dir_baton' -- debugging", 
+   "was quite painful when seeing variables with \"file\" in them", 
+   "applied to \"dir\" propsets.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(struct path_driver_cb_baton, path_driver_cb_func): New.", 
+   "(repos_to_repos_copy): Now use the path-based editor driver."
+  ], 
+  "revision_id": "846169"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T14:45:10.714347Z", 
+  "msg": [
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_root_revision): Was svn_fs_revision_root_revision, and used", 
+   "to only work on revision roots.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(svn_fs_root_revision): Was svn_fs_revision_root_revision; now works", 
+   "for all root types.", 
+   "(make_txn_root): Now returns an error.  Also, populate the 'rev'", 
+   "root member with the revision on which the txn root was based.", 
+   "(txn_body_txn_root): Update call to make_txn_root (and simplify this", 
+   "function while we're in there).", 
+   "(txn_body_copy, txn_body_paths_changed): Update call to", 
+   "svn_fs_root_revision.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(get_path_revision, svn_repos_dir_delta): Update call to", 
+   "svn_fs_root_revision().", 
+   "* subversion/svnlook/main.c", 
+   "(generate_label): Update call to svn_fs_root_revision().", 
+   "* subversion/mod_dav_svn/util.c", 
+   "(dav_svn_get_safe_cr): Update call to svn_fs_root_revision()."
+  ], 
+  "revision_id": "846168"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T03:05:30.165445Z", 
+  "msg": [
+   "* subversion/libsvn_repos/delta.c", 
+   "Change this file's description to be a little more useful."
+  ], 
+  "revision_id": "846167"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T03:03:01.600034Z", 
+  "msg": [
+   "* subversion/libsvn_repos/commit.c", 
+   "(open_root): It's fine to ignore the base_revision when deciding on", 
+   "which revision to base the commit, but we need to keep it around", 
+   "for out-of-dateness checks.  This bug was obscured by a commit", 
+   "crawler bug (which I'm fixing in a future commit)."
+  ], 
+  "revision_id": "846166"
+ }
+]

@@ -1,0 +1,114 @@
+[
+ {
+  "author": "dws", 
+  "date": "2004-04-28T18:08:28.939397Z", 
+  "msg": [
+   "* rpm/wbel-3/subversion.spec,", 
+   "rpm/fedora-1/subversion.spec : Don't mess with the svn_version.h file.  This", 
+   "causes one of the tests to fail.  This fixes a problem with building the", 
+   "release RPMs for 1.0.0, 1.0.1, and 1.0.2."
+  ], 
+  "revision_id": "849625"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-28T05:56:15.934584Z", 
+  "msg": [
+   "In the fs-abstraction branch, make a first stab at implementing", 
+   "DSO-loading in the FS loader library and at fixing the build system", 
+   "not to assume that the FS library depends on BDB.", 
+   "* Makefile.in:", 
+   "Add SVN_FS_LIB_{DEPS,LINK}, parallel to SVN_RA_LIB_{DEPS,LINK}.", 
+   "Replace fs_libdir with bdb_libdir; remove fs_bindir.", 
+   "Replace INSTALL_FS_LIB with INSTALL_BDB_LIB; remove INSTALL_FS_BIN.", 
+   "Replace @FS_TEST_PROGRAMS@ with @BDB_TEST_PROGRAMS@ in TESTS.", 
+   "Replace @FS_TEST_DEPS@ with @BDB_TEST_DEPS@ in check target.", 
+   "* build.conf", 
+   "Move most test scripts to [test-scripts].", 
+   "Replace [fs-test-scripts] with [bdb-test-scripts].", 
+   "Move everything from fs-bin into bin and from fs-lib into lib.", 
+   "Add [fs-libs] thingie (a la ra-libs) and make [libsvn_fs] use it.", 
+   "Use add-deps in [libsvn_fs] as it's used in [libsvn_ra].", 
+   "Put [libsvn_fs_base] in bdb-lib.", 
+   "Make [libsvn_fs_base] and [libsvn_fs_fs] into fs-modules.", 
+   "Move BDB-specific tests from fs-test to bdb-test.", 
+   "* configure.in", 
+   "Only conditionalize bdb-lib, bdb-test, and install-bdb-lib rules", 
+   "on Berkeley DB.", 
+   "Reorganize the non-DSO linking section so that ra_local is", 
+   "unconditional, and add in stuff for the FS modules.", 
+   "* build/generator/gen_base.py", 
+   "(GeneratorBase): If type isn't found, there's a good chance that it", 
+   "was just missing.  So don't try to include it in the error message;", 
+   "instead, include section_name.", 
+   "(__init__): Replace fs-test-scripts with bdb-test-scripts.", 
+   "(add_dependencies): Replace fs-test with bdb-test.", 
+   "(TargetFsModule): New class, a la TargetRaModule.", 
+   "(_build_types): Add fs-module.", 
+   "(_predef_sections): Replace fs-test-scripts with bdb-test-scripts.", 
+   "* build/generator/gen_make.py", 
+   "(write_symbols): Handle FS modules as well as RA modules.", 
+   "* subversion/libsvn_fs/fs_loader.c", 
+   "(fs_modules): New table to store FS type definitions.", 
+   "(load_vtable): New function to dynamically load a vtable.", 
+   "(get_library_vtable): Use table and loader to produce vtable,", 
+   "instead of the cheesy if/else-if construct."
+  ], 
+  "revision_id": "849624"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-04-28T05:04:52.240476Z", 
+  "msg": [
+   "Overwrite libsvnjavahl-1.jnilib on Darwin if it already exists.", 
+   "* configure.in: Force overwrite of libsvnjavahl-1.jnilib by passing 'f' to ln."
+  ], 
+  "revision_id": "849623"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-28T02:48:45.104234Z", 
+  "msg": [
+   "In the fs-abstraction branch do the symbol rename dance for", 
+   "libsvn_fs_fs just like it was done in r9533 for libsvn_fs_base.", 
+   "- svn_fs__ becomes svn_fs_fs__", 
+   "- svn_fs__fs_ becomes svn_fs_fs__", 
+   "- Type names and constants lose the svn_fs__ prefix", 
+   "- Remove functions that were thin wrappers around the svn_fs__fs_*", 
+   "ones, as they now cause namespace conflicts", 
+   "Much reflowing and re-indentation results."
+  ], 
+  "revision_id": "849622"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-28T02:31:22.738583Z", 
+  "msg": [
+   "In the fs-abstraction branch, hide the FSAP concept from the caller by", 
+   "having svn_fs_create look for an FS type rather than an FSAP name.", 
+   "The loader library will be responsible for performing any necessary", 
+   "translation; for now, that means mapping the \"bdb\" FS type to the", 
+   "\"base\" FSAP name.", 
+   "* include/svn_error_codes.h (SVN_ERR_FS_UNKNOWN_FS_TYPE): New error", 
+   "code for unrecognized FS types.", 
+   "* include/svn_fs.h", 
+   "(SVN_FS_CONFIG_FSAP_NAME): Remove.", 
+   "(SVN_FS_CONFIG_FS_TYPE): New config variable.", 
+   "(SVN_FS_TYPE_BDB, SVN_FS_TYPE_FSFS): Defined fs-type values.", 
+   "(svn_fs_create): Document SVN_FS_CONFIG_FS_TYPE instead of", 
+   "SVN_FS_CONFIG_FSAP_NAME.", 
+   "* libsvn_fs/fs_loader.c", 
+   "(get_library_vtable): Operate on an FS type, not an FSAP name.", 
+   "Return an error on unrecognized FS types.", 
+   "(write_fsap_name): Remove.", 
+   "(write_fs_type): Replaces write_fsap_name.", 
+   "(fs_library_vtable, svn_fs_create, svn_fs_create_berkeley,", 
+   "svn_fs_open_berkeley, svn_fs_delete_berkeley, svn_fs_hotcopy_berkeley,", 
+   "svn_fs_berkeley_recover, svn_fs_set_berkeley_errcall): Adjust for", 
+   "the FS type world order.", 
+   "* svnadmin/main.c (subcommand_create): Just set the FS type in the", 
+   "hash table, unchecked."
+  ], 
+  "revision_id": "849621"
+ }
+]

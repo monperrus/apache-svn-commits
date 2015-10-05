@@ -1,0 +1,105 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-10-08T21:21:53.409081Z", 
+  "msg": [
+   "Issue #498, part 2.", 
+   "If auth info was given on the commandline, 'svn checkout' should store", 
+   "it in the working copy.  A bit of tweaking to authentication", 
+   "architecture was required to make this happen.", 
+   "* svn_ra.h (svn_ra_simple_password_authenticator_t):  change", 
+   "declaration and promises of both of these callback routines.  Any", 
+   "auth data will now be stored in the auth_baton, not in the RA's", 
+   "session baton.", 
+   "* ra_dav.h (svn_ra_session_t):  no longer caches auth info.", 
+   "* session.c (request_auth):  don't try to store info in ras.", 
+   "* util.c (svn_ra_dav__maybe_store_auth_info):  call the storage", 
+   "callback;  let libsvn_client decide if the auth_baton has anything", 
+   "worth storing.", 
+   "* auth.c (get_username):  make sure info is cached in auth_baton", 
+   "(get_password):  same.", 
+   "(store_user_and_pass): rewrite to match new declaration.", 
+   "* svn_client.h (svn_client_auth_baton_t):  doc fix", 
+   "* prompt.c (svn_cl__make_auth_baton):  if the application has", 
+   "explicitly given auth info (from commandline, say), then it's okay", 
+   "to overwrite any existing info in working copy."
+  ], 
+  "revision_id": "840290"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-08T16:44:39.922674Z", 
+  "msg": [
+   "Issue #498, part 1 - cleaner solution.", 
+   "* ra_dav.h (svn_ra_session_t): add number_of_tries field", 
+   "* session.c (request_auth): use this field correctly with boolean arg."
+  ], 
+  "revision_id": "840289"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-08T14:37:24.960518Z", 
+  "msg": [
+   "Issue #498 - part 1.", 
+   "If authentication fails, try again by forcing a prompt in the user's face.", 
+   "Actually, this change won't have any effect until we're able to", 
+   "control neon's authentication-retry behavior (it currently attempts", 
+   "authentication only once; see the following thread:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?msgId=39304&listName=dev)", 
+   "* auth.c", 
+   "(get_user_and_pass):  take force_prompt switch.", 
+   "(get_username, get_password):  same.", 
+   "* svn_ra.h", 
+   "(svn_ra_simple_password_authenticator_t): add this switch to", 
+   "get_user_and_pass().", 
+   "(svn_ra_username_authenticator_t): add switch to get_username()", 
+   "* libsvn_ra_dav/session.c", 
+   "(request_auth): if called more than once by neon, pass the", 
+   "force_prompt flag to the get_user_and_pass() callback.", 
+   "* libsvn_ra_local/ra_plugin.c", 
+   "(open):  pass extra arg to get_username()"
+  ], 
+  "revision_id": "840288"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-05T16:42:48.337311Z", 
+  "msg": [
+   "Updating status page"
+  ], 
+  "revision_id": "840287"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-10-05T11:04:21.966991Z", 
+  "msg": [
+   "Changes to support autoconf 2.5x and libtool 1.4.", 
+   "Patch by: Mo DeJong <supermo@bayarea.net>", 
+   "Greg Stein <gstein@lyra.org>", 
+   "* ac-helpers/berkeley-db.m4: for the embedded DB case, link against", 
+   "the .la file unless shared libs have been disabled (which means no", 
+   ".la file will be present). tweak an AC_MSG_RESULT() to avoid some", 
+   "quoting.", 
+   "* gen-make.py: for intra-library dependencies, just refer to the .la", 
+   "files now, rather than peeking into the .libs directory. for", 
+   "installation using libtool or apxs, \"cd\" into the lib's directory", 
+   "and run install from there (on the local file) to avoid a libtool", 
+   "bug.", 
+   "* autogen.sh: add buildcheck.sh (new file) to the \"chmod +x\"", 
+   "list. call our own buildcheck, rather than APR's. toss some old", 
+   "libtool 1.3 files.", 
+   "* build.conf: don't peek into Neon's .libs directory, just use its .la", 
+   "convenience library instead.", 
+   "* configure.in: require autoconf 2.50 or greater. tweak some of the", 
+   "params that we pass to Neon (until we are sure it will always be", 
+   "using autoconf 2.50 or greater (users unpacking their own Neon", 
+   "will use whatever the distro uses, so our call to neon/autogen", 
+   "won't satisfy us entirely)). the INSTALL program needs to use an", 
+   "absolute path since we could call it from anywhere in the source", 
+   "tree. adjust some library references to use .la files rather than", 
+   "peeking into the .libs directories.", 
+   "* buildcheck.sh: new file. check for minimum versions of tools."
+  ], 
+  "revision_id": "840286"
+ }
+]

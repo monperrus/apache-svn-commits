@@ -1,0 +1,90 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-01-05T16:14:47.686265Z", 
+  "msg": [
+   "Use the FSFS write lock when packing.  This ensures that multiple instances", 
+   "of 'svnadmin pack' run in parallel don't corrupt the filesystem.", 
+   "See this thread for more information:", 
+   "http://svn.haxx.se/dev/archive-2009-01/0040.shtml", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_library_vtable_t): Update pack member to accept a new fs parameter.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_pack): Grab the fs mutex before packing.", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_bdb_pack): Update signature based on the new vtable.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(pack_baton): New.", 
+   "(pack_body): Renamed from svn_fs_fs__pack(), arguments adjusted.", 
+   "(svn_fs_fs__pack): New.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__pack): Adjust parameters.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_pack): New.", 
+   "(library_vtable): Use the wrapper function."
+  ], 
+  "revision_id": "875105"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-05T13:54:44.244068Z", 
+  "msg": [
+   "Fix conversion-related warnings in libsvn_fs_fs.  Followup to r35029.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(recover_read_from_file_baton): Increase variable size.", 
+   "(read_handler_recover): Increase variable size, add cast."
+  ], 
+  "revision_id": "875104"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-05T13:50:32.598602Z", 
+  "msg": [
+   "Fix conversion-related warnings in libsvn_diff.", 
+   "I took the strategy of increasing the size of any variables we use directly,", 
+   "and explicitly casting variables that are converted as part of function calls.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(token_compare): Add cast.", 
+   "(unified_output_baton_t): Increase variable size.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(datasource_to_index, datasource_open, datasource_get_next_token):", 
+   "Increase variable size, add cast.", 
+   "(map_or_read_file, token_compare): Add casts.", 
+   "* subversion/libsvn_diff/diff.h,", 
+   "subversion/libsvn_diff/util.c", 
+   "(svn_diff__adler32): Increase variable size."
+  ], 
+  "revision_id": "875103"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2009-01-05T07:09:09.962887Z", 
+  "msg": [
+   "Before the fifth commit in SvnClientTest::assert_merge, use revert and resolve", 
+   "to put the wc in the state it was in before tree conflict handling was merged", 
+   "in.  Not sure if this is really the \"right\" solution, but it allows the", 
+   "subsequent assertions to pass, too.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest::assert_merge): Before the fifth merge, revert the prop", 
+   "changes on trunk, and resolve the trunk file to use the local mods."
+  ], 
+  "revision_id": "875102"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2009-01-05T07:08:06.261157Z", 
+  "msg": [
+   "Update Svn::Client::Context to include resolve method.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest::assert_resolve, SvnClientTest::test_resolve_base,", 
+   "SvnClientTest::test_resolve_theirs_full,", 
+   "SvnClientTest::test_resolve_mine_full,", 
+   "SvnClientTest::test_resolve_theirs_conflict,", 
+   "SvnClientTest::test_resolve_mine_conflict,", 
+   "SvnClientTest::test_resolve_merged): New methods.", 
+   "* subversion/bindings/swig/ruby/svn/client.rb", 
+   "(Svn::Client::Context.resolve): New method."
+  ], 
+  "revision_id": "875101"
+ }
+]

@@ -1,0 +1,76 @@
+[
+ {
+  "author": "rickmcguire", 
+  "date": "2010-03-04T15:12:49.806417Z", 
+  "msg": [
+   "Copy the stax api tag back to trunk to get a new working copy."
+  ], 
+  "revision_id": "919015"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-03-04T15:07:17.289160Z", 
+  "msg": [
+   "Rework how svn patch handles EOL styles.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(patch_target_t): Amend documentation of EOL_STYLE and EOL_STR fields.", 
+   "Declare them next to each other.", 
+   "They've changed their meanings slightly. The EOL_STR used to be the", 
+   "first newline character found in the target. Now it is either a fixed", 
+   "EOL character (in case the target has svn:eol-style set), or it is", 
+   "the EOL character which terminated the line most recently read from", 
+   "the target. EOL_STYLE is set to either 'none' (if no svn:eol-style is", 
+   "set), or it is set to the EOL-style specified by svn:eol-style.", 
+   "(init_patch_target): Initialise EOL_STYLE and EOL_STR according to the", 
+   "above. Also repair newlines of the target's eol-style is native (we", 
+   "used to repair newlines only if the style was fixed).", 
+   "(read_line): Put the EOL character which terminated the line into", 
+   "TARGET->EOL_STR if TARGET->EOL_STYLE is 'none'. Don't pass an EOL", 
+   "argument to svn_subst_translate_cstring2(), the string we're translating", 
+   "does not contain a newline.", 
+   "(match_hunk): Don't pass an EOL arguement to svn_subst_translate_cstring2(),", 
+   "same reason as above. Discard the newline read from the patch file, we do", 
+   "not need it during matching.", 
+   "(reject_hunk): Write the native EOL-character in the diff header of reject", 
+   "files.", 
+   "(apply_hunk): When writing out the patched result to a target which does", 
+   "not have an svn:eol-style property set, use the EOL character read from", 
+   "the patch for all lines copied from the patch (this includes context lines).", 
+   "In case the target has a different EOL-style and no svn:eol-style set,", 
+   "the target will end up with mixed EOLs. In this case users need to either", 
+   "change the newlines in the patch file, or set an svn:eol-style property", 
+   "on the target to get consistent EOLs in the patched result.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_no_svn_eol_style, patch_with_svn_eol_style,", 
+   "patch_with_svn_eol_style_uncommitted): New regression tests which check", 
+   "for the behaviour around EOLs implemented as of this commit. Based on", 
+   "a patch submitted by dannas.", 
+   "(test_list): Add new tests."
+  ], 
+  "revision_id": "919014"
+ }, 
+ {
+  "author": "slaws", 
+  "date": "2010-03-04T15:03:06.970732Z", 
+  "msg": [
+   "Update error message to match current code"
+  ], 
+  "revision_id": "919013"
+ }, 
+ {
+  "author": "slaws", 
+  "date": "2010-03-04T15:02:11.092882Z", 
+  "msg": [
+   "Try again - update bridge to match OASIS. subclipse did something strange last time and the file was deleted"
+  ], 
+  "revision_id": "919012"
+ }, 
+ {
+  "author": "gertv", 
+  "date": "2010-03-04T14:59:31.320150Z", 
+  "msg": [
+   "Ensure build works fine even with a clean local repo"
+  ], 
+  "revision_id": "919011"
+ }
+]

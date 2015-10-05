@@ -1,0 +1,104 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-04-23T04:13:37.909924Z", 
+  "msg": [
+   "Introduce a new function svn_txdelta_target_push(), which allows a", 
+   "caller to push target data onto a window stream receiver, instead of", 
+   "having to provide a readable target stream.", 
+   "* include/svn_delta.h (svn_txdelta_target_push): Declare.", 
+   "* libsvn_delta/text_delta.c", 
+   "(struct tpush_baton): State variable for a target-push stream.", 
+   "(compute_window): Convenience function to compute a delta window", 
+   "given the data and meta-information.", 
+   "(tpush_write_handler, tpush_close_handler): Stream handler for", 
+   "a target-push delta operation.", 
+   "(svn_txdelta_target_push): Implement using above stream handler", 
+   "functions."
+  ], 
+  "revision_id": "849540"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-23T03:21:22.543533Z", 
+  "msg": [
+   "Update libsvn_fs_fs transaction writing and reading code to the latest", 
+   "version of structure.  The copyroot field is represented as a", 
+   "revision/path pair, and there is no longer a (soft|hard) copy field in", 
+   "the copyfrom line.  Also, fix ID relatedness checking to handle the", 
+   "temporary transaction node-ids.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(svn_fs__node_revision_t): Remove copykind, and add the new", 
+   "copyroot definitions.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs__dag_get_copy_kind): Removed", 
+   "(svn_fs__dag_get_copyroot): Return two results, the revision and", 
+   "path of the copyroot.", 
+   "(svn_fs__dag_clone_child): Never create a copy entry for the new", 
+   "clone, but do get the copyroot from the parent if a flag is", 
+   "passed.", 
+   "(copy_node_revision, make_entry, svn_fs__dag_copy): Handle the", 
+   "new copyroot format", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(get_copy_inheritance, make_path_mutable, find_youngest_copyroot,", 
+   "txn_body_history_prev): Use the new copyroot format.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs__fs_get_node_revision): No longer read in a copykind, and", 
+   "do read in the new copyroot format.", 
+   "(write_noderev_txn, create_new_txn_noderev_from_rev,", 
+   "svn_fs__fs_create_successor, write_final_rev): Use the new", 
+   "copyroot fields.", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(svn_fs_check_related): Correctly return not related when two", 
+   "nodes have different transaction ids."
+  ], 
+  "revision_id": "849539"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-23T02:52:56.820457Z", 
+  "msg": [
+   "Revert two lines of revision 9462 as they unnecessarily place the", 
+   "allocation for the root object itself in the parent pool, when it is", 
+   "fine to allocate it from the subpool as pointed out by ghudson.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(make_root): Allocate the root object from the subpool."
+  ], 
+  "revision_id": "849538"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-23T00:06:48.905568Z", 
+  "msg": [
+   "Tighten up the integer overflow checking in svndiff parsing.", 
+   "(decode_int): Replace with separate functions for offsets and sizes.", 
+   "(decode_offset, decode_size): Same body as decode_int, but decode", 
+   "into an svn_filesize_t or apr_size_t variable.", 
+   "(decode_instruction, write_handler): Use new decoding functions to", 
+   "avoid the temporary variable and avoid possible loss of precision", 
+   "between svn_filesize_t and apr_size_t.", 
+   "(count_and_verify_instructions, write_handler): apr_size_t is", 
+   "unsigned, so when checking for integer overflow, use \"if (a + b <", 
+   "a)\", and don't check for size_t values being less than 0."
+  ], 
+  "revision_id": "849537"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-22T22:49:18.275143Z", 
+  "msg": [
+   "Fix a mis-assigned pool in both libsvn_fs and libsvn_fs_fs when", 
+   "creating filesystem root objects as discussed with ghudson.  The root", 
+   "object's pool is set to the parent pool, rather than the subpool,", 
+   "causing corruption when the root object (and it's associated pool) are", 
+   "destroyed.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(make_root): Use pool for creating the root object, and subpool", 
+   "for allocations associated with the root object."
+  ], 
+  "revision_id": "849536"
+ }
+]

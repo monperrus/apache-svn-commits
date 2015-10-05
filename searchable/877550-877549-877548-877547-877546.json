@@ -1,0 +1,98 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-25T21:13:31.291362Z", 
+  "msg": [
+   "* subversion/include/svn_io.h", 
+   "(svn_io_reset_fn_t): Update whitespace to follow convention.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_reset): Check reset_fn instead of write_fn.", 
+   "(read_handler_disown, write_handler_disown, reset_handler_disown)", 
+   "Remove redundant casts.", 
+   "Suggested by: gstein", 
+   "Found by: gstein"
+  ], 
+  "revision_id": "877550"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-25T21:03:39.434826Z", 
+  "msg": [
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_temp_dir): Use svn_dirent_internal style as apr returns the path", 
+   "with local separators."
+  ], 
+  "revision_id": "877549"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-25T21:02:17.068911Z", 
+  "msg": [
+   "Use streams for parsing the SVNPATCH blocks instead of rewrapping apr_file_t*", 
+   "handles every time.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_apply_svnpatch): Accept svn_stream_t instead of apr_file_t.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(includes): Include svn_subst.h", 
+   "(SVNPATCH_DELETE_WHEN): Use svn_io_file_del_on_pool_cleanup to allow reopening", 
+   "a stream.", 
+   "(merge_props_changed): Use svn_wc_merge_props2() to resolve deprecation", 
+   "warning.", 
+   "(merge_dir_added): Use NULL as copyfrom_url instead of dangling pointer.", 
+   "(extract_svnpatch): Use subst_translated stream for input to resolve", 
+   "eol-style issues. Shrink scoping of variables. Create unnamed temporary", 
+   "streams instead of named apr files. Provide a stream as output. Use", 
+   "subpool for temporary files.", 
+   "(svn_client_patch): Pass cancel handler to svn_wc_adm_open3.", 
+   "Pass stream between extract_svnpatch and svn_wc_apply_svnpatch.", 
+   "* subversion/libsvn_wc/patch.c", 
+   "(svn_wc_apply_svnpatch): Accept svn_stream_t instead of wrapping the", 
+   "apr_file_t locally.", 
+   "* subversion/svn/patch-cmd.c", 
+   "(svn_cl__patch): Stop checking working copy. svn_client_patch() does", 
+   "that for us."
+  ], 
+  "revision_id": "877548"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-25T17:34:55.790073Z", 
+  "msg": [
+   "To allow cleaning up our patch/diff support, allow streams to implement", 
+   "resetting back to their origin and implement this for apr_file, string buffer", 
+   "and empty streams.", 
+   "This allows using the more binding friendly svn_streams in more places where we", 
+   "could only use apr_file_t or temporary file paths before.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_STREAM_RESET_NOT_SUPPORTED): New error.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_t): Documentation updated.", 
+   "(svn_io_reset_fn_t): New typedef.", 
+   "(svn_stream_set_reset, svn_stream_reset): New function.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_t): Add reset_fn field.", 
+   "(svn_stream_create): Initialize reset_fn to NULL.", 
+   "(svn_stream_set_reset, svn_stream_reset): New function.", 
+   "(reset_handler_empty): New function.", 
+   "(svn_stream_empty): Hook reset_handler_empty as stream reset.", 
+   "(reset_handler_disown): New function.", 
+   "(svn_stream_disown): Hook reset_handler_disown as stream reset.", 
+   "(reset_handler_apr): New function.", 
+   "(svn_stream_from_aprfile2): Hook reset_handler_apr as stream reset.", 
+   "(reset_handler_stringbuf): New function.", 
+   "(svn_stream_from_stringbuf): Hook reset_handler_stringbuf as stream reset."
+  ], 
+  "revision_id": "877547"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-25T13:15:01.283159Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_delete3): Avoid unnecessary tree marking on directories we are", 
+   "about to delete and add a TODO comment for future handling when we move", 
+   "to a single database per working copy."
+  ], 
+  "revision_id": "877546"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-08-17T19:14:09.535377Z", 
+  "msg": [
+   "Make 'svn revert' remove any kind of copied file, regardless of whether", 
+   "the file was modified post-copy.", 
+   "The rationale for this change can be found in a comment by Julian Foad", 
+   "on issue #3601: http://subversion.tigris.org/issues/show_bug.cgi?id=3101#desc6", 
+   "Quote:", 
+   "svn revert should undo the local text and prop changes, undo the scheduling,", 
+   "and also undo the copying of the file into its new location on disk,", 
+   "since that is (like prop changes) an operation that Subversion performed", 
+   "on the user's behalf as a \"local modification\" of the user's working copy.", 
+   "Most parts of this change are concerned with removing the pristine checksum", 
+   "comparison revert_restore_handle_copied_file() was doing. A fix for a bug", 
+   "in revert_list_read() uncovered by a failing test is also included.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(remove_conflict_file): No need to remove 'pi' after revert.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(revert_tree_conflicts_in_updated_files): Expect 'A/D/G/rho' to be", 
+   "delete from disk after revert. No need to delete it manually.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_restore_handle_copied_file): Remove. This was wrapping the", 
+   "comparison to the pristine file, which is now unnecessary.", 
+   "(revert_restore_handle_copied_dirs, revert_restore): Remove all reverted", 
+   "copied files from disk. Update some comments.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(revert_list, trigger_revert_list_nodes, STMT_SELECT_REVERT_LIST,", 
+   "STMT_SELECT_REVERT_LIST_COPIED_CHILDREN): Drop the pristine CHECKSUM.", 
+   "It isn't needed anymore.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(revert_list_read_baton): Remove PRISTINE_CHECKSUM.", 
+   "(revert_list_read): Remove handling of the pristine checksum.", 
+   "Fix a bug: The COPIED_HERE output parameter wasn't set correctly if a", 
+   "copied node also had an entry in the ACTUAL_NODES table. E.g. a copied", 
+   "node which was also a tree-conflict victim was not recognised as a copy", 
+   "by the revert code, and left behind unversioned on disk. Set COPIED_HERE", 
+   "correctly in this case, too.", 
+   "(svn_wc__db_revert_list_read): Remove PRISTINE_CHECKSUM output parameter.", 
+   "(revert_list_read_copied_children): Remove handling of the pristine checksum.", 
+   "Small indentation fixes.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_revert_list_read): Remove PRISTINE_CHECKSUM output parameter.", 
+   "(svn_wc__db_revert_list_copied_child_info_t): Remove PRISTINE_CHECKSUM."
+  ], 
+  "revision_id": "1158875"
+ }, 
+ {
+  "author": "kevan", 
+  "date": "2011-08-17T19:12:30.131371Z", 
+  "msg": [
+   "GERONIMO-6055 This change limits the ClassLoader searching (getWiredBundle, etc) that will occur during BeanValidation application startup. ValidatorFactory creation time becomes nearly zero. Bean Validation TCK tests passed for me. Would like some validation of this. Will also need to keep an eye out for any potential side effects. There may be better ways of doing this. So, alternatives welcome."
+  ], 
+  "revision_id": "1158874"
+ }, 
+ {
+  "author": "chug", 
+  "date": "2011-08-17T19:12:23.174590Z", 
+  "msg": [
+   "NO-JIRA Clean up some text and formatting in .NET binding.", 
+   "1. Delete Microsoft name in some projects.", 
+   "2. Get rid of ascii codes >= 0x80. The copyright symbol is the main culprit.", 
+   "3. Change 2010 to 2011.", 
+   "4. Minor tab and trailing whitespace removal."
+  ], 
+  "revision_id": "1158873"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2011-08-17T19:11:46.806209Z", 
+  "msg": [
+   "Reverted r1158146 which was causing a build failure."
+  ], 
+  "revision_id": "1158872"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-08-17T19:05:41.114756Z", 
+  "msg": [
+   "[MINDEXER-36] index osgi metadatas.", 
+   "Add support for :", 
+   "* Bundle-Description", 
+   "* Bundle-Name", 
+   "* Bundle-License", 
+   "* Bundle-DocURL", 
+   "* Import-Package"
+  ], 
+  "revision_id": "1158871"
+ }
+]

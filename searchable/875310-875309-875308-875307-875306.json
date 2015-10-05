@@ -1,0 +1,88 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-01-14T15:28:15.490422Z", 
+  "msg": [
+   "Fix issue 2220: Deleting a non-existent property should produce an error.", 
+   "The solution is a bit tricky, since our notification functions (where we", 
+   "actually detect the error) don't allow us to return an error.  So, in the case", 
+   "where a 'svn propdel' happens recursively, all the operations go through, and", 
+   "we then send the error.  It isn't perfect, but it's the best we've got under", 
+   "the circumstances.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(perms_on_symlink, invalid_propnames): Update to expect errors.", 
+   "(delete_nonexistent_property): New.", 
+   "(test_list): Add new test.", 
+   "* subversion/svn/propdel-cmd.c", 
+   "(notify_wrapper_baton, notify_wrapper): New.", 
+   "(svn_cl__propdel): Use the new wrapper to detect a 'deleted nonexistent'", 
+   "condition, and ultimately report it if one exists.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Don't notify on a deleted nonexistent event."
+  ], 
+  "revision_id": "875310"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-14T14:39:08.600960Z", 
+  "msg": [
+   "Continued cleaning of the various translation functions.", 
+   "* subversion/include/svn_subst.h:", 
+   "(svn_subst_stream_translated): add note about closing the returned", 
+   "stream, and that it will (in turn) close the provided stream", 
+   "(svn_subst_stream_translated_to_normal_form): note that the source", 
+   "stream will be closed when the returned stream is closed.", 
+   "* subversion/libsvn_client/blame.c:", 
+   "(svn_client_blame4): simplify call to svn_subst_stream_translated by", 
+   "directly opening a stream onto the \"last file\". clear out the closing", 
+   "of the file handle (no longer needed)", 
+   "* subversion/libsvn_subr/subst.c:", 
+   "(svn_subst_stream_detranslated): clear out some code duplication by", 
+   "rewriting in terms of svn_subst_stream_translated_to_normal_form.", 
+   "(svn_subst_translate_cstring2): simplify and remove some string", 
+   "duplication.", 
+   "(create_special_file): remove, by folding contents into ...", 
+   "(svn_subst_copy_and_translate3): ... here. remove the resulting extra", 
+   "io_check. simplify this function by rebuilding in terms of", 
+   "svn_subst_create_translated."
+  ], 
+  "revision_id": "875309"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-01-14T14:32:06.799759Z", 
+  "msg": [
+   "On the issue-3334-dirs branch:", 
+   "Set the 'copied' flag on all entries in the re-added tree. Previously I was", 
+   "skipping one of the two entries for each directory (the one where it's a", 
+   "child in its parent's entries file). Both of them need to be set.", 
+   "Just one problem that I know of now remains with the re-added tree's state:", 
+   "its root's 'revision' should not be bumped, at least in its \"this dir\" entry.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(set_copied_callback): Don't skip dirs when they are not \"this dir\".", 
+   "Remove a bogus construction of \"full_path\"."
+  ], 
+  "revision_id": "875308"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-01-14T14:31:48.268053Z", 
+  "msg": [
+   "On the issue-3334-dirs branch:", 
+   "Add a test that sets up two scenarios that should come out the same. This", 
+   "\"test\" doesn't actually test that they do come out the same, yet.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(tree_conflict_uc2_schedule_re_add): New test.", 
+   "(test_list): Add it."
+  ], 
+  "revision_id": "875307"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-01-14T14:28:45.541933Z", 
+  "msg": [
+   "On the issue-3334-dirs branch: Merge changes from trunk up to r35231."
+  ], 
+  "revision_id": "875306"
+ }
+]

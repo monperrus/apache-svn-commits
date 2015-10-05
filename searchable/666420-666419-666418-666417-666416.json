@@ -1,0 +1,57 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-06-11T00:58:13.484161Z", 
+  "msg": [
+   "Add a README to alterl which shows how to use thrift_client"
+  ], 
+  "revision_id": "666420"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-11T00:58:07.788761Z", 
+  "msg": [
+   "Remove extra debugging from thrift_client.erl"
+  ], 
+  "revision_id": "666419"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-11T00:58:00.947763Z", 
+  "msg": [
+   "Add a thrift client to alterl bindings", 
+   "Test plan:", 
+   "f(), {ok, C} = thrift_client:start_link(\"localhost\", 9090, thriftTest_thrift).", 
+   "thrift_client:call(C, testAsync, [1234]).", 
+   "thrift_client:call(C, testVoid, []).", 
+   "thrift_client:call(C, testList, [[1,2,3,4,5]]).", 
+   "- Should write an actual test suite that exercises all of ThriftTest but I'm lazy right now"
+  ], 
+  "revision_id": "666418"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-11T00:57:54.283830Z", 
+  "msg": [
+   "Change alterl thrift_server to use non-blocking TCP calls and properly set the processor as the controlling process for the client sockets.", 
+   "Summary:", 
+   "- Removes the non-OTP \"acceptor\" process", 
+   "- The processor becomes the socket's controlling process instead of the transport, which is kind of messy, but it means we don't have to make a process for the socket_transport.", 
+   "- See http://www.trapexit.org/Building_a_Non-blocking_TCP_server_using_OTP_principles for non-blocking server info", 
+   "Test plan:", 
+   "- Ran ThriftTest and StressTest"
+  ], 
+  "revision_id": "666417"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-06-11T00:57:42.456933Z", 
+  "msg": [
+   "Fix thrift_processor so that exceptions thrown in async void functions don't get serialized", 
+   "Test plan: Made testAsync() in test_server always crash with a badmatch 1 = 0,", 
+   "and made sure that the badmatch was caught and logged but not", 
+   "serialized back to the client"
+  ], 
+  "revision_id": "666416"
+ }
+]

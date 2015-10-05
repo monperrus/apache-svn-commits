@@ -1,0 +1,106 @@
+[
+ {
+  "author": "mbk", 
+  "date": "2003-03-17T18:59:59.786761Z", 
+  "msg": [
+   "It is with great joy that I present what will hopefully be the last", 
+   "in a series of commits related to issue 1037 (repository uuids).", 
+   "This one removes the sending of UUIDs as part of the update report.", 
+   "It is semantically equivalent to the change made in rev 5245 as part", 
+   "of the release of 0.19.  However, this change excises the evil code", 
+   "rather than simply ifdef-ing a portion of it out.", 
+   "This is a reversion of a portion of rev 4916.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "#include svn_dav.h removed.", 
+   "(item_baton_t): Remove uuid member.", 
+   "(close_helper): Do not include <S2:repository-uuid> in <S:prop> block for", 
+   "updates.", 
+   "(upd_set_target_revision): Do not include S2 namespace in <S:update-report>", 
+   "header.", 
+   "(upd_change_xxx_prop): Do not populate baton's uuid from UUID property."
+  ], 
+  "revision_id": "845435"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-17T18:16:04.247734Z", 
+  "msg": [
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Make \"get\" a synonym for \"checkout\".", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn--help_stdout,", 
+   "subversion/tests/clients/cmdline/getopt_tests_data/svn_help_stdout:", 
+   "Adjust accordingly.", 
+   "Patch by: Todd Mokros <tmokros@neo.rr.com>"
+  ], 
+  "revision_id": "845434"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-17T18:06:54.014246Z", 
+  "msg": [
+   "Finish issue #1004: make 'svn cleanup', 'svn copy', and 'svn move'", 
+   "cancellable, and improve the cancellability of 'svn add'.", 
+   "* subversion/include/svn_client.h, subversion/libsvn_client/cleanup.c", 
+   "(svn_client_cleanup): Take new ctx parameter, pass cancellation func", 
+   "and baton from the ctx along to svn_wc_cleanup.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_cleanup, svn_wc_add, svn_wc_copy): Take new cancel_func and", 
+   "cancel_baton parameters.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_copy_dir_recursively): Take new cancel_func and", 
+   "cancel_baton parameters.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_copy_dir_recursively): Check for cancellation.  Also, add a", 
+   "pair of curly braces for ISO Pilato Compliance.", 
+   "* subversion/clients/cmdline/cleanup-cmd.c", 
+   "(svn_cl__cleanup): Extract client ctx from the baton, pass it to", 
+   "svn_client_cleanup.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc_cleanup): Take new cancel_func and cancel_baton args, use", 
+   "them to check for cancellation, and pass them to recursive call.", 
+   "* subversion/libsvn_client/add.c", 
+   "(svn_client_add, add_dir_recursive): Pass cancel_func and", 
+   "cancel_baton to svn_wc_add.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_add): Pass cancel_func and cancel_baton along to mark_tree.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Pass nulls for cancellation func and", 
+   "baton to svn_wc_add.", 
+   "(copy_dir_administratively): Take new cancel_func and cancel_baton", 
+   "args, pass them along to svn_wc_cleanup, svn_wc_add, and", 
+   "svn_io_copy_dir_recursively.", 
+   "(svn_wc_copy): Take new cancel_func and cancel_baton args, pass", 
+   "them along to copy_dir_administratively.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(remove_tmpfiles): Take cancel_func and cancel_baton, check for", 
+   "cancellation before removing a tmpfile.", 
+   "(wc_to_wc_copy): Pass ctx->cancel_func and ctx->cancel_baton to", 
+   "svn_wc_copy.", 
+   "(wc_to_repos_copy): Pass ctx->cancel_func and ctx->cancel_baton to", 
+   "remove_tmpfiles.", 
+   "(repos_to_wc_copy): Pass ctx->cancel_func and ctx->cancel_baton to", 
+   "svn_wc_add."
+  ], 
+  "revision_id": "845433"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-17T16:21:37.735185Z", 
+  "msg": [
+   "* subversion/tests/svn_tests_main.c", 
+   "(main): Remove const qualifier from `arg', to silence an \"assignment", 
+   "from incompatible pointer type\" warning."
+  ], 
+  "revision_id": "845432"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-03-17T10:50:09.261147Z", 
+  "msg": [
+   "* tests/clients/cmdline/svntest/main.py:", 
+   "(Sandbox.cleanup_test_paths): no need to use 'global' unless you're", 
+   "actually assigning to the specified variable."
+  ], 
+  "revision_id": "845431"
+ }
+]

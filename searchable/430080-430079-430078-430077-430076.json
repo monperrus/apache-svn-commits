@@ -1,0 +1,73 @@
+[
+ {
+  "author": "boisvert", 
+  "date": "2006-08-09T15:59:03.600835Z", 
+  "msg": [
+   "remove unnecessary partnerlink from http binding"
+  ], 
+  "revision_id": "430080"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2006-08-09T15:53:50.624849Z", 
+  "msg": [
+   "o tweak the workflow if one is specified"
+  ], 
+  "revision_id": "430079"
+ }, 
+ {
+  "author": "tellison", 
+  "date": "2006-08-09T15:50:57.498601Z", 
+  "msg": [
+   "Deal with missing .svn dir when setting svn.info property"
+  ], 
+  "revision_id": "430078"
+ }, 
+ {
+  "author": "bpendleton", 
+  "date": "2006-08-09T15:45:21.056667Z", 
+  "msg": [
+   "DERBY-1533: ArrayIndexOutOfBoundsException in DDMReader", 
+   "DERBY-1533 follows in a series of bugs (DERBY-170, DERBY-428, DERBY-491,", 
+   "DERBY-492, DERBY-614 among others) which have to do with the particulars of", 
+   "the DRDA protocols used for handling long messages and large amounts of data.", 
+   "In this particular issue, the problems involve the situation in which the", 
+   "server is receiving a message which is segmented across multiple layer A", 
+   "blocks using DSS continuations. This is a relatively unusual case, as", 
+   "generally large amounts of data flow from the server to the client, not vice", 
+   "versa.", 
+   "This change contains two modifications to DDMReader, as well as some tests:", 
+   "1) The Network Server method DDMReader.compressBLayerData was incorrect in", 
+   "several respects. Rather than going through that code in detail, I noticed", 
+   "that an almost identical version of this routine exists in the DerbyNetClient,", 
+   "in the class Reply, and I am pretty confident that the client side code is", 
+   "working, so I just wholesale modified the server's compressBLayerData method", 
+   "so that it matched the client's method.", 
+   "2) When the client is sending parameter data to the server, and the data to be", 
+   "sent is a large array of bytes for a blob, the client, the client may send the", 
+   "data inline as DRDA_TYPE_NVARBYTE, or it may externalize the data and send it", 
+   "as DRDA_TYPE_NLOBBYTES. I believe that similar things happen with CLOB.", 
+   "The client makes this decision based on the length of the data to be sent;", 
+   "short values are sent inline, and long values are sent externalized.", 
+   "When the server receives the data, it must decide whether it is reading an", 
+   "inline string of bytes, or externalized data, and it, too, makes this decision", 
+   "based on the length of the data. However, the server's code for this was", 
+   "comparing the length of the byte string against the amount of data left in the", 
+   "current segment, as opposed to comparing it against the constant threshold", 
+   "value for switching from inline bytes to externalized bytes; hence if a long", 
+   "byte string happened to start late in a buffer, and was then segmented", 
+   "(continued) into a subsequent buffer, the server would mistakenly think the", 
+   "byte string was being sent as externalized bytes, when in fact it was sent as", 
+   "inline bytes."
+  ], 
+  "revision_id": "430077"
+ }, 
+ {
+  "author": "snoopdave", 
+  "date": "2006-08-09T15:38:36.174674Z", 
+  "msg": [
+   "Themes no longer need to use #showCommonJavascript()"
+  ], 
+  "revision_id": "430076"
+ }
+]

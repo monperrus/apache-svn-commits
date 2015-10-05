@@ -1,0 +1,77 @@
+[
+ {
+  "author": "jimb", 
+  "date": "2001-02-21T16:52:02.000000Z", 
+  "msg": [
+   "* libsvn_fs/node-rev.c: #include \"nodes-table.h\".", 
+   "* libsvn_fs/node-rev.c (svn_fs__stable_node): Trivial implementation,", 
+   "for our current non-deltifying situation."
+  ], 
+  "revision_id": "838665"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-02-21T16:47:29.000000Z", 
+  "msg": [
+   "* libsvn_fs/node-rev.c: Finally complete the reorganization of the", 
+   "mid-level node management stuff.  Most of the things in this file have", 
+   "been segregated into nodes-table.c.  This file will become fatter when", 
+   "we actually do deltification, or split file contents into a separate", 
+   "table.", 
+   "(make_nodes, get_representation_skel, put_representation_skel,", 
+   "new_node_id, last_key_before, new_successor_id): Deleted.", 
+   "(svn_fs__get_node_revision): Call `svn_fs__get_rep', from", 
+   "nodes-table.h, instead of `get_representation_skel'.", 
+   "(svn_fs__put_node_revision): Remove interface explanation; this is a", 
+   "public function, described in the interface file.  Don't rely on", 
+   "automatic array initialization to construct the representation skel; I", 
+   "think that's a GCC extension.  Instead, construct the skel explicitly.", 
+   "Call `svn_fs__put_rep', from nodes-table.h, instead of", 
+   "`put_representation_skel'.", 
+   "(svn_fs__create_node): Call `svn_fs__put_node_revision, defined", 
+   "elsewhere in this file, instead of `put_representation_skel'.  Not", 
+   "only does the latter not exist, but it's the wrong function --- we're", 
+   "passing it a NODE-REVISION, not a REPRESENTATION.", 
+   "(svn_fs__create_successor): Same.  And call `svn_fs__new_successor_id'", 
+   "from nodes-table.h, not `new_successor_id'."
+  ], 
+  "revision_id": "838664"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-02-21T16:39:52.000000Z", 
+  "msg": [
+   "(replace_root): Improve comment by using Jim's suggested wording.", 
+   "(change_prop_args, txn_body_change_prop): New baton/func txn pair.", 
+   "(change_file_prop, change_dir_prop): Implement using above."
+  ], 
+  "revision_id": "838663"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-02-21T16:38:12.000000Z", 
+  "msg": [
+   "* libsvn_fs/nodes-table.c (svn_fs__new_successor_id): When allocating", 
+   "space for the successor ID, there's no need to multiply the expected", 
+   "length of the ID by the *square* of the size of an ID.  (What kind of", 
+   "dimension is a square byte, anyway?)"
+  ], 
+  "revision_id": "838662"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2001-02-21T15:54:40.000000Z", 
+  "msg": [
+   "* libsvn_fs/editor.c: Use the SVN_ERR macro throughout, for", 
+   "consistency with the rest of the filesystem code.", 
+   "(txn_body_clone_root, replace_root, txn_body_delete, delete_entry,", 
+   "txn_body_add_directory, add_directory, txn_body_replace_directory,", 
+   "replace_directory, txn_body_add_file, add_file, txn_body_replace_file,", 
+   "replace_file, close_edit): Use SVN_ERR.", 
+   "* libsvn_fs/editor.c (close_directory, close_file): Doc fixes.", 
+   "* libsvn_fs/editor.c (struct edit_baton, struct dir_baton, struct", 
+   "file_baton): Doc fixes."
+  ], 
+  "revision_id": "838661"
+ }
+]

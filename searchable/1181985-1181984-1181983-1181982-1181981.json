@@ -1,0 +1,113 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:43.395169Z", 
+  "msg": [
+   "Add more cases to TestBlocksRead targetting the cases that lazy seek optimizations should help", 
+   "Summary:", 
+   "Add more cases to TestBlocksRead targetting the cases that lazy seek", 
+   "optimizations should help.", 
+   "-- Currently, lazy Seek optimization helps the multiple column get.", 
+   "-- For single column get, more optimizations are yet to follow. At that point,", 
+   "we'll have to adjust the test.", 
+   "Test Plan: run test", 
+   "Reviewers: mbautin, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: liyintang", 
+   "Differential Revision: 329612"
+  ], 
+  "revision_id": "1181985"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:41.038938Z", 
+  "msg": [
+   "TestBlocksRead (test for HBASE-4433 and HBASE-4434)", 
+   "Summary:", 
+   "Common test for both optimizations (HBASE-4433 & HBASE-4434) that checks how", 
+   "many blocks we are reading.", 
+   "Test Plan: Ran test.", 
+   "Reviewers: nspiegelberg, kranganathan, mbautin, liyintang", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, hbase@lists, kranganathan", 
+   "Differential Revision: 329136"
+  ], 
+  "revision_id": "1181984"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:38.390399Z", 
+  "msg": [
+   "Lazy-seek optimization for StoreFile scanners", 
+   "Summary:", 
+   "Previously, if we had several StoreFiles for a column family in a region, we", 
+   "would seek in each of them and only then merge the results, even though the", 
+   "row/column we are looking for might only be in the most recent (and the", 
+   "smallest) file. Now we prioritize our reads from those files so that we check", 
+   "the most recent file first. This is done by doing a \"lazy seek\" which pretends", 
+   "that the next value in the StoreFile is (seekRow, seekColumn,", 
+   "lastTimestampInStoreFile), which is earlier in the KV order than anything that", 
+   "might actually occur in the file. So if we don't find the result in earlier", 
+   "files, that fake KV will bubble up to the top of the KV heap and a real seek", 
+   "will be done. This is expected to significantly reduce the amount of disk IO for", 
+   "Prod Cluster (but we need careful testing and measurement).", 
+   "This is joint work with Liyin Tang -- huge thanks to him for many helpful", 
+   "discussions on this and the idea of putting fake KVs with the highest  timestamp", 
+   "of the StoreFile in the scanner priority queue.", 
+   "Test Plan:", 
+   "Existing unit tests.", 
+   "A new unit test will be written.", 
+   "Test on dev cluster and dark launch.", 
+   "Reviewers: liyintang, kannan, kranganathan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@lists, hbase@lists, , liyintang, kannan", 
+   "Differential Revision: 326359", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1181983"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:33.872785Z", 
+  "msg": [
+   "HBASE-4433: avoid extra next (potentially a seek) if done with column/row", 
+   "Summary:", 
+   "When we are done with the requested column(s) the code still does an extra", 
+   "next() call before it realizes that it is actually done. This extra next() call", 
+   "could potentially result in an unnecessary extra block load. This is likely to", 
+   "be especially bad for CFs where the KVs are large blobs (such as", 
+   "Snapshot/ThreadSnapshot CF) where each KV may be occupying a block of its own.", 
+   "So the next() can often load a new unrelated block unnecessarily.", 
+   "Test Plan: running unit tests right now; writing a custom test to count number", 
+   "of blocks accessed with blockcache size set to pretty small; will do dev testing", 
+   "etc.", 
+   "Reviewers: mbautin, kranganathan, liyintang, nspiegelberg", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, hbase@lists, kannan, mbautin, nspiegelberg, kranganathan", 
+   "Differential Revision: 327923"
+  ], 
+  "revision_id": "1181982"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:30.105740Z", 
+  "msg": [
+   "A new unit test for lazy seek and StoreScanner in general", 
+   "Summary:", 
+   "A randomized unit test for Gets/Scans (all-row, single-row, multi-row,", 
+   "all-column, single-column, and multi-column). Also all combinations of Bloom", 
+   "filters and compression (NONE vs GZIP) are tested. The unit test flushes", 
+   "multiple StoreFiles with disjoint timestamp ranges and runs various types of", 
+   "queries against them. Currently we are not testing overlapping timestamp ranges.", 
+   "This diff was originally part of D326359.", 
+   "Test Plan: Run the unit test, as well as TestMultiColumnScanner and", 
+   "TestScanWithBloomError, which share some code.", 
+   "Reviewers: liyintang, kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan", 
+   "Differential Revision: 328766", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1181981"
+ }
+]

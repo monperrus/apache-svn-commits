@@ -1,0 +1,120 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T18:53:59.750429Z", 
+  "msg": [
+   "Don't worry about introducing propcaching when upgrading working copies.", 
+   "We've already nuked propcaching on trunk, so this is a pointless step.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(introduce_propcaching): Remove.", 
+   "(maybe_upgrade_format): Don't call the removed function."
+  ], 
+  "revision_id": "877155"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-07T18:47:31.853148Z", 
+  "msg": [
+   "On the 'issue-3390-dev' branch, began tinkering with the way externals", 
+   "are processed.  Rather than harvesting only the externals property", 
+   "values in traveral_info, track also the URL of the item on which the", 
+   "property is set (so that relative URLs can later been properly", 
+   "un-relative-ized).", 
+   "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", 
+   "*                                                                 *", 
+   "*  This work is unfinished, and not suitable for merge back to    *", 
+   "*  the trunk.                                                     *", 
+   "*                                                                 *", 
+   "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_externals_definition_t): New opaque type.", 
+   "(svn_wc_edited_externals2, svn_wc_externals_definition_propval,", 
+   "svn_wc_externals_definition_baseurl): New functions.", 
+   "(svn_wc_edited_externals): Mark as deprecated.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(struct svn_wc_externals_definition_t): New type.", 
+   "(struct svn_wc_traversal_info_t): Tweak the definitions of this", 
+   "structure's 'externals_old' and 'externals_new' members.", 
+   "(svn_wc__add_traversal_info): New function.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc__add_traversal_info): New helper, cored from", 
+   "report_revisions_and_depths(), but which builds traversal_info a", 
+   "little differently now, according to its new definition.", 
+   "(report_revisions_and_depths): Use svn_wc__add_traversal_info() now.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_dir_status): Use svn_wc__add_traversal_info() now.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(maybe_record_externals_change): New helper function.", 
+   "(close_directory): Use maybe_record_externals_change() both when", 
+   "their was a real set of externals properties changes and when this", 
+   "is a switch operation that might have changed the way relative", 
+   "external URLs are interpreted.", 
+   "(svn_wc_edited_externals2): New function.", 
+   "(svn_wc_edited_externals): Moved to deprecated.c.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_edited_externals): Moved from update_editor.c, with a note", 
+   "to rework it for compatibility.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__handle_externals): Add 'is_switch' parameter.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client__switch_internal): Pass non-NULL traversal info to", 
+   "svn_wc_crawl_revisions4().  Update call to svn_client__handle_externals().", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Update call to", 
+   "svn_client__handle_externals().", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_external_item_change_baton): Add 'new_base_url' and", 
+   "'old_base_url' members; lose 'parent_dir_url'.", 
+   "(handle_external_item_change): Pass new base URL parameters to", 
+   "resolve_relative_external_url().", 
+   "(struct handle_externals_desc_change_baton): Note that externals", 
+   "hashes are as they come from svn_wc_edited_externals2() now.  Add", 
+   "'is_switch' member.", 
+   "(handle_externals_desc_change): Track changes to datatypes returned", 
+   "by svn_wc_edited_externals2(), and apply the old and new base URL", 
+   "information where application.", 
+   "(svn_client__handle_externals): Add 'is_switch' parameter, tossed", 
+   "into baton.  Use svn_wc_edited_externals2() now.", 
+   "(svn_client__fetch_externals):  Populate new 'is_switch' baton member.", 
+   "(svn_client__do_external_status):  Use svn_wc_edited_externals2() now."
+  ], 
+  "revision_id": "877154"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-07T18:39:30.740552Z", 
+  "msg": [
+   "Record what formats were used in each release of Subversion.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(SVN_WC__VERSION): update docstring"
+  ], 
+  "revision_id": "877153"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T18:39:20.241361Z", 
+  "msg": [
+   "Insert a not present BASE node if we get an entry which is schedule add, but", 
+   "already has a revision (implying it exists in the repository).  This fixes", 
+   "update test 34 for wc-ng.", 
+   "Note: This increases the number of test failures, but gets us conceptually", 
+   "closer to where we need to be.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(write_entry): Create a base node even if we have a schedule add entry and", 
+   "the revision is > 0."
+  ], 
+  "revision_id": "877152"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T18:28:00.991554Z", 
+  "msg": [
+   "Remove conditional compilation code designed to prevent inadvertent", 
+   "working copy format upgrades.  Since 1.7 will require an explicit", 
+   "cleanup to upgrade, this code is not needed.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(maybe_upgrade_format): Remove version used to block silent upgrades."
+  ], 
+  "revision_id": "877151"
+ }
+]

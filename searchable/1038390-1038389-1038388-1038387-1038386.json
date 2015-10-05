@@ -1,0 +1,86 @@
+[
+ {
+  "author": "jcorvel", 
+  "date": "2010-11-24T00:03:07.347786Z", 
+  "msg": [
+   "On the diff-optimizations-tokens branch:", 
+   "Make svn_diff skip identical prefix to make diff and blame faster.", 
+   "* subversion/include/svn_diff.h", 
+   "(svn_diff_fns_t): Add new function type token_pushback_prefix to the", 
+   "vtable. This function is needed to push back the last token that has been", 
+   "read during prefix scanning (the first non-matching line), so it can be", 
+   "read again (and checksummed) during the get_next_token phase.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(datasource_get_next_token): Make the checksum calculation optional (only", 
+   "calculate checksum if HASH is not NULL).", 
+   "(token_pushback_prefix): New function.", 
+   "(svn_diff__mem_vtable): Add new function token_pushback_prefix.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(svn_diff__file_baton_t): Add member PREFIX_TOKENS, a linked list of pushed", 
+   "back prefix tokens.", 
+   "(datasource_get_next_token): Make the checksum calculation optional (only", 
+   "calculate checksum if HASH is not NULL). If applicable, use a pushed back", 
+   "prefix token to adjust the raw_length of a token that is being reread.", 
+   "(token_pushback_prefix): New function.", 
+   "(svn_diff__mem_vtable): Add new function token_pushback_prefix.", 
+   "* subversion/libsvn_diff/diff.h", 
+   "(svn_diff__lcs): Add argument \"prefix_lines\".", 
+   "(svn_diff__get_all_tokens): New function declaration.", 
+   "* subversion/libsvn_diff/token.c", 
+   "(find_identical_prefix): New function.", 
+   "(svn_diff__get_all_tokens): New function. The purpose of this function is to", 
+   "read the tokens from all datasources at once, so it can first scan for", 
+   "identical prefix and suffix.", 
+   "* subversion/libsvn_diff/lcs.c", 
+   "(svn_diff__lcs): Added argument \"prefix_lines\". Use this to correctly set", 
+   "the offset of the sentinel position for EOF, even if one of the files", 
+   "became empty after eliminating the identical prefix.", 
+   "* subversion/libsvn_diff/diff.c", 
+   "(svn_diff__diff): Add a chunk of \"common\" diff for identical prefix.", 
+   "(svn_diff_diff): Use new function svn_diff__get_all_tokens to get the tokens", 
+   "from original and modified at once (while scanning for identical prefix).", 
+   "Pass prefix_lines to svn_diff__lcs and svn_diff__diff.", 
+   "* subversion/libsvn_diff/diff3.c", 
+   "(svn_diff_diff3): For now, don't use svn_diff__get_all_tokens yet.", 
+   "Pass prefix_lines = 0 to svn_diff__lcs.", 
+   "* subversion/libsvn_diff/diff4.c", 
+   "(svn_diff_diff4): For now, don't use svn_diff__get_all_tokens yet.", 
+   "Pass prefix_lines = 0 to svn_diff__lcs."
+  ], 
+  "revision_id": "1038390"
+ }, 
+ {
+  "author": "bentmann", 
+  "date": "2010-11-24T00:01:52.397359Z", 
+  "msg": [
+   "[MNG-4913] [regression] User properties override equally named POM properties of transitive dependencies", 
+   "o Added IT"
+  ], 
+  "revision_id": "1038389"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2010-11-24T00:00:21.019803Z", 
+  "msg": [
+   "Basics."
+  ], 
+  "revision_id": "1038388"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2010-11-23T23:55:01.979405Z", 
+  "msg": [
+   "CMS commit to kitty by joes"
+  ], 
+  "revision_id": "1038387"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2010-11-23T23:42:45.212011Z", 
+  "msg": [
+   "[CXF-3074] Add fork mode to java2ws plugin", 
+   "Patch from Vincent Siveton applied"
+  ], 
+  "revision_id": "1038386"
+ }
+]

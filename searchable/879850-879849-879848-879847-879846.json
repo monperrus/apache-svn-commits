@@ -1,0 +1,101 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-05T09:57:18.393351Z", 
+  "msg": [
+   "Following up on r39775, which showed an issue with not properly deleted", 
+   "working copy properties, make svn_wc_delete4() delete working copy properties", 
+   "of files it removes from version control.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_delete4): When deleting a schedule add file, also remove its", 
+   "working properties."
+  ], 
+  "revision_id": "879850"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-04T23:26:59.944985Z", 
+  "msg": [
+   "Remove the direct dependency on access batons from svn_wc_add4().", 
+   "Use the wc-db api for accessing the to be added path, to reduce the", 
+   "number of exceptional behaviors in entry handling caused by existing", 
+   "but unversioned directories which where all eaten by svn_wc_entry().", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_add4): Use wc_db api for checking existing nodes. Switch to", 
+   "absolute paths for processing. Only retrieve the access baton", 
+   "where still need it for compatibility.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(exclude_keeps_hidden_entries): Allow absolute path in error message."
+  ], 
+  "revision_id": "879849"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-04T00:44:02.229222Z", 
+  "msg": [
+   "Use the newer, not-deprecated revert api.", 
+   "* subversion/libsvn_client/revert.c", 
+   "(includes): Add include.", 
+   "(revert): Call revert on absolute path."
+  ], 
+  "revision_id": "879848"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-04T00:02:25.959090Z", 
+  "msg": [
+   "Remove a few more access batons and entries and at the same time make", 
+   "the libsvn_client property functions return the paths in the relative", 
+   "path format pre 1.7 users expect: always based on the passed anchor.", 
+   "Our testsuite doesn't test proplist output with depth for exact output,", 
+   "so it didn't catch this api change.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client_propset3): Check for existence.", 
+   "(propget_walk_baton): Add anchor/abspath pair to allow returning", 
+   "relative paths.", 
+   "(propget_walk_cb): Implement node walker and set relative path", 
+   "in hashtable.", 
+   "(remote_propget): Use uri joining.", 
+   "(wc_walker_error_handler): Remove now unused function.", 
+   "(get_prop_from_wc): Remove access baton argument and update", 
+   "node walker call.", 
+   "(svn_client_propget3): Check node kind and existance instead of", 
+   "reading entry.", 
+   "(remote_proplist): Use uri joining.", 
+   "(proplist_walk_baton): Add anchor/abspath pair.", 
+   "(proplist_walk_cb): Calculate relative path, so users still using access", 
+   "batons can use the returned paths to perform operations.", 
+   "(svn_client_proplist3): Verify existence and store anchor/abspath pair."
+  ], 
+  "revision_id": "879847"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-02T21:34:43.576131Z", 
+  "msg": [
+   "Remove another access baton call chain, this time in the", 
+   "client commit harvester.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_copy_committables): Remove access baton argument.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(add_lock_token_baton): New struct.", 
+   "(add_lock_token): Implement svn_wc__node_found_func_t. Retrieve", 
+   "locks by retrieving entry.", 
+   "(add_tokens_callbacks): Remove variable.", 
+   "(harvest_committables): Remove access baton argument and calculation.", 
+   "Retrieve obstructed status instead. Use children walker instead of", 
+   "entry walker.", 
+   "(svn_client__harvest_committables): Update caller.", 
+   "(copy_committables_baton): Remove access baton.", 
+   "(harvest_copy_committables): Update caller.", 
+   "(svn_client__get_copy_committables): Update caller.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_repos_copy): Update caller by removing unused", 
+   "access baton calculations.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node_is_status_obstructed): Return true for", 
+   "more obstruction types."
+  ], 
+  "revision_id": "879846"
+ }
+]

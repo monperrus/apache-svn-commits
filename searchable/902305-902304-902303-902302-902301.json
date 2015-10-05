@@ -1,0 +1,82 @@
+[
+ {
+  "author": "cutting", 
+  "date": "2010-01-22T23:09:51.443739Z", 
+  "msg": [
+   "AVRO-135.  Add a missing Ivy configuration dependency."
+  ], 
+  "revision_id": "902305"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2010-01-22T23:02:26.067719Z", 
+  "msg": [
+   "move sstable deletions into a Timer to reduce concurrency", 
+   "patch by jbellis; reviewed by gdusbabek for CASSANDRA-667"
+  ], 
+  "revision_id": "902304"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-01-22T22:50:42.505389Z", 
+  "msg": [
+   "Add a safe API for using write locks on a working copy,", 
+   "i.e. locks acquired via svn_wc__acquire_write_lock() and", 
+   "released via svn_wc__release_write_lock().", 
+   "Quoting Philip Martin from", 
+   "http://mail-archives.apache.org/mod_mbox/subversion-dev/200912.mbox/%3C87ws0g458j.fsf@stat.home.lan%3E", 
+   "because he explained the problem very well:", 
+   "In 1.6 wc locks were associated with access batons and when an access", 
+   "baton was opened a pool cleanup handler was installed to ensure that", 
+   "the baton was closed.  The pool cleanup handler would remove any lock", 
+   "associated with the access baton provided there were no log files in", 
+   "the directory.  Code was typically:", 
+   "svn_wc_adm_access_t *adm_access;", 
+   "SVN_ERR(svn_wc_adm_open3(&adm_access, ... pool));", 
+   "SVN_ERR(svn_wc_foo(adm_access, ... pool));", 
+   "SVN_ERR(svn_wc_adm_close(adm_access));", 
+   "If svn_wc_foo completes without error then svn_wc_adm_close is called", 
+   "which removes the locks unconditionally.  If svn_wc_foo returns an", 
+   "error then svn_wc_adm_close doesn't get called, and when the pool is", 
+   "finally cleared the pool cleanup handler will leave or remove the lock", 
+   "depending on whether cleanup is required.", 
+   "End of qoute.", 
+   "Quoting Greg Stein from #svn-dev:", 
+   "<gstein> unlocking via pool cleanup blows", 
+   "<gstein> \"is the database still open? can I manipulate stuff in it?\"", 
+   "<gstein> is only the first and worst of the questions when you try", 
+   "to do shit like that in the cleanup", 
+   "End of qoute.", 
+   "Instead of releasing wc-ng write locks during pool cleanup,", 
+   "we provide a function which invokes a callback while holding a", 
+   "wc lock and releases the lock after the callback returns.", 
+   "We do not anticipate many users of this type of lock, so use of", 
+   "this API should be limited to few occurrences within libsvn_client.", 
+   "This API is private for now, as we may still decide to change it.", 
+   "Suggested by: gstein", 
+   "hwright", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__with_write_lock_func_t): New callback type.", 
+   "(svn_wc__call_with_write_lock): Declare.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc__call_with_write_lock): New."
+  ], 
+  "revision_id": "902303"
+ }, 
+ {
+  "author": "felixk", 
+  "date": "2010-01-22T22:45:16.301784Z", 
+  "msg": [
+   "I18n"
+  ], 
+  "revision_id": "902302"
+ }, 
+ {
+  "author": "sbanacho", 
+  "date": "2010-01-22T22:44:39.786590Z", 
+  "msg": [
+   "AVRO-349. Fix C++ build for post-AVRO-163."
+  ], 
+  "revision_id": "902301"
+ }
+]

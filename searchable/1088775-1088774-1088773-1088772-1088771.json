@@ -1,0 +1,79 @@
+[
+ {
+  "author": "jens", 
+  "date": "2011-04-04T20:20:36.030793Z", 
+  "msg": [
+   "add dependency to Servlet API CMIS-351", 
+   "Improve Eclipse integration CMIS-352"
+  ], 
+  "revision_id": "1088775"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-04-04T20:20:12.902526Z", 
+  "msg": [
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(propvalue_normalized): Don't skip tests that work just fine on non-posix."
+  ], 
+  "revision_id": "1088774"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2011-04-04T20:16:16.270983Z", 
+  "msg": [
+   "Leverage an existing status check to avoid a redundant query to detect mixed-", 
+   "revision WCs during sync-type (i.e. non-reintegrate) merge-tracking aware", 
+   "merges.", 
+   "When r1087866 removed the final node walker from the merge tracking code, it", 
+   "added a single call to svn_client_status5 to get numerous bits of info", 
+   "relevant to merge tracking.  One bit of information it could also derive", 
+   "rather cheaply is if the target has mixed-revisions.  We were checking for", 
+   "this in libsvn_client/merge.c:ensure_wc_is_suitable_merge_target().  With", 
+   "this change we still use that function for non-merge-tracking merges and", 
+   "reintegrate merges, but for sync-style merge-tracking merges we use the", 
+   "status call and get a bit faster.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(pre_merge_status_baton_t): Add members to track min and max revision in", 
+   "the merge target.", 
+   "(pre_merge_status_cb): Set new pre_merge_status_baton_t members.", 
+   "(get_mergeinfo_paths): Leverage existing svn_client_status5 call to cheaply", 
+   "check for mixed-revision working copies.", 
+   "(do_directory_merge): Add ALLOW_MIX_REV argument and pass it along.", 
+   "(do_merge): Remove the check for mergeinfo capable servers and instead pass", 
+   "that information in as a boolean argument.  Add ALLOW_MIX_REV argument.", 
+   "(merge_cousins_and_supplement_mergeinfo): Add ALLOW_MIX_REV and", 
+   "MERGEINFO_CAPABLE_SERVER arguments.", 
+   "(merge_locked): Check for a mergeinfo capable server here", 
+   "instead of waiting until do_merge().", 
+   "(merge_reintegrate_locked): Check for a mergeinfo capable server here", 
+   "instead of waiting until do_merge().  Note: Unfortunately we can't skip", 
+   "the check for mixed-rev working copies because of the way reintegrate", 
+   "merges are implemented; as three separate merges, the first of which", 
+   "is a merge-tracking unaware merge and thus cannot leverage the check in", 
+   "get_mergeinfo_paths().  Reimplementing reintegrate merges to spare this", 
+   "single query doesn't strike me as a particularly good use of time at", 
+   "the moment.", 
+   "(merge_peg_locked): Check for a mergeinfo capable server here instead of", 
+   "waiting until do_merge().  That is the final bit of information needed to", 
+   "tell if this is a merge-tracking aware merge, which allows us to", 
+   "potentially skip the redundant check for mixed-revs here."
+  ], 
+  "revision_id": "1088773"
+ }, 
+ {
+  "author": "jens", 
+  "date": "2011-04-04T20:14:53.536229Z", 
+  "msg": [
+   "provide a simple index JSP page. CMIS-351"
+  ], 
+  "revision_id": "1088772"
+ }, 
+ {
+  "author": "jens", 
+  "date": "2011-04-04T20:13:53.235341Z", 
+  "msg": [
+   "Create a config property for inmemory server that performs a regular clean of the repository. CMIS-350"
+  ], 
+  "revision_id": "1088771"
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "author": "rwesten", 
+  "date": "2011-03-25T05:12:03.699958Z", 
+  "msg": [
+   "Overview:", 
+   "Stanbol-118 and Stanbol-117 added the SolrDirectoryManager that is now responsible of managing the SolrIndex used by the SolrYard for Indexes with relative paths.", 
+   "Stanbol-117: Found a second race condition when activating the Entityhub and the Yard instance used by the Entityhub (typically happening when the /sling folder is not already present when starting the Entityhub). This was solved by using a ServiceTracker instead of looking up the reference in the activate(\u2026) method.", 
+   "Stanbol-120: While working on the issue mentioned above I added functionality to the Jersey endpoint of the Entityhub that allows to add/remove Services to the ServletContext during runtime.", 
+   "Details:", 
+   "Jersey endpoint:", 
+   "- All dependencies related to services needed by the **Resource classes are now OPTIONAL and Dynamic.", 
+   "- When services bind/unbind they are added to a map off managed attributes. This is necessary because bind/unbind might be called even if the Component is not activated.", 
+   "- As soon as the JerseyEndpoint is activated the managed attributes are synchronized with the ServletContext.", 
+   "- **Resource classes should no longer hold local references to Services. The JerseyUtils contains an utility method that easily allows to retrieve services from the ServletContext.", 
+   "SolrYard & SolrDirectoryManager:", 
+   "- The SolrDirectoryManager now provides the functionality to manage the Solr Index directory structure (only the files on the disc not the Solr index instance) used by the SolrYard if an relative path is parsed as index location", 
+   "- This functionality was extracted from the EmbeddedSolrServer.", 
+   "- The EmbeddedSolrServer does no longer need any configuration. This solves the problem described in STANBOL-117.", 
+   "- The SolrYard has a reference to the SolrDirectoryManager. This now allows the SolrYard to get notified if the configuration for the managed directory is changed (e.g. via the Apache Felix Webconsole). This would allow now to switch to a backup location without restarting the Stanbol Server.", 
+   "- Moved internally defined Services to the root package of the bundle. Moved implementations to the .impl package.", 
+   "Entityhub:", 
+   "- A ServiceTracker is now used for the Yard instance used by the Entityhub", 
+   "- Also had to refractor the FieldMapper. Previously A ValueFactory was assigned to the FieldMapper instance. Now the ValueFactory is parsed when the FieldMapper is used to apply mappings.", 
+   "- This has the advantage that the same instance can be used by Yards using different ValueFactories. In addition it allows to instantiate and configure the FieldMapper even if the Yard is not yet activated (as it is now the case with the Entityhub).", 
+   "- Adapted some classes to confirm with the FieldMapper changes"
+  ], 
+  "revision_id": "1085255"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2011-03-25T05:00:46.401794Z", 
+  "msg": [
+   "HBASE-3622 Deadlock in HBaseServer (JVM bug?); Add an FAQ about hanging regionservers"
+  ], 
+  "revision_id": "1085254"
+ }, 
+ {
+  "author": "stroucki", 
+  "date": "2011-03-25T04:52:42.788152Z", 
+  "msg": [
+   "add scratchDir option to documentation"
+  ], 
+  "revision_id": "1085253"
+ }, 
+ {
+  "author": "stroucki", 
+  "date": "2011-03-25T04:44:28.960581Z", 
+  "msg": [
+   "qemu.py: Make it possible for snapshot disk data to be put elsewhere, otherwise hosted vms are hosed when the host /tmp fills up"
+  ], 
+  "revision_id": "1085252"
+ }, 
+ {
+  "author": "gpetracek", 
+  "date": "2011-03-25T04:25:54.573689Z", 
+  "msg": [
+   "EXTCDI-157 moving junit dependencies to a specialized support module"
+  ], 
+  "revision_id": "1085251"
+ }
+]

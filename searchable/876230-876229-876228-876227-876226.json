@@ -1,0 +1,114 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-26T13:16:48.157348Z", 
+  "msg": [
+   "* win-tests.py", 
+   "(Httpd._start_daemon): Remove an invalid ')' introduced yesterday."
+  ], 
+  "revision_id": "876230"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-26T13:01:32.420864Z", 
+  "msg": [
+   "Incremental work: look in wc_db's stored hash for per-directory", 
+   "information. While we don't ever *put* anything into that hash, this", 
+   "change updates the test to construct an actual DB object (it was being", 
+   "sneaky and just passing NULL). The lead-in code to searching for a wc.db", 
+   "is also updated to deal with the fact that the incoming LOCAL_ABSPATH", 
+   "could refer to a file/dir/symlink or possibly not on disk at all.", 
+   "This does shift a sqlite attempted-open into a stat() call if a file path", 
+   "is passed in. In the future, we may want to optimize away those stat calls", 
+   "in some fashion.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(parse_local_abspath): look in the hash for the passed LOCAL_ABSPATH. if", 
+   "it is a directory, then we might hit it early. otherwise, check the", 
+   "node type and possibly move up and check again. if it still isn't in", 
+   "the hash, then go ahead and start a scan upwards.", 
+   "(svn_wc__db_open): parse_local_abspath wants to fast-exit if a directory", 
+   "is found in the hash. open_one_directory doesn't populate the PDH with", 
+   "sqlite information, so a fast-exit would be Bad. just avoid creating a", 
+   "PDH at open time, and wait for lazy creation.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(test_getting_info, test_inserting_nodes, test_base_children,", 
+   "test_working_info): really construct a DB, rather than fakin'"
+  ], 
+  "revision_id": "876229"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-26T11:29:02.533400Z", 
+  "msg": [
+   "Start preparation for retaining state on WC directories within the wc_db.", 
+   "The per-directory structure is now expanded from simply recording where", 
+   "pristines are kept, to include other key values for interacting with the", 
+   "SQLite database.", 
+   "The lookup function for a given LOCAL_ABSPATH now returns one of these", 
+   "structures, in expectation of pulling the structure from the internal", 
+   "cache in the future. All callers have been adjusted.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_open_many): remove. we'll \"open\" directories on demand.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(struct svn_wc__db_t): record STATE_POOL as the pool for future", 
+   "allocations that expand the DB's state.", 
+   "(struct svn_wc__db_pdh_t): store a bunch more state in the per-directory", 
+   "handle structures.", 
+   "(open_one_directory): don't take a RESULT_POOL, favoring allocation", 
+   "within the DB's STATE_POOL. record the LOCAL_ABSPATH in the struct.", 
+   "(new_db_state): record the STATE_POOL", 
+   "(parse_local_abspath): adjust parameters to return a PDH rather than a", 
+   "triple of database and access information.", 
+   "(svn_wc__db_open): adjust call to open_one_directory()", 
+   "(svn_wc__db_open_many): removed.", 
+   "(...): many functions: adjust calls to parse_local_abspath() and then", 
+   "use the resulting PDH."
+  ], 
+  "revision_id": "876228"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-02-26T08:23:54.554487Z", 
+  "msg": [
+   "Remove detection for GNU libtool and always use APR's libtool (be it GNU or", 
+   "jlibtool or whatever).", 
+   "* configure.ac: Always enable using APR's libtool.", 
+   "* autogen.sh, build/buildcheck.sh: Remove anything related to libtool detection.", 
+   "* build/", 
+   "(svn:ignore): Remove config.guess and config.sub from ignore list.", 
+   "* build/config.guess, build/config.sub", 
+   "(added): Take latest drops from FSF."
+  ], 
+  "revision_id": "876227"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-26T07:33:33.819485Z", 
+  "msg": [
+   "Alter the wc_db API to never scan up the tree automatically. Let the", 
+   "caller know about the need, and provide helper functions to do so. It may", 
+   "be that the caller has all the information needed, so the extra database", 
+   "reads aren't necessary.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_base_get_info, svn_wc__db_read_info): add docco", 
+   "(svn_wc__db_scan_base_repos, svn_wc__db_scan_added_repos): new", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(scan_upwards_for_repos): reset a statement after use", 
+   "(scan_upwards_for_non_work): new function; in progress; unused", 
+   "(svn_wc__db_base_get_info): remove the INHERIT_REPOS local var. let the", 
+   "caller scan up the tree.", 
+   "(svn_wc__db_read_info): remove INHERIT_REPOS and ADDED_REPOS. let the", 
+   "caller do any upwards scanning. simplify the computation of the STATUS", 
+   "value since we're not going to do any scanning.", 
+   "(svn_wc__db_scan_base_repos): new function", 
+   "(svn_wc__db_scan_added_repos): new function; incomplete", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): if the db_base_get_info returns NULL for the repos", 
+   "information, then use scan_base_repos to find it.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(test_getting_info): adjust test to know when NULL is/should be returned", 
+   "by base_get_info() and test the results of scan_base_repos."
+  ], 
+  "revision_id": "876226"
+ }
+]

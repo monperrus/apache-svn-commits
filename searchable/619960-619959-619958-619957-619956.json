@@ -1,0 +1,83 @@
+[
+ {
+  "author": "mriou", 
+  "date": "2008-02-08T17:59:43.605933Z", 
+  "msg": [
+   "ODE-241 Fixing WSDL including XSD including XSD, kind of a monkey patch but works."
+  ], 
+  "revision_id": "619960"
+ }, 
+ {
+  "author": "mriou", 
+  "date": "2008-02-08T17:59:05.327129Z", 
+  "msg": [
+   "ODE-241 Fixing WSDL including XSD including XSD, kind of a monkey patch but works."
+  ], 
+  "revision_id": "619959"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-02-08T17:57:22.970807Z", 
+  "msg": [
+   "Merging changes 618788, 619279 and 619772 into 10.3 codeline for DERBY-3304.", 
+   "For reference, copying the commit comments for each of these revisions that are getting merged into 10.3 codeline", 
+   "*********commit comments for 619772****************", 
+   "DERBY-3304", 
+   "Some code cleanup in GenericLanguageConnectionContext.endTransactionActivationHandling so the code is more readable.", 
+   "No functionality change, just consolidated various if statements and used some local variables to replace repeated", 
+   "method calls like a.getResultSet() and a.getResultSet().returnsRows()", 
+   "*********end of commit comments for 619772*********", 
+   "*********commit comments for 619279****************", 
+   "This is a followup commit for DERBY-3304 based on various comments. It does following", 
+   "1)The existing method resetActivations in GenericLanguageConnectionContext has been renamed to better reflect it's", 
+   "functionality. It will be now called endTransactionActivationHandling since it gets called for commit/rollback.", 
+   "2)The javadoc comments for resetActivations(now called endTransactionActivationHandling) were not valid. Fixed that in", 
+   "this commit.", 
+   "3)Took out the redundant code about setting the holdability to false if we were in rollback. It was needed earlier", 
+   "because the method that took care of activations at rollback time needed to check the holdability. That method", 
+   "(BaseActivation.reset) does not check holdability anymore and hence we do not need to set the activations to false", 
+   "holdability when we are dealing with rollback.", 
+   "4)Lastly, JDBC api for Connection.commit does not ask for clearing of warnings and hence we should not have code to", 
+   "clear the warnings at the time of commit. I removed the warning clearing code from resetActivations(now called", 
+   "endTransactionActivationHandling) in GenericLanguageConnectionContext.", 
+   "*********end of commit comments for 619279*********", 
+   "*********commit comments for 618788****************", 
+   "DERBY-3304", 
+   "This commit addresses two issues.", 
+   "First of all, it cleanups up reset method in BaseActivation which was doing more than just bringing the Activation back", 
+   "to pre-execution state. The method had to make itself aware of holdability and what kind of resultset it was dealing with", 
+   "before closing or clearing the row of the resultset. The reason for this behavior is commit code path was relying on", 
+   "Activation.reset to do more than just bringing the activation to pre-execution state. I fixed this by moving this code", 
+   "from BaseActivation.reset to GenericLanguageConnectionContext.resetActivations.", 
+   "Additionally, in the new code in GenericLanguageConnectionContext.resetActivations, I added the code to not close the", 
+   "language result sets associated with activations that do not return rows even if activation may have holdability set to", 
+   "false. This will ensure that a commit inside a java procedure will not inadvertantly close the resultset associated with", 
+   "the java procedure call.", 
+   "Additionally, I copied some of the cleanup work(as shown below) from BaseActivation.reset into", 
+   "new code in GenericLanguageConnectionContext.resetActivations", 
+   "a.clearHeapConglomerateController();", 
+   "if (!a.isSingleExecution())", 
+   "a.clearWarnings();", 
+   "This code above was always getting executed at the time of commit before my commit and because of that, I decided to copy", 
+   "it in GenericLanguageConnectionContext.resetActivations. If anyone has any comments on this, please let me know.", 
+   "*********end of commit comments for 618788*********"
+  ], 
+  "revision_id": "619958"
+ }, 
+ {
+  "author": "xavier", 
+  "date": "2008-02-08T17:52:09.144412Z", 
+  "msg": [
+   "check for module descriptor nullity, to avoid a NPE if the ModuleDescriptorParser does not fulfill its contract"
+  ], 
+  "revision_id": "619957"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2008-02-08T17:50:20.890467Z", 
+  "msg": [
+   "[UIMA-754] This file was accidently ommitted from the previous patch set.  It is used to read the UIMA version from a property file.  Hopefully - it is called just once and the result cached somewhere, otherwise it is an expensive operation.  We might want to have a way in the main UIMA to let people know the build property info to use in error messages."
+  ], 
+  "revision_id": "619956"
+ }
+]

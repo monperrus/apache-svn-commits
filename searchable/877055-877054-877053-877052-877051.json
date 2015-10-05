@@ -1,0 +1,83 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-04-03T20:31:29.097099Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Don't set non-inheritable mergeinfo unless", 
+   "it is really necessary.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_directory_merge): Don't set non-inheritable mergeinfo to describe an", 
+   "inoperative merge."
+  ], 
+  "revision_id": "877055"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-03T18:56:19.446809Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Revert r36853 from merge.c.", 
+   "r36853 stated: \"If a subtree has no explicit mergeinfo prior to the merge", 
+   "and also has missing children, then we need to record non-inheritable", 
+   "mergeinfo on that subtree.  Otherwise those missing children may start", 
+   "inheriting bogus mergeinfo.\"", 
+   "The thing is: So what?!  Implicit in this change was the idea that we", 
+   "couldn't be sure if the merge would effect the missing subtree's children if", 
+   "they were present, but actually we can be sure.", 
+   "The child of a subtree could be considered missing for a number of reasons,", 
+   "it might be switched, the working copy could be shallow, or it might be", 
+   "absent to authz restrictions.  But in every case we know that the merge", 
+   "would have affected the missing subtree because we see a skip notification", 
+   "or a tree conflict.  Even edge cases like not having authorization to a", 
+   "subtree in the source, produce a skip notification -- AFAICT we always", 
+   "*know*.  So if we don't see a skip notification or a tree conflict then", 
+   "there was nothing to be merged to the subtree in question even if it was", 
+   "present.  Yes the subtree will now inherit its mergeinfo from some parent", 
+   "path where we earlier recorded mergeinfo describing the merge.  Again, so", 
+   "what?  It will be inheriting whatever it inherited prior to the merge", 
+   "plus some inoperative mergeinfo, but that is perfectly ok, in fact we do it", 
+   "every time we record mergeinfo only on the merge target.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_directory_merge): Don't record mergeinfo mergeinfo on subtrees with", 
+   "missing children unless we know that subtree was touched or would have", 
+   "been touched if it was complete."
+  ], 
+  "revision_id": "877054"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-03T18:20:45.611697Z", 
+  "msg": [
+   "* notes/wc-ng-design:", 
+   "Add some preliminary notes about what it's going to take to upgrade old", 
+   "working copies."
+  ], 
+  "revision_id": "877053"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-03T18:06:57.710071Z", 
+  "msg": [
+   "Further change the expected output for revert tests 17 for wc-ng.", 
+   "The original test was written as a response to issue 2804, but it turns out", 
+   "that the series of events in the test creates ambiguities.  Is the revert a", 
+   "revert of the merge, or a revert of the copy, or the parent or what?  This", 
+   "basically represents a deviation from known reality, so we define it as Unreal.", 
+   "Note that the issue solution is still valid, it's the intermediate steps", 
+   "getting there which require modification.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replace_with_history_dir): Change an", 
+   "expectation with wc-ng."
+  ], 
+  "revision_id": "877052"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-03T17:29:54.646773Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Fix a comment typo.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(subtree_touched_by_merge): Fix a comment typo."
+  ], 
+  "revision_id": "877051"
+ }
+]

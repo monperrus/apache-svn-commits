@@ -1,0 +1,68 @@
+[
+ {
+  "author": "kahatlen", 
+  "date": "2007-05-24T21:21:27.910062Z", 
+  "msg": [
+   "DERBY-1440: jdk 1.6 client driver omits SQLStates and chained exceptions in", 
+   "error messages", 
+   "While working on DERBY-2472 I found out what caused this difference between", 
+   "the JDBC 3.0 driver and the JDBC 4.0 driver. There are three", 
+   "problems. Firstly, StandardException.unexpectedUserException() doesn't", 
+   "recognize that an SQLException is generated Derby since it is not an", 
+   "EmbedSQLException. Secondly, TransactionResourceImpl.wrapInSQLException()", 
+   "invokes SQLException.setNextException() explicitly so that the required", 
+   "chaining/ferrying logic in the exception factory and in EmbedSQLException's", 
+   "constructor is not used. Thirdly,", 
+   "SQLException40.wrapArgsForTransportAcrossDRDA() puts a standard", 
+   "SQLException, not an EmbedSQLException, in the argument ferry's", 
+   "next-exception chain, which prevents the network server from seeing it as a", 
+   "Derby exception.", 
+   "The attached patch fixes the problem by", 
+   "1) using SQLExceptionFactory.getArgumentFerry() to find out whether the", 
+   "exception is a Derby exception in unexpectedUserException()", 
+   "2) using factory methods instead of setNextException() to do the chaining", 
+   "in wrapInSQLException()", 
+   "3) improving Util.javaException() so that it sets up a next-exception", 
+   "chain if the Java exception contains nested exceptions", 
+   "4) changing wrapArgsForTransportAcrossDRDA() to create an argument ferry", 
+   "whose next exception is the argument ferry of the main exception's next", 
+   "exception", 
+   "This patch also fixes all the JUnit tests that contain code looking like this:", 
+   "assertStatementError(JDBC.vmSupportsJDBC4() ? \"38000\" : \"42X62\", cSt);", 
+   "Now, the check for JDBC level is not needed anymore for those tests."
+  ], 
+  "revision_id": "541435"
+ }, 
+ {
+  "author": "jmcconnell", 
+  "date": "2007-05-24T21:16:22.814814Z", 
+  "msg": [
+   "[MRM-363] add name to local and remote repository view"
+  ], 
+  "revision_id": "541434"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2007-05-24T21:15:40.051486Z", 
+  "msg": [
+   "Minor update to make JMS tests subclassable"
+  ], 
+  "revision_id": "541433"
+ }, 
+ {
+  "author": "dwoods", 
+  "date": "2007-05-24T21:14:02.420862Z", 
+  "msg": [
+   "Give the EjbDaemonGBean a friendly name of 'OpenEJB Daemon' to display at server startup"
+  ], 
+  "revision_id": "541432"
+ }, 
+ {
+  "author": "erodriguez", 
+  "date": "2007-05-24T21:04:45.419792Z", 
+  "msg": [
+   "Removed empty directories."
+  ], 
+  "revision_id": "541431"
+ }
+]

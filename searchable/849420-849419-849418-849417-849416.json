@@ -1,0 +1,96 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-04-13T18:28:54.571766Z", 
+  "msg": [
+   "* STATUS: Votes on r8949, r9032."
+  ], 
+  "revision_id": "849420"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-04-13T18:15:09.423518Z", 
+  "msg": [
+   "Fix Issue #1806: 'svn up' should continue after deleting unversioned", 
+   "or locally modified items.", 
+   "Patch by: Patch by: S. Ramaswamy <ramaswamy@collab.net>", 
+   "Review by: rooneg", 
+   "(He reminded about clearing an error.)", 
+   "(Regression test by me.)", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_delete_entry): Pass FALSE for 'instant_error' param to", 
+   "svn_wc_remove_from_revision_control, to allow unversioning of", 
+   "files/dirs even if there are local modifications.  Trap error", 
+   "SVN_ERR_WC_LEFT_LOCAL_MOD so that updates can continue.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(do_entry_deletion): Remove section that does not allow updates to", 
+   "proceed if there are local modifications.", 
+   "* subversion/subversion/tests/clients/cmdline/update_tests.py", 
+   "(update_delete_modified_files): Don't expect update to stop.", 
+   "* subversion/subversion/tests/clients/cmdline/switch_tests.py", 
+   "(failed_anchor_is_target): Don't expect switch to stop."
+  ], 
+  "revision_id": "849419"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-13T16:38:35.552817Z", 
+  "msg": [
+   "Fix copy-id assignment in fsfs dumpfile converter.", 
+   "* libsvn_fs_fs/structure: State that a missing copyroot field means", 
+   "the node-rev is its own copyroot.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(copy_entry): Remove the is_copy and soft_copy flags; it wasn't", 
+   "helping to deal with copies here.", 
+   "(get_child): Assign copy-ids consistently with the BDB FS", 
+   "implementation.", 
+   "(write_node_rev): Write out a copyroot field precisely when the", 
+   "entry is not its own copyroot.", 
+   "(new_revision_record): Adjust copy_entry callsite.", 
+   "(new_node_record): Adjust copy_entry callsite, and assign the copy", 
+   "fields ourselves since copy_entry isn't doing it any more."
+  ], 
+  "revision_id": "849418"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-13T12:25:28.330791Z", 
+  "msg": [
+   "Add support for svn_fs_paths_changed to libsvn_fs_fs.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(paths_changed_args, txn_body_paths_changed): Removed", 
+   "(svn_fs_paths_changed): Implemented using new fs_fs API.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "Added definitions for the textual elements of the changed-path data.", 
+   "(svn_fs__fs_paths_changed): New prototype", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_root_offset): Renamed to get_root_changes_offset.", 
+   "(get_root_changes_offset): Renamed from get_root_offset, now it", 
+   "can return both the root node offset, and the changed path", 
+   "information offset.", 
+   "(svn_fs__fs_rev_get_root): Use new get_root_changes_offset", 
+   "function.", 
+   "(fold_change): New, copied from libsvn_fs/bdb/changes-table.c", 
+   "(read_change): New, reads an entry from the changed path data.", 
+   "(svn_fs__fs_paths_changed): New, implements", 
+   "svn_fs_paths_changed."
+  ], 
+  "revision_id": "849417"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-13T01:09:39.178567Z", 
+  "msg": [
+   "Simplify fsfs rev file structure by disallowing newlines in filenames.", 
+   "They already don't work in our dumpfile format, and they screw up the", 
+   "output format of just about every client command.", 
+   "* libsvn_fs_fs/structure: Get rid of the length-counted field format.", 
+   "In the changed-path data, move the path to the end of the line and", 
+   "get rid of the length count.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(write_field): Punt the length-counted case.", 
+   "(write_change): Move the path to the end and nuke the count."
+  ], 
+  "revision_id": "849416"
+ }
+]

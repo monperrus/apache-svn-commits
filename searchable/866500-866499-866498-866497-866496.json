@@ -1,0 +1,112 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-09-02T01:36:45.955173Z", 
+  "msg": [
+   "Make transmission of log messages more streamy by using a sentinel to mark", 
+   "the end of the log message list.  This enables us to send merged messages", 
+   "as we find them, instead of needing to generate all the merged messages before", 
+   "sending any of them.", 
+   "This also cleans up the log logic in libsvn_repos a bit, as well as the client", 
+   "log receiver.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_log_entry_t): Change nbr_children member to has_children.", 
+   "(log_message_receiver2_t): Update docstring.", 
+   "* subversion/libsvn_subr/compat.c", 
+   "(log_wrapper_callback): Don't return an invalid revision.", 
+   "* subversion/libsvn_client/log.c", 
+   "(revnum_receiver): Ignore the SVN_INVALID_REVNUM marking the end of the", 
+   "message list.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(log_state_e): Change NBR_CHILDREN to HAS_CHILDREN.", 
+   "(start_log): Handle the has-children element.", 
+   "(end_log): Handle the has-children element.  Generate the SVN_INVALID_REVNUM", 
+   "message at the end of the log-report.", 
+   "(cdata_log): Remove the NBR_CHILDREN element.", 
+   "* subversion/libsvn_ra_neon/log.c", 
+   "(reset_log_item): Initialize the has_children log entry member to FALSE.", 
+   "(log_start_element): Handle the has-children element.", 
+   "(log_end_element): Handle the has-children element.  Generate an extra", 
+   "SVN_INVALID_REVNUM message the end of the log-report.  Remove big hoss", 
+   "comment which suggested this whole escapade.", 
+   "(svn_ra_neon__get_log): If we've hit the limit, and exited the parser early,", 
+   "send the SVN_INVALID_REVNUM message.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h:", 
+   "Replace ELEM_nbr_children with ELEM_has_children.", 
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(log_receiver_baton): Add a stack_depth member.", 
+   "(log_receiver): For compatibility reasons, don't send the last", 
+   "SVN_INVALID_REVNUM message.  Also, send the has-children element.", 
+   "(dav_svn__log_report): Initialize log baton stack depth.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(log_tree_node): Remove.", 
+   "(do_merged_log): Remove tree_node parameter, add the receiver/baton", 
+   "parameters.  Don't just buld the log tree, send it too.", 
+   "(send_log_tree): Remove.", 
+   "(build_log_tree): Rename from this...", 
+   "(send_logs): ...to this.  Send the logs immediately, instead of waiting to", 
+   "build the entire tree.", 
+   "(do_logs, svn_repos_get_logs4): Send the log tree instead of just building it.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_log): Parse the has_children and invalid_revnum parameters, send the", 
+   "extra SVN_INVALID_REVNUM message at the end of the list.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(log): Remove the nrb-children parameter, add the has-children and", 
+   "invalid-revnum parameters.", 
+   "* subversion/svn/log-cmd.c", 
+   "(log_receiver_baton): Update docstring for merge_stack member.", 
+   "(merge_frame): Remove.", 
+   "(log_message_receiver, log_message_receiver_xml): Use the SVN_INVALID_REVNUM", 
+   "sentinel to determine when to pop the merged revisions stack.", 
+   "(svn_cl__log): Initialize the merge stack with svn_revnum_t's.", 
+   "* subversion/svnserve/serve.c", 
+   "(log_baton_t): Add the stack_depth counter.", 
+   "(log_receiver): Filter out the last SVN_INVALID_REVNUM message, and also use", 
+   "the invalid_revnum parameter instead of sending an actual SVN_INVALID_REVNUM.", 
+   "(log_cmd): Initialize the stack_depth."
+  ], 
+  "revision_id": "866500"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2007-09-02T01:29:36.498856Z", 
+  "msg": [
+   "* test/remoterepos.py", 
+   "(test_revprop_set): Skip this test on cygwin, because cygwin crashes", 
+   "with a fatal error during fork when we try to set revprops. The tests", 
+   "pass otherwise."
+  ], 
+  "revision_id": "866499"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2007-09-02T01:17:05.883028Z", 
+  "msg": [
+   "* autogen.py", 
+   "(get_apr_config): Add svn_repos-1 to list of libraries to wrap, fixing the", 
+   "build on cygwin."
+  ], 
+  "revision_id": "866498"
+ }, 
+ {
+  "author": "niqueco", 
+  "date": "2007-09-02T00:52:03.176787Z", 
+  "msg": [
+   "Spanish translation updated.", 
+   "* subversion/po/es.po:", 
+   "Some translation updates."
+  ], 
+  "revision_id": "866497"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-09-01T23:19:42.847803Z", 
+  "msg": [
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES): Remove two redundant patterns.  (Note", 
+   "that, unlike many Unix shells, fnmatch will allow metacharacters to match", 
+   "leading periods)."
+  ], 
+  "revision_id": "866496"
+ }
+]

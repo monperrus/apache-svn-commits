@@ -1,0 +1,105 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-11T00:17:21.177461Z", 
+  "msg": [
+   "Convert one more tree builder function over to the State model.", 
+   "* subversion/tests/cmdline/svntest/wc.py:", 
+   "(State.from_wc): new class method to build a State object from the files", 
+   "found on-disk in a working copy.", 
+   "* subversion/tests/cmdline/svntest/tree.py:", 
+   "(get_nodes_which_might_have_props): removed. obsolete.", 
+   "(get_text): rewrite this stupid-ass little function.", 
+   "(handle_dir): removed. obsolete.", 
+   "(build_tree_from_wc): use State.from_wc() and then .old_tree() to create", 
+   "the old-style tree description of the wc."
+  ], 
+  "revision_id": "876550"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2009-03-10T23:14:52.060281Z", 
+  "msg": [
+   "Introduce the notion of a work-in-progress XFAIL test.", 
+   "* subversion/tests/svn_test.h (svn_test_descriptor_t): Add work-in-progress", 
+   "description text.", 
+   "(SVN_TEST_WIMP, SVN_TEST_WIMP_COND, SVN_TEST_OPTS_WIMP,", 
+   "SVN_TEST_OPTS_WIMP_COND, SVN_TEST_WIMP0, SVN_TEST_WIMP_COND0): New.", 
+   "* subversion/tests/svn_test_main.c (do_test_num): Special-case printing", 
+   "descriptions for work-in-progress tests.", 
+   "* subversion/tests/libsvn_fs/fs-test.c (test_funcs): Mark the obviously", 
+   "in-progress XFAIL test.", 
+   "* subversion/tests/cmdline/svntest/testcase.py: (__all__, TestCase, XFail):", 
+   "Add buts for a work-in-progress predicate.", 
+   "(Wimp): New predicate.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(TestRunner.list, TestRunner._print_name): Special-case printing descriptions", 
+   "for work-in-progress tests.", 
+   "* build/run_tests.py (TestHarness.run): Parse out work-in-progress tests in", 
+   "the test summary.", 
+   "* subversion/tests/cmdline/patch_tests.py (test_list): Mark all Skip tests", 
+   "as work-in-progress XFail."
+  ], 
+  "revision_id": "876549"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-10T22:28:51.215173Z", 
+  "msg": [
+   "Create some class methods on wc.State for building State objects based on", 
+   "various commands' outputs. Switch the tree.build_from_* functions to use", 
+   "these new State methods, then converting to an old-style tree.", 
+   "* subversion/tests/cmdline/svntest/wc.py:", 
+   "(_re_parse_status, _re_parse_skipped, re_parse_summarize,", 
+   "_re_parse_checkout, _re_parse_co_skipped, _re_parse_co_restored):", 
+   "new compile regexes to parse svn output.", 
+   "(State.from_status): new method to parse 'svn status' output into a", 
+   "State object.", 
+   "(State.from_skipped): new method to parse 'Skipped' lines.", 
+   "(State.from_summarize): new method for 'svn diff --summarize'", 
+   "(State.from_checkout): new method for parsing 'svn checkout'", 
+   "(State.from_commit): new method for parsing 'svn commit'", 
+   "* subversion/tests/cmdline/svntest/tree.py:", 
+   "(build_tree_from_checkout): reimplement in terms of State.from_checkout", 
+   "(build_tree_from_commit): reimplement in terms of State.from_commit", 
+   "(build_tree_from_status): reimplement in terms of State.from_status", 
+   "(build_tree_from_skipped): reimplement in terms of State.from_skipped", 
+   "(build_tree_from_diff_summarize): reimplement in terms of", 
+   "State.from_summarize"
+  ], 
+  "revision_id": "876548"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-10T21:40:42.068902Z", 
+  "msg": [
+   "Remove the 1.6.x-UNC-paths branch, reintegrated in r36472."
+  ], 
+  "revision_id": "876547"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-10T21:39:21.308288Z", 
+  "msg": [
+   "Reintegrate the 1.6.x-UNC-paths branch into 1.6.x:", 
+   "* ^/branches/1.6.x-UNC-paths", 
+   "Resolves the regression on 1.6.X that disabled UNC path support on Windows.", 
+   "(All \\\\server\\share format paths were canonicalized to /local/dir format).", 
+   "Justification:", 
+   "A lot of Windows users use UNC paths in corporate environment. While", 
+   "not fully supported until issue #2028 and #2556 are resolved, this is a", 
+   "serious regression against older versions.", 
+   "Notes:", 
+   "Most of the changes in this branch are tests on the behavior of path", 
+   "functions. The real changes are in path.c and reroute unc paths to", 
+   "svn_dirent_*() functions.", 
+   "The tests are there to make sure we don't regress again on the 1.6.x", 
+   "branch and to allow future merges in this part of the code.", 
+   "Votes:", 
+   "+1: rhuijben, gstein, steveking", 
+   "[ Note: A couple of omitted commas made compiling on *nix platforms error out,", 
+   "so I added them while merging. ]"
+  ], 
+  "revision_id": "876546"
+ }
+]

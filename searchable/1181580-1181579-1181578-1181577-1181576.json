@@ -1,0 +1,107 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:22:23.315059Z", 
+  "msg": [
+   "Stop printing holding region info to avoid log skew", 
+   "Summary:", 
+   "Stop printing holding region info to avoid log skew", 
+   "Test Plan:", 
+   "mvn package", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, mbautin", 
+   "CC: hbase@lists, , kannan", 
+   "Differential Revision: 272489"
+  ], 
+  "revision_id": "1181580"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:22:16.575521Z", 
+  "msg": [
+   "Per CF stats and per blocktype stats for memstore size, cache size, etc", 
+   "Summary:", 
+   "Added stats for the following, per column family:", 
+   "1) memstore size", 
+   "2) storefile index size", 
+   "3) storefile size", 
+   "4) bytes flushed", 
+   "5) # of storefiles", 
+   "6) Block Cache usage by Block Type (index blocks vs. bloom blocks vs. data blocks)", 
+   "7) Block Cache usage by Column Family", 
+   "8) Total Size of Blooms by Column Family", 
+   "Number 4 was removed by accident but readded. Also, stopped use of reset() persistent metrics in favor of non-persistent ones that are deleted when read. Testing is now underway; code should be stable pending discovery of unexpected behavior.", 
+   "Task ID: #530815", 
+   "Blame Rev:", 
+   "Reviewers: kannan", 
+   "CC:", 
+   "Test Plan: Currently I am testing by editing the metrics configuration file to export into a file and reading the metrics there (they should be prefixed by a column family name). The better way to test is on a dev cluster using JMX, although hopefully both should yield the same information. Consistency checks should be made that, ie the number of files for each column family adds up to the total. If discrepancies are found they should be investigated.", 
+   "Perhaps some performance tests should be done, and or the performance ramifications of the code should be thought about more thoroughly.", 
+   "Revert Plan: Just revert the codebase and restart.", 
+   "Tags:", 
+   "Differential Revision: 270111"
+  ], 
+  "revision_id": "1181579"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:22:04.741242Z", 
+  "msg": [
+   "Added a method to return a list of HLog files", 
+   "Summary:", 
+   "1. Added a method in HLog to return a list of HLog files.", 
+   "2. Exposed that via HRegionServer + HRegionInterface.", 
+   "3. Pass true / false : depending on whether current HLog should be rolled.", 
+   "Test Plan:", 
+   "Tested on dev cluster", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, nspiegelberg, jgray", 
+   "Commenters: jgray", 
+   "CC: pritam, aaiyer, kranganathan, madhuvaidya, jgray, kannan", 
+   "Differential Revision: 270044"
+  ], 
+  "revision_id": "1181578"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:22:00.409397Z", 
+  "msg": [
+   "Add an option to flush regions before starting the snapshot / backup.", 
+   "Summary:", 
+   "1. Added an optional flushFlag (default is false) to flush regions before", 
+   "starting the snapshot.", 
+   "2. Added a method to HRegionServer to flush a region passed as a parameter", 
+   "(regionName).", 
+   "3. Exposed that through HRegionInterface.", 
+   "Test Plan:", 
+   "Tested on my dev cluster using a small table. The flush creates the HFiles and", 
+   "then they are copied.", 
+   "Reviewed By: aaiyer", 
+   "Reviewers: aaiyer, kranganathan, kannan, nspiegelberg", 
+   "Commenters: kannan", 
+   "CC: pritam, gqchen, kannan, madhuvaidya, aaiyer", 
+   "Differential Revision: 269380"
+  ], 
+  "revision_id": "1181577"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:21:54.536749Z", 
+  "msg": [
+   "Fix the unit test failure for new region assignment", 
+   "Summary:", 
+   "Fix the unit test failure for the following unit tests", 
+   "TestMultiParallelPut", 
+   "TestRegionRebalancing", 
+   "TestAdmin", 
+   "Test Plan:", 
+   "tested", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: kannan, nspiegelberg", 
+   "Commenters: mbautin", 
+   "CC: hbase@lists, , liyintang, mbautin, nspiegelberg", 
+   "Differential Revision: 271660"
+  ], 
+  "revision_id": "1181576"
+ }
+]

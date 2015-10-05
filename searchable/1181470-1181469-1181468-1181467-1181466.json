@@ -1,0 +1,92 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:11:31.364577Z", 
+  "msg": [
+   "Throw Exception on the client side if the region is improperly formatted."
+  ], 
+  "revision_id": "1181470"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:11:24.874639Z", 
+  "msg": [
+   "Additional debug info added for invalid regionname errors."
+  ], 
+  "revision_id": "1181469"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:11:22.055080Z", 
+  "msg": [
+   "Rename HLog Dir during Recovery", 
+   "Summary:", 
+   "If a RegionServer goes rogue (GC pause, ops issue), the master", 
+   "needs to be able to forcibly prevent further writes before it can log", 
+   "split.  Do a non-recursive create and rename the dir on HLog recovery.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestHLogSplit", 
+   "DiffCamp Revision: 195313", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, aaiyer, hkuang, kannan, kranganathan", 
+   "CC: nspiegelberg, kannan", 
+   "Tasks:", 
+   "#207588: HBASE-2312: splitLog race condition", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181468"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:11:15.600687Z", 
+  "msg": [
+   "enhance debugability of slow puts", 
+   "Summary:", 
+   "put/multiput from client ends up as a multiput() on server side. However,", 
+   "MultiPut() doesn't implement a toString() method. So the slow response log is", 
+   "something like:", 
+   "(responseTooSlow) multiPut(org.apache.hadoop.hbase.client.MultiPut@30943653)", 
+   "from 10.47.56.33:33642: Size: 70.0: Time (ms): 2064", 
+   "Improve it so that we get some insight into the offending KeyValue(s).", 
+   "With the fix, the output will be something like:", 
+   "(responseTooSlow) multiPut(#regions:1 {#puts:1 {row=row, families={(family=cf1,", 
+   "keyvalues=(row/cf1:cf1-col/8/Put/vlen=2500000), (family=cf2,", 
+   "keyvalues=(row/cf2:cf2-col/8/Put/vlen=2500000)}}}) from", 
+   "10.47.56.33:40074: Size: 70.0: Time (ms): 1240", 
+   "Test Plan:", 
+   "ran some local tests to trigger the logging. Also running unit tests.", 
+   "DiffCamp Revision: 194453", 
+   "Reviewed By: jgray", 
+   "Reviewers: jgray, nspiegelberg, kranganathan", 
+   "Commenters: nspiegelberg", 
+   "CC: jgray, nspiegelberg, kannan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181467"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:11:09.740356Z", 
+  "msg": [
+   "track slow queries", 
+   "Summary:", 
+   "In addition to large response, also log slow queries.", 
+   "Test Plan:", 
+   "Ran locally with large data. Output is something like:", 
+   "WARN org.apache.hadoop.ipc.HBaseServer: IPC Server handler 23 on 46829:", 
+   "(responseTooLarge) (responseTooSlow) get([B@7e350225, row=row,", 
+   "maxVersions=2147483647, timeRange=[0,9223372036854775807),", 
+   "families={(family=cf1, columns=ALL), (family=cf2, columns=ALL}) from", 
+   "10.47.56.33:34161: Size: 47.7m: Time (ms): 2932", 
+   "DiffCamp Revision: 193928", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: nspiegelberg, kranganathan", 
+   "CC: kranganathan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181466"
+ }
+]

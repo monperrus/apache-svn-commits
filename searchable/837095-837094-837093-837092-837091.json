@@ -1,0 +1,119 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2000-08-31T14:17:31.000000Z", 
+  "msg": [
+   "while I'm thinking about it..."
+  ], 
+  "revision_id": "837095"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-31T13:52:28.000000Z", 
+  "msg": [
+   "continued development.", 
+   "fetch.c:", 
+   "- added my_basename() to get the basename of a char* into an svn_string", 
+   "- added fetch_file() to grab files from the server", 
+   "- added logic to call walker callbacks to create the working copy", 
+   "- fetch_data is history: it becomes svn_ra_checkout()", 
+   "- svn_ra_update() is gone. the algorithm will use a walker returned by", 
+   "svn_ra_get_update_walker()", 
+   "- added svn_ra_get_update_walker() and associated functions (unused)", 
+   "commit.c:", 
+   "- added svn_ra_get_commit_walker() and associated functions (unused)", 
+   "ra-dav-test.c:", 
+   "- can't use svn_wc_get_change_walker(), so we add a temporary, internal", 
+   "debug walker to use.", 
+   "Makefile.am:", 
+   "- build commit.c and tests subdir", 
+   "svn_ra.h:", 
+   "- bring up to date with new design"
+  ], 
+  "revision_id": "837094"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-31T13:44:17.000000Z", 
+  "msg": [
+   "(svn_wc_get_change_walker): ADDED. provides a walker structure for effecting", 
+   "change against the working copy.", 
+   "(svn_wc_apply_delta): don't use manual assignments to a walker structure;", 
+   "just use a static, constant structure. added \"change_walker\" struct."
+  ], 
+  "revision_id": "837093"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-31T13:40:48.000000Z", 
+  "msg": [
+   "add a new \"component style\" (for paths) for the URL separator ('/')"
+  ], 
+  "revision_id": "837092"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-08-30T22:52:00.000000Z", 
+  "msg": [
+   "Adopting code in libsvn_delta to use newly revised svn_delta_walk_t", 
+   "interface.  Test program in tests/ DOES NOT YET WORK.pp", 
+   "In general, rename all \"svn_delta_window_t\" references to", 
+   "\"svn_txdelta_window_t\", and rename \"svn_delta_window_handler_t\" to", 
+   "\"svn_txdelta_window_handler_t\".  Rename \"svn_delta_op_t\" to", 
+   "\"svn_txdelta_op_t\". Also rename \"svn_delta__vcdiff_parser_t\" to", 
+   "\"svn_vcdiff_parser_t\" when moving from private to public header file,", 
+   "as well as changing \"svn_delta__vcdiff_parse\" to \"svn_vcdiff_parse\".", 
+   "(Remove all references to pdelta_handler_t, pdelta_parser_t.)", 
+   "* delta.h: (svn_delta__digger_t):  added file_baton and current_propdelta.", 
+   "(svn_delta__stackframe_t): added file_baton.", 
+   "(svn_vcdiff_parser_t): moved from private to public header.", 
+   "(svn_make_vcdiff_parser): removed, already declared in public", 
+   "header.", 
+   "(svn_vcdiff_send_window): added so delta_parse can flush vcdiff", 
+   "buffer (temporary only, until we get a real vcdiff implementation)", 
+   "(svn_propdelta_t): define simpler in-memory prop-delta object.", 
+   "* svn_delta.h: (svn_vcdiff_parser_t): added from private header.", 
+   "(svn_make_vcdiff_parser): added pool arg, to create windows from.", 
+   "* delta_parse.c: (do_file_callback, do_finish_file): deal with", 
+   "file_baton now.", 
+   "(do_finish_directory): drop the current dir baton when done.", 
+   "(do_begin_textdelta): call apply_textdelta with new file_baton.", 
+   "(do_finish_textdelta): scale down to a buffer flush only, no longer", 
+   "a walker callback for this.", 
+   "(do_prop_delta_callback): added -- calls appropriate walker callback", 
+   "for property deltas.", 
+   "(do_finish_setprop): deleted, made irrelevant by", 
+   "do_prop_delta_callback.", 
+   "(do_begin_propdelta, do_begin_setprop, do_delete_prop): major", 
+   "rewrite to use new in-memory propdeltas.", 
+   "(do_finish_propdelta): deleted, no longer needed.", 
+   "(xml_handle_end): add *specific* test for </delete> in the context", 
+   "of a <prop-delta> (as opposed to within a <tree-delta>)", 
+   "(xml_handle_data): buffer property values internally, no longer need", 
+   "a \"property parser\" in prop_parse.c", 
+   "* vcdiff_parse.c: (svn_delta__vcdiff_flush_buffer): removed, just put", 
+   "the one line into delta_parse.c:do_finish_textdelta.", 
+   "(svn_vcdiff_send_window): no longer static -- called by", 
+   "do_finish_text_delta to flush final buffer.", 
+   "* prop_parse.c: deleted, no longer needed.  xml_handle_data can buffer", 
+   "property values as they come in from expat.  Much simpler now!", 
+   "* Makefile.am: remove prop_parse.c", 
+   "TODO:  rename svn_delta_parse to something more specific.", 
+   "svn_XML_parse is fine, I think, because it's still a very", 
+   "general-purpose routine;  it takes an read function and a walk_t", 
+   "structure.", 
+   "This would work for a \"test\" program:", 
+   "* reader function presents an XML file;", 
+   "* callbacks are a bunch of dorky printf's", 
+   "It would also work for WC use:", 
+   "* reader function implicitly crawls the working copy, assembling", 
+   "an XML stream on-the-fly", 
+   "* callbacks generate DAV calls", 
+   "It would also work for WC *internal* use:", 
+   "* reader function implicitly crawls the working copy, assembling", 
+   "an XML stream on-the-fly", 
+   "* callbacks generate *new* XML to put in WC administrative files."
+  ], 
+  "revision_id": "837091"
+ }
+]

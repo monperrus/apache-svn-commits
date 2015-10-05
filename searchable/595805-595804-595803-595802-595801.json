@@ -1,0 +1,86 @@
+[
+ {
+  "author": "markt", 
+  "date": "2007-11-16T20:11:45.334710Z", 
+  "msg": [
+   "Include Fix for bug 43702 in trunk. Inner class files have unnecessarily long names."
+  ], 
+  "revision_id": "595805"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2007-11-16T20:11:12.382655Z", 
+  "msg": [
+   "Fix bug 43702. Inner class files have unnecessarily long names."
+  ], 
+  "revision_id": "595804"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-11-16T20:08:28.426444Z", 
+  "msg": [
+   "This is a followup checkin to checkin(595047) was committed for DERBY-3172. The DataSourceTest had started failing", 
+   "under JDK1.6 after 595047. The particular test case that was failing was for Connection.getTypeMap The reason for", 
+   "failure was that this method was overridden in a subclass which kicks in only when JDBC4.0 is available. The", 
+   "overriden method was not sending the correct connection error event as expected by the test and hence the failure.", 
+   "While fixing this, I realized that there are several new JDBC4.0 apis that need to send the correct events to", 
+   "ConnectionEventListeners. This checkin takes care of those apis. More info on what was changed in this commit is", 
+   "as follows.", 
+   "New JDBC4.0 api, setClientInfo, wraps SQLException inside SQLClientInfoException but we were not copying the", 
+   "error code of SQLException into SQLClientInfoException. Without the correct error code, we would not send", 
+   "connection error event because the severity has to be fatal for us to send connection error event. Because of this,", 
+   "I had to change several places where SQLException is wrapped inside SQLClientInfoException to pass SQLException's", 
+   "error code to SQLClientInfoException. The classes changed because of this are EmbedConnection40,", 
+   "BrokeredConnection40, NetConnection40.", 
+   "For methods that throw SQLClientInfoException, we were not notifying the connection error events. I made changes to", 
+   "fix this.", 
+   "Several of new JDBC4 apis on connection object were not sending error events so I changed those methods in", 
+   "BrokeredConnection40 and LogicalConnection40.", 
+   "BrokeredConnection40 implements new JDBC4 methods on Connection object but these new methods did not follow the", 
+   "same logic as the other existing pre-JDBC4 methods to check for connection close and that caused the events to", 
+   "be not sent correctly. The problematic apis were createBlob, createClob, isWrapperFor, unwrap and I fixed those.", 
+   "Not all the new JDBC4 apis have been implemented (they throw not implemented exception) so the tests written for", 
+   "those apis just catch the unimplemented exception. These methods include createArrayOf, createNClob, createSQLXML,", 
+   "createStruct.", 
+   "In JDBC4, Connection object has two methods isWrapperFor and unwrap which do not go to the server when Derby is", 
+   "being accessed in client server mode and because of this, we never detect that the server is down and hence no", 
+   "connection error event is thrown in client server mode for these 2 apis. But when the same apis are called in", 
+   "embedded Derby after the engine is shutdown, we get connection error event. I have added the test for these 2 apis", 
+   "to count for the different in behavior but I am not sure if this is the expected behavior difference between the", 
+   "2 configurations of Derby. I will enter a Jira entry for this.", 
+   "And lastly, the new JDBC4 api isValid on Connection object has different behavior in client server mode and", 
+   "embedded mode. They both throw exception that the connection is down but the connection close and error events", 
+   "are not dealt the same way in the 2 configurations. In embedded mode, after the engine is shutdown, an isValid", 
+   "call on Connection object raises a connection closed event and no connection error event. In client server mode,", 
+   "after the Network Server is shutdown, an isValid call on Connection object does not raise any event. In both the", 
+   "configurations, we do get a SQLException stating that connection is down. Again, I am not sure if this is expected", 
+   "bahavior difference between the 2 configurations of Derby. I will enter a Jira entry for this too. In addition, as", 
+   "per Connection.isValid api Java specification, a SQLException is thrown under following condition which is not", 
+   "being followed in embedded and client-server mode", 
+   "Throws:", 
+   "SQLException - if the value supplied for timeout is less then 0", 
+   "Based on this, I am not sure if our behavior is correct to throw an SQLException if the server/engine is down. I", 
+   "will include this information in the Jira entry that I will make.", 
+   "The tests for all these new JDBC4 apis are in jdbc4/DataSourceTest.", 
+   "I moved the AssertEventCatcher class implementation from jdbcapi/DataSourceTest into a class of it's own. This way,", 
+   "it can be shared by jdbcapi/DataSourceTest and jdbc4/DataSourceTest."
+  ], 
+  "revision_id": "595803"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2007-11-16T20:07:21.619497Z", 
+  "msg": [
+   "Include CGI include fix in trunk"
+  ], 
+  "revision_id": "595802"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2007-11-16T20:07:07.103837Z", 
+  "msg": [
+   "Fix CGI failed when included"
+  ], 
+  "revision_id": "595801"
+ }
+]

@@ -1,0 +1,105 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-01-08T02:43:24.273037Z", 
+  "msg": [
+   "Remove the svn_stream_from_aprfile_range_readonly() interface added in r878099.", 
+   "The only consumer was svn patch which stopped using it in r1056601.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(baton_apr): Remove 'start' and 'end' fields.", 
+   "(seek_handler_apr): Remove special case for range_readonly().", 
+   "(svn_stream_from_aprfile2): Track removal of 'start' and 'end' baton fields.", 
+   "(read_range_handler_apr, svn_stream_from_aprfile_range_readonly): Remove.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(test_stream_range): Remove.", 
+   "(test_funcs): De-list removed test.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_from_aprfile_range_readonly): Remove declaration."
+  ], 
+  "revision_id": "1056605"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2011-01-08T02:39:45.484684Z", 
+  "msg": [
+   "On Mac OS X, RAT does not recognise \"*.dia\" as binary files.", 
+   "Thanks to Gump on adam.a.o"
+  ], 
+  "revision_id": "1056604"
+ }, 
+ {
+  "author": "gmcdonald", 
+  "date": "2011-01-08T02:36:35.041600Z", 
+  "msg": [
+   "Add some mirrors"
+  ], 
+  "revision_id": "1056603"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2011-01-08T02:30:14.171622Z", 
+  "msg": [
+   "Gump now builds us on adam.a.o (Mac OS X Server). Thanks."
+  ], 
+  "revision_id": "1056602"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-01-08T02:26:03.762816Z", 
+  "msg": [
+   "Fix issue #3764, \"svn patch opens the patch file too many times\".", 
+   "Make the diff parser use only a single file handle per patch file.", 
+   "Before this change, the parser opened several file handles for each hunk", 
+   "in the patch file. Since file descriptors are a limited resource this", 
+   "imposed a hard upper bound on the number of hunks svn patch could process.", 
+   "Instead of using streams mapped onto APR file ranges to read hunks,", 
+   "track offsets hunks have within the patch file and perform seeks within", 
+   "the patch file directly.", 
+   "Some API changes were required but these APIs are all new in 1.7.", 
+   "Also do some cosmetic house-keeping.", 
+   "* subversion/include/svn_diff.h", 
+   "(svn_diff_hunk_readline_diff_text, svn_diff_hunk_readline_original_text.", 
+   "svn_diff_hunk_readline_modified_text.  svn_diff_hunk_reset_diff_text,", 
+   "svn_diff_hunk_reset_original_text, svn_diff_hunk_reset_modified_text,", 
+   "svn_diff_parse_next_patch): Adjust declarations.", 
+   "(svn_prop_patch_t): Advise API users not to allocate this structure directly.", 
+   "(svn_patch_t): As previous, and remove unused 'path' and 'patch_file' fields.", 
+   "(svn_diff_close_patch): Remove declaration.", 
+   "(svn_patch_file_t, svn_diff_open_patch_file,", 
+   "svn_diff_close_patch_file): Declare.", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(): Include svn_dep_compat.h for APR_SIZE_MAX.", 
+   "(svn_diff__hunk_range): New file-local type. Describes a hunk's range in", 
+   "the patch file, in byte offsets, including a \"current\" position within", 
+   "this range.", 
+   "(svn_diff_hunk_t): Remove the diff_text, original_text and modified_text", 
+   "svn_stream_t members. Instead, add an apr_file and ranges for the hunk", 
+   "texts called diff_text_range, original_text_range, and modified_text_range,", 
+   "respectively.", 
+   "(svn_diff_hunk_reset_diff_text, svn_diff_hunk_reset_original_text,", 
+   "svn_diff_hunk_reset_modified_text, scan_eol, hunk_readline,", 
+   "svn_diff_hunk_readline_original_text, svn_diff_hunk_readline_modified_text,", 
+   "svn_diff_hunk_readline_diff_text, parse_next_hunk): Re-implement, mostly", 
+   "to switch from using streams to using plain APR files and hunk ranges.", 
+   "(readline, hunk_readline_original_or_modified): New helpers, descendents", 
+   "of the old stream-based hunk_readline() function.", 
+   "(close_hunk): Remove.", 
+   "(svn_patch_file_t): New type. Opaque to users of libsvn_diff.", 
+   "(svn_diff_open_patch_file): New function to open a patch file.", 
+   "(svn_diff_parse_next_patch): Expect svn_patch_file_t instead of an APR file", 
+   "and adjust accordingly. Some cosmetic tweaks while here.", 
+   "(svn_diff_close_patch): Remove.", 
+   "(svn_diff_close_patch_file): New function to close a patch file.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(match_hunk, match_existing_target, apply_hunk, apply_patches): Adjust to", 
+   "diff parser API changes.", 
+   "* subversion/tests/libsvn_diff/parse-diff-test.c", 
+   "(create_patch_file, check_content, test_parse_unidiff, test_parse_git_diff,", 
+   "test_parse_git_tree_and_text_diff, test_bad_git_diff_headers,", 
+   "test_parse_property_diff, test_parse_property_and_text_diff,", 
+   "test_parse_diff_symbols_in_prop_unidiff,", 
+   "test_git_diffs_with_spaces_diff): Adjust to diff parser API changes."
+  ], 
+  "revision_id": "1056601"
+ }
+]

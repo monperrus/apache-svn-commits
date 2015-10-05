@@ -1,0 +1,109 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-22T19:39:10.707757Z", 
+  "msg": [
+   "* subversion/bindings/swig/python/svn/repos.py", 
+   "(RevisionChangeCollector.__init__): Add 'pool' parameter.", 
+   "(RevisionChangeCollector._get_root): New.", 
+   "(RevisionChangeCollector.delete_entry): Use _get_root() so that we", 
+   "can cache revision roots.", 
+   "* tools/hook-scripts/mailer/mailer.py", 
+   "(main): Update call to RevisionChangeCollector()."
+  ], 
+  "revision_id": "847560"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-22T19:16:10.655323Z", 
+  "msg": [
+   "Fix some goofed-up spellings of 'administrative'"
+  ], 
+  "revision_id": "847559"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-10-22T18:53:54.471189Z", 
+  "msg": [
+   "Change ra_svn protocol to better support our authentication framework.", 
+   "Protocol version is bumped to 2, but client and server both support", 
+   "version 1 for the moment.  In version 2, we modify the initial", 
+   "handshake to support repository-specific authentication policies,", 
+   "restarting authentication, and a common wire format for authentication", 
+   "exchanges at the beginning of the protocol and later on.  We also add", 
+   "authentication exchanges at various points within the protocol: after", 
+   "every main-set command is issued, at the end of a commit, and at the", 
+   "end of a report for update/switch/status/diff.", 
+   "* libsvn_ra_svn/protocol: Update for protocol version 2.", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_session_baton_t): To support auth requests, we need to hold", 
+   "onto more than just a connection.", 
+   "(ra_svn_commit_callback_baton_t, ra_svn_reporter_baton_t): Add a", 
+   "pointer to the session baton in order to support auth requests at", 
+   "the end of a commit and report.", 
+   "(auth_response, read_success, do_auth, handle_auth_request): New", 
+   "functions to handle authentication.", 
+   "(make_tunnel): New function to handle tunnel initialization, in order", 
+   "to improve the sanity of ra_svn_open.", 
+   "(ra_svn_get_reporter): Initialize reporter baton with session baton.", 
+   "(ra_svn_commit): Initialize commit baton with session baton.", 
+   "(ra_svn_open): Split out tunnel initialization and authentication.", 
+   "Support version 1 and 2 protocol handshake.", 
+   "(ra_svn_finish_report, ra_svn_end_commit): Handle an auth request.", 
+   "(ra_svn_get_latest_rev, ra_svn_get_dated_rev,", 
+   "ra_svn_change_rev_prop, ra_svn_rev_proplist, ra_svn_rev_prop,", 
+   "ra_svn_commit, ra_svn_get_file, ra_svn_get_dir, ra_svn_update,", 
+   "ra_svn_switch, ra_svn_status, ra_svn_diff, ra_svn_log,", 
+   "ra_svn_check_path): Accept a session baton instead of a connection", 
+   "for the baton argument.  Handle an auth request after sending the", 
+   "command.", 
+   "* svnserve/serve.c:", 
+   "(server_baton_t): Add a protocol_version field so we know whether to", 
+   "send auth requests.", 
+   "(report_driver_baton_t): Add a pointer to the server baton so we can", 
+   "do an auth request at the end of a report.", 
+   "(trivial_auth_request): New function to send an auth request", 
+   "requiring no additional authentication.", 
+   "(accept_report): Initialize report baton with server baton.", 
+   "(send_mechs, auth): New support functions for authentication.", 
+   "(serve): Support version 1 and version 2 handshakes.", 
+   "(finish_report, get_latest_rev, get_dated_rev, change_rev_prop,", 
+   "rev_proplist, rev_prop, commit, get_file, get_dir, update,", 
+   "switch_cmd, status, diff, log_cmd, check_path): Add trivial auth", 
+   "requests."
+  ], 
+  "revision_id": "847558"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-22T18:50:40.558820Z", 
+  "msg": [
+   "* subversion/libsvn_repos/reporter.c", 
+   "(gut_directory): Renamed from remove_directory_children().  Also,", 
+   "greatly simplify the code by not asking APR for stuff we don't", 
+   "need, and losing some unnecessary convenience variables.", 
+   "(svn_repos_set_path, svn_repos_link_path): Update calls to gut_directory()."
+  ], 
+  "revision_id": "847557"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-22T17:30:10.996670Z", 
+  "msg": [
+   "Move some great change collection code from mailer.py to the shared", 
+   "repos.py module.  It might get ported to C and moved into libsvn_repos", 
+   "someday (and then, of course, exposed via SWIG to all the bindings", 
+   "languages), but I won't attack that right now.", 
+   "* subversion/bindings/swig/python/svn/repos.py", 
+   "(ChangedPath.__init__): Was the _change class in mailer.py.  Renamed", 
+   "the 'item_type' member to 'item_kind'.", 
+   "(RevisionChangeCollector): Was the ChangeCollector class in", 
+   "mailer.py.  Minor changes here and there to suit the new location.", 
+   "(True, False): Copied from mailer.py.", 
+   "* tools/hook-scripts/mailer/mailer.py", 
+   "(_svn_basename, _svn_join): Removed.", 
+   "(ChangeCollector, _change): Moved to repos.py."
+  ], 
+  "revision_id": "847556"
+ }
+]

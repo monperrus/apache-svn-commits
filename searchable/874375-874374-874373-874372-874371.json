@@ -1,0 +1,83 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-11-21T13:39:07.103277Z", 
+  "msg": [
+   "On the fsfs-pack branch:", 
+   "Add another test, to check committing to a packed filesystem.", 
+   "* subversion/tests/libsvn_fs_fs/fs-pack-test.c", 
+   "(commit_packed_fs): New.", 
+   "(test_funcs): XFail the new test."
+  ], 
+  "revision_id": "874375"
+ }, 
+ {
+  "author": "sbutler", 
+  "date": "2008-11-21T11:52:34.870331Z", 
+  "msg": [
+   "TODO-1.6: Remove 2 done items."
+  ], 
+  "revision_id": "874374"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-11-21T07:36:20.057730Z", 
+  "msg": [
+   "When we commit a text modification, a temp file is left around (later to", 
+   "be installed as the new text base). This file was also used to compute a", 
+   "checksum for the new entry, but the ugly part was that we just *assumed* a", 
+   "particular location for the file and checksum'd it.", 
+   "In actuality, we already had the checksum stashed away in the commit", 
+   "queue, or (in some cases) the unmodified text base. So: go look around for", 
+   "the checksum instead of assuming a path and computing the checksum.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(struct svn_wc_committed_queue_t, committed_queue_item_t): move to top", 
+   "of file, like all good structs should be.", 
+   "(process_committed_leaf); take the commit queue as a parameter, and look", 
+   "in there for a file that we may have sent to the server. if it isn't", 
+   "there, then we should be able to find a text base for it. in one edge", 
+   "case, we simply don't have a checksum, but the file is scheduled for", 
+   "deletion anyways.", 
+   "(process_committed_internal): take a queue as a parameter, and pass it", 
+   "along when recursing on self, or calling _leaf.", 
+   "(svn_wc_process_committed_queue): pass the queue along", 
+   "(svn_wc_process_committed4): pass a NULL for the queue"
+  ], 
+  "revision_id": "874373"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-11-21T05:23:35.456851Z", 
+  "msg": [
+   "On branch tc_url_rev: Some progress in `update' tree-conflicts info.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(check_tree_conflict):", 
+   "Add arguments THEIR_NODE_KIND and THEIR_URL, instead of guessing them", 
+   "within this function. Give proper repository and path-in-repos info", 
+   "on update (switch is not entirely similar).", 
+   "(do_entry_deletion):", 
+   "### TODO: try to pass proper THEIR_URL (and THEIR_NODE_KIND if possible).", 
+   "(add_directory, open_directory, add_file, open_file):", 
+   "Send proper THEIR_NODE_KIND and THEIR_URL to check_tree_conflict().", 
+   "* subversion/svn/tree-conflicts.c", 
+   "(svn_cl__append_human_readable_tree_conflict_description):", 
+   "Fix repository comparison between Older and Theirs. Print \"Common", 
+   "Repository\" instead of just \"Older\" in case of a match."
+  ], 
+  "revision_id": "874372"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-11-21T03:25:09.545129Z", 
+  "msg": [
+   "On the fsfs-pack branch:", 
+   "Remove various and sundry compiler warnings.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__rev_get_root): Remove unused variable.", 
+   "(packer_func): Make static, and remove unused variables.  Also, fix", 
+   "format strings.", 
+   "(pack_shard): Make static and fix format strings."
+  ], 
+  "revision_id": "874371"
+ }
+]

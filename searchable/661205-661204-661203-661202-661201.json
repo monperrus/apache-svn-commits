@@ -1,0 +1,73 @@
+[
+ {
+  "author": "ivaynberg", 
+  "date": "2008-05-29T04:23:10.832069Z", 
+  "msg": [
+   "generics cleanup"
+  ], 
+  "revision_id": "661205"
+ }, 
+ {
+  "author": "bpendleton", 
+  "date": "2008-05-29T04:20:48.896907Z", 
+  "msg": [
+   "DERBY-3219: GROUP BY query fails with ERROR XSDA7", 
+   "The underlying cause of this problem is that the externalized data format", 
+   "for a MaxMinAggregator instance includes the max (or min) value that the", 
+   "aggregator is processing, and this data value happens to be embedded", 
+   "*inside* of the overall externalized data format. However, the externalized", 
+   "format for a SQLChar-based data value can use a \"stream\" format, in which", 
+   "the explicit length of the value is not encoded, and rather the value is", 
+   "read until an EOF is received, which means that such a value always has", 
+   "to be the *last* value in the particular stream, and cannot be embedded", 
+   "inside of a larger data structure.", 
+   "In the case in question, the value was a string of length 0, which when", 
+   "externalized looks like a streamed value, but can be distinguished", 
+   "because the EOF exception occurs before any data has been read. But when", 
+   "the value is included inside the larger MaxMinAggregator value, the EOF", 
+   "exception does *not* occur immediately, but rather after the code in", 
+   "SQLChar.readExternal has read beyond its own section, and has erroneously", 
+   "consumed the other values from the MaxMinAggregator's external data.", 
+   "The solution is to re-order the external format of the MaxMinAggregator,", 
+   "such that the data value is the last item in the external data, by", 
+   "calling super.writeExternal and super.readExternal *after* processing", 
+   "the other MaxMinAggregator data. Since MaxMinAggregator instances are", 
+   "never stored persistently in permanent data structures, but only in", 
+   "temporary data structures such as overflow tables and sort buffers, this", 
+   "should not cause any compatibility problems.", 
+   "An alternative implementation, which involved changing SQLChar.writeExternal", 
+   "to use an explicitly-delimited external format for a string of length", 
+   "zero, rather than the streaming-until-EOF format, was rejected because it", 
+   "would have increased the on-disk format of such values, and because it", 
+   "could have caused compatibility problems by changing the on-disk format", 
+   "of existing values.", 
+   "The unit test for this bug fix involves the use of some SanityManager code", 
+   "in the sorter, and hence is only effective when run in a sane debug build."
+  ], 
+  "revision_id": "661204"
+ }, 
+ {
+  "author": "jdillon", 
+  "date": "2008-05-29T04:18:39.393873Z", 
+  "msg": [
+   "use File.toURI().toURL()"
+  ], 
+  "revision_id": "661203"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2008-05-29T04:17:03.970687Z", 
+  "msg": [
+   "add hama to navigation"
+  ], 
+  "revision_id": "661202"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2008-05-29T03:57:58.060794Z", 
+  "msg": [
+   "update NMaven status"
+  ], 
+  "revision_id": "661201"
+ }
+]

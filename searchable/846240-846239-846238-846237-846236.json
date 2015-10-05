@@ -1,0 +1,98 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-06-08T05:43:53.085584Z", 
+  "msg": [
+   "* rpm/redhat-7.x/subversion.spec,", 
+   "rpm/redhat-8.x/subversion.spec : svn-design.info is no longer built by the", 
+   "subversion build process."
+  ], 
+  "revision_id": "846240"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-06-07T03:31:08.650623Z", 
+  "msg": [
+   "Yield a meaningful error when something goes wrong in the child", 
+   "process trying to exec a tunnel agent.  To do this, change the", 
+   "greeting to a command response so that it can be an error.  This is an", 
+   "incompatible protocol change.", 
+   "* include/svn_ra_svn.h", 
+   "(svn_ra_svn_skip_leading_garbage): Document less stringent check for", 
+   "what looks like a greeting.", 
+   "* libsvn_ra_svn/marshal.c", 
+   "(readbuf_skip_leading_garbage): A greeting tuple no longer starts a", 
+   "number; it starts with \"success\" or \"failure\".  For conciseness and", 
+   "flexibility, only check for \"(\" followed by whitespace; that should", 
+   "be good enough.", 
+   "* libsvn_ra_svn/client.c", 
+   "(handle_child_process_error): New function to handle child process", 
+   "errors by writing a command failure to stdout.", 
+   "(ra_svn_open): Set up handle_child_process_error as a child process", 
+   "error handler.  When we read the server's greeting, read it as a", 
+   "command response.", 
+   "* svnserve/serve.c", 
+   "(serve): Write out greeting as a command response.", 
+   "* libsvn_ra_svn/protocol", 
+   "Document the new greeting (requires shifting the definition of a", 
+   "command response upward).  While we're updating this, document the", 
+   "port number now that one is assigned."
+  ], 
+  "revision_id": "846239"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-06-07T01:20:29.482162Z", 
+  "msg": [
+   "* subversion/libsvn_repos/replay.c", 
+   "(svn_repos_replay): make keylen an apr_ssize_t to fix a warning."
+  ], 
+  "revision_id": "846238"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-06-06T02:28:59.304874Z", 
+  "msg": [
+   "Add destination-UUID-validation to the issue-951-integration branch.", 
+   "Note: this is completely untested.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CLIENT_INVALID_RELOCATION): Add error code.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_relocation_validator): Add function typedef.", 
+   "(svn_wc_relocate): Add parameters for validation of url-uuids.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_relocate): Add client-ctx parameter.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "svn_path.h, props.h: Add includes.", 
+   "(svn_wc_relocate): Add parameters for validation of url-uuids,", 
+   "call validation function before rewriting each URL.  Move", 
+   "call to svn_wc__remove_wcprops to *before* the call to", 
+   "svn_wc__entries_write, since missing props are preferable to", 
+   "inconsistent props.", 
+   "* subversion/libsvn_client/relocate.c", 
+   "(baton_t): New typedef for validator callback baton.", 
+   "(error): New function.", 
+   "(validator): New function.", 
+   "(svn_client_relocate): Initialize validator baton, pass it", 
+   "to svn_wc_relocate.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__longopt_t): add missing comma.", 
+   "* subversion/clients/cmdline/switch-cmd.c", 
+   "(rewrite_urls): Add client-ctx parameter, pass it to svn_client_relocate.", 
+   "(svn_cl__switch): Pass client-ctx to rewrite-urls."
+  ], 
+  "revision_id": "846237"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-06-06T02:17:44.716278Z", 
+  "msg": [
+   "Fix another case where 'deleted' got erroneously deleted.", 
+   "* subversion/libsvn_wc/log.c (log_do_delete_entry): Preserve other deleted", 
+   "entries when deleting a missing directory.", 
+   "* subversion/tests/clients/cmdline/update_tests.py (another_hudson): New", 
+   "test for the above, but marked XFAIL because it triggers issue 919."
+  ], 
+  "revision_id": "846236"
+ }
+]

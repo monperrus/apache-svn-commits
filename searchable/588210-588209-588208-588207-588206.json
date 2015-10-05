@@ -1,0 +1,51 @@
+[
+ {
+  "author": "oysteing", 
+  "date": "2007-10-25T12:15:36.459991Z", 
+  "msg": [
+   "DERBY-3071 (Contributed by Jorgen Loland)::", 
+   "1. LogToFile is put in slave mode automatically during boot (if property SlaveFactory.SLAVE_MODE is set),", 
+   "but a method is needed to take LogToFile out of recovery mode.", 
+   "2. SlaveFactory will receive log records from the master and use LogToFile#appendLogRecord to write these to disk. While in", 
+   "slave mode, only SlaveFactory will be allowed to append log records.", 
+   "3. The thread running LogToFile#recover will recover (redo) one log file at a time (like now), but will not be allowed to open a", 
+   "log file X until that file is no longer being written to. Thus, while appenLogFile writes to logX.dat, recover will be allowed to        read all log files up to and including logX-1.dat but will then have to wait until appendLogRecord starts writing to logX+1.dat.", 
+   "4.  adds a method initializeSlaveReplication that sets up the log file so that log records received from the master can be applied     to the slave log files. In a normal bootup of a database, the log file is initialized in LogToFile.recover() after the redo loop.", 
+   "That is too late for the slave functionality to work since the recovery thread will get stuck in that redo loop for the duration", 
+   "of the slave mode."
+  ], 
+  "revision_id": "588210"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2007-10-25T12:14:35.848093Z", 
+  "msg": [
+   "Fix management spring file"
+  ], 
+  "revision_id": "588209"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2007-10-25T12:12:06.684221Z", 
+  "msg": [
+   "Fix bad cglib metadata"
+  ], 
+  "revision_id": "588208"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2007-10-25T12:05:58.544314Z", 
+  "msg": [
+   "Fix JBI layer"
+  ], 
+  "revision_id": "588207"
+ }, 
+ {
+  "author": "jonesde", 
+  "date": "2007-10-25T12:04:23.311828Z", 
+  "msg": [
+   "A handy little method to facilitate some GenericDelegator new/enhanced methods that are now using Set instead of Collection as they should be"
+  ], 
+  "revision_id": "588206"
+ }
+]

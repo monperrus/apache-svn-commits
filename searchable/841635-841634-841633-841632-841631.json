@@ -1,0 +1,83 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-03-19T22:42:37.008206Z", 
+  "msg": [
+   "add information about the editor driver side of things"
+  ], 
+  "revision_id": "841635"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-03-19T22:19:02.165151Z", 
+  "msg": [
+   "Remove pool usage in status printing to prevent memory growth.", 
+   "* cmdline/status.c (print_long_format): remove pool argument, use a", 
+   "buffer for serializing the revision number, and revamp the logic", 
+   "for filling in and using the revision string.", 
+   "(svn_cl__print_status_list): don't pass a pool to print_long_format"
+  ], 
+  "revision_id": "841634"
+ }, 
+ {
+  "author": "bcollins", 
+  "date": "2002-03-19T21:11:50.655938Z", 
+  "msg": [
+   "Fix conflict between ra_dav/mod_dav_svn with regard to \"+\" in filenames.", 
+   "* libsvn_subr/path.c", 
+   "(svn_path_uri_decode): Mark where(if) query string part of URI starts.", 
+   "Use this mark to determine if \"+\" should be converted to \" \".", 
+   "According to RFC, it should only be done in the query string."
+  ], 
+  "revision_id": "841633"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-03-19T18:43:49.574937Z", 
+  "msg": [
+   "Begin work on 'svn merge'.  Use Philip's diff-editor infrastructure to", 
+   "drive a callback that wraps svn_wc_merge, instead of just printing", 
+   "diffs to the screen.  Better to commit changes gradually, rather than", 
+   "commit a power-plant.  :-)", 
+   "* svn_types.h (svn_diff_cmd_t):  add a bunch of new arguments to this", 
+   "callback, needed by 'svn merge':  a third path argument, a new", 
+   "enumerated type indicating an add/delete/modify action, and the two", 
+   "revisions of PATH1 and PATH2.", 
+   "(svn_diff_action_t):  new enumerated type.", 
+   "* svn_client.h (svn_client_merge):  take after_editor & baton.", 
+   "* diff.c (diff_cmd): receive all the new callback args, but ignore", 
+   "them.  'svn diff' just doesn't need all the information that the", 
+   "diff editor has to offer.", 
+   "(merge_cmd): new callback func of type svn_diff_cmd_t.  this", 
+   "callback needs all of the information available.  :-)", 
+   "(diff_or_merge):  take an optional after-editor, so we can trace a", 
+   "merge.", 
+   "(svn_client_merge): build merge_baton, pass new callback to", 
+   "diff_or_merge().  Also, take an after-editor that we can pass", 
+   "through to diff_or_merge.", 
+   "* repos_diff.c (run_diff_cmd):  take an enumerated action argument,", 
+   "and pass all the new arguments to the diff_cmd callback.", 
+   "(struct edit_baton):  new target_revision field.", 
+   "(set_target_revision):  set the target_revision field.", 
+   "(close_file):  pass either action_add or action_modify to run_diff_cmd.", 
+   "(delete_entry):  pass action_delete to run_diff_cmd.", 
+   "* libsvn_wc/diff.c (file_diff): pass all the new args to diff_cmd.", 
+   "(delete_entry):  same.", 
+   "(close_file):  same.", 
+   "* merge-cmd.c (svn_cl__merge): fetch the trace-editor, pass to", 
+   "svn_client_merge."
+  ], 
+  "revision_id": "841632"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-03-19T17:58:27.519960Z", 
+  "msg": [
+   "* subversion/include/svn_config.h", 
+   "(svn_config_enumerator_t): Take value as a `const char *'.", 
+   "* subversion/libsvn_subr/config.c", 
+   "(svn_config_enumerate): Pass a C string as value param to callback."
+  ], 
+  "revision_id": "841631"
+ }
+]

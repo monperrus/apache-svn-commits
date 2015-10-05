@@ -1,0 +1,73 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2010-09-16T13:06:19.219302Z", 
+  "msg": [
+   "Make svn patch match a hunk the normal way around before trying to determine", 
+   "whether it has already been applied by matching it in reverse.", 
+   "This fixes a bug where when applying a patch and then applying it again in", 
+   "reverse, a hunk would be misdetected as \"already applied\", with the following", 
+   "type of patch:", 
+   "Index: foo", 
+   "===================================================================", 
+   "--- foo\t(revision 2)", 
+   "+++ foo\t(working copy)", 
+   "@@ -1 +1,2 @@", 
+   "alpha", 
+   "+aaa", 
+   "This change has a side effect: Instead of causing a \"hunk already applied\"", 
+   "message upon duplicate application, repeatedly applying the patch above will", 
+   "now keep adding \"aaa\" lines to the file foo, as long as the first line of the", 
+   "file reads \"alpha\". Conversely, applying the patch in reverse will keep", 
+   "removing \"aaa\" lines following the \"alpha\" line lines until none are left.", 
+   "However, this matches the behaviour of Larry Wall's patch implementation,", 
+   "so we accept it for now. GNU patch detects the duplicate application,", 
+   "just as Subversion did before this commit. But both Larry's and GNU's patch", 
+   "implementations correctly apply the above patch in reverse, so the fix for", 
+   "this has higher priority.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_same_twice): Adjust test expectations to conform to the behaviour", 
+   "of Larry Wall's patch implementation.", 
+   "(patch_reverse_revert): New test, which applies a patch and then applies", 
+   "it again in reverse. This test covers the bug this commit is fixing.", 
+   "(test_list): Add new test.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(get_hunk_info): Try to match the hunk the normal way around before", 
+   "checking whether it's already been applied."
+  ], 
+  "revision_id": "997735"
+ }, 
+ {
+  "author": "kayyagari", 
+  "date": "2010-09-16T13:06:14.903041Z", 
+  "msg": [
+   "o moving to client-api"
+  ], 
+  "revision_id": "997734"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2010-09-16T13:04:04.131759Z", 
+  "msg": [
+   "Release Tomcat 5.5.31"
+  ], 
+  "revision_id": "997733"
+ }, 
+ {
+  "author": "vamsic007", 
+  "date": "2010-09-16T13:03:45.917420Z", 
+  "msg": [
+   "GERONIMO-5221 Add naming support for Validator and ValidatorFactory", 
+   "o DefaultValidator should use configured ValidatorFactory if any"
+  ], 
+  "revision_id": "997732"
+ }, 
+ {
+  "author": "jakobk", 
+  "date": "2010-09-16T12:54:09.137258Z", 
+  "msg": [
+   "removed TODO"
+  ], 
+  "revision_id": "997731"
+ }
+]

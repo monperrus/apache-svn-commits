@@ -1,0 +1,77 @@
+[
+ {
+  "author": "bentmann", 
+  "date": "2008-10-26T15:18:19.902845Z", 
+  "msg": [
+   "o Fixed unintended changes from previous commit"
+  ], 
+  "revision_id": "708005"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2008-10-26T15:18:15.449762Z", 
+  "msg": [
+   "added common IDE files to svn:ignore"
+  ], 
+  "revision_id": "708004"
+ }, 
+ {
+  "author": "bentmann", 
+  "date": "2008-10-26T15:12:45.982654Z", 
+  "msg": [
+   "o Updated IT archetype"
+  ], 
+  "revision_id": "708003"
+ }, 
+ {
+  "author": "bpendleton", 
+  "date": "2008-10-26T15:05:13.073519Z", 
+  "msg": [
+   "DERBY-3904: NPE on left join with aggregate", 
+   "The issue involves a very special optimization that is performed", 
+   "for MIN and MAX queries in which we may be able to use an index", 
+   "to go directly to the lowest/highest value of the desired column.", 
+   "For example, in the query", 
+   "SELECT MAX(d1) FROM t1", 
+   "if there is an index on d1, we can use that index to retrieve", 
+   "the max value very rapidly. In order to incorporate this", 
+   "optimization, the following conditions must be met:", 
+   "- No group by", 
+   "- One of:", 
+   "- min/max(ColumnReference) is only aggregate && source is", 
+   "ordered on the ColumnReference", 
+   "- min/max(ConstantNode)", 
+   "The optimization of the other way around (min with desc index or", 
+   "max with asc index) has the same restrictions with the additional", 
+   "temporary restriction of no qualifications at all (because", 
+   "we don't have true backward scans).", 
+   "The source of the data must also be \"simple\" (not a result of a join),", 
+   "and the NullPointerException occurred during the code that tried", 
+   "to establish the above conditions because it wasn't thoroughly", 
+   "enough excluding the join case. In the query:", 
+   "SELECT MAX( T1.D1 ) AS D FROM T1 LEFT JOIN T2 ON T1.D1 = T2.D2", 
+   "WHERE T2.D2 IS NULL", 
+   "the code in GroupByNode.considerPostOptimizeOptimizations was", 
+   "trying to traverse the AccessPathImpl to find the index scan", 
+   "information, but for this LEFT JOIN case there is an AccessPathImpl", 
+   "but no index scan information, because there is a join being", 
+   "performed, not an index scan.", 
+   "The solution is to examine the AccessPathImpl more carefully,", 
+   "and only search the index scan information if an index scan", 
+   "is actually present.", 
+   "Also added a few tests, including an enhancement to the test", 
+   "library's RuntimeStatisticsParser so that it can determine", 
+   "if a Last Key Index Scan is being performed by the query."
+  ], 
+  "revision_id": "708002"
+ }, 
+ {
+  "author": "luc", 
+  "date": "2008-10-26T14:55:45.847533Z", 
+  "msg": [
+   "Added a scalb method in MathUtils.", 
+   "This method is similar to the method with same name added in java.lang.Math as of Java 6."
+  ], 
+  "revision_id": "708001"
+ }
+]

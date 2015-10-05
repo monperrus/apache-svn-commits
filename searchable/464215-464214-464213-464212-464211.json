@@ -1,0 +1,62 @@
+[
+ {
+  "author": "bpendleton", 
+  "date": "2006-10-15T15:35:27.225596Z", 
+  "msg": [
+   "DERBY-630: CREATE TRIGGER fails with null pointer exception", 
+   "This patch was contributed by Yip Ng (yipng168@gmail.com)", 
+   "The current implementation for CREATE TRIGGER needs to handle null compilation", 
+   "schema. A compilation schema with null value indicates that the", 
+   "trigger action statement text does not depend on the current schema. This means:", 
+   "1. It is safe to compile this statement in any schema since there is no dependency with", 
+   "the CURRENT SCHEMA. i.e.: All relevent fields are qualified with a specific schema.", 
+   "2. The statement cache mechanism can utilize this piece of information to enable", 
+   "better statement plan sharing across different schemas; thus, avoiding unnecessary", 
+   "statement compilation.", 
+   "So the proposal is:", 
+   "a) Allow null compilation schema. The system catalog first needs to change the", 
+   "compiliation schema id column of SYS.SYSSTATEMENTS and SYS.SYSVIEWS system", 
+   "table's nullability to true. This would also require a soft upgrade for the", 
+   "previous versions of Derby. This step will resolve the NPE problem of this jira.", 
+   "b) Handle null compilation schema in statement preparation logic. This can be filed", 
+   "as a separate jira as improvement. It may require some work on the SQL parser to", 
+   "determine whether the compiled statement depends on the CURRENT SCHEMA or not, so", 
+   "that the compilation schema can be properly set."
+  ], 
+  "revision_id": "464215"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2006-10-15T15:29:16.540951Z", 
+  "msg": [
+   "Mark the current version."
+  ], 
+  "revision_id": "464214"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2006-10-15T15:28:31.643289Z", 
+  "msg": [
+   "Remove extra colon from /wd compiler directive.", 
+   "On conversion the VS2005 reports:", 
+   "ommand line error D8021 : invalid numeric argument '/wd:4996'\tcl"
+  ], 
+  "revision_id": "464213"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2006-10-15T15:27:17.070605Z", 
+  "msg": [
+   "Revert /wd fix. We should use clean third party sources."
+  ], 
+  "revision_id": "464212"
+ }, 
+ {
+  "author": "dashorst", 
+  "date": "2006-10-15T15:25:38.819803Z", 
+  "msg": [
+   "New issue tracker"
+  ], 
+  "revision_id": "464211"
+ }
+]

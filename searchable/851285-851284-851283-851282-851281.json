@@ -1,0 +1,69 @@
+[
+ {
+  "author": "ringstrom", 
+  "date": "2004-10-03T18:54:53.450567Z", 
+  "msg": [
+   "Fix the horrible ra_dav->get_dir performance introduced in 1.1.0-rc4.", 
+   "...also to be known as...", 
+   "Fix the horrible ls performance over ra_dav introduced in 1.1.0-rc4.", 
+   "If svn_repos_fs_revision_prop is supplied a path read authz function,", 
+   "it will run that function on all changed paths for the revision to", 
+   "verify that the revision is readable.  That is a very expensive", 
+   "operation, but the best we can do when we simply want to read a", 
+   "revision property.", 
+   "The liveprops code in ra_dav already has a path and wants to read a", 
+   "couple of revision properties for the last changed revision of those", 
+   "paths.  By letting mod_dav_svn checking the path first, and not", 
+   "letting svn_repos_fs_revision_prop do any authz we save an enormous", 
+   "amount of work.", 
+   "One test case (which I'm too lazy to describe how to set up here, but", 
+   "the client operation was a non-recursive ls of a directory with 412", 
+   "files) went down from six minutes to three seconds with this change.", 
+   "* subversion/mod_dav_svn/liveprops.c", 
+   "(dav_svn_insert_prop, dav_svn_get_last_modified_time): Call", 
+   "dav_svn_authz_read on our path, and pass NULL as path read authz", 
+   "callback to svn_repos_fs_revision_prop."
+  ], 
+  "revision_id": "851285"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-10-03T14:55:54.742553Z", 
+  "msg": [
+   "* www/index.html:  merge the 1.0 and 1.1 features into a single list."
+  ], 
+  "revision_id": "851284"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2004-10-03T11:08:16.602178Z", 
+  "msg": [
+   "Fix an error in the regression tests for auto-props.  The error is harmless in", 
+   "theory, but in some cases triggers a Python bug which causes test failures.", 
+   "(The bug is that on some installations of Python, open(filename, 'w', buf_size)", 
+   "with some buffer sizes, including 0644, leads to corrupt data being written to", 
+   "the file by a subsequent write().)", 
+   "* subversion/tests/clients/cmdline/autoprop_tests.py", 
+   "(create_test_file): Don't try to pass a file permissions mode to open(); its", 
+   "optional third argument is a buffer size."
+  ], 
+  "revision_id": "851283"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-10-03T09:59:16.315778Z", 
+  "msg": [
+   "* STATUS: Add and vote for r11190."
+  ], 
+  "revision_id": "851282"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2004-10-01T23:23:55.243828Z", 
+  "msg": [
+   "* subversion/libsvn_ra_svn/client.c (ra_svn_log2): Make variable", 
+   "unsigned to avoid a gcc sign-compare warning."
+  ], 
+  "revision_id": "851281"
+ }
+]

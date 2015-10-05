@@ -1,0 +1,117 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-10-03T20:50:50.914347Z", 
+  "msg": [
+   "Adjust the behavior of the 'svnadmin setrevprop' command, making the", 
+   "default mode to bypass hooks, and adding --use-pre-revprop-change-hook", 
+   "and --use-post-revprop-change-hook options to replace the", 
+   "--bypass-hooks option.", 
+   "* subversion/svnadmin/main.c", 
+   "(svnadmin__use_pre_revprop_change_hook,", 
+   "svnadmin__use_post_revprop_change_hook): Add new enum elements", 
+   "corresponding to the new options.", 
+   "(options_table): Add help for the new options.", 
+   "(cmd_table): Update help and command-line options for the", 
+   "'setrevprop' command.", 
+   "(svnadmin_opt_state): Add boolean storage for the new options.", 
+   "(set_revprop): Replace use of bypass_hooks with the", 
+   "use_pre_revprop_change_hook and use_post_revprop_change_hook flags", 
+   "(noted in doc string), and delegate to the new", 
+   "svn_repos_fs_change_rev_prop3() API as appropriate.", 
+   "(subcommand_setlog): Translate the bypass_hooks flag into the", 
+   "appropriate value for use_pre_revprop_change_hook and", 
+   "use_post_revprop_change_hook flags.", 
+   "(main): Handle the svnadmin__use_pre_revprop_change_hook and", 
+   "svnadmin__use_post_revprop_change_hook options.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(setrevprop): Remove --bypass-hooks flag from the call to", 
+   "'setrevprop', as this is now the default behavior.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_change_rev_prop3): A replacement for the", 
+   "svn_repos_fs_change_rev_prop2() API which accepts flags for whether", 
+   "to run the pre-/post-revprop-change hook scripts.", 
+   "(svn_repos_fs_change_rev_prop2): Deprecated.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_change_rev_prop3): Contains code from the old", 
+   "svn_repos_fs_change_rev_prop2() function, with calls to the", 
+   "pre-/post-revprop-change hook scripts conditionalized based on the", 
+   "corresponding parameters.", 
+   "(svn_repos_fs_change_rev_prop2): Delegate to", 
+   "svn_repos_fs_change_rev_prop3() with the \"run hook scripts\"", 
+   "parameters TRUE.", 
+   "Suggested by: cmpilato"
+  ], 
+  "revision_id": "861820"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-10-03T20:49:30.656829Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "* notes/rename-dump-load.txt: New file describing my current thoughts on", 
+   "the dump/load + renames problem."
+  ], 
+  "revision_id": "861819"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2006-10-03T20:20:26.613759Z", 
+  "msg": [
+   "* subversion/bindings/swig/perl/native/Repos.pm:", 
+   "Don't mark \"open\" as \"create\" as methods -- they're actually", 
+   "constructors. Followup to r21741."
+  ], 
+  "revision_id": "861818"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-10-03T20:14:14.152745Z", 
+  "msg": [
+   "* subversion/svnadmin/main.c", 
+   "(svn_opt_subcommand_t, cmd_table): Re-order subcommand_setrevprop to", 
+   "be in alphabetical order."
+  ], 
+  "revision_id": "861817"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-10-03T19:11:05.040761Z", 
+  "msg": [
+   "On the fs-atomic-renames branch: Inch closer to fully working dump/load", 
+   "of renames.  This switches our dump strategy from using the _to callbacks", 
+   "to using the _from callbacks, and holding off on executing renames so any", 
+   "renames under that path have already occurred.", 
+   "I'm still not entirely convinced that this is correct, but it's better", 
+   "than we had before, and passes more tests, so onward and upward!", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_delta_editor_t::rename_file_from,", 
+   "svn_delta_editor_t::rename_dir_from): Update parameter names to match", 
+   "what we're actually passing.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(test_list): multiple_moves is no longer XFail.", 
+   "* subversion/tests/cmdline/svnadmin_tests_data/multiple-moves.dump: Update", 
+   "to match what we currently dump for this case.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(rename_src): New struct.", 
+   "(dir_baton): Start storing pending renames here so they can be run when", 
+   "we close the directory.", 
+   "(make_dir_baton): Initialize renamed_entries hash.", 
+   "(open_directory): If there's a rename to the dir we're trying to open,", 
+   "run it before descending into it.", 
+   "(close_directory): Run rename operations.", 
+   "(open_file): Run pending rename to this path before doing anything else.", 
+   "(rename_file_to): Rename to...", 
+   "(rename_file_from): This, and start storing pending renames in the dir", 
+   "baton.", 
+   "(rename_dir_to): Rename to...", 
+   "(rename_file_from): This, and start storing pending renames in the dir", 
+   "baton.", 
+   "(get_dump_editor): s/_from/_to/.", 
+   "* subversion/libsvn_repos/replay.c", 
+   "(path_driver_cb_func): Pass the source revs into the rename_foo_from", 
+   "functions."
+  ], 
+  "revision_id": "861816"
+ }
+]

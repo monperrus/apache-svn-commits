@@ -1,0 +1,113 @@
+[
+ {
+  "author": "epg", 
+  "date": "2007-12-04T02:06:06.987968Z", 
+  "msg": [
+   "Replace bare SubversionException implemented in C with", 
+   "SubversionException written in Python, exposing the full chain of", 
+   "svn_error_t objects.", 
+   "* subversion/bindings/swig/python/svn/core.py", 
+   "(SubversionException): Add Exception class with apr_err, message,", 
+   "child, file, and line attributes, plus args attribute that is", 
+   "compatible with pre-1.5 bindings.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(SubversionException, svn_swig_py_exception_type,", 
+   "svn_swig_py_register_exception): Remove.", 
+   "(svn_swig_py_svn_exception): Turn svn_error_t chain into", 
+   "svn.core.SubversionException chain and raise that.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.h", 
+   "(svn_swig_py_exception_type, svn_swig_py_register_exception): Remove.", 
+   "* subversion/bindings/swig/core.i", 
+   "Drop reference to svn_swig_py_exception_type.", 
+   "Don't register SubversionException here.", 
+   "* subversion/bindings/swig/python/tests/client.py", 
+   "* subversion/bindings/swig/python/tests/mergeinfo.py", 
+   "* subversion/bindings/swig/python/tests/repository.py", 
+   "* subversion/bindings/swig/python/tests/wc.py", 
+   "Import SubversionException from svn.core instead of libsvn.core."
+  ], 
+  "revision_id": "868300"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-12-04T00:21:06.808073Z", 
+  "msg": [
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_uuid, path_txn_current, path_txn_current_lock, path_lock,", 
+   "path_txn_dir, path_txn_changes, path_txn_props, path_txn_mergeinfo,", 
+   "path_txn_next_ids, path_txn_proto_rev, path_txn_proto_rev_lock,", 
+   "path_txn_node_props, path_txn_node_children): Add hint for the", 
+   "compiler to inline static functions that don't contain variable", 
+   "declarations."
+  ], 
+  "revision_id": "868299"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-12-04T00:18:28.957929Z", 
+  "msg": [
+   "A follow-up to r28213, fixing a compilation warning from a shadowed", 
+   "parameter name.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_canonicalize_svn_prop): Rename local variable \"path\" to \"merge_src\"."
+  ], 
+  "revision_id": "868298"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2007-12-03T21:56:54.346306Z", 
+  "msg": [
+   "Start to implement handling of known problematic tree conflict use cases.", 
+   "See the thread starting at", 
+   "http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=133069", 
+   "for discussion of this particular patch.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_kind_t): Added item svn_wc_conflict_kind_tree.", 
+   "(svn_wc_operation_t): New type to identify operations causing tree conflicts.", 
+   "(svn_wc_conflict_description_t): New members 'operation' and 'victim_path'.", 
+   "(svn_wc_entry_t): New members 'tree_conflict_data' and 'tree_conflict_desc'.", 
+   "(svn_wc_conflicted_p2): New function that can also report tree conflicts.", 
+   "* subversion/libsvn_wc/treeconflicts.c: New file.", 
+   "* subversion/libsvn_wc/treeconflicts.h: New file.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entry): Consider new members in svn_wc_entry_t.", 
+   "(write_entry, fold_entry, svn_wc_entry_dup): Likewise.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(SVN_WC__ENTRY_ATTR_TREE_CONFLICT_DATA,", 
+   "SVN_WC__ENTRY_ATTR_TREE_CONFLICT_DESC,", 
+   "SVN_WC__ENTRY_MODIFY_TREE_CONFLICT_DESC,", 
+   "SVN_WC__ENTRY_MODIFY_TREE_CONFLICT_DATA): New constants for handling", 
+   "tree conflict information stored in entries file.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_committed, svn_wc__loggy_entry_modify): Consider new members", 
+   "in svn_wc_entry_t.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(bump_dir_info): Mention tree conflicts in comment inside declaration", 
+   "of this struct.", 
+   "(do_entry_deletion): Add new local variable 'modified'.", 
+   "Add comments (and some incomplete code) about detecting tree conflict", 
+   "use cases 2 and 3 as described in notes/tree-conflicts/use-cases.txt.", 
+   "(open_directory): Skip tree conflicted directories.", 
+   "(open_file): Add comments about detecting use case 1 as described", 
+   "in notes/tree-conflicts/use-cases.txt.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc_conflicted_p2): New function that can also report tree conflicts.", 
+   "(svn_wc_conflicted_p): Call svn_wc_conflicted_p2 but don't return tree", 
+   "conflict information."
+  ], 
+  "revision_id": "868297"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-12-03T21:55:10.288768Z", 
+  "msg": [
+   "Change the name of the --design option in the test suite to --development.", 
+   "Suggested by: dlr", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(setup_design_mode): Rename to ..", 
+   "(setup_development_mode): .. this.", 
+   "(usage, run_tests): Change --design option name to --development."
+  ], 
+  "revision_id": "868296"
+ }
+]

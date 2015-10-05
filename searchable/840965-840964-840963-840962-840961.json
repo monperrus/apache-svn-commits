@@ -1,0 +1,81 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-01-15T01:09:41.355240Z", 
+  "msg": [
+   "Implement diffs over the network during \"svn update\".", 
+   "This requires the server to support the diffs (i.e. be recent). If the", 
+   "server doesn't understand them, then a fulltext will be transferred", 
+   "and all will be fine.", 
+   "* mod_dav_svn/repos.c (dav_svn_diff_ctx_t {}): new context structure", 
+   "for an svn_stream that we use to pass svndiff data to the output", 
+   "filter stack.", 
+   "(dav_svn_set_headers): set the MIME type appropriately. set the", 
+   "content-length only when we are sending a fulltext (apache will", 
+   "set the length appropriately for the svndiff case).", 
+   "(dav_svn_write_to_filter): an svn_stream write function for writing", 
+   "the data to an apache filter [stack]", 
+   "(dav_svn_close_filter): an svn_stream close function for writing an", 
+   "EOS (End Of Stream) marker to the filter stack.", 
+   "(dav_svn_deliver): enable the network diff code. (note that it looks", 
+   "like a lot of change due to whitespace changes). to generate an", 
+   "svndiff, we get a text delta stream from the FS, feed the windows", 
+   "into an svndiff formatting handler, which feeds into out filter", 
+   "output stream to the filter stack.", 
+   "* libsvn_ra_dav/fetch.c (file_read_ctx_t {}): add an svndiff parser", 
+   "stream for handling svndiff downloads.", 
+   "(fetch_file_reader): detect svndiff downloads and set up an svndiff", 
+   "parser stream. work around a bug in Neon for the detection (Joe", 
+   "has a patch to fix; will appear in the next Neon). switch on the", 
+   "type to feed a fulltext window to the editor's handler, or to", 
+   "shove data into the parsing stream."
+  ], 
+  "revision_id": "840965"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-15T00:20:48.759681Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/trans_tests.py: Tweak description", 
+   "of file.  Start a list of hand tests that failed for Mike and Ben.", 
+   "(setup_working_copy): More descriptive file names.  Be extra devious", 
+   "in the bogus keyword case.", 
+   "(set_property, del_property): Removed, see new functions below.", 
+   "(keywords_on, keywords_off): New functions.", 
+   "(keywords_from_birth): New test function, incomplete.", 
+   "(test_list): Add new test function."
+  ], 
+  "revision_id": "840964"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-15T00:12:51.882903Z", 
+  "msg": [
+   "* props.c (expand_keyword): bugfix for checkouts, whereby a newly", 
+   "checked-out file wasn't having keywords expanded."
+  ], 
+  "revision_id": "840963"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-14T23:51:05.686568Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_crawler.c (restore_file): Fix accidental", 
+   "reversal of TRUE and FALSE cases from revision 884.  Greg Stein caught", 
+   "this, and snickered, or so he claims."
+  ], 
+  "revision_id": "840962"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-14T23:47:04.524764Z", 
+  "msg": [
+   "* props.c (expand_keyword): segfault bugfix.  During a checkout, the", 
+   "entry may not exist yet, so a call to svn_wc__get_keywords() may", 
+   "return no expansion data at all.  That's fine, because the svn:entry", 
+   "props are already cached in the update editor's file baton, it will", 
+   "suck the values from there."
+  ], 
+  "revision_id": "840961"
+ }
+]

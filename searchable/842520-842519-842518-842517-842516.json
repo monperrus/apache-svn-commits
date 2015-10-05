@@ -1,0 +1,85 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-07-09T20:45:57.264586Z", 
+  "msg": [
+   "Partially address issue #756:", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Be stricter about disallowing copies", 
+   "of copies, and improve error message for that case.", 
+   "Note that this doesn't fully resolve the issue.  The truly golden fix", 
+   "is rather more complex, see the issue for details."
+  ], 
+  "revision_id": "842520"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-09T16:22:59.684715Z", 
+  "msg": [
+   "Second part of issue #493:  add '--recursive' feature to 'svn resolve'.", 
+   "Again, use our generic entry-walker to accomplish this, yum yum.", 
+   "* adm_ops.c, svn_wc.h (svn_wc_resolve_conflict):  take a 'recursive'", 
+   "flag, and if set, use the generic entry walker to do teh recursion.", 
+   "(struct resolve_callback_baton, resolve_found_entry_callback,", 
+   "resolve_walk_callbacks):   machinery for the generic entry walker.", 
+   "(resolve_conflict_on_entry): all of the main \"work\" code to", 
+   "automatically resolve conflicts has moved in here.  This is the", 
+   "routine called by our walker callback.", 
+   "* adm_crawler.c (restore_file): update caller of", 
+   "svn_wc_resolve_conflict, pass FALSE to recursive flag.", 
+   "* resolve.c, svn_client.h (svn_client_resolve):  take a 'recursive'", 
+   "flag, pass it thru to svn_wc_resolve_conflict.", 
+   "* resolve-cmd.c (svn_cl__resolve): pass opt_state->recursive to", 
+   "svn_client_resolve.", 
+   "* main.c (svn_cl__cmd_table):  let 'svn resolve' to take --recursive switch."
+  ], 
+  "revision_id": "842519"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-09T15:53:49.382004Z", 
+  "msg": [
+   "Another bugfix for a special ghudson 'deleted' scenario.", 
+   "When doing post-commit processing, it's not enough to notice that a", 
+   "deleted item has a greater version number than its parent: this", 
+   "assumes that the deleted item somehow belongs in the parent revision,", 
+   "which is *not* necessarily true.  For example: {svn add newfile; svn", 
+   "ci; svn rm newfile; svn ci}.  This will still leave a 'deleted' entry", 
+   "for newfile, and during an update, our state-reporter will attempt to", 
+   "report newfile as missing -- by deleting it from a txn where it never", 
+   "existed.", 
+   "We debated adding new entry flags for this edge-case, but it's much", 
+   "cleaner to allow our reporter->delete_path to allow no-op deletions.", 
+   "* reporter.c (svn_repos_delete_path):  if the delete is a no-op, don't", 
+   "throw an error, just ignore."
+  ], 
+  "revision_id": "842518"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-07-09T12:03:17.019338Z", 
+  "msg": [
+   "you'd really think i would have noticed this before committing...", 
+   "* packages/freebsd/subversion/pkg-message", 
+   "fix typo"
+  ], 
+  "revision_id": "842517"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-07-09T12:00:17.314795Z", 
+  "msg": [
+   "As numerous people have requested, add a warning message to the FreeBSD port", 
+   "of Subversion informing people that this is pre-alpha software and should not", 
+   "be used in production.  For those who like to live dangerously, point them to", 
+   "the development code on http://svn.collab.net and the developmentmailing list", 
+   "at dev@subversion.tigris.org.", 
+   "Feedback on the wording of the message would be quite welcome.", 
+   "* packages/freebsd/subversion/pkg-message", 
+   "add the warning message.", 
+   "* packages/freebsd/subversion/Makefile", 
+   "print the warning message in the post-install target."
+  ], 
+  "revision_id": "842516"
+ }
+]

@@ -1,0 +1,92 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-22T21:22:10.432532Z", 
+  "msg": [
+   "On the 'fs-rep-sharing' branch, mess around with the BDB", 
+   "implementation a little bit.", 
+   "WARNING: This code, when run on an svnsync of our Subversion", 
+   "repository, will spin into an infinite cycle of death around r114.", 
+   "I dunno why.", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(svn_fs_base__dag_index_checksums): Was svn_fs_base__dag_index_data_checksum.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(store_checksum_rep): New helper function.", 
+   "(svn_fs_base__dag_index_checksums): Use store_checksum_rep() to", 
+   "store `checksum-reps' index records for file contents and properties", 
+   "and directory properties.  Was svn_fs_base__dag_index_data_checksum().", 
+   "* subversion/libsvn_fs_base/bdb/checksum-reps-table.c", 
+   "(svn_fs_bdb__set_checksum_rep): Don't bother comparing the new value", 
+   "against an existing one (but leave the code visible for now).", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(txn_body_txn_deltify): Track rename of svn_fs_base__dag_index_data_checksum", 
+   "function.", 
+   "* fs-rep-sharing/subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_set_proplist): Check for and try to avoid", 
+   "duplicate property lists."
+  ], 
+  "revision_id": "869065"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-22T16:47:14.224153Z", 
+  "msg": [
+   "* build.conf", 
+   "(options.private-built-includes): Restore rubyhead.swg, which r28979", 
+   "mysteriously removed, probably for reasons similar to the story", 
+   "behind r28989.", 
+   "Found by: stylesen"
+  ], 
+  "revision_id": "869064"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-01-22T16:39:37.562147Z", 
+  "msg": [
+   "Reapply r28978, which was accidentally reverted by a merge in r28979."
+  ], 
+  "revision_id": "869063"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-22T16:35:21.067034Z", 
+  "msg": [
+   "Fix cause of merge_tests.py 61 and 77 failures.", 
+   "See http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=134048", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_reflected_revisions): After the reintegrate branch was merged to", 
+   "trunk in r28979, the behavior of svn_client__get_repos_mergeinfo() changed.", 
+   "It now returns an error if a URL@revision doesn't exist, rather than", 
+   "returning an empty mergeinfo hash.  Account for the fact that this error", 
+   "might occur when filtering reflected revisions on added/deleted subtrees", 
+   "and allow the merge to complete rather than returning an error.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): Remove XFail from merge_fails_if_subtree_is_deleted_on_src", 
+   "and new_subtrees_should_not_break_merge."
+  ], 
+  "revision_id": "869062"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2008-01-22T16:12:21.366413Z", 
+  "msg": [
+   "Followup to r28979: Add mergeReintegrate method to JavaHL.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(mergeReintegrate):  Add method and call svn_client_merge_reintegrate.", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_mergeReintegrate):", 
+   "Added mergeReintegrate method.", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java,", 
+   "src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(mergeReintegrate): Added method.", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testMergeReintegrate): Added test of failure and success scenarios", 
+   "(appendText): tweaked to allow update of file in branch", 
+   "Reviewed by: hwright"
+  ], 
+  "revision_id": "869061"
+ }
+]

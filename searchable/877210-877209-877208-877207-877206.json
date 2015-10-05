@@ -1,0 +1,100 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-09T16:03:03.124149Z", 
+  "msg": [
+   "When we construct the access batons, we now place them all directly into a", 
+   "\"shared\" set to start with. The prior code used join_batons() to join two", 
+   "sets, but since we know the target shared set at creation time, we just", 
+   "start the batons in that set.", 
+   "We also construct a DB at the start, too. We'll use it in place of the set", 
+   "after a couple more iterations.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(adm_access_alloc): take a SHARED parameter for the shared set to hold", 
+   "this baton. if the baton is the first one in the set, it is the \"owner\"", 
+   "(alloc_shared): helper function to create a SHARED structure", 
+   "(adm_ensure_set): no longer needed. all batons start with a shared area.", 
+   "(svn_wc__adm_steal_write_lock): create a SHARED struct and put the new", 
+   "baton into it. remove unnecessary localvar to hold the lock.", 
+   "(open_single): take a SHARED parameter for where to place the new baton.", 
+   "(close_single): simply a bit since we know the SHARED structure is", 
+   "present, with all members.", 
+   "(do_open): take a new SHARED parameter for where to place all the batons", 
+   "that are created. take a ROLLBACK parameter to contain all the", 
+   "constructed batons which may need to be closed if an error occurs.", 
+   "remove unneeded calls to adm_ensure_set and join_batons.", 
+   "(open_all): new function to wrap do_open() and prep it with the rollback", 
+   "list, and to *do* the rollback if necessary.", 
+   "(svn_wc_adm_open): no need to use adm_ensure_set or join_batons. fetch", 
+   "the SHARED set from ASSOCIATED, or construct one. switch the call over", 
+   "to open_all() for rollback support.", 
+   "(svn_wc__adm_pre_open): create a SHARED structure and pass it to", 
+   "adm_access_alloc. get rid of unneeded localvar.", 
+   "(join_batons): removed. obsolete.", 
+   "(child_is_disjoint): fix bug in computing the expected URL", 
+   "(svn_wc_adm_open_anchor): create a SHARED structure for the batons to", 
+   "live within. for the calls where levels_to_lock is 0, we can replace", 
+   "it with a call to open_single. replace the remaining do_open() call", 
+   "with open_all() for rollback support. perform some scary manipulations", 
+   "of the SHARED set around the disjoint calculation. play more funny", 
+   "games with SHARED when we close the parent baton. remove calls to", 
+   "adm_ensure_set and join_batons, which also cleans up some conditional", 
+   "logic.", 
+   "(do_close): if the baton is NOT in the set, then don't close any", 
+   "dependents.", 
+   "(svn_wc__adm_get_db): the DB will always be present. just return it."
+  ], 
+  "revision_id": "877210"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T15:46:34.258300Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(fetch_actual_nodes): Reset the sqlite statement after using it."
+  ], 
+  "revision_id": "877209"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-09T15:00:40.980971Z", 
+  "msg": [
+   "Create a handy SVN_DBG() macro for svn developers to use during debugging.", 
+   "See svn_debug.h for more information.", 
+   "* subversion/include/private/svn_debug.h: new header", 
+   "(SVN_DBG): new debug printing macro", 
+   "* subversion/libsvn_subr/debug.c: new implementation", 
+   "(quiet_mode): helper function to disable output dynamically", 
+   "(svn_dbg__preamble): helper function to print out the initial part of an", 
+   "output line. or to use for breakpoints.", 
+   "(svn_dbg__printf): helper function to produce the debug output."
+  ], 
+  "revision_id": "877208"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T14:48:17.500986Z", 
+  "msg": [
+   "Merge r37117 from trunk:", 
+   "* r37117", 
+   "Fix issue #3393 'Merge consuming too much memory'.", 
+   "Justification:", 
+   "A merge which targets a WC with thousands of subtrees with mergeinfo", 
+   "can consume multiple GB of memory in a hurry.", 
+   "Notes:", 
+   "This is as simple a fix to review as you've ever seen with the", 
+   "word 'merge' in the title!", 
+   "Votes:", 
+   "+1: pburba, rhuijben, stylesen"
+  ], 
+  "revision_id": "877207"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T14:37:55.770316Z", 
+  "msg": [
+   "Tagging release 1.6.1 with svn_version.h matching tarball."
+  ], 
+  "revision_id": "877206"
+ }
+]

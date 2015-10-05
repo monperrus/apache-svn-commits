@@ -1,0 +1,95 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2004-11-14T00:13:50.717243Z", 
+  "msg": [
+   "Stop casting away const-ness where we don't need to.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(test_tempdir): No need for \"*path\" to be const.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(req_check_access): Modify the data before (not after) assigning it to", 
+   "a pointer-to-const, so a cast is not needed.", 
+   "* subversion/tests/libsvn_fs_base/skel-test.c", 
+   "(parse_cstr): \"*str\" can be const...", 
+   "(parse_invalid_atoms): so this no longer needs a cast.", 
+   "* subversion/tests/libsvn_fs_base/strings-reps-test.c", 
+   "(write_new_rep, write_rep, read_rep, delete_rep): Casts not needed.", 
+   "* subversion/tests/libsvn_subr/config-test.c", 
+   "(test1): The local string variables can be const (and can also be more", 
+   "local), so the casts are not needed.  One cast was not needed anyway."
+  ], 
+  "revision_id": "851965"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2004-11-13T21:56:57.043044Z", 
+  "msg": [
+   "Some undefined symbols were being tested with \"#if\".  Either define them", 
+   "or else test whether they are defined.", 
+   "* subversion/libsvn_fs_base/trail.c", 
+   "Include the header that defines SVN_BDB_HAS_DB_INCOMPLETE.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "Don't bother testing APR_HAVE_STDLIB - everywhere else we just include", 
+   "<stdlib.h>.", 
+   "* subversion/svnserve/serve.c (repos_path_valid):", 
+   "Test WIN32 with \"#ifdef\" (not \"#if\") like everywhere else."
+  ], 
+  "revision_id": "851964"
+ }, 
+ {
+  "author": "gradha", 
+  "date": "2004-11-13T19:56:24.071070Z", 
+  "msg": [
+   "Book Spanish. Renamed script so it can be imported easily. Split", 
+   "main function into externally callable functions."
+  ], 
+  "revision_id": "851963"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2004-11-13T19:47:59.877575Z", 
+  "msg": [
+   "Add the locked/switched/with-history column from the \"svn st\" output.", 
+   "Patch by: Richard Lewis <mapc01@bangor.ac.uk>", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-status-line-format): Add a new '%c' column for the \"with history\" mark", 
+   "(svn-status-locked-face): New face for writing \"[ LOCKED ]\" next to locked", 
+   "files", 
+   "(svn-status-switched-face): New face for writing \"(switched)\" next to", 
+   "switched directories", 
+   "(svn-status-maybe-add-string): New helper function, used to add \"LOCKED\" and", 
+   "\"switched\"", 
+   "(svn-parse-status-result): Record the other columns (locked/switched/", 
+   "with-history) from the output. Fix quoting of brackets on lines corresponding", 
+   "to \"Performing status on external item at...\"", 
+   "(svn-status-line-info->locked): New function to test if line-info is locked", 
+   "(svn-status-line-info->switched): New function to test if line-info is switched", 
+   "(svn-status-line-info->historymark): New function to test if line-info is", 
+   "\"added-with-history\"", 
+   "(svn-insert-line-in-status-buffer): Insert the \"with-history\" mark as a third", 
+   "column.", 
+   "If the file is switched add \"(switched)\".", 
+   "If the file is locked add \"[LOCKED]\"", 
+   "(svn-status-commit-file):  Add a docstring", 
+   "(svn-status-parse-commit-output): Fix \"end of buffer\" error when commit output", 
+   "contains blank lines"
+  ], 
+  "revision_id": "851962"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2004-11-13T19:27:22.418077Z", 
+  "msg": [
+   "Rationalize #includes in C source files.", 
+   "If a file does not use symbols from a given header, then do not include", 
+   "that header.", 
+   "If a file uses symbols from a given header 'H', and H was only being", 
+   "included via another header that neither needs nor guarantees to include", 
+   "H, then include H directly.", 
+   "(By \"symbols from a given header\" I mean symbols that it either defines", 
+   "itself or pulls in from other headers with the specific intention of", 
+   "providing them to its users.)"
+  ], 
+  "revision_id": "851961"
+ }
+]

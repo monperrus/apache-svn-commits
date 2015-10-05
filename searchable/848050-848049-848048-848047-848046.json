@@ -1,0 +1,99 @@
+[
+ {
+  "author": "mbk", 
+  "date": "2003-12-11T13:29:13.493464Z", 
+  "msg": [
+   "* tools/cvs2svn/README: Fix a typo noticed by Daniel Bonniot (issue 1636)."
+  ], 
+  "revision_id": "848050"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2003-12-11T00:01:45.550097Z", 
+  "msg": [
+   "Use apr_uint32_t for the SSL server certificate failure bits, and", 
+   "store a pointer to an apr_uint32_t instead of misusing a void*.  Also", 
+   "define the bits using hex numbers instead of a shifted bit.", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_cred_ssl_server_trust_t): Use apr_uint32_t, not int.", 
+   "(SVN_AUTH_SSL_*): Use a hex number instead of a bit shift.", 
+   "* subversion/libsvn_client/ssl_server_trust_providers.c", 
+   "(ssl_server_trust_file_first_credentials): Use apr_uint32_t, not", 
+   "int.  Use strtoul, not atoi.", 
+   "(ssl_server_trust_file_save_credentials): Cast failure mask to", 
+   "unsigned long and use %lu in the format string.", 
+   "(ssl_server_trust_prompt_first_cred): Use apr_uint32_t, not int.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__auth_ssl_server_trust_prompt): Use apr_uint32_t, not int.", 
+   "* subversion/clients/cmdline/prompt.c", 
+   "(svn_cl__auth_ssl_server_trust_prompt): Use apr_uint32_t, not int.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(neon_failure_map, convert_neon_failures, server_ssl_callback):", 
+   "Use apr_uint32_t, not int for the failures.  Store a pointer to", 
+   "apr_uint32_t in the hash instead of misusing a void*."
+  ], 
+  "revision_id": "848049"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-12-10T21:38:13.801493Z", 
+  "msg": [
+   "Start work on issue #1601: to do deltification unconditionally as part", 
+   "of the commit, but in the background when possible, so the user", 
+   "doesn't wait.", 
+   "This change prepares code paths for RA layers to choose which style of", 
+   "deltification is most appropriate.  The actual deltification", 
+   "(backgrounded or foregrounded) is not implemented yet.  In other", 
+   "words, don't merge this to trunk yet :-).", 
+   "* subversion/include/svn_repos.h", 
+   "(enum svn_repos_deltification_style): New enum.", 
+   "(svn_repos_fs_commit_txn, svn_repos_get_commit_editor): Take new", 
+   "deltify_how enum parameter.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_commit_txn): Take new deltify_how enum, leave comment", 
+   "about actually using it.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(struct edit_baton): New field deltify_how.", 
+   "(svn_repos_get_commit_editor): Take new deltify_how parameter, store", 
+   "it in the edit baton.", 
+   "(close_edit): Pass eb->deltify_how to svn_repos_fs_commit_txn.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_commit_editor): Pass svn_repos_deltify_foreground", 
+   "to svn_repos_get_commit_editor.", 
+   "* subversion/svnserve/serve.c", 
+   "(commit): Pass svn_repos_deltify_foreground to", 
+   "svn_repos_get_commit_editor, for now, and leave comment about", 
+   "conditionalizing based on daemon mode.", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(dav_svn_checkin, dav_svn_merge): Pass svn_repos_deltify_background", 
+   "to svn_repos_fs_commit_txn.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(dir_deltas, node_tree_delete_under_copy): Pass", 
+   "svn_repos_deltify_foreground to svn_repos_fs_commit_txn.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(create_hooks): Remove call to 'svnadmin deltify' from the", 
+   "post-commit hook template.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_commit_callback_t): Document that this is invoked only after", 
+   "the post-commit hook has completed."
+  ], 
+  "revision_id": "848048"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2003-12-10T21:26:59.674163Z", 
+  "msg": [
+   "* subversion/libsvn_subr/auth.c", 
+   "(svn_auth_save_credentials): Fixed a typo in a comment."
+  ], 
+  "revision_id": "848047"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-12-10T20:35:27.991738Z", 
+  "msg": [
+   "* doc/book/TODO:  add book task for cmpilato."
+  ], 
+  "revision_id": "848046"
+ }
+]

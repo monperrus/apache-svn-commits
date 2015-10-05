@@ -1,0 +1,100 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-11-03T22:58:01.737281Z", 
+  "msg": [
+   "With Ben, marshal the new absence elements into the update editor:", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(absent_xxx): New editor function, covers both absent_directory and", 
+   "absent_file.  Temporarily silly implementation.", 
+   "(make_editor): Include it in the editor.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(ELEM_absent_directory, ELEM_absent_file): New XML elements.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(report_elements): List the new absence XML elements.", 
+   "(validate_element): Validate the new absence XML elements.", 
+   "(start_element): Handle the new absence XML elements.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(authz_read): Add some directory silliness, for testing."
+  ], 
+  "revision_id": "847700"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-03T22:14:01.692661Z", 
+  "msg": [
+   "With Ben, implement a (rather silly) authz read callback, have", 
+   "mod_dav_svn pass it to svn_repos_dir_delta, then marshal the new", 
+   "absent_foo tag over the network.", 
+   "Since the client doesn't yet understand this tag, the result is that", 
+   "the file is simply skipped, not mentioned in the wc at all.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_authz_read_func_t): Move declaration earlier.", 
+   "(svn_repos_begin_report): Take authz_read_func and authz_read_baton.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_begin_report): Take authz_read_func and authz_read_baton.", 
+   "(svn_repos_report_baton_t): New fields for above.", 
+   "(svn_repos_begin_report): Store the new fields.", 
+   "(finish_report): Pass them along to svn_repos_dir_delta.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(absent_helper, upd_absent_directory, upd_absent_file): New helper", 
+   "and editor functions.", 
+   "(authz_read): New function.", 
+   "(dav_svn__update_report): Include the new absent_foo functions in", 
+   "the update editor.  Pass auth_read to svn_repos_begin_report", 
+   "and svn_repos_dir_delta.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(make_reporter): Pass nulls to svn_repos_dir_delta for", 
+   "authz_read_func and baton.", 
+   "* subversion/svnserve/serve.c", 
+   "(accept_report): Pass nulls to svn_repos_dir_delta for", 
+   "authz_read_func and baton."
+  ], 
+  "revision_id": "847699"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-03T20:52:05.893873Z", 
+  "msg": [
+   "With Ben and Mike, back out the changes to svn_repos_replay involving", 
+   "the new authz read check callback.  It's very, very hard to implement", 
+   "for svn_repos_replay, and not really necessary.", 
+   "* subversion/include/svn_repos.h, subversion/libsvn_repos/replay.c", 
+   "(svn_repos_replay): \"That's no moon... Full reverse!  Chewie, lock in", 
+   "the auxiliary power.\"  All callers changed."
+  ], 
+  "revision_id": "847698"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-03T20:20:48.572140Z", 
+  "msg": [
+   "Implement the new absent_foo functions in editors that care:", 
+   "* subversion/libsvn_delta/cancel.c", 
+   "(absent_file, absent_directory): New functions.", 
+   "(svn_delta_get_cancellation_editor): Include the new functions in", 
+   "the cancellation editor.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(get_test_editor): Add comment about reason for not implementing", 
+   "editor->absent_foo here.", 
+   "* subversion/tests/svn_test_editor.c", 
+   "(absent_file_or_dir): New function.  At Mike and Ben's behest,", 
+   "resist the temptation to implement close_or_absent_file_or_dir().", 
+   "(test_absent_directory, test_absent_file): New wrappers for above.", 
+   "(svn_test_get_editor): Include test_absent_directory and", 
+   "test_absent_file in the returned editor.", 
+   "* subversion/tests/libsvn_repos/dir-delta-editor.c", 
+   "(dir_delta_get_editor): Add comment about incompleteness of editor."
+  ], 
+  "revision_id": "847697"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-03T19:55:57.546996Z", 
+  "msg": [
+   "* subversion/libsvn_delta/cancel.c", 
+   "(svn_delta_get_cancellation_editor): Uh, semicolon, not comma."
+  ], 
+  "revision_id": "847696"
+ }
+]

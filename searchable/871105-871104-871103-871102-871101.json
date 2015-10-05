@@ -1,0 +1,97 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2008-05-05T16:12:23.056477Z", 
+  "msg": [
+   "Follow up to r30937.", 
+   "Review by: kameshj", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_check_path):  Try again to match the docstring to the", 
+   "implementation."
+  ], 
+  "revision_id": "871105"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-05T15:23:46.536496Z", 
+  "msg": [
+   "Show context in the \"conflict-only diff3\" output.", 
+   "The header line for conflict-only context sections looks like:", 
+   "@@ <M,N |M,N >M,N @@", 
+   "If there is prior art that I should be mimicking, let me know.", 
+   "This revision implements it only for in-memory diffs (because it's", 
+   "easier to start here...), so the only visible way to see that it works", 
+   "is to see that the test XFails during the file-diff part, not the", 
+   "mem-diff part.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(merge_output_baton_t): Add some fields only used by conflict-only", 
+   "mode: hunk, hunk_length, hunk_start, real_output_stream, and pool.", 
+   "(output_merge_token_range): Add a lines_printed_p arg.", 
+   "(output_common_modified, output_latest, output_conflict): Adjust.", 
+   "(output_conflicts_flush_hunk): New.", 
+   "(output_conflict_with_context): Actually have context.", 
+   "(svn_diff_mem_string_output_merge2): Initialize fields and clean up", 
+   "differently for conflict-only mode.", 
+   "* subversion/tests/libsvn_diff/diff-diff3-test.c", 
+   "(test_three_way_merge_conflict_styles): Add context to expected", 
+   "output.", 
+   "(test_funcs): Mark test_three_way_merge_conflict_styles as XFail."
+  ], 
+  "revision_id": "871104"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-05T15:23:09.187309Z", 
+  "msg": [
+   "Refactor in-memory diff so that \"conflicts only\" uses its own vtable.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(output_common_modified, output_latest, output_conflict): Remove", 
+   "code for conflicts-only.", 
+   "(output_conflict_with_context): New.", 
+   "(merge_only_conflicts_output_vtable): New.", 
+   "(svn_diff_mem_string_output_merge2): Use separate vtable for", 
+   "conflicts_only."
+  ], 
+  "revision_id": "871103"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-05T15:22:31.848130Z", 
+  "msg": [
+   "Remove an outdated comment.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(source_tokens_t): Remove outdated comment: diff_memory", 
+   "has supported normalization since r26059."
+  ], 
+  "revision_id": "871102"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-05T15:22:04.224834Z", 
+  "msg": [
+   "At the conflict resolution prompt, if the user plays with the merged", 
+   "file (by choosing (e)dit or (l)aunch) and then chooses one of the", 
+   "resolution options that ignores the merged file ([mt][cf]), save a", 
+   "copy of the merged file as \"foo.edited\".", 
+   "This does not affect --accept.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_result_t): New field save_merged.", 
+   "* subversion/libsvn_wc/merge.c", 
+   "(svn_wc__merge_internal): If (for textual merges) the resolver said", 
+   "to save the merged copy, do so.", 
+   "(svn_wc_create_conflict_result): Explicitly initialize save_merged", 
+   "to FALSE.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(show_diff): Remove performed_edit argument (which was", 
+   "unconditionally set to TRUE in non-error cases).", 
+   "(svn_cl__conflict_handler): Split \"performed_edit\" boolean into", 
+   "\"performed_edit\" (which affects save_merged) and \"knows_something\"", 
+   "(which affects whether or not (r)esolved is offered).  Make the", 
+   "([mt][cf]) choices set the save_merged flag if performed_edit is", 
+   "set.  Make (d[fc]) set knows_something rather than performed_edit.", 
+   "Make (e) and (l) set knows_something if they set performed_edit.", 
+   "Suggested by: kfogel"
+  ], 
+  "revision_id": "871101"
+ }
+]

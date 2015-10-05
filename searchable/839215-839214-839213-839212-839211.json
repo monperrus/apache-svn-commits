@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-04-17T20:07:22.000000Z", 
+  "msg": [
+   "Make sure to grab libsvn_repos, too, when building dynamically."
+  ], 
+  "revision_id": "839215"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-17T19:54:39.000000Z", 
+  "msg": [
+   "* include/svn_fs.h", 
+   "* include/svn_repos.h", 
+   "(svn_fs_dir_delta): Moved this prototype from svn_fs.h to", 
+   "svn_repos.h, renaming the function to svn_repos_dir_delta.", 
+   "* libsvn_fs/Makefile.am", 
+   "* libsvn_repos/Makefile.am", 
+   "(delta.c): Moved this file from libsvn_fs/ to libsvn_repos/ (Karl", 
+   "hacked the RCS to preserve history for this change).", 
+   "* libsvn_repos/delta.c", 
+   "New file (with the history and contents of libsvn_fs/delta.c).", 
+   "* libsvn_fs/delta.c", 
+   "Nah nah naaaaah nah, nah nah naaaaah nah, hey hey -- you get the", 
+   "point.", 
+   "* libsvn_fs/tree.c", 
+   "(svn_fs_file_delta): New home for this function since delta.c no", 
+   "longer exists in libsvn_fs/", 
+   "(svn_repos_dir_delta): Renamed from svn_fs_dir_delta.", 
+   "(svn_fs_file_delta): Moved to libsvn_fs/tree.c"
+  ], 
+  "revision_id": "839214"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-04-17T17:41:22.000000Z", 
+  "msg": [
+   "The following is all about changes to the C-based test harness and", 
+   "related tests.  Ouch.  If I never have to paste the text \", pool\"", 
+   "again, it will be too soon.", 
+   "* configure.in", 
+   "(SVN_TESTS_MAIN_LIBS): Got rid of seperate SVN_TESTS_EDITOR_LIBS,", 
+   "merging it into SVN_TESTS_MAIN_LIBS.", 
+   "(BUILD_FS_STUFF): New automake conditional for use in", 
+   "tests/Makefile.am", 
+   "* subversion/libsvn_fs/delta.c", 
+   "Sweeping change:  removed POOL field from struct context, and added", 
+   "POOL arguments to all functions herein that require it.  Also used", 
+   "subpools in places where it seemed useful to do so.", 
+   "* subversion/tests/Makefile.am", 
+   "Added some comments, and made use of new BUILD_FS_STUFF conditional", 
+   "for deciding (based on the existence of the Berkeley DB libs)", 
+   "whether or not to include fs-helpers.c in the build of the SVN tests", 
+   "library.", 
+   "* subversion/tests/fs-helpers.c", 
+   "* subversion/tests/fs-helpers.h", 
+   "New files to hold functions intended to be shared by tests/libsvn_fs", 
+   "and tests/libsvn_repos (when the latter comes to exist).", 
+   "* subversion/tests/svn_tests_main.c", 
+   "Removed global POOL extern, adding a POOL argument to the test", 
+   "function prototype.  From now on, tests using this harness will be", 
+   "handed their own POOL to play with--no more of this global pool", 
+   "nonsense.", 
+   "(main): We now hand a fresh pool to each test we call, clearing it", 
+   "out after the test is finished before calling the next test.", 
+   "* subversion/tests/libsvn_delta/Makefile.am", 
+   "* subversion/tests/libsvn_fs/Makefile.am", 
+   "* subversion/tests/libsvn_ra_local/Makefile.am", 
+   "* subversion/tests/libsvn_repos/Makefile.am", 
+   "* subversion/tests/libsvn_ra_local/Makefile.am", 
+   "* subversion/tests/libsvn_wc/Makefile.am", 
+   "No longer refer to SVN_TESTS_EDITOR_LIBS.  All the stuff in the", 
+   "tests/ directory is referenced with just SVN_TESTS_MAIN_LIBS.", 
+   "* subversion/tests/libsvn_fs/skel-test.c", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "* subversion/tests/libsvn_subr/hashdump-test.c", 
+   "* subversion/tests/libsvn_subr/stringtest.c", 
+   "Sweeping changes to remove the global POOL variable, adding POOL as", 
+   "a passed-in argument to all test cases (and inevitably, most of the", 
+   "helper functions as well).", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(berkeley_error_handler, fs_new, create_fs_and_repos,", 
+   "stream_to_string, set_file_contents, get_file_contents, typedef", 
+   "struct tree_test_entry_t, typedef struct tree_test_t,", 
+   "get_dir_entries, validate_tree_ (validate_tree, typedef struct", 
+   "txn_script_command_t, txn_script_exec):  Functions moved to new", 
+   "shared codebase tests/fs-helpers.c (with prototypes in", 
+   "tests/fs-helpers.h, and semi-public symbol names prefixed with", 
+   "\"svn_test__\")"
+  ], 
+  "revision_id": "839213"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-04-17T16:04:27.000000Z", 
+  "msg": [
+   "(print_version_info):  for sanity, --version now shows when the binary", 
+   "was compiled.  Oh, the sanity!"
+  ], 
+  "revision_id": "839212"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-04-17T10:51:48.000000Z", 
+  "msg": [
+   "Shut down the stream -> window mechanism in the correct order. Closing the", 
+   "stream first could inadvertently throw out the parent of our subpool.", 
+   "(window_handler): swap order of pool destruction and stream closing."
+  ], 
+  "revision_id": "839211"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kevin", 
+  "date": "2002-02-28T02:42:28.555204Z", 
+  "msg": [
+   "One more typo"
+  ], 
+  "revision_id": "841460"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-02-28T02:40:17.196554Z", 
+  "msg": [
+   "Fix comments at the top of the script."
+  ], 
+  "revision_id": "841459"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-02-28T02:21:39.120917Z", 
+  "msg": [
+   "Switch over to the \"duplicate keys\" design for the 'strings' table.", 
+   "COMPATABILITY NOTE: this requires an update to existing", 
+   "repositories. The strings table needs to have its \"duplicates\" flag", 
+   "enabled. See the 'tools/enable-dupkey.sh' script to fix up existing", 
+   "repositories.", 
+   "* libsvn_fs/strings-table.c", 
+   "(svn_fs__open_strings_table): set the flags on the db to enable", 
+   "duplicate keys.", 
+   "(locate_key): new function to allocate a cursor, locate the first", 
+   "record of data for a key, and return its length.", 
+   "(get_next_length): use the cursor to get the length of the next", 
+   "record of data [for the key]", 
+   "(svn_fs__string_read): use locate_key and get_next_length to locate", 
+   "the data record for the requested offset. return whatever data is", 
+   "available in that data record, or the requested length (whichever", 
+   "is less). note that this changes the semantics to \"return some", 
+   "amount\" rather than \"return all requested\"", 
+   "(get_key_and_bump): new function containing code factored out of", 
+   "svn_fs__string_append; it gets the current 'next-key' value and", 
+   "bumps the value in the database. it has also been updated to deal", 
+   "with the new 'put' semantics of databases with dup keys.", 
+   "(svn_fs__string_append): just shove another record into the database", 
+   "(svn_fs__string_clear): we have to delete prior contents (all the", 
+   "data records associated with the key) since we can't just 'put' a", 
+   "zero-length value over the top of the old.", 
+   "(svn_fs__string_size): revamped to total all the data records for", 
+   "the given key.", 
+   "(svn_fs__string_copy): revamp. rather than reading and appending to", 
+   "a new record, we just copy all the records to the new key.", 
+   "* libsvn_fs/strings-table.h (svn_fs__string_read): update the docs to", 
+   "better reflect reality, and the fact that the function can now", 
+   "(legally) return less than requested.", 
+   "* tests/libsvn_fs/strings-reps-test.c (verify_expected_record): print", 
+   "more information when an expected size is not met. adjust call to", 
+   "svn_fs__string_read() to compensate for not necessarily getting", 
+   "all the data.", 
+   "* tools/enable-dupkey.sh: new tool to convert an existing database", 
+   "over to the new \"duplicate keys\" format."
+  ], 
+  "revision_id": "841458"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-02-28T00:34:40.147215Z", 
+  "msg": [
+   "Make the SVN_FS_WRITE_BUFFER_SIZE symbol private, moving it into", 
+   "tree.c", 
+   "* include/svn_fs.h (SVN_FS_WRITE_BUFFER_SIZE): removed", 
+   "* libsvn_fs/tree.c (SVN_FS_WRITE_BUFFER_SIZE): moved here from", 
+   "svn_fs.h. Added a few comments about it (potentially) being", 
+   "transitory, on its way to reps-strings.c.", 
+   "(write_to_string, window_consumer): leave comments about these", 
+   "functions, and a potential move to reps-strings.c."
+  ], 
+  "revision_id": "841457"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-02-27T21:15:59.132535Z", 
+  "msg": [
+   "Make svnlook use a single temporary subdir, and leave notes about how", 
+   "this single subdir *should* come about in the future.", 
+   "* subversion/svnlook/main.c", 
+   "(SVNLOOK_DIFF_TMPDIR_NEW, SVNLOOK_DIFF_TMPDIR_BASE): Removed these", 
+   "#defines, in favor of ...", 
+   "(SVNLOOK_TMPDIR): ... this one.", 
+   "(print_diff_tree): Use only a single subdirectory for diff stuffs,", 
+   "and pass filesystem path as label to `diff' program so that patches", 
+   "from svnlook output apply nicely."
+  ], 
+  "revision_id": "841456"
+ }
+]

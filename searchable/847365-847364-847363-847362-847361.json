@@ -1,0 +1,96 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-04T01:37:24.543935Z", 
+  "msg": [
+   "Just consistifying some stuff."
+  ], 
+  "revision_id": "847365"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-04T01:35:21.848705Z", 
+  "msg": [
+   "* subversion/bindings/swig/swigutil_py.h", 
+   "* subversion/bindings/swig/swigutil_py.c", 
+   "(svn_swig_py_repos_history_func): New.", 
+   "* subversion/bindings/swig/svn_repos.i", 
+   "Add typemap for svn_repos_history_func_t/baton (### I did Python", 
+   "only -- other bindings language maintainers will need to follow suit)."
+  ], 
+  "revision_id": "847364"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-04T00:19:11.786507Z", 
+  "msg": [
+   "I'm really tired of copy-n-pasting the complex loop (complex because", 
+   "of the pool games I had to play) in what used to be", 
+   "svn_repos_revisions_changed().  Replace/rename", 
+   "svn_repos_revisions_changed() with a new function,", 
+   "svn_repos_history(), that does this work and uses callbacks so that", 
+   "users of this interface can do whatever they want with the history", 
+   "data without reproducing so much darned code.", 
+   "Also, kill 'svnadmin lscr' (since its functionality is encompassed by", 
+   "the new 'svnlook history').", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_history_func_t): New.", 
+   "(svn_repos_history): Was svn_repos_revisions_changed().  Now takes a", 
+   "'history_func' and 'history_baton' instead of populating a 'revs' array.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos_history): Was svn_repos_revisions_changed().  Now takes", 
+   "and call a 'history_func' and 'history_baton' instead of", 
+   "populating a 'revs' array.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(history_to_revs_array): New.", 
+   "(svn_repos_get_logs): Update calls to svn_repos_history().", 
+   "* subversion/svnadmin/main.c", 
+   "(struct svnadmin_opt_state): Remove 'follow_copies' member.", 
+   "(cmd_table): Kill the 'lscr' subcommand.", 
+   "(options_table, main): Remove support for --copies option.", 
+   "(svnadmin__follow_copies, subcommand_lscr): Buh-bye.", 
+   "* subversion/svnlook/main.c", 
+   "(struct print_history_baton, print_history): New.", 
+   "(do_history): Now just call svn_repos_history().  Oh, and compose", 
+   "the docstring I forgot to write when I introduced this function.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(history_to_revs_array): New.", 
+   "(revisions_changed): Update test message, and update call to", 
+   "svn_repos_history().", 
+   "* subversion/doc/book/book/ch05.xml", 
+   "* subversion/doc/book/book/ch08.xml", 
+   "Kill mentions of 'svnadmin lscr'.  (Oh, and add reference stuff for", 
+   "the new 'svnlook history'."
+  ], 
+  "revision_id": "847363"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2003-10-03T20:28:26.781086Z", 
+  "msg": [
+   "Move the test for SVN_AUTH_PARAM_NO_AUTH_CACHE one level up so that", 
+   "all save_creds don't have to remember to test it.", 
+   "* subversion/libsvn_subr/auth.c", 
+   "(svn_auth_save_credentials): Do not call the save_credentials handlers", 
+   "if SVN_AUTH_PARAM_NO_AUTH_CACHE is set.", 
+   "* subversion/libsvn_client/providers.c", 
+   "(simple_save_creds, username_save_creds): Remove test for", 
+   "SVN_AUTH_PARAM_NO_AUTH_CACHE since it is now checked at a higher", 
+   "level."
+  ], 
+  "revision_id": "847362"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2003-10-03T20:14:53.322320Z", 
+  "msg": [
+   "Fix (very) small part of issue 1526: Fix problem with multiple calls", 
+   "to the save_credentials function when the disk cache already contains", 
+   "the credentials.", 
+   "* subversion/libsvn_client/providers.c", 
+   "(save_creds): Tell the upper layer that the creds were saved if the", 
+   "disk cache already contains the credentials."
+  ], 
+  "revision_id": "847361"
+ }
+]

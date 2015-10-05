@@ -1,0 +1,95 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:42:04.458415Z", 
+  "msg": [
+   "HBase RegionSplitter: Split on low-loaded regions first", 
+   "Summary:", 
+   "Always split on low-loaded regions first.  This will prevent", 
+   "the load balancing slop from kicking in during rolling splits.", 
+   "Test Plan:  - bin/hbase RegionSplitter table -o 20", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kranganathan", 
+   "CC: kranganathan", 
+   "Differential Revision: 297100", 
+   "Task ID: 510843"
+  ], 
+  "revision_id": "1181920"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:42:02.154064Z", 
+  "msg": [
+   "Fix FileNotFoundException in HLog.java", 
+   "Summary:", 
+   "When deploying HBase over Avatarnode HDFS the following diff :", 
+   "D293997 breaks initialization of a region, since it throws an exception", 
+   "for listStatus() if the parent directory does not exist instead of just", 
+   "returning null. This results in the region never being opened.", 
+   "Test Plan: Test on dev cluster.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: hkuang, nspiegelberg", 
+   "CC: hbase@lists, nspiegelberg", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 295918"
+  ], 
+  "revision_id": "1181919"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:59.838230Z", 
+  "msg": [
+   "RegionSplitter : Allow NSFRE during logical split verification"
+  ], 
+  "revision_id": "1181918"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:57.190919Z", 
+  "msg": [
+   "Update pom.xml for hbase to include version 2.9 of the Surefire plugin", 
+   "Summary:", 
+   "Some of the hbase tests were failing with the following error:", 
+   "[INFO] Error while executing forked tests.; nested exception is", 
+   "org.apache.maven.surefire.booter.shade.org.codehaus.plexus.util.cli.CommandLineException:", 
+   "Error inside systemErr parser", 
+   "The above error was fixed in Surefire 2.7", 
+   "http://jira.codehaus.org/browse/SUREFIRE-640", 
+   "In addition, the surefire plugin wasn't quitting when the tests were finished.", 
+   "Test Plan: Run tests and see if they are more reliable", 
+   "Reviewed By: mbautin", 
+   "Reviewers: mbautin, liyintang", 
+   "CC: nspiegelberg, mbautin", 
+   "Differential Revision: 293524"
+  ], 
+  "revision_id": "1181917"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:55.579485Z", 
+  "msg": [
+   "Don't schedule major compactions during peak time.", 
+   "Summary:", 
+   "Major compactions triggering at peak time cause a lot of trouble as", 
+   "they load up the cluster quite a bit with a lot of IO. We should have logic in", 
+   "place which prevents major compactions from triggering at peak time. This is an", 
+   "attempt in that direction.", 
+   "Test Plan: 1) Unit test the peak time logic.", 
+   "Reviewed By: mbautin", 
+   "Reviewers: mbautin, nspiegelberg", 
+   "CC: hbase@lists, , mbautin", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 294514", 
+   "Task ID: 639114"
+  ], 
+  "revision_id": "1181916"
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-26T20:38:40.783315Z", 
+  "msg": [
+   "More work in issue #2953.  Change the way merge source normalization", 
+   "happens to account for the annoyance that given a segment of path FOO", 
+   "and revision coverage from N to M (inclusive), you can't actually do", 
+   "anything useful unless you expand the range to N-1 (exclusive) to M", 
+   "(inclusive), and path location for N-1 (which might not be FOO, but", 
+   "perhaps is whatever FOO was copied from in rN).", 
+   "Sadly, I'm having trouble figuring out what to do with gaps in the", 
+   "history, so this code remains dead at the moment.  :-(", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_source_link_t, struct nls_receiver_baton_t, merge_source_ranges_t):", 
+   "Removed structures.", 
+   "(merge_source_t): New structure.", 
+   "(merge_source_link_split, nls_receiver, merge_source_links_to_array):", 
+   "Removed functions.", 
+   "(compare_merge_source_ts, combine_range_with_segments): New functions.", 
+   "(normalize_merge_sources): Add 'ctx' parameter, and rework this function", 
+   "to fetch segment locations in full, combine those with the ranges,", 
+   "and then return the results."
+  ], 
+  "revision_id": "867505"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-26T20:29:58.379623Z", 
+  "msg": [
+   "Reverse the ordering of svn_client__repos_location_segments()'s results.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__repos_location_segments): Change sort ordering of results.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(compare_segments): Change sort ordering of results."
+  ], 
+  "revision_id": "867504"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-26T20:06:27.072960Z", 
+  "msg": [
+   "In test suite, pass default --username and --password to any 'svn'", 
+   "invocation that doesn't already have it.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(_with_auth): New function, adding --username/--password to its args", 
+   "if they aren't there already.", 
+   "(run_svn): Use _with_auth."
+  ], 
+  "revision_id": "867503"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-26T20:00:55.596516Z", 
+  "msg": [
+   "Make the command-line client accept the \"auth\" options (username,", 
+   "password, no-auth-cache, non-interactive) for *all* subcommands, even", 
+   "those which don't currently require authentication or aren't", 
+   "interactive.", 
+   "This allows wrapper scripts to pass these arguments to every", 
+   "invocation of svn.  This both simplifies their job, and", 
+   "\"future-proofs\" them --- they can happily pass '--non-interactive' to", 
+   "every invocation even if it's not currently possible for the", 
+   "subcommand to be interactive.", 
+   "* subversion/include/svn_opt.h", 
+   "(svn_opt_subcommand_takes_option3, svn_opt_subcommand_helps3,", 
+   "svn_opt_print_help3): New versions of APIs which take a", 
+   "\"global_options\" parameter.", 
+   "* subversion/libsvn_subr/opt.c", 
+   "(svn_opt_subcommand_takes_option3, svn_opt_subcommand_helps3,", 
+   "svn_opt_print_help3, print_command_info2): Take a \"global_options\"", 
+   "parameter, and update callers/old versions.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__global_options): Declare new array.", 
+   "* subversion/svn/help-cmd.c", 
+   "(svn_cl__help): Pass svn_cl__global_options to svn_opt_print_help3.", 
+   "* subversion/svn/main.c", 
+   "(SVN_CL__AUTH_OPTIONS): Remove.", 
+   "(svn_cl__global_options): New array containing the former", 
+   "SVN_CL__AUTH_OPTIONS options and --config-dir.", 
+   "(svn_cl__cmd_table): Remove SVN_CL__AUTH_OPTIONS and", 
+   "svn_cl__config_dir_opt from all entries.", 
+   "(main): Pass svn_cl__global_options to", 
+   "svn_opt_subcommand_takes_option3.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "Move the global options to the end of the expected output."
+  ], 
+  "revision_id": "867502"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-26T18:06:13.020695Z", 
+  "msg": [
+   "Followup to r27424.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(commit_tests): Use an expected error message regexp that works for", 
+   "both trunk and 1.4.x servers."
+  ], 
+  "revision_id": "867501"
+ }
+]

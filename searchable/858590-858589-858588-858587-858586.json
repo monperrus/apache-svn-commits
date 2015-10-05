@@ -1,0 +1,90 @@
+[
+ {
+  "author": "clkao", 
+  "date": "2006-02-18T00:32:47.280235Z", 
+  "msg": [
+   "* swig/core.i:", 
+   "Wrap the array input for svn_diff_option_parse.  Note that", 
+   "args is probably a bad name though it doesn't match other stuff", 
+   "at the moment."
+  ], 
+  "revision_id": "858590"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2006-02-18T00:30:59.213592Z", 
+  "msg": [
+   "Some older perl module build utilities panic on VERSION set on", 
+   "two lines.", 
+   "* perl/native/Core.pm:", 
+   "Put the version string in one line."
+  ], 
+  "revision_id": "858589"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-02-18T00:15:03.724287Z", 
+  "msg": [
+   "Unbreak Perl bindings, fs->config can be null according to svn_fs.h.", 
+   "Patch by: clkao", 
+   "(Ported to libsvn_fs_base by me.)", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__create): Don't assume fs->config is non-null.", 
+   "Also remove a variable that is only used in the same test.", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_create): Ditto."
+  ], 
+  "revision_id": "858588"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-02-17T23:52:54.627947Z", 
+  "msg": [
+   "Fix for issue 2151 \"'svn ls' is slow over ra_dav\"", 
+   "This patch implements a solution to issue 2151.  We now only request", 
+   "the needed props in the PROPFIND for server listings. 'svn ls' is now", 
+   "noticably faster.  In most cases 'ls' takes about half the time and half", 
+   "the bandwidth - In some case even better results.", 
+   "For backward compatibility, before doing the long PROPFIND we make", 
+   "another simpler PROPFIND to see if the server supports the new type of", 
+   "request (supports the deadprop-count prop). If it does we use the new", 
+   "scheme and performance is improved - If not then we use the old scheme", 
+   "and the slowness persists.", 
+   "To summarise: only patched servers and patched clients have improved", 
+   "speed. Mismatched configurations (old client or server) are not improved", 
+   "but still work. Regular dav clients are still slow.", 
+   "Patch by: Jean-Marc Godbout <jean-marc@computrad.com>", 
+   "Kazutoshi Satoda <k_satoda@f2.dion.ne.jp>", 
+   "Suggested by: Erik Scrafford <erik@scrafford.org>", 
+   "Ben Collins-Sussman <sussman@collab.net>", 
+   "(and everyone else who contributed to issue 2151)", 
+   "* subversion/mod_dav_svn/liveprops.c", 
+   "(SVN_PROPID_deadprop_count): Added a PROPID to support the new prop", 
+   "(dav_svn_props[]): Added the deadprop-count prop to the list of", 
+   "supported props.", 
+   "(dav_svn_insert_prop): Returns the number of deadprops found in the", 
+   "fs for that file.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(SVN_RA_DAV__PROP_DEADPROP_COUNT): Added the prop name for deadprop", 
+   "(ELEM_deadprop_count): Added the prop to the list of props", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(elem_definition, propfind_elements): Added ELEM_deadprop_count to", 
+   "the list of propfind props", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(deadprop_count_support_props[]): New array, list of props to get in", 
+   "a root PROPFIND", 
+   "(svn_ra_dav__get_dir): check if server supports 'deadprop-count', and", 
+   "if so, request fewer properties"
+  ], 
+  "revision_id": "858587"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2006-02-17T22:00:51.181973Z", 
+  "msg": [
+   "I guess I am the 'someone' who knows about svk commands.", 
+   "* www/merge-tracking: fill in svk transcripts."
+  ], 
+  "revision_id": "858586"
+ }
+]

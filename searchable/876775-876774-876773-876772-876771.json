@@ -1,0 +1,80 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-03-20T14:16:34.245567Z", 
+  "msg": [
+   "Post-release housekeeping:", 
+   "* subversion/include/svn_version.h:", 
+   "Bump version number."
+  ], 
+  "revision_id": "876775"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-20T14:00:07.342228Z", 
+  "msg": [
+   "Some more annoying deprecated API removal.", 
+   "* subversion/libsvn_client/locking_commands.c", 
+   "(organize_lock_targets),", 
+   "* subversion/libsvn_client/list.c", 
+   "(svn_client_list2):", 
+   "Switch from svn_path_* APIs to svn_{dirent,uri}_* APIs."
+  ], 
+  "revision_id": "876774"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-03-20T13:56:04.116832Z", 
+  "msg": [
+   "Clarify a \"Test failed\" message.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_info):", 
+   "Remind how the output should be interpreted."
+  ], 
+  "revision_id": "876773"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-03-20T13:51:57.218088Z", 
+  "msg": [
+   "Add a new XFail test as collateral damage of r36689 and its thread.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(info_excluded):  New test.", 
+   "(test_list):  Run it, XFail, as number #36.", 
+   "Also,", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(exclude_keeps_hidden_entries):", 
+   "Update a comment to refer to the new test."
+  ], 
+  "revision_id": "876772"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-20T13:47:47.794456Z", 
+  "msg": [
+   "Fix a sequencing problem with wcprops loggy modification. The node should", 
+   "be \"not hidden\" by the time wcprops are installed. In cases where a", 
+   "previous versioned node was marked DELETED (thus, classified as \"hidden\"),", 
+   "the log actions did not reset the DELETED state before the wcprops are", 
+   "installed resulting in a failure/complaint about the node not being in", 
+   "version control.", 
+   "I've audited all wcprop loggy actions, and there was one point in the", 
+   "update_editor where the properties are installed *before* the flag was", 
+   "cleared. Analyzing the code, these two loggy actions and the supporting", 
+   "code are independent, so they can be performed in any order. This revision", 
+   "puts the clearing of the DELETE (via loggy_tweak_entry) before the wcprops", 
+   "installation (via merge_props and accumulate_wcprops).", 
+   "This bug has existed for a long while, but due to *another* bug (see", 
+   "http://svn.haxx.se/dev/archive-2009-03/0622.shtml) the code essentially", 
+   "worked as intended.", 
+   "Note: this revision does not fix old, stale logs which may be in the", 
+   "incorrect order. That may be fixed by a future revision. (Done: r36715)", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(merge_file): move the call to loggy_tweak_entry before the call to", 
+   "merge_props. expand a comment to explain why the order is important.", 
+   "(svn_wc_add_repos_file3): expand a couple comments to discuss the", 
+   "required ordering of the log actions."
+  ], 
+  "revision_id": "876771"
+ }
+]

@@ -1,0 +1,115 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-12-08T06:07:07.512431Z", 
+  "msg": [
+   "Make sure that error strings stand alone.  (Same idea, many places.)"
+  ], 
+  "revision_id": "848025"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-07T23:32:50.135707Z", 
+  "msg": [
+   "Introduce a convenient way to wrap errors from APR functions.", 
+   "* include/svn_error.h, libsvn_ra_svn/error.c", 
+   "(svn_error_wrap_apr): New function to wrap an APR status code.", 
+   "Includes the APR error message in the error string, if present.", 
+   "Many svn_error_create/svn_error_createf call sites changed to use", 
+   "this function, with messages regularized to the general form \"Can't", 
+   "operate on '%s'\".", 
+   "* libsvn_subr/subst.c (svn_subst_translate_cstring): It is supremely", 
+   "uninteresting to the user that we were trying to translate a", 
+   "stringbuf.  Don't wrap the translation error.", 
+   "* libsvn_subr/io.c", 
+   "(io_check_path): Reorganize a tiny bit to lose two lines of code.", 
+   "(svn_io_temp_dir): Regularize an error message.", 
+   "(svn_io_make_dir_recursively): Simplify.", 
+   "(svn_io_remove_dir): Stop reusing an error format; without the", 
+   "function prefix, the format strings we want are much shorter, and", 
+   "we can be clearer about what's going on by varying the error", 
+   "string.", 
+   "(svn_io_run_cmd): Regularize a few error messages.", 
+   "(svn_io_file_write, svn_io_file_write_full): Op string to", 
+   "do_io_file_wrapper_cleanup was wrong; fix.", 
+   "(svn_io_file_printf): Use do_io_file_wrapper_cleanup.", 
+   "* svnlook/main.c", 
+   "(open_writable_binary_file): Remove some unnecessary wrapping.", 
+   "Remove a test which was always true.  Clear err if we don't use it", 
+   "(though we still leak it in some error cases).", 
+   "* libsvn_diff/diff_file.c (map_or_read_file,", 
+   "svn_diff__file_output_unified_flush_hunk),", 
+   "libsvn_fs/fs.c (bdb_write_config),", 
+   "libsvn_subr/io.c (svn_io_file_printf),", 
+   "libsvn_subr/stream.c (write_handler_apr),", 
+   "libsvn_ra_dav/fetch.c (reporter_set_path, reporter_link_path,", 
+   "reporter_delete_path, reporter_finish_report,", 
+   "make_reporter):", 
+   "Use svn_io_file functions to simplify error handling."
+  ], 
+  "revision_id": "848024"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-07T18:53:31.906105Z", 
+  "msg": [
+   "Clean up some error message bogons.", 
+   "* svnadmin/main.c (parse_local_repos_path): Eliminate newline.", 
+   "* libsvn_subr/time.c (svn_time_from_cstring),", 
+   "libsvn_wc/adm_ops.c (svn_wc_revert): Just use svn_error_create.", 
+   "* libsvn_fs/tree.c (svn_fs_node_history),", 
+   "libsvn_fs/bdb/bdb-err.c (svn_fs__bdb_dberrf),", 
+   "libsvn_subr/opt.c (svn_opt_parse_all_args),", 
+   "clients/cmdline/merge.c (svn_cl__merge),", 
+   "clients/cmdline/checkout-cmd.c (svn_cl__checkout),", 
+   "clients/cmdline/mkdir-cmd.c (svn_cl__mkdir),", 
+   "clients/cmdline/move-cmd.c (svn_cl__move),", 
+   "clients/cmdline/cat-cmd.c (svn_cl__cat),", 
+   "clients/cmdline/revert-cmd.c (svn_cl__revert),", 
+   "clients/cmdline/copy-cmd.c (svn_cl__copy),", 
+   "clients/cmdline/blame-cmd.c (svn_cl__blame),", 
+   "clients/cmdline/resolved-cmd.c (svn_cl__resolved),", 
+   "clients/cmdline/cleanup-cmd.c (svn_cl__cleanup),", 
+   "clients/cmdline/add-cmd.c (svn_cl__add),", 
+   "clients/cmdline/switch-cmd.c (svn_cl__switch),", 
+   "clients/cmdline/delete-cmd.c (svn_cl__delete),", 
+   "clients/cmdline/export-cmd.c (svn_cl__export): Pass NULL instead of \"\"."
+  ], 
+  "revision_id": "848023"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-12-07T17:25:10.076960Z", 
+  "msg": [
+   "Various fixes for perl bindings, and partial swig 1.3.20 support.", 
+   "* perl/Makefile.PL: 'make clean' was removing Makefile.PL for some", 
+   "reasons, perhaps on case-insensitive platforms. Submitted by:", 
+   "Ben Reser <ben@reser.org>", 
+   "* svn_repos.i: Wrap config and fs_config for svn_repos_create.", 
+   "* svn_delta.i, svn_fs.i, core.i: Include svn_md5.h.", 
+   "* svn_string.i: Don't return when we get a null array.", 
+   "* swigutil_pl.c:", 
+   "Refactor perl -> c array convertor to share element convertors", 
+   "with hash convertors. Also re-order the functions for readibility.", 
+   "(svn_swig_pl_strings_to_hash): New.", 
+   "* swigutil_pl.h:", 
+   "Add swig 1.3.20 compile support.", 
+   "(svn_swig_pl_strings_to_hash): New."
+  ], 
+  "revision_id": "848022"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-07T16:58:37.211330Z", 
+  "msg": [
+   "Improve the error resulting from failing to open a repository.", 
+   "* libsvn_repos/repos.c (check_repos_version): Due to the magic of", 
+   "svn_repos_find_root_path, it's not likely that we'll try to open a", 
+   "repository with a nonexistent format file; moreover, if we", 
+   "fail to open the file due to a permissions or other error, wrapping", 
+   "that error will only serve to confuse the user.  So just use SVN_ERR", 
+   "when opening the version file."
+  ], 
+  "revision_id": "848021"
+ }
+]

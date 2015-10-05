@@ -1,0 +1,52 @@
+[
+ {
+  "author": "jonesde", 
+  "date": "2007-08-16T13:46:41.672189Z", 
+  "msg": [
+   "Small change so it doesn't blow up... didn't test to see if this works as desired though"
+  ], 
+  "revision_id": "566715"
+ }, 
+ {
+  "author": "gkossakowski", 
+  "date": "2007-08-16T13:44:28.526466Z", 
+  "msg": [
+   "COCOON-2112: Rename JXTGStringTemplateParser to LegacyStringTemplateParser so it better describes it's purpose."
+  ], 
+  "revision_id": "566714"
+ }, 
+ {
+  "author": "apetrenko", 
+  "date": "2007-08-16T13:44:19.724592Z", 
+  "msg": [
+   "Patch for HARMONY-4110 \"[classlib][awt] The method java.awt.geom.Area.subtract() returns no correct result when the first figure lies inside the second one\""
+  ], 
+  "revision_id": "566713"
+ }, 
+ {
+  "author": "woonsan", 
+  "date": "2007-08-16T13:43:17.863064Z", 
+  "msg": [
+   "I did some performance testings today on parallel rendering and fixed some bugs.", 
+   "With JMeter, I tested sequential mode, mixed mode and parallel mode by 50, 100, 200, 300, 400 concurrent threads.", 
+   "Some errors were detected during the testings and they were reasoned as follows:", 
+   "- It is problematic for worker monitor to pop two items to set one job. So, items of a job must be popped out in a thread-safe way.", 
+   "- The java.util.ConcurrentModificationException was thrown because the shared request object was not synchronized. ServletPortletInvoker should synchronize the servletRequest object during setting necessary attributes in its invoke() method.", 
+   "- The FIFOQueue may return null. Even if the size of the queue is greater than zero, the queue can return null because the item can be popped by other thread. Therefore, WorkerMonitorImpl should check if the popped job is null or not.", 
+   "- RenderingJobImpl should also synchronize the servlet request object before setting an attribute in parallel mode.", 
+   "- The #235 line of ServletPortletInvoker is like the following:", 
+   "servletRequest.setAttribute(ContainerConstants.PORTAL_CONTEXT, requestContext.getRequest().getContextPath());", 
+   "In the above code, requestContext.getRequest() can be null in parallel mode. So the line can be replaced with the following line:", 
+   "servletRequest.setAttribute(ContainerConstants.PORTAL_CONTEXT, ((HttpServletRequest) servletRequest).getRequest().getContextPath());"
+  ], 
+  "revision_id": "566712"
+ }, 
+ {
+  "author": "jkf", 
+  "date": "2007-08-16T13:42:30.442379Z", 
+  "msg": [
+   "Merge of Pr 43016 improved error reporting on nothing to compress."
+  ], 
+  "revision_id": "566711"
+ }
+]

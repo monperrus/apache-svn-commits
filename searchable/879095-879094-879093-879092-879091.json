@@ -1,0 +1,89 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-01T08:39:51.972783Z", 
+  "msg": [
+   "Stop the Win32 retry loop on trying to remove a directory that is not empty.", 
+   "(Removing a few seconds delay in several testcases).", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_dir_remove_nonrecursive): Only enter the win32 retry loop if the", 
+   "error is not 'directory not empty'."
+  ], 
+  "revision_id": "879095"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-01T08:16:20.537779Z", 
+  "msg": [
+   "* STATUS: Fix up a sentence in the r38000 group which had 3 words in it", 
+   "that didn't really make any sense."
+  ], 
+  "revision_id": "879094"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-09-01T04:00:58.490544Z", 
+  "msg": [
+   "Fix bug where svn_[rangelist | mergeinfo]_[merge | intersect | remove | diff]", 
+   "APIs could modify their *non*-output arguments.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(combine_ranges): The output variable for the svn_merge_range_t argument", 
+   "in this function does not need to be a pointer to a pointer, one pointer", 
+   "is enough since we are not allocating it.", 
+   "(intersection_type_t): New file local enum.", 
+   "(get_type_of_intersection): New.", 
+   "(combine_with_lastrange): Clean sheet reimplementation which fixes bug", 
+   "where non-output arguments to various svn_mergeinfo_* and svn_rangelist_*", 
+   "APIs where getting modified.  Also does away with the DUP_MRANGE argument", 
+   "since *every* caller was passing TRUE.  Also makes the code (hopefully) a", 
+   "bit easier to understand.", 
+   "(svn_rangelist_merge, rangelist_intersect_or_remove): Update calls to", 
+   "combine_with_lastrange().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(fix_deleted_subtree_ranges): If a rangelist describes a reverse merge", 
+   "then reverse it before passing it to the svn_rangelist_diff() API, which", 
+   "is, like most svn_rangelist_* APIs, intended to work with forward ranges", 
+   "only.  Through dumb luck our test suite's limited exercising of this", 
+   "code passed, but the rewrite of combine_with_lastrange() does not (as it", 
+   "should not).", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(test_merge_mergeinfo, test_remove_rangelist, test_rangelist_merge): When", 
+   "testing the svn_mergeinfo_merge, svn_rangelist_remove, and", 
+   "svn_rangelist_merge APIs, check that the non-output mergeinfo or", 
+   "rangelist arguments are not modified."
+  ], 
+  "revision_id": "879093"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-01T02:12:38.353583Z", 
+  "msg": [
+   "Remove an access baton use in loggy, in an effort to transition to wc-ng.", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "Update callers throughout.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__loggy_translated_file): Use the adm_abspath instead of the access", 
+   "baton.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(svn_wc__loggy_translated_file): Update parameter and docs."
+  ], 
+  "revision_id": "879092"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-01T01:30:16.596025Z", 
+  "msg": [
+   "Remove an access baton use in loggy, in an effort to transition to wc-ng.", 
+   "* subversion/libsvn_wc/adm_ops.c,", 
+   "subversion/libsvn_wc/update_editor.c,", 
+   "subversion/libsvn_wc/props.c,", 
+   "subversion/libsvn_wc/merge.c:", 
+   "Update callers throughout.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__loggy_move): Use the adm_abspath instead of the access baton.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(svn_wc__loggy_move): Update parameter and docs."
+  ], 
+  "revision_id": "879091"
+ }
+]

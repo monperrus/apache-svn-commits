@@ -1,0 +1,69 @@
+[
+ {
+  "author": "adelmelle", 
+  "date": "2008-05-01T16:15:44.622650Z", 
+  "msg": [
+   "Javadoc corrections"
+  ], 
+  "revision_id": "652565"
+ }, 
+ {
+  "author": "fhanik", 
+  "date": "2008-05-01T16:14:27.079374Z", 
+  "msg": [
+   "votes"
+  ], 
+  "revision_id": "652564"
+ }, 
+ {
+  "author": "jimk", 
+  "date": "2008-05-01T16:08:09.878779Z", 
+  "msg": [
+   "HBASE-607 MultiRegionTable.makeMultiRegionTable is not deterministic enough for regression tests", 
+   "M MultiRegionTable", 
+   "Make deterministic by creating the regions directly and not rely on", 
+   "the asychronous nature of cache flushes, compactions and splits. The", 
+   "regions are small, but the point of this class is to generate a", 
+   "table with multiple regions so we can test map / reduce, region", 
+   "onlining / offlining, etc.", 
+   "Removed PUNCTUATION from row keys. Not sure why it was there in the", 
+   "first place, other than perhaps to verify that a row key can have", 
+   "punctuation in it provided it is not the first character. This will", 
+   "become moot when row keys change from Text to byte[] anyways.", 
+   "Incorporate repeated code", 
+   "{code}", 
+   "region.close();", 
+   "region.getLog().closeAndDelete();", 
+   "{code}", 
+   "into private method closeRegionAndDeleteLog", 
+   "M TestSplit", 
+   "extends HBaseTestCase instead of MultiRegionTable. It didn't use the", 
+   "output of MultiRegionTable, so all that work was just wasted by this", 
+   "test.", 
+   "M TestTableIndex, TestTableMapReduce", 
+   "The only two tests that currently use MultiRegionTable. Minor", 
+   "modifications needed because MultiRegionTable now handles starting", 
+   "and stopping of the mini-DFS cluster. With the new MultiRegionTable", 
+   "class, if these tests fail now it will be because something they are", 
+   "testing has regressed and not because MultiRegionTable failed."
+  ], 
+  "revision_id": "652563"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2008-05-01T16:02:59.734893Z", 
+  "msg": [
+   "Fix threading issue which was causing a memory leak. Basically the writes were getting added to the in flight map", 
+   "after they were enqueued to get written and in that time span they could be been processed and the remove() would occur before the add witch caused the leak."
+  ], 
+  "revision_id": "652562"
+ }, 
+ {
+  "author": "josh", 
+  "date": "2008-05-01T15:46:21.980361Z", 
+  "msg": [
+   "added disabled junit for bug 44916"
+  ], 
+  "revision_id": "652561"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T12:40:46.974831Z", 
+  "msg": [
+   "HARMONY-1534", 
+   "This small patch fixed the following bugs in JVMTI", 
+   "- It used to be interpreter the default mode when JVMTI is enabled because JIT functionality was not implemented to a", 
+   "usable extent. When JVMTI was enabled on the command line interpreter was enabled automatically. Later then it was", 
+   "required to create a special property for JIT, it was added just in the place where interpreter property was set. But", 
+   "this isn't really correct since if -Dvm.use_interpreter property is specified explicitly on the command line then", 
+   "JVMTI vm.jvmti_enabled property ins't set. The fix just removes check for interpreter property because now we're", 
+   "trying to fully support JVMTI in both JIT and interpreter modes.", 
+   "- Getting and setting local variables in JIT mode is fixed. The null reference case was not handled correctly in the", 
+   "code. A reference which has a null object is not allowed in drlvm, it should be a null pointer or a heap pointer", 
+   "which is contained inside of a reference. The ugly interface with JIT always requires a pointer, so setting a null", 
+   "reference for it requires creating a local pointer pointing to a null :)", 
+   "- When starting and stopping single step when all threads are suspended thread manager iterator sometimes gives out", 
+   "threads with null vm_thread (VM TLS pointer). It appears that these threads are just started ones. So there is no", 
+   "need for assertion that threads is not alive (in thread manager terms it is alive, just birthing). So I've removed", 
+   "assertions and added comments.", 
+   "Ubuntu 6, smoke and c-unit"
+  ], 
+  "revision_id": "449225"
+ }, 
+ {
+  "author": "jonesde", 
+  "date": "2006-09-23T12:29:54.515623Z", 
+  "msg": [
+   "Basics in place for sample customer affiliate commission service, with commented out ECA rule to trigger; just need to implement the invoice creation now"
+  ], 
+  "revision_id": "449224"
+ }, 
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T12:26:00.041693Z", 
+  "msg": [
+   "HARMONY-1532", 
+   "[DRLVM] Implement advanced scheme of jvmti PopFrame and several fixes into JVMTI.", 
+   "- Implement advanced scheme of jvmti PopFrame. It provides opportunity to evaluate locals on the stack after", 
+   "pop, and allow several frames popping. This scheme can works for safe_point only.", 
+   "- Fix possible bug in GC stack enumeration after PopFrame. After pop frame nobody enumerate methods arguments", 
+   "for GC. This patch fixes it.", 
+   "- JVMTI PopFrame support in the JET (VM Part). To provide correct pop of the method frame, popped frame", 
+   "should be compiled with special flags. It's provide opportunity to find corresponding \"this\" and restore context", 
+   "before method call.", 
+   "- ExceptionCatch event does not send in some cases. The source of the bug is missed callback setting. So", 
+   "after add missed callback set, bug was fixed.", 
+   "- Fixed m2n frame registers in breakpoint dispatcher function.", 
+   "Depends on HARMONY-1523", 
+   "Tested on Ubuntu 6 - smoke and c-unit"
+  ], 
+  "revision_id": "449223"
+ }, 
+ {
+  "author": "bago", 
+  "date": "2006-09-23T12:14:41.197534Z", 
+  "msg": [
+   "Removed dead links, updated changelog to show only 2.2.0 (previous) to current (JAMES-618)"
+  ], 
+  "revision_id": "449222"
+ }, 
+ {
+  "author": "geirm", 
+  "date": "2006-09-23T12:10:00.095044Z", 
+  "msg": [
+   "HARMONY-1527", 
+   "By declaration jvmti_field_access_callback() & jvmti_field_modification_callback() must recieve pointer to jobject", 
+   "(GC-safe object handle). But actually JIT transfers non GC-safe direct pointers to managed objects. This results in", 
+   "crash on any attempt to use recieved object.", 
+   "Also JIT passes direct pointer instead of gc-safe handle in jvalue.l field of new_value argument to", 
+   "jvmti_field_modification_callback().", 
+   "Proposed patch fixes callbacks interface and implementation according to actual data type passed from JIT.", 
+   "Ubuntu 6 - smoke and c-unit"
+  ], 
+  "revision_id": "449221"
+ }
+]

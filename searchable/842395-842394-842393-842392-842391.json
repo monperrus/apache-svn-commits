@@ -1,0 +1,104 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-24T10:16:52.284884Z", 
+  "msg": [
+   "Continuing work on issue #745.  Specifically, this change makes the", 
+   "`revisions' table nothing but a mapping from revision number to", 
+   "transaction ID.", 
+   "* subversion/libsvn_fs/fs.h", 
+   "(svn_fs__revision_t): Remove `id' and `proplist'.  Rename `txn' to `txn_id'.", 
+   "(svn_fs__transaction_t): Change some comments ... we'll be using a", 
+   "few more of these fields for both types of transactions, now.", 
+   "* subversion/libsvn_fs/revs-txns.h", 
+   "(svn_fs__txn_make_commited): Was svn_fs__commit_txn.  The former", 
+   "name was a bit misleading.", 
+   "* subversion/libsvn_fs/revs-txns.c", 
+   "(get_rev_txn): New helper.", 
+   "(svn_fs__rev_get_root, svn_fs__rev_get_txn_id,", 
+   "txn_body_revision_prop, txn_body_revision_proplist,", 
+   "svn_fs__set_rev_prop): Update to use new svn_fs__revision_t and", 
+   "svn_fs__transaction_t structures.", 
+   "(svn_fs__txn_make_committed): Was svn_fs__commit_txn.  The former", 
+   "name was a bit misleading.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(svn_fs__dag_commit_txn, txn_body_dag_init_fs): svn_fs__commit_txn", 
+   "=> svn_fs__txn_make_committed.  Update usage of svn_fs__revision_t", 
+   "structure.", 
+   "* subversion/libsvn_fs/util/fs_skels.c", 
+   "(is_valid_revision_skel, svn_fs__parse_revision_skel,", 
+   "svn_fs__unparse_revision_skel): Updated to support new", 
+   "svn_fs__revision_t.", 
+   "(is_valid_transaction_skel, svn_fs__parse_transaction_skel,", 
+   "svn_fs__unparse_transaction_skel): Updated to support new", 
+   "svn_fs__transaction_t.", 
+   "* subversion/libsvn_fs/structure", 
+   "Modify the TRANSACTION and REVISION skel schemas."
+  ], 
+  "revision_id": "842395"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-24T08:11:54.652595Z", 
+  "msg": [
+   "Add version number to \"svndiff\" database storage mechanism.  Idea", 
+   "gleaned from a patch by Daniel Berlin <dan@dberlin.org>.  From this", 
+   "point, Daniel's implementation of svndiff v.1 (also present in the", 
+   "patch, but not of strict interest my task at hand) can be added", 
+   "without requiring a repository dump/load cycle.  While this change", 
+   "*could* have been implemented to be backwards compatible, forthcoming", 
+   "changes to the filesystem code will not be, so a dump/load cycle will", 
+   "be required for all existing repositories anyway.  I'm considering", 
+   "this change part of Issue #745, as well as issue #725.", 
+   "* subversion/libsvn_fs/structure", 
+   "(Representations): Add VERSION header for \"svndiff\" DIFF types.", 
+   "* subversion/libsvn_fs/fs.h", 
+   "(svn_fs__rep_delta_chunk_t): Add 'version' member.", 
+   "* subversion/libsvn_fs/util/fs_skels.c", 
+   "(is_valid_rep_delta_chunk_skel): New.", 
+   "(is_valid_representation_skel): Flesh this function out a bit.", 
+   "(svn_fs__parse_representation_skel, svn_fs__unparse_representation_skel):", 
+   "Update to handle addition of VERSION atom to DIFF skel.", 
+   "* subversion/libsvn_fs/reps-strings.c", 
+   "(rep_read_range): Send the stored diff version down the line, and", 
+   "error out if any inconsistencies are found.", 
+   "(struct write_svndiff_strings_baton): Add 'version' member.", 
+   "(write_svndiff_strings): Populate the baton's 'version' member.", 
+   "(svn_fs__rep_deltify): Populate the diff chunk's 'version' member."
+  ], 
+  "revision_id": "842394"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-24T07:35:20.400376Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/version.c", 
+   "(dav_new_error_tag): Make the out-of-dateness check a bit more", 
+   "choosy about what it deems an errorful state."
+  ], 
+  "revision_id": "842393"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-06-23T19:04:40.898092Z", 
+  "msg": [
+   "* subversion/libsvn_client/externals.c", 
+   "(parse_externals_description): Remove comma to fix error format.", 
+   "* subversion/clients/cmdline/export-cmd.c: Include svn_path.h."
+  ], 
+  "revision_id": "842392"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-06-23T17:12:23.508569Z", 
+  "msg": [
+   "Set an appropriate rpath when linking the mod_dav_svn Apache module.", 
+   "Patch by: Stephen Clouse <stephenc@theiqgroup.com>", 
+   "* Makefile.in: Add APACHE_LIBEXECDIR and LINK_APACHE_MOD.", 
+   "* ac-helpers/svn-apache.m4: Set APACHE_LIBEXECDIR.", 
+   "* build/gen_base.py (MakefileGenerator.write): Use LINK_APACHE_MOD to", 
+   "link the Apache module."
+  ], 
+  "revision_id": "842391"
+ }
+]

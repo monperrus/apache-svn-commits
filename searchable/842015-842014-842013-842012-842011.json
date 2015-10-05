@@ -1,0 +1,111 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-05-12T20:24:49.938440Z", 
+  "msg": [
+   "* subversion/libsvn_wc/diff.c (directory_elements_diff): Move property", 
+   "diff printing so that it works for the root directory."
+  ], 
+  "revision_id": "842015"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-12T19:58:50.424828Z", 
+  "msg": [
+   "Have dumpfile parser send feedback via a passed-in stream.", 
+   "Someday, maybe it can drive a more complex, specialized feedback", 
+   "vtable.  But for now, this solves the problem of getting all the", 
+   "temporary printf's out of libsvn_repos.", 
+   "* svn_repos.h", 
+   "(svn_repos_get_fs_build_parser) new public name of get_parser.  add", 
+   "a 'feedback' stream as well.", 
+   "(svn_repos_load_fs):  take a 'feedback' stream arg, a.k.a. 'outstream'.", 
+   "* load.c", 
+   "(struct parse_baton):  add outstream field.", 
+   "(svn_repos_get_fs_build_parser): pass outstream to parse_baton.", 
+   "(svn_repos_load_fs): take outstream, pass to previous.", 
+   "(new_revision_record, new_node_record, close_revision): use", 
+   "svn_stream_printf or svn_stream_write to send feedback during the", 
+   "parse.", 
+   "* svnadmin/main.c", 
+   "(main): pass stdout as feedback stream to svn_fs_load_fs."
+  ], 
+  "revision_id": "842014"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-12T19:20:53.432958Z", 
+  "msg": [
+   "* notes/fs-improvements.txt: \"Caesar's wife must be above suspicion.\""
+  ], 
+  "revision_id": "842013"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-12T19:07:29.504800Z", 
+  "msg": [
+   "If the dumpstream parser encounters \"copyfrom\" history, try to do a", 
+   "copy from older revisions.", 
+   "This behavior can be toggled with a 'use_history' flag to the parser:", 
+   "if the flag is set, then the (relative) copyfrom_rev better exist in", 
+   "the repository.  If the flag is unset, the copyfrom history is", 
+   "ignored, and the file is added anyway (since the dumpstream still has", 
+   "its fulltext.)", 
+   "* load.c", 
+   "(struct revision_baton): add rev_offset field.", 
+   "(struct parse_baton): add use_history flag.", 
+   "(struct node_baton): add copyfrom args.", 
+   "(make_node_baton): parse copyfrom args out of a header.", 
+   "(new_revision_record): calculate rev_offset.", 
+   "(maybe_add_with_history): new helper func.", 
+   "(new_node_record): call new helper func.", 
+   "(get_parser): take use_history flag.", 
+   "(svn_repos_load_fs): pass use_history == TRUE to get_parser.", 
+   "* dump.c (dump_node): print copyfrom data in two headers.", 
+   "* svn_repos.h (SVN_REPOS_DUMPFILE_NODE_COPYFROM_PATH,", 
+   "SVN_REPOS_DUMPFILE_NODE_COPYFROM_REV):  split up the old copied-from", 
+   "header for easier parsing.", 
+   "* fs_dumprestore.txt: tweak copyfrom spec appropriately."
+  ], 
+  "revision_id": "842012"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-12T16:57:03.498843Z", 
+  "msg": [
+   "Miscellaneous cleanups and stuff related to svn_repos_dir_delta.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_dir_delta): Remove `src_revs' parameter.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(proplist_change_fn_t): Remove `source_rev_diffs' member.", 
+   "(delta_proplists): Fix some uses of `pool' that should have been `subpool'.", 
+   "(add_file_or_dir, replace_file_or_dir, delta_dirs): Renamed some", 
+   "variables for brevity.", 
+   "(get_path_revision): New.", 
+   "(get_revision_from_hash): Removed.  Callers now use get_path_revision().", 
+   "(svn_repos_dir_delta): Remove `src_revs' parameter.", 
+   "* subversion/libsvn_repos/node_tree.c", 
+   "(open_file, open_directory): Code lineup.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(svn_repos_dump_fs): Update call to svn_repos_dir_delta().", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_report_baton_t): Remove `path_revs' member.", 
+   "(add_to_path_map, get_from_path_map): Code formatting change.", 
+   "(svn_repos_set_path, svn_repos_link_path): No longer use path_revs hash.", 
+   "(svn_repos_finish_report): Update call to svn_repos_dir_delta().", 
+   "(svn_repos_begin_report): No longer use path_revs hash.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_or_open_file): Oops.  Rename `copyfrom_url' to `copyfrom_rev'.", 
+   "* subversion/svnlook/main.c", 
+   "(generate_delta_tree): Update call to svn_repos_dir_delta().", 
+   "* subversion/mod_dav_svn/merge.c", 
+   "(dav_svn__merge_response): Update call to svn_repos_dir_delta().", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(dir_deltas): Update call to svn_repos_dir_delta().", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(receive_overlapping_same_change): Make test description consistent", 
+   "with others in this file (and fix spelling along the way)."
+  ], 
+  "revision_id": "842011"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-04-28T18:32:43.673481Z", 
+  "msg": [
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/Status.java", 
+   "(lastChangedDate, lockCreationDate): Documented that these dates are", 
+   "represented in _microseconds_.", 
+   "(microsecondsToDate): New class method which converts microseconds", 
+   "since the epoch to a Date object.", 
+   "(getLastChangedDate, getLockCreationDate): Refactored to leverage", 
+   "the new microsecondsToDate() class method."
+  ], 
+  "revision_id": "854570"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-04-28T18:30:34.431022Z", 
+  "msg": [
+   "ra_dav/mod_dav_svn bugfix:  'svn info URL' should show correct lock owner.", 
+   "The problem is that -- just like lock->creationdate -- there's no", 
+   "concept of lock->owner in the DAV universe.  When neon performs a", 
+   "PROPFIND to learn lock details, mod_dav_svn inserts a custom", 
+   "'creationdate' header into the response that ra_dav picks out.  This", 
+   "patch adds the same behavior for marshalling the 'lock owner' field.", 
+   "This patch fixes lock_tests.py #18 over ra_dav.", 
+   "* subversion/include/svn_dav.h", 
+   "(SVN_DAV_LOCK_OWNER_HEADER): new custom response header.", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(dav_svn_get_locks, dav_svn_find_lock, dav_svn_append_locks):", 
+   "send new header along with the custom creationdate header.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(struct lock_request_baton):  add 'lock_owner' field to context.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(handle_lock_owner_header):  new callback to parse new response header.", 
+   "(pre_send_hook):  register callback for neon's LOCK and PROPFIND requests.", 
+   "(shim_svn_ra_dav__lock, lock_receiver):  don't assume ras->auth_user", 
+   "owns the lock, grab field from the context structure instead.", 
+   "(svn_ra_dav__get_lock):  remove redundant check for creationdate;", 
+   "lock_receiver callback was already doing this."
+  ], 
+  "revision_id": "854569"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-04-28T17:47:42.882787Z", 
+  "msg": [
+   "Commit up some outstanding changes to the crossover guide.", 
+   "* doc/user/cvs-crossover-guide.html"
+  ], 
+  "revision_id": "854568"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-04-28T14:20:18.835739Z", 
+  "msg": [
+   "Add a new test for Ben's 'svn info URL' bug (where the lock owner is", 
+   "either missing or incorrect).  This test currently fails over DAV, but", 
+   "ben will be committing a fix for it today.", 
+   "* subversion/tests/clients/cmdline/lock_tests.py", 
+   "(examine_lock_via_url): New test.", 
+   "(test_list): Add examine_lock_via_url to the list."
+  ], 
+  "revision_id": "854567"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-04-28T13:42:12.738231Z", 
+  "msg": [
+   "Cast a third +1 for r14482."
+  ], 
+  "revision_id": "854566"
+ }
+]

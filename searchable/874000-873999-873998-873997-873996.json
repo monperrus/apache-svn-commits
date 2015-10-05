@@ -1,0 +1,94 @@
+[
+ {
+  "author": "sbutler", 
+  "date": "2008-10-28T13:08:55.447061Z", 
+  "msg": [
+   "On the tree-conflicts-notify branch: Bug fixes before we merge to", 
+   "trunk.  Mainly changes to test code.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(check_tree_conflict): Eliminate false tree conflict upon checking", 
+   "out a file external.", 
+   "* subversion/tests/cmdline/tree_conflict_tests.py", 
+   "(ensure_tree_conflict): The commit target should be the tree conflict", 
+   "victim, not its parent directory.", 
+   "* subversion/tests/cmdline/stat_tests.py", 
+   "(status_with_tree_conflicts): Adjust expectations (incoming delete", 
+   "is not applied to a tree conflict victim).", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(del_differing_file): For now, allow tree conflicts to be reported", 
+   "as text conflicts in the output summary."
+  ], 
+  "revision_id": "874000"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-28T12:21:11.525367Z", 
+  "msg": [
+   "On the tree-conflicts-notify branch:", 
+   "Merge outstanding changes from trunk up to r33900."
+  ], 
+  "revision_id": "873999"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-28T11:33:59.215827Z", 
+  "msg": [
+   "* subversion/libsvn_subr/win32_crypto.c", 
+   "(windows_password_encrypter, windows_password_decrypter): Following up on", 
+   "r33913 call svn_auth__simple_password_(get/set) with an extra argument."
+  ], 
+  "revision_id": "873998"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-28T10:50:51.986922Z", 
+  "msg": [
+   "Mark a local function as \"static\" and remove unused variables. Found by GCC.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(make_adm_subdir): Mark as \"static\". Add an empty doc-string as a", 
+   "reminder that it needs one.", 
+   "(init_adm_tmp_area, init_adm): Remove unused variables."
+  ], 
+  "revision_id": "873997"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-28T02:55:14.448904Z", 
+  "msg": [
+   "Revamp how some key paths are passed around in order to clarify the", 
+   "dataflow, and to give us opportunities for simplifications and to skip", 
+   "extra complete-scans of files.", 
+   "In short, one of the big problems is that struct file_baton is being used", 
+   "as a giant glom of random globals. One function stores a value, and an", 
+   "unrelated function reads that value. The connection and ordering between", 
+   "the functions is unclear (being primarily driven by the delta editor from", 
+   "some unknown location). The resultant coupling is total ass.", 
+   "More parameters are passed to functions, now, in order to clear this up.", 
+   "* subverslon/libsvn_wc/update_editor.c:", 
+   "(struct handler_baton): add the path where we are constructing the", 
+   "updated file (within apply_textdelta). also store the digest in the", 
+   "baton. when the apply is finished, we construct/store the checksum", 
+   "into the file_baton.", 
+   "(struct file_baton): add a checksum that is computed from an", 
+   "apply_txdelta, and one computed during an add-with-history. the", 
+   "old-style digest is removed (in handler_baton now)", 
+   "(window_handler): the file to remove is now hb->work_path rather than in", 
+   "the file_baton. upon a successful apply, we copy that path and the", 
+   "checksum into the file baton.", 
+   "(add_file_with_history): compute the checksum for the copied file *as*", 
+   "we copy the file, or receive it from the server. this saves a pass", 
+   "over the file later, and gives us an opportunity to skip the checksum", 
+   "in the first place, based on where we get the file.", 
+   "(choose_base_paths); take pointers to OUTPUT params, rather than a file", 
+   "baton hunk o' globals. we only fill out the original text base", 
+   "location, as the caller will get a temporary path on its own.", 
+   "(apply_textdelta): change call to choose_base_paths(), and put the", 
+   "working file into the handler baton (not the file baton).", 
+   "(merge_file): take the path to the to-be-installed text base as a", 
+   "parameter, rather than picked up out of file_baton.", 
+   "(close_file): don't bother to copy or checksum a copied text base; we've", 
+   "already done that"
+  ], 
+  "revision_id": "873996"
+ }
+]

@@ -1,0 +1,68 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2008-10-16T21:25:35.011474Z", 
+  "msg": [
+   "Fix signed/unsigned compile error."
+  ], 
+  "revision_id": "705365"
+ }, 
+ {
+  "author": "nbubna", 
+  "date": "2008-10-16T21:24:33.975863Z", 
+  "msg": [
+   "standardize line/col testing for exception messages"
+  ], 
+  "revision_id": "705364"
+ }, 
+ {
+  "author": "nbubna", 
+  "date": "2008-10-16T21:23:23.422598Z", 
+  "msg": [
+   "put proper template/line/col info null iterator message (thx to Byron Foster)"
+  ], 
+  "revision_id": "705363"
+ }, 
+ {
+  "author": "gsingers", 
+  "date": "2008-10-16T21:10:52.860864Z", 
+  "msg": [
+   "MAHOUT-69: added easymock"
+  ], 
+  "revision_id": "705362"
+ }, 
+ {
+  "author": "chrisd", 
+  "date": "2008-10-16T21:09:27.020092Z", 
+  "msg": [
+   "Prior to authn/z refactoring in r368027, if authorization Require", 
+   "directives had no matching AuthType and associated authentication", 
+   "directives, requests would generally fall through in the", 
+   "check_user_id hook to mod_authn_default.c's authentication_no_user()", 
+   "handler, which returned DECLINED if ap_auth_type() was not set.", 
+   "The ap_process_request_internal() function in request.c would handle", 
+   "this case by logging an \"AuthType not set!\" error and returning", 
+   "HTTP_INTERNAL_SERVER_ERROR.", 
+   "The refactoring removes this error handling in request.c, so", 
+   "individual modules will need to test for a lack of authentication,", 
+   "as necessary.  Since some modules such as mod_authz_host.c support", 
+   "Require directives that do not need any authentication, the", 
+   "mod_authn_default.c handler no longer returns DECLINED if ap_auth_type()", 
+   "is not set.  (Also, mod_authn_default can be compiled out with", 
+   "--disable-authn-default, so it can't be relied upon to exist.)", 
+   "Since r->user may now be NULL, individual handlers must test for that", 
+   "case when necessary.  Otherwise, most Require directives in the", 
+   "absence of AuthType directives cause handlers to crash while performing", 
+   "strcmp() and friends on a NULL r->user value.", 
+   "NOTE: I can't test mod_authnz_ldap.c myself, so I'm not sure if it", 
+   "needs similar fixes.  On the one hand, a NULL r->user in the authz", 
+   "handlers always generates a log message.  However, it appears that", 
+   "authn_ldap_build_filter() will sometimes then be called, perform no", 
+   "action, which may result in a possibly uninitialized filtbuf buffer", 
+   "being passed to util_ldap_cache_getuserdn().  I don't know if that", 
+   "could cause problems in the LDAP cache code.  If someone familiar with", 
+   "LDAP authz could take a look, that would be much appreciated."
+  ], 
+  "revision_id": "705361"
+ }
+]

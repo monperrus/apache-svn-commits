@@ -1,0 +1,99 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2008-02-14T23:22:45.504875Z", 
+  "msg": [
+   "Follow up to r29360 with a more conservative fix:", 
+   "* subversion/mod_dav_svn/reports/mergeinfo.c", 
+   "(dav_svn__get_mergeinfo_report): Flush the brigade if there was any", 
+   "data sent, no matter what the value of derr.  This essentially", 
+   "reverts the code back to the way it was, then adds a conditional", 
+   "making the flush dependent on whether data was sent.", 
+   "We may want to consider a similar technique for other parts of mod_dav_svn."
+  ], 
+  "revision_id": "869440"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-14T22:53:32.380436Z", 
+  "msg": [
+   "Remove the mergeinfo-capability branch, now that issue #3089 is done."
+  ], 
+  "revision_id": "869439"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-14T22:47:26.552748Z", 
+  "msg": [
+   "Fix issue #3089: only claim mergeinfo capability if repos has it too.", 
+   "This change teaches all three RA layers to correctly divine", 
+   "server-side mergeinfo support.  It is consolidated from various", 
+   "changes on the mergeinfo-capability branch; see the r29358 log", 
+   "message for more information.", 
+   "Do ra_svn:", 
+   "* subversion/svnserve/serve.c", 
+   "(serve): Only report mergeinfo capability if repos supports it.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(open_session): Expect repos capabilities to arrive separately.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(svn_ra_svn_set_capabilities): Document idempotency, because we", 
+   "depend on it now.", 
+   "* subversion/libsvn_ra_svn/protocol: Document how repository", 
+   "capabilities get sent to the client.", 
+   "Do ra_dav:", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(capability_server_yes): New capability state.", 
+   "(capabilities_headers_iterator_callback): Set above state for mergeinfo.", 
+   "(svn_ra_serf__has_capability): Only claim mergeinfo capability if", 
+   "repository supports it as well as server.", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(capability_server_yes): New capability state.", 
+   "(parse_capabilities): Set above state for mergeinfo.", 
+   "(svn_ra_neon__has_capability): Only't claim mergeinfo capability if", 
+   "repository supports it as well as server.", 
+   "Do ra_local:", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__has_capability): Just ask repository directly if it", 
+   "has mergeinfo capability.", 
+   "Update documentation:", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_mergeinfo): Document error behavior that we depend on,", 
+   "and correct a comment about mergeinfo support."
+  ], 
+  "revision_id": "869438"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-02-14T21:40:33.771702Z", 
+  "msg": [
+   "Merge r29329  from trunk, which see for details.", 
+   "* r29329", 
+   "Fix regression in svnadmin verify in r24559, new in 1.5.x.  We can", 
+   "just roll back 24559 on the 1.5.x branch, but that makes svnadmin", 
+   "unusable on large repositories.  We must do one or the other.", 
+   "Votes:", 
+   "+1: epg, cmpilato", 
+   "Also:", 
+   "* STATUS", 
+   "Remove this change from the approved list."
+  ], 
+  "revision_id": "869437"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-02-14T21:37:40.694644Z", 
+  "msg": [
+   "Merge r29313 from trunk, which see for details.", 
+   "* r29313", 
+   "This is a follow on to the already approved r29250 \"Yet another node-", 
+   "origins-cache-for-FSFS implementation!\" that modifies the Ruby bindings", 
+   "tests so they pass.", 
+   "Votes:", 
+   "+1: joeswatosh, cmpilato", 
+   "Also:", 
+   "* STATUS", 
+   "Remove this change from the approved list."
+  ], 
+  "revision_id": "869436"
+ }
+]

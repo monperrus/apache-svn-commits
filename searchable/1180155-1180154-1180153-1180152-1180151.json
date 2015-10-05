@@ -1,0 +1,74 @@
+[
+ {
+  "author": "tucu", 
+  "date": "2011-10-07T19:01:01.990838Z", 
+  "msg": [
+   "MAPREDUCE-3003. Publish Yarn and MapReduce artifacts to Maven snapshot repository. (tucu)"
+  ], 
+  "revision_id": "1180155"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2011-10-07T19:00:40.982121Z", 
+  "msg": [
+   "Tweak the svn_rangelist_merge2 API so it allocates new svn_merge_range_t", 
+   "elements only when absolutely necessary.", 
+   "This addresses a serious inefficiency in memory usage when", 
+   "svn_mergeinfo_catalog_merge, svn_mergeinfo_merge2, or svn_rangelist_merge2", 
+   "are called in a loop.  Prior to this change svn_rangelist_merge2 could", 
+   "potentially reallocate *every* range in both rangelists.", 
+   "For example, the peak working set memory for the reintegrate merge described", 
+   "here http://svn.haxx.se/dev/archive-2011-09/0254.shtml was 1,324,664 KB", 
+   "with trunk@1179545.  With this commit that drops to 26,880 KB.", 
+   "* subversion/include/svn_sorts.h", 
+   "(svn_sort__array_delete): New.", 
+   "* subversion/libsvn_subr/sorts.c", 
+   "(svn_sort__array_delete): New, moved here from", 
+   "subversion/libsvn_client/merge.c:remove_element_from_array.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(remove_element_from_array): Remove -- replacing it with", 
+   "svn_sort__array_delete.", 
+   "(remove_absent_children,", 
+   "remove_children_with_deleted_mergeinfo): Replace remove_element_from_array", 
+   "with svn_sort__array_delete.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(adjust_remaining_ranges): New.", 
+   "(svn_rangelist_merge2): We are not creating a new rangelist, so modify", 
+   "the output rangelist in-place as much as possible.  Previously we used", 
+   "combine_with_lastrange, which happily reallocated most of the ranges", 
+   "in both rangelists.  This is fine for the other callers (i.e.", 
+   "svn_rangelist_intersect, svn_rangelist_remove, and", 
+   "svn_mergeinfo__filter_mergeinfo_by_ranges) which are allocating a new", 
+   "output argument, but not for svn_rangelist_merge2 which is *not*", 
+   "allocating a new rangelist.", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(test_rangelist_merge): Add some new test cases to exercise all the code", 
+   "paths in svn_rangelist_merge2 and adjust_remaining_ranges."
+  ], 
+  "revision_id": "1180154"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2011-10-07T18:53:06.207650Z", 
+  "msg": [
+   "Fix expansion of tdb: in command line --set parameters."
+  ], 
+  "revision_id": "1180153"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2011-10-07T18:51:57.483309Z", 
+  "msg": [
+   "Fix expansion of tdb: in command line --set parameters."
+  ], 
+  "revision_id": "1180152"
+ }, 
+ {
+  "author": "patanachai", 
+  "date": "2011-10-07T18:46:37.366660Z", 
+  "msg": [
+   "Correct Project name"
+  ], 
+  "revision_id": "1180151"
+ }
+]

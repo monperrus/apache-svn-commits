@@ -1,0 +1,88 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-08-31T20:35:17.572251Z", 
+  "msg": [
+   "Thwart attempts to merge into a path that has unresolved conflicts, by", 
+   "aborting a merge which is broken into multiple revision ranges after", 
+   "applying a range which results in a conflict.", 
+   "Eventually, we'll want to only abort the merge when attempting to", 
+   "merge into a path which we've already put into conflict (creating what", 
+   "sussman calls a \"deep conflict\", and possibly stashing away the", 
+   "remaining unmerged revisions in the entries file for later restart of", 
+   "the merge).  This solution will need to deal with tree conflicts,", 
+   "however.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(struct merge_cmd_baton): Add a new conflicted_paths field.", 
+   "(is_path_conflicted_by_merge): Add new function which returns", 
+   "whether any WC path is in conflict.", 
+   "(conflict_resolver_baton_t): Add a new data structure used to", 
+   "collect state while performing merges which encounter confilcts.", 
+   "(conflict_resolver): Rename svn_wc_conflict_resolver_func_t", 
+   "implementation from default_conflict_resolver() (since it's now a", 
+   "wrapper function), including a conflicted_paths field which is a", 
+   "pointer to the field of the same name in \"struct merge_cmd_baton\".", 
+   "Keep track of paths for which conflict resolution attempts did not", 
+   "resolve the conflict.", 
+   "(merge_file_changed): Add a TODO comment for the spot where we", 
+   "eventually want to error out if attempting to merge into a path", 
+   "that is already in conflict.  Wrap any", 
+   "svn_wc_conflict_resolver_func_t and baton provided by the client", 
+   "context, using conflict_resolver(), and a stack-allocated", 
+   "conflict_resolver_baton_t.", 
+   "(make_merge_conflict_error): Add new function used to create an", 
+   "error object used when conflicts occur.", 
+   "(do_merge, do_single_file_merge): Error out if attempting to merge", 
+   "into a path which needs therapy (e.g. has unresolved conflicts).", 
+   "(svn_client_merge3, svn_client_merge_peg3): Initialize", 
+   "merge_cmd_baton.conflicted_paths to NULL.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(cherry_pick_text_conflict): Enhance test case such that the", 
+   "requested merge is broken up into multiple revision ranges, the", 
+   "first of which creates a conflict.  Test for the expected error", 
+   "output from the aborted merge, in addition to the conflict itself."
+  ], 
+  "revision_id": "866485"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-08-31T20:28:27.727023Z", 
+  "msg": [
+   "We don't make return value guarentees when the function returns an error.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc_transmit_text_delta2): Don't set the return value in the error-case."
+  ], 
+  "revision_id": "866484"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-31T20:22:10.264244Z", 
+  "msg": [
+   "Add a meaningful error message to the exception thrown when the", 
+   "expected error output of 'merge' is not matched by the actual output.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_merge2): Add message to SVNUnmatchedError exception."
+  ], 
+  "revision_id": "866483"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-31T19:20:58.386507Z", 
+  "msg": [
+   "Reduce boilerplate in test case.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(cherry_pick_text_conflict): Use Python string multiplication", 
+   "operator to reduce the amount of text repeated in the test."
+  ], 
+  "revision_id": "866482"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-31T18:35:44.050927Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(log_receiver): Split a long line."
+  ], 
+  "revision_id": "866481"
+ }
+]

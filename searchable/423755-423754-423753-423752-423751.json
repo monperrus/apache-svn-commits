@@ -1,0 +1,45 @@
+[
+ {
+  "author": "jstrachan", 
+  "date": "2006-07-20T04:39:20.032754Z", 
+  "msg": [
+   "To help with the development of Virtual Topics I've added a test case to confirm that destinations are lazily created when a consumer is created. For more background see the dev thread:  http://www.nabble.com/Re%3A-Virtual-Topics-%28was-Re%3A-Failover-topic-subscribers%29-tf1942508.html#a5404863"
+  ], 
+  "revision_id": "423755"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2006-07-20T04:32:04.063637Z", 
+  "msg": [
+   "DERBY-1357: Fix optimizer short-circuit logic. Here is the note from the contributor.", 
+   "I also had to update the lang/predicatePushdown.out master file because with the d1357_v1.patch the order of a couple of qualifiers has changed. Note that the query plans themselves are exactly the same--the only thing that's changed is the the qualifier ordering for one query. This change of order occurs because as part of the costing code in FromBaseTable.estimateCost() the optimizer transfers predicates from one predicate list to another, gets an estimated cost, then puts the predicates back into the original list. The methods to do this transferring are in NestedLoopJoinStrategy.java and HashJoinStrategy.java. In the former, the predicates are transferred away in front-to-back order and then transferred back in back-to-front order, which leads to a reversal of the relevant predicate ordering. Ex. If we have a list L1 of preds A,B,C and we transfer them to L2 in front-to-back order, L2 will end up with A,B,C. Then, when we transfer the predicates back to L1, if we process L2 in back-to-front order, L1 will end up with C,B,A. That said, with d1357_v1 applied the short-circuit logic prevents the optimizer from trying to optimize a join order that is known to be bad. This means that we skip an unnecessary round of optimization and therefore skip one round of order reversal, which means the order of the predicate qualifiers in the final plan is now different.", 
+   "I ran derbyall on Red Hat with sane jars and ibm142, and saw no new failures.", 
+   "Submitted by Army Brown (qozinx@gmail.com)"
+  ], 
+  "revision_id": "423754"
+ }, 
+ {
+  "author": "aadamchik", 
+  "date": "2006-07-20T04:26:20.572079Z", 
+  "msg": [
+   "a logging upgrade hint"
+  ], 
+  "revision_id": "423753"
+ }, 
+ {
+  "author": "bayard", 
+  "date": "2006-07-20T04:26:20.458209Z", 
+  "msg": [
+   "Applying all of Niall's nice work for finder back over to csv (from which finder was copied)"
+  ], 
+  "revision_id": "423752"
+ }, 
+ {
+  "author": "aadamchik", 
+  "date": "2006-07-20T04:26:15.920475Z", 
+  "msg": [
+   "a logging upgrade hint"
+  ], 
+  "revision_id": "423751"
+ }
+]

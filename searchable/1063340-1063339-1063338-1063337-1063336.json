@@ -1,0 +1,77 @@
+[
+ {
+  "author": "sergeyb", 
+  "date": "2011-01-25T16:28:45.622308Z", 
+  "msg": [
+   "[CXF-3288] Cloning ResponseBuilder during Client.getResponse() calls"
+  ], 
+  "revision_id": "1063340"
+ }, 
+ {
+  "author": "hossman", 
+  "date": "2011-01-25T16:28:04.224710Z", 
+  "msg": [
+   "SOLR-2320: Fixed ReplicationHandler detail reporting for masters"
+  ], 
+  "revision_id": "1063339"
+ }, 
+ {
+  "author": "simonw", 
+  "date": "2011-01-25T16:27:00.302394Z", 
+  "msg": [
+   "merged revision 1063272 to 1063333"
+  ], 
+  "revision_id": "1063338"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2011-01-25T16:26:42.885789Z", 
+  "msg": [
+   "Server-side fix for issue #3657 'dav update report handler in skelta mode can", 
+   "cause spurious conflicts'.", 
+   "This change has two parts that are loosely related:", 
+   "1) It stops mod_dav_svn from ever sending the 'fetch-props' response to a", 
+   "client, even when in skelta (i.e. send-all=false) mode.  The server", 
+   "already knows what properties have changed so now it simply sends them,", 
+   "rather than telling the client to ask for them later.  This prevents", 
+   "the svn_delta_editor_t change_[file|dir]_prop callback from receiving", 
+   "faux property changes when the client asks for *all* the properties.", 
+   "See http://subversion.tigris.org/issues/show_bug.cgi?id=3657 for all the", 
+   "gory details.", 
+   "2) The comments in our code frequently make reference to 'modern' servers", 
+   "and clients in the context of mod_dav_svn.  Unfortunately there is no such", 
+   "thing as a pre-modern server, they are all modern!  The use of the term", 
+   "'modern' in our code comments predates Subversion 1.0.0, so the comments", 
+   "are misleading and the special case code for pre-modern servers (or", 
+   "clients) is unnecessary.  The special-case code is interdependent with", 
+   "the changes in #1 though, so these changes are being made in one commit,", 
+   "despite the fact one could argue they are logically separate.", 
+   "* subversion/libsvn_ra_neon/fetch.c", 
+   "(report_baton_t, start_element): Remove comments about 'modern' servers and", 
+   "replace as needed with discussion of whether we are in 'send-all' mode or", 
+   "not.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(struct item_baton_t): Remove changed_props, committed_rev, committed_date,", 
+   "and last_author members, none of these are necessary.", 
+   "(close_helper): Simplify check for when we need to send remove-prop.", 
+   "Remove code which sends 'fetch-props' to the client, we've already sent", 
+   "them.  Stop sending version-name, creationdate, and creator-displayname,", 
+   "these were only needed by  'non-modern clients' which don't actually", 
+   "exist!", 
+   "(upd_change_xxx_prop): Whether we are in send-all mode or not, we have the", 
+   "property changes already so send them now, rather than telling the client", 
+   "to 'fetch-props' later.  The only time we don't send the props is for", 
+   "additions while not in send-all mode (i.e. skelta mode) since property", 
+   "fetching is implied in addition."
+  ], 
+  "revision_id": "1063337"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2011-01-25T16:18:42.421411Z", 
+  "msg": [
+   "Deprecate isArrayByteBase64 in favor of isBase64 to match other method names."
+  ], 
+  "revision_id": "1063336"
+ }
+]

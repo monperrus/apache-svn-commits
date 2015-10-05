@@ -1,0 +1,93 @@
+[
+ {
+  "author": "dws", 
+  "date": "2002-02-14T06:30:07.577131Z", 
+  "msg": [
+   "* packages/rpm/subversion.spec : Now requires apache-2.0.32-0.3 or greater.", 
+   "I forgot to increment the release version last time."
+  ], 
+  "revision_id": "841345"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-02-14T02:53:58.335178Z", 
+  "msg": [
+   "Oops.  Last commit broke 'make check'.  This fixes it.", 
+   "* subversion/tests/clients/cmdline/svntest/tree.py", 
+   "(get_props): pass '--verbose' to 'svn plist' so we get both the names", 
+   "and values of properties."
+  ], 
+  "revision_id": "841344"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-02-14T02:29:38.113589Z", 
+  "msg": [
+   "Previously, 'svn propget' and 'svn proplist' printed out both the property", 
+   "names and the property values on their targets.  In addition, 'svn propget'", 
+   "would always print out the name of the file or directory in question.", 
+   "In the case of 'svn propget', this becomes problematic becuase people are", 
+   "prone to doing an 'svn propget', then editing the output and using it as the", 
+   "value for a propset, thus resulting in a property value that contains the", 
+   "name of the property, which is almost certainly not what they want.", 
+   "In the case of 'svn proplist', it just doesn't make sense to list the values,", 
+   "and only clutters up the output.", 
+   "This changes the behavior to the following:  'svn proplist' will only print", 
+   "the names of the properties, unless '--verbose' is specified.  'svn propget'", 
+   "will only print the values, and will only print the filenames if there is", 
+   "more than one target or '--recursive' was specified and svn_client_propget", 
+   "returned multiple files that matched that property.", 
+   "This fixes issue #627.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "add prototype and docstring for svn_cl__print_prop_names.", 
+   "* subversion/clients/cmdline/props.c", 
+   "(svn_cl__print_prop_names): new function.", 
+   "* subversion/clients/cmdline/propget-cmd.c", 
+   "(print_prop): deleted.", 
+   "(svn_cl__propget): print filenames only if necessary, and don't print", 
+   "property name at all, since it never changes.", 
+   "* subversion/clients/cmdline/proplist-cmd.c", 
+   "(svn_cl__proplist): only call svn_cl__print_prop_hash if verbose was", 
+   "specified, otherwise use svn_cl__print_prop_names.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): add 'v' to the entry for svn_cl__proplist."
+  ], 
+  "revision_id": "841343"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-02-14T01:17:16.994608Z", 
+  "msg": [
+   "* subversion/libsvn_subr/svn_error.c: Wrap the definitions of error_file", 
+   "and error_line inside SVN_DEBUG, to silence gcc warning about those vars", 
+   "not being used.", 
+   "Suggested by: Blair Zajac <blair@orcaware.com>", 
+   "(Who noticed the new warning here.)"
+  ], 
+  "revision_id": "841342"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-02-13T22:45:03.513481Z", 
+  "msg": [
+   "I hear people are having trouble finding where Subversion errors come from.", 
+   "This little patch will fix them. (The troubles, not the people. :-)", 
+   "* subversion/include/svn_types.h (svn_error_t): Added fields file and line.", 
+   "* subversion/include/svn_error.h (svn_error__locate): New prototype.", 
+   "(svn_error_create, svn_error_createf, svn_error_quick_wrap): New macros,", 
+   "defined iff SVN_DEBUG, that wrap a call to svn_error__locate around", 
+   "the error creating functions.", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(SVN_ERROR_POOL, SVN_ERROR_POOL_ROOTED_HERE): Change to static arrays.", 
+   "Doesn't make sense to duplicate those strings.", 
+   "(SVN_FILE_LINE_UNDEFINED): New string: \"svn:<undefined>\"", 
+   "(svn_error__locate): New function. Remember the current error location.", 
+   "(make_error_internal): Copy the error location into the svn_error_t.", 
+   "(svn_handle_error): If SVN_DEBUG, print out the error location before", 
+   "displaying the error.", 
+   "(svn_pool_create, svn_pool_clear): Use SVN_FILE_LINE_UNDEFINED instead", 
+   "of a string literal in the ..._debug call."
+  ], 
+  "revision_id": "841341"
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "author": "josander", 
+  "date": "2005-04-14T06:14:21.856372Z", 
+  "msg": [
+   "* packages/windows-innosetup: Renamed from packages/win32-innosetup.", 
+   "The win32 part of the name is meaningless. Inno Setup doesn't care if it's 32-", 
+   "or 64-bit and handles both systems without problems.", 
+   "The Setup System is based on that the setup maker person is using a Working", 
+   "Copy for each setup series (trunk, 1.1.x series, 1.2.x series and so on) not", 
+   "different win*-innosetup folders in the repository."
+  ], 
+  "revision_id": "854255"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-04-14T06:10:51.029673Z", 
+  "msg": [
+   "Drop \"timeout\" from the public locking API, in favor of", 
+   "\"expiration_date\", matching both our internal storage semantics and", 
+   "the semantics of the only known users of expiring locks (DAV).", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_lock): Lose 'timeout'; add 'expiration_date' instead.", 
+   "* subversion/include/svn_repos.h,", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_lock): Lose 'timeout'; add 'expiration_date' instead.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_lock): Lose 'timeout'; add 'expiration_date' instead.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t): Update 'lock' function match the public API calling", 
+   "discipline.", 
+   "* subversion/libsvn_fs_fs/lock.h", 
+   "(svn_fs_fs__lock): Update to match public API calling discipline.", 
+   "* subversion/libsvn_fs_fs/lock.c", 
+   "(lock_baton): Lose 'timeout' member; add 'expiration_date' instead.", 
+   "(lock_body): Set the expiration date without any arithmetricks.", 
+   "(svn_fs_fs__lock): Update to match public API calling discipline.", 
+   "* subversion/libsvn_fs_base/lock.h", 
+   "(svn_fs_base__lock): Update to match public API calling discipline.", 
+   "* subversion/libsvn_fs_base/lock.c", 
+   "(struct lock_args): Lose 'timeout' member; add 'expiration_date' instead.", 
+   "(txn_body_lock): Set the expiration date without any arithmetricks.", 
+   "(svn_fs_base__lock): Update to match public API calling discipline.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__lock): Update comment in call to svn_repos_fs_lock().", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(dav_lock_to_svn_lock): Don't count on DAV_TIMEOUT_INFINITE == 0;", 
+   "its abstracted away for a reason.", 
+   "(dav_svn_refresh_locks): Handle the DAV_TIMEOUT_INFINITE case.", 
+   "(dav_svn_append_locks): Just use the lock expiration date directly.", 
+   "* subversion/tests/libsvn_fs/locks-test.c", 
+   "(attach_lock, lock_expiration, lock_break_steal_refresh, lock_out_of_date):", 
+   "Update calls to svn_fs_lock()."
+  ], 
+  "revision_id": "854254"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-04-14T06:03:41.403076Z", 
+  "msg": [
+   "New contribution -- a pre-lock hook script which requires that the", 
+   "path about to locked has the svn:needs-lock property set on it.", 
+   "* contrib/hook-scripts/pre-lock-require-needs-lock.py"
+  ], 
+  "revision_id": "854253"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-04-14T05:56:09.297073Z", 
+  "msg": [
+   "Minor cleanup to a contrib/ hook script template.", 
+   "* contrib/hook-scripts/pre-commit-check.py", 
+   "(main): Lose 'config_fp' parameter.", 
+   "(__main__): Don't pass an argument for the lost parameter."
+  ], 
+  "revision_id": "854252"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-04-14T05:53:00.864169Z", 
+  "msg": [
+   "Add svn_ra_initialize function.  Currently, it does nothing; the reason for it", 
+   "is so we can require it when used with the new svn_ra APIs in 1.2.", 
+   "* subversion/libsvn_ra/wrapper_template.h (COMPAT_INITFUNC): Add pool", 
+   "to INITFUNC call.", 
+   "* subversion/libsvn_ra/ra_loader.c (svn_ra_initialize): New function.", 
+   "(svn_ra_open, svn_ra_print_modules): Add pool to init_func call.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__init_func_t, svn_ra__local_init, svn_ra__svn_init,", 
+   "svn_ra__dav_init): Add pool argument.", 
+   "* subversion/include/svn_ra.h (svn_ra_initialize): Declare.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c (svn_ra_local__init),", 
+   "* subversion/libsvn_ra_svn/client.c (svn_ra_svn__init),", 
+   "* subversion/libsvn_ra_dav/session.c (svn_ra_dav__init): Add pool argument.", 
+   "* subversion/svnversion/main.c (main):", 
+   "* subversion/clients/cmdline/main.c (main): Call svn_ra_initialize."
+  ], 
+  "revision_id": "854251"
+ }
+]

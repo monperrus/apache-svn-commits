@@ -1,0 +1,47 @@
+[
+ {
+  "author": "mamta", 
+  "date": "2007-04-01T06:41:00.188819Z", 
+  "msg": [
+   "This commit provides collation sensitive subclasses of SQLVarchar, SQLLongvarchar, SQLClob namely, CollatorSQLVarchar, CollatorSQLLongvarchar and CollatorSQLClob. This new classes differ from their superclasses in how a non-default Collator is used for collation sensitive methods.", 
+   "The main problem that I came across while working on this patch is that Java does not allow multiple inheritence. Currently, the iapi.types package has  SQLChar as the base class. From this SQLChar, we have 2 subclasses, namely, CollatorSQLChar and SQLVarchar. At the moment, CollatorSQLChar overrides the collation sensitive methods(currently, there is only one collation sensitive method in CollatorSQLChar called like. More will be added later) from SQLChar. In order to provide a non-default collation implementation of SQLVarchar, I need to subclass SQLVarchar, but I can't simultaneously inherit from CollatorSQLChar method to get the collation sensitive implementation of the like method. Becuase of this limitation, one option is to duplicate the implementation ofcollation sensitive methods from CollatorSQLChar into CollatorSQLVarchar. That also means that we will have to duplicate the code in Collation sensitive subclasses of SQLLongvarchar and SQLClob. That is code duplicaiton in 4 classes.", 
+   "In order to avoid this code duplication, I am introducing a new helper class called WorkHorseForCollatorDatatype. This new class will keep the Collator and the SQLChar object whose data needs to be collated. The new class's like method will user the Collator object on SQLChar to do the comparison. Now, the non-default collation implementation of SQLChar and SQLVarchar can simply instantiate the new WorkHorseForCollatorDatatype class and delegate all the work for like method to WorkHorseForCollatorDatatype. This will avoid the code duplication and will keep the code in one central place.", 
+   "In addition, I have added a new interface called CollationElementsInterface. This interface should be mplemented by all the non-default collation implementation subclasses. The methods defined in the interface will be used by the like method(and other collation methods in future) in WorkHorseForCollatorDatatype.", 
+   "These new non-default collation implementations for all the char datatypes are not hooked into Derby at query compile phase and hence they do not currently get used. More code to follow later to make these classes active in Derby.", 
+   "One other change in this package is to remove the formatid for CollatorSQLChar. These formatid changes for CollatorSQLChar went into revision 516864. But since then, we have changed the design and rather than adding new datatypes for non-default collation implementations, we will simply associate a RuleBasedCollator with them and this collator will get used during collation at runtime. Because of this design change, I am removing the changes related to new formatid that went in revision 516864. This impacts RegisteredFormatIds.java, StoredFormatIds.java and CollatorSQLChar.java"
+  ], 
+  "revision_id": "524545"
+ }, 
+ {
+  "author": "samisa", 
+  "date": "2007-04-01T06:27:40.013929Z", 
+  "msg": [
+   "Arranged ops struct members"
+  ], 
+  "revision_id": "524544"
+ }, 
+ {
+  "author": "samisa", 
+  "date": "2007-04-01T06:22:32.960705Z", 
+  "msg": [
+   "Made ops struct static"
+  ], 
+  "revision_id": "524543"
+ }, 
+ {
+  "author": "jsdelfino", 
+  "date": "2007-04-01T06:22:13.550346Z", 
+  "msg": [
+   "Renamed xml module to assembly-xml"
+  ], 
+  "revision_id": "524542"
+ }, 
+ {
+  "author": "jsdelfino", 
+  "date": "2007-04-01T06:21:45.503592Z", 
+  "msg": [
+   "Removed unused imports"
+  ], 
+  "revision_id": "524541"
+ }
+]

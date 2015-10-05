@@ -1,0 +1,87 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-06-16T02:39:36.409382Z", 
+  "msg": [
+   "Update Win32 build.", 
+   "* libsvn_client.dsp: Add export.c. Remove apply_edits.c.", 
+   "* subversion_client.dsp: Add export-cmd.c."
+  ], 
+  "revision_id": "842310"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-16T02:14:07.957826Z", 
+  "msg": [
+   "Fix the dirs-changed command by using a new editor for it.", 
+   "* svnlook.py:", 
+   "(SVNLook.cmd_dirs_changed): pass the new DirsChangedEditor class to", 
+   "the _print_tree() method. no longer worry about passing dirs_only,", 
+   "as the new editor *only* does dirs.", 
+   "(SVNLook.cmd_ids, SVNLook.cmd_tree): pass the Editor class and don't", 
+   "worry about the do_indent flag, as the Editor class always indents", 
+   "now.", 
+   "(SVNLook._print_tree): take a factory object (e.g. a class) for", 
+   "constructing the editor object. No longer take dirs_only or", 
+   "do_indent, as we assume the factory constructs an editor with the", 
+   "right options.", 
+   "(Editor.__init__): don't take dirs_only or do_indent any more. These", 
+   "options are now always false, true (respectively).", 
+   "(Editor.open_root, Editor.add_directory, Editor.add_file): always", 
+   "indent, and never worry about omitting files.", 
+   "(DirsChangedEditor class): new editor class for handling the", 
+   "dirs-changed command."
+  ], 
+  "revision_id": "842309"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-16T01:49:38.764071Z", 
+  "msg": [
+   "Implement two more commands: ids and tree. Although this is also", 
+   "\"minus one\" command, as I realized that dirs-changed does not print", 
+   "bubble-up dirs, yet svnlook.py does right now.", 
+   "* svnlook.py:", 
+   "(SVNLook.cmd_dirs_changed): refactor some code out into the", 
+   "_print_tree() method. add comment that we have more work to do.", 
+   "(SVNLook.cmd_info): implement in terms of _print_tree", 
+   "(SVNLook.cmd_tree): implement in terms of _print_tree", 
+   "(SVNLook._print_tree): new method, starting with code from", 
+   "cmd_dirs_changed. take a base revision, and three flag arguments", 
+   "for controlling the operation of the method. the flags are passed", 
+   "to the Editor class instance.", 
+   "(Editor.__init__): take two flags and an optional FS root for", 
+   "looking up IDs.", 
+   "(Editor.open_root): fetch and print the id (if the option is", 
+   "enabled). adjust the indent, if the flag states we should.", 
+   "(Editor.add_directory): fetch and print the id. if indenting, then", 
+   "manage the indent and only print the basename. change the", 
+   "parameters so we can use this function for open_directory(), too.", 
+   "(Editor.open_directory): body removed, this method is now set to be", 
+   "equivalent to the add_directory method.", 
+   "(Editor.close_directory): new. manage the indent.", 
+   "(Editor.add_file): new. print files and ids, as controlled by flags.", 
+   "(Editor.open_file): new. same as add_file.", 
+   "(_basename): new function to compute the basename of a '/' seperated", 
+   "path."
+  ], 
+  "revision_id": "842308"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-16T01:25:33.787534Z", 
+  "msg": [
+   "* main.c (print_tree): minor nit -- remove an extraneous trailing", 
+   "space when printing out node names."
+  ], 
+  "revision_id": "842307"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-16T01:15:35.004419Z", 
+  "msg": [
+   "Fix minor typo in the Editor.open_file method's parameters."
+  ], 
+  "revision_id": "842306"
+ }
+]

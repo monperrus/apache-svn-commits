@@ -1,0 +1,90 @@
+[
+ {
+  "author": "kevin", 
+  "date": "2002-03-11T14:56:22.191882Z", 
+  "msg": [
+   "* subversion/libsvn_client/log.c (svn_client_log): Send an empty path if", 
+   "svn_path_condense_targets determines that only a single path was given.", 
+   "* subversion/mod_dav_svn/log.c (dav_svn__log_report): Accept a NULL path entry.", 
+   "This signifies that we specified a path, but it is the same as the path where", 
+   "the operation is rooted."
+  ], 
+  "revision_id": "841555"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-03-11T02:36:16.041959Z", 
+  "msg": [
+   "Move a bunch of the svn_fs_id_t APIs to private FS APIs. The end goal", 
+   "is to reduce the public reliance on the Node IDs in preparation for", 
+   "changing their internal/underlying structure.", 
+   "* include/svn_fs.h (svn_fs_id_length, svn_fs_id_eq,", 
+   "svn_fs_id_is_ancestor, svn_fs_is_parent, svn_fs_copy_id,", 
+   "svn_fs_predecessor_id): removed. these were all renamed and", 
+   "moved to libsvn_fs/id.h.", 
+   "(svn_fs_txn_path_is_id): new function to see whether a path in a", 
+   "transaction is a specified node (id). this new function is used by", 
+   "mod_dav_svn for early out-of-date detection.", 
+   "* libsvn_fs/id.h: moved/renamed a bunch of functions from svn_fs.h", 
+   "(svn_fs__id_eq): renamed from svn_fs_id_eq", 
+   "(svn_fs__id_length): renamed from svn_fs_id_length", 
+   "(svn_fs__id_predecessor): renamed from svn_fs_predecessor_id", 
+   "(svn_fs__id_is_ancestor): renamed from svn_fs_id_is_ancestor", 
+   "(svn_fs__id_copy): renamed from svn_fs_copy_id", 
+   "(svn_fs__id_is_parent): renamed from svn_fs_is_parent", 
+   "CHANGED ALL CALLERS", 
+   "* libsvn_fs/id.c: updated functions to new names", 
+   "(svn_fs__id_copy): use apr_pmemdup() to simplify things", 
+   "* libsvn_fs/tree.c: updated functions to new names", 
+   "(svn_fs_txn_path_is_id): new function. reports whether a path in a", 
+   "txn root matches a specified node ID. this function can be used to", 
+   "do a pre-flight conflict test (if you have a node id for the base", 
+   "of what you're trying to change). this code originated in", 
+   "mod_dav_svn.c/version.c::dav_svn_checkout() with changes to the", 
+   "new function names and revised comments for the modified semantics.", 
+   "* mod_dav_svn/version.c (dav_svn_checkout): factored out code which", 
+   "moved to become svn_fs_txn_path_is_id() and now call it. update", 
+   "all comments to reflect the modified semantics.", 
+   "* libsvn_fs/dag.c: updated functions to new names", 
+   "* libsvn_fs/nodes-table.c: updated functions to new names", 
+   "* libsvn_fs/txn-table.c: updated functions to new names", 
+   "* libsvn_fs/deltify.c: updated functions to new names", 
+   "* tests/libsvn_fs/fs-test.c: updated functions to new names"
+  ], 
+  "revision_id": "841554"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-10T23:24:00.591671Z", 
+  "msg": [
+   "* packages/freebsd/subversion/files/patch-configure", 
+   "patch for configure to keep us from trying to use libneon.la when linking", 
+   "against the external neon."
+  ], 
+  "revision_id": "841553"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-10T21:00:24.530826Z", 
+  "msg": [
+   "* packages/freebsd/subversion/Makefile", 
+   "depend on neon.19, not neon.18.  remove the hack to work around the lack of", 
+   "libneon.la, as the problem has been corrected in the latest version of the", 
+   "neon port."
+  ], 
+  "revision_id": "841552"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-03-10T17:57:44.075946Z", 
+  "msg": [
+   "* subversion/bindings/swig/util.i: Change apr_ansi_time_to_apr_time to", 
+   "apr_time_ansi_put.", 
+   "* tools/cvs2svn/cvs2svn.py (get_metadata): Change apr_ansi_time_to_apr_time", 
+   "to apr_time_ansi_put.", 
+   "Patch by: Daniel Berlin  <dan@dberlin.org>", 
+   "Review by: me"
+  ], 
+  "revision_id": "841551"
+ }
+]

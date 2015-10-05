@@ -1,0 +1,87 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-30T03:00:39.964255Z", 
+  "msg": [
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_compare_paths): Lose some unnecessary commentary.  The", 
+   "functions works fine."
+  ], 
+  "revision_id": "846165"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-29T05:09:18.070424Z", 
+  "msg": [
+   "Eliminate some dead code.  Sadly, we can't currently get rid of", 
+   "svn_wc_get_checkout_editor; it's still used in repos_to_wc_copy() in", 
+   "copy.c.", 
+   "* libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): We weren't doing anything with the", 
+   "checkout editor, so don't fetch it."
+  ], 
+  "revision_id": "846164"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-28T22:55:20.739614Z", 
+  "msg": [
+   "I realized that ra_svn doesn't actually use APR buffering for the", 
+   "tunnel agent pipes (or the network socket).  It does its own", 
+   "buffering.  So there is no double-flushing problem to worry about.", 
+   "Ergo, we can get rid of all those annoying flush calls.", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_set_path, ra_svn_delete_path, ra_svn_link_path,", 
+   "ra_svn_abort_report, ra_svn_update, ra_svn_switch, ra_svn_status,", 
+   "ra_svn_diff): No need to flush.", 
+   "(cleanup_socket): We don't need this.", 
+   "(make_connection): APR sockets set up their own cleanups.", 
+   "(cleanup_file, cleanup_process): We don't need these; we can use", 
+   "APR facilities instead.", 
+   "(ra_svn_open): Use apr_file_inherit_unset to prevent pipes from", 
+   "leaking to child processes, instead of registering a redundant", 
+   "cleanup handler.  Use apr_pool_note_subprocess to clean up the", 
+   "tunnel agent process with greater prejudice than the \"close", 
+   "sockets and wait\" dance.", 
+   "* libsvn_ra_svn/editor.c", 
+   "(ra_svn_change_dir_prop, ra_svn_add_file, ra_svn_open_file,", 
+   "ra_svn_change_file_prop): No need to flush.", 
+   "(store_token): Can't use NULL as cleanup handler; use", 
+   "svn_pool_cleanup_null instead."
+  ], 
+  "revision_id": "846163"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-28T21:27:45.563510Z", 
+  "msg": [
+   "Finish the exhaustive search algorithm for svn_fs_revisions_changed()", 
+   "except for one tiny little detail -- it won't work. :-(  At least, not", 
+   "unless I can solve the sort order problem ('ab' < 'z' to a db table", 
+   "cursor, but that's the opposite of how our ordering works).  I do want", 
+   "to hold onto the code though in case I need it for some reason in the", 
+   "future.", 
+   "* subversion/libsvn_fs/bdb/copies-table.h", 
+   "(svn_fs__bdb_copy_cb_func_t): Add 'done' parameter.", 
+   "(svn_fs__bdb_walk_copies_reverse): Document this function.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(copies_cb_func): Add 'done' parameter.", 
+   "(txn_body_revisions_changed): Call find_relevant_copies() to search", 
+   "for copies that have occured since the last edit of the path which", 
+   "affected that path.", 
+   "* subversion/libsvn_fs/bdb/copies-table.c", 
+   "(svn_fs__bdb_walk_copies_reverse): Pay attention to the callback's", 
+   "setting of the 'done' flag, and if end_id is NULL, start from the", 
+   "end of the 'copies' table."
+  ], 
+  "revision_id": "846162"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-05-28T21:22:36.264951Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "846161"
+ }
+]

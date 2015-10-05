@@ -1,0 +1,89 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-04-28T19:00:14.925801Z", 
+  "msg": [
+   "* subversion/svn/patch-cmd.c", 
+   "(svn_cl__patch): No need to check for presence of patch file here,", 
+   "the client library will throw an error for us if it does not exist."
+  ], 
+  "revision_id": "877570"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-28T18:33:36.576187Z", 
+  "msg": [
+   "Some more error wrapping.", 
+   "* subversion/libsvn_client/ra.c:", 
+   "Wrap some directly returned errors."
+  ], 
+  "revision_id": "877569"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-28T16:33:37.822228Z", 
+  "msg": [
+   "Expand existing merge test to cover issue #3407 'Shallow merges", 
+   "incorrectly set mergeinfo on children'.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_away_subtrees_noninheritable_ranges): Cover issue #3407.", 
+   "(test_list): Mark merge_away_subtrees_noninheritable_ranges as XFail."
+  ], 
+  "revision_id": "877568"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-28T15:20:39.781793Z", 
+  "msg": [
+   "Get rid of the loggy upgrade procedure for migrating working copies to wc-ng.", 
+   "This does *not* mean that we no longer need to worry about atomicity, it just", 
+   "means that loggy isn't the solution.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc__upgrade_format): Directly migrate the entries file, instead of", 
+   "using loggy.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(SVN_WC__LOG_UPGRADE_FORMAT): Remove.", 
+   "(log_do_upgrade_format): Remove.", 
+   "(start_handler): Don't handle the upgrade format log bits.", 
+   "(svn_wc__loggy_upgrade_format): Remove.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(svn_wc__loggy_upgrade_format): Remove."
+  ], 
+  "revision_id": "877567"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-28T12:20:11.340284Z", 
+  "msg": [
+   "Shift to using presence=incomplete rather than a separate column.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(WORKING_NODE.incomplete_children): note that this column is obsolete.", 
+   "we cannot remove it yet, since wc-ng is now active, and we need to", 
+   "version its removal.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(enum statement_keys, statements): remove STMT_SELECT_INCOMPLETE_FLAG", 
+   "and its query. remove the incomplete_children column from the", 
+   "STMT_INSERT_BASE_NODE statement.", 
+   "(db_base_node_t): remove the 'incomplete_children' member", 
+   "(determine_incomplete): removed. no longer needed.", 
+   "(read_entries_new): create a wc_id localvar rather than a bunch of", 
+   "free-floating magic numbers. look for presence=incomplete, and mark", 
+   "the entry appropriately.", 
+   "(insert_base_node): write presence=incomplete when necessary. don't bind", 
+   "the 'incomplete_children' column.", 
+   "(insert_working_node): write presence=incomplete when necessary", 
+   "(write_entry): handle entry->incomplete differently. watch out for", 
+   "attempts to mix it with other presence values.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(statements): don't insert a value into the 'incomplete_children' column", 
+   "(insert_base_baton_t): remove the 'incomplete_children' member", 
+   "(insert_base_node): do not bind the 'incomplete_children' column", 
+   "(svn_wc__db_init): vary the presence, rather than a separate flag", 
+   "(svn_wc__db_base_add_directory, svn_wc__db_base_add_file,", 
+   "svn_wc__db_base_add_symlink, svn_wc__db_base_add_absent_node,", 
+   "svn_wc__db_temp_base_add_subdir): remove assignment of the", 
+   "'incomplete_children' member."
+  ], 
+  "revision_id": "877566"
+ }
+]

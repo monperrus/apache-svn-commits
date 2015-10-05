@@ -1,0 +1,93 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:13:39.906099Z", 
+  "msg": [
+   "Fixed small off-by-one error from previous checkin"
+  ], 
+  "revision_id": "1181495"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:13:32.654853Z", 
+  "msg": [
+   "RegionSplitter : Change to Split Scan", 
+   "Summary:", 
+   "Currently, outstanding split requests are handled like a FIFO", 
+   "queue.  This can stall the split pipeline in cases where a major", 
+   "compaction must be requested before the split or a daughter region is", 
+   "load balanced, creating a non-local major compaction.  Switching from a", 
+   "queue to a scan should mitigate these bottlenecks.", 
+   "Test Plan:", 
+   "- bin/hbase org.apache.hadoop.hbase.loadtest.RegionSplitter TABLE -o 50", 
+   "Reviewed By: aaiyer", 
+   "Reviewers: aaiyer, kannan", 
+   "CC: aaiyer", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 219294"
+  ], 
+  "revision_id": "1181494"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:13:29.992190Z", 
+  "msg": [
+   "RegionSplitter: Multiple Outstanding Split Requests", 
+   "Summary:", 
+   "Because a split requires a compaction first, waiting for the", 
+   "daughter regions was taking a long time.  This is mostly because the", 
+   "split is stalled in the compaction queue.  Allow multiple split", 
+   "requests to be outstanding to speed this process up", 
+   "Test Plan:", 
+   "- bin/hbase org.apache.hadoop.hbase.loadtest.RegionSplitter TABLE -o 50", 
+   "DiffCamp Revision: 218894", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181493"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:13:24.188524Z", 
+  "msg": [
+   "fix fsWriteSize metric", 
+   "Summary:", 
+   "fsWriteSize (size of append to HLog) metric wasn't getting recorded correctly.", 
+   "Test Plan:", 
+   "Tested this on my dev cluster.", 
+   "Differential Revision: 217250", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kranganathan", 
+   "CC: kannan, kranganathan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181492"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:13:19.869573Z", 
+  "msg": [
+   "Find outliers in HLog metrics", 
+   "Summary:", 
+   "Currently, the hlog metrics don't show the real min/max.  It", 
+   "looks higher in OpenTSBD because you see avg for the RS with the highest", 
+   "metric.  Refactor hlog code to give us actual min max data so we can", 
+   "detect outliers.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestHRegion", 
+   "- ./manage-v2-cluster.sh verify", 
+   "DiffCamp Revision: 215561", 
+   "Reviewed By: kannan", 
+   "Reviewers: aaiyer, kannan, kranganathan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181491"
+ }
+]

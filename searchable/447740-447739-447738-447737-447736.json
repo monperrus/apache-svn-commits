@@ -1,0 +1,60 @@
+[
+ {
+  "author": "wsmoak", 
+  "date": "2006-09-19T05:18:10.147266Z", 
+  "msg": [
+   "Update the download and index pages for the Core 1.1.4 release."
+  ], 
+  "revision_id": "447740"
+ }, 
+ {
+  "author": "mmarinschek", 
+  "date": "2006-09-19T05:16:45.310204Z", 
+  "msg": [
+   "fix for [TOMAHAWK-531] JavascriptDetectorFilter: endless redirects with cookies disabled. Thanks to Markus Bussemer."
+  ], 
+  "revision_id": "447739"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2006-09-19T05:16:09.249664Z", 
+  "msg": [
+   "found bug with handling addAll with non-LdapDN Names"
+  ], 
+  "revision_id": "447738"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2006-09-19T05:15:02.838511Z", 
+  "msg": [
+   "found bug with handling addAll with non-LdapDN Names"
+  ], 
+  "revision_id": "447737"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-09-19T05:12:33.662736Z", 
+  "msg": [
+   "DERBY-1694", 
+   "contributed by Sunitha Kambhampati", 
+   "I was looking at the testProperties issue that caused problems because of test hang. The test doesnt hang in my environment but I thought I would look to see why the test didnt timeout.", 
+   "I found couple of issues here:", 
+   "0. The testProperties.java and several networkserver tests exec new processes to start server, test properties,shutdown server etc. In some cases, we wait to capture the output from the subprocess that is started. ProcessStreamResult is used for this purpose. ProcessStreamResult is part of the harness (see org.apache.derbyTesting.functionTests.harness.ProcessStreamResult) and it starts a thread to read data from the process's stream and writes it out. Once EOS (-1) is reached, the thread exits after doing a notifyAll.", 
+   "1. ProcessStreamResult.Wait() does not work with the timeout case. I think the original intention of the method that takes the timeout was to force the thread to stop, once the timeout period has elapsed. The method Wait() does not handle this case.", 
+   "2. On timeout, the myThread needs to stop its work. The run() method does not handle this case.", 
+   "3. testProperties test does not make use of the ProcessStreamResult timeout mechanism.", 
+   "4. Process's are exec'd in the tests and they are not destroyed within a timeout period. The network server tests start server using Process, and then cleanup by shutting them down. It will all work ok, if no deadlock or blocking of process's occur. It seems to me though, that we should have a way to destroy the processes that are", 
+   "started as part of each test given a timeout period. Each test must learn to do the cleanup when it leaves and the test has knowledge of all the sub-processes that it has exec'd. The current test harness has a class TimedProcess which could work.", 
+   "In the spirit of incremental development, I am attaching a patch(derby1694.p2.diff.txt and corresponding stat file - derby1694.p2.stat.txt) that fixes problems 1,2 and 3. I think #4 can be handled as a separate issue/patch.", 
+   "This patch", 
+   "-- fixes the timeout handling in ProcessStreamResult. Instance variable 'interrupted' is a flag to indicate if a timeout has occurred or if the thread's work has been interrupted in between. The flag 'finished' indicates whether the work has been finished by the thread. Changes are in Wait() method to make use of wait(timeoutms) if a timeout is specified in ProcessStreamResult. If timeout time has elapsed, then the interrupted flag is set to true.", 
+   "-- Adds condition in the run() method to check if interrupted is true. If so, the thread will stop its work and leave.", 
+   "-- correctly return if the thread's work was interrupted either because of a timeout or if it was interrupted.", 
+   "-- Make use of the ProcessStreamResult with a timeout setting of 2 minutes in testProperties test. Note, the timeout handling only comes into effect when ProcessStreamResult.Wait() method is called.", 
+   "other notes:", 
+   "-- when you run a test, the suite property for timeout does not get picked up. I think this is intentional behavior.", 
+   "-- Issues mentioned above are not specific to just testProperties but exist for other networkserver tests. There are a total of 7 files in derbynet that make use of this."
+  ], 
+  "revision_id": "447736"
+ }
+]

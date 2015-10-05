@@ -1,0 +1,79 @@
+[
+ {
+  "author": "norman", 
+  "date": "2011-06-02T20:57:47.343164Z", 
+  "msg": [
+   "Fix NOT Searches when using LuceneMessageSearchIndex. Also fix some incorrect tests. See MAILBOX-10"
+  ], 
+  "revision_id": "1130810"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-06-02T20:56:58.651211Z", 
+  "msg": [
+   "Remove use of stream mark/seek features from svn patch.", 
+   "The patch code needs an abstraction for patching both file and property", 
+   "content in a seamless manner. This abstraction was previously provided", 
+   "by streams and the mark/seek feature. This commit replaces use of streams", 
+   "with a custom read/write/seek/tell callback interface added to the", 
+   "target_content_info_t structure which is private to the patch code.", 
+   "As a bonus, the new implementation patches properties entirely in memory.", 
+   "The old code used to patch property values within temporary files and", 
+   "then read those files back into memory, which is somewhat pointless.", 
+   "* subversion/libsvn_client/patch.c", 
+   "everywhere: Update docstrings and comments to match the new implementation.", 
+   "(target_content_info_t): Major revamp. New members: EXISTED, READLINE,", 
+   "READLINE_BATON, TELL, SEEK, WRITE, WRITE_BATON (most are callback types).", 
+   "Removed: PATCHED, REJECT (the latter has moved into patch_target_t),", 
+   "and POOL (this was unused).", 
+   "(prop_patch_target_t): New members: VALUE, PATCHED_VALUE for storing", 
+   "properties as strings in memory. Remove PATCHED_PATH.", 
+   "(patch_target_t): Replace PATCHED and REJECT streams with PATCHED_FILE", 
+   "and REJECT_FILE files. Remove POOL (not sure why this was even here).", 
+   "(prop_read_baton_t, readline_prop, tell_prop, seek_prop, write_prop): New.", 
+   "(readline_file, tell_file, seek_file, write_file): New.", 
+   "(init_prop_target, init_patch_target): Set up the new callbacks and other", 
+   "items and drop anything related to removed items.", 
+   "(read_line, seek_to_line, match_existing_target, get_hunk_info,", 
+   "copy_lines_to_target, reject_hunk, apply_hunk, apply_one_patch,", 
+   "write_out_rejected_hunks): Stop", 
+   "using streams. Call content_info callbacks instead of stream functions.", 
+   "Drop anything not needed with the new interface. Take care not to change", 
+   "existing semantics for callers.", 
+   "(install_patched_target): Perform keyword expansion and EOL translation", 
+   "while installing patched file in the working copy. This used to be done", 
+   "on the fly be wrapper streams, but we don't have those anymore.", 
+   "(install_patched_prop_targets): Take advantage of the fact that props", 
+   "are now being patched entirely in memory."
+  ], 
+  "revision_id": "1130809"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2011-06-02T20:53:00.657528Z", 
+  "msg": [
+   "Post-release housekeeping.", 
+   "* STATUS,", 
+   "subversion/include/svn_version.h:", 
+   "Bump version numbers."
+  ], 
+  "revision_id": "1130808"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2011-06-02T20:52:00.254852Z", 
+  "msg": [
+   "removed DTD handling, since .dtd are missing"
+  ], 
+  "revision_id": "1130807"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2011-06-02T20:49:07.878039Z", 
+  "msg": [
+   "Merge r1130553 from the 1.6.x branch to the 1.6.17 tag, to bring CHANGES", 
+   "up-to-date with what was released in 1.6.17."
+  ], 
+  "revision_id": "1130806"
+ }
+]

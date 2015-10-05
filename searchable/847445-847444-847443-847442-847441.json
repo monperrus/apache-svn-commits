@@ -1,0 +1,91 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-10T03:02:37.680019Z", 
+  "msg": [
+   "Stop using the session's pool for everything under the sun", 
+   "(commit-wise) in libsvn_ra_dav.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(resource_t): Add a 'pool' member.", 
+   "(simple_request, do_checkout): Add a 'pool' parameter, and use it", 
+   "instead of the session pool.", 
+   "(add_child): Populate the resource's new 'pool' member.", 
+   "(get_activity_collection): Shorten a variable name for beauty", 
+   "reasons only.", 
+   "(checkout_resource): Add 'pool' parameter; use it.  Also, alloc the", 
+   "working resource URL in the resource's pool.  Oh, and update calls", 
+   "to do_checkout().  Finally, rename 'res' to 'rsrc' (for", 
+   "consistency with other code herein).", 
+   "(commit_open_root): Alloc the root resource from the passed-in pool,", 
+   "and initialize the new 'pool' member of resource_t.", 
+   "(delete_activity, create_activity, commit_delete_entry,", 
+   "commit_add_dir, commit_change_dir_prop, commit_add_file,", 
+   "commit_open_file, commit_change_file_prop, apply_log_message):", 
+   "Update calls to simple_request() and checkout_resource().  Fix", 
+   "other miscellaneous abuses of the session pool, too.", 
+   "(get_version_url): Alloc the resource's vsn-rsrc-url in the same", 
+   "pool as the resource."
+  ], 
+  "revision_id": "847445"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-10T02:22:52.390197Z", 
+  "msg": [
+   "* subversion/clients/cmdline/notify.c", 
+   "(struct notify_baton): Document the lifetime of the 'pool' item.", 
+   "(notify): Instead of creating and destroying a subpool every time", 
+   "just to do a single path conversion, just clear a dedicated", 
+   "subpool after each call.", 
+   "(svn_cl__get_notifier): Make the baton's pool a subpool of the", 
+   "passed-in pool."
+  ], 
+  "revision_id": "847444"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2003-10-09T23:26:43.478624Z", 
+  "msg": [
+   "Fix whitespace-trimming functions.", 
+   "Fix svn_stringbuf_strip_whitespace: it did not trim a string consisting only", 
+   "of whitespace.  Remove svn_string_strip_whitespace: it had that bug and also", 
+   "failed to set a null terminator, violating its invariants, and was not used,", 
+   "and was not an appropriate operation to perform on a constant string.", 
+   "* subversion/include/svn_string.h", 
+   "* subversion/libsvn_subr/svn_string.c", 
+   "(svn_string_strip_whitespace): Removed.", 
+   "(svn_stringbuf_strip_whitespace): Strip even if string is all whitespace."
+  ], 
+  "revision_id": "847443"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-09T22:12:55.499104Z", 
+  "msg": [
+   "Can you say \"sieve\"?  Ben found that when importing the Mozilla source", 
+   "tree over ra_dav, the client grew to 220 Megs of usage.  This is part", 
+   "one of (probably) several patches aimed at cleaning that mess up.", 
+   "With Ben Collins-Sussman.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_ctx_t): Remove the oh-my-gosh-this-is-never-read-from!", 
+   "'resource' hash/cache member.", 
+   "(add_child): Use the passed-in pool for everything.", 
+   "(commit_open_root): Dude, don't be setting stuff in hashes that no", 
+   "longer exist.", 
+   "(svn_ra_dav__get_commit_editor): No alloc-y absent hash-y."
+  ], 
+  "revision_id": "847442"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-10-09T19:51:04.430582Z", 
+  "msg": [
+   "Add a new script that makes a bunch of changes to a working copy (add", 
+   "files, delete files, add text to files, and remove text from files).", 
+   "See the comment at the top of the script for details.  Thanks to Karl", 
+   "Fogel for the lovely and beautiful documentation.", 
+   "* tools/dev/scramble-tree.py: New file"
+  ], 
+  "revision_id": "847441"
+ }
+]

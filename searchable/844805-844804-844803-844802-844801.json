@@ -1,0 +1,99 @@
+[
+ {
+  "author": "", 
+  "date": "2003-02-04T21:35:45.909865Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "844805"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-02-04T21:28:02.008106Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "844804"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-02-04T19:38:31.477553Z", 
+  "msg": [
+   "Issue #724, libsvn_auth, TNG.", 
+   "Part 2 of the redesign:  auth_baton 'runtime parameters' hash.", 
+   "* auth.c (struct svn_auth_baton_t): grow a 'parameters' hash.  Note", 
+   "that I have nothing against an svn_config_t; it would be nice to", 
+   "have two namespaces instead of one.  But the svn_config_t interface", 
+   "returns const char * values, and I suspect that certain providers", 
+   "may need to get/set -binary- data in parameters (like a key, or an", 
+   "svn_wc_adm_access_t). Thus I'm falling back on apr_hash's ability to", 
+   "store void * parameters.", 
+   "(struct svn_auth_iterstate_t): add a pointer to auth_baton->parameters.", 
+   "(svn_auth_open):  initialize the parameter hash.", 
+   "(svn_auth_first_credentials): pass parameter hash to provider's", 
+   "first_creds, and put parameter hash in the iter_baton.", 
+   "(svn_auth_next_credentials): pass parameter hash to provider's next_creds.", 
+   "(svn_auth_save_credentials): pass parameter hash to provider's save_creds.", 
+   "(svn_auth_get_parameter, svn_auth_set_parameter): new funcs, just", 
+   "dumb wrappers around apr_hash_set/get.", 
+   "* svn_auth.h:  describe the new hash interface in the discussion comment.", 
+   "(svn_auth_provider_t):  every function in a provider", 
+   "vtable now takes the parameter hash as input, so they have access to", 
+   "run-time data.", 
+   "(svn_auth_get_parameter, svn_auth_set_parameter):  declare new API.", 
+   "(SVN_AUTH_PARAM_DEFAULT_USERNAME, SVN_AUTH_PARAM_DEFAULT_PASSWORD):", 
+   "declare universal run-time parameter names, usable by all providers", 
+   "if they wish.", 
+   "* svn_client.h (svn_client_ctx_t): remove default_simple_creds field;", 
+   "they're in the auth_baton's parameter hash now.", 
+   "* cmdline/main.c (main): place default username/password data into the", 
+   "new auth_baton hash, instead of the cxt_t.", 
+   "* simple_wc_provider.c (svn_wc_get_simple_wc_provider): constructor no", 
+   "longer needs wc or default creds arguments.  yay.", 
+   "(simple_wc_provider_baton_t):  lose default creds args.", 
+   "(simple_wc_first_creds, simple_wc_save_creds): take parameters hash", 
+   "arg now.  query it for default creds and the wcdir/access_baton", 
+   "runtime parameters as necessary.", 
+   "* svn_wc.h (svn_wc_get_simple_wc_provider):  update declaration and", 
+   "docstring.", 
+   "(SVN_AUTH_SIMPLE_WC_PARAM_PREFIX, SVN_AUTH_PARAM_SIMPLE_WC_WCDIR,", 
+   "SVN_AUTH_PARAM_SIMPLE_WC_ACCESS): new runtime params specific to", 
+   "this provider.", 
+   "* libsvn_client/auth.c, client.h (svn_client__get_simple_prompt_provider):", 
+   "constructor no longer needs default creds args. yay.", 
+   "(simple_prompt_provider_baton_t):  lose default creds args.", 
+   "(simple_prompt_first_creds, simple_prompt_next_creds):  take", 
+   "parameters hash arg now.  first_creds queries the hash for default", 
+   "creds.", 
+   "* ra.c (svn_client__open_ra_session): update calls to both provider", 
+   "constructors.  much simpler now.", 
+   "* commit-cmd.c (svn_cl__commit): unrelated change -- remove unused", 
+   "variable log_msg_baton."
+  ], 
+  "revision_id": "844803"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2003-02-04T19:01:32.098510Z", 
+  "msg": [
+   "* Some patches from Robert Bihlmeyer <robbe@orcus.priv.at>", 
+   "- Added new keyboard shortcut: f - svn-status-find-file", 
+   "- Fixed a xemacs incompatibility", 
+   "Patch by: Robert Bihlmeyer <robbe@orcus.priv.at>", 
+   "(Above changes only.)", 
+   "* Added the function svn-status-parse-info-result (not yet needed now)"
+  ], 
+  "revision_id": "844802"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-02-04T18:57:58.299809Z", 
+  "msg": [
+   "* subversion/bindings/swig/python/setup.py", 
+   "Add libsvn_repos and libsvn_swig_py to the dependencies list for the", 
+   "'ra' bindings.  (Rumor has it that Brandon Ehle submitted a similar", 
+   "patch.  I'm too lazy to dig it up.)"
+  ], 
+  "revision_id": "844801"
+ }
+]

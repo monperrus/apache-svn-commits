@@ -1,0 +1,91 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-03-02T23:47:09.286601Z", 
+  "msg": [
+   "Tweak the logic that maintains the 'pending_error' RA session variable", 
+   "in libsvn_ra_serf.", 
+   "libsvn_ra_serf's error handling is not straightforward, and is (in my", 
+   "experience) unreliable.  The idea of using a session variable to hold", 
+   "pending errors and maintaining that variable's state in multi-various", 
+   "locations makes me nervous.  This commit adds some assertions to", 
+   "ensure that we aren't overwriting errors (thus leaking them).  This", 
+   "seems to have had the effect of causing a test that was expected to", 
+   "fail to start passing, possibly because the only reason the test was", 
+   "failing before this commit was due to memory leak detection logic", 
+   "abort()s.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__handle_client_cert, svn_ra_serf__handle_client_cert_pw):", 
+   "Note that these function might set the session's 'pending_error' member.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__context_run_wait): Rather than clobber any pending", 
+   "error stored in the session (thereby leaking it, thereby causing", 
+   "an abort() in maintainer mode), assert that there is no error.", 
+   "If, after we do real work, the 'pending_error' variable is", 
+   "non-NULL, make sure we reset it before returning its value to the", 
+   "caller.", 
+   "(handle_response): Add some asserts to make error clobbering a more", 
+   "direct failure case.", 
+   "(svn_ra_serf__get_relative_path): Formatting tweak only.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(finish_report): Reset 'pending_error' after destroying the error.", 
+   "Minor additional logic juggling nearby.", 
+   "* subversion/libsvn_ra_serf/replay.c", 
+   "(svn_ra_serf__replay_range): Minor logic tweak.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(relocate_and_propset): Add comment about test failure in Neon.", 
+   "(test_list): Adjust XFail() for relocate_and_propset() test."
+  ], 
+  "revision_id": "876345"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-03-02T22:33:26.970242Z", 
+  "msg": [
+   "On the ra_serf-digest-authn branch: Multiple Authentication headers are combined", 
+   "into one, separated by a comma. That doesn't work really well if the parameters", 
+   "of the authentication type are also comma-separated.", 
+   "Switch to a iterator/callback mechanism.", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(auth_baton_t): New type.", 
+   "(handle_auth_header): New function, called on each header in the response", 
+   "message.", 
+   "(svn_ra_serf__handle_auth): Iterate over all headers using", 
+   "serf_bucket_headers_do instead of apr_strtok(... \",\" ...).", 
+   "* BRANCH-README: Mark task as done."
+  ], 
+  "revision_id": "876344"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-02T22:24:11.162761Z", 
+  "msg": [
+   "Fix a bug in libsvn_client, uncovered by work on WC-NG.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(harvest_committables): Make the code match the comments by ensuring that", 
+   "used_url is always set.  Add a note about WC-NG to the comment."
+  ], 
+  "revision_id": "876343"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T22:24:03.722729Z", 
+  "msg": [
+   "* subversion/libsvn_wc/merge.c:", 
+   "(merge_binary_file): removed an unused local variable."
+  ], 
+  "revision_id": "876342"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T22:23:26.167727Z", 
+  "msg": [
+   "Higher layers of svn want entry->revision to equal the BASE node's", 
+   "revision for replaced nodes. There shouldn't be a revision, of course,", 
+   "since the node has not (yet) been committed. Ah well.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): for replaced nodes, use the BASE node's revision."
+  ], 
+  "revision_id": "876341"
+ }
+]

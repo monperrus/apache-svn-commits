@@ -1,0 +1,59 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2009-11-20T15:56:25.931734Z", 
+  "msg": [
+   "Remove unused methods"
+  ], 
+  "revision_id": "882620"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2009-11-20T15:55:00.604675Z", 
+  "msg": [
+   "Remove QueryWrapper"
+  ], 
+  "revision_id": "882619"
+ }, 
+ {
+  "author": "ashish", 
+  "date": "2009-11-20T15:54:39.207143Z", 
+  "msg": [
+   "Applied patch from jira issue OFBIZ-3077 - Error for productStoreId when click on productId link from showcart of purchase order.", 
+   "Steps regenerate error:", 
+   "1) Hit url: https://localhost:8443/ordermgr/control/orderentry", 
+   "2) Select purchase order with supplier", 
+   "3) Add product for order", 
+   "4) Click on the productId from showcart page", 
+   "it will generate error as following", 
+   "org.ofbiz.widget.screen.ScreenRenderException: Error rendering screen component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productdetail: java.lang.NullPointerException: Cannot get property 'productStoreId' on null object (Cannot get property 'productStoreId' on null object)", 
+   "Notes from Mridul:", 
+   "As Joe has already stated that we need to do few adjustments in the code based on presence of productStoreId. I would vote for:", 
+   "1. Showing all reviews.", 
+   "2. Skipping surveys.", 
+   "The third section, which is the most important one and needs productStoreId is getProductVariantTree service invoked in ProductDetail.groovy (line 232). getProductVariantTree service needs productStoreId to get available inventory. In case of PO's we don't need to check for available inventory at all. Now for being able to use the same code to display product detail page in case of a PO, we will need to make modifications to getProductVariantTree service too, which can be done in two ways:", 
+   "1. Add a boolean IN attribute checkInventory to service definition, if its true check the available inventory and if false do not.", 
+   "2. A check on productStoreId in the implementation can serve our purpose too.", 
+   "I like #1 more as it won't eliminate importance of productStoreId in case of a sales order. Looking forward to suggestions from community to handle this situation.", 
+   "Thanks Amit for the contribution. Mridul Thanks a lot for providing useful notes for the implementation.", 
+   "Guys, I appreciate your coordination on this!"
+  ], 
+  "revision_id": "882618"
+ }, 
+ {
+  "author": "woonsan", 
+  "date": "2009-11-20T15:54:04.741790Z", 
+  "msg": [
+   "JS2-1057: Removing event handlers for toolbox portlet and move up yui config to be shared."
+  ], 
+  "revision_id": "882617"
+ }, 
+ {
+  "author": "cmoulliard", 
+  "date": "2009-11-20T15:52:26.511138Z", 
+  "msg": [
+   "Add new features : Section, OneToMany, Required, Position (see wiki page http://camel.apache.org/bindy.html for description)"
+  ], 
+  "revision_id": "882616"
+ }
+]

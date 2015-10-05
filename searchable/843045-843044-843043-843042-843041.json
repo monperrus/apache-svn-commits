@@ -1,0 +1,110 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-08-14T19:05:06.226901Z", 
+  "msg": [
+   "* clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Add --username and --password options to 'svn ls'.", 
+   "Patch by: Shay Harding <sharding@ccbill.com>"
+  ], 
+  "revision_id": "843045"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-14T16:16:34.860984Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_get_resource): Fix compile warning, by using ap_strchr_c", 
+   "instead of strchr.  Greg Stein explains: httpd knows that the", 
+   "standard C strchr is type unsafe, because it takes `const char *'", 
+   "but returns `char *'.  So httpd remaps strchr to ap_strchr, which", 
+   "has no const on its first arg, and httpd also offers ap_strchr_c,", 
+   "which qualifies both input and output with const.", 
+   "Also, add comment about redirection, at Greg's request."
+  ], 
+  "revision_id": "843044"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-08-14T13:09:17.473888Z", 
+  "msg": [
+   "Fix for issue #868.", 
+   "* Makefile.in (check): If $(BASE_URL) is defined, pass it to", 
+   "run_tests.py so that DAV tests can be run with", 
+   "\"make check BASE_URL=http://localhost\".", 
+   "* win-tests.py: Accept an optional URL parameter and, if present,", 
+   "pass it to the test harness so that DAV tests can be run with", 
+   "\"python win-tests.py r http://localhost\".", 
+   "(client_tests): Add module_tests.py.", 
+   "* subversion/mod_dav_svn/repos.c: Include apr_want.h for string functions.", 
+   "(dav_svn_get_resource): [SVNParentPath handler]", 
+   "- Return a 403 error if a repository name isn't present in the URL.", 
+   "- Fix the parser: If the repository name is the only component and", 
+   "doesn't end in a slash, set true_relative_path to '/' instead of", 
+   "running off the end of the string.", 
+   "* subversion/tests/clients/cmdline/README: Update the instructions for", 
+   "running DAV tests.", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "(guarantee_greek_repository): Don't symlink or copy to current-repo.", 
+   "(make_repo_and_wc): Call main.set_repos_paths, and use", 
+   "main.current_repo_url to check out the working copy.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py (current_repo_dir):", 
+   "Initialize to None and update docstring.", 
+   "(set_repos_paths): New; set current_repo_dir and current_repo_url.", 
+   "(run_one_test): Reset current_repo_dir and current_repo_url to None.", 
+   "Scratch an itch: Exit immediately upon receiveing a ^C.", 
+   "(run_tests): Don't set current_repo_url, set_repos_paths does that now.", 
+   "* build/run_tests.py (TestHarness.__init__): New parameter 'base_url'.", 
+   "(TestHarness._run_test): If self.base_url is defined, send an --url", 
+   "flag to each Python test program.", 
+   "(main): Handle --url flag, update usage text and docstring."
+  ], 
+  "revision_id": "843043"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-08-13T23:55:29.086145Z", 
+  "msg": [
+   "add mbk for libsvn_ra_pipe work"
+  ], 
+  "revision_id": "843042"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-13T23:10:32.835047Z", 
+  "msg": [
+   "Finish issue #840.", 
+   "* subversion/mod_dav_svn/liveprops.c", 
+   "(dav_svn_namespace_uris, DAV_SVN_NAMESPACE_URI, SVN_RO_SVN_PROP,", 
+   "SVN_RW_SVN_PROP, dav_svn_props, dav_svn_insert_prop): Use new", 
+   "namespaces for dav-ish properties.", 
+   "(DAV_SVN_NAMESPACE_URI_OLD, SVN_RO_SVN_OLD_PROP,", 
+   "SVN_RW_SVN_OLD_PROP): Were DAV_SVN_NAMESPACE_URI, SVN_RO_SVN_PROP,", 
+   "and SVN_RW_SVN_PROP, respectively.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(log_message_prop, do_proppatch): Use new property namespace(s) when", 
+   "the time is Right.", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(dav_svn_db_define_namespaces, get_repos_propname,", 
+   "dav_svn_db_output_value, get_name, save_value): Use new property", 
+   "namespaces.", 
+   "* subversion/include/svn_dav.h", 
+   "(SVN_FEATURE_USE_OLD_NAMESPACES): New #define for helping us find", 
+   "and remove support for old namespaces in the future.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(SVN_RA_DAV__PROP_BASELINE_RELPATH_OLD, ELEM_baseline_relpath_old):", 
+   "Wrap with new #define so we can more easily find and remove this", 
+   "code in the future.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(elem_definitions, neon_descriptions, starting_props,", 
+   "validate_element, svn_ra_dav__get_baseline_info): Wrap use of old", 
+   "namespaces with new #define.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_dir, add_props): Wrap use of old namespaces with", 
+   "new #define.", 
+   "(filter_props): Wrap use of old namespaces with new #define.  Also,", 
+   "pass final NULL to apr_pstrcat."
+  ], 
+  "revision_id": "843041"
+ }
+]

@@ -1,0 +1,99 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-08-21T21:02:27.097208Z", 
+  "msg": [
+   "Fix locking problem with updates of missing directories.  This is probably", 
+   "not perfect since restored directories give feedback 'A' while files give", 
+   "feedback 'Restored'.  However I believe it reverts the behaviour to that", 
+   "which existed before the locking changes.", 
+   "* subversion/include/svn_wc.h (svn_wc_adm_open): Tweak documentation.", 
+   "* subversion/libsvn_wc/lock.c (svn_wc_adm_open): Ignore missing subdirs.", 
+   "* subversion/tests/clients/cmdline/update_tests.py (update_missing): Enable", 
+   "this test and disable only the bits that don't work."
+  ], 
+  "revision_id": "843080"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-08-21T19:41:41.327161Z", 
+  "msg": [
+   "Fix locking problem with merges that delete files or directories.  Simplify", 
+   "the handling of locked directories that get deleted.", 
+   "* subversion/include/svn_wc.h (svn_wc_delete): Add access baton parameter.", 
+   "* subversion/include/svn_client.h (svn_client_delete): Add optional access", 
+   "baton parameter.", 
+   "* subversion/libsvn_wc/adm_ops.c (svn_wc_delete): Add access baton parameter.", 
+   "Remove open and close of access baton.", 
+   "* subversion/libsvn_client/delete.c (svn_client_delete): Add optional access", 
+   "baton parameter.  Open and close an access baton if required.  Pass access", 
+   "baton to svn_wc_delete.", 
+   "* subversion/libsvn_client/diff.c (merge_file_deleted, merge_dir_deleted):", 
+   "Pass access baton to svn_client_delete.", 
+   "* subversion/clients/cmdline/delete-cmd.c (svn_cl__delete): Pass null", 
+   "access baton to svn_client_delete.", 
+   "* subversion/libsvn_client/copy.c (wc_to_wc_copy): Open access baton for", 
+   "source and pass to svn_wc_delete.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__adm_forced_lock_removal): Delete.", 
+   "(svn_wc__adm_destroy): Document new behaviour.", 
+   "* subversion/libsvn_wc/adm_files.c (svn_wc__adm_destroy): Remove call to", 
+   "svn_wc__adm_forced_lock_removal.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(remove_lock): Allow administrative directory to have been deleted.", 
+   "(svn_wc__adm_forced_lock_removal): Delete.", 
+   "* subversion/tests/clients/cmdline/merge_tests.py", 
+   "(delete_file_and_dir): New test.", 
+   "(add_with_history): Enable this test by working around a testing bug."
+  ], 
+  "revision_id": "843079"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-08-21T14:11:50.960434Z", 
+  "msg": [
+   "Factorize the parsing code out of dav_svn_get_resource into a", 
+   "standalone utility function.  This makes it possible for external", 
+   "systems to discover which repository paths are being accessed -- by", 
+   "asking mod_dav_svn to partially \"decode\" the opaque URIs coming in.", 
+   "* dav_svn.h (dav_svn_private_restype, special_uri): fix some comments", 
+   "($svn --> !svn)", 
+   "(dav_svn_split_uri):  new public func declaration.", 
+   "* repos.c (dav_svn_parse_uri):  fix some comments ($svn --> !svn)", 
+   "(special_defn, special_subdirs): add new 'numcomponents' and", 
+   "'has_repos_path' fields for each special subdir, so we can easily", 
+   "parse right pass the junk without calling the real parsing routines.", 
+   "(dav_svn_split_uri): new factorized routine to return all uri pieces.", 
+   "(dav_svn_get_resource):  call new factorized routine."
+  ], 
+  "revision_id": "843078"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-21T07:38:40.989773Z", 
+  "msg": [
+   "Remove obsolete branch"
+  ], 
+  "revision_id": "843077"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-21T07:37:21.399277Z", 
+  "msg": [
+   "Port the changes in the issue-842-dev branch to trunk.  For log", 
+   "messages describing the summation of these changes, see revisions", 
+   "2914, 2883, 2862, 2860, 2859, 2853.", 
+   "This is part of issue #842.", 
+   "In addition, I've upped the repository version number and fixed a", 
+   "related error message (see below).", 
+   "*** THIS CHANGE NECESSITATES A DUMP/LOAD CYCLE OF EXISTING", 
+   "LOCALLY ACCESSED REPOSITORIES ***", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(SVN_REPOS__VERSION): Up the repository version number to 1.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(svn_repos_open): Include possibility of a bad path being passed to", 
+   "the error message here."
+  ], 
+  "revision_id": "843076"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2000-10-26T12:47:54.000000Z", 
+  "msg": [
+   "Duh, only write prop hashes if fb->prop_changed."
+  ], 
+  "revision_id": "837815"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-10-26T02:41:34.000000Z", 
+  "msg": [
+   "Begin implementing properties in checkout/update.  The immediate", 
+   "short-term goal is to be able to read a <prop-delta> from XML and", 
+   "correctly store properties in the SVN/ area; properties should be", 
+   "\"updated\" in the same logged, crash-safe way that normal files are.", 
+   "The main restriction, for now, is that we have no way for users to", 
+   "manipulate properties from the command-line.", 
+   "At the moment, here's our algorithm, on a per-file basis:", 
+   "* load the pristine properties from prop-base/ into `baseprops' hash", 
+   "* load working properties from props/ into `localprops' hash", 
+   "* merge each prop-delta into baseprops hash.", 
+   "* merge each prop-delta into localprops hash, but *note* conflicts.", 
+   "* when we close the file_baton, write our two hashes into the SVN/tmp/", 
+   "area, specifically tmp/prop-base/ and tmp/props/", 
+   "* write log entry to move tmp/prop-base/ to prop-base/", 
+   "* if (conflict) either leave tmp/props/ alone, (or move it?)", 
+   "I have a feeling this algorithm is going to change.  ;)", 
+   "* wc.h: change administrative file #defines to match new property", 
+   "storage schema in libsvn_wc/README.", 
+   "* get_editor.c (struct file_baton):  add \"properties\" hashes to be", 
+   "edited in-memory as a prop-delta is received.", 
+   "(make_file_baton):  initialize hashes", 
+   "(change_file_prop):  actually fill in this routine.  Builds", 
+   "in-memory prophashes within the file_baton;  all prop-delta edits go", 
+   "into this hash.", 
+   "(close_file):  flush hashes to SVN/tmp/ areas, write log entries.", 
+   "(load_prop_file):  factorized code to read properties from disk to hash", 
+   "(save_prop_file):  factorized code to write props from hash to disk", 
+   "* adm_files.c: change calls to SVN_WC__ADM_* defines where necessary."
+  ], 
+  "revision_id": "837814"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-10-26T02:15:55.000000Z", 
+  "msg": [
+   "Fix input args to svn_hash_read.  (Why the heck were we passing a double", 
+   "pointer to a hash?!?)  `hashdump-test' still passes all tests.", 
+   "* svn_hash.h (svn_hash_read):  fix declaration", 
+   "* hashdump.c (svn_hash_read):  change input from **hash to *hash", 
+   "* hashdump-test.c (test2):  change call to svn_hash_read"
+  ], 
+  "revision_id": "837813"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2000-10-25T23:29:52.000000Z", 
+  "msg": [
+   "Added two new sections:", 
+   "* Reserved and unreserved checkouts", 
+   "* Handling conflicts in the client and working copy", 
+   "And a new subsection to", 
+   "* shell-like interactive mode for client (like ftp):", 
+   "** Useful for integration with Emacs, etc."
+  ], 
+  "revision_id": "837812"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2000-10-25T21:27:30.000000Z", 
+  "msg": [
+   "(SVN_ERR_FS_NO_SUCH_TRANSACTION, SVN_ERR_FS_BAD_REPLACE_ROOT,", 
+   "SVN_ERR_FS_NOT_MUTABLE): New errors."
+  ], 
+  "revision_id": "837811"
+ }
+]

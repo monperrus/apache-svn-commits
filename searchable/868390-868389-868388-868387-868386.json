@@ -1,0 +1,95 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-12-06T21:12:54.359835Z", 
+  "msg": [
+   "On the whole-branch-merge branch: Actually include the left and right", 
+   "sides of our merge operation in the list of merge_source_t's passed to", 
+   "do_merge().  For the left side, possibly further increase the age of", 
+   "the peg revision to use past the youngest revision committed to the", 
+   "merge target, to the youngest revision merged from the merge target to", 
+   "the merge source.", 
+   "This will need some refinement to account for renames of the target,", 
+   "or for mixed mergeinfo on the merge source for the merge target.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client_merge_whole_branch): Rename local variable", 
+   "\"new_merge_sources\" to \"merge_sources\".  Drop local variables", 
+   "\"URL\", \"target_url\", and \"rev\" in favor of new \"merge_source\".", 
+   "Adjust code accordingly.  Calculate the most recent revision merged", 
+   "into source from target, and adjust the revision used for the left", 
+   "side of the merge accordingly."
+  ], 
+  "revision_id": "868390"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-12-06T21:12:49.965306Z", 
+  "msg": [
+   "Merge in full the work done on the 'mo-betta-two-url-merges' branch,", 
+   "including the portion done on the 'better-two-url-merges' branch on", 
+   "which it was based.  This adds support for history-sensitive 3-way", 
+   "merges.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Rename 'sources_related' field to 'sources_ancestral'.", 
+   "Track field rename through this file.", 
+   "(merge_file_changed): Don't require that local working file in a", 
+   "binary file merge is unmodified -- just require that it look like", 
+   "the left side of the merge source.", 
+   "(populate_remaining_ranges): Only set a dummy merge range for the", 
+   "target if the target isn't the only child with mergeinfo.", 
+   "(do_merge): Rename 'sources_related' parameter to 'sources_ancestral'.", 
+   "Then, re-add a new 'sources_related' parameter that means something", 
+   "different.  Update call to do_file_merge().", 
+   "(do_file_merge): Add 'sources_related' parameter, and use it (instead of", 
+   "the merge baton's sources_ancestral field, or a now-redundant", 
+   "history hunt) to determine if this is a text-n-props merge or a", 
+   "delete-n-add merge.", 
+   "(svn_client_merge3): Add support for history-sensitive merges", 
+   "between two sources that are ancestrally related but not actually", 
+   "direct ancestors of one another.  We'll merge directly across the", 
+   "two sources (without honoring mergeinfo), but then *record*", 
+   "mergeinfo as if we'd gone the long way 'round -- from left-side to", 
+   "common-ancestor to right-side.  Update calls to do_merge().", 
+   "(svn_client_merge_peg3): Update calls to do_merge().", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_binary_with_common_ancestry): Update test expectations."
+  ], 
+  "revision_id": "868389"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-12-06T21:05:43.959126Z", 
+  "msg": [
+   "On the svnsync-folder branch: When replaying a directory '/A/B/C' relative to", 
+   "a repository root, svn already limits the paths returned in the replay report", 
+   "to '/A/B/C/**'. It should however also include Adds (or Copies) of '/A' and", 
+   "'/A/B' in the report.", 
+   "* subversion/libsvn_repos/replay.c", 
+   "(svn_repos_replay2): Replay adds of parent directories of the requested", 
+   "base path."
+  ], 
+  "revision_id": "868388"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-12-06T20:56:25.407916Z", 
+  "msg": [
+   "On the svnsync-folder branch: Remove some checks that test if the source url", 
+   "points to the root of a repository.", 
+   "* subversion/svnsync/main.c", 
+   "(do_initialize,", 
+   "open_source_session): Remove calls to check_if_session_is_at_repos_root."
+  ], 
+  "revision_id": "868387"
+ }, 
+ {
+  "author": "jrvernooij", 
+  "date": "2007-12-06T20:48:50.810542Z", 
+  "msg": [
+   "Add tests for Python binding of svn.ra.has_capability().", 
+   "* subversion/bindings/swig/python/tests/ra.py", 
+   "(test_has_capability): New function."
+  ], 
+  "revision_id": "868386"
+ }
+]

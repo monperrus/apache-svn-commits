@@ -1,0 +1,108 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-02-18T06:29:29.100908Z", 
+  "msg": [
+   "Add a developer-only feature to enable the next-gen working copy code. If", 
+   "the SVN_ENABLE_NG environment variable is set to any value, then when a", 
+   ".svn admin area is created, it will be populated with the new sqlite", 
+   "metadata database (rather than 'entries').", 
+   "All of the sqlite code is now compiled for everybody (no #define guards),", 
+   "but will only be active for working copies created with the new format.", 
+   "In wc.h, we now define SVN_WC__VERSION_EXPERIMENTAL as a new wc format.", 
+   "The rest of the code still deals with the original SVN_WC__VERSION value.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(SVN_WC__VERSION_EXPERIMENTAL): wc format version to use during our", 
+   "development of the wc-ng format.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(maybe_upgrade_format): only attempt to upgrade working copies that are", 
+   "*older* than the default format version. We don't want to \"upgrade\"", 
+   "the experimental format.", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(svn_wc__check_format): only throw a \"too new\" error for versions that", 
+   "are later than the experimental format. (will probably get reverted at", 
+   "some point rather than keeping an \"experimental\" notion)", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(...): remove FROM_EXPLORE_WC guards", 
+   "(should_create_next_gen): new function. examine environ variable to", 
+   "determine whether we should create a next-gen working copy.", 
+   "(find_working_add_entry_url_stuffs): open the db readonly, and with the", 
+   "experimental format version", 
+   "(read_entries): if the current wc is old-format, then use the old-format", 
+   "code to read the entries. otherwise, use the new sqlite code. and open", 
+   "the database in readonly mode with the experimental format version", 
+   "(svn_wc__entries_write): if the current wc is old-format, then use the", 
+   "old-format writing code. open with the experimental format version", 
+   "(svn_wc__entry_remove): undo the guards, and then remove the db entry", 
+   "IFF the database actually exists (ie. new format wc). open the db with", 
+   "the experimental format version.", 
+   "(svn_wc__entries_init): check the environ variable to determine if we", 
+   "should create an old/new style admin directory. if we create a", 
+   "new-format, then use the experimental format version."
+  ], 
+  "revision_id": "876025"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-02-18T02:38:45.734769Z", 
+  "msg": [
+   "Make fsfs implementation of svn_fs_commit_txn adhere to API promises.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(svn_fs_fs__commit_txn): If the commit fails then the *NEW_REV argument", 
+   "should be SVN_INVALID_REVNUM."
+  ], 
+  "revision_id": "876024"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-18T02:30:09.056908Z", 
+  "msg": [
+   "All changes have been merged, except for r35687. We don't want that just", 
+   "yet, and it lost a \"too new\" check. So... we're all done here. Buh-bye!!"
+  ], 
+  "revision_id": "876023"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-02-18T02:05:37.997949Z", 
+  "msg": [
+   "* subversion/tests/libsvn_fs/fs-test.c (merging_commit): Explain the XFail()."
+  ], 
+  "revision_id": "876022"
+ }, 
+ {
+  "author": "dustin", 
+  "date": "2009-02-18T02:03:28.107781Z", 
+  "msg": [
+   "Support multiple pathids with command-line options", 
+   "* contrib/client-side/svnmerge/svnmerge:", 
+   "(get_repo_root): give a proper error message getting repo root for an", 
+   "invalid URL", 
+   "(PathIdentifier): new class", 
+   "(RevisionLog.__init__): extract repo_relative_path from pathid", 
+   "(dict_from_revlist_prop): recognize string forms of pathids", 
+   "(format_merge_props): use '%s' to force pathids to strings", 
+   "(is_url): add an optional validity check for URLs", 
+   "(is_pathid, pathid_hint, target_to_pathid): new functions", 
+   "(get_copyfrom): extract repo_relative_path from pathid, use '%s'", 
+   "to force pathids to strings", 
+   "(check_old_prop_version): removed", 
+   "(action_init): use pathids", 
+   "(action_integrated, action_rollback): remove call to", 
+   "check_old_prop_version", 
+   "(common_opts, command_table): new options", 
+   "(main): use pathids, set up hints", 
+   "* contrib/client-side/svnmerge/svnmerge_test.py:", 
+   "(TestCase_PathIdentifier): new test class", 
+   "(TestCase_SvnMerge.svnmerge2): clear new caches between runs", 
+   "(testUninitForce, testBidirectionalMergesMultiBranch): allow properties", 
+   "to come back in arbitrary order", 
+   "(test_dict_from_revlist_prop, test_pathid_fns, test_pathid_hint_url,", 
+   "test_is_pathid): new tests", 
+   "(test_invalid_url): new unit test", 
+   "* contrib/client-side/svnmerge/svnmerge.README:", 
+   "describe new functionality"
+  ], 
+  "revision_id": "876021"
+ }
+]

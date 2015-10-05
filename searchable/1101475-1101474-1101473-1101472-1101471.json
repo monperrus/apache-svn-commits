@@ -1,0 +1,112 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-10T14:32:27.037889Z", 
+  "msg": [
+   "* subversion/libsvn_client/status.c", 
+   "(reporter_link_path): Fix relevant name of function in comment."
+  ], 
+  "revision_id": "1101475"
+ }, 
+ {
+  "author": "mikedd", 
+  "date": "2011-05-10T14:32:20.765671Z", 
+  "msg": [
+   "OPENJPA-1725: cleanup comments"
+  ], 
+  "revision_id": "1101474"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-10T14:31:45.716240Z", 
+  "msg": [
+   "In general svn_wc__internal_file_modified_p() should be called with", 
+   "compare_text_bases TRUE, as that is what a normal user would call a", 
+   "modified file.", 
+   "In other words it should ignore keyword expansion differences and eol", 
+   "differences, as we would do that on commit and status.", 
+   "Then we have a property that indicates whether we should use recorded", 
+   "information or not, which we only use to specialize svn:eol-style in", 
+   "the commit processing to hide a few bugs.", 
+   "But for svn:keywords we do a similar thing, but we do that when updating", 
+   "the property value. (Which doesn't trigger on merges)", 
+   "Summarized: This moves the recording fixes to the two places where we set", 
+   "properties. And this makes us always use the recorded information from the", 
+   "public api. Adds a simple to explain boolean to check if the file matches", 
+   "what you would get if you restored the file.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(check_prop_mods): removed. no longer needed.", 
+   "(harvest_committables): Remove eol checks. (Handled by libsvn_wc now,", 
+   "just like svn:keywords).", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_restore): Do an exact match check.", 
+   "(svn_wc__internal_remove_from_version_control): This function is only used", 
+   "from svn_wc_crop and when removing working copies, so stop doing work that", 
+   "isn't relevant there. Use recursive delete when we find a deleted node.", 
+   "Only call svn_wc__adm_destroy when we really destroy the wc.", 
+   "* subversion/libsvn_wc/cleanup.c", 
+   "(repair_timestamps): Convert to repository form for timestamp repair.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(svn_wc__internal_file_modified_p): Convert to repository form for copy", 
+   "repair.", 
+   "* subversion/libsvn_wc/diff_editor.c", 
+   "(file_diff): Update caller.", 
+   "* subversion/libsvn_wc/diff_local.c", 
+   "(file_diff): Update caller.", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(close_file): Update caller. Do the right check.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__perform_props_merge): Just clear recorded information on magic", 
+   "property changes.", 
+   "(do_propset): Handle eol changes like we do keyword changes, but make", 
+   "wc_db do the hard work in one atomic step.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(compare_and_verify): Remove unused checksum verfication. (Should be handled", 
+   "by a pristine verification).", 
+   "(svn_wc__internal_file_modified_p): Update arguments.", 
+   "(svn_wc_text_modified_p2): Update caller add note.", 
+   "(argument will be removed in a followup commit).", 
+   "* subversion/libsvn_wc/status.c", 
+   "(assemble_status): Update caller.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(merge_file): Update caller.", 
+   "(svn_wc_add_repos_file4): Update caller.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__internal_file_modified_p): Update documentation.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(record_baton_t): Moved up in the file, to allow reuse.", 
+   "(db_record_fileinfo): Added db_ prefix and moved up to allow reuse.", 
+   "(svn_wc__db_global_record_fileinfo): Moved.", 
+   "(set_props_baton_t): Add clear_recorded_info boolean.", 
+   "(set_props_txn): Clear recorded info if requested.", 
+   "(svn_wc__db_op_set_props): Add argument.", 
+   "(record_baton_t, record_fileinfo,", 
+   "svn_wc__db_global_record_fileinfo): Moved up.", 
+   "(has_local_mods): Update caller.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_op_set_props): Add argument and update documentation.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(process_commit_file_install): Update caller. As the result is only used to", 
+   "update the cache it shouldn't use exact comparison.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(validate_node): Update caller."
+  ], 
+  "revision_id": "1101473"
+ }, 
+ {
+  "author": "nzhang", 
+  "date": "2011-05-10T14:30:56.925728Z", 
+  "msg": [
+   "HIVE-2151. Too many open files in running negative cli tests (Yongqiang He via Ning Zhang)"
+  ], 
+  "revision_id": "1101472"
+ }, 
+ {
+  "author": "nick", 
+  "date": "2011-05-10T14:26:17.343245Z", 
+  "msg": [
+   "TIKA-658 TCPDump pcap mime matching"
+  ], 
+  "revision_id": "1101471"
+ }
+]

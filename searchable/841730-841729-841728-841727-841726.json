@@ -1,0 +1,79 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-04-09T19:54:09.787117Z", 
+  "msg": [
+   "Make 'svn merge' actually *merge* propchanges, not just set props.", 
+   "Use the same code that 'svn up' uses to do this.", 
+   "[Haven't tested this code yet, just checking it in for now.  Tests", 
+   "forthcoming.]", 
+   "* questions.c, svn_wc.h (svn_wc_get_prop_diffs):  new public function.", 
+   "Not used yet, but soon.  :-)", 
+   "* svn_delta.h (svn_diff_callbacks_t):  change 'prop_changed' callback", 
+   "to 'props_changed' callback, which now takes a complete list of", 
+   "*all* propchanges to a path, instead of a single change.  The diff", 
+   "callback table receives the entire fulltext to merge all-at-once, so", 
+   "it only makes sense to receive the entire set of propchanges to", 
+   "merge all-at-once as well.  And it's a lot easier too.", 
+   "* diff.c (diff_props_changed, diff_callbacks):  update callback.", 
+   "(merge_props_changed, merge_callbacks):  update callback, and add", 
+   "new code which actually merges the propchanges [via the same", 
+   "method that the update-editor does -- svn_wc__merge_propchanges()]", 
+   "* props.c, svn_wc.h (svn_wc_merge_prop_diffs): new public wrapper", 
+   "around svn_wc__merge_prop_diffs -- does loggy work under the hood.", 
+   "This is used by libsvn_client's merge callback.", 
+   "* repos_diff.c (struct file_baton, struct dir_baton):  new field -- an", 
+   "array of cached propchanges.", 
+   "(make_dir_baton, make_file_baton, open_root):  allocate the arrays.", 
+   "(change_file_prop, change_dir_prop): copy the incoming propchange", 
+   "into the file or dir baton's propchanges array.", 
+   "(close_file, close_directory):  if any propchanges have been cached", 
+   "in the baton, pass them to the new diff callback.", 
+   "(svn_client__get_diff_editor):  use new close_directory callback."
+  ], 
+  "revision_id": "841730"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-09T14:11:39.287211Z", 
+  "msg": [
+   "Test suite cleanups.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py (run_one_test): Print", 
+   "just the basename of the test program, and loose the space between the", 
+   "test index and the colon, to make the output look like what comes from", 
+   "the C tests.", 
+   "* subversion/tests/clients/cmdline/getopt_tests.py (getopt_output_dir):", 
+   "Fix the path to make srcdir!=builddir tests pass."
+  ], 
+  "revision_id": "841729"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-09T14:05:39.115227Z", 
+  "msg": [
+   "* Makefile.in (check): Use build/run-tests.py instead of shell commands."
+  ], 
+  "revision_id": "841728"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-09T10:30:28.985873Z", 
+  "msg": [
+   "* build/run-tests.py: Don't bother with xreadlines, because the filter function", 
+   "in pre-2.2 Python can't grok it, anyway.", 
+   "(TestHarness.run): Just pass self.log.readlines() to filter.", 
+   "(TestHarness._run_prog): Restore stdout and stderr even if spawnv throws", 
+   "an exception.", 
+   "Oh, and fix typo in the example check target."
+  ], 
+  "revision_id": "841727"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-04-09T02:27:27.986643Z", 
+  "msg": [
+   "The very first step towards making the test harness platform-independent."
+  ], 
+  "revision_id": "841726"
+ }
+]

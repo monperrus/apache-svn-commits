@@ -1,0 +1,105 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-12-29T01:02:55.211590Z", 
+  "msg": [
+   "Add initial patch for the dav-mirror code.  It functionally works, but may", 
+   "need more work as we improve it.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c:", 
+   "Include http_core.h and apr_strmatch.h as we need functions from them.", 
+   "Add SVNMasterURI directive that points at the 'master' repository.", 
+   "(dav_svn_dir_conf): Add master_uri and root_dir fields.", 
+   "(dav_svn_create_dir_config): Track what our top-level directory is.", 
+   "(dav_svn_merge_dir_config): Inherit master_uri normally, but take the", 
+   "parent's root_dir if it exists.", 
+   "(dav_svn_master_uri): Add helper function to set dav_svn_dir_conf->master_uri", 
+   "(dav_svn_get_master_uri): Add helper function to set", 
+   "dav_svn_dir_conf->master_uri", 
+   "(proxy_merge_fixup): Add fixup hook that will redirect things to the proxy", 
+   "if we're configured correctly, otherwise we will redirect to the proxy.", 
+   "(location_in_filter, location_header_filer, location_body_filter):", 
+   "Various httpd filters used to rewrite the location in the body and headers", 
+   "(register_hooks): Register our filters and install or proxy fixups."
+  ], 
+  "revision_id": "844275"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-12-29T00:53:14.915262Z", 
+  "msg": [
+   "Issue #951:", 
+   "New option for svn switch: \"--relocate\".  Useful for when the URL", 
+   "by which the repository must be referred to has changed.  This happens", 
+   "most frequently for mobile users.  These changes were greatly improved", 
+   "by feedback from Philip Martin.  Thanks to Greg Hudson for noticing that", 
+   "the log message was no longer in sync with the patch.", 
+   "This patch was originally authored by Mark Bendetto King, but was", 
+   "slightly cleaned up in the following ways by Justin Erenkrantz:", 
+   "- supports --non-recursive relocate since switch allows for this", 
+   "- output was adjusted to fit our help pattern a little better", 
+   "It is unsure what effect Issue #1000 has on this patch, but Justin", 
+   "has not had the time to track it down.  It is hoped that people can", 
+   "try this branch out, if it works, it can be merged into the trunk soon.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_relocate): Prototype for new function.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_relocate): Prototype for new function.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__remove_wcprops): Add recurse option.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(svn_wc__remove_wcprops): Add recurse option.", 
+   "(copy_dir_administratively): Call svn_wc__remove_wcprops recursively", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_add): Add recurse option to svn_wc__remove_wcprops", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "New file.  Includes implementation of svn_wc_relocate().", 
+   "Should eventually verify that new URL is valid; doesn't", 
+   "do any validation at all right now.", 
+   "* subversion/libsvn_client/relocate.c", 
+   "New file.  Includes implementation of svn_client_relocate().", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__longopt_t): Added enum for new option.", 
+   "(svn_cl__opt_state_t): Added entry for new option.", 
+   "* subversion/clients/cmdline/switch-cmd.c", 
+   "(rewrite_urls): New function: calls svn_client_relocate().", 
+   "(svn_cl__switch): Call rewrite_urls() instead of normal switch logic", 
+   "when appropriate.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__options): Added entry for new option.", 
+   "(svn_cl__cmd_table): Updated entry for switch to support new option.", 
+   "(main): Added support for new option.", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "Adjust expected output."
+  ], 
+  "revision_id": "844274"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-12-29T00:31:25.337094Z", 
+  "msg": [
+   "Create a branch to implement issue 951 (svn switch --relocate)"
+  ], 
+  "revision_id": "844273"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-12-29T00:28:49.550167Z", 
+  "msg": [
+   "Create branch for dav mirror patches (branched from r4197)"
+  ], 
+  "revision_id": "844272"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-12-28T21:46:27.470993Z", 
+  "msg": [
+   "reduce the number of newbie errors with svnadmin and svnlook by checking to", 
+   "see if the path we've been given is really a url and erroring out if it is.", 
+   "* subversion/svnadmin/main.c", 
+   "(main): ensure that repos_path is really a path before we use it.", 
+   "* subversion/svnlook/main.c", 
+   "(main): ditto."
+  ], 
+  "revision_id": "844271"
+ }
+]

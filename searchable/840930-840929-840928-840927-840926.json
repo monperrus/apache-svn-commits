@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-01-11T22:37:48.192980Z", 
+  "msg": [
+   "Handle eol and keyword untranslation in one place.", 
+   "NOTE: This commit breaks diff_tests.py tests 5 and 6, but Ben needs to", 
+   "start using the new interface, so will fix afterwards.", 
+   "* subversion/include/svn_wc.h, subversion/libsvn_wc/util.c", 
+   "(svn_wc_translated_file): New function.", 
+   "* subversion/libsvn_wc/questions.c (svn_wc__files_contents_same_p): If", 
+   "the contents are not identical, set *same to 0.  Unbelievable as it", 
+   "may seem, this bug has been here since the day this function was", 
+   "written.  The caller just happened to compensate by starting with the", 
+   "assumption that the files were not the same.  Today I rewrote the", 
+   "caller, and the regression tests caught the bug, bless 'em.", 
+   "(svn_wc__versioned_file_modcheck): Just use svn_wc_translated_file.", 
+   "(svn_wc_text_modified_p): Comment tweak.", 
+   "* subversion/libsvn_wc/wc.h (svn_wc__versioned_file_modcheck):", 
+   "Document error case better.", 
+   "* subversion/libsvn_wc/diff.c (file_diff, close_file): Just use", 
+   "svn_wc_translated_file.", 
+   "* subversion/include/svn_io.h (svn_io_remove_file): New prototype.", 
+   "* subversion/libsvn_subr/io.c (svn_io_remove_file): New function,", 
+   "wrapper around apr_file_remove.", 
+   "Unrelated fix:", 
+   "* subversion/libsvn_wc/props.c (svn_wc__get_keywords): Compare", 
+   "characters against '\\0', not NULL.  Ben's compiler didn't print", 
+   "warnings for these!  Mine does, though.  They're both GCC 2.95blah,", 
+   "mine under Linux, his under FreeBSD.  Go figure."
+  ], 
+  "revision_id": "840930"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-11T22:35:15.028346Z", 
+  "msg": [
+   "Add keyword logic to existing EOL logic for 'svn revert'.", 
+   "* adm_ops.c (revert_admin_things): When copying the text-base out to", 
+   "the working copy, make sure to do any eol translations or keyword", 
+   "substitutions, as dictated by the property values.  This is the same", 
+   "logic done by checkout/update, but without any tricky snafus to", 
+   "beware.  :-)"
+  ], 
+  "revision_id": "840929"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-11T22:14:20.624574Z", 
+  "msg": [
+   "Add keyword logic to existing EOL logic for 'svn ci'.", 
+   "* adm_crawler.c (do_postfix_text_deltas): check the keyword property", 
+   "when preparing to commit a file.  Always send a 'contract' flag to", 
+   "svn_io_copy_and_translate when creating the tmpfile that will be", 
+   "committed. Also, I think the styles got mixed up in the if..else", 
+   "cases, so I fixed them.", 
+   "* log.c (replace_text_base): always copy_and_translate the committed", 
+   "tmpfile back on top of working after the commit succeeds.  See the", 
+   "comment for details."
+  ], 
+  "revision_id": "840928"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T21:59:08.225483Z", 
+  "msg": [
+   "Change the name of the \"is_status\" flag to \"fetch_content\" to describe", 
+   "its desired semantic. This is clearer than a \"mode\" flag.", 
+   "* fetch.c (report_baton_t {}): rename is_status field to fetch_content", 
+   "(start_element): test fetch_content rather than is_status. flip the", 
+   "condition since the new field is inverted from before. also, pass", 
+   "the new field to simple_fetch_file()", 
+   "(add_node_props): test fetch_content. flip the condition.", 
+   "(end_element): use the new fetch_content field rather than is_status", 
+   "(make_reporter): take and set fetch_content rather than is_status", 
+   "(svn_ra_dav__do_update): flip value passed to make_reporter()", 
+   "(svn_ra_dav__do_status): flip value passed to make_reporter()"
+  ], 
+  "revision_id": "840927"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T21:45:34.518458Z", 
+  "msg": [
+   "Use the new error conversion function that Joe implemented a while back.", 
+   "[ all files in libsvn_ra_dav ]", 
+   "* props.c (svn_ra_dav__get_props): use svn_ra_dav__convert_error", 
+   "* commit.c (checkout_resource, do_proppatch, commit_add_dir, commit_add_file,", 
+   "commit_stream_close, apply_log_message): ditto", 
+   "* fetch.c (simple_fetch_file, svn_ra_dav__get_file): ditto"
+  ], 
+  "revision_id": "840926"
+ }
+]

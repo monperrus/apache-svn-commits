@@ -1,0 +1,65 @@
+[
+ {
+  "author": "ehillenius", 
+  "date": "2005-04-29T14:54:40.000000Z", 
+  "msg": [
+   "several fixes for cleaning up a page (model detaches) after an IListener call, when the responePage is a different page than the listener page"
+  ], 
+  "revision_id": "456620"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-04-29T12:33:00.000000Z", 
+  "msg": [
+   "fix in progress. NOT DONE YET, but it works better than what was currently in HEAD as it fixes some urgent problems we have currently.", 
+   "Related email to wicket-dev:", 
+   "In RequestCycle, there is this variable. It is never called however...", 
+   "/**", 
+   "* If the page is set to null, we'll first set the current page to this", 
+   "* variable. We use this in order to be able to release resources on the", 
+   "* page and its components.", 
+   "*/", 
+   "private Page pageBackup;", 
+   "I don't think we need the variable, as it is theoretically possible to set the response page multiple times, while - if we would actually use this variable - it could only work for one.", 
+   "Let me point out a bunch of related problems in HEAD:", 
+   "1. Currently, internalEndRequest (resulting in internalOnEndRequest) is not guaranteed to be called on a page. More specifically, when requestCycle.setResponsePage(...some other page) is called from an IListener interface, the current page's (the page where the listener resides on) internalEndRequest method is not called. That means we can't currently use this for resource cleanup.", 
+   "2. The current way of detaching models is not right.", 
+   "a) In Component.render:", 
+   "// Call implementation to render component", 
+   "onRender();", 
+   "// Component has been rendered", 
+   "rendered();", 
+   "// Detach models now that rendering is fully completed", 
+   "detachModels();", 
+   "The problem with this is that it is *very* inefficient when you share models between components. E.g. component A and component B share model Z. When A has rendered, Z will be detached. When B renders after that, Z will be attached and detached again. And so on.", 
+   "b) When setResponsePage is used in a IListener method, the current page will not be rendered. Hence: any models that were attached during the IListener handling are not detached, resulting in - a temporary - memory leak and possibly the effect that things are stored in the session which shoudn't.", 
+   "I'll follow up with a proposed fix later, but in the meanwhile any suggestions are welcome!", 
+   "Eelco"
+  ], 
+  "revision_id": "456619"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-04-29T12:31:29.000000Z", 
+  "msg": [
+   "more debug info"
+  ], 
+  "revision_id": "456618"
+ }, 
+ {
+  "author": "jonl", 
+  "date": "2005-04-28T06:37:22.000000Z", 
+  "msg": [
+   "Fix compile error."
+  ], 
+  "revision_id": "456617"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-04-27T21:29:09.000000Z", 
+  "msg": [
+   "versioning fix (Johan told me ;))"
+  ], 
+  "revision_id": "456616"
+ }
+]

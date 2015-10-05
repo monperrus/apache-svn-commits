@@ -1,0 +1,90 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2008-04-22T00:24:45.587053Z", 
+  "msg": [
+   "Fix a merge range notification bug.", 
+   "Note: The change to merge.c includes some unintentional whitespace changes.", 
+   "These were corrected in r30748 as part of an unrelated change.  This mess was", 
+   "caused because I had both changes in my WC and committed them sequentially,", 
+   "but missed the fact there where whitespace changes in the first commit.", 
+   "Today's moral: Always have \"compare whitespace\" selected in TortoiseMerge!", 
+   "* subversion/libsvn_client/merge.c", 
+   "(find_nearest_ancestor): Don't consider a subtree path its own nearest", 
+   "ancestor.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_fails_if_subtree_is_deleted_on_src): Correct the expected merge", 
+   "range.  Due to the bug in find_nearest_ancestor() when we merged -r1:5", 
+   "from 'A' into 'A_COPY' we were getting a \"--- Merging r5 into", 
+   "'A_COPY/D/gamma'\" header followed the deletion of A_COPY/D/gamma!  This", 
+   "should be \"--- Merging r3 through r5 into 'A_copy'\" (A_copy was", 
+   "copied from A@2)."
+  ], 
+  "revision_id": "870820"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-04-22T00:21:54.695122Z", 
+  "msg": [
+   "Fix bug when creating string representations of ranges X:Y where X > Y.", 
+   "Note: We don't actually create string representations of reversed ranges so", 
+   "this hasn't been a problem so far.  I only discovered it when using some", 
+   "printf's and svn_rangelist_to_string's while debugging.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(range_to_string): Handle reversed svn_merge_range_t (START > END).  If", 
+   "(START - 1) = END then create a string representation of START preceded", 
+   "by \"-\".  Otherwise create a string representation of START, followed by", 
+   "a \"-\", followed by a string representation of END + 1."
+  ], 
+  "revision_id": "870819"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-04-21T22:04:35.732589Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch:", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_auth_plaintext_prompt): Does use baton argument", 
+   "now, so remove contradicting statement in docstring (which in", 
+   "hindsight should never have been there in the first place).", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Split a 160 characters long line into two.", 
+   "Found by: Daniel Shahaf <d.s@daniel.shahaf.co.il>"
+  ], 
+  "revision_id": "870818"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-04-21T20:16:30.840451Z", 
+  "msg": [
+   "Fix a memory leak in remove recursive propget.  See thread starting here:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=137529", 
+   "From: \"Peter Wemm\" <peter@wemm.org>", 
+   "To: dev@subversion.tigris.org", 
+   "Subject: svn propget -R on the root of a large repository == boom!", 
+   "Date: Mon, 21 Apr 2008 02:12:54 -0700", 
+   "Message-ID: <e7db6d980804210212h49b2a5a2g5b99093d2ec437a7@mail.gmail.com>", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(remote_propget): Take perm_pool and work_pool arguments, instead of", 
+   "just one pool, and use them to manage memory more efficiently."
+  ], 
+  "revision_id": "870817"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-04-21T19:12:51.317272Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch,", 
+   "revert use of SVN_INT_ERR.", 
+   "* subversion/svn/main.c", 
+   "(main): Exit via svn_cmdline_handle_exit_error if conversion to", 
+   "UTF-8 fails. This avoids aborts in maintainer mode according to", 
+   "the log message of r24415.", 
+   "Exit via svn_handle_error2 with force == TRUE if setting up the", 
+   "auth baton fails. I'm not convinced abort()ing is correct here,", 
+   "but this is how it's currently done on trunk. No need to differ,", 
+   "this branch isn't about cleaning up our exit behaviour."
+  ], 
+  "revision_id": "870816"
+ }
+]

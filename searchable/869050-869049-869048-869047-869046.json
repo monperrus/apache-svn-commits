@@ -1,0 +1,108 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-01-21T21:57:06.657282Z", 
+  "msg": [
+   "On the fs-rep-sharing branch:", 
+   "First step toward supporting multiple checksum types.  Add a new datatype for", 
+   "checksums, and appropriate setting and getting functions.  Rev the", 
+   "svn_fs_file_md5_checksum() interface to allow it to return digests other", 
+   "than MD5.", 
+   "(\"Why is this happening on the fs-rep-sharing branch?\" you ask.  Well,", 
+   "currently, we use MD5 digests in the fs to make sure that the representation", 
+   "is what we think it is.  MD5 works fine for that.  However, with representation", 
+   "sharing, we are now using the checksum to detect duplicate representations and", 
+   "only store the one of them.  Should somebody want to intentionally create", 
+   "collisions in the database, MD5 is known to be vulnerable.  Hence the desire", 
+   "to use something stronger, like SHA-1.)", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(file_checksum_args): Use a checksum, instead of an MD5 digest.", 
+   "(base_file_md5_checksum, base_file_checksum): Rename.", 
+   "(txn_body_file_checksum): Return the MD5 if requested, and all zeros if", 
+   "SHA-1 requested.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_BAD_CHECKSUM_KIND): New error.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_file_checksum): New.", 
+   "(svn_fs_file_md5_checksum): Deprecate.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_checksum_kind_t, svn_checksum_t, svn_checksum_create):", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t): Update type for file_checksum.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_file_checksum): New.", 
+   "(svn_fs_file_md5_checksum): Implement as wrapper around", 
+   "svn_fs_file_checksum().", 
+   "* subversion/libsvn_subr/checksum.c:", 
+   "New.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_file_md5_checksum, fs_file_checksum): Rename.  Return the MD5 if requested,", 
+   "and all zeros if SHA-1 requested.", 
+   "(root_vtable): Update reference to fs_file_checksum()."
+  ], 
+  "revision_id": "869050"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-21T21:31:33.578067Z", 
+  "msg": [
+   "* subversion/notes/changelist-design.txt", 
+   "Update status of the feature revamp, noting 'svn update' as a", 
+   "problem case."
+  ], 
+  "revision_id": "869049"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-01-21T21:02:19.456939Z", 
+  "msg": [
+   "JavaHL: Followup to r28973.  Add support for changelists to status().", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_status):", 
+   "Add changelist parameter.", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(status): Add changelist parameter, use it for the C APIs.", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientInterface.java", 
+   "(status): Add parameter."
+  ], 
+  "revision_id": "869048"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-21T20:29:08.887448Z", 
+  "msg": [
+   "Teach svn_client_status3() about changelists.", 
+   "* subversion/libsvn_client/status.c", 
+   "(struct status_baton): Add 'changelist_hash' member.", 
+   "(tweak_status): Use the baton's changelist hash to filter unwanted statuses.", 
+   "(svn_client_status3): Add 'changelists' parameter, and use it to", 
+   "populate the 'changelist_hash' status wrapper function baton member.", 
+   "(svn_client_status2): Update call to svn_client_status3.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_status3): Add 'changelists' parameter.", 
+   "(svn_client_status2): Docstring tweak.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(svn_client__can_delete): Update calls to svn_client_status3.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(svn_client__do_external_status): Update calls to svn_client_status3.", 
+   "* subversion/svn/status-cmd.c", 
+   "(do_status): Update calls to svn_client_status3.", 
+   "(svn_cl__status): Stop doing changelist expansion.", 
+   "* subversion/notes/changelist-design.txt", 
+   "Update status of the feature revamp."
+  ], 
+  "revision_id": "869047"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-21T20:11:08.023847Z", 
+  "msg": [
+   "Per his request, update Bill Tutt's email addy."
+  ], 
+  "revision_id": "869046"
+ }
+]

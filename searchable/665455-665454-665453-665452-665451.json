@@ -1,0 +1,78 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-02-02T00:54:55.000000Z", 
+  "msg": [
+   "Thrift: Make borrow (almost) always succeed for TBufferedTransport.", 
+   "Chad Walters is writing a JSON protocol for Thrift, but he wants", 
+   "borrow to always succeed.  That would be a pain to implement,", 
+   "but here is a first step: borrow will almost always work with", 
+   "TBufferedTransport.", 
+   "Reviewed by: mcslee", 
+   "Test Plan: Ran the DenseProtocol test and Zlib test, but more needs to be done.", 
+   "Other Notes:", 
+   "Also reviewed by Chad Walters, and maybe Ben Maurer."
+  ], 
+  "revision_id": "665455"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-02-02T00:54:48.000000Z", 
+  "msg": [
+   "Thrift: Update the interface for TTransport's \"borrow\" method.", 
+   "Summary:", 
+   "I don't know what I was thinking when I first wrote this.", 
+   "It makes sense that the transport might not want to allocate its own memory,", 
+   "so the protocol is expected to provide a buffer for the data.", 
+   "However, if the transport already has the data buffered,", 
+   "there is no need to memcpy it; it can just return a pointer into its buffer.", 
+   "The new interface still requires the protocol to provide a buffer,", 
+   "but allows the transport to return a pointer to an interal buffer.", 
+   "In addition, I made len a pass-by-pointer parameter so that", 
+   "the transport can return more than the requested data if it has it", 
+   "available in its buffers.", 
+   "Reviewed By: mcslee", 
+   "Test Plan: Ran the DenseProtocol test and the Zlib test.", 
+   "Revert Plan: ok", 
+   "Other Notes:", 
+   "Also got this reviewed by Chad Walters from Powerset.", 
+   "Ben Maurer suggested making len a reference parameter."
+  ], 
+  "revision_id": "665454"
+ }, 
+ {
+  "author": "dweatherford", 
+  "date": "2008-02-01T20:42:56.000000Z", 
+  "msg": [
+   "[thrift] Fix generated T_LIST push_back() for cpptype override", 
+   "Summary: Thrift compiler emitting code missing a closing paren:", 
+   "\"this->extras.push_back(_elem18;\"", 
+   "Reviewed by: eletuchy", 
+   "Test plan: rebuild some feed code that uses cpptype overrides", 
+   "Revert: ok"
+  ], 
+  "revision_id": "665453"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2008-02-01T01:36:26.000000Z", 
+  "msg": [
+   "Fix to the throws clause validation", 
+   "Summary: Types from external files are not resolved until the program parse pass, not the include one. Therefore, only do full type validation once after all includes have been parsed and external type pointers resolved.", 
+   "Reviewed By: aditya", 
+   "Test Plan: build ServiceManager.thrift"
+  ], 
+  "revision_id": "665452"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2008-01-31T22:02:26.000000Z", 
+  "msg": [
+   "If a list has a custom CPP type, use push_back", 
+   "Summary: Can't deserialize by reference into std::list, for example", 
+   "Reviewed By: dweatherford", 
+   "Test Plan: Build feed"
+  ], 
+  "revision_id": "665451"
+ }
+]

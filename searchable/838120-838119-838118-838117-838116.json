@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2000-11-26T15:13:14.000000Z", 
+  "msg": [
+   "Small tweaks for stricter compilation, and compensate for some APR header", 
+   "rearrangement. Fixed a small bug in svn_wc__do_property_merge().", 
+   "* client/main.c: add <apr_general.h> for apr_initialize/apr_terminate", 
+   "* include/svn_hash.h: add APR headers for APR types used in file", 
+   "* include/svn_io.h: add APR headers for APR types used in file", 
+   "* libsvn_client/apply_edits.c: (do_edits) add const to 'repos' variable", 
+   "since the RHS is actually const.", 
+   "* libsvn_delta/text_delta.c: add <apr_general.h> for APR_INLINE", 
+   "* libsvn_delta/vdelta.c: add <apr_general.h> for APR_INLINE", 
+   "* libsvn_delta/tests/deltaparse-test.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate. group APR includes and use < >", 
+   "* libsvn_delta/tests/xml-output-test.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate. group APR includes and use < >", 
+   "* libsvn_fs/err.c: (svn_fs__dberrf) add const to 'fmt' argument", 
+   "* libsvn_fs/err.h: (svn_fs__dberrf) add const to 'fmt' argument", 
+   "* libsvn_fs/id.c: remove unneeded <math.h> include", 
+   "* libsvn_fs/tests/skel-test.c: (parse_cstr, put_explicit_length,", 
+   "check_explicit_length, try_explicit_length) add const to an argument", 
+   "(init_char_types) add const to 'c' local variable", 
+   "* libsvn_subr/base64.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate. group APR includes and use < >", 
+   "* libsvn_subr/tets/hashdump-test.c: remove key, f, and err globals, moving", 
+   "them into the appropriate functions. add const to 'review' global.", 
+   "(test1) add 'key' and 'f' local variables", 
+   "(test2) add 'f' local variable", 
+   "* libsvn_wc/adm_files.c: (close_adm_file) remove inner declarations of", 
+   "apr_err and components_added to prevent shadowing of outer decl. minor", 
+   "formatting changes.", 
+   "* libsvn_wc/entries.c: (handle_start_tag) add const to 'nstr' local variable", 
+   "since the RHS can/should be const.", 
+   "* libsvn_wc/get_editor.c: add a <apr_thread_proc.h>.", 
+   "(close_file): add const to 'diff_args' since the values are const. remove", 
+   "inner decl of 'apr_err' which shadowed an outer decl", 
+   "* libsvn_wc/local_changes.c: (svn_wc__string_to_time) use 'when' rather than", 
+   "'time' to prevent shadowing of a global 'time' symbol.", 
+   "* libsvn_wc/lock.c: (svn_wc__lock) use 'wait_for' rather than 'wait' to", 
+   "prevent shadowing of a global 'wait' symbol.", 
+   "* libsvn_wc/log.c: (run_cmd_in_directory) add const to 'args' argument to", 
+   "match expectation of apr_create_process() (and remove cast). fix typos", 
+   "in error strings (\"run_cmd_under_directory\" -> \"run_cmd_in_directory\")", 
+   "* libsvn_wc/props.c: (svn_wc__do_property_merge) rename inner 'full_path' to", 
+   "'full_reject_path' to prevent shadowing of outer decl. fix bug in error", 
+   "condition which used reject_path->data, yet reject_path is NULL; correct", 
+   "value is full_reject_path->data.", 
+   "* libsvn_wc/wc.h: (svn_wc__lock) use 'wait_for' rather than 'wait'.", 
+   "(svn_wc__time_to_string) use 'when' rather than 'time'.", 
+   "* libsvn_wc/tests/checkout-test.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate.", 
+   "* libsvn_wc/tests/commit-test.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate. group APR includes and use < >", 
+   "* tests-common/svn_test_editor.c: (test_delete) add a const to 'Aname' since", 
+   "the RHS could be const.", 
+   "(add_or_replace_dir) add a const to 'Aname' and 'ancestor' since RHS", 
+   "values could be const.", 
+   "(test_apply_textdelta) add a const to 'Aname' since RHS may be const", 
+   "(add_or_replace_file) add a const to 'Aname' and 'ancestor' since RHS", 
+   "values could be const.", 
+   "* tests-common/svn_tests_main.c: add a <apr_general.h> for", 
+   "apr_initialize/apr_terminate."
+  ], 
+  "revision_id": "838120"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-11-26T00:51:31.000000Z", 
+  "msg": [
+   "Minor tweaks. Some additional commentary.", 
+   "* (SVN_RO_DAV_PROP, SVN_RW_DAV_PROP): [new] macros to ease construction of", 
+   "dav_liveprop_spec initialization structures.", 
+   "* (dav_svn_insert_prop): add (empty) cases for DAV:getcontentlanguage,", 
+   "DAV:getcontenttype, and DAV:target."
+  ], 
+  "revision_id": "838119"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-25T06:47:17.000000Z", 
+  "msg": [
+   "(main): handle all ways of asking for help consistently -- the option", 
+   "way and the command way, either one possibly followed further", 
+   "arguments."
+  ], 
+  "revision_id": "838118"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-25T06:18:21.000000Z", 
+  "msg": [
+   "(main): Allow subcommand to be interleaved like any other argument.", 
+   "Inline all handling of conditions where user needs to see help msg.", 
+   "Destroy pool before any exit.", 
+   "(get_command): removed.", 
+   "(svn_cl__help): doc fix."
+  ], 
+  "revision_id": "838117"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-25T05:50:10.000000Z", 
+  "msg": [
+   "* main.c (read_from_file): new helper func.", 
+   "(main): if see valfile, read value right away, don't defer.", 
+   "* propset-cmd.c (svn_cl__propset): use opt_state->value, which will", 
+   "have been set in main no matter what."
+  ], 
+  "revision_id": "838116"
+ }
+]

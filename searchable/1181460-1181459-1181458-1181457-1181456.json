@@ -1,0 +1,94 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:10:28.248395Z", 
+  "msg": [
+   "Fix compilation bug that was not necessary in 0.90"
+  ], 
+  "revision_id": "1181460"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:10:21.873300Z", 
+  "msg": [
+   "Fixed miscellaneous bugs that would ignore a user-requested major compaction"
+  ], 
+  "revision_id": "1181459"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:10:11.747649Z", 
+  "msg": [
+   "Explicit Split Points", 
+   "Summary:", 
+   "Added the ability to explicitly split an existing region at a", 
+   "user-specified point.  Note that significant changes will be required", 
+   "for 0.90 version.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestHeapSize", 
+   "- mvn test -Dtest=TestAdmin", 
+   "- mvn test (underway)", 
+   "DiffCamp Revision: 191101", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, kannan, kranganathan", 
+   "Commenters: jgray", 
+   "CC: jgray, nspiegelberg, kannan", 
+   "Tasks:", 
+   "#443065: increase the number of splits", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181458"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:09:57.304392Z", 
+  "msg": [
+   "remove incorrect region count in Master UI", 
+   "Summary:", 
+   "The master web ui displays the region count twice.", 
+   "The first is an approx region count based on FS, and this is incorrect because", 
+   "it (the TableDirFilter() logic) doesn't exclude the .oldlogs directory when", 
+   "checking for Table directories.", 
+   "The other region count (towards the bottom) is a count of the active regions", 
+   "and more helpful.", 
+   "For checking if regions on disk and online regions are consistent, we are", 
+   "separately doing routine \" hbck\" calls.", 
+   "This also slows master UI page load & healthcheck times. On prod cluster the", 
+   "production cluster, it is reporting that we have 7000 odd regions on FS, while", 
+   "in reality we just have 472 regions.]", 
+   "Removing this code from master.jsp. I checked 90 (open source trunk) and this", 
+   "has already been removed there.", 
+   "[Separately, need to check why .oldlogs is growing and not getting cleaned up.]", 
+   "Test Plan:", 
+   "Run on dev cluster and make sure we no longer display this info.", 
+   "DiffCamp Revision: 190079", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kranganathan", 
+   "CC: kranganathan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181457"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:09:54.511321Z", 
+  "msg": [
+   "increase RPC timeout used by bin/hbase verify", 
+   "Summary:", 
+   "bin/hbase verify is used by ops to check cluster sanity.", 
+   "We need to increase RPC timeout for admin operations (like create, disable,", 
+   "drop table) operations used in bin/hbase verify.", 
+   "Test Plan:", 
+   "Ran on localhost. Will try on my test cluster as well.", 
+   "DiffCamp Revision: 188916", 
+   "Reviewed By: aaiyer", 
+   "Reviewers: aaiyer, nspiegelberg, kranganathan, aravind", 
+   "CC: aaiyer", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181456"
+ }
+]

@@ -1,0 +1,114 @@
+[
+ {
+  "author": "mrglavas", 
+  "date": "2006-12-19T21:50:33.205461Z", 
+  "msg": [
+   "Fixing JIRA Issue #1220:", 
+   "http://issues.apache.org/jira/browse/XERCESJ-1220", 
+   "The \"Standalone Document Declaration\" [1] validity constraint applies to markup declarations which", 
+   "occur in the external subset and/or a parameter entity (also known as external markup declarations [2]).", 
+   "Xerces was only considering declarations in the external subset.", 
+   "[1] http://www.w3.org/TR/2006/REC-xml-20060816/#vc-check-rmd", 
+   "[2] http://www.w3.org/TR/2006/REC-xml-20060816/#dt-extmkpdecl"
+  ], 
+  "revision_id": "488820"
+ }, 
+ {
+  "author": "bayard", 
+  "date": "2006-12-19T21:50:04.442686Z", 
+  "msg": [
+   "Fixing LANG-300 (reported by Jeremy Lemaire) - 1L to 9L incorrectly throw exceptions when passed into NumberUtils.createNumber. Fixed in both the math.NumbersUtils and the deprecated NumberUtils classes."
+  ], 
+  "revision_id": "488819"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2006-12-19T21:48:16.037985Z", 
+  "msg": [
+   "* This proposal has been backported"
+  ], 
+  "revision_id": "488818"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2006-12-19T21:45:35.977976Z", 
+  "msg": [
+   "Merge r422731, r422736, r422739, r423940, r424759, r424950, r425109, r426790,", 
+   "r426791, r426793, r426795, r416165, r426799, r475403, r475406, r475915,", 
+   "r475920, r475922, r476600, r437668 from trunk, which makes mod_deflate.c the", 
+   "same as r483597 from trunk:", 
+   "All comments to these changes for the sake of completeness:", 
+   "* Fix wrong FLUSH bucket handling in deflate_out_filter: Actually the internal", 
+   "structures of libz never got flushed as ctx->stream.avail_in is always zero", 
+   "here. As the EOS and the FLUSH bucket case use the same code for flushing", 
+   "libz's internal buffers move this code to the new function flush_zlib_buffer.", 
+   "* Fix potential memory leaks in deflate_out_filter if bailing out due to an", 
+   "error (either in the lower filter chain or during a libz operation). We need", 
+   "to call deflateEnd as it is very likely that this filter is never called", 
+   "again to ensures that libz's internal structures get cleaned properly.", 
+   "* Remove ourselves from the filter chain if we failed to init libz, as we", 
+   "pass data down the filter chain uncompressed afterwards.", 
+   "* In preparation of the changes of the inflate out filter:", 
+   "- rename flush_zlib_buffer to flush_libz_buffer (this name seems", 
+   "better)", 
+   "- add a parameter to tell flush_libz_buffer whether it should", 
+   "deflate or inflate as this function should be also used for the", 
+   "inflate out filter.", 
+   "* This shortcut is too short. It is not up to the filters to decide", 
+   "whether filters down the chain can do something useful with this empty", 
+   "brigade.", 
+   "* Initialize zRC to avoid a compiler warning.", 
+   "* Rather use a pool cleanup function than calling deflateEnd before every", 
+   "return from function to ensure that libz's internals get cleaned up.", 
+   "* Add parameter crc to flush_libz_buffer in order to call the libz's crc32", 
+   "function on the output buffer if needed. This is actually needed by the", 
+   "later rework of the inflate out filter.", 
+   "* Use a define for the number of validation bytes (CRC and length) after the", 
+   "compressed data", 
+   "* We can ignore Z_BUF_ERROR in flush_libz_buffer because:", 
+   "When we call libz_func we can assume that", 
+   "- avail_in is zero (due to the surrounding code that calls", 
+   "flush_libz_buffer)", 
+   "- avail_out is non zero due to the fact that we just emptied", 
+   "the output buffer and stored it into a brigade", 
+   "So the only reason for Z_BUF_ERROR is that the internal libz", 
+   "buffers are now empty and thus we called libz_func one time", 
+   "too often. This does not hurt. It simply says that we are done.", 
+   "* some optimizations taken from the inflate out filter", 
+   "* Remove bogus code that chokes on flush buckets", 
+   "* Rework inflate out filter and give it a similar workflow as the deflate out", 
+   "filter. This fixes the following bugs in the inflate out filter:", 
+   "- Incorrect handling of flush buckets.", 
+   "- Excessive memory usage for large compressed content (because we now", 
+   "already sent parts down the chain and do not process the whole brigade", 
+   "first before sending something down the chain).", 
+   "- Handle the case correctly where the validation bytes at the end of", 
+   "the compressed data stream are distributed across different buckets /", 
+   "brigades.", 
+   "- Fix a memory leak due to not cleaning up the internal structures of", 
+   "libz in some error cases.", 
+   "* Ensure that we do not try to inflate validation data or garbage data. None", 
+   "of this is zlib's business.", 
+   "* Ensure that we do not perform our final operations twice if a second EOS", 
+   "falls down the chain by accident. Otherwise we are likely to run in a", 
+   "SEGFAULT. So remove ourselves from the chain.", 
+   "* Actually append new data to the validation buffer and do not overwrite old", 
+   "data already there by setting the correct offset for the target buffer.", 
+   "* Also log the presence of garbage data at the end of the stream if all", 
+   "validation data is available in the first round.", 
+   "* Housekeeping: keep track of size even in the edge-case where validation", 
+   "bytes trickle in over multiple buckets.", 
+   "PR: 39854", 
+   "Reviewed by: rpluem, niq, jerenkrantz, wrowe"
+  ], 
+  "revision_id": "488817"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2006-12-19T21:28:20.906900Z", 
+  "msg": [
+   "Remove system.out call"
+  ], 
+  "revision_id": "488816"
+ }
+]

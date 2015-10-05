@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2008-10-01T02:55:03.250543Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Small tweaks.", 
+   "* subversion/libsvn_wc/revision_status.c:", 
+   "(analyze_status): declare \"err\"", 
+   "* subversion/libsvn_wc/experiment.c:", 
+   "(generic_walker): update to current params of base_get_info()"
+  ], 
+  "revision_id": "873445"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-01T02:46:11.665742Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Merge recent changes from /trunk."
+  ], 
+  "revision_id": "873444"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-10-01T00:57:21.008421Z", 
+  "msg": [
+   "Bugfix: allow relative externals to refer to paths with spaces, over HTTP.", 
+   "Found by: steveking", 
+   "* subversion/libsvn_client/externals.c", 
+   "(handle_externals_desc_change): Use svn_path_url_add_component", 
+   "instead of svn_path_join when extending a URL by a local path.", 
+   "* subversion/include/svn_path.h", 
+   "(svn_path_url_add_component): Document that leading '/' on the", 
+   "component isn't kosher, at least not right now.", 
+   "See:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=143427", 
+   "From: Stefan K\u00fcng <tortoisesvn@gmail.com>", 
+   "To: dev@subversion.tigris.org", 
+   "Subject: relative externals fail with spaces", 
+   "Date: Thu, 25 Sep 2008 19:00:36 +0200", 
+   "Message-ID: <48DBC3B4.8060204@gmail.com>"
+  ], 
+  "revision_id": "873443"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-09-30T22:15:40.634589Z", 
+  "msg": [
+   "Replace target-test.py with a version using the C test framework. This allows", 
+   "for better reuse of the tests when we'll introduce svn_dirent/svn_uri versions", 
+   "of svn_path_condense_targets.", 
+   "* subversion/tests/libsvn_subr/target-test.c", 
+   "(): Reimplement using the C test framework.", 
+   "(condense_targets_tests_helper): Internal function that executes", 
+   "svn_path_condense_targets and runs the necessary checks on the results.", 
+   "(test_path_condense_targets): New test, implements the test cases from", 
+   "target-test.py.", 
+   "(test_funcs): New, run the new test.", 
+   "* build.conf", 
+   "(test-scripts): Remove target-test.py.", 
+   "(target-test): Add libsvn_test dependency.", 
+   "x subversion/tests/libsvn_subr/target-test.py: Remove."
+  ], 
+  "revision_id": "873442"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-09-30T22:10:46.438468Z", 
+  "msg": [
+   "On the issue-3067-deleted-subtrees branch: Avoid spurious tree conflicts when", 
+   "a subtree file needs some changes during a merge but is ultimately deleted.", 
+   "As part of this fix I've reimplemented the helper function which ensures that", 
+   "we don't describe non-existent subtree paths to the merge editor and thus", 
+   "break the merge.  I did this with the obvious goal of solving the problem", 
+   "this branch was created to address,", 
+   "http://subversion.tigris.org/issues/show_bug.cgi?id=3067#desc43, but this", 
+   "change should also solve any analogous problems for *directory* subtrees,", 
+   "when (if) that behavior is implemented.  This change also goes some way to", 
+   "making the subtree merge code marginally easier to understand (o.k., I", 
+   "might be guilty of extreme optimism here, but I can dream).", 
+   "There are still two significant TODOs left on this branch:", 
+   "1) Handle the case of 1.6 clients and 1.5 servers: The latter won't have", 
+   "svn_ra_get_revision_deleted implemented and the solution in this commit", 
+   "relies on that API.", 
+   "2) Implement svn_ra_get_revision_deleted() for ra_neon, ra_svn, and", 
+   "ra_serf.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(prepare_subtree_ranges): Rename this...", 
+   "(adjust_deleted_subtree_ranges): ...to this.  Change signature to accept", 
+   "the actual svn_client__merge_path_t *child being processed, rather than", 
+   "just the child's remaining_ranges member.  Remove the reference argument", 
+   "child_deleted_or_nonexistant and handle this situation entirely within", 
+   "this function.", 
+   "(filter_merged_revisions): Simplify what this function does, specifically", 
+   "stop calling prepare_subtree_ranges() and remove arguments from signature", 
+   "that were only needed for this call.  Rework the doc string to reflect", 
+   "these signature changes and to better describe what this function does.", 
+   "Also, use a subpool for all but the final allocation of", 
+   "child->remaining_ranges.", 
+   "(calculate_remaining_ranges): Update call to filter_merged_revisions().", 
+   "Call adjust_deleted_subtree_ranges() directly since for subtrees, since", 
+   "filter_merged_revisions() no longer does that work.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(new_subtrees_should_not_break_merge,", 
+   "subtree_gets_changes_even_if_ultimately_deleted): Remove comments about", 
+   "XFail status.", 
+   "(test_list): Remove XFail from new_subtrees_should_not_break_merge and", 
+   "subtree_gets_changes_even_if_ultimately_deleted."
+  ], 
+  "revision_id": "873441"
+ }
+]

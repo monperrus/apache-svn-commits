@@ -1,0 +1,77 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2010-05-12T10:59:27.860837Z", 
+  "msg": [
+   "Add a new --show-diff option to svn log, fixing part of issue #2909.", 
+   "svn log --show-diff makes the svn log command provide inline diff output.", 
+   "This is a fairly naive implementation, done entirely within the CLI client.", 
+   "A separate RA session is opened to retrieve the diff. It behaves more or", 
+   "less like one svn log invocation coupled with many svn diff invocations", 
+   "(one for each revision in the log). This means first and foremost that", 
+   "it is a bit slow. But it works.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add SHOW_DIFF member.", 
+   "* subversion/svn/log-cmd.c", 
+   "(log_receiver_baton): Add a client context CTX here so we can invoke", 
+   "svn_client_diff5(), replacing the CANCEL_FUNC and CANCEL_BATON members.", 
+   "Also add TARGET_URL member to be used as root of the diff operation.", 
+   "The new SHOW_DIFF and DIFF_EXTENSIONS members represent the --show-diff", 
+   "and --extensions options.", 
+   "(log_entry_receiver): Adjust calls to cancellation functions to baton", 
+   "changes. Print a diff if the --show-diff option was passed. Flush stderr", 
+   "as well as stdout since an external diff tool might write to stderr.", 
+   "(log_entry_receiver_xml): Adjust calls to cancellation functions to baton", 
+   "changes. There is no support for printing diffs in XML mode yet so nothing", 
+   "else changed here.", 
+   "(svn_cl__log): Make sure diff options passed are consistent. Adjust", 
+   "population of the baton to above changes.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t): Add OPT_SHOW_DIFF.", 
+   "(svn_cl__options): Add and document the new --show-diff option, alias", 
+   "it to --diff.", 
+   "(svn_cl__cmd_table): Make svn log accept the --show-diff, --diff-cmd,", 
+   "and --extensions options.", 
+   "(main): Handle --show-diff option.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Adjust, output has changed.", 
+   "Inspired by: dannas (who said he really likes git log -p)"
+  ], 
+  "revision_id": "943445"
+ }, 
+ {
+  "author": "peter_firmstone", 
+  "date": "2010-05-12T10:54:23.744383Z", 
+  "msg": [
+   "River-323 Just some more refactoring still experiencing failled tests", 
+   "This will break some tests causing a failled Hudson build, however I think it best to get the code out there, so I can get some assistance.", 
+   "By default the qa tests now utilise the ConcurrentDynamicPolicyProvider and DynamicPolicyProvider uses a pluggable SPI."
+  ], 
+  "revision_id": "943444"
+ }, 
+ {
+  "author": "parsonsd", 
+  "date": "2010-05-12T10:48:20.750716Z", 
+  "msg": [
+   "Removed copying of TRANSPORT_HEADERS property from referenced MsgCtx into newly created MsgCtx as relies on specific information being available", 
+   "in future layers."
+  ], 
+  "revision_id": "943443"
+ }, 
+ {
+  "author": "fguillaume", 
+  "date": "2010-05-12T10:46:38.095936Z", 
+  "msg": [
+   "Added Chemistry logo, artwork by Thibaut Soulcie, free of use"
+  ], 
+  "revision_id": "943442"
+ }, 
+ {
+  "author": "supun", 
+  "date": "2010-05-12T10:46:32.791903Z", 
+  "msg": [
+   "improving code"
+  ], 
+  "revision_id": "943441"
+ }
+]

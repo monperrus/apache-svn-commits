@@ -1,0 +1,100 @@
+[
+ {
+  "author": "jwhitlock", 
+  "date": "2009-06-24T21:35:55.687111Z", 
+  "msg": [
+   "Created an SVN namespace for the Pool object to avoid symbol collisions in other", 
+   "libraries, like X11 and OpenGL for example.", 
+   "* subversion/bindings/javahl/native/Pool.h: Defined the Pool class within", 
+   "the SVN namespace.", 
+   "* subversion/bindings/javahl/native/SVNAdmin.cpp,", 
+   "subversion/bindings/javahl/native/Outputer.h,", 
+   "subversion/bindings/javahl/native/JNIThreadData.h,", 
+   "subversion/bindings/javahl/native/Pool.cpp,", 
+   "subversion/bindings/javahl/native/StringArray.h,", 
+   "subversion/bindings/javahl/native/CopySources.cpp,", 
+   "subversion/bindings/javahl/native/JNIUtil.cpp,", 
+   "subversion/bindings/javahl/native/Targets.h,", 
+   "subversion/bindings/javahl/native/RevisionRange.h,", 
+   "subversion/bindings/javahl/native/Outputer.cpp,", 
+   "subversion/bindings/javahl/native/Path.cpp,", 
+   "subversion/bindings/javahl/native/SVNClient.cpp,", 
+   "subversion/bindings/javahl/native/StringArray.cpp,", 
+   "subversion/bindings/javahl/native/Targets.cpp,", 
+   "subversion/bindings/javahl/native/RevpropTable.h,", 
+   "subversion/bindings/javahl/native/RevisionRange.cpp,", 
+   "subversion/bindings/javahl/native/CopySources.h,", 
+   "subversion/bindings/javahl/native/JNIUtil.h,", 
+   "subversion/bindings/javahl/native/Inputer.cpp,", 
+   "subversion/bindings/javahl/native/RevpropTable.cpp,", 
+   "subversion/bindings/javahl/native/Inputer.h: Updated references to Pool", 
+   "to be fully qualified with the new SVN namespace."
+  ], 
+  "revision_id": "878265"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-06-24T20:45:30.506636Z", 
+  "msg": [
+   "Revert r38189, it violated a basic principle of pool usage and allowed", 
+   "unbounded memory growth.", 
+   "Suggested by: hwright"
+  ], 
+  "revision_id": "878264"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-06-24T20:16:15.174921Z", 
+  "msg": [
+   "Fix a pool bug in our entries walker.", 
+   "Prevents some devious pool related bugs if you allocate long lived objects", 
+   "in svn_wc_walk_entries3's svn_wc_entry_callbacks2_t.found_entry callback", 
+   "and expect them to be allocated in the pool you passed to", 
+   "svn_wc_walk_entries3.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(walker_helper): The first call to the", 
+   "svn_wc_entry_callbacks2_t->found_entry callback, for the '.' entry, passes", 
+   "the pool which is passed into this function, the same pool passed to its", 
+   "only caller svn_wc_walk_entries3.  But all subsequent found_entry callbacks", 
+   "use a subpool which, no surprise, is destroyed.  This is at odds with", 
+   "the doc string for svn_wc_walk_entries3 which states that it should use", 
+   "its POOL argument for \"looping, recursion, and to allocate all entries", 
+   "returned\".  So with this change we start using POOL for that and use the", 
+   "subpool only for temporary allocations."
+  ], 
+  "revision_id": "878263"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-24T17:40:08.064353Z", 
+  "msg": [
+   "Promote two static functions from libsvn_diff to public API.", 
+   "No functional change.", 
+   "The functions will be useful for 'svn patch', which needs to call", 
+   "them from libsvn_client. Lacking a better idea of where to move them,", 
+   "I am moving them into libsvn_subr/subst.c which already concerns", 
+   "itself with EOL characters in one way or another.", 
+   "* subversion/include/svn_subst.h", 
+   "(svn_subst_find_eol_start, svn_subst_detect_eol): Declare.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(datasource_get_next_token, output_unified_line, output_line,", 
+   "svn_diff_file_output_merge2): Track renamed functions.", 
+   "(find_eol_start, detect_eol): Moved from here ...", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_find_eol_start, svn_subst_detect_eol): ... to here."
+  ], 
+  "revision_id": "878262"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-24T15:23:22.546730Z", 
+  "msg": [
+   "Follow-up to r38186:", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_commit_item3_t): Add @since marker for new 'adm_access'", 
+   "member. Also add a ### comment about its future with WC-NG.", 
+   "Found by: rhuijben"
+  ], 
+  "revision_id": "878261"
+ }
+]

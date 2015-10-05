@@ -1,0 +1,98 @@
+[
+ {
+  "author": "davsclaus", 
+  "date": "2010-12-27T13:43:56.800714Z", 
+  "msg": [
+   "CAMEL-3466: Polished"
+  ], 
+  "revision_id": "1053065"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2010-12-27T13:29:35.011595Z", 
+  "msg": [
+   "CAMEL-3364: Polished"
+  ], 
+  "revision_id": "1053064"
+ }, 
+ {
+  "author": "torsten", 
+  "date": "2010-12-27T13:09:54.800723Z", 
+  "msg": [
+   "The current implementation of AT->import is buggy in many aspects.", 
+   "For example, import() is called at compile time and plan() at run", 
+   "time. AT uses a set of global variables to pass state from import() to", 
+   "plan() (@testmore and $real_plan). Now, suppose a set of test modules", 
+   "that use a mix of -withtestmore and without it is loaded via", 
+   "PerlModule or similar. import() is called when they are loaded but", 
+   "plan() only when the handler is called. What is the state of @testmore", 
+   "and $real_plan at plan() time?", 
+   "This is also the reason why the 0Xtestmore tests fail sometimes. If", 
+   "the wrong interpreter is hit by the request the wrong plan() is", 
+   "called.", 
+   "This a rewrite of AT::import plus a few tweaks in other functions.", 
+   "It introduces %wtm to memorize which caller uses Test::More and which", 
+   "Test. If a module calls", 
+   "use Apache::Test;                     # without -withtestmore", 
+   "...", 
+   "use Apache::Test qw/-withtestmore/;   # and later with test more", 
+   "a warning is issued and the -withtestmore switch is ignored. Once", 
+   "Test.pm always Test.pm.", 
+   "The other way around is allowed to export more functions for example:", 
+   "use Apache::Test qw/-withtestmore is_deeply/;", 
+   "...", 
+   "use Apache::Test qw/plan/;", 
+   "But still once -withtestmore always -withtestmore (for the namespace).", 
+   "Further, the code does not import all default symbols from Test and", 
+   "Test::More into the Apache::Test namespace. It imports ok() and skip()", 
+   "from Test.pm but only because Apache::TestHandler (and perhaps some", 
+   "other modules) calls them as Apache::Test::ok. Instead it uses string", 
+   "eval to export directly from Test.pm or Test::More into the calling", 
+   "namespace.", 
+   "But that causes a problem, import() has to decide which functions to", 
+   "export from Apache::Test namespace and which from Test.pm or", 
+   "Test::More. Both modules inherit from Exporter and Exporter allows for", 
+   "quite complex import syntax (e.g. /symbol/ or !/sym.$/). I didn't want", 
+   "to copy&paste that logic from Exporter. So, import() ignores those", 
+   "more exotic specifications and issues a warning.", 
+   "Further, \":withtestmore\" is gone. A warning is issued if it is used.", 
+   "There is one more subtle case. What if someone uses:", 
+   "use Apache::Test ();", 
+   "That way the import() function is skipped. So, the first occasion code", 
+   "from Apache::Test is called is when", 
+   "Apache::Test::plan tests=>19;", 
+   "is executed. The new AT version takes this as if import was called as", 
+   "use Apache::Test qw/!:DEFAULT/;", 
+   "meaning without -withtestmore. But a warning is issued that there is a", 
+   "plan() call without a previous use(). That also means that the", 
+   "following will be an error:", 
+   "package my::test;", 
+   "require Apache::Test;", 
+   "Apache::Test::plan tests=>19;", 
+   "...", 
+   "package my::test;", 
+   "use Apache::Test qw/-withtestmore/;", 
+   "The -wtm option will be ignored due to the plan() call above that", 
+   "nails the package my::test to Test.pm."
+  ], 
+  "revision_id": "1053063"
+ }, 
+ {
+  "author": "jonm", 
+  "date": "2010-12-27T13:07:53.110948Z", 
+  "msg": [
+   "Changed bad host for retry handler tests to bogus.example.com", 
+   "from www.complete.garbage.invalid, which seems to have better", 
+   "timing properties for me (and hopefully Hudson)."
+  ], 
+  "revision_id": "1053062"
+ }, 
+ {
+  "author": "hiranya", 
+  "date": "2010-12-27T12:57:49.281371Z", 
+  "msg": [
+   "Class mediator samples"
+  ], 
+  "revision_id": "1053061"
+ }
+]

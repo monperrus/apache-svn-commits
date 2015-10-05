@@ -1,0 +1,87 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2002-03-19T01:14:37.350192Z", 
+  "msg": [
+   "* packages/freebsd/apr-devel/files/patch-apr-Makefile.in", 
+   "use a version of this patch that actually works ;-)  the previous patch", 
+   "caused 'make install' to fail to install several files.", 
+   "Correct Fix Pointed Out By:  Justin Erenkrantz"
+  ], 
+  "revision_id": "841625"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-19T00:32:23.173721Z", 
+  "msg": [
+   "Update the FreeBSD subversion port to r1537.", 
+   "* packages/freebsd/subversion/Makefile", 
+   "point to new tarball.", 
+   "* packages/freebsd/subversion/distinfo", 
+   "update md5.", 
+   "* subversion/files/patch-configure", 
+   "remove patch that has been committed to subversion already."
+  ], 
+  "revision_id": "841624"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-19T00:28:44.040814Z", 
+  "msg": [
+   "* packages/freebsd/apr-devel", 
+   "update svn:ignore", 
+   "* packages/freebsd/apr-devel/files/patch-apr-Makefile.in", 
+   "patch around a problem with the new version of autoconf in the FreeBSD", 
+   "ports tree.  we aren't using srcdir != builddir for the port anyway, so", 
+   "it doesn't have any effect on us, other than breaking make install."
+  ], 
+  "revision_id": "841623"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-03-19T00:23:34.534085Z", 
+  "msg": [
+   "* packages/freebsd/apr-devel/pkg-plist", 
+   "add some files we were missing.", 
+   "Patch by: Alex Newman <dolemite@wulimasters.net>"
+  ], 
+  "revision_id": "841622"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-03-18T23:54:55.869074Z", 
+  "msg": [
+   "Switch over to use mod_dav's new API for report generation (streamy,", 
+   "rather than buffered in memory).", 
+   "* mod_dav_svn/dav_svn.h (dav_svn__update_report, dav_svn__log_report):", 
+   "change the type of the 'output' parameter to an ap_filter_t*", 
+   "rather than an apr_text_header*", 
+   "* mod_dav_svn/log.c (struct log_receiver_baton): the 'output' member", 
+   "is now a filter rather than a linked list of text items. add a", 
+   "bucket brigade for buffering up the output and for delivery of", 
+   "content into the filter stack.", 
+   "(send_xml): format the output right into the bucket brigade,", 
+   "flushing it to the output filters, if necessary.", 
+   "(log_receiver): clear the iteration subpool", 
+   "(dav_svn__log_report): change the type of the 'output' parameter.", 
+   "create an iteration subpool for the baton. send the DAV_XML_HEADER", 
+   "since mod_dav won't do that for us any more. ensure that the", 
+   "output is flushed and toss the subpool. be wary about how errors", 
+   "are returned to mod_dav (that is: we can't once output has begun).", 
+   "* mod_dav_svn/update.c (update_ctx_t {}): add a bucket brigade for", 
+   "output buffering, and change 'output' to the filter type. removed", 
+   "the 'opool' member since we don't need it any more.", 
+   "(send_xml): format the output right into the bucket brigade,", 
+   "flushing it to the output filters, if necessary.", 
+   "(upd_set_target_revision): output the DAV_XML_HEADER since mod_dav", 
+   "won't do it for us.", 
+   "(dav_svn__update_report): change the 'output' parameter type. create", 
+   "the bucket brigade. ensure that the output is flushed when we're", 
+   "done with the output.", 
+   "* mod_dav_svn/version.c (dav_svn_deliver_report): renamed from", 
+   "dav_svn_get_report. 'report' parameter changed its name to", 
+   "'output' and became a filter type."
+  ], 
+  "revision_id": "841621"
+ }
+]

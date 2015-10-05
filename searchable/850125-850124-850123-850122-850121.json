@@ -1,0 +1,87 @@
+[
+ {
+  "author": "breser", 
+  "date": "2004-06-22T16:27:55.405778Z", 
+  "msg": [
+   "Use the swig command from configure rather than the one that is just on the", 
+   "path when building the perl bindings.", 
+   "* subversion/bindings/swig/perl/native/Makefile.PL.in", 
+   "Get the path to the swig command from configure via @SWIG@."
+  ], 
+  "revision_id": "850125"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-06-22T13:14:16.808322Z", 
+  "msg": [
+   "Close the listening socket in the child process after forking svnserve", 
+   "to make sure that the port is not kept open if the main process is", 
+   "terminated.", 
+   "* subversion/svnserve/main.c", 
+   "(main): Just do it."
+  ], 
+  "revision_id": "850124"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-06-21T21:04:00.198274Z", 
+  "msg": [
+   "Change svn_client__repos_locations to use the new get_locations RA layer", 
+   "functionality if available. This is the final part of issue 1846.", 
+   "* libsvn_client/ra.c (struct log_receiver_baton): Change start_path and", 
+   "end_path to be const char **.", 
+   "(log_receiver): Adjust accordingly.", 
+   "(slow_locations): New function. Some of it moved here from", 
+   "svn_client__repos_locations.", 
+   "(svn_client__repos_locations): Use the new get_locations RA layer function", 
+   "and use slow_locations as a fall-back for 1.0.x servers."
+  ], 
+  "revision_id": "850123"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-06-21T20:50:08.459619Z", 
+  "msg": [
+   "Comment fix.", 
+   "* libsvn_ra_svn/client.c (ra_svn_get_locations): Remove forgotten ###", 
+   "comment and some extra newlines."
+  ], 
+  "revision_id": "850122"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-06-21T20:27:36.268428Z", 
+  "msg": [
+   "Implement a new RA layer function get_locations that will get the locations", 
+   "for a path@rev for a number of other revisions. Extend the svn protocol", 
+   "and add a custom DAV REPORT.", 
+   "Patch by: Shlomi Fish <shlomif@iglu.org.il>", 
+   "(Reworked by me.)", 
+   "Review by: Ben Collins-Sussman <sussman@collab.net>", 
+   "Greg Hudson <ghudson@mit.edu>", 
+   "* include/svn_ra.h (svn_ra_plugin_t): Added get_locations function pointer.", 
+   "* libsvn_ra_local/ra_plugin.c (svn_ra_local__get_locations): New function.", 
+   "(ra_local_plugin): Add svn_ra_local__get_location to the end of the struct.", 
+   "* libsvn_ra_dav/ra_dav.h (anonymous enum): Add ELEM_get_locations_report and", 
+   "ELEM_location.", 
+   "(svn_ra_dav__get_locations): Added function declaration.", 
+   "* libsvn_ra_dav/session.c (dav_plugin): Add svn_ra_dav__get_locations to the", 
+   "end of the struct.", 
+   "* libsvn_ra_dav/fetch.c (get_locations_baton_t): New struct typedef.", 
+   "(gloc_report_elements): New variable.", 
+   "(get_attr): Add forward declaration.", 
+   "(gloc_start_element, svn_ra_dav__get_locations): New function.", 
+   "* mod_dav_svn/version.c (send_get_locations_report,", 
+   "dav_svn__get_locations_report): New function.", 
+   "(dav_svn_deliver_report): Handle get-locations report request.", 
+   "* mod_dav_svn/dav_svn.h (dav_svn__get_locations_report): Added declaration.", 
+   "* libsvn_ra_svn/client.c (ra_svn_get_locations): New function.", 
+   "(ra_svn_plugin): Added ra_svn_get_locations to the end of the struct.", 
+   "* libsvn_ra_svn/protocol: Added information about the new get-locations", 
+   "command.", 
+   "* svnserve/serve.c (get_locations): New function.", 
+   "(main_commands): Add entry for get-locations command."
+  ], 
+  "revision_id": "850121"
+ }
+]

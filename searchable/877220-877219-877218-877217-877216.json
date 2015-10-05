@@ -1,0 +1,96 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-09T20:28:25.734652Z", 
+  "msg": [
+   "Add access baton storage into wc_db thru some temporary interfaces. These", 
+   "batons are managed in parallel with the hash table managed by lock.c.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_temp_get_access, svn_wc__db_temp_set_access,", 
+   "svn_wc__db_temp_close_access, svn_wc_temp_clear_access): new", 
+   "functions to manage access batons.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_pdh_t): add ADM_ACCESS member", 
+   "(svn_wc__db_temp_get_access, svn_wc__db_temp_set_access,", 
+   "svn_wc__db_temp_close_access, svn_wc_temp_clear_access): new", 
+   "functions to manage access batons.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc_adm_access_t): add ABSPATH member to hold the path in an", 
+   "absolute form.", 
+   "(IS_MISSING): new helper macro to detect if a baton is the \"missing\"", 
+   "marker.", 
+   "(create_lock): rename parameter to SCRATCH_POOL", 
+   "(adm_access_alloc): rename POOL to RESULT_POOL, and take an additional", 
+   "SCRATCH_POOL parameter. populate the new ABSPATH member. adjust", 
+   "parameters to add_to_shared().", 
+   "(add_to_shared): revamp params. add lock to its SHARED data, and also", 
+   "track the lock in the DB.", 
+   "(mark_missing): new helper function to mark a path as \"missing\". also", 
+   "tracked in the DB.", 
+   "(remove_path_from_shared): new helper function used for some specific", 
+   "tracking situations.", 
+   "(remove_from_shared): remove a baton from its SHARED area, and also from", 
+   "the DB.", 
+   "(get_from_shared): grow a SCRATCH_POOL argument, and pass it along to", 
+   "the DB when fetching batons.", 
+   "(svn_wc__adm_steal_write_lock, open_single): adjust call to adm_access_alloc", 
+   "(close_single): use remove_from_shared instead of accessing the shared", 
+   "set directly. drop a redundant assertion.", 
+   "(do_open): call the new mark_missing() helper instead of add_to_shared", 
+   "(open_all, svn_wc_adm_open3, svn_wc__adm_retrieve_internal): use new", 
+   "IS_MISSING macro", 
+   "(svn_wc__adm_pre_open): adjust call to adm_access_alloc", 
+   "(svn_wc_adm_open_anchor): use new remove_path_from_shared, mark_missing,", 
+   "and remove_from_shared helpers. adjust call to add_to_shared.", 
+   "(do_close): adjust call to get_from_shared. use new IS_MISSING macro.", 
+   "use new remove_path_from_shared helper.", 
+   "(svn_wc__adm_missing): adjust call to get_from_shared, and use new", 
+   "IS_MISSING macro."
+  ], 
+  "revision_id": "877220"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T20:25:25.943055Z", 
+  "msg": [
+   "Fix the build by falling back to the system svnversion if the just-built one", 
+   "fails.  See this thread for more information:", 
+   "http://svn.haxx.se/dev/archive-2009-04/0262.shtml", 
+   "* Makefile.in:", 
+   "(revision-install): If the just-build svnversion fails, try the", 
+   "system-installed one.  If that also fails, just bail and print \"unknown\"."
+  ], 
+  "revision_id": "877219"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2009-04-09T19:50:34.415209Z", 
+  "msg": [
+   "Added example function svn-status-parse-fixup-tramp-exit", 
+   "* trunk/contrib/client-side/emacs/psvn.el:", 
+   "(svn-status-parse-fixup-tramp-exit): New function that shows how to", 
+   "cleanup the *svn-process* buffer before parsing the *svn-status*", 
+   "result"
+  ], 
+  "revision_id": "877218"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T18:10:22.770125Z", 
+  "msg": [
+   "Followup to r37071: Don't prematurely close a file when running 'svn patch'", 
+   "Found by: arfrever", 
+   "* subversion/libsvn_client/patch.c", 
+   "(extract_svnpatch): Disown the compressed file when converting it to a stream."
+  ], 
+  "revision_id": "877217"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-09T17:02:31.477821Z", 
+  "msg": [
+   "Propose r37137 for backport to 1.5.x."
+  ], 
+  "revision_id": "877216"
+ }
+]

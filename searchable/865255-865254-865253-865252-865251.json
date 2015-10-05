@@ -1,0 +1,101 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-05-29T18:11:10.398397Z", 
+  "msg": [
+   "* www/merge-tracking/design.html", 
+   "(audit-log): Remove note about the existence of the", 
+   "merge-sensitive-log branch, which has been merged onto trunk."
+  ], 
+  "revision_id": "865255"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-05-29T18:03:34.058249Z", 
+  "msg": [
+   "When determining a copy source with svn_client__get_copy_source,", 
+   "notice copied parents of our target path.", 
+   "For example, if you have \"/branches/foo/bar\", and \"/branches/baz/bar\",", 
+   "and \"baz\" was a copy of \"foo\", we should detect the copy when running", 
+   "'log' on \"bar\".  Consider a revision like:", 
+   "$ svn log -v -r2 branches/baz/bar", 
+   "------------------------------------------------------------------------", 
+   "r2 | dlr | 2007-05-25 19:11:55 -0700 (Fri, 25 May 2007) | 1 line", 
+   "Changed paths:", 
+   "A /branches/baz (from /branches/foo:1)", 
+   "create branch", 
+   "------------------------------------------------------------------------", 
+   "The changed paths hash passed to a log receiver will contain", 
+   "/branches/baz, not /branches/baz/bar, so in order to find the copy", 
+   "source, we need to check if the changed path is a parent of the give", 
+   "path.", 
+   "This code (incorrectly) assumes that we'll never see both \"baz\" and", 
+   "\"baz/bar\" in the log output.  To handle the most general case, we will", 
+   "need to use logic similar to svn_fs_closest_copy (or just expose", 
+   "svn_fs_closest_copy over the RA layer).", 
+   "* subversion/libsvn_client/log.c", 
+   "(copyfrom_info_receiver): Detect copied parents of BATON->target_path,", 
+   "and record copy source appropriately.", 
+   "Reviewed by: kameshj"
+  ], 
+  "revision_id": "865254"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-05-29T14:57:27.502253Z", 
+  "msg": [
+   "Logo source cleanups.", 
+   "* subversion_logo.ai", 
+   "Make some fixes to object boundaries that have long been bugging me (does not", 
+   "affect the rendered result noticeably ... just makes editing much easier).", 
+   "* subversion_logo.eps", 
+   "Re-convert from updated subversion_logo.ai.", 
+   "* subversion_logo.pdf", 
+   "New (also converted from subversion_logo.ai)."
+  ], 
+  "revision_id": "865253"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-05-29T14:30:20.882193Z", 
+  "msg": [
+   "Fix issue #2712.  If anon-access==\"read\" in svnserve.conf, svnserve won't also", 
+   "check authz rules to see if anonymous users are actually able to checkout", 
+   "the requested path.  As a side effect, users who would otherwise be authorized", 
+   "to access that path are never authenticated and the checkout fails later, when", 
+   "the authz rules are enforced by libsvn_repos.", 
+   "[Changes to subversion/svnserve/serve.c:diff() were reverted in r25461.]", 
+   "* subversion/svnserve/serve.c", 
+   "(update): Use must_have_access() instead of trivial_auth_request().  This", 
+   "ensures that the authz rules are checked and that the user is authenticated", 
+   "if necessary.", 
+   "(diff): Same, but this change was accidental and was reverted in r25461.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(write_restrictive_svnserve_conf): Add an optional second parameter for", 
+   "setting the value of anon-access.", 
+   "* subversion/tests/cmdline/authz_tests.py", 
+   "(authz_svnserve_anon_access_read): New test.", 
+   "(test_list): Add the new test, skip it when running the tests over DAV."
+  ], 
+  "revision_id": "865252"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-05-29T13:35:19.983968Z", 
+  "msg": [
+   "Fix a few places in lock_tests.py where we really shouldn't depend on cached", 
+   "credentials.", 
+   "Why lock_tests.py?  Consider that:", 
+   "a) lock_tests.py uses both jrandom and jconstant", 
+   "b) commits have to be done by the same user who locked the file", 
+   "c) the tests can now be run in parallel", 
+   "So, if jconstant happens to do an authenticated Subversion operation right", 
+   "before we try to do a commit expecting to use jrandom's cached credentials,", 
+   "the test will fail.", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(commit_file_keep_lock, commit_file_unlock, update_while_needing_lock):", 
+   "Always use --username and --password arguments when committing."
+  ], 
+  "revision_id": "865251"
+ }
+]

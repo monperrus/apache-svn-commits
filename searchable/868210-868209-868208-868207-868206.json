@@ -1,0 +1,97 @@
+[
+ {
+  "author": "kameshj", 
+  "date": "2007-11-29T13:04:40.301499Z", 
+  "msg": [
+   "Document svnserve protocol for commit-revs-for-merge-ranges command.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(Capabilities): mergeinfo capability means supporting", 
+   "'commit-revs-for-merge-ranges' command too.", 
+   "(Main Command Set): Document 'commit-revs-for-merge-ranges' command.", 
+   "Found by: glasser"
+  ], 
+  "revision_id": "868210"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-29T10:11:56.194877Z", 
+  "msg": [
+   "Follow a change in the serf API.", 
+   "Note: devs that build svn on Windows with serf trunk will have to update", 
+   "serf to r1164.", 
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.c", 
+   "(init_sspi_connection, handle_sspi_auth):", 
+   "Rename serf_set_max_outstanding_requests to", 
+   "serf_connection_set_max_outstanding_requests."
+  ], 
+  "revision_id": "868209"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T08:57:27.372557Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Track the number of nodes with mergeinfo under a given node in a field", 
+   "on the node-revision itself.  This can eliminate the need for sqlite", 
+   "lookups, though this revision doesn't change that.  (Well, it actually", 
+   "does break the writes to the index, but doesn't make reads use the new", 
+   "data.)", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(struct node_revision_t): New field mergeinfo_count.  (It's an int,", 
+   "though it probably shouldn't be if we're scared of overflow.)", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(copy_node_revision): Copy mergeinfo_count field.", 
+   "(svn_fs_fs__dag_get_mergeinfo_count): New accessor.", 
+   "(svn_fs_fs__dag_increment_mergeinfo_count): New mutator, flushing to", 
+   "disk each time.  Ensure that the count is not negative, and is not", 
+   "more than 1 for a file.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_get_mergeinfo_count,", 
+   "svn_fs_fs__dag_increment_mergeinfo_count): Declare.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(HEADER_MERGEINFO): New header name.", 
+   "(svn_fs_fs__get_node_revision): Read new field.", 
+   "(write_noderev_txn): Write new field.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Revision file format): Document new field.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(increment_mergeinfo_up_tree): New helper to increment mergeinfo for", 
+   "every ancestor node by the same amount.", 
+   "(fs_change_node_prop): Don't mess with the \"txn mergeinfo\"; instead,", 
+   "see if we're actually adding or deleting svn:mergeinfo, and", 
+   "increment up the tree if so.", 
+   "(merge): Whenever we use a node (or deletion) from the source tree,", 
+   "adjust a \"mergeinfo_increment\" variable if necessary; also adjust", 
+   "it based on recursive calls to merge.  At the end, increment this", 
+   "node (but not ancestors!) by that amount, and return that value to", 
+   "the caller in a new argument.", 
+   "(merge_changes): Adjust.", 
+   "(fs_delete_node): If the node we're deleting has mergeinfo in its", 
+   "subtree, decrement up the tree.", 
+   "(copy_helper): If the copied item's subtree has mergeinfo, or it's", 
+   "replacing something with mergeinfo, adjust mergeinfo count up the", 
+   "tree."
+  ], 
+  "revision_id": "868208"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T06:12:18.987302Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Revert r28129-28131.  I have a different plan: eliminating sqlite for", 
+   "mergeinfo entirely."
+  ], 
+  "revision_id": "868207"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-11-29T04:42:15.407759Z", 
+  "msg": [
+   "* TODO-1.5-branch: Remove the TODO added in r28060, as it is now in the issue", 
+   "tracker as issue #3034.  Add some verbage which suggests non-branch-blocking", 
+   "items go to the issue tracker."
+  ], 
+  "revision_id": "868206"
+ }
+]

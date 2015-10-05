@@ -1,0 +1,87 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-14T16:12:24.000000Z", 
+  "msg": [
+   "* strings-table.c", 
+   "(svn_fs__string_size): Removed obsolete \"todo\" comment.", 
+   "* tree.c", 
+   "(txn_body_copy, svn_fs_apply_textdelta): Updated \"todo\" comment.", 
+   "(merge): Logic reorganization and some \"todo\" cleanups."
+  ], 
+  "revision_id": "839935"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-08-14T15:26:55.000000Z", 
+  "msg": [
+   "Temporarily adding binary file for testing."
+  ], 
+  "revision_id": "839934"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-14T03:51:45.000000Z", 
+  "msg": [
+   "BIG HACK. Map the incoming names from mod_dav's current scheme (NAMESPACE-ID", 
+   "\":\" NAME) into a \"normal\" string for use in the FS. Also take care of the", 
+   "property values that mod_dav expects: they begin with a language value and", 
+   "contain embedded NUL characters.", 
+   "This is a temporary solution. The final solution (in the next day,", 
+   "hopefully) will be a reworking of the interface between mod_dav and its", 
+   "backend modules (e.g. mod_dav_svn).", 
+   "(dav_db{}): add a working buffer for the various remapping", 
+   "(fix_name): new function to tweak a property name from the mod_dav style to", 
+   "the FS style.", 
+   "(dav_svn_db_open): prep the working buffer", 
+   "(dav_svn_db_fetch): if the \"METADATA\" pseudo-property is requested, then", 
+   "return a fake one. (we no longer store this property). remap the name via", 
+   "fix_name(). format the result value properly.", 
+   "(dav_svn_db_store): don't store the \"METADATA\" pseudo-property. remap the", 
+   "name. handle the value reformat.", 
+   "(dav_svn_db_remove, dav_svn_db_exists): remap the name.", 
+   "(get_key): pass in db to do the hack-work. remap the name from the FS style", 
+   "to the mod_dav style.", 
+   "(dav_svn_db_firstkey, dav_svn_db_nextkey): pass new param to get_key."
+  ], 
+  "revision_id": "839933"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-14T03:44:10.000000Z", 
+  "msg": [
+   "When sending properties to the server, don't use the custom namespace if the", 
+   "property name already begins with \"svn:\".", 
+   "(do_setprop): test the name for \"svn:\" and use the right namespace prefix", 
+   "(do_proppatch): define the \"C\" prefix for the custom namespace and use \"S\"", 
+   "for the normal \"svn:\" namespace. For deletes, use the correct prefix based", 
+   "on the property name."
+  ], 
+  "revision_id": "839932"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-14T03:41:22.000000Z", 
+  "msg": [
+   "Rationalize some of the XML namespaces and property name/prefix stuff.", 
+   "WARNING: DAV-based working copies will be broken by this change because of a", 
+   "local property name change.", 
+   "* mod_dav_svn/update.c (dav_svn__update_report): update some error text --", 
+   "the svn:target-revision element name is lower-case.", 
+   "* mod_dav_svn/liveprops.c (dav_svn_namespace_uris[]): use SVN_PROP_PREFIX", 
+   "for the property prefix to ensure we get the lower-cased prefix for the", 
+   "property names.", 
+   "* libsvn_ra_dav/ra_dav.h (SVN_RA_DAV__LP_NAMESPACE): use SVN_PROP_WC_PREFIX", 
+   "to ensure that we get the proper prefix; toss the long URL in favor of a", 
+   "simpler prefix.", 
+   "(SVN_RA_DAV__CUSTOM_NAMESPACE, SVN_RA_DAV__PROP_BASELINE_RELPATH): use", 
+   "SVN_PROP_PREFIX to get the lower-cased version of the prefix.", 
+   "* libsvn_ra_dav/props.c (neon_descriptions[]): use SVN_PROP_PREFIX to get", 
+   "the right case for the property prefix.", 
+   "* libsvn_ra_dav/fetch.c (starting_props[]): use SVN_PROP_PREFIX to get the", 
+   "right case for the property prefix.", 
+   "* include/svn_xml.h (SVN_XML_NAMESPACE): use the simpler \"svn:\" prefix"
+  ], 
+  "revision_id": "839931"
+ }
+]

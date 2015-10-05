@@ -1,0 +1,70 @@
+[
+ {
+  "author": "abrown", 
+  "date": "2007-05-15T17:28:17.907349Z", 
+  "msg": [
+   "DERBY-2631: Expose existing auto-generated key functionality through more JDBC", 
+   "APIs in embedded mode.", 
+   "1. Updates the following JDBC methods so that they no longer throw a \"Feature", 
+   "not implemented\" error in embedded mode. Instead they make calls to an", 
+   "already existing internal method and pass in the appropriate arguments:", 
+   "Connection.prepareStatement(String sql, String[] columnNames);", 
+   "Connection.prepareStatement(String sql, int[] columnIndexes);", 
+   "Statement.execute(String sql, String[] columNames);", 
+   "Statement.execute(String sql, int[] columIndexes);", 
+   "Statement.executeUpdate(String sql, String[] columnNames);", 
+   "Statement.executeUpdate(String sql, int[] columnIndexes);", 
+   "2. Changes the (already existing but not currently used) code in", 
+   "sql/execute/InsertResultSet that handles autogen column indexes/names", 
+   "to throw an error for any target column that is not an auto-increment", 
+   "column. This is because Derby's implementation of getGeneratedKeys()", 
+   "internally maps to the IDENTITY_VAL_LOCAL() function, which only returns", 
+   "keys for identity (autoincrement) columns. So if the user specifies", 
+   "something else, we'll throw an error.", 
+   "3. Changes the names of two existing (but unused) errors to more accurately", 
+   "reflect their intended use (they are now called by the changes for #2).", 
+   "Also changes the text for those errors as the old text seemed a tad", 
+   "awkward. No regression impact here because the two errors in question", 
+   "were never exposed to users before now.", 
+   "4. Makes a slight change to jdbcapi/statementJdbc30.java (a test) to", 
+   "reflect the new behavior (we no longer throw \"Feature not implemented\"", 
+   "errors).", 
+   "5. Adds test cases for the newly supported APIs to the JUnit test", 
+   "lang/AutoGenJDBC30Test.java. This involved adding two more utility", 
+   "methods to junit/BaseJDBCTestCase.java, as well."
+  ], 
+  "revision_id": "538260"
+ }, 
+ {
+  "author": "sppatel", 
+  "date": "2007-05-15T17:26:43.532751Z", 
+  "msg": [
+   "set missing tomcat standard context attributes for tomcat fallback application"
+  ], 
+  "revision_id": "538259"
+ }, 
+ {
+  "author": "seade", 
+  "date": "2007-05-15T17:15:35.329913Z", 
+  "msg": [
+   "Add a little more verification to the test."
+  ], 
+  "revision_id": "538258"
+ }, 
+ {
+  "author": "dmiddlem", 
+  "date": "2007-05-15T17:12:45.824591Z", 
+  "msg": [
+   "Small bug fix to handle special cases of stax data"
+  ], 
+  "revision_id": "538257"
+ }, 
+ {
+  "author": "carnold", 
+  "date": "2007-05-15T17:10:36.887958Z", 
+  "msg": [
+   "Bug 37930: Almost ready for a Maven-based release"
+  ], 
+  "revision_id": "538256"
+ }
+]

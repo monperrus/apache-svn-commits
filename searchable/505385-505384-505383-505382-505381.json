@@ -1,0 +1,82 @@
+[
+ {
+  "author": "hlship", 
+  "date": "2007-02-09T17:27:01.822153Z", 
+  "msg": [
+   "First pass at a functional, extensible Grid component."
+  ], 
+  "revision_id": "505385"
+ }, 
+ {
+  "author": "wjwashburn", 
+  "date": "2007-02-09T17:25:01.259962Z", 
+  "msg": [
+   "Harmony-2385, clean up the coding style", 
+   "passes build, build test on both winxp32 and lin32 RHEL4, gcc 4.0.2"
+  ], 
+  "revision_id": "505384"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-02-09T17:22:52.587361Z", 
+  "msg": [
+   "QPID-346 Message loss after rollback", 
+   "QPID-347 Connection closure results in undelivered messages remaining 'taken()' and so never re-delivered.", 
+   "QPID-348 Problems of prefetching messages", 
+   "QPID-355 Closing a consumer does not ensure messages delivery will stop for that subscription", 
+   "Most changes are related to QPID-346,QPID-348,QPID-355", 
+   "Broker", 
+   "------", 
+   "Adjusted broker log4j.xml to provide a more reasonable output.", 
+   "AMQChannel - resend() modified to use the DeliveryManager to resend messages so ordering is preserved and higher priority messaes can be so prioritised.", 
+   "- requeue/resend adjusted to release() messages QPID-347", 
+   "BasicRecoverMethodHandler - updated to make use of requeue flag ... needs testing though it is same code as Rollback. Method now sends back the synchronous Recover-Ok", 
+   "TxRollbackHandler - This now calls resend() to put all messages sent back on subscriptions resendQueue. This currently assumes that you are suspended as otherwise you will start to receive the resent messages before the RollbackOk method.", 
+   "AMQMinaProtocolSession - getChannel() from the interface says to return null if channelId cannot be found. However, in most cases this is not checked to be null and in the few places it is checked a AMQE is thrown. Consistency here would be good I have changed this method to throw AMQException directly but we should be clear why we were returning null. NPEs could occur in an error situation.", 
+   "- also white space changes", 
+   "AMQQueue - Changed previous change to subscription creation to pass in the AMQQueue to the subscription rather than the DeliveryManager this allows the messages stored on the resendQueue to be delivered to the queue during closure.", 
+   "Added method to allow a subscription to say that it is containing data for the queue.", 
+   "DeliveryManager - Added method to allow the Subscription call through the AMQQueue to specify that it is holding content that should stop the queue being marked as empty.", 
+   "ConcurrentSelectorDeliveryManager - Added locking with the subscription to ensure that if there is a resendQueue in use then only one thread is processing it at once. Without this the AsyncDelivery thread and the io thread closing the subscription can both process _resendQueue. This results in a message being dupicated and the next message on the queue being lost. As the AsyncDelivery thread peeks the queue, ensures the message is sent then poll()s it. While the io-closing thread poll()s the message and delivers it to the queue. So the AsyncDelivery thread will remove the next message in the queue by mistake with it's poll() call.", 
+   "+implemented new features in DeliveryManager", 
+   "+wrapped loging in if<level>Enable added some extra trace logs.", 
+   "Subscription - added method to get sendLock.", 
+   "SubscriptionFactory - changes as said above from AMQChannel, changed DeliveryManager to AMQQueue in subscription constructor.", 
+   "SubscriptionImpl - Changes for new constructor.", 
+   "+ Changed suspension notion to suspend the subscription whilst messages are being resent from the resendQueue to the main AMQQueue this only occurs during closure so this is a good thing as the messages would just come back when the consumer finally closes. QPID-355", 
+   "+ Implemented requeue of messages during message closure. QPID-355", 
+   "+ Changed hard-coded value of false for msg.redelivered to use the acutal value stored in the message.", 
+   "SubscriptionSet - formatting", 
+   "Client", 
+   "------", 
+   "AMQSession - Changed the implementation of recover() to be synchronous on Recover-Ok and perform the correct clean up. Whilst the session is suspended.", 
+   "CommitRollbackTest - Added to confirm changes work. (Updated from previous commit)", 
+   "testPutThenRollback() - checks redelivered flag", 
+   "testRollbackWithConsumerConnectionClose() -", 
+   "Test that Closing a consumer and then connection while messages are being resent from a rolling back get correctly requeued a session purges the dispatcher queue, and the messages arrive in the correct order", 
+   "testRollbackWithConsumerAndSessionClose()-", 
+   "Test that Closing a consumer and then session while messags are being resent from a rollback get correctly requeued, a session purges the dispatcher queue, and the messages arrive in the correct order", 
+   "Cluster", 
+   "-------", 
+   "SubscriptionTestHelper/RemoteSubscriptionImpl - null implementation of Subscription interface sendLock()", 
+   "amqp.0-8.xml - spec change. to add Recover-ok"
+  ], 
+  "revision_id": "505383"
+ }, 
+ {
+  "author": "gwinn", 
+  "date": "2007-02-09T17:21:40.730513Z", 
+  "msg": [
+   "TUSCANY-1103"
+  ], 
+  "revision_id": "505382"
+ }, 
+ {
+  "author": "andreas", 
+  "date": "2007-02-09T17:21:33.277252Z", 
+  "msg": [
+   "Log out at the end of the acusecases test"
+  ], 
+  "revision_id": "505381"
+ }
+]

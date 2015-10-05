@@ -1,0 +1,86 @@
+[
+ {
+  "author": "niallp", 
+  "date": "2010-04-20T01:00:29.852996Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release commons-parent-15"
+  ], 
+  "revision_id": "935780"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2010-04-20T00:56:24.761832Z", 
+  "msg": [
+   "Add description of web repository connection."
+  ], 
+  "revision_id": "935779"
+ }, 
+ {
+  "author": "jghoman", 
+  "date": "2010-04-20T00:48:51.353421Z", 
+  "msg": [
+   "HDFS-1014: Error in reading delegation tokens from edit logs. Contributed by Jitendra Nath Pandey."
+  ], 
+  "revision_id": "935778"
+ }, 
+ {
+  "author": "kfujino", 
+  "date": "2010-04-20T00:46:19.708598Z", 
+  "msg": [
+   "remove null check."
+  ], 
+  "revision_id": "935777"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-20T00:34:49.747988Z", 
+  "msg": [
+   "Create two internal prop APIs that more directly model our tree approach", 
+   "and the intended/eventual wc_db APIs. Replace svn_wc__load_props() with", 
+   "these APIs.", 
+   "Also convert uses of __internal_prop_diff to __get_pristine_props where", 
+   "only the props were fetched (without the changes).", 
+   "The code in diff.c:file_diff() is unclear and may be slightly incorrect", 
+   "(though the test pass) in this revision. The next revision will clear up", 
+   "the logic and streamline status checks.", 
+   "* subversion/libsvn_wc/props.h:", 
+   "(svn_wc__load_props): removed", 
+   "(svn_wc__get_pristine_props): internal version of svn_wc_get_pristine_props", 
+   "(svn_wc__get_actual_props): internal version of svn_wc_proplist2", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc__load_props): made static and renamed to...", 
+   "(load_all_props): ... this.", 
+   "(svn_wc__merge_props, svn_wc__internal_propset, svn_wc__has_props,", 
+   "svn_wc__internal_propdiff): track rename to load_all_props", 
+   "(svn_wc__get_actual_props): new internal function to load the ACTUAL", 
+   "properties, using load_all_props", 
+   "(svn_wc_prop_list2, svn_wc__internal_propget): switch to use", 
+   "svn_wc__get_actual_props", 
+   "(svn_wc__get_pristine_props): new internal function to load the pristine", 
+   "props from BASE or WORKING as appropriate. fill in all the correct", 
+   "checks and return NULL when props are undefined.", 
+   "(svn_wc_get_pristine_props): use svn_wc__get_pristine_props", 
+   "(svn_wc__internal_propget):", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(copy_props): switch to use svn_wc__get_actual_props", 
+   "(copy_file_administratively): switch to use svn_wc__get_pristine_props", 
+   "and svn_wc__get_actual_props", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(get_base_mimetype): simplify fetching of props and use", 
+   "svn_wc__get_pristine_props.", 
+   "(get_working_mimetype): simplify fetching of props and use", 
+   "svn_wc__get_actual_props", 
+   "(file_diff): switch from __internal_propdiff to get_pristine_props. be", 
+   "careful around fetching the baseprops, depending on the REPLACED and", 
+   "IGNORE_ANCESTRY values. we may need the \"revert\" props", 
+   "(report_wc_directory_as_added, close_directory, close_file): switch to", 
+   "get_pristine_props and get_actual_props", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(close_directory, add_file_with_history): use svn_wc__get_pristine_props", 
+   "and __get_actual_props", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(svn_wc__wq_add_revert): use svn_wc__get_(pristine|actual)_props"
+  ], 
+  "revision_id": "935776"
+ }
+]

@@ -1,0 +1,105 @@
+[
+ {
+  "author": "djames", 
+  "date": "2005-11-17T17:22:24.297402Z", 
+  "msg": [
+   "* build/generator/gen_base.py (query_swig): Typo fix. Followup to r17425."
+  ], 
+  "revision_id": "857500"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-17T16:40:17.511405Z", 
+  "msg": [
+   "Followup to r17396. Fix release mode, after r17396 broke it by tickling a bug", 
+   "in the dependency generator.", 
+   "Move dependencies which do not matter to the generation of SWIG source, only to", 
+   "the compilation of it, to actually be attached to the compilation, not the", 
+   "generation, rule. This is required because some of the files which matter only", 
+   "at compilation might not even exist at generation time.", 
+   "* build/generator/gen_base.py", 
+   "(GeneratorBase.compute_hdr_deps):", 
+   "Receive two different kinds of dependencies from the IncludeDependencyInfo", 
+   "instance, registering one kind as DT_OBJECT (.o: .c) dependencies, the", 
+   "other as DT_SWIG_C (.c: .i) dependencies.", 
+   "(IncludeDependencyInfo.__init__): Redocument.", 
+   "Fill in SWIG proxy info earlier, thus fixing bugs where this info was not", 
+   "fully taken into account.", 
+   "Changes to reflect that includes now have a type (C or SWIG).", 
+   "Run closure across all dependencies, not just those which are existing", 
+   "files.", 
+   "(IncludeDependencyInfo.query_swig): Renamed from query().", 
+   "Extended with dependency type (C or SWIG) handling.", 
+   "(IncludeDependencyInfo.query): New wrapper emulating the old behaviour for", 
+   "non-SWIG files.", 
+   "(IncludeDependencyInfo._upd_dep_hash): New helper function.", 
+   "(IncludeDependencyInfo._include_closure): Use _upd_dep_hash.", 
+   "(IncludeDependencyInfo._scan_for_includes): Use types and _upd_dep_hash."
+  ], 
+  "revision_id": "857499"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-17T16:22:47.362402Z", 
+  "msg": [
+   "On wc-propcaching branch: INtroduce an has_props flag in the entry, which", 
+   "tracks whether the entry has any working props.  Use this flag to avoid lots", 
+   "of stat calls in svn status.", 
+   "* subversion/include/svn_wc.h (svn_wc_entry_t): Add has_props member.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__load_props): Make use of the has_props flag to not try to load", 
+   "non-existent props.", 
+   "(svn_wc__install_props): Update has_props flag.", 
+   "(svn_wc__has_props): Use has_props flag if possible.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__atts_to_entry, write_entry, fold_entry): Handle has-props attribute.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(SVN_WC__ENTRY_ATTR_HAS_PROPS, SVN_WC__ENTRY_MODIFY_HAS_PROPS): New macro.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__loggy_entry_modify): Handle has_props flag."
+  ], 
+  "revision_id": "857498"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-17T16:18:35.447319Z", 
+  "msg": [
+   "Follow-up to r17289, fix bad merge.", 
+   "I hang my head in shame, in r17289, when I merged r16234:17095 from", 
+   "svn/trunk to ebcdic/trunk, I *somehow* screwed up this file.  This applies", 
+   "the merge changes from 16234:17095 that didn't make it in and applies the", 
+   "required fixes for the AS/400 port.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(FALSE_STR, NONE_STR, TRUE_STR, UNKNOWN_STR): New utf-8 escaped", 
+   "symbolic constants.", 
+   "(SVN_WC__LOG_MODIFY_ENTRY, SVN_WC__LOG_DELETE_LOCK,", 
+   "SVN_WC__LOG_DELETE_ENTRY, SVN_WC__LOG_MV, SVN_WC__LOG_CP,", 
+   "SVN_WC__LOG_CP_AND_TRANSLATE, SVN_WC__LOG_CP_AND_DETRANSLATE,", 
+   "SVN_WC__LOG_RM, SVN_WC__LOG_APPEND, SVN_WC__LOG_READONLY,", 
+   "SVN_WC__LOG_MAYBE_READONLY, SVN_WC__LOG_SET_TIMESTAMP,", 
+   "SVN_WC__LOG_COMMITTED, SVN_WC__LOG_MODIFY_WCPROP, SVN_WC__LOG_MERGE,", 
+   "SVN_WC__LOG_ATTR_NAME, SVN_WC__LOG_ATTR_DEST, SVN_WC__LOG_ATTR_REVISION,", 
+   "SVN_WC__LOG_ATTR_TIMESTAMP, SVN_WC__LOG_ATTR_PROPNAME,", 
+   "SVN_WC__LOG_ATTR_PROPVAL, SVN_WC__LOG_ATTR_ARG_1, SVN_WC__LOG_ATTR_ARG_2,", 
+   "SVN_WC__LOG_ATTR_ARG_3, SVN_WC__LOG_ATTR_ARG_4,", 
+   "SVN_WC__LOG_ATTR_ARG_5): Hex escape symbolic constant with utf-8 values.", 
+   "(svn_wc__logfile_path): Use APR_PSPRINTF2 to create all utf-8 log", 
+   "file name.", 
+   "(svn_wc__loggy_committed): Use APR_PSPRINTF2 to create all utf-8 xml tag.", 
+   "(svn_wc__loggy_entry_modify): Use new utf-8 symbols in place of string", 
+   "literals.  Use APR_PRSPRINTF2 when creating string reps of rev numbers.", 
+   "(svn_wc__write_log): Use APR_PSPRINTF to create ebcdic string for SVN_ERR_W."
+  ], 
+  "revision_id": "857497"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-17T16:18:31.825956Z", 
+  "msg": [
+   "Partial merge of r17421 from /branches/ebcdic/trunk to /branches/ebcdic/1.3.x.", 
+   "Note: Changes to wc.h in r17421 are not applicable to ebcdic/1.3.x yet so are", 
+   "not applied in this merge."
+  ], 
+  "revision_id": "857496"
+ }
+]

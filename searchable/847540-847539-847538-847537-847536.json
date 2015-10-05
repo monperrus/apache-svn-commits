@@ -1,0 +1,110 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-10-21T20:16:28.094698Z", 
+  "msg": [
+   "Do one of two compatibility cleanups from issue #1275:", 
+   "In revision 6749, we taught ra-dav clients to DELETE activities they", 
+   "no longer needed.  However, servers only learned how to support this", 
+   "at the same time.  So, a client trying to DELETE an activity from an", 
+   "older server would get a 500 HTTP_INTERNAL_SERVER_ERROR, and would", 
+   "ignore that error.", 
+   "After the new server code has been \"out there\" for a bit, though, we", 
+   "want to yank the special code from delete_activity() which allows", 
+   "status=500 to pass through as a non-errorful condition.  500s are,", 
+   "generally speaking, most definitely the kinds of errors we want to", 
+   "report.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(delete_activity): Don't special-case error 500,", 
+   "HTTP_INTERNAL_SERVER_ERROR, anymore.  Instead, ignore the result", 
+   "code of the request and just return any error.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h, subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__request_dispatch): Change parameter's name to 'code_p',", 
+   "and allow it to be null, to better support the above changes.", 
+   "Thanks to Mike Pilato for eyes."
+  ], 
+  "revision_id": "847540"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-10-21T19:50:10.017686Z", 
+  "msg": [
+   "Follow-up to r7450, change diff tests to match diff output.", 
+   "* subversion/tests/libsvn_diff/diff-diff3-test.c", 
+   "(dump_core, test_two_way_unified, test_two_way_unified_suspect,", 
+   "test_three_way_merge_with_conflict): Replace \\n with APR_EOL_STR."
+  ], 
+  "revision_id": "847539"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-21T17:18:39.221526Z", 
+  "msg": [
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Temporarily revert the change made in", 
+   "revision 7462 -- it violates the client/server compatibility policy.", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(another_hudson_problem): Fix the expected output in light of the", 
+   "server change reversion.  This will change again when we re-enable", 
+   "that server code."
+  ], 
+  "revision_id": "847538"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-10-21T16:38:41.841746Z", 
+  "msg": [
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_get_uuid, ra_svn_get_repos_root): Style police."
+  ], 
+  "revision_id": "847537"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-21T16:17:55.431754Z", 
+  "msg": [
+   "This commit addresses a couple of issues.  First, there was a reported", 
+   "problem with inconsistency in the behaviors of:", 
+   "svn st -u # (where there is a schedule-add-dir in the wc)", 
+   "svn st -u schedule-add-dir", 
+   "In looking at this, I discovered a server-side bug with dir-deltas.", 
+   "No sweat, three-line fix, bodda-bing bodda-*BLAMMO*!  Regression.  Oh", 
+   "what, pray tell, might be going on now?  Ah, the code that deals with:", 
+   "svn up -r REV missing-dir # (where REV is a revision in which", 
+   "missing-dir does not exist)", 
+   "was expecting the server to do the wrong thing.  Which it did.  Until", 
+   "now.  From there, it was all a blur of painful update editor coding", 
+   "decisions.", 
+   "So, I guess what I'm trying to say is, \"Thanks tons, Julian Foad, for", 
+   "several days of pain that resulted from your keen 'svn st' bug report.\"", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Oops!  If *both* the target and the source", 
+   "are missing, do nothing.  Sheesh.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(complete_directory): Take a 'path' instead of a 'bdi' structure", 
+   "whose only member we use is -- you guessed it -- bdi->path.  Also,", 
+   "take a new 'is_root' parameter (to keep us from messing with stuff", 
+   "we're not supposed to).  Finally, use 'svn_wc_notify_update_delete'", 
+   "instead of just 'svn_wc_notify_delete'.", 
+   "(maybe_bump_dir_info): Update call to complete_directory().", 
+   "(do_entry_deletion): New helper, core from the guts of delete_entry().", 
+   "(delete_entry): Now just calls the new do_entry_deletion() abstraction.", 
+   "(close_edit): If an update target is still missing after no editor", 
+   "drive took place, we have to play funny games with \"deleted\" flags", 
+   "and all that.  Use do_entry_deletion() to take care of this.", 
+   "Also, call complete_directory() instead of doing our own", 
+   "incomplete-flag removal.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status): Only note that the status target was deleted", 
+   "from the repository if we aren't about to add it for the first time.", 
+   "* subversion/tests/clients/cmdline/update_tests.py", 
+   "(another_hudson_problem): Expect slightly different text now (since", 
+   "no real update will happen in this case now).", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(upd_close_edit): New.", 
+   "(dav_svn__update_report): Override the default editor's close_edit()", 
+   "with our own."
+  ], 
+  "revision_id": "847536"
+ }
+]

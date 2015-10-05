@@ -1,0 +1,85 @@
+[
+ {
+  "author": "kou", 
+  "date": "2007-03-31T04:39:35.732424Z", 
+  "msg": [
+   "Support svn_wc_process_committed4().", 
+   "* subversion/bindings/swig/ruby/svn/wc.rb", 
+   "(Svn::Wc::AdmAccess#process_committed): Support remove_change_list", 
+   "parameter."
+  ], 
+  "revision_id": "864365"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-03-31T04:12:10.190009Z", 
+  "msg": [
+   "JavaHL: More work on the info() and info2() interface.  Followup to r24274.", 
+   "This commit removes duplicate implementations of info() and info2() at the C++", 
+   "layer in favor of a thin wrapper at the Java layer.  Because info() has a flags", 
+   "from the wc entry which info2() doesn't, we still get to fetch the entry in the", 
+   "receiver.  In the case of the receiver being called by a repository crawl, we", 
+   "also have to make sure we cache the wc root path beforehand, so we can", 
+   "reconstruct the absolute path to fetch the entry correctly.", 
+   "The alternative to this convoluted double-entry fetching is to add a couple of", 
+   "fields to svn_info_t, but this impacts *every* call to svn_client_info(), not", 
+   "just when using JavaHL.", 
+   "(Note: The approach proved fruitless, and most of the work done here was", 
+   "reverted in r24531.)", 
+   "[ in subversion/bindings/java/javahl/ ]", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java", 
+   "(info): Reimplement as a wrapper around info2().", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(info_baton): Add a wcPath member.", 
+   "(info2, info, info): Consolidate the info implementations into a single", 
+   "function.", 
+   "(infoReceiver): Update the receiver to use store the information retrieved", 
+   "locally from the wc entry.", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_info):  Remove.", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_info2):  Use the new combined", 
+   "info() implementation."
+  ], 
+  "revision_id": "864364"
+ }, 
+ {
+  "author": "djh", 
+  "date": "2007-03-31T02:46:58.845851Z", 
+  "msg": [
+   "Replace os.rmtree with the safe_rmtree implementation from the test", 
+   "suite so that we can remove read-only files on Windows.", 
+   "Suggested by: Chris Foote <cfoote@v21.me.uk>", 
+   "Jens Peters <jpeters7677@gmx.de>", 
+   "* tools/backup/hot-backup.py.in", 
+   "(chmod_tree): New method for setting permissions on a tree.", 
+   "(safe_rmtree): New method for dropping possibly read-only directory trees."
+  ], 
+  "revision_id": "864363"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-03-31T02:41:09.846348Z", 
+  "msg": [
+   "Add new svn_client_get_mergeinfo() API which retrieves merge info for", 
+   "a WC path or URL.  This code is not yet tested -- I plan to expose", 
+   "this API to JavaHL (and possibly SWIG bindings), and test it there.", 
+   "* subversion/include/svn_client.h", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client_get_mergeinfo): Add new API."
+  ], 
+  "revision_id": "864362"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-03-31T02:37:35.257235Z", 
+  "msg": [
+   "Rename libsvn_client-private API.  A follow-up to r24283.", 
+   "* subversion/libsvn_client/util.c", 
+   "(svn_client__get_repos_merge_info): Rename from", 
+   "svn_client__get_merge_info_for_path().", 
+   "Found by: hwright"
+  ], 
+  "revision_id": "864361"
+ }
+]

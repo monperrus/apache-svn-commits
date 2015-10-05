@@ -1,0 +1,79 @@
+[
+ {
+  "author": "stack", 
+  "date": "2011-07-22T20:18:32.103868Z", 
+  "msg": [
+   "HBASE-4126 Make timeoutmonitor timeout after 30 minutes instead of 3"
+  ], 
+  "revision_id": "1149720"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2011-07-22T20:17:23.400234Z", 
+  "msg": [
+   "HBASE-4126 Make timeoutmonitor timeout after 30 minutes instead of 3"
+  ], 
+  "revision_id": "1149719"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2011-07-22T20:16:33.989403Z", 
+  "msg": [
+   "vote"
+  ], 
+  "revision_id": "1149718"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2011-07-22T20:15:54.383951Z", 
+  "msg": [
+   "Since svnpredumpfilter.py is meant to be run iteratively, make some", 
+   "changes to facilitate that.  Now, for example, you can use a wrapper", 
+   "script such as the following to handle the iterations from start to", 
+   "end.", 
+   "{{{", 
+   "#!/bin/sh", 
+   "#", 
+   "# Usage: predumpfilterloop.sh ABSPATH-TO-REPOS INCLUDE-PATH", 
+   "svn log -vq file://$1 > svn_log_vq.out", 
+   "echo $2 > targets.prev", 
+   "while [ 1 ]; do", 
+   "cat svn_log_vq.out | svnpredumpfilter.py --targets targets.prev include > targets", 
+   "case \"$?\" in", 
+   "0)", 
+   "echo \"Success!  You'll need all of the following paths:\"", 
+   "echo \"\"", 
+   "cat targets | grep ' + ' | cut -c4-", 
+   "exit 0", 
+   ";;", 
+   "1)", 
+   "cat targets | grep ' + ' | cut -c4- > targets.prev", 
+   ";;", 
+   "*)", 
+   "echo \"Fatal error\" 2>&1", 
+   "exit 1", 
+   ";;", 
+   "esac", 
+   "done", 
+   "}}}", 
+   "* tools/server-side/svnpredumpfilter.py", 
+   "(__doc__): Update to note --targets option and errorcode promises.", 
+   "(EXIT_SUCCESS, EXIT_MOREDEPS, EXIT_FAILURE): New.", 
+   "(analyze_logs): Print a '+' before each include/exclude path for", 
+   "easier output grepping.  Also, return EXIT_SUCCESS or", 
+   "EXIT_MOREDEPS as appropriate.", 
+   "(usage_and_exit): Use EXIT_SUCCESS and EXIT_FAILURE instead of 0 and 1.", 
+   "(main): Now accept --targets option.  Use the new errorcodes."
+  ], 
+  "revision_id": "1149717"
+ }, 
+ {
+  "author": "slebresne", 
+  "date": "2011-07-22T20:10:50.482929Z", 
+  "msg": [
+   "Don't include tmp file as sstable when creating cfs", 
+   "patch by slebresne; reviewed by jbellis for CASSANDRA-2929"
+  ], 
+  "revision_id": "1149716"
+ }
+]

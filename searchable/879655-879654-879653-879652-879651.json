@@ -1,0 +1,104 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-24T21:20:50.554286Z", 
+  "msg": [
+   "Revise the conflict handling api on the WC-DB level to work completely", 
+   "with conflict descriptions.", 
+   "Every node in the filesystem (versioned or not) can have zero or more", 
+   "conflicts associated to them. A tree conflict, a text conflict, and any", 
+   "number of property conflicts.", 
+   "This updates the svn_wc__db_read_info() to just return a boolean indicating", 
+   "whether the specified node has one or more conflicts. Further details can", 
+   "be obtained via svn_wc__db_read_conflicts().", 
+   "* *", 
+   "(*): Update callers of svn_wc__db_read_info() and making conflict", 
+   "descriptors constant.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__get_tree_conflict): Return constant descriptor.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(resolve_conflict_on_node): Use new apis for retrieving conflict data.", 
+   "* subversion/libsvn_wc/crop.c", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries_new): Use new apis for retrieving conflict data.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "* subversion/libsvn_wc/node.c", 
+   "* subversion/libsvn_wc/props.c", 
+   "(get_existing_prop_reject_file): Retrieve a property reject file via the new", 
+   "api.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__internal_conflicted_p): Function rewritten to take advantage of new api.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "* subversion/libsvn_wc/status.c", 
+   "* subversion/libsvn_wc/translate.c", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_op_read_tree_conflict): Make conflict description constant.", 
+   "(svn_wc__db_read_info): Update argument list. Use", 
+   "svn_wc__db_op_read_tree_conflict to retrieve tree conflicted status.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_op_read_tree_conflict): Make conflict description constant.", 
+   "(svn_wc__db_read_info): Update argument list.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(run_revert): Retrieve conflicts the new way.", 
+   "* subversion/tests/libsvn_wc/db-test.c"
+  ], 
+  "revision_id": "879655"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-24T21:04:20.222431Z", 
+  "msg": [
+   "Update the WC metadata schema to reflect the new idea about storing", 
+   "conflicts. We will store all conflicts in a TEXT field of the ACTUAL_NODE", 
+   "table serialialized via the skel api.", 
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(format 14): Remove CONFLICT_VICTIM table and instead add a conflict_data", 
+   "column on the ACTUAL_NODE table."
+  ], 
+  "revision_id": "879654"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-09-24T20:18:00.938491Z", 
+  "msg": [
+   "Create a branch for my issue #3242 work.  (It's outgrowing patchfiles.)"
+  ], 
+  "revision_id": "879653"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-24T18:31:43.398466Z", 
+  "msg": [
+   "* subversion/libsvn_wc/crop.c", 
+   "(svn_wc_crop_tree2): Don't fetch a depth which is never used."
+  ], 
+  "revision_id": "879652"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-24T18:29:32.019799Z", 
+  "msg": [
+   "Provide some information on what is happening during a working copy", 
+   "upgrade by adding a notification per upgraded directory.", 
+   "The final output might need some further tweaks when we no how", 
+   "well it performs.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Add notification.", 
+   "(svn_wc_cleanup3): Remove obsolete note about upgrading using cleanup.", 
+   "(svn_wc_upgrade): Add notify function, baton arguments.", 
+   "* subversion/libsvn_client/cleanup.c", 
+   "(svn_client_upgrade): Pass notification handler.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(upgrade_working_copy): Take notification handler and send a notification", 
+   "for the upgraded directory.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Handle upgraded notification", 
+   "* subversion/svn/upgrade-cmd.c", 
+   "(svn_cl__upgrade): Setup notification handler."
+  ], 
+  "revision_id": "879651"
+ }
+]

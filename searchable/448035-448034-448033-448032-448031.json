@@ -1,0 +1,64 @@
+[
+ {
+  "author": "vgritsenko", 
+  "date": "2006-09-20T02:48:01.711403Z", 
+  "msg": [
+   "use locatable exceptions"
+  ], 
+  "revision_id": "448035"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-09-20T02:40:57.235191Z", 
+  "msg": [
+   "DERBY-1766", 
+   "contributed by Army Brown", 
+   "Well, after that paragraph of justification, it turns out that there are only three places where we use the 42Z79 SQLSTATE. But still, I think it's a useful error message and should be kept around; it could come in handy further down the road if SQL/XML functionality is expanded.", 
+   "As for line/column numbers, it turns out that those values are readily available from within sqlgrammar.jj and thus can easily be passed as part of the error message. The only potential downside that I can see is that we have to create an Integer object out of the line/col numbers in order to pass them to the StandardException constructor...but maybe that's not a big deal...? The fact that no one has done this earlier makes me wonder if there's some \"gotcha\" here that I'm missing, but I haven't seen any problems with it just yet...", 
+   "Attaching a patch d1776_v1.patch that changes the error message for 42Z79 as mentioned in my previous comment and also does the following:", 
+   "1. Adds line and column numbers to the error message to indicate where", 
+   "the missing keyword is expected.", 
+   "2. Removes one \"lookahead\" call that was causing 42Z79 to be raised", 
+   "for a missing \"AS\" keyword when in fact the keyword was present", 
+   "(what was missing was the datatype). To avoid confusion, I", 
+   "removed the lookahead and now the user will see a more generic", 
+   "42X01 error in that particular case.", 
+   "3. Updated xml_general master files accordingly.", 
+   "So with this patch applied, instead of:", 
+   "select xmlserialize(x) from t;", 
+   "ERROR 42Z72: XML syntax error; missing keyword(s): 'AS'.", 
+   "we'll now see:", 
+   "create table t (i int, x xml);", 
+   "ERROR 42Z72: Missing SQL/XML keyword(s) 'AS' at line 1, column 22."
+  ], 
+  "revision_id": "448034"
+ }, 
+ {
+  "author": "trustin", 
+  "date": "2006-09-20T02:28:07.972327Z", 
+  "msg": [
+   "Applied Greg's patch on DIRMINA-162 (datagram session management fails) with small modification:", 
+   "* Changed the type of TTL and expiration interval to integer (seconds).", 
+   "* ExpirationSessionRecycler doesn't implement ExpirationListener directly. I made an inner class instead.", 
+   "* Removed the static getInstance() method in ExpiringSessionRecycler because we are already using a static global expirer by default. We need some documentation on creating many recyclers though."
+  ], 
+  "revision_id": "448033"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2006-09-20T02:19:10.996700Z", 
+  "msg": [
+   "Add section for Locationmaps. Need to explain that a project locationmap is not required, but", 
+   "a default stops the error messages."
+  ], 
+  "revision_id": "448032"
+ }, 
+ {
+  "author": "ffang", 
+  "date": "2006-09-20T02:16:39.613866Z", 
+  "msg": [
+   "[JIRA CXF-68] get servlet working - phase 1"
+  ], 
+  "revision_id": "448031"
+ }
+]

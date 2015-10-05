@@ -1,0 +1,107 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:18:59.226577Z", 
+  "msg": [
+   "Fix hbase build.", 
+   "Summary:", 
+   "Diff https://phabricator.fb.com/D261736 had an unmatched brace", 
+   "which broke the hbase build.", 
+   "Test Plan:", 
+   "Build it.", 
+   "Reviewed By: kannan", 
+   "Reviewers: nileema, kannan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 263528"
+  ], 
+  "revision_id": "1181550"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:18:54.309773Z", 
+  "msg": [
+   "Title: Change the logging level for NotServingRegionException", 
+   "Summary:Currently the NotServingRegionException is logged at the error level which creates a lot of noise in the scribe logs. Change the logging level for this to info.", 
+   "Task ID: #586756", 
+   "Blame Rev:", 
+   "Reviewed by: kannan", 
+   "CC:hbase@lists", 
+   "Test Plan:Started HBaseTests on a dev cluster. While the tests were running, stopped the regionserver. Started it again after a few minutes. This caused the regions to move among the region servers. Since the client had the old location of the regionserver:region mapping, it tried to contact the old region server. This induced the NotServingRegionException. Checked logging for this exception before and after making the change.", 
+   "With this change the exception will be logged as an info with the classname and the region that caused the exception.", 
+   "Revert Plan:", 
+   "Tags:hbase", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 261736"
+  ], 
+  "revision_id": "1181549"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:18:51.038513Z", 
+  "msg": [
+   "Porting patch for HBASE-3416 to hbase-trunk.", 
+   "Summary:", 
+   "Don't call setRow when scanning over same row. The patch fixes one case, setRow", 
+   "is also called from next. Fixed it there too.", 
+   "Test Plan:", 
+   "Unit test. When batch is used with scan, in some cases deletes were getting", 
+   "ignored because of this bug.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, jgray", 
+   "CC: , madhuvaidya, kannan", 
+   "Differential Revision: 261692"
+  ], 
+  "revision_id": "1181548"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:18:46.121035Z", 
+  "msg": [
+   "Make LRU Cache Hit Ratio Incremental", 
+   "Summary:", 
+   "While trying to understand how compaction policies affect", 
+   "performance, I noticed that the block cache hit ratio was very steady.", 
+   "That is because it averages since process start time.  In practice, the", 
+   "ratio varies widely based on the time.  Change this stat to be", 
+   "incremental so we can observe those changes", 
+   "Test Plan:", 
+   "- JMX", 
+   "DiffCamp Revision:", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, kranganathan", 
+   "Commenters: jgray", 
+   "CC: , nspiegelberg, jgray, kannan", 
+   "Differential Revision: 257940"
+  ], 
+  "revision_id": "1181547"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:18:40.350251Z", 
+  "msg": [
+   "A command-line tool to create a random StoreFile in the HFile format version 1", 
+   "Summary:", 
+   "This tool creates a StoreFile with the specified number of key/value pairs,", 
+   "with the specified compression and Bloom filter type. This is needed to create", 
+   "HFile format version 1 store files and read them with the new HFile format", 
+   "reader in the code branch that supports both HFile format version 1 and version", 
+   "2.", 
+   "Test Plan:", 
+   "Run it. Run the HFile pretty-printer on the resulting file.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, nspiegelberg", 
+   "CC: hbase@lists, , kannan", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 260416"
+  ], 
+  "revision_id": "1181546"
+ }
+]

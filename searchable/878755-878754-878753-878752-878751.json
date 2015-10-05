@@ -1,0 +1,112 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T18:19:22.501770Z", 
+  "msg": [
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Remove duplicate variable declaration."
+  ], 
+  "revision_id": "878755"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-08-11T18:04:41.976254Z", 
+  "msg": [
+   "Facilitate wc-ng migration work by removing unnecessary requests for", 
+   "pristine mergeinfo properties when merging.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo): Remove PRISTINE argument.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Remove PRISTINE argument.  Use", 
+   "svn_client__parse_mergeinfo() rather than svn_client__get_prop_from_wc().", 
+   "(svn_client__elide_mergeinfo): Update calls to", 
+   "svn_client__get_wc_mergeinfo() which were not asking for pristine", 
+   "mergeinfo.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo): Update call to svn_client__get_wc_mergeinfo()", 
+   "which was not asking for pristine mergeinfo.", 
+   "* subversion/libsvn_client/merge.c:", 
+   "(update_wc_mergeinfo): This was the *one* place we were asking for", 
+   "pristine rather than working mergeinfo, but upon further examination we", 
+   "can safely ask for the working mergeinfo in *all* cases.  Originally the", 
+   "thought was, if we skipped some subtree while merging because the subtree", 
+   "was missing or we didn't have access to the subtree in the merge source,", 
+   "then we wanted to set mergeinfo on the skipped subtree such that it did", 
+   "not appear the merge was performed to that subtree.  The thing is, we", 
+   "don't need implicit mergeinfo to do this.  Why?  First, if there are no", 
+   "local mods to the WC, then the inherited mergeinfo of the subtree is", 
+   "equal to its pristine inherited mergeinfo.  Second, if there are local", 
+   "mods from an earlier merge, then one of the following must be true:", 
+   "1) The earlier merge also skipped the subtree and recorded non-inheritable", 
+   "mergeinfo on the subtree's parent to indicate that the subtree hasn't had", 
+   "the revisions in question merged.  So the inherited working mergeinfo of", 
+   "the subtree the second time around does not include the earlier merge and", 
+   "is again the same as the pristine inherited mergeinfo.", 
+   "2) The subtree's inherited working mergeinfo might differ from its", 
+   "pristine inherited mergeinfo, but only by revisions that are inoperative", 
+   "on the subtree, a situation our design has always allowed re inherited", 
+   "mergeinfo.", 
+   "Either way we can safely get by without asking for pristine mergeinfo.", 
+   "(get_mergeinfo_paths, process_children_with_new_mergeinfo,", 
+   "record_mergeinfo_for_added_subtrees): Update calls to", 
+   "svn_client__get_wc_mergeinfo() which were not asking for pristine", 
+   "mergeinfo."
+  ], 
+  "revision_id": "878754"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-08-11T17:47:13.020918Z", 
+  "msg": [
+   "Start a new sqlite db auto-upgrade mechanism, based out of upgrade.c. This", 
+   "is just a minor step, as I just realized a lot more initial plumbing has", 
+   "to happen before finishing this.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(svn_wc__upgrade_sdb): new function to auto-upgrade a wc's database", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(svn_wc__upgrade_sdb): new function. stubbed to do nothing yet.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(create_wcroot): call the auto-upgrade function when needed."
+  ], 
+  "revision_id": "878753"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T17:34:00.852956Z", 
+  "msg": [
+   "Replace a single svn_wc__entry_versioned() call with", 
+   "svn_wc__get_entry_versioned(),greatly simplify a couple of other functions", 
+   "dependent on the first one, and update all their callers to stop passing", 
+   "access batons around.", 
+   "* subversion/libsvn_client/util.c", 
+   "(wc_path_to_repos_url): Directly fetch an entry, instead of possibly opening", 
+   "up an access baton to do it.", 
+   "(svn_client__path_relative_to_root, svn_client_get_repos_root):", 
+   "Don't use an access baton to call the above function, and greatly simplify", 
+   "these functions by not worrying about cleaning up the access baton.", 
+   "Also, add scratch_pools.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__path_relative_to_root, svn_client_get_repos_root):", 
+   "Update params and docstrings.", 
+   "* subversion/libsvn_client/externals.c,", 
+   "subversion/libsvn_client/cmdline.c,", 
+   "subversion/libsvn_client/merge.c,", 
+   "subversion/libsvn_client/url.c,", 
+   "subversion/libsvn_client/copy.c,", 
+   "subversion/libsvn_client/mergeinfo.c,", 
+   "subversion/libsvn_client/list.c:", 
+   "Update various callers of svn_client__path_relative_to_root() and", 
+   "svn_client_get_repos_root()."
+  ], 
+  "revision_id": "878752"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T16:14:46.674174Z", 
+  "msg": [
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__get_entry_versioned): Remove recursive reference in docstring."
+  ], 
+  "revision_id": "878751"
+ }
+]

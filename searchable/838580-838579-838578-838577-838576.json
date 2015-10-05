@@ -1,0 +1,102 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2001-02-14T21:31:06.000000Z", 
+  "msg": [
+   "SWEEPING CHANGE: Updated editor composition functions to make use of", 
+   "the new interface described in the following file(s):", 
+   "* include/svn_delta.h", 
+   "Herein lies interface changes that have been debated, debated, and", 
+   "debated again.  The gist of the final (?) outcome of the debates is", 
+   "as follows:", 
+   "(svn_delta_edit_fns_t->set_target_revision): New function to handle", 
+   "setting of global target revision for the current edit operation.", 
+   "(svn_delta_edit_fns_t->begin_edit): Re-re-named to \"replace_root()\".", 
+   "See below for further changes.", 
+   "(svn_delta_edit_fns_t->replace_file, replace_directory,", 
+   "replace_root): These now take only a base_revision instead of both a", 
+   "target_revision and base_revision (or ancestor_revision).", 
+   "(svn_delta_edit_fns_t->add_file, add_directory): Renamed", 
+   "ancestor_revision and ancestor_path to base_revision and base_path", 
+   "respectively.", 
+   "The following file(s) were lined up and shot with this sweeping change:", 
+   "* client/trace-commit.c", 
+   "* client/trace-update.c", 
+   "* libsvn_delta/compose_editors.c", 
+   "* libsvn_delta/default_editor.c", 
+   "* libsvn_ra_dav/commit.c", 
+   "* libsvn_wc/adm_crawler.c", 
+   "* libsvn_wc/get_editor.c", 
+   "* tests/svn_test_editor.c", 
+   "* tests/libsvn_delta/xml-output-test.c", 
+   "In addition to the sweeping change above, the following file(s) were", 
+   "modified as described below:", 
+   "* libsvn_delta/xml_parse.c", 
+   "* libsvn_delta/xml_output.c", 
+   "Now using the \"base-rev\" attributes instead of \"ver\", \"base-path\"", 
+   "instead of \"ancestor\", and the delta-pkg tag can now have a", 
+   "\"target-rev\" attribute.", 
+   "Here are other files changed as a result of this group of edits, but", 
+   "did not really suffer a \"sweeping change.\":", 
+   "* include/libsvn_types.c", 
+   "(SVN_IGNORED_REVNUM): Re-define'ing this to be the same value as", 
+   "SVN_INVALID_REVNUM until which time someone can verify that all", 
+   "checks of a revision number against SVN_INVALID_REVNUM are a) still", 
+   "valid or b) changed to use the SVN_IS_VALID_REVNUM() macro.", 
+   "* libsvn_delta/delta.h", 
+   "(svn_xml__digger_t): Added target_revision.", 
+   "* libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__do_checkout): This is the checkout case, so pass", 
+   "SVN_IGNORED_REVNUM to the editor's replace_root() function.", 
+   "MIKE'S NOTEZ:  While these changes do compile, and \"make check\" does", 
+   "run without error, there are some obviously erraneous results from", 
+   "these changes.  I am attacking these problems immediately after", 
+   "checking this stuff in, but other works in progress depend on these", 
+   "interfaces changes."
+  ], 
+  "revision_id": "838580"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-02-14T20:55:02.000000Z", 
+  "msg": [
+   "Progress on ra_local.", 
+   "* ra_local.h (svn_ra_local__session_baton_t): remove useless", 
+   "`revision' field.", 
+   "* ra_plugin.c (svn_ra_local_init):  simplify return value.  :)", 
+   "(open):  temporary debugging printf.", 
+   "* svn_ra.h (svn_ra_local_init):  now publically declared, since we're", 
+   "no longer using on-demand DSOs", 
+   "* configure.in (@SVN_LIBSVN_RA_DAV_LIBS@, AC_OUTPUT): add ra_local.", 
+   "* Makefile (x2):  add ra_local.", 
+   "* target.c (PATH_MAX):  compensate for now, so freebsd will build.", 
+   "* tests/libsvn_ra_local/*:  new dir & files for ra_local mini-test"
+  ], 
+  "revision_id": "838579"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-14T18:01:49.000000Z", 
+  "msg": [
+   "Documentation fixes.", 
+   "Contributed by Yoshiki Hayashi <yoshiki@xemacs.org>"
+  ], 
+  "revision_id": "838578"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-14T18:00:02.000000Z", 
+  "msg": [
+   "Added item about svn_path_first_component."
+  ], 
+  "revision_id": "838577"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-02-14T01:01:47.000000Z", 
+  "msg": [
+   "(svn_fs__dag_clone_root): Clarifying comments."
+  ], 
+  "revision_id": "838576"
+ }
+]

@@ -1,0 +1,123 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-01-27T19:19:49.455735Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Abstract out the insertion of the base_nodes as part of wc-ng.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(MAYBE_ALLOC): New.", 
+   "(statements): Update statement to include a new field.", 
+   "(db_base_node_t, db_working_node_t, db_actual_node_t, db_changelist_t,", 
+   "db_lock_t): New.", 
+   "(insert_base_node): Completely rewrite, as just a function which inserts or", 
+   "replaces a given base node into the database.", 
+   "(insert_working_node): Change signature.", 
+   "(insert_actual_node): New.", 
+   "(write_entry): Start to reason about when to create various node rows."
+  ], 
+  "revision_id": "875580"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-27T19:03:36.528087Z", 
+  "msg": [
+   "Remove all handling for wc_entry.prop_time. It is not persisted into", 
+   ".svn/entries, so it will always be zero. Nothing attempts to change the", 
+   "value *away* from zero, so we can simply remove all prop_time code.", 
+   "Also trimmed out some code that attempted to read changelist and file", 
+   "external stuff from XML files (old entries and logs). We modify both", 
+   "synchronously (rather than via loggy), and they are newer features than", 
+   "old xml entries files.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_entry_t.prop_time): mark as deprecated", 
+   "* subversion/include/svn_client.h:", 
+   "(svn_info_t): note that prop_time will always be zero.", 
+   "* svn/info-cmd.c:", 
+   "(print_info_xml): don't \"print\" prop_time", 
+   "(print_info): don't print prop_time", 
+   "* subversion/libsvn_clie/ninfo.c:", 
+   "(build_info_from_entry): don't copy prop_time", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(load_props): simplify; we don't have to check for a missing file again.", 
+   "(svn_wc_props_modified_p): forget the subpool. remove all the", 
+   "optimizations since this section of code only fires for OLD formats", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(revert_admin_things): no need to specify \"which\" timestamp to update in", 
+   "the svn_wc__loggy_set_entry_timestamp_from_wc call.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(introduce_propcaching): no need to zero out prop_time since, by this", 
+   "point, the new entries format is used, and has a zeroed time already.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(merge_file, svn_wc_add_repos_file3): no need to specify \"which\"", 
+   "timestamp to update in the svn_wc__loggy_set_entry_timestamp_from_wc", 
+   "call.", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(svn_wc__timestamps_equal_p): no need for a TIMESTAMP_KIND param, as", 
+   "there is only one kind of timestamp now. simplify function body.", 
+   "* subversion/libsvn_wc/questions.h:", 
+   "(svn_wc__timestamp_kind): remove", 
+   "(svn_wc__timestamps_equal_p): remove TIMESTAMP_KIND param.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__atts_to_entry): don't bother looking for a PROP_TIME attr since", 
+   "anything in it (an old log, for example) will end up getting ignored", 
+   "anyways. also, don't bother looking for CHANGELIST or FILE_EXTERNAL", 
+   "attributes since they are not in old XML entries files, nor in logs", 
+   "that modify entries.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(SVN_WC__ENTRY_ATTR_PROP_TIME): remove", 
+   "(SVN_WC__ENTRY_MODIFY_PROP_TIME): remove", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_modify_entry): don't worry about prop_time. update an obsolete", 
+   "comment, wrt TEXT_TIME", 
+   "(svn_wc__loggy_entry_modify): ignore prop_time", 
+   "(svn_wc__loggy_set_entry_timestamp_from_wc): remove TIME_PROP param and", 
+   "just hard-code it to the one kind.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(): update a comment referring to prop_time", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_set_entry_timestamp_from_wc): remove TIME_PROP param"
+  ], 
+  "revision_id": "875579"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2009-01-27T18:57:07.616635Z", 
+  "msg": [
+   "* TODO-1.6: Remove a TODO"
+  ], 
+  "revision_id": "875578"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-27T17:39:32.329174Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Bring up-to-date with trunk.  (to get the skel changes)"
+  ], 
+  "revision_id": "875577"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-27T17:24:25.867579Z", 
+  "msg": [
+   "Move property list skel parsing and unparsing to libsvn_subr.", 
+   "* subversion/libsvn_subr/skel.c", 
+   "(skel_err, is_valid_proplist_skel): Copied from libsvn_fs_base.", 
+   "(svn_skel__parse_proplist, svn_skel__unparse_proplist): New.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_get_proplist): Update caller.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.h", 
+   "(svn_fs_base__parse_proplist_skel, svn_fs_base__unparse_proplist_skel):", 
+   "Remove.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.c", 
+   "(is_valid_proplist_skel, svn_fs_base_parse_proplist_skel,", 
+   "svn_fs_base__unparse_proplist_skel): Remove.", 
+   "(svn_fs_base__parse_transaction_skel,", 
+   "svn_fs_base__unparse_transaction_skel): Update caller.", 
+   "* subversion/include/private/svn_skel.h", 
+   "(svn_skel__parse_proplist, svn_skel__unparse_proplist): New."
+  ], 
+  "revision_id": "875576"
+ }
+]

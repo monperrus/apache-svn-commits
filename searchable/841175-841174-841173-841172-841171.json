@@ -1,0 +1,83 @@
+[
+ {
+  "author": "yoshiki", 
+  "date": "2002-01-29T07:52:04.456513Z", 
+  "msg": [
+   "Sync with latest change.  Now svn_txdelta_window_t has its own pool", 
+   "so no need to refcount parent's pool.", 
+   "(struct svn_ruby_txdelta_window_t): Add new member pool, which is", 
+   "associated with this object.", 
+   "(send_string): Use svn_string_t instead of svn_stringbuf_t.", 
+   "(free_txdelta_window): Remove refcount stuff.  Destroy pool.", 
+   "(free_txdelta_stream): Remove call to svn_txdelta_free.", 
+   "(txdelta_stream_init): Remove instance variables used for refcount.", 
+   "(txdelta_stream_close): Remove refcount stuff.", 
+   "(txdelta_stream_next_window): Pass in pool.  Remove refcount stuff."
+  ], 
+  "revision_id": "841175"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2002-01-29T06:27:01.867562Z", 
+  "msg": [
+   "Implement freeing directory baton using reference counting.", 
+   "* trace-commit.c", 
+   "(struct dir_baton): New members, subpool and ref_count.", 
+   "(decrement_dir_ref_count): New function, copied from", 
+   "libsvn_ra_local/commit_editor.", 
+   "(open_root): Create subpool corresponding the directory.  Initialize refcount.", 
+   "(add_directory): Create subpool.  Initialize refcount.  Increment parent's", 
+   "refcount.", 
+   "(open_directory): Ditto.", 
+   "(close_directory): Call decrement_dir_ref_count.", 
+   "(close_file): Ditto.", 
+   "(add_file): Increase parent's refcount.  Use parent directory's pool.", 
+   "(open_file): Ditto.", 
+   "Review by: Karl Fogel <kfogel@collab.net>"
+  ], 
+  "revision_id": "841174"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-01-29T01:52:23.100970Z", 
+  "msg": [
+   "* subversion/tests/libsvn_subr/target-test.sh", 
+   "Instead of trying to assign to PWD and masking the error if it fails, just", 
+   "change the variable name to CURRENT_DIR.", 
+   "Requested By: gstein"
+  ], 
+  "revision_id": "841173"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-01-29T01:05:48.664416Z", 
+  "msg": [
+   "apr_hash_this() takes an apr_ssize_t as it's third argument, not an", 
+   "apr_size_t.  Also, if we aren't going to use the length anyway, it's legal", 
+   "to just pass NULL, so we can eliminate those unused variables.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "* subversion/libsvn_wc/status_editor.c", 
+   "* subversion/libsvn_ra_local/checkout.c", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "* subversion/tests/fs-helpers.c", 
+   "* subversion/libsvn_repos/delta.c", 
+   "In all cases where we were using an apr_size_t as our length argument for", 
+   "apr_hash_this(), use an apr_ssize_t instead.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "* subversion/libsvn_delta/track_editor.c", 
+   "Since we weren't actually using the length argument we were passing to", 
+   "apr_hash_this(), just pass NULL instead."
+  ], 
+  "revision_id": "841172"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-28T23:39:32.724584Z", 
+  "msg": [
+   "(svn_client_revision_committed): Renamed from incorrectly spelled", 
+   "`svn_client_revision_commited'.  Thanks again to Greg Stein."
+  ], 
+  "revision_id": "841171"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-10-18T00:29:04.279737Z", 
+  "msg": [
+   "Make sure we wait on the right PID in the test suite.  Makes", 
+   "--parallel more stable.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(): Instead of checking to see if we have os.wait, check to see if", 
+   "we have popen2.Popen3.", 
+   "(open_pipe): New function to replace calls to os.popen3; returns the", 
+   "three file descriptors and a token to pass to wait_on_pipe.  On", 
+   "Unix this token is the Popen3 object and the command; on Windows it", 
+   "is None.", 
+   "(wait_on_pipe): New function; on Unix, waits on the provided Popen3", 
+   "object and deals with errors.", 
+   "(spawn_process): Use open_pipe and wait_on_pipe instead of os.popen3", 
+   "and dealing with wait itself.", 
+   "(copy_repos): Use open_pipe and wait_on_pipe instead of os.popen3", 
+   "and child endangerment."
+  ], 
+  "revision_id": "867340"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-10-18T00:21:51.740590Z", 
+  "msg": [
+   "Follow-up to r27259, stop using unsupported -g option in merge_tests.py.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_inheritance_and_discontinuous_ranges,", 
+   "detect_copy_src_for_target_with_multiple_ancestors,", 
+   "merge_with_auto_rev_range_detection,", 
+   "mergeinfo_recording_in_skipped_merge,", 
+   "propchange_of_subdir_raises_conflict,", 
+   "merge_target_with_non_inheritable_mergeinfo): No more", 
+   "-g/--use-merge-history."
+  ], 
+  "revision_id": "867339"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-17T23:42:14.198016Z", 
+  "msg": [
+   "Change the threading semantics of --parallel in the test suite to use", 
+   "a Queue.", 
+   "Formerly, we spawned a thread for each test case which forks a", 
+   "subprocess for the test case.  Communication between workers and the", 
+   "master happened via an unsynchronized list; and the master did a lot", 
+   "of sleeping.", 
+   "Instead, we make a synchronized Queue containing the test numbers,", 
+   "fork off 5 threads from the get-go, and have the threads fetch numbers", 
+   "from the queue.  The parent just starts the children and joins them;", 
+   "no extra sleep(0.2) necessary, and almost everything is thread-safe.", 
+   "(I did not fix the fact that the children do a popen/wait instead of a", 
+   "waitpid, and thus may end up wait()ing on the wrong child and thus", 
+   "getting the wrong result; it's unclear if there is a way to do this", 
+   "that works on Windows before Python 2.4.)", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(): Import Queue (which was around in Python 2.0, don't worry).", 
+   "(spawn_process): Even in verbose mode, no need to print out commands", 
+   "which are running the suite itself from helper threads.", 
+   "(TestSpawningThread): Complete rewrite of SpawnTest; see above for", 
+   "explanation.", 
+   "(_internal_run_tests): Rewrite parallel section; see above."
+  ], 
+  "revision_id": "867338"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-17T22:24:18.500696Z", 
+  "msg": [
+   "Fix a sizeof to take the size of the correct pointer type.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__abort_txn): dir_cache_id is an array of svn_fs_id_t *,", 
+   "not apr_hash_t *, so use that when calculating the block of memory", 
+   "to memset."
+  ], 
+  "revision_id": "867337"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-10-17T22:22:07.856026Z", 
+  "msg": [
+   "* www/merge-tracking/design.html (commutative-reporting): Correct API names."
+  ], 
+  "revision_id": "867336"
+ }
+]

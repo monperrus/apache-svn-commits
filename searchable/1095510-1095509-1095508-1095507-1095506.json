@@ -1,0 +1,78 @@
+[
+ {
+  "author": "gates", 
+  "date": "2011-04-20T20:57:55.391981Z", 
+  "msg": [
+   "HCATALOG-7 Fixed the dependency order so that hive builds first.  Having hcat", 
+   "first fetch it's libs and then hive build was messing with hive's ivy fetches."
+  ], 
+  "revision_id": "1095510"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-04-20T20:56:20.425583Z", 
+  "msg": [
+   "Fix a copy over deletion issue identified by philipm.", 
+   "This issue could only be triggered in the specific case identified here:", 
+   "copying a node over a deletion of itself (same repos_relpath and revision)", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(op_depth_for_copy): We never want to return an op_depth lower then our", 
+   "current working layer, as that would hide the copy below our current", 
+   "node.", 
+   "* subversion/tests/libsvn_wc/op-depth-test.c", 
+   "(test_funcs): Remove XFail from test_child_replace_with_same_origin."
+  ], 
+  "revision_id": "1095509"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2011-04-20T20:49:02.689446Z", 
+  "msg": [
+   "Create a 1.6.x backport branch from issue #3650."
+  ], 
+  "revision_id": "1095508"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-04-20T20:33:18.574129Z", 
+  "msg": [
+   "Make the streamy property read code differentiate between pristine and BASE", 
+   "properties. The standard property functions in libsvn_client want to look at", 
+   "pristine properties, but usually not explicitly at op_depth 0.", 
+   "* In WC-NG pristine properties are unmodified properties.", 
+   "* And BASE properties are the op_depth 0 properties.", 
+   "Virtually no libsvn_client code should look at BASE directly.", 
+   "(In the old WC-1.0 world we would call that the revert base)", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__prop_list_recursive): Add base_props argument and extend", 
+   "documentation.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(svn_client__crawl_for_externals): Update caller.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(get_prop_from_wc): Add boolean argument. Update caller.", 
+   "(svn_client_propget3,", 
+   "svn_client_proplist3): This code should look at the pristine version, not", 
+   "at the op_depth 0 version. As that will show the wrong properties when", 
+   "the node is shadowed.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__prop_list_recursive): Pass base_props argument.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(cache_props_baton_t): Add base_props boolean.", 
+   "(cache_props_recursive): Only look at BASE when base_props is TRUE, but", 
+   "don't look at local mods if either base_props or pristine is TRUE.", 
+   "(svn_wc__db_read_props_streamily): Add base_props argument.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_props_streamily): Add base_props argument; update", 
+   "documentation."
+  ], 
+  "revision_id": "1095507"
+ }, 
+ {
+  "author": "dennisl", 
+  "date": "2011-04-20T20:33:15.160158Z", 
+  "msg": [
+   "[MCHANGES-231] Changes plugin doesn't use maven proxy settings"
+  ], 
+  "revision_id": "1095506"
+ }
+]

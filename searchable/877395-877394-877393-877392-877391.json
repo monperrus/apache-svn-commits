@@ -1,0 +1,97 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-17T12:39:58.701853Z", 
+  "msg": [
+   "Use the new entry functions to rewrite check_wc_root(). Specifically, this", 
+   "avoids some of the baton management occurring in that function. A little", 
+   "more wordy for some parts, and a bit less for others. But hopefully more", 
+   "understandable.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(check_wc_root): replace calls to svn_wc_entry() with svn_wc__get_entry.", 
+   "don't worry about P_ACCESS -- batons aren't needed here. handle errors", 
+   "and missing entries appropriately, marking whether this is a root. one", 
+   "definite improvement: exit early with \"not a root\" if we find a file", 
+   "(the old code would merrily continue thru the whole function)."
+  ], 
+  "revision_id": "877395"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-17T12:32:21.383139Z", 
+  "msg": [
+   "Publish the entry_is_hidden() function for callers to use. Hopefully, it", 
+   "use will diminish as we move away from entry_t structures, but it is", 
+   "really handy during the interim for determining whether an entry should be", 
+   "\"hidden\". Doubly handy as we remove concepts of \"show_hidden\" from the", 
+   "APIs and always returned information about versioned nodes, letting the", 
+   "caller decide what to do.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__entry_is_hidden): new declaration", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(entry_is_hidden): rename to ...", 
+   "(svn_wc__entry_is_hidden): ... this.", 
+   "(svn_wc_entry, prune_deleted, walker_helper, svn_wc_walk_entries3,", 
+   "visit_tc_too_found_entry): track rename"
+  ], 
+  "revision_id": "877394"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-17T04:34:02.596413Z", 
+  "msg": [
+   "Fix a small bug in svn_wc__get_entry()", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__get_entry): compare the first char of the name to NUL, rather", 
+   "than the name pointer."
+  ], 
+  "revision_id": "877393"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-17T04:13:20.297661Z", 
+  "msg": [
+   "* subversion/libsvn_client/info.c", 
+   "(same_resource_in_head): Improve error handling a bit.", 
+   "[ Reverted in r37329. ]"
+  ], 
+  "revision_id": "877392"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-17T03:51:20.653028Z", 
+  "msg": [
+   "Create a new function to fetch an entry without worrying about all the", 
+   "damned access baton crap. (the function is not used in this revision)", 
+   "This may go away in time, but is provided to help simplify our code as", 
+   "we get it migrated to new mechanisms.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__get_entry): new function to grab an entry from Somewhere.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): renamed to ...", 
+   "(read_entries_new): ... this. the parameters were revamped to avoid an", 
+   "access baton. the function now *only* returns entries based on a", 
+   "new-style working copy. no entries caching is performed -- it is", 
+   "simply returned.", 
+   "(read_entries): new function to check the wc_format and call either", 
+   "read_entries_new or read_entries_old.", 
+   "(svn_wc__get_entry): new function to yank an entry from an access baton", 
+   "cache, or on disk, or whatever. it handles obstructions and also tries", 
+   "to optimize disk access as it looks for the entry.", 
+   "(svn_wc_entries_read): remove POOL from call to", 
+   "svn_wc__adm_access_entries per a change in its signature. use the new", 
+   "read_entries function to call old/new reading, and then cache the", 
+   "results in the access baton.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_access_entries): remove the POOL argument. unused.", 
+   "(svn_wc__adm_retrieve_internal2): directly return the baton.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_access_entries): remove the POOL argument. unused.", 
+   "(svn_wc__adm_retrieve_internal2): directly return the baton.", 
+   "(svn_wc__adm_retrieve_internal): track the change to internal2.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(get_entries): track the change to internal2."
+  ], 
+  "revision_id": "877391"
+ }
+]

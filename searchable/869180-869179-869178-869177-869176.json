@@ -1,0 +1,83 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2008-01-31T18:00:08.395154Z", 
+  "msg": [
+   "Don't open a rev or revprop file whose number is larger than the", 
+   "youngest revision (as per the \"current\" file).", 
+   "FSFS is based around the concept that commits only take effect when", 
+   "the number in \"current\" is bumped.  Thus if there happens to be a rev", 
+   "or revprops file installed for a revision higher than the one recorded", 
+   "in \"current\" (because a commit failed between installing the rev file", 
+   "and bumping \"current\", or because an administrator rolled back the", 
+   "repository by resetting \"current\" without deleting rev files, etc), it", 
+   "ought to be completely ignored.  However, checks to this effect only", 
+   "happen at high levels, and inconsistently.  For example, before this", 
+   "commit, \"svn pl --revprop\" could be run successfully against such a", 
+   "revision.", 
+   "This patch makes FSFS check the requested revision number against", 
+   "\"current\" each time it goes to open a rev or revprop file.  The last", 
+   "read youngest-rev is cached, so in general this change will require", 
+   "only one extra read of \"current\" per svn_fs_t.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(struct fs_fs_data_t): New field youngest_rev_cache.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "Add a forward declaration of get_youngest.", 
+   "(svn_fs_fs__open): Call get_youngest to initialize", 
+   "youngest_rev_cache.", 
+   "(svn_fs_fs__youngest_rev): Store return value in the svn_fs_t.", 
+   "(ensure_revision_exists): New.", 
+   "(open_and_seek_revision, svn_fs_fs__rev_get_root,", 
+   "svn_fs_fs__set_revision_proplist, svn_fs_fs__revision_proplist,", 
+   "svn_fs_fs__paths_changed): Call ensure_revision_exists.", 
+   "(commit_body): Update youngest_rev_cache with committed revision", 
+   "after writing \"current\".", 
+   "(svn_fs_fs__create): Initialize youngest_rev_cache to 0."
+  ], 
+  "revision_id": "869180"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-31T17:39:22.612215Z", 
+  "msg": [
+   "* STATUS: Move r29098 and r29101 to approved per our relaxed approval", 
+   "standards for 1.5.x."
+  ], 
+  "revision_id": "869179"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-31T15:47:22.294530Z", 
+  "msg": [
+   "* STATUS: Nominate r29085, vote for r29098 and r29101."
+  ], 
+  "revision_id": "869178"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2008-01-31T15:10:33.306770Z", 
+  "msg": [
+   "Merge r29099 from trunk, whose log message read:", 
+   "Fix JavaHL test for record-only merge.", 
+   "[ in subversion/bindings/javahl ]", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testRecordOnlyMerge):", 
+   "corrected the path name it was checking for mergeinfo to", 
+   "verify test results..", 
+   "Also:", 
+   "* STATUS", 
+   "Remove the backport TODO item.", 
+   "Approved by:", 
+   "hwright"
+  ], 
+  "revision_id": "869177"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-31T15:07:32.124253Z", 
+  "msg": [
+   "Recommend 29101 (and 29098) for backport."
+  ], 
+  "revision_id": "869176"
+ }
+]

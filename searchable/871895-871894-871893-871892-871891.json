@@ -1,0 +1,71 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-06-19T21:27:59.574676Z", 
+  "msg": [
+   "Propose r31820 for backport."
+  ], 
+  "revision_id": "871895"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-06-19T21:26:29.036741Z", 
+  "msg": [
+   "Avoid a bunch of unnecessary database queries during the post-commit", 
+   "deltification phase in Berkeley DB repositories.", 
+   "deltify_mutable(), when recursing, iterates over directory entries,", 
+   "calling itself.  The first thing it does is check the provided path's", 
+   "node kind and node-revision-ID.  But both of those pieces of", 
+   "information are already available in the entries over which the caller", 
+   "is iterating!  So, this change just lets the caller pass the", 
+   "information it already has on hand into deltify_mutable().  This has", 
+   "significant impact in some situations.  On a test repository", 
+   "containing a directory of almost 20,000 files, commit which removed 10", 
+   "of those files at a time went from spending 13 minutes in delification", 
+   "to just a few seconds.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(deltify_mutable): Add 'node_id' and 'kind' parameters.  Avoid", 
+   "querying for those bits of information when provided by the caller.", 
+   "And *do* provide that information in recursive calls.", 
+   "(svn_fs_base__deltify): Update call to deltify_mutable()."
+  ], 
+  "revision_id": "871894"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2008-06-19T21:04:43.686785Z", 
+  "msg": [
+   "Don't refer to 1.5 in the future tense.", 
+   "* www/faq.html (sorry-no-globbing),", 
+   "www/tools_contrib.html (fsfs-reshard.py),", 
+   "www/design.html (goals.misc.merging):", 
+   "As above."
+  ], 
+  "revision_id": "871893"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-06-19T19:54:42.473742Z", 
+  "msg": [
+   "* STATUS: Nominate fix for issue #3174, r30632, r30749, r31757, r31769,", 
+   "and r31817."
+  ], 
+  "revision_id": "871892"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-06-19T17:34:34.665104Z", 
+  "msg": [
+   "Fix issue #3174 'Merge algorithm chokes on subtrees needing special", 
+   "attention that have been renamed'.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_file_merge): Note restrictions on merge baton's RA sessions.  Pass", 
+   "correct RA session to single_file_merge_get_file() in accordance with", 
+   "the 'MERGEINFO MERGE SOURCE NORMALIZATION' restrictions.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_chokes_on_renamed_subtrees): Remove XFail status comment.", 
+   "(test_list): Remove XFail from merge_chokes_on_renamed_subtrees test."
+  ], 
+  "revision_id": "871891"
+ }
+]

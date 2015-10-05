@@ -1,0 +1,101 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-11-11T00:38:30.257323Z", 
+  "msg": [
+   "Another attempt at fixing the cleanup handlers - now that we have", 
+   "determined that using parent pools is not thread safe, but allocating", 
+   "from the cleanup pool is OK.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(do_close): Remove pool parameter, use lock's pool.", 
+   "(pool_cleanup): Don't use parent pool.", 
+   "(svn_wc_adm_close): Don't pass pool to do_close.", 
+   "(adm_access_alloc): Move cleanup registration from here...", 
+   "(svn_wc_adm_open): ...to here.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(temp_file_plain_cleanup_handler): Don't use parent pool.", 
+   "* subversion/libsvn_wc/diff.c (temp_file_cleanup_handler): Don't use parent", 
+   "pool.  Clear any error."
+  ], 
+  "revision_id": "843795"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-11-10T23:43:47.523471Z", 
+  "msg": [
+   "* subversion/bindings/ruby/extconf.rb", 
+   "bring this somewhat up to date.  the ruby bindings are still way behind the", 
+   "times with regard to almost all of subversion, but it's hard to fix the real", 
+   "problems if you don't have a makefile, so this seemed like as good a place", 
+   "to start as any."
+  ], 
+  "revision_id": "843794"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2002-11-10T23:10:55.075099Z", 
+  "msg": [
+   "Simplify error interface by allocating errors in a subpool of the", 
+   "global pool, since they must be freed explicitly anyway.", 
+   "* libsvn_subr/svn_error.c: Split into error.c and pool.c, since errors", 
+   "are no longer especially related to pools.  (And since svn_error.c", 
+   "was an anachronistic name.)", 
+   "* include/svn_error.h, libsvn_subr/error.c", 
+   "(svn_error_create, svn_error_createf, svn_error_clear): Remove pool", 
+   "argument.  Allocate errors in a subpool of the global pool.  All", 
+   "call sites changed.  Also, collect file and line information in", 
+   "all cases; it's useful for debugging with gdb even if we don't", 
+   "display it.", 
+   "(svn_error_clear_all): Replace with svn_error_clear.  All call sites", 
+   "changed.", 
+   "(svn_error_init_error_pool, svn_error__set_error_pool,", 
+   "svn_error__get_error_pool): Remove.", 
+   "* libsvn_subr/pool.c", 
+   "(svn_pool__inherit_error_pool): Remove.", 
+   "(svn_pool_create, svn_pool_clear): Remove all the error pool stuff.", 
+   "Use SVN_POOL_ROOTED_HERE to distinguish the top-level svn pool so", 
+   "we can reallocate the allocator mutex on clear.  Abort with", 
+   "abort(), not abort_on_pool_failure().", 
+   "* libsvn_fs/tree.c (conflict_err),", 
+   "libsvn_fs/fs_skels.c (skel_err),", 
+   "libsvn_fs/err.c, libsvn_fs/err.h (svn_fs__dberr, svn_fs__dberrf),", 
+   "libsvn_repos/load.c (stream_ran_dry, stream_malformed),", 
+   "libsvn_repos/commit.c (out_of_date),", 
+   "libsvn_repos/delta.c (not_a_dir_error),", 
+   "libsvn_delta/svndiff.c (count_and_verify_instructions),", 
+   "libsvn_ra_dav/ra_dav.h, libsvn_ra_dav/util.c (svn_ra_dav__convert_error),", 
+   "tests/libsvn_fs/fs-test.c (check_no_fs_error, verify_entry),", 
+   "tests/libsvn_subr/hashdump-test.c (check),", 
+   "tests/libsvn_delta/random-test.c (compare_files):", 
+   "Remove pool argument.  All call sites changed.", 
+   "* mod_dav_svn/mod_dav_svn.c (dav_svn_header_parser): Remove; no need", 
+   "to init error pool now.", 
+   "* mod_dav_svn/repos.c (dav_svn_get_resource): No need to init error", 
+   "pool now.", 
+   "* libsvn_ra_dav/commit.c (put_baton_t): Don't need pool field any more.", 
+   "* libsvn_ra_dav/util.c (parser_ctx_t): Don't need pool field any more,", 
+   "and since this gets us down to just an svn_error_t *, just use an", 
+   "svn_error_t **.  All usage sites changed accordingly."
+  ], 
+  "revision_id": "843793"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-11-10T22:53:23.790322Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "843792"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-11-10T21:43:26.216780Z", 
+  "msg": [
+   "* tools/dev/stress.pl", 
+   "(populate): Use 'svn mkdir'.", 
+   "(\"main\"): Create files and directories in trunk/ subdir.  Fix off-by-one", 
+   "bug when checking number of files."
+  ], 
+  "revision_id": "843791"
+ }
+]

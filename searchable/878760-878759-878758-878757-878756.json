@@ -1,0 +1,90 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2009-08-11T20:36:50.871541Z", 
+  "msg": [
+   "Fix two serious bugs in libsvn_ra_svn and svnsync.", 
+   "Working together, these bugs cause a situation whereby if 'svnsync", 
+   "sync' from svnserve to apache ever encounters an error, a half-written", 
+   "transaction is committed anyway.  And then subsequent calls to", 
+   "'svnsync sync' continue to snowball this behavior.", 
+   "* subversion/svnsync/main.c", 
+   "(get_sync_editor):  put abort_edit() into the vtable.", 
+   "(abort_edit): new function which calls wrapped editor's abort_edit().", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_replay_range):  notice when drive_editor2() aborts the commit.", 
+   "When it does, BAIL instead of calling close_edit().", 
+   "* subversion/include/svn_error_codes.h:", 
+   "(SVN_ERR_RA_SVN_EDIT_ABORTED):  new error code."
+  ], 
+  "revision_id": "878760"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T20:27:24.145334Z", 
+  "msg": [
+   "Update callers to use svn_client_uuid_from_path2()", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cousins_and_supplement_mergeinfo, svn_client_merge3,", 
+   "svn_client_merge_peg3),", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_wc_copy):", 
+   "Use svn_client_uuid_from_path2() in place of svn_client_uuid_from_path()."
+  ], 
+  "revision_id": "878759"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T19:27:08.917244Z", 
+  "msg": [
+   "* subversion/include/svn_client.h", 
+   "(svn_client_uuid_from_path2): Followup to r38683 by making a parameter name", 
+   "consistent with the docstring and implementation.", 
+   "Found by: rhuijben"
+  ], 
+  "revision_id": "878758"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T19:10:11.687365Z", 
+  "msg": [
+   "Rev svn_client_uuid_from_path() to take a absolute path and no access baton.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_uuid_from_path2): New.", 
+   "(svn_client_uuid_from_path): Deprecate.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client_uuid_from_path2): New, and strip out code which isn't needed", 
+   "in 1.7 and later.", 
+   "(svn_client_uuid_from_path): Remove.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_uuid_from_path): New wrapper."
+  ], 
+  "revision_id": "878757"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-11T19:01:28.513314Z", 
+  "msg": [
+   "Remove another occurance of svn_wc__entry_versioned().", 
+   "* subversion/libsvn_client/revisions.c", 
+   "(svn_client__get_revision_number): Don't open an access baton to get an", 
+   "entry, and adjust parameters to accept a wc context.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_revision_number): Update docstring and params.", 
+   "* subversion/libsvn_client/status.c,", 
+   "subversion/libsvn_client/merge.c,", 
+   "subversion/libsvn_client/prop_commands.c,", 
+   "subversion/libsvn_client/ra.c,", 
+   "subversion/libsvn_client/url.c,", 
+   "subversion/libsvn_client/diff.c,", 
+   "subversion/libsvn_client/copy.c,", 
+   "subversion/libsvn_client/mergeinfo.c,", 
+   "subversion/libsvn_client/blame.c,", 
+   "subversion/libsvn_client/log.c,", 
+   "subversion/libsvn_client/update.c:", 
+   "Update callers to provide absolute paths and wc contexts to", 
+   "svn_client__get_revision_number()."
+  ], 
+  "revision_id": "878756"
+ }
+]

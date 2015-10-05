@@ -1,0 +1,103 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-04-17T14:10:20.173150Z", 
+  "msg": [
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_setup_auth_baton): Don't reuse a variable that", 
+   "represents the store-passwords option to also represent the", 
+   "store-auth-creds option. This made it look at first glance", 
+   "as if the store-passwords option was equivalent to the", 
+   "--no-auth-cache command line option, which isn't true."
+  ], 
+  "revision_id": "870730"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-04-17T11:40:34.044543Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch, default to", 
+   "not storing plaintext passwords on disk.", 
+   "Users now have to explicitly tell Subversion to save plaintext", 
+   "passwords, either via a configuration file setting, or by passing", 
+   "a new command line option.", 
+   "This still needs to be refined. Karl wants another command line", 
+   "option equivalent to the dont-store-passwords directive in the", 
+   "configuration file. Further input welcome.", 
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_OPTION_STORE_PLAINTEXT_PASSWORDS): New constant.", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_setup_auth_baton2): New revision of", 
+   "svn_cmdline_setup_auth_baton.", 
+   "* subversion/include/svn_auth.h", 
+   "(SVN_AUTH_PARAM_STORE_PLAINTEXT_PASSWORDS): New constant.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Document the new store-plaintext-passwords", 
+   "in the example configuration file.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_setup_auth_baton2): New revision of", 
+   "svn_cmdline_setup_auth_baton. Takes a new parameter and reads a", 
+   "new configuration file option, both indicating whether storing", 
+   "plaintext passwords is allowed. This information is fed into", 
+   "the returned auth baton.", 
+   "(svn_cmdline_setup_auth_baton): Now calls svn_cmdline_setup_auth_baton2", 
+   "with store_plaintext_passwords set to TRUE. This means the old", 
+   "behaviour of storing plaintext passwords by default is retained", 
+   "for clients using the old API.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(simple_save_creds_helper): Only store passwords by default for", 
+   "providers encrypting passwords. Currently this means that only", 
+   "the wincrypt and keychain providers store passwords by default.", 
+   "I opted for listing the providers allowed to store passwords by", 
+   "default explicitly, rather than simply disallowing password storing", 
+   "for the \"simple\" provider. This approach is safer, because if new", 
+   "providers are added in the future that store passwords in plaintext,", 
+   "we don't want them to slip through the cracks accidentally.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add new member store_plaintext_passwords.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t): Add opt_store_plaintext_passwords.", 
+   "(svn_cl__options): Add \"--store-plaintext-pw\" option. I wanted to", 
+   "call this --store-plaintext-passwords but this was too wide for", 
+   "the help output :(", 
+   "(svn_cl__global_options): Add opt_store_plaintext_passwords.", 
+   "(main): Handle new command line option, and pass it on to", 
+   "svn_cmdline_setup_auth_baton2."
+  ], 
+  "revision_id": "870729"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-04-17T11:27:06.219865Z", 
+  "msg": [
+   "Create dont-save-plaintext-passwords-by-default branch."
+  ], 
+  "revision_id": "870728"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2008-04-17T08:35:46.349949Z", 
+  "msg": [
+   "Follow up to r30643.", 
+   "* tools/client-side/bash_completion", 
+   "(): fix one --accept value for 'svn resolve' command, and more", 
+   "comments.", 
+   "Patch by: stylesen", 
+   "me"
+  ], 
+  "revision_id": "870727"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-04-17T03:41:10.366783Z", 
+  "msg": [
+   "On the fs-rep-sharing branch:", 
+   "fs_base checksum cleanups.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(tx_body_file_checksum): Don't default to the empty checksum if SHA1", 
+   "requested (lower layers will handle that).", 
+   "(base_file_checksum): Directly return the error from the last function call."
+  ], 
+  "revision_id": "870726"
+ }
+]

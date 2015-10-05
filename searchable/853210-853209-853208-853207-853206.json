@@ -1,0 +1,118 @@
+[
+ {
+  "author": "kou", 
+  "date": "2005-02-24T12:18:28.452955Z", 
+  "msg": [
+   "Add an argument check for pool.", 
+   "* subversion/bindings/swig/svn_types.i", 
+   "(%typemap(ruby, arginit) apr_pool_t *pool): Add argc == 0 check."
+  ], 
+  "revision_id": "853210"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2005-02-24T12:15:49.829634Z", 
+  "msg": [
+   "Add a test case for client authentication.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(TestSvnClient#test_authentication): Add a test case for", 
+   "client authentication.", 
+   "* subversion/bindings/swig/ruby/test/util.rb", 
+   "(SvnTestUtil#setup_svnserve): Invoke svnserve.", 
+   "(SvnTestUtil#teardown_svnserve): Terminate svnserve.", 
+   "(SvnTestUtil#add_authentication): Add some configurations", 
+   "for authoentication to svnserve configuration files."
+  ], 
+  "revision_id": "853209"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-02-24T12:14:18.733110Z", 
+  "msg": [
+   "Locking branch: Change RA reporter to accept lock tokens. Update RA functions", 
+   "and the WC crawling to handle this.  Pass lock tokens through in ra_local", 
+   "and ra_svn (not in svnserve yet). ra_dav and mod_dav are to be done.", 
+   "* subversion/include/svn_ra.h (svn_ra_reporter2_t): New typedef.  Add", 
+   "lock_token argument to link_path and set_path functions.", 
+   "(svn_ra_reporter_t): Deprecate.", 
+   "(svn_ra_do_update, svn_ra_do_switch, svn_ra_do_status, svn_ra_do_diff):", 
+   "Take new reporter instead of old.", 
+   "* subversion/libsvn_ra/wrapper_template.h (compat_report_baton): New struct.", 
+   "(compat_set_path, compat_delete_path, compat_link_path, compat_finish_report,", 
+   "compat_abort_report, compat_wrap_reporter): New functions.", 
+   "(compat_reporter): New static variable.", 
+   "(compat_do_update, compat_do_status, compat_do_switch, compat_do_diff):", 
+   "Adapt to the new vtable API and wrap the reporter.", 
+   "* subversion/libsvn_ra/ra_loader.c (svn_ra_do_update, svn_ra_do_switch,", 
+   "svn_ra_do_status, svn_ra_do_diff): Replace svn_ra_reporter_t with new", 
+   "reporter.", 
+   "* subversion/libsvn_ra/ra_loader.h (svn_ra_vtable_t): Replace old reporter", 
+   "with new in functions taking a reporter.", 
+   "* subversion/include/svn_wc.h (svn_wc_crawl_revisions2): New function, taking", 
+   "an svn_ra_reporter2_t instead of the old reporter.  Doc fix.", 
+   "(svn_wc_crawl_revisions): Deprecate.", 
+   "* subversion/libsvn_wc/adm_crawler.c (report_revisions): Take new reporter", 
+   "Report lock tokens.", 
+   "(svn_wc_crawl_revisions2): New, from svn_wc_crawl_revisions. Report", 
+   "lock tokens (or the absence thereof).", 
+   "(wrap_report_baton): New struct.", 
+   "(wrap_set_path, wrap_delete_path, wrap_link_path, wrap_finish_report,", 
+   "wrap_abort_report): New functions.", 
+   "(wrap_reporter): New static variable.", 
+   "(svn_wc_crawl_revisions): Wrap new function above.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c (reporter_set_path,", 
+   "reporter_link_path): Take new lock token argument and call new repository", 
+   "function.", 
+   "(ra_local_reporter): Change type to svn_ra_reporter2_t.", 
+   "(make_reporter, svn_ra_local__do_update, svn_ra_local__do_switch,", 
+   "svn_ra_local__do_status, svn_ra_local__do_diff): Change argument type of", 
+   "reporter to svn_ra_reporter2_t.", 
+   "* subversion/libsvn_ra_svn/client.c (ra_svn_set_path, ra_svn_link_path):", 
+   "Take lock_token argument and pass to the server.", 
+   "(ra_svn_reporter): Change type to new reporter.", 
+   "(ra_svn_get_reporter, ra_svn_update, ra_svn_switch, ra_svn_status,", 
+   "ra_svn_diff): Take new reporter argument.", 
+   "* subversion/libsvn_ra_svn/protocol (set-path and link-path commands): Add", 
+   "lock-token parameter.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h (svn_ra_dav__do_update,", 
+   "svn_ra_dav__do_switch, svn_ra_dav__do_status, svn_ra_dav__do_diff):", 
+   "Change type of reporter argument.", 
+   "* subversion/libsvn_ra_dav/fetch.c (reporter_set_path, reporter_link_path):", 
+   "Take lock_token argument, leave TODO for sussman:-)", 
+   "(ra_dav_reporter): Change type to svn_ra_reporter2_t.", 
+   "(make_reporter, svn_ra_dav__do_update, svn_ra_dav__do_switch,", 
+   "svn_ra_dav__do_status, svn_ra_dav__do_diff): Change argument type to", 
+   "new reporter.", 
+   "* subversion/libsvn_client/switch.c (svn_client_switch),", 
+   "* subversion/libsvn_client/export.c (svn_client_export3),", 
+   "* subversion/libsvn_client/status.c (svn_client_status2),", 
+   "* subversion/libsvn_client/diff.c (do_merge, diff_repos_repos, diff_repos_wc),", 
+   "* subversion/libsvn_client/update.c (svn_client__update_internal):", 
+   "Use new APIs."
+  ], 
+  "revision_id": "853208"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2005-02-24T12:04:12.673883Z", 
+  "msg": [
+   "- Fix a bug that --mode=relink doesn't work on Mac OS X.", 
+   "- Fix a bug that libtool's shared library extension and shared", 
+   "library extension required by ruby are different.", 
+   "Both of them are reported by Thomas Riboulet", 
+   "<ange@librium.org>. Thanks.", 
+   "* build/ac-macros/swig.m4 (ac_cv_ruby_link):", 
+   "- Substitute Config::CONFIG[\"CC\"] for LINK-COMMAND.", 
+   "- Use Config::CONFIG[\"DLEXT\"] as shared library extension."
+  ], 
+  "revision_id": "853207"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-02-23T21:22:43.444513Z", 
+  "msg": [
+   "* www/project_links.html:  add links to two more Subversion books."
+  ], 
+  "revision_id": "853206"
+ }
+]

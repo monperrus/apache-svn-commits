@@ -1,0 +1,107 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2001-11-21T15:01:43.228131Z", 
+  "msg": [
+   "commit.c: added 1 to the size of uuid_buf to fix an overflow problem that only reared its head on Mac OS X."
+  ], 
+  "revision_id": "840560"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-11-20T21:30:27.321677Z", 
+  "msg": [
+   "Just checking in some copy-related code before the holiday weekend", 
+   "(and some days).  No functionality is added/removed by these changes,", 
+   "and hopefully all dead-end code paths will abort().", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_copy, svn_client_move): Now, take revision, auth baton,", 
+   "and log message.", 
+   "* subversion/clients/cmdline/copy-cmd.c", 
+   "(svn_cl__copy): Get the revision, auth baton and log message, and", 
+   "pass those to svn_client_copy.", 
+   "* subversion/clients/cmdline/move-cmd.c", 
+   "(svn_cl__move): Get the revision, auth baton and log message, and", 
+   "pass those to svn_client_move.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_wc_copy, wc_to_repos_copy, repos_to_wc_copy,", 
+   "repos_to_repos_copy, setup_copy): New helpers (unfinished).", 
+   "(svn_client_move, svn_client_copy): Take revision, auth baton, and", 
+   "log message arguments.  Call setup_copy helper function."
+  ], 
+  "revision_id": "840559"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-11-20T20:53:05.244591Z", 
+  "msg": [
+   "Get rid of 'existence=copied' entry flag;  make 'copied=TRUE' a", 
+   "standalone entry flag (just like 'conflicted'.)", 
+   "Hoo, this is messy.  But we really need the flag independence.", 
+   "* svn_wc.h (enum svn_wc_existence_t): remove svn_wc_existence_copied.", 
+   "(svn_wc_entry_t):  add 'copied' boolean flag.", 
+   "(SVN_WC_ENTRY_VALUE_COPIED):  removed.", 
+   "(SVN_WC_ENTRY_ATTR_COPIED):  new.", 
+   "* wc.h (SVN_WC__ENTRY_MODIFY_COPIED):  new flag.", 
+   "(svn_wc__entry_modify):  take new 'copied' argument.", 
+   "* status.c (assemble_status): look for entry->copied flag now.", 
+   "* entries.c (svn_wc__entry_modify):  take new 'copied' argument.", 
+   "(fold_entry):  take new 'copied' argument.", 
+   "(svn_wc__atts_to_entry): don't look for svn_wc_existence_copied anymore.", 
+   "Also, read COPIED attribute.", 
+   "(normalize_entry): don't look for svn_wc_existence_copied anymore.", 
+   "Also, write COPIED attribute.", 
+   "(svn_wc__recursively_rewrite_ancestry): update call to fold_entry", 
+   "* adm_ops.c (add_to_revision_control): call svn_wc__entry_modify", 
+   "and mark_tree differently now.", 
+   "(mark_tree):  take a 'copied' argument, and update call to __entry_modify.", 
+   "(svn_wc_set_revision): update call to svn_wc__entry_modify.", 
+   "(svn_wc_delete): update call to mark_tree and svn_wc__entry_modify.", 
+   "(svn_wc_revert): update call to svn_wc__entry_modify.", 
+   "* adm_crawler.c (report_single_mod): look at entry->copied.", 
+   "(crawl_dir):  same.", 
+   "* get_editor.c (free_dir_baton): update call to svn_wc__entry_modify.", 
+   "(add_directory): same.", 
+   "* log.c (log_do_detect_conflict): update call to svn_wc__entry_modify.", 
+   "(log_do_modify_entry): same.", 
+   "(conflict_if_rejfile): same.", 
+   "(log_do_committed): same.", 
+   "* ra_plugin.c (do_check_path): unrelated bugfix;  svn_fs_check_path", 
+   "takes a char *, not a stringbuf.  A warning caught this."
+  ], 
+  "revision_id": "840558"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-11-20T19:03:37.028046Z", 
+  "msg": [
+   "Add public UI description above Mike's implementation details"
+  ], 
+  "revision_id": "840557"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-11-20T17:12:38.020549Z", 
+  "msg": [
+   "Added 'check_path' RA function.  Implemented (well, not really) in", 
+   "RA_DAV and RA_LOCAL.  Caution:  if you use this function, your primary", 
+   "hard drive partition will be low-level formatted. :-)", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t): Added 'check_path' vtable entry.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(do_check_path): ra_local's new 'check path' function.", 
+   "(ra_local_plugin): Added reference to do_check_path.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(dav_plugin): Added reference to svn_ra_dav__do_check_path.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__do_check_path): New.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__resourcetype): New.", 
+   "(svn_ra_dav__get_props): Trapped requests for missing items.", 
+   "(svn_ra_dav__do_check_path): ra_dav's new 'check_path' function.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_PROPS_NOT_FOUND): New error code."
+  ], 
+  "revision_id": "840556"
+ }
+]

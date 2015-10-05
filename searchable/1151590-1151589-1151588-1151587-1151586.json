@@ -1,0 +1,107 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-07-27T18:59:52.092000Z", 
+  "msg": [
+   "Make svn_wc__db_scan_addition() provide information about the local source", 
+   "of a move for nodes with a 'moved-here' status.", 
+   "Some future callers will only want to act on the op-roots involved in", 
+   "a move, e.g. the commit code detecting whether both halfs of a move", 
+   "are among the commit targets.", 
+   "Other future callers might want to act directly on children of the op-roots,", 
+   "e.g. code performing automatic tree conflict resolution.", 
+   "So scan_addition() provides both the moved_from abspath and the abspath of", 
+   "the operation root of the delete-half of the move. This should satisfy", 
+   "either use case to some degree. It might not be the optimal solution", 
+   "for all use cases but won't hurt, either.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_scan_addition, scan_addition): New output parameters", 
+   "MOVED_FROM_ABSPATH and DELETE_OP_ROOT_ABSPATH.", 
+   "(get_moved_from_info): New helper function which computes values for", 
+   "above new output parameters.", 
+   "(scan_addition_baton_t): Add MOVED_FROM_ABSPATH and DELETE_OP_ROOT_ABSPATH.", 
+   "(scan_addition_txn): Run get_moved_from_info() for 'moved-here' nodes.", 
+   "(get_info_for_copy, read_url_txn, svn_wc__db_global_relocate): Update", 
+   "scan_addition() calls.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_scan_addition): Update declaration and docstring.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_MOVED_FROM_RELPATH): New query which selects the 'moved-from'", 
+   "path corresponding to a 'moved-here' node.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(TESTING_DATA): Create another row for the delete-half of a move.", 
+   "svn_wc__db_scan_addition() now treats a move without a delete-half", 
+   "as if it was a normal a copy. (We've been recording delete-halfs", 
+   "since r1151166.)", 
+   "(test_scan_addition): Check for moved-from information scan_addition()", 
+   "now returns for 'moved-here' nodes.", 
+   "The remaining items list updated callers of svn_wc__db_scan_addition().", 
+   "All of them pass NULL for the new output parameters.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__get_pristine_props): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(check_can_add_to_parent): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc_restore, report_revisions_and_depths,", 
+   "svn_wc_crawl_revisions5): Update svn_wc__db_scan_addition() calls.", 
+   "* subversion/libsvn_wc/diff_local.c", 
+   "(file_diff): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/diff_editor.c", 
+   "(file_diff, report_wc_file_as_added,", 
+   "close_file): Update svn_wc__db_scan_addition() calls.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__internal_ensure_adm): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(create_tree_conflict, add_directory,", 
+   "add_file): Update svn_wc__db_scan_addition() calls.", 
+   "* subversion/libsvn_wc/info.c", 
+   "(build_info_for_node): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_or_move): Update svn_wc__db_scan_addition() calls.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_repos_root_url_relpath): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(child_is_disjoint): Update svn_wc__db_scan_addition() call.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(get_info_for_deleted,", 
+   "read_one_entry): Update svn_wc__db_scan_addition() calls.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__internal_get_repos_info, svn_wc__node_get_repos_relpath,", 
+   "svn_wc__internal_get_copyfrom_info, svn_wc__internal_get_commit_base_rev,", 
+   "svn_wc__internal_get_origin): Update svn_wc__db_scan_addition() calls."
+  ], 
+  "revision_id": "1151590"
+ }, 
+ {
+  "author": "stroucki", 
+  "date": "2011-07-27T18:52:27.105727Z", 
+  "msg": [
+   "clustermanagerservice.py: fix indentation level on database release statement"
+  ], 
+  "revision_id": "1151589"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2011-07-27T18:49:38.505866Z", 
+  "msg": [
+   "Renamed HttpCore 4.1.3 RC1 tag"
+  ], 
+  "revision_id": "1151588"
+ }, 
+ {
+  "author": "brandonwilliams", 
+  "date": "2011-07-27T18:42:32.504254Z", 
+  "msg": [
+   "Remove obsolete tests for removetoken"
+  ], 
+  "revision_id": "1151587"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2011-07-27T18:33:07.355902Z", 
+  "msg": [
+   "adding some support for PUT, DELETE... in openejb-http"
+  ], 
+  "revision_id": "1151586"
+ }
+]

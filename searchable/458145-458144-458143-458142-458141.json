@@ -1,0 +1,97 @@
+[
+ {
+  "author": "ivaynberg", 
+  "date": "2005-11-28T16:46:01.000000Z", 
+  "msg": [
+   "thoughts"
+  ], 
+  "revision_id": "458145"
+ }, 
+ {
+  "author": "jcompagner", 
+  "date": "2005-11-28T10:03:18.000000Z", 
+  "msg": [
+   "warn->info"
+  ], 
+  "revision_id": "458144"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-11-28T08:29:48.000000Z", 
+  "msg": [
+   "*** empty log message ***"
+  ], 
+  "revision_id": "458143"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-11-28T08:29:16.000000Z", 
+  "msg": [
+   "urlFor is now final in Page instead of abstract in Page and implemented in WebPage. The actual implementation is now hidden in a seperate strategy."
+  ], 
+  "revision_id": "458142"
+ }, 
+ {
+  "author": "ehillenius", 
+  "date": "2005-11-28T08:18:08.000000Z", 
+  "msg": [
+   "work in progress: request cycle refactoring.", 
+   "Milestone: the major part of low-level refactoring is done now and there is new functionality", 
+   "for mounting request targets to paths.", 
+   "A short explanation how request processing works now:", 
+   "Request cycle processing is now mostly delegated to an instance of IRequestCycleProcessor which can", 
+   "be created by RequestCycles or - preferably - the default request cycle processor in Application.", 
+   "I defined the processing clear steps; they can be found as methods on IRequestCycleProcessor:", 
+   "1. Destiling a strongly typed RequestParameters object from the Request. This is done by an instance", 
+   "of IRequestEncoder. The request encoder is the strategy that takes care of creating urls (all urlFor", 
+   "methods of Page are now dispatched to this strategy) and 'decoding' them into the strongly typed", 
+   "parameters object. Furthermore, the encoder interface provides for mounting and unmounting", 
+   "Wicket request targets (see 2). Using this interface has the advantage that all 'translations' are now", 
+   "being done by one object and that the translations do not do any real processing yet. Hence the", 
+   "actual processing can be implemented in a very different way that has nothing to do with url translations.", 
+   "2. Solving an incomming request to a request target using the strongly typed RequestParameters of step 1.", 
+   "Request targets (IRequestTarget) are a central concept in the new refactorings.  A request cycle has", 
+   "one current request target that can range from a bookmarkable page (or a redirect to it), a component", 
+   "listener invocation to shared resources, external resources or something like a HTTP error message.", 
+   "Request targets themselves are responsible for creating/ delegating a response. For the rest they are", 
+   "fairly shallow, and implementations of IRequestCycleProcessor do the heavy lifting.", 
+   "Once the target is determined, it is set as 'the current' target in the RequestCycle. Actually, RequestCycle", 
+   "holds a stack of all set targets. For instance, when you call setResponsePage, what happens is that", 
+   "actually a request target implementation (in this case (PageRequestTarget) is put on top of the stack.", 
+   "after the request cycle is done executing, all request targets will be iterated and their cleanUp methods", 
+   "will be called to enable request target implementations to free resources, give notifications, etc.", 
+   "3. The next step is event dispatching. During this step things like calling listener interface methods (such", 
+   "as Link.onClick) may be done.", 
+   "4. The last step is to respond using the current request target. A target may directly call render on e.g.", 
+   "a component, delegate the actual response creation (like with resources) or create a redirect to", 
+   "defer the actual handling. A target implementation is free to do whatever it wants, as long as a response", 
+   "is created.", 
+   "4.a. when something during handling of 3 or 4 goes wrong, an exception response is created. It is now much", 
+   "easier (I hope) for users to implement completely custom exception handling/ page rendering.", 
+   "NOTE: most of the refactorings are interface based (due to popular demand?) so that it is much easier than", 
+   "before to create proxies, interleave them, etc. This can now be done better than before as the contract", 
+   "is better externalized now (and enforced in the final method RequestCycle.request()) and devided in seperate", 
+   "steps instead of being implementation details.", 
+   "NOTE: there is a lot of cleaning up to do still. I'd like to take a good look at all the special cases we put in", 
+   "Application/Settings/Pages", 
+   "the last few months, and get rid of the things we don't need to support anymore", 
+   "when they can be done using this interface, such as exception page handling.", 
+   "NOTE: there is a default, handy implementation of IRequestCycleProcessor called CompoundRequestCycleProcessor", 
+   "which delegates it's behaviour into seperate interface calls so that it is easier to mix-'n-match implementations.", 
+   "NOTE: there are some API breaks:", 
+   "- Page class alias functionality is not supported anymore. It was 'miss-used' for shortening resource keys", 
+   "more than it was for having page aliases, and while the shortening of resource keys might be a nice thing", 
+   "to have again in the near future, the page aliases are not needed anymore as it is replaced by the new", 
+   "path mounting functionality. We need to rethink the shortening of resource keys in a more generalized", 
+   "fashion in the next few days.", 
+   "- The home page render strategy is removed. There are now two options:", 
+   "1. The home page class is mounted to a path. When that is the case, a redirect to this bookmarkable page", 
+   "path will be issued and the mounted url is thus shown.", 
+   "2. Nothing was mounted. The home page is rendered directly and the url will be 'clean'", 
+   "(like http://localhost:8080/wicket-examples/navomatic)", 
+   "I know there was a third option, but it was not clear to me what the advantage for that one was. If someone", 
+   "needs it, please complain :)"
+  ], 
+  "revision_id": "458141"
+ }
+]

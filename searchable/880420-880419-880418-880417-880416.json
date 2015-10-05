@@ -1,0 +1,66 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-11-01T22:43:12.747715Z", 
+  "msg": [
+   "* subversion/libsvn_subr/io.c", 
+   "(get_default_file_perms): As part of fixing the recently introduced", 
+   "permission problems due to restrictive permissions on temp files,", 
+   "optimise a bit by getting permissions from the file handle rather than", 
+   "statting the filename, and most importantly use svn_io_open_uniquely_named()", 
+   "instead of svn_io_open_unique_file3() since the latter tweaks permissions", 
+   "of files it creates, regardless of umask. Also, split off code into ...", 
+   "(merge_default_file_perms): ... this new function for readability.", 
+   "(io_set_file_perms): Call merge_default_file_perms()."
+  ], 
+  "revision_id": "880420"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-01T22:24:29.531603Z", 
+  "msg": [
+   "Changes made to svn_io_copy_perms() in r40275 weren't correct.", 
+   "APR_OS_DEFAULT and apr_file_perms_set() don't play nicely together at all,", 
+   "the result is not \"set OS default permissions\" but more like chmod(0xFFF).", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_copy_file): Revert documentation change from r40275.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_copy_file): Stop accepting SRC == NULL. Assume both SRC", 
+   "and DST exist. If DST is a symlink, return early. Use the new", 
+   "svn_io_file_perms_set() helper to trim down the code a bit."
+  ], 
+  "revision_id": "880419"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-01T21:47:28.479344Z", 
+  "msg": [
+   "Add a wrapper for apr_file_perms_set().", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_file_perms_set): Declare.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_file_perms_set): New function."
+  ], 
+  "revision_id": "880418"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-11-01T20:28:15.912493Z", 
+  "msg": [
+   "* subversion/libsvn_client/copy.c", 
+   "(get_copy_pair_ancestors): Resolve two deprecation warnings by detecting", 
+   "what kind of path is used and then using the type specific function."
+  ], 
+  "revision_id": "880417"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-01T15:22:15.120006Z", 
+  "msg": [
+   "Revert r40333, it wasn't right. Copying permissions from the temporary", 
+   "file to the destination is what we're trying to avoid, yet the \"fix\" did", 
+   "just that."
+  ], 
+  "revision_id": "880416"
+ }
+]

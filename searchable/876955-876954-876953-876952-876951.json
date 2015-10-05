@@ -1,0 +1,95 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-31T03:12:26.412177Z", 
+  "msg": [
+   "The test suite now passes with the additional entries API compatibility", 
+   "tests, so it has been enabled by default.", 
+   "This revision wraps up the last little tweaks necessary for this to work.", 
+   "* subversion/tests/cmdline/svntest/wc.py:", 
+   "(State.normalize): move the join() private function out to ...", 
+   "(repos_join): ... here. and add a base PARAM and allow either parameter", 
+   "to be the empty string.", 
+   "(State.from_wc): remove the '/'-append onto the parent, as we'll call", 
+   "repos_join instead, and it will Do The Right Thing.", 
+   "(State.from_entries): always return a State now. avoid keys that start", 
+   "with \".\" and use repos_join when possible. leave \"missing\" StateItem", 
+   "objects for the stub subdir entries.", 
+   "(svn_url_quote): new function to quote URLs according to svn semantics", 
+   "rather than Python's semantics."
+  ], 
+  "revision_id": "876955"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-31T02:14:31.889714Z", 
+  "msg": [
+   "On the subtree-mergeinfo branch: Sync merge from trunk, r36660-36879."
+  ], 
+  "revision_id": "876954"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-31T01:45:13.716004Z", 
+  "msg": [
+   "Follow-up to r26229, the issue #2823 and issue #2839 fix.", 
+   "Fix a merge bug which can occur when the merge target or a subtree of", 
+   "the target has non-inheritable mergeinfo.", 
+   "Found this bug while working on the subtree-mergeinfo branch...", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_mergeinfo_paths): Yikes!  When looking for a subtree's inherited", 
+   "mergeinfo be sure to pass an entry that corresponds to the", 
+   "subtree's path, not the entry for the merge target!  Otherwise we will", 
+   "always find NULL inherited mergeinfo and no override will be set.  This", 
+   "works in our test suite (see merge_tests.py 50 'merge to path with", 
+   "switched children') because the tests are structured such that elision", 
+   "hides the fact that no override mergeinfo was ever set.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_away_subtrees_noninheritable_ranges): Expand this test to", 
+   "demonstrate how incorrect mergeinfo can be set on a path's immediate", 
+   "children if the path has non-inheritable mergeinfo."
+  ], 
+  "revision_id": "876953"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-31T01:27:00.880525Z", 
+  "msg": [
+   "This just about finishes the entries-based status checks. Details of this", 
+   "round of tweaks are given below.", 
+   "* subversion/tests/cmdline/svntests/wc.py:", 
+   "(State.from_entries): some 'svn status' calls and expected trees were", 
+   "run for a single file, rather than a directory or whole working copy.", 
+   "in this case, special-case it with a quick-and-dirty reading,", 
+   "construction, and exit. during the walk, compute parent URLs and", 
+   "\"hide\" them onto the StateItems, then use them to compute implied URLs", 
+   "for switched-directory testing.", 
+   "(StateItem.__eq__): filter out \"hidden\" state (anything with a leading", 
+   "underscore).", 
+   "(StateItem.from_entry): if the revision is SVN_INVALID_REVNUM then use", 
+   "'?' for the wc_rev value.", 
+   "(repos_split): new helper function to split a repos relpath into its", 
+   "directory/entry values."
+  ], 
+  "revision_id": "876952"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-30T23:47:13.937099Z", 
+  "msg": [
+   "Continued refinement of the mapping from the old entries interface into a", 
+   "State that can be compared to an 'svn status' expected State. In", 
+   "particular, refine our treatment of DELETED items and avoid recursing into", 
+   "disconnected WCs. And handle conflicts and copied items' revisions better.", 
+   "Note: when this testing is enabled, it results in just 14 FAILs now.", 
+   "* subversion/tests/cmdline/svntest/wc.py:", 
+   "(State.from_entries): don't skip DELETED nodes if there is something new", 
+   "that is schedule-add. avoid recursing into subdirs which are not", 
+   "mentioned in the entries -- they are unversioned or part of a disjoint", 
+   "working copy.", 
+   "(StateItem.from_entry): if conflict files are present, put the item into", 
+   "a conflict state. copied nodes have '-' for their revision."
+  ], 
+  "revision_id": "876951"
+ }
+]

@@ -1,0 +1,93 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-09T17:00:36.501121Z", 
+  "msg": [
+   "Merge from trunk r37137."
+  ], 
+  "revision_id": "877215"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-09T16:55:58.101309Z", 
+  "msg": [
+   "Create a backport branch for the r37137 changes, aimed at 1.5.x."
+  ], 
+  "revision_id": "877214"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-09T16:49:00.942955Z", 
+  "msg": [
+   "Propose r37137 for backport."
+  ], 
+  "revision_id": "877213"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-09T16:26:30.947788Z", 
+  "msg": [
+   "Fix the source of a couple \"database busy\" sqlite errors.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_scan_addition): Reset the sqlite statement before returning an", 
+   "error.  The caller may catch the error, leaving the db with a hanging", 
+   "statement."
+  ], 
+  "revision_id": "877212"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-04-09T16:24:28.305231Z", 
+  "msg": [
+   "Attempt to button down the BDB backend's memory usage by allowing trail", 
+   "producers to tell that subsystem to discard all memory associated with", 
+   "the trail.", 
+   "Most of the time, this pool usage waste isn't a problem (because of", 
+   "better pool practices in higher layers).  But mod_dav and mod_dav_svn", 
+   "have notoriously wicked pool usage behavior, and I'm tired of having", 
+   "the theoretically niceties of our pool usage guidelines getting in the", 
+   "way of Subversion working.  Why should a simple 'svn ls -v' of a", 
+   "directory with 10,000 files exhaust all the memory on my 2Gb laptop?", 
+   "It shouldn't, ahd if this kind of change is what I have to do to get", 
+   "that leakage back down to \"only\" 339Mb, I feel compelled to do it.", 
+   "An arguably cleaner approach would have been to add a 'result_pool'", 
+   "argument to the txn_body_* function type which is the same pool passed", 
+   "to svn_fs_base__retry_txn().  That would allow the txn_body_*", 
+   "functions (which already operate with 'trail' and 'trail->pool' today)", 
+   "to use the 'result_pool' argument as a final destination for", 
+   "returnable stuff and 'trail->pool' for scratch work.  (And then", 
+   "do_retry() function would, of course, always whack trail->pool when it", 
+   "was finished with a trail.)  I've filed issue #3395 to track this", 
+   "possible future enhancement.", 
+   "Reviewed by:  gstein", 
+   "* subversion/libsvn_fs_base/trail.h", 
+   "(svn_fs_base__retry_debug, svn_fs_base__retry_txn, svn_fs_base__retry):", 
+   "Add 'destroy_trail_pool' parameter.", 
+   "* subversion/libsvn_fs_base/trail.c", 
+   "(do_retry): Add 'destroy_trail_pool', and, if set, destroy the trail", 
+   "subpool even upon successful completion of the transaction.", 
+   "(svn_fs_base__retry_debug, svn_fs_base__retry_txn, svn_fs_base__retry):", 
+   "Add 'destroy_trail_pool' parameter, passed to do_retry().", 
+   "* subversion/libsvn_fs_base/reps-strings.c,", 
+   "* subversion/libsvn_fs_base/revs-txns.c,", 
+   "* subversion/libsvn_fs_base/lock.c,", 
+   "* subversion/libsvn_fs_base/dag.c,", 
+   "* subversion/tests/libsvn_fs_base/changes-test.c,", 
+   "* subversion/tests/libsvn_fs_base/fs-base-test.c,", 
+   "* subversion/tests/libsvn_fs_base/strings-reps-test.c", 
+   "Update all calls to svn_fs_base__retry() and svn_fs_base__retry_txn(),", 
+   "passing TRUE for the new 'destroy_trail_pool' parameter iff the", 
+   "caller didn't need any allocations made by the trail subsystem to", 
+   "outlive the trail itself.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "Same as above, but also...", 
+   "(base_node_created_path, base_node_prop, svn_fs_base__miscellaneous_get,", 
+   "base_copied_from, base_file_checksum): Use a scratch pool for the", 
+   "trail work.", 
+   "* subversion/libsvn_fs_base/uuid.c", 
+   "Same as above, but also...", 
+   "(svn_fs_base__get_uuid): Use a scratch pool for the trail work."
+  ], 
+  "revision_id": "877211"
+ }
+]

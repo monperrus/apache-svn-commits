@@ -1,0 +1,101 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2007-07-25T16:12:35.770912Z", 
+  "msg": [
+   "Fix for issue #2848 - Make the svn_merge_range_t start field exclusive", 
+   "of the range being described if start <= end, otherwise make the end field", 
+   "exclusive.", 
+   "This makes svn_merge_range_t's start and end fields analogous to the command", 
+   "line's \"-rX:Y\" option.  Previously a command like 'svn merge %URL%", 
+   "WCPATH -rX:Y' resulted in a svn_merge_range_t with start == X+1 and end == Y", 
+   "(when X > Y).  With this patch start == X and end == Y.", 
+   "This is immediately helpful for notifications of single revision subtractive", 
+   "merges.  Where before 'svn merge %URL% WCPATH -cZ' *and*", 
+   "'svn merge %URL% WCPATH -c-Z' both resulted in start == end == Z (and the", 
+   "same notification), now the former results in start == Z-1, end == Z and the", 
+   "latter start == Z, end == Z - 1.  This allows for more accurate merge", 
+   "notifications in the single revision case.", 
+   "Note that this patch in now way affects how we store svn:mergeinfo props,", 
+   "those are still inclusive.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(get_implied_mergeinfo(): Make start rev of implied range exclusive.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(grok_range_info_from_opt_revisions): Leave start and end revs as-is from", 
+   "command line parsing.", 
+   "(do_merge): Stop tweaking start and end of range for calls to", 
+   "svn_client__get_diff_editor(), svn_ra_do_diff3(), and reporter->set_path(),", 
+   "the ranges from grok_range_info_from_opt_revisions() now work as-is.", 
+   "(do_single_file_merge): As above, but for calls to", 
+   "single_file_merge_get_file() and merge_file_changed().", 
+   "* subversion/libsvn_repos/log.c", 
+   "(find_merge_source): Account for fact that range start is now exclusive.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(combine_ranges, parse_revlist, range_intersect,", 
+   "rangelist_intersect_or_remove, svn_rangelist_count_revs,", 
+   "svn_rangelist_to_revs, svn_range_to_stringbuf): Account for fact that", 
+   "range start is now exclusive or in the case of reverse merges that the end", 
+   "range is exclusive.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Account for fact that range start or end is now exclusive.", 
+   "Change notification for subtractive merges.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(textual_merges_galore, merge_with_implicit_target_helper,", 
+   "merge_with_prev, merge_binary_with_common_ancestry, merge_dir_branches,", 
+   "mergeinfo_elision, empty_rev_range_mergeinfo): Update calls to", 
+   "svntest.main.merge_notify_line() to pass a negative number when reverse", 
+   "merging a single revision.", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(mergeinfo_ranges, test_parse_combine_rangeinfo, test_diff_mergeinfo,", 
+   "test_rangelist_reverse, test_rangelist_intersect, test_merge_mergeinfo,", 
+   "test_remove_mergeinfo): Account for fact that range start is now exclusive.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(merge_notify_line): Adjust to expect new notifications."
+  ], 
+  "revision_id": "865910"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-07-25T01:08:55.460804Z", 
+  "msg": [
+   "* subversion/include/svn_fs.h:", 
+   "Documentation grammar fix."
+  ], 
+  "revision_id": "865909"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-24T21:54:29.059168Z", 
+  "msg": [
+   "* STATUS: Nominate r25833 in lieu of r25822."
+  ], 
+  "revision_id": "865908"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-24T21:53:16.334956Z", 
+  "msg": [
+   "Reinstate an alternate incarnation of r25822, *really* fixing", 
+   "administrative property file handling for prop changes to a file which", 
+   "is subsequently copied/moved over another schedule-delete file, where", 
+   "the original doesn't have any props (e.g. 'svn mv a b; svn ps name val", 
+   "b; svn mv b a' is a 1.5-specific way to trigger this problem).", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(svn_wc_add_repos_file2): For schedule-delete files that have no", 
+   "(destination) base properties file, create an empty base props file", 
+   "with a temporary name.", 
+   "Patch by: ehu"
+  ], 
+  "revision_id": "865907"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-24T21:38:56.249854Z", 
+  "msg": [
+   "A follow-up to r25829, adjusting expected help text for 'svn log'.", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout", 
+   "Add '-l' short option."
+  ], 
+  "revision_id": "865906"
+ }
+]

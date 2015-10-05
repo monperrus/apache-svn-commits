@@ -1,0 +1,70 @@
+[
+ {
+  "author": "raul", 
+  "date": "2006-08-05T17:36:07.077755Z", 
+  "msg": [], 
+  "revision_id": "429015"
+ }, 
+ {
+  "author": "suresht", 
+  "date": "2006-08-05T17:11:47.059303Z", 
+  "msg": [
+   "DERBY -1156 (partial) (re) encryption of an existing database.", 
+   "This patch adds code required to correctly handle crash/recovery during", 
+   "encryption of an un-encrypted database and encryption of an encrypted", 
+   "database with a new key.", 
+   "Crashes before updating the database with the new encryption key", 
+   "are handled by recovery, those log records are encrypted old key.", 
+   "Crashes after updates to the service.properties with a new encryption key", 
+   "is handled by using the new status flag (derby.storage.databaseEncryptionStatus)", 
+   "to track the changes and by writing the transaction log encrypted with", 
+   "new key to a new log file.", 
+   "Logging system can handle only one encryption key, which means the", 
+   "recovery can read the log with a new key or the old key. Checkpoint", 
+   "log record is also encrypted. So it is necessary for the system", 
+   "to find a checkpoint in the log that it can decrypt using the encryption", 
+   "key stored in the service.properties or the one provided by the user.", 
+   "This is ensured by  by writing  COMMIT and CHECKPOINT log records", 
+   "into a new log file and delete that file on-reboot if there is a crash", 
+   "before checkpoint records are updated.", 
+   "CHECKPOINT and COMMIT is done after setting the databaseEncryptionStatus to", 
+   "IN-PROGRESS in the service.properties.On a reboot if databaseEncryptionStatus", 
+   "is  IN-PROGRESS,  then engine first checks if checkpoint is in the last", 
+   "log file , it it is then (re) encryption is complete otherwise it deletes the", 
+   "last log file before doing recovery. Because the last log file also", 
+   "had the commit record , it is also gone; Now recovery sees log only encrypted", 
+   "with the old key and no end for re-encryption transaction, so it the (re)", 
+   "encryption work rolled back and database is brought to the state it was", 
+   "before (re) encryption started.", 
+   "If engine find a checkpoint in the last log file when databaseEncryptionStatus", 
+   "is IN-PROGRESS , the it is clear that checkpoint is encrypted with the new", 
+   "key; so it does any cleanup required.", 
+   "Added new test cases using debug flags to crash at critical", 
+   "point during (re) encryption and recovery of failed (re)encryption."
+  ], 
+  "revision_id": "429014"
+ }, 
+ {
+  "author": "raul", 
+  "date": "2006-08-05T16:59:54.566296Z", 
+  "msg": [], 
+  "revision_id": "429013"
+ }, 
+ {
+  "author": "raul", 
+  "date": "2006-08-05T16:58:30.409570Z", 
+  "msg": [
+   "Optimize xml:* inheritance", 
+   "Refactor utf writting."
+  ], 
+  "revision_id": "429012"
+ }, 
+ {
+  "author": "clr", 
+  "date": "2006-08-05T16:26:19.940195Z", 
+  "msg": [
+   "ROL-977 Remove unused prototype JDO back end classes"
+  ], 
+  "revision_id": "429011"
+ }
+]

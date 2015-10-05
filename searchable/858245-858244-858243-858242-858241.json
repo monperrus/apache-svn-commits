@@ -1,0 +1,69 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2006-01-19T19:05:05.812717Z", 
+  "msg": [
+   "Followup to r18170. Restore APR 1.x compatibility.", 
+   "* subversion/libsvn_fs_base/env.c", 
+   "(svn__atomic_cas): New macro, defined differently for APR 0.9.x and 1.x.", 
+   "(bdb_cache_init): Change apr_atomic_cas to svn__atomic_cas.", 
+   "Also fix comment."
+  ], 
+  "revision_id": "858245"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-01-19T17:28:07.448129Z", 
+  "msg": [
+   "In the BDB environment cache, implement an enumerated type using small integers", 
+   "instead of self-referential pointers, thus allowing the use of apr_atomic_cas()", 
+   "instead of apr_atomic_casptr(), thus avoiding breaking GCC's strict-aliasing", 
+   "rules, and provoking warnings.  Incidentally, it also avoids confusing humans,", 
+   "which the use of self-referential pointers merely as unique tokens is prone to", 
+   "do :-).", 
+   "* subversion/libsvn_fs_base/bdb/env.c", 
+   "(bdb_cache_start_init, bdb_cache_init_failed, bdb_cache_initialize):", 
+   "Remove, replacing with...", 
+   "(BDB_CACHE_UNINITIALIZED, BDB_CACHE_START_INIT, BDB_CACHE_INIT_FAILED,", 
+   "BDB_CACHE_INITIIALISED): ...these #defined integer constants.", 
+   "(bdb_cache_state): Change from a void* to an apr_uint32_t.", 
+   "(bdb_cache_init): Adapt to the above changes, including replacing all", 
+   "apr_atomic_casptr() with apr_atomic_cas()."
+  ], 
+  "revision_id": "858244"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-01-19T15:00:11.430097Z", 
+  "msg": [
+   "* tools/hook-scripts/mailer/mailer.conf.example:", 
+   "Some corrections and clarifications."
+  ], 
+  "revision_id": "858243"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-01-19T14:43:38.857465Z", 
+  "msg": [
+   "Mailer.py cleanups.", 
+   "Patch by: Mathias Weinert <mathias.weinert@gfa-net.de>", 
+   "[in tools/hook-scripts/mailer]", 
+   "* mailer.py: Comment typo fix.", 
+   "* mailer.conf.example: Add missing full stops.", 
+   "(suppress_deletes): Comment out deprecated option."
+  ], 
+  "revision_id": "858242"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-01-19T11:22:43.105343Z", 
+  "msg": [
+   "Preparation for fixing issue #1809: replace svn_client_ls and", 
+   "make recursive ls streamy.", 
+   "* subversion/libsvn_client/ls.c (svn_client_ls4): Use svn_ra_stat()", 
+   "and fall back to the old method of using svn_ra_check_path and", 
+   "svn_ra_get_dir in the file case if necessary."
+  ], 
+  "revision_id": "858241"
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "author": "mattf", 
+  "date": "2011-11-23T18:31:11.744128Z", 
+  "msg": [
+   "HADOOP-7827 HDFS-2588 MAPREDUCE-3464. jsp pages missing DOCTYPE. Contributed by Dave Vronay."
+  ], 
+  "revision_id": "1205530"
+ }, 
+ {
+  "author": "mattf", 
+  "date": "2011-11-23T18:26:53.037694Z", 
+  "msg": [
+   "HADOOP-7827 HDFS-2588 MAPREDUCE-3464. jsp pages missing DOCTYPE. Contributed by Dave Vronay."
+  ], 
+  "revision_id": "1205529"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-11-23T18:24:33.906604Z", 
+  "msg": [
+   "On the moves-scan-log branch, hook the moves-log scanning logic into the", 
+   "interactive conflict resolution callback system.", 
+   "For now, this is triggered only on delete vs. delete conflicts.", 
+   "This commit also changes some aspects of auto-resolution behaviour of", 
+   "tree conflict handling back to the level of 1.7. This applies to any", 
+   "conflict involving an incoming delete. This is because auto-resolution", 
+   "strategies will be based on feedback we get from the conflict callback.", 
+   "However, this feedback is not evaluated completely at this point.", 
+   "This is mostly a checkpoint commit to get these changes off my hard drive.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_repos_move_info_t): Move definition further up in this file.", 
+   "(svn_wc_conflict_description2_t): New fields suggested_move and", 
+   "server_sends_moves_as_copy_plus_delete. See docstrings for details.", 
+   "(svn_wc_conflict_choice_t): Add new choices scan_log_for_moves,", 
+   "delete_is_delete, copy_is_copy, incoming_move, new_local_move_target.", 
+   "Not all of these are used yet.", 
+   "(svn_wc_conflict_result_t): Expand to cover responses to above choices", 
+   "by adding new fields incoming_move and new_local_move_target.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__conflict_handler): Update to use svn_wc_conflict_description2_t.", 
+   "* subversion/svn/main.c", 
+   "(main): Configure an conflict_func2 in the client context, instead of the", 
+   "old conflict_func that uses svn_wc_conflict_description_t.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(pick_move): New helper function.", 
+   "(svn_cl__accept_from_word, show_conflicts, open_editor): Change to", 
+   "svn_wc_conflict_description2_t.", 
+   "(svn_cl__conflict_handler): As previous. Also handle 'incoming delete vs.", 
+   "local delete' conflicts by presenting the user with the following options:", 
+   "-------------------------------------------------------", 
+   "(p) postpone, (s) suggest-move,", 
+   "(a) ask-move, (d) is-delete, (h) help: h", 
+   "(p) postpone      - resolve the conflict later", 
+   "(s) suggest-move  - suggest moves found in revision log", 
+   "(a) ask-move      - specify server-side move yourself", 
+   "(d) is-delete     - treat incoming delete as delete", 
+   "(h) help          - show this help", 
+   "-------------------------------------------------------", 
+   "Not all of these options are implemented yet. The 's' option invokes the", 
+   "log history scanner and presents the list of moves found, if any.", 
+   "The UI control flow is still a bit crude and will be improved later.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(create_tree_conflict): Always set server_sends_moves_as_copy_plus_delete", 
+   "in the created conflict description. This flag will be useful later when", 
+   "servers start sending proper moves instead of copy+delete.", 
+   "(check_tree_conflict): Always consider delete vs. delete a conflict. Move", 
+   "the code which auto-resolves certain cases from here into delete_entry().", 
+   "Remove the moved_to_abspath parameter as it is now unneeded.", 
+   "(compare_revision_items_ascending): New helper.", 
+   "(find_applicable_move): Select a move from a list of server side moves", 
+   "which applies to a node being updated. This is half-baked and needs", 
+   "some additional work, especially for updates into past. It works for simple", 
+   "forward-update tests, however.", 
+   "(delete_entry): Do not scan the log for moves by default anymore. Invoke", 
+   "the interactive conflict resolution callback upon delete vs. delete tree", 
+   "conflicts.", 
+   "(add_directory, open_directory, add_file, open_file): Stop passing the", 
+   "moved_to_abspath parameter to check_tree_conflict(). This breaks some", 
+   "tree conflict auto-resolution behaviour which will be restored later."
+  ], 
+  "revision_id": "1205528"
+ }, 
+ {
+  "author": "hashutosh", 
+  "date": "2011-11-23T18:23:51.456701Z", 
+  "msg": [
+   "HCATALOG-160 : HBaseDirectOutputStorageDriver outputVersion isn't consitent within the same MR job (toffer via hashutosh)"
+  ], 
+  "revision_id": "1205527"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2011-11-23T18:22:12.463894Z", 
+  "msg": [
+   "Explicit boxing"
+  ], 
+  "revision_id": "1205526"
+ }
+]

@@ -1,0 +1,109 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2004-11-10T20:30:40.220197Z", 
+  "msg": [
+   "Add public fs func: we should be able to lookup locks by path *or* token.", 
+   "* include/svn_fs.h", 
+   "(svn_fs_get_lock_from_path):  renamed from svn_fs_get_lock.", 
+   "(svn_fs_get_lock_from_token):  new declaration.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t):  update vtable func pointers.", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_get_lock_from_path):  renamed from svn_fs_get_lock.", 
+   "(svn_fs_get_lock_from_token):  new dispatch function.", 
+   "* libsvn_fs_base/lock.h, lock.c", 
+   "(svn_fs_base__get_lock_from_path):  renamed from svn_fs_base__get_lock.", 
+   "(svn_fs_base__get_lock_from_token):  new function.", 
+   "* libsvn_fs_base/fs.c", 
+   "(fs_vtable):  add pointers to new funcs above.", 
+   "* libsvn_fs_fs/lock.h, lock.c", 
+   "(svn_fs_fs__get_lock_from_path):  renamed from svn_fs_fs__get_lock.", 
+   "(svn_fs_fs__get_lock_from_token):  new function.", 
+   "* libsvn_fs_fs/fs.c", 
+   "(fs_vtable):  add pointers to new funcs above."
+  ], 
+  "revision_id": "851895"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-11-10T19:57:56.742950Z", 
+  "msg": [
+   "Adjust our definitions of \"lock\" and \"lock-token\" throughout code and docs.", 
+   "Let's fix our terminology, it's causing confusion and getting sloppy.", 
+   "A \"lock\" is a structure that describes an exclusive right to change", 
+   "something: {UUID, path, owner, creation-date, etc.}.  Locks only exist", 
+   "in the repository, wholly created and owned by the filesystem.  A", 
+   "\"lock-token\" is just a UUID that points to a lock, and is what the", 
+   "client gets back from the server after creating a lock.  A client uses", 
+   "the lock-token to make use of the lock, and the lock-token can also be", 
+   "queried to discover all of the lock's fields.  (In our case, the", 
+   "working copy will probably cache the lock's fields for convenience", 
+   "anyway, since a lock is immutable).", 
+   "* libsvn_fs_base/notes/structure", 
+   "Rejigger the two new table descriptions, using the new language.", 
+   "* include/svn_types.h", 
+   "(svn_lock_t):  renamed from svn_lock_token_t.  clarify docstrings.", 
+   "* include/svn_fs.h", 
+   "(svn_fs_get_lock):  return a 'lock' structure, not a token.", 
+   "(svn_fs_access_add_lock_token, svn_fs_lock, svn_fs_unlock):", 
+   "a lock-token is now a (const char *).", 
+   "* include/svn_delta.h", 
+   "(svn_delta_editor_t):  push_lock_token() now takes a (const char *).", 
+   "* include/svn_repos.h:", 
+   "(svn_repos_fs_lock, svn_repos_fs_unlock):  update signatures.", 
+   "* libsvn_delta/default_editor.c", 
+   "(push_lock_token):  take a (const char *) arg, not a struct.", 
+   "* libsvn_fs/access.c", 
+   "(svn_fs_access_add_lock_token):  take a (const char *).", 
+   "Put UUID keys into the hash, with irrelevant values.", 
+   "While we're at it, stop checking for NULL pointers.", 
+   "(svn_fs_access_get_username):  stop checking for NULL pointers here, too.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t):  update args in vtable to match public declarations.", 
+   "(svn_fs_access_t):  update docstring.", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_lock, svn_fs_unlock, svn_fs_get_lock):  update signatures.", 
+   "* libsvn_fs_base/lock.h, lock.c", 
+   "(svn_fs_base__lock, svn_fs_base__unlock, svn_fs_base__get_lock):", 
+   "update signatures.", 
+   "* libsvn_fs_fs/lock.h, lock.c", 
+   "(svn_fs_fs__lock, svn_fs_fs__unlock, svn_fs_fs__get_lock):", 
+   "update signatures."
+  ], 
+  "revision_id": "851894"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-11-10T17:48:11.265412Z", 
+  "msg": [
+   "* contrib/client-side/diff-to-logmsg.vim: New file.", 
+   "Patch by: Ph. Marek <philipp.marek@bmlv.gv.at>", 
+   "(Tweaked by Julian Foad <julianfoad@btopenworld.com> and me.)"
+  ], 
+  "revision_id": "851893"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-11-10T15:19:04.478971Z", 
+  "msg": [
+   "* subversion/libsvn_ra_svn/protocol: Fix typos."
+  ], 
+  "revision_id": "851892"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-11-10T14:39:34.727170Z", 
+  "msg": [
+   "Some auth-related enhancements to the SWIG Python bindings.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.h", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(svn_swig_py_auth_simple_prompt_func,", 
+   "svn_swig_py_auth_username_prompt_func): New thunked callbacks.", 
+   "* subversion/bindings/swig/svn_client.i", 
+   "(svn_client_get_simple_prompt_provider,", 
+   "svn_client_get_username_prompt_provider): Hook in the thunked callbacks."
+  ], 
+  "revision_id": "851891"
+ }
+]

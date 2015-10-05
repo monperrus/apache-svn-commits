@@ -1,0 +1,76 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-12-25T20:21:09.212654Z", 
+  "msg": [
+   "Factor authz checks down into add_file_or_dir and replace_file_or_dir.", 
+   "Also clean up an unneeded path computation.", 
+   "* libsvn_repos/delta.c", 
+   "(add_file_or_dir, replace_file_or_dir): Perform authz check; if it", 
+   "fails, punt to absent_file_or_dir.", 
+   "(svn_repos_dir_delta, delta_dirs): Let subsidiary function perform", 
+   "authz checks.", 
+   "(delta_dirs): Remove a dead variable assignment."
+  ], 
+  "revision_id": "848155"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-12-25T12:56:10.266784Z", 
+  "msg": [
+   "* subversion/libsvn_client/export.c:", 
+   "(copy_versioned_files): Rename the \"time\" local variable to \"tm\" in", 
+   "order to avoid warnings from gcc."
+  ], 
+  "revision_id": "848154"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-12-25T03:53:23.665397Z", 
+  "msg": [
+   "* STATUS: clarify justification for merge of r8021."
+  ], 
+  "revision_id": "848153"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-25T00:40:00.529661Z", 
+  "msg": [
+   "Fix a bug in svn_repos_dir_delta which doesn't manifest to the user.", 
+   "When a directory is replaced by a file or vice versa, dir_delta was", 
+   "passing the full path (including editor anchor) of the source filename", 
+   "to editor->delete_entry().  This was not resulting in any user-visible", 
+   "problems because update_editor's delete_entry() doesn't care too much", 
+   "about the full path of the object being deleted, and was computing it", 
+   "in a funny way anyway such that only the basename of the passed-in", 
+   "argument mattered.", 
+   "* libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta): Pass src_entry, not src_fullpath, when", 
+   "deleting a file or directory in order to replace it with a", 
+   "directory or file.  (If you look a little earlier in the", 
+   "function, you can see that we already do this correctly when", 
+   "deleting a file or directory in order to replace it with nothing.)", 
+   "* libsvn_wc/update_editor.c", 
+   "(do_entry_deletion): Revert r6890 and instead construct full_path by", 
+   "appending the path argument to eb->anchor, for consistency with", 
+   "other editor functions.  Use the passed-in path as an argument for", 
+   "the \"Won't delete locally modified file\" error message, also for", 
+   "consistency, although it would be better if we consistently (a)", 
+   "included the editor anchor, and (b) converted the path to local", 
+   "style.", 
+   "* tests/clients/cmdline/update_tests.py", 
+   "(update_delete_modified_files): Don't be so picky about what shows", 
+   "up in the error message.  Is now consistent with similar code in", 
+   "basic_tests.py, which is not to imply that it's optimal."
+  ], 
+  "revision_id": "848152"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-12-24T05:24:04.500195Z", 
+  "msg": [
+   "* STATUS: Formatting fix."
+  ], 
+  "revision_id": "848151"
+ }
+]

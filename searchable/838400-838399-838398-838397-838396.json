@@ -1,0 +1,78 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-01-25T20:30:52.000000Z", 
+  "msg": [
+   "Major rewrite of WC interface for changing an `entry' on disk.", 
+   "We now have two routines to do this: one dumb one, and one smart one.", 
+   "The \"smart\" one will alter an entry's attributes according to the", 
+   "caller's *intent*, while the dumb one will just merge a direct (and", 
+   "possibly incorrect) change.", 
+   "* entries.c (normalize_entry):  renamed from sync_entry, which was", 
+   "overloading the term \"sync\".", 
+   "(svn_wc__entry_fold_sync):  renamed from svn_wc__entry_merge_sync.", 
+   "Again, \"merge\" is a loaded term we'd like to avoid.", 
+   "(svn_wc__entry_fold_sync_intelligently): new function which may", 
+   "actually end up making *different* entry changes than what you asked", 
+   "for, based on an entry's current context.", 
+   "(internal_fold_sync): new function, shared code for the two exported", 
+   "fold_sync routines.", 
+   "(fold_entry):  renamed from stuff_entry.  It's doing a fold (merge),", 
+   "which is more descriptive than \"stuffing\" an entry.  Also update doc", 
+   "string for clarity.", 
+   "(interpret_changes): new routine.  the \"logic\" module called by", 
+   "fold_sync_intelligently that (potentially) alters requested entry", 
+   "changes into something different, based on an entry's current", 
+   "context.", 
+   "* wc.h (svn_wc_entry__fold_sync,", 
+   "svn_wc__entry_fold_sync_intelligently): new declarations and docs.", 
+   "* svn_error.h (SVN_ERR_WC_ENTRY_BOGUS_MERGE):  new error type.", 
+   "* adm_ops.c (svn_wc_delete_file, svn_wc_add_file): change all calls to", 
+   "__entry_merge_sync to __entry_fold_sync_intelligently.", 
+   "* get_editor.c (free_dir_baton, add_directory): same as above.", 
+   "* log.c (log_do_detect_conflict, log_do_modify_entry,", 
+   "conflict_if_rejfile):  same as above."
+  ], 
+  "revision_id": "838400"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-01-25T13:53:19.000000Z", 
+  "msg": [
+   "add svnadmin to the build."
+  ], 
+  "revision_id": "838399"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-01-25T13:44:38.000000Z", 
+  "msg": [
+   "\"There can be only one.\""
+  ], 
+  "revision_id": "838398"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-01-25T13:37:47.000000Z", 
+  "msg": [
+   "doc fix."
+  ], 
+  "revision_id": "838397"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-01-25T13:23:51.000000Z", 
+  "msg": [
+   "txn_checkpoint() returns EINVAL if the environment isn't properly opened. We", 
+   "want to ignore that case -- if we don't, then we exit cleanup_fs() early", 
+   "which causes a second call to cleanup_fs() when the pool is cleaned, which", 
+   "fails again, which (typically) means cleanup_fs_apr() calls fs->warning()", 
+   "which is the defalt_warning_func, which aborts.", 
+   "Solution: ignore the EINVAL and complete the close (zero out fs->env).", 
+   "cleanup_fs() returns quickly on the invocation from cleanup_fs_apr() and all", 
+   "is well.", 
+   "(cleanup_fs): handle EINVAL from txn_checkpoint()"
+  ], 
+  "revision_id": "838396"
+ }
+]

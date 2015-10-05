@@ -1,0 +1,76 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2009-10-09T20:50:13.457510Z", 
+  "msg": [
+   "Add a new tool that calculates the reference-count statistics for FSFS", 
+   "with rep-sharing enabled.", 
+   "* tools/server-side/svn-rep-sharing-stats.c", 
+   "New file.", 
+   "* build.conf (svn-rep-sharing-stats):", 
+   "New section."
+  ], 
+  "revision_id": "879980"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-10-09T20:16:05.414745Z", 
+  "msg": [
+   "Moving a file should preserve its changelist.  Add tests to this effect.", 
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(move_keeps_changelist, move_added_keeps_changelist):", 
+   "New tests.", 
+   "(test_list):", 
+   "Run them, XFail."
+  ], 
+  "revision_id": "879979"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-09T19:40:55.357144Z", 
+  "msg": [
+   "Perform some major hackery to start invoking the new wc_db commit logic.", 
+   "For right now, it is only invoked when replacing files.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_leaf): set up a USING_NG flag for when we want to use", 
+   "the new commit logic. at the moment, just for replaced files. there is", 
+   "a loggy modification of the changed_* values and the checksum, which", 
+   "gets deferred until *after* the NG commit process since it does not", 
+   "set them (yet), relying on this extra modification step. we also don't", 
+   "need to manage the changelist since the NG process does that (although", 
+   "we are not (yet) passing that flag along properly).", 
+   "(remove_revert_files): unrelated param rename to follow precedent", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_committed): always compute the NEW_REVISION value, rejiggering a", 
+   "couple uses. set up a parallel USING_NG flag, and call into wc_db when", 
+   "true. after that call, patch up the last_mod_time and translated_size", 
+   "fields based on the newly-installed file, and simply exit.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(commit_node): remove assert for a WORKING_NODE or ACTUAL_NODE row since", 
+   "we could be committing a simple text change. figure out the 'kind' a", 
+   "bit differently since we don't have a checksum in here (yet).", 
+   "(svn_wc__db_global_commit): flush the entries. they're hopelessly stale", 
+   "after this function is done."
+  ], 
+  "revision_id": "879978"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-09T17:57:20.919627Z", 
+  "msg": [
+   "SQLite doesn't like SQL comments within its commands. Hunh.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_APPLY_CHANGES_TO_BASE): switch SQL-style comments to C-style which", 
+   "are removed by our transform script."
+  ], 
+  "revision_id": "879977"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-10-09T16:54:28.547522Z", 
+  "msg": [
+   "Add BRANCH-README file."
+  ], 
+  "revision_id": "879976"
+ }
+]

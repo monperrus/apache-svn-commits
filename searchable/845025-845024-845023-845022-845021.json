@@ -1,0 +1,103 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-02-19T02:45:45.593578Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x/subversion.spec,", 
+   "* packages/rpm/redhat-8.x/subversion.spec: Small tweak to sleep for 1 second to", 
+   "give the svnserve process time to die, after being killed, before starting", 
+   "up a new one.  This prevents an abend of the build process because the", 
+   "old svnserve process is still alive on the SVNSERVE networking port."
+  ], 
+  "revision_id": "845025"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-02-19T01:11:04.292211Z", 
+  "msg": [
+   "Fix the crash Sussman was seeing after revision 4948.", 
+   "* subversion/libsvn_wc/providers.c", 
+   "(get_creds): initialize susername and spassword to NULL, so we can later", 
+   "test them for validity to see if we should use their data."
+  ], 
+  "revision_id": "845024"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-19T01:07:23.501208Z", 
+  "msg": [
+   "Add SVN_VER_REVISION, which gets replaced with the WC_VERSION during", 
+   "the release process, and use it to set the nano version field in the", 
+   "Windows file version info.", 
+   "* subversion/include/svn_version.h (SVN_VER_REVISION): New.", 
+   "(SVN_VER_NUMTAG): Reformat the docstring.", 
+   "* build/win32/svn.rc: Use SVN_VER_REVISION as the nano file and product", 
+   "versions. Also use it instead of the nonexistent SVN_VER_NAME to decide", 
+   "if this is a prerelease, and if it is, add a SpecialBuild value.", 
+   "* dist.sh: Replace the value of SVN_VER_REVISION with WC_VERSION."
+  ], 
+  "revision_id": "845023"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-02-19T00:24:43.075655Z", 
+  "msg": [
+   "Issue #724: remove old, vestigial auth system.  Watch the code shrink!  Woo!", 
+   "I think this completes the issue.  Let's let the dust settle overnight.", 
+   "* svn_ra.h (svn_ra_auth_method, svn_ra_username_authenticator_t,", 
+   "svn_ra_simple_password_authenticator_t):  bye-bye!", 
+   "(svn_ra_callbacks_t):  remove get_authenticator() field.", 
+   "* client.h (svn_client__callback_baton_t): remove old-style auth_baton", 
+   "field.  remove do_store and got_new_auth_info fields as well;  these", 
+   "are no longer needed, because a non-NULL base_dir indicates", 
+   "whether it's safe to save, and the wc-provider knows when it does or", 
+   "doesn't need to save.", 
+   "(svn_client__get_authenticator): remove declaration.", 
+   "(svn_client__open_ra_session): remove 'do_store' argument.", 
+   "* auth.c (svn_client__get_authenticator, store_user_and_pass,", 
+   "maybe_store_password, maybe_store_username, store_auth_info,", 
+   "get_user_and_pass, get_password, get_username):  bye-bye.", 
+   "* ra.c (svn_client__open_ra_session): don't put the old-style", 
+   "auth_baton into the callback_baton, nor the authenticator thingie.", 
+   "no more 'do_store' argument.", 
+   "* svn_client.h (svn_client_ctx_t):  remove old-style auth_baton field.", 
+   "* main.c (main):  stop creating old-style auth_baton.", 
+   "* prompt.c (svn_cl__make_auth_baton): bye-bye.", 
+   "* commit.c (get_ra_editor): no 'do_store' arg to svn_client__open_ra_session.", 
+   "* add.c (svn_client_mkdir): same.", 
+   "* status.c (add_update_info_to_status_hash): same.", 
+   "* update.c (svn_client__update_internal): same.", 
+   "* log.c (svn_client_log): same.", 
+   "* prop_commands.c (svn_client_revprop_set, svn_client_propget,", 
+   "svn_client_revprop_get, svn_client_proplist, svn_client_revprop_list): same.", 
+   "* ls.c (svn_client_ls): same.", 
+   "* copy.c (repos_to_repos_copy, wc_to_repos_copy, wc_to_repos_copy,", 
+   "repos_to_wc_copy): same.", 
+   "* diff.c (do_merge, do_single_file_merge, do_diff): same.", 
+   "* cat.c (svn_client_cat): same.", 
+   "* checkout.c (svn_client__checkout_internal): same.", 
+   "* delete.c (svn_client_delete): same.", 
+   "* switch.c (svn_client_switch): same."
+  ], 
+  "revision_id": "845022"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-19T00:17:03.158082Z", 
+  "msg": [
+   "Renamed the [default] section in the servers config file to [global].", 
+   "Also fixed a discrepancy in the ~/.subversion/README file WRT the", 
+   "[DEFAULT] section and variable expansions.", 
+   "* subversion/include/svn_config.h (SVN_CONFIG_SECTION_GLOBAL): Renamed", 
+   "from SVN_CONFIG_SECTION_DEFAULT, and value changed.", 
+   "* subversion/libsvn_subr/config_file.c (svn_config_ensure): Change", 
+   "[default] to [global] in the servers file template.", 
+   "Remove reference to [DEFAULT] in the registry format description of", 
+   "the README template.", 
+   "* subversion/libsvn_ra_dav/session.c: Replace all uses of", 
+   "SVN_CONFIG_SECTION_DEFAULT with SVN_CONFIG_SECTION_GLOBAL.", 
+   "* CHANGES: Add entry for 0.18.0 and document the [default] -> [global] change."
+  ], 
+  "revision_id": "845021"
+ }
+]

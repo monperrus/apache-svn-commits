@@ -1,0 +1,105 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-05-22T23:26:03.918321Z", 
+  "msg": [
+   "Add some new test data for cvs2svn:", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/proj/: New test data tree,", 
+   "includes branches and tags.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/proj/README: New file,", 
+   "explains the tree's history."
+  ], 
+  "revision_id": "846090"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-22T20:28:59.077044Z", 
+  "msg": [
+   "* subversion/bindings/swig/swigutil_py.c", 
+   "(svn_swig_py_make_file): Fix some scoping Greg Stein noticed could", 
+   "have been done a little more tightly."
+  ], 
+  "revision_id": "846089"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-05-22T19:55:44.262848Z", 
+  "msg": [
+   "Adjust some of the includes in our headers files. There were some", 
+   "unused includes, some stylistic ordering of includes, some <> instead", 
+   "of \"\", and an improper location of one include.", 
+   "This may address issue 1274 and issue 1308. (haven't tested that)", 
+   "* include/svn_pools.h: moved include of apr_want.h outside of the C++", 
+   "namespace block. We don't want to impose C on foreign headers.", 
+   "* svnlook/main.c: insert a blank line between classes of includes", 
+   "* libsvn_subr/path.c: add svn_io.h since it was removed from some", 
+   "header, yet is needed in this file.", 
+   "* libsvn_subr/config_auth.c: add svn_io.h. reorder blocks of includes.", 
+   "* include/svn_sorts.h, include/svn_base64.h, include/svn_ra_svn.h,", 
+   "include/svn_delta.h, include/svn_path.h, include/svn_subst.h,", 
+   "include/svn_xml.h, include/svn_types.h, include/svn_config.h,", 
+   "include/svn_wc.h, include/svn_client.h, include/svn_hash.h,", 
+   "include/svn_error.h, include/svn_utf.h: remove unneeded includes,", 
+   "reorder some blocks, fix some delimiters, add whitespace, etc."
+  ], 
+  "revision_id": "846088"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-05-22T19:53:56.790409Z", 
+  "msg": [
+   "Lots of the same client code fixes, all centered around", 
+   "interruptibility and memory usage.  Ensure that every client operation", 
+   "that loops over targets a) uses subpools, and b) call the cancellation", 
+   "checker function after handling target.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__check_cancel): New.", 
+   "(svn_cl__print_commit_info): Just moving this prototype down a bit.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__check_cancel): Was check_cancel.", 
+   "(main): Update call to svn_cl__check_cancel.", 
+   "In each of the follow locations, call the cancellation function after", 
+   "each target is processed:", 
+   "* subversion/clients/cmdline/add-cmd.c (svn_cl__add)", 
+   "* subversion/clients/cmdline/checkout-cmd.c (svn_cl__checkout)", 
+   "* subversion/clients/cmdline/cleanup-cmd.c (svn_cl__cleanup)", 
+   "* subversion/clients/cmdline/delete-cmd.c (svn_cl__delete)", 
+   "* subversion/clients/cmdline/ls-cmd.c (svn_cl__ls)", 
+   "* subversion/clients/cmdline/propdel-cmd.c (svn_cl__propdel)", 
+   "* subversion/clients/cmdline/propedit-cmd.c (svn_cl__propedit)", 
+   "* subversion/clients/cmdline/propset-cmd.c (svn_cl__propset)", 
+   "* subversion/clients/cmdline/resolve-cmd.c (svn_cl__resolve)", 
+   "* subversion/clients/cmdline/revert-cmd.c (svn_cl__revert)", 
+   "* subversion/clients/cmdline/status-cmd.c (svn_cl__status)", 
+   "In each of the follow locations, call the cancellation function after", 
+   "each target is processed, and also introduce these suckers to the use", 
+   "of subpools:", 
+   "* subversion/clients/cmdline/cat-cmd.c (svn_cl__cat)", 
+   "* subversion/clients/cmdline/diff-cmd.c (svn_cl__diff)", 
+   "* subversion/clients/cmdline/info-cmd.c (svn_cl__info)", 
+   "* subversion/clients/cmdline/mkdir-cmd.c (svn_cl__mkdir)", 
+   "* subversion/clients/cmdline/propget-cmd.c (svn_cl__propget)", 
+   "* subversion/clients/cmdline/proplist-cmd.c (svn_cl__proplist)", 
+   "* subversion/clients/cmdline/update-cmd.c (svn_cl__update)"
+  ], 
+  "revision_id": "846087"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-22T19:52:19.071146Z", 
+  "msg": [
+   "Set up a log parsing system, so it's easy to conduct spot checks of", 
+   "repository history (especially useful for testing branch and tag", 
+   "conversion, since we don't want to be forced to check out a working", 
+   "copy for every inspection).  Use the new system to finish a test.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(repos_to_url): New helper function.", 
+   "(Log): Finish this class.", 
+   "(parse_log): New function.", 
+   "(ensure_conversion): Use the new repos_to_url helper function.", 
+   "Return parsed logs along with repos and wc; all callers changed.", 
+   "(prune_with_care): Finish this test."
+  ], 
+  "revision_id": "846086"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:59.662470Z", 
+  "msg": [
+   "Force use of 'mv -f' when moving aside hbase logfiles", 
+   "Summary:", 
+   "We saw a case where the hbase startup script wouldn't finish because it", 
+   "couldn't move logfiles out of the way, and would throw the session into", 
+   "interactive mode.", 
+   "The problem is caused because the script uses 'mv' with no arguments, and so it", 
+   "will inherit any shell aliases for the default. This changes 'mv' to 'mv -f'", 
+   "Test Plan:", 
+   "No longer thrown into interactive mode, and the files are moved out of the way.", 
+   "DiffCamp Revision: 165208", 
+   "Reviewed By: mwelty", 
+   "Commenters: kannan", 
+   "CC: mwelty, kannan, gsmyth", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181395"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:58.021482Z", 
+  "msg": [
+   "Ensure that we log compaction requests", 
+   "Summary:", 
+   "Our internal logging logic got messsed up pulling in a patch from the open", 
+   "source.", 
+   "changing the order to ensure that our logging logic works.", 
+   "Test Plan:", 
+   "going to run testsuite.", 
+   "DiffCamp Revision: 165113", 
+   "Reviewed By: kannan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181394"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:50.266775Z", 
+  "msg": [
+   "HBASE-3043 : Trivial changes per OpenSource peer view + fix TestHeapSize"
+  ], 
+  "revision_id": "1181393"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:46.428421Z", 
+  "msg": [
+   "HBASE-3043: Halt Compactions on RS Stop", 
+   "Summary:", 
+   "During rolling restarts, we'll occasionally get into a situation with our", 
+   "100-node cluster where a RS stop takes 5-10 minutes. The problem is that the RS", 
+   "is undergoing a compaction and won't stop until it is complete. In a stop", 
+   "situation, it would be preferable to preempt the compaction, delete the", 
+   "newly-created compaction file, and try again once the cluster is restarted.", 
+   "Test Plan:", 
+   "mvn test -Dtest=TestCompaction", 
+   "mvn clean install", 
+   "DiffCamp Revision: 164652", 
+   "Reviewed By: jgray", 
+   "CC: jgray, nspiegelberg", 
+   "Tasks:", 
+   "#398292: stop-hbase waits if compactions are in progress", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181392"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:39.183931Z", 
+  "msg": [
+   "Fix a race condition in ReadWriteConsistencyControl#completeMemStoreInsert", 
+   "Summary:", 
+   "This bug causes TestReadWriteCinsistencyControl to occasionally hang", 
+   "Test Plan:", 
+   "unit test", 
+   "DiffCamp Revision: 164443", 
+   "Reviewed By: nspiegelberg", 
+   "CC: nspiegelberg, hbase@lists", 
+   "Tasks:", 
+   "#401792: TestReadWriteConsistencyControl hang", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181391"
+ }
+]

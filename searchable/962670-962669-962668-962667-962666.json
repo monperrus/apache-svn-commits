@@ -1,0 +1,83 @@
+[
+ {
+  "author": "dannas", 
+  "date": "2010-07-09T19:45:19.401978Z", 
+  "msg": [
+   "Print a diff header even if the diff only contains changes to", 
+   "properties. We enable that by keeping a hashtable of visited paths", 
+   "and print the header for props if the path hasn't been visited yet.", 
+   "Works nicely, with two exceptions:", 
+   "1) svnlook uses it's own diff implementation. I've marked the test as", 
+   "XFail and intend to do the same change there in a follow-up.", 
+   "2) Since the diff_props_changed callback does not have any revision", 
+   "arguments, the revisions have been fetched from the diff_cmd_baton.", 
+   "BUT, those don't match for paths that have been added or when the", 
+   "caller is providing SVN_INVALID_REVNUM for revnum2. Intending to", 
+   "fix that in a follow-up.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_label): Move above display_prop_diffs() since we need to call", 
+   "it from there.", 
+   "(display_prop_diffs): Add parameters for paths and revisions", 
+   "of the diffed content. Also add parameter 'show_diff_header'.", 
+   "Print the diff header if 'show_diff_header' is TRUE.", 
+   "(diff_cmd_baton): Add field 'visited_paths', a hashtable holding all", 
+   "the paths that we have received changes for - be it properties or", 
+   "text.", 
+   "(diff_props_changed): Determine if a diff header for the path has", 
+   "been written.", 
+   "(diff_content_changed): Add the path to 'visited_paths'.", 
+   "(svn_client_diff5,", 
+   "svn_client_diff_peg5): Initialize 'visited_paths'.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(diff_in_depthy_wc): Add diff headers.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_only_property_change): Add diff headers.", 
+   "(diff_property_changes_to_base): Add diff headers. Use", 
+   "make_diff_header() instead of replacing lines all over", 
+   "the place.", 
+   "(diff_prop_change_local_propmod): Add diff headers but mark", 
+   "as XFail since the revisions in the labels are not the", 
+   "expected.", 
+   "(diff_repos_wc_add_with_props,", 
+   "diff_with_depth): Add diff headers.", 
+   "* subversion/tests/cmdline/svnlook_tests.py", 
+   "(test_print_property_diffs,", 
+   "diff_ignore_eolstyle): Mark as XFail.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_in_new_file_and_diff): Add diff headers."
+  ], 
+  "revision_id": "962670"
+ }, 
+ {
+  "author": "zoe", 
+  "date": "2010-07-09T19:38:56.919923Z", 
+  "msg": [
+   "ARIES-350 Move main menu items further apart"
+  ], 
+  "revision_id": "962669"
+ }, 
+ {
+  "author": "hadrian", 
+  "date": "2010-07-09T19:38:52.731806Z", 
+  "msg": [
+   "CAMEL-2915. Fix misspelled api and set NO_REFERENCES for json"
+  ], 
+  "revision_id": "962668"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2010-07-09T19:34:27.866315Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "962667"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2010-07-09T19:34:25.384705Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag parent-pom-distr-2"
+  ], 
+  "revision_id": "962666"
+ }
+]

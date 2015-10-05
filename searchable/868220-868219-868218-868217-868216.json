@@ -1,0 +1,114 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T18:36:44.747497Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Remove the almost-completely-unused svn_fs_change_mergeinfo API.", 
+   "(This should be done on trunk anyway if this branch is rejected.)", 
+   "Why \"almost\"?  Well, there's a C test that uses it, but that C test is", 
+   "pretty wacky already (the mergeinfo it sets is invalid, it does a", 
+   "svn_fs_get_mergeinfo on a non-existing path, etc).  And it doesn't", 
+   "actually verify anything about the return value from", 
+   "svn_fs_get_mergeinfo.  So ditch the test too.", 
+   "Again, I only made changes to fs_base to keep it compiling; BDB is", 
+   "still presumably broken on this branch.  (Though reverting the first", 
+   "few revisions of this branch should fix that.)", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_change_mergeinfo): Remove.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_change_mergeinfo): Remove.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t): Remove change_mergeinfo.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(change_mergeinfo_args, txn_body_change_mergeinfo,", 
+   "base_change_mergeinfo): Remove.", 
+   "(root_vtable): Remove base_change_mergeinfo.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_change_mergeinfo): Remove.", 
+   "(root_vtable): Remove fs_change_mergeinfo.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(get_mergeinfo): Remove.", 
+   "(test_funcs): Remove get_mergeinfo."
+  ], 
+  "revision_id": "868220"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T18:24:33.785464Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "In FSFS, add a dummy implementation of svn_fs_get_mergeinfo_for_tree", 
+   "that doesn't actually do anything recursive.  This ought to break log", 
+   "-g.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_get_mergeinfo_for_tree): New implementation of", 
+   "fs_get_mergeinfo_for_tree, which doesn't actually recurse.", 
+   "(root_vtable): Use our new implementation."
+  ], 
+  "revision_id": "868219"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T18:19:24.272740Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "In FSFS, stop using libsvn_fs_util to implement svn_fs_get_mergeinfo.", 
+   "Instead, just implement it ourself, using the information we have in", 
+   "the noderevs about where mergeinfo is.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(append_to_merged_froms): New helper, kind of like", 
+   "append_component_to_paths in mergeinfo-sqlite-index, except that we", 
+   "use it just once instead of once per path component, and it does a", 
+   "deep copy of the rangelists.", 
+   "(get_mergeinfo_hash_for_path): New function to calculate mergeinfo", 
+   "for a given path.  This is the function that implements", 
+   "inheritance.  Similar to get_mergeinfo_for_path in", 
+   "mergeinfo-sqlite-index, but instead of being recursive and", 
+   "lengthening the merged-from-path one component at a time, just does", 
+   "it all at once.  Also, doesn't need to look up svn:mergeinfo on", 
+   "nodes that don't have it.  Also, doesn't maintain a cache; if we", 
+   "have performance issues we can add it back later.", 
+   "(get_mergeinfo_hashes_for_paths): New function, similar to", 
+   "get_mergeinfo in mergeinfo-sqlite-index; calls the previous", 
+   "function a bunch while swimming.", 
+   "(fs_get_mergeinfo): New implementation of svn_fs_get_mergeinfo,", 
+   "using the previous helpers instead of libsvn_fs_util.", 
+   "(root_vtable): Use our new implementation."
+  ], 
+  "revision_id": "868218"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-29T17:28:45.943345Z", 
+  "msg": [
+   "Make the default merge source in the command-line client be the same", 
+   "as the target.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Default the merge source to the same thing as the target.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Update usage information for merge subcommand.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(mergeinfo_inheritance_and_discontinuous_ranges): Update in light of", 
+   "merge command-line syntax changes.", 
+   "(detect_copy_src_for_target_with_multiple_ancestors): Remove.", 
+   "(test_list): Remove reference to obnoxiously-lengthy function name,", 
+   "detect_copy_src_for_target_with_multiple_ancestors()", 
+   "* TODO-1.5-branch", 
+   "Remove associated TODO item."
+  ], 
+  "revision_id": "868217"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T16:51:42.151043Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Fix a docstring.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_increment_mergeinfo_count): Don't claim that the", 
+   "function recurses upwards."
+  ], 
+  "revision_id": "868216"
+ }
+]

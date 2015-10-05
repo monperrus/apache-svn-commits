@@ -1,0 +1,78 @@
+[
+ {
+  "author": "breser", 
+  "date": "2004-06-10T17:35:09.115951Z", 
+  "msg": [
+   "Fix security bug in parsing of the svn protocol.  We were allowing the", 
+   "sender to request that we allocate an arbitrary amount of memory.  This", 
+   "could allow the sender to denial of service attack the remote side by", 
+   "using up large amounts of memory or cause a heap overflow due to the", 
+   "integer holding the string length wrapping.", 
+   "Bug found by: ned <nd@felinemenace.org>", 
+   "This issue is known as CAN-2004-0413 at http://cve.mitre.org/", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(read_string): New function that buffers strings into svn_stringbuf_t.", 
+   "(read_item): When reading integers check for wrapping.", 
+   "Use the new read_string() function to read in strings.", 
+   "Remove a spurious return that accepted illegal syntax."
+  ], 
+  "revision_id": "850020"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-06-10T09:25:51.431560Z", 
+  "msg": [
+   "Fix an incredibly unlikely bug when creating transaction directories in fsfs.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(create_txn_dir): Error out if we run out of unique names."
+  ], 
+  "revision_id": "850019"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-06-09T23:21:41.810928Z", 
+  "msg": [
+   "Fix some Windows compilation warnings in the FSFS code.  (Hopefully", 
+   "without introducing new ones, though I can't guarantee that.)", 
+   "* libsvn_fs_fs/fs.h (representation_t): Make size and expanded_size", 
+   "svn_filesize_t instead of apr_size_t, since they represent file", 
+   "lengths.", 
+   "* libsvn_fs_fs/fs_fs.c", 
+   "(representation_string, rep_write_get_baton): use SVN_FILESIZE_T_FMT", 
+   "when formatting the aforementioned fields.", 
+   "(write_hash_rep): Fix a signed/unsigned comparison.  Introduce a", 
+   "variable to hold the length of PATH_EXT_TXN for clarity."
+  ], 
+  "revision_id": "850018"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2004-06-09T21:40:17.808104Z", 
+  "msg": [
+   "* contrib/hook-scripts/check-case-insensitive.pl:", 
+   "Fix one incorrectly converted command string interpolation."
+  ], 
+  "revision_id": "850017"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2004-06-09T21:19:11.607020Z", 
+  "msg": [
+   "Perl cleanups on the new check-case-insensitive.pl file.", 
+   "* contrib/hook-scripts/check-case-insensitive.pl:", 
+   "Add #!/usr/bin/perl -w at the top so it actually runs with Perl.", 
+   "Spelling fixes.", 
+   "Remove $opSys and use $^O instead, which has greater meaning for", 
+   "Perl programmers.", 
+   "Improve warning messages for failed open() calls by using $!.", 
+   "Add command line argument checking and a usage message.", 
+   "Changed all command strings to use variable interpolation instead of", 
+   "the concatenation operator which makes the commands easier to", 
+   "read.", 
+   "Test for non-empty array using if (@array) instead of", 
+   "if ($#array < 0).", 
+   "Wrap some lines to 80 characters."
+  ], 
+  "revision_id": "850016"
+ }
+]

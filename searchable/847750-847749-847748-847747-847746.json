@@ -1,0 +1,78 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-11-09T03:43:16.032620Z", 
+  "msg": [
+   "Fixed bug tracked down by Jani Averbach:", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(do_open): Whups.  Don't upgrade working directory format if this", 
+   "is only a read lock, not a write lock."
+  ], 
+  "revision_id": "847750"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-09T03:06:03.090834Z", 
+  "msg": [
+   "Remove a redundant variable:", 
+   "* subversion/libsvn_repos/load.c", 
+   "(svn_repos_parse_dumpstream): Outer scope already has 'eof', remove", 
+   "inner declaration."
+  ], 
+  "revision_id": "847749"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-11-07T23:46:20.597337Z", 
+  "msg": [
+   "Merge /branches/partial-authz-dev to /trunk, r7571:7672.", 
+   "See the branch for full log messages.", 
+   "Here's my nutshell summary of the new 'partial read-authz feature':", 
+   "If a client checks out or updates a tree, a server authz system now", 
+   "has the ability to selectively deny read-access on arbitrary files and", 
+   "dirs by supplying a authz_read_func to svn_repos_dir_delta().  In this", 
+   "situation, dir_delta() will call new absent_[file|dir]() editor", 
+   "functions instead of the usual [open|add] functions.  The DAV layer", 
+   "now marshals these messages over the network, and libsvn_wc marks the", 
+   "appropriate wc entries as 'absent'.  Entries marked 'absent' are", 
+   "essentially treated like 'deleted' ones; most client commands can't", 
+   "see them at all.  (But 'svn up' *does* report them to the server, in", 
+   "case read-access is re-granted.)", 
+   "(There are still a couple of small wc bugs, specifically triggered by", 
+   "repeated granting/ungranting of read-access to files.  They'll be", 
+   "fixed RSN.)", 
+   "Final note:  this change upgrades working copies from format 2 to", 
+   "format 3 'in place'.  Format 1 wc's are no longer supported."
+  ], 
+  "revision_id": "847748"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2003-11-07T22:35:54.941087Z", 
+  "msg": [
+   "A step towards finishing issue #506.  Adds a test of an exported greek tree.", 
+   "* subversion/tests/clients/cmdline/export_tests.py", 
+   "(export_greek_tree): New.", 
+   "(test_list): Added new export_greek_tree test to the list.", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "(run_and_verify_export): New."
+  ], 
+  "revision_id": "847747"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-07T20:03:57.287953Z", 
+  "msg": [
+   "Finish the working copy version compatibility work started in r7661:", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(maybe_upgrade_format): Renamed from upgrade_format, filled in.", 
+   "(create_lock): Don't call upgrade_format, we don't have the", 
+   "lock->wc_format yet.  Instead, callers of create_lock will have", 
+   "to call maybe_upgrade_format.", 
+   "(do_open, svn_wc__adm_steal_write_lock): Call maybe_upgrade_format.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_WC_FORMAT_UPGRADE): New error code."
+  ], 
+  "revision_id": "847746"
+ }
+]

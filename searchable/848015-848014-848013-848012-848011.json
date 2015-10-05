@@ -1,0 +1,69 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-12-05T22:27:05.713585Z", 
+  "msg": [
+   "Fix two aspects of a recursive propset bug which no longer exists.", 
+   "Specifically, we used to have this recursive_propset function in", 
+   "libsvn_client which iterated without a subpool, but we don't any more,", 
+   "so it doesn't matter so much that validate_eol_prop_against_file", 
+   "leaked its file handle upon success.  But we shouldn't do that anyway.", 
+   "By a similar token, we're unlikely to get an EMFILE result from trying", 
+   "to open the format file, but if we do, we should report it correctly.", 
+   "* libsvn_wc/props.c", 
+   "(validate_eol_prop_against_file): Close the file when we're done.", 
+   "* libsvn_wc/questions.c", 
+   "(svn_wc_check_wc): Sometimes when we fail to open the format file,", 
+   "it's not because this isn't a wc; it's because of a permissions", 
+   "problem or running out of files or whatever.  So, only zero out", 
+   "*wc_format and return success if the error is ENOENT or ENOTDIR", 
+   "(we'd get ENOTDIR if .svn exists but is not a file)."
+  ], 
+  "revision_id": "848015"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-12-05T18:35:10.367272Z", 
+  "msg": [
+   "Fix a crash when diffing across the removal of an svn:mime-type property.", 
+   "* libsvn_client/repos_diff.c (get_file_mime_types): Check new value of", 
+   "svn:mime-type for nullity."
+  ], 
+  "revision_id": "848014"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-12-05T17:45:30.582798Z", 
+  "msg": [
+   "* swigutil_pl.c", 
+   "(svn_swig_pl_make_stream): Use SvOK to test if stream is defined."
+  ], 
+  "revision_id": "848013"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-12-05T17:35:40.319097Z", 
+  "msg": [
+   "Allow NULL streams to be converted from Perl.", 
+   "* swigutil_pl.c", 
+   "(svn_swig_pl_make_stream): Handle the case that stream is undef."
+  ], 
+  "revision_id": "848012"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-12-05T16:59:12.899698Z", 
+  "msg": [
+   "Build enhacement and better interpolation for svn_stream objects in Perl.", 
+   "* perl/Makefile.PL", 
+   "workaround build problems so Mac OS X and FreeBSD can both build and run.", 
+   "* perl/Core.pm", 
+   "(SVN::Stream::READLINE): Support $/ = \\$chunksize.", 
+   "(SVN::Stream::getline): Properly return undef upon eof.", 
+   "* swigutil_pl.c", 
+   "(svn_swig_pl_make_stream): Do not double PerlIO-wrap known types", 
+   "like SVN::Stream and _p_svn_stream."
+  ], 
+  "revision_id": "848011"
+ }
+]

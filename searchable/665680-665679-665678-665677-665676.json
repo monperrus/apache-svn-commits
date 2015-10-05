@@ -1,0 +1,59 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2008-05-09T00:40:26.000000Z", 
+  "msg": [
+   "Fix a small logic error in TBufferedTransport::borrowSlow.", 
+   "Was using an unsigned int for a value that could be negative."
+  ], 
+  "revision_id": "665680"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-05-04T03:00:22.000000Z", 
+  "msg": [
+   "Switch md5 implementations.", 
+   "Specifically, switch from the legally-ambiguous RSA implementation to", 
+   "a zlib-licensed RFC-based implementation from SourceForge.", 
+   "Generated some files with \"dense\" and made sure the output hadn't changed."
+  ], 
+  "revision_id": "665679"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-05-01T20:51:03.000000Z", 
+  "msg": [
+   "Remove an unnecessary include of boost/lexical_cast.hpp"
+  ], 
+  "revision_id": "665678"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-05-01T06:21:04.000000Z", 
+  "msg": [
+   "Throw a transport exception if fstat fails.", 
+   "This was failing on an NFS mount that was dying.", 
+   "Better to fail hard then return uninitialized data."
+  ], 
+  "revision_id": "665677"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2008-05-01T06:17:36.000000Z", 
+  "msg": [
+   "Memory-based transport rewrite.", 
+   "The old implementations of the memory-based transports (TBufferedTransport,", 
+   "TFramedTransport, and TMemoryBuffer) shared very little code and all worked", 
+   "a bit differently.  This change unifies them all as subclasses of a single", 
+   "base (TBufferBase) which handles the fast-path operations (when requests", 
+   "can be satisfied by the buffer) with inline methods (that will eventually", 
+   "be made nonvirtual in the template branch) and calls out to pure-virutal", 
+   "methods to handle full/empty buffers.  All of the buffer-management is now", 
+   "done in terms of \"base and bound\" pointers rather than \"pos\" integers.", 
+   "These classes were moved to TBufferTransports.{h,cpp}.  The .h is included", 
+   "in TTransportUtils for backwards compatibility.", 
+   "Also added a \"TShortReadTransport\" to assist testing transports."
+  ], 
+  "revision_id": "665676"
+ }
+]

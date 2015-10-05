@@ -1,0 +1,48 @@
+[
+ {
+  "author": "zwoop", 
+  "date": "2011-09-07T18:57:09.985178Z", 
+  "msg": [
+   "TS-567 Fix build with WCCP"
+  ], 
+  "revision_id": "1166315"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2011-09-07T18:54:29.468717Z", 
+  "msg": [
+   "Axe param names from function pointers"
+  ], 
+  "revision_id": "1166314"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2011-09-07T18:53:39.838942Z", 
+  "msg": [
+   "DERBY-5044 ALTER TABLE DROP COLUMN will not detect triggers defined on other tables with their trigger action using the column being dropped", 
+   "This commit includes engine changes and upgrade test additions. Will add more junit tests as another checkin", 
+   "Following is a brief description of the engine changes.", 
+   "For the table being altered, we will go through the dependency system to determine all the triggers that depend on the table being altered(this will include triggers defined directly on the table being altered and the triggers defined on other tables but using the table being altered in their trigger action plan.) This is done by first finding all the objects that depend on the table being altered. We are only interested in SPSDescriptors from that list of dependent objects. For each of these dependent SPSDescriptor, we want to find if they are defined for a trigger action SPS. If yes, then the trigger must be dependent on the table being altered. For each of these dependent triggers, we dropped their trigger descriptor from datadictionary, regenerate and rebind it's trigger action SPS and then add the trigger descriptor(with upto date version of internal representation of trigger action) back to datadictionary.During the rebind of trigger action, we will get exception if the trigger depends on the column being altered. If so, then if the alter table drop column is being done in restrict mode, then we will throw an exception that column can't be dropped because it has dependent object. If the drop column was issued in cascade mode, then we will drop the dependent triggers.", 
+   "As part of this commit, I have removed the code which used to go directly through all the triggers defined on the table being altered and dropping, rebinding and recreating them. This is because the new code going through the dependency system should find all the triggers which would be impacted by drop column, no matter whether the triggers are defined on the table being altered or triggers defined on other tables but using table being altered in their trigger action.) DERBY-5120 could have prevented us from catching all the triggers defined on the table being altered through the dependency system because of missing dependency between trigger action sps and trigger table but that has been fixed in 10.9 and 10.8 so we should be fine. I have run all the existing junit suites and derbyall and they ran fine."
+  ], 
+  "revision_id": "1166313"
+ }, 
+ {
+  "author": "kayyagari", 
+  "date": "2011-09-07T18:49:09.807763Z", 
+  "msg": [
+   "o fixed the version number", 
+   "o fixed an issue with loading the now non-existing control factory(SyncModifyDnFactory)"
+  ], 
+  "revision_id": "1166312"
+ }, 
+ {
+  "author": "luc", 
+  "date": "2011-09-07T18:48:06.088085Z", 
+  "msg": [
+   "Removed completely MathUserException.", 
+   "JIRA: MATH-195"
+  ], 
+  "revision_id": "1166311"
+ }
+]

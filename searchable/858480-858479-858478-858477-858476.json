@@ -1,0 +1,97 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-02-09T22:46:55.337541Z", 
+  "msg": [
+   "* www/merge-tracking/requirements.html", 
+   "Add a blurb to the \"Auditing\" section about both original author and", 
+   "merging author being shown by 'svn log'."
+  ], 
+  "revision_id": "858480"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-02-09T22:40:10.208459Z", 
+  "msg": [
+   "* www/merge-tracking/requirements.html", 
+   "Tweak title.  Update TODOs.  Flesh out \"Cherry Picking\" section.", 
+   "Create \"Auditing\" section (replacing \"Miscellaneous Thoughts\").", 
+   "Misc. formatting tweaks.", 
+   "* www/merge-tracking/func-spec.html", 
+   "Add TODO, indicating that the repeated-merging doc belongs here (or", 
+   "possibly in the design doc)."
+  ], 
+  "revision_id": "858479"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-02-09T22:26:30.129849Z", 
+  "msg": [
+   "Keep svn_repos_get_logs3 from using an unbounded amount of memory", 
+   "when it is given multiple targets.  This fixes issue #2494.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(path_info): Make path a stringbuf, add two new boolean flags.", 
+   "(get_history): Take a pool argument, add an alternate mode of", 
+   "operation where we open the history object each time instead of", 
+   "holding it open.  Instead of setting info->hist to NULL when we", 
+   "are done with it, set info->done.", 
+   "(check_history): Take a pool argument, pass it to get_history,", 
+   "use info->done instead of info->hist to tell when we're done", 
+   "with a path.", 
+   "(next_history_rev): Use info->done instead of info->hist to tell", 
+   "when we're done with a path.", 
+   "(MAX_OPEN_HISTORIES): New define that controls how many history", 
+   "objects we'll keep open.", 
+   "(svn_repos_get_logs3): Only open MAX_OPEN_HISTORIES histories,", 
+   "for any additional paths the history will be opened as needed.", 
+   "Pass pool to get_history and use info->done to determine if we", 
+   "are done with a path."
+  ], 
+  "revision_id": "858478"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-02-09T19:22:59.330508Z", 
+  "msg": [
+   "* www/merge-tracking/requirements.html", 
+   "* notes/merge-tracking.txt", 
+   "Dumped content from merge-tracking.txt into requirements.html (which is", 
+   "not yet anywhere close to ready for review)."
+  ], 
+  "revision_id": "858477"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-09T17:45:10.022351Z", 
+  "msg": [
+   "ra_serf: Redeliver requests if we lose our connection.", 
+   "httpd's default is to close the connection after 100 requests; so we need", 
+   "to better handle having our connection pulled out from under us.", 
+   "Serf will invoke the response handler with a NULL response field to indicate", 
+   "that we lost our connection.", 
+   "(This commit requires some forthcoming commits to serf.)", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(handle_fetch): Redeliver GET requests; use is_conn_closing helper to", 
+   "hint to Serf that the connection is going to go away.", 
+   "* subversion/libsvn_ra_serf/property.c:", 
+   "(handle_propfind): Redeliver PROPFIND requests.", 
+   "(deliver_props): Normalize some argument names with their field names;", 
+   "don't allocate a propfind_context_t if our prop_ctx arg is non-NULL.", 
+   "(retrieve_props): Send deliver_props a NULL prop_ctx.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(is_conn_closing): New function to see if we have Conn: Close header and", 
+   "return new SERF_ERROR_CLOSING error code.", 
+   "(handle_xml_parser): Use is_conn_closing() function.", 
+   "* subversion/libsvn_ra_serf/log.c:", 
+   "(handle_log): Add a placeholder for now to abort() if we lose our", 
+   "connection.", 
+   "* subversion/libsvn_ra_serf/getloc.c", 
+   "(handle_getloc): Add a placeholder for now to abort() if we lose our", 
+   "connection.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(propfind_context_t): Add depth field.", 
+   "(is_conn_closing): Declare new helper function."
+  ], 
+  "revision_id": "858476"
+ }
+]

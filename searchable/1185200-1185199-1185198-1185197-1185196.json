@@ -1,0 +1,53 @@
+[
+ {
+  "author": "markt", 
+  "date": "2011-10-17T14:26:18.831173Z", 
+  "msg": [
+   "Make differences between WEB-INF/lib and $CATALINA_BASE/lib clearer"
+  ], 
+  "revision_id": "1185200"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2011-10-17T14:26:16.295777Z", 
+  "msg": [
+   "Temporarily disable engine builds until dependencies have been sorted"
+  ], 
+  "revision_id": "1185199"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2011-10-17T14:25:45.261566Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1185179\"", 
+   "------------------------------------------------------------------------", 
+   "r1185179 | jleroux | 2011-10-17 16:03:30 +0200 (lun., 17 oct. 2011) | 12 lines", 
+   "A patch from Paul Foxworthy \"Order not completed when filled from more than one InventoryItem\" https://issues.apache.org/jira/browse/OFBIZ-4386", 
+   "There is a nasty bug in IssuanceServices in the situation where the order is filled from more than one InventoryItem. When the order is created, there are OrderItemShipGrpInvRes reservations created for all the inventory items needed to fill the order.", 
+   "In the simple method issueOrderItemShipGrpInvResToShipment in IssuanceServices, at line 173 (https://fisheye6.atlassian.com/browse/ofbiz/trunk/applications/product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml?hb=true#to173), there is an assumption that if the OrderShipment already exists, we are some sort of adjustment, and we should adjust the OrderShipment quantity by the difference between the old OrderShipment quantity and the new one. This all works fine in the situation where there is only one InventoryItem needed to fill the order. However, if there are two or more InventoryItems, the simple method is called twice, and an incorrect quantity is calculated.", 
+   "The crux of the problem is that OrderShipment doesn't care about InventoryItems, so there will be only one OrderShipment row for a given product. In contrast, ItemIssuance does care about InventoryItems, so there will be more than one if the product is supplied from more than one InventoryItem. The ItemIssuance code doesn't take account of this distinction.", 
+   "I have provided two patches. One is a new unit test that exemplifies the bug. If you just apply this patch to trunk, the unit test will fail with an OrderShipment quantity of 4 when it ought to be 6.", 
+   "The other patch is my fix for IssuanceServices, which now looks for a relevant ItemIssuance to decide if we are adjusting quantities, or creating a new ItemIssuance (and possibly a new OrderShipment).", 
+   "jleroux: I commit patch by patch to be able to backport the fix, here only the fix", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1185198"
+ }, 
+ {
+  "author": "felixk", 
+  "date": "2011-10-17T14:25:23.013017Z", 
+  "msg": [
+   "Use renamed james-skin (JAMES-1334)"
+  ], 
+  "revision_id": "1185197"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2011-10-17T14:23:01.254343Z", 
+  "msg": [
+   "Hudson => Jenkins"
+  ], 
+  "revision_id": "1185196"
+ }
+]

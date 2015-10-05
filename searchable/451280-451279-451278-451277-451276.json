@@ -1,0 +1,61 @@
+[
+ {
+  "author": "jm", 
+  "date": "2006-09-29T13:15:09.937904Z", 
+  "msg": [
+   "try to work around horribleness when checking in the entire built tree for the website update procedure"
+  ], 
+  "revision_id": "451280"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2006-09-29T13:15:08.946808Z", 
+  "msg": [
+   "* Move the tasks of eor_bucket_destroy (status update, transaction logging) to", 
+   "a cleanup function that is registered with the request pool.", 
+   "eor_bucket_destroy only destroys the request pool if there is still a request", 
+   "at this point of time which triggers the call of the cleanup function.", 
+   "This is needed as the eor bucket could be (and usually is) allocated from", 
+   "a pool different from the request pool (the connection pool in this case).", 
+   "This can lead to situations where eor_bucket_destroy is called at a point of", 
+   "time when the request pool had been already destroyed. But the status update", 
+   "and the transaction logging rely on the request pool.", 
+   "In practise this happens with the worker MPM if the client refuses to read", 
+   "the response from the handler. Then the unsent data (including the", 
+   "eor bucket) remains in a brigade allocated from the connection pool which", 
+   "is the parent of the request pool. This brigade is cleaned up during the", 
+   "cleanup of the ptrans pool in worker_thread. As the request pool gets", 
+   "destroyed during this cleanup operation *before* the brigade gets cleaned up", 
+   "eor_bucket_destroy starts the status update and the transaction logging with", 
+   "a destroyed request pool which leads to a segfault."
+  ], 
+  "revision_id": "451279"
+ }, 
+ {
+  "author": "faridz", 
+  "date": "2006-09-29T13:14:55.069064Z", 
+  "msg": [
+   "2006-09-29 Farid Zaripov <faridz@kyiv.vdiweb.com>", 
+   "* _num_put.cc: Updated the licensing header", 
+   "* _select.h: The same", 
+   "* file.cpp: The same"
+  ], 
+  "revision_id": "451278"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2006-09-29T13:13:36.106855Z", 
+  "msg": [
+   "updated site"
+  ], 
+  "revision_id": "451277"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2006-09-29T13:09:23.298380Z", 
+  "msg": [
+   "updating new dist tree"
+  ], 
+  "revision_id": "451276"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-02-26T20:33:12.736325Z", 
+  "msg": [
+   "More issue #1003 work.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(svn_fs__dag_copy): Correctly calculate the new copied node's created_path."
+  ], 
+  "revision_id": "845195"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-26T20:14:50.237414Z", 
+  "msg": [
+   "When ra_svn tests failed, the test scripts would exit immediately without", 
+   "killing svnserve. That would in turn cause all subsequent ra_svn tests to", 
+   "fail.", 
+   "* svntest-config.sh (FAIL): Optionally run a cleanup script before exiting.", 
+   "* svntest-run.sh: Move the \"kill svnserve\" target into a function, and pass", 
+   "that as a cleanup script when FAIL'ing after a ra_svn test run."
+  ], 
+  "revision_id": "845194"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-26T19:52:01.931218Z", 
+  "msg": [
+   "Added a mechanism for sending runtime configuration data to the filesystem,", 
+   "an option to svnadmin and the FS to switch off fsync on BDB transaction commit,", 
+   "and changed all tests to use this option.", 
+   "* subversion/include/svn_fs.h (svn_fs_new): Add new parameter 'fs_config'.", 
+   "* subversion/include/svn_repos.h (svn_repos_create): Likewise.", 
+   "* subversion/libsvn_fs/fs.h (svn_fs_t): New member 'config'.", 
+   "* subversion/libsvn_fs/fs.c (svn_fs_new): Store fs_config in the svn_fs_t.", 
+   "(svn_fs_create_berkeley): If the \"bdb-txn-nosync\" option is set in the", 
+   "filesystem config hash, add a \"set_flags DB_TXN_NOSYNC\" to DB_CONFIG.", 
+   "* subversion/libsvn_repos/repos.c (svn_repos_create): Pass the fs_config", 
+   "parameter to svn_fs_new.", 
+   "(get_repos): Pass a NULL config hash to svn_fs_new.", 
+   "* subversion/svnadmin/main.c: New option --bdb-txn-nosync for 'create'.", 
+   "If used, set the \"bdb-txn-nosync\" option in the filesystem config hash", 
+   "when calling svn_repos_create.", 
+   "* subversion/tests/libsvn_fs/fs-test.c (call_functions_with_unopened_fs):", 
+   "Send the \"bdb-txn-nosync\" option to svn_fs_new.", 
+   "* subversion/tests/fs-helpers.c (svn_test__fs_new, svn_test__create_repos):", 
+   "Send the \"bdb-txn-nosync\" option to svn_fs_new and svn_repos_create.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py (create_repos): Send", 
+   "--bdb-txn-nosync to 'svnadmin create'."
+  ], 
+  "revision_id": "845193"
+ }, 
+ {
+  "author": "mprice", 
+  "date": "2003-02-26T17:58:47.569123Z", 
+  "msg": [
+   "Merge rpm package fixes from revision 5089."
+  ], 
+  "revision_id": "845192"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-02-26T16:16:48.499754Z", 
+  "msg": [
+   "Issue #1003 stuff:  for each node in the filesystem, store the path at", 
+   "which is was created.", 
+   "* subversion/libsvn_fs/fs.h", 
+   "(svn_fs__node_revision_t): Add 'created_path' member.", 
+   "* subversion/libsvn_fs/dag.h", 
+   "(svn_fs__dag_clone_child, svn_fs__dag_make_file,", 
+   "svn_fs__dag_make_dir): Add 'parent_path' argument.", 
+   "(svn_fs__dag_get_created_path): New.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(struct dag_node_t): Add 'parent_path' member.", 
+   "(svn_fs__dag_get_created_path): New.", 
+   "(svn_fs__dag_get_node, svn_fs__dag_dup): Initialize the created_rev member.", 
+   "(svn_fs__dag_clone_child, svn_fs__dag_make_file,", 
+   "svn_fs__dag_make_dir, make_entry): Add 'parent_path' argument.", 
+   "(txn_body_dag_init_fs, copy_node_revision): Initialize the new node's", 
+   "created_path.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(make_path_mutable): Update call to svn_fs__dag_clone_child().", 
+   "(txn_body_make_dir): Update call to svn_fs__dag_make_dir().", 
+   "(txn_body_make_file): Update call to svn_fs__dag_make_file().", 
+   "* subversion/libsvn_fs/structure", 
+   "Update NODE-REVISION skel description(s) to include CREATED-PATH.", 
+   "* subversion/libsvn_fs/util/fs_skels.c", 
+   "(svn_fs__parse_node_revision_skel, svn_fs__unparse_node_revision_skel,", 
+   "is_valid_node_revision_header_skel): Update to handle new CREATED-PATH", 
+   "atom in the NODE-REVISION skel."
+  ], 
+  "revision_id": "845191"
+ }
+]

@@ -1,0 +1,67 @@
+[
+ {
+  "author": "abrown", 
+  "date": "2007-03-12T23:57:29.911965Z", 
+  "msg": [
+   "DERBY-47 (partial): Patch to implement execution-time \"probing\" given a probe", 
+   "predicate \"place-holder\" and a list of IN values. This patch creates a new", 
+   "execution-time result, MuliProbeTableScanResultSet, to perform the probing.", 
+   "At a higher-level the changes in this patch make it so that repeated calls to", 
+   "MultiProbeTableScanResultSet.getNextRowCore() will first return all rows matching", 
+   "probeValues[0], then all rows matching probeValues[1], and so on (duplicate probe", 
+   "values are ignored). Once all matching rows for all values in probeValues have", 
+   "been returned, the call to getNextRowCore() will return null, thereby ending", 
+   "the scan.", 
+   "In order to accommodate the above behavior, the following changes were made to", 
+   "existing files:", 
+   "1 - Add correct instantiation logic to the \"getMultiProbeTableScanResultSet()\"", 
+   "method of GenericResultSetFactory, which was just a stub method before this", 
+   "patch.", 
+   "2 - Overloaded methods in TableScanResultSet to allow the passing of a \"probe value\"", 
+   "into the openScanController() and reopenScanController() methods. The methods", 
+   "then use the probe value (if one exists) as the start/stop key for positioning", 
+   "a scan, instead of using the start/stop key passed into the result set constructor.", 
+   "3 - Made the iapi.types.DataType class implement the java.lang.Comparable interface", 
+   "for the sake of easy sorting (just let the JVM do the sort). Since DataType (the", 
+   "superclass of all datatypes and base implementation of the DataValueDescriptor", 
+   "interface) already has a \"compare()\" method that returns an integer to indicate", 
+   "less than, greater than, or equal, all we have to do is wrap that method inside", 
+   "a \"compareTo()\" method and we're done."
+  ], 
+  "revision_id": "517470"
+ }, 
+ {
+  "author": "dashorst", 
+  "date": "2007-03-12T23:51:47.243883Z", 
+  "msg": [
+   "Fixed site docs"
+  ], 
+  "revision_id": "517469"
+ }, 
+ {
+  "author": "dashorst", 
+  "date": "2007-03-12T23:51:02.777683Z", 
+  "msg": [
+   "Fixed site docs"
+  ], 
+  "revision_id": "517468"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2007-03-12T23:50:15.935026Z", 
+  "msg": [
+   "[sca-integration-branch] Use @Autowire to access SDO HelperContext"
+  ], 
+  "revision_id": "517467"
+ }, 
+ {
+  "author": "erodriguez", 
+  "date": "2007-03-12T23:50:13.129602Z", 
+  "msg": [
+   "Updates regarding supportedSASLMechanisms:", 
+   "o  Removed SIMPLE from the list of supportedSASLMechanisms.", 
+   "o  Added an integration test to check that the supportedSASLMechanisms are returned from a RootDSE query."
+  ], 
+  "revision_id": "517466"
+ }
+]

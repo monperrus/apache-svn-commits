@@ -1,0 +1,66 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2007-02-28T21:34:27.447389Z", 
+  "msg": [
+   "Fix a you-didnt-clear-the-error abort in the bindings that occurred", 
+   "when an error was returned from the C API, translated into a Python", 
+   "exception, but then not cleared.", 
+   "I verified this by hand by doing:", 
+   "$ python", 
+   ">>> from svn import core", 
+   ">>> core.svn_io_file_checksum(\"non-existent-file\")", 
+   "Traceback (most recent call last):", 
+   "File \"<stdin>\", line 1, in ?", 
+   "File \"/usr/local/lib/svn-python/libsvn/core.py\", line 3667, in svn_io_file_checksum", 
+   "return apply(_core.svn_io_file_checksum, args)", 
+   "libsvn._core.SubversionException: (\"Can't open file 'foopy': No such file or directory\", 2)", 
+   ">>> ^D", 
+   "Before the fix, my Python interpreter croaked with \"Aborted (core", 
+   "dumped)\".  Now it exits cleanly.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(svn_swig_py_svn_exception): Note that this function consumes the", 
+   "input svn_error_t.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(svn_swig_py_svn_exception): Actually consume the svn_error_t that", 
+   "was passed in (by clearing it)."
+  ], 
+  "revision_id": "863595"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-02-28T21:12:30.108314Z", 
+  "msg": [
+   "Merged revs 22350,23360,23362 & 23372 to the 1.4.x-r21537 branch (part 3).", 
+   "Note: I removed the svk:merge property from the merge due to unsolvable (for me) conflicts."
+  ], 
+  "revision_id": "863594"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-02-28T21:00:55.007252Z", 
+  "msg": [
+   "* subversion/tests/cmdlist/svnadmin_tests.py", 
+   "(empty_date, test_list): Move the empty_date test down one in the", 
+   "order, so the too-much-content and too-little-content tests run", 
+   "consecutively again.  No logic changes."
+  ], 
+  "revision_id": "863593"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-02-28T20:59:31.335465Z", 
+  "msg": [
+   "Merged r21627 to the 1.4.x-r21537 branch (part 2)"
+  ], 
+  "revision_id": "863592"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-02-28T20:56:43.137552Z", 
+  "msg": [
+   "Recommend issue #2729 bugfix for backport."
+  ], 
+  "revision_id": "863591"
+ }
+]

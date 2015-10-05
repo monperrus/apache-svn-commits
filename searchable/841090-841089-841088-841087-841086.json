@@ -1,0 +1,122 @@
+[
+ {
+  "author": "yoshiki", 
+  "date": "2002-01-22T12:09:06.012825Z", 
+  "msg": [
+   "New new commit_info structure.", 
+   "* client.c", 
+   "(commit_info_to_array): New function.", 
+   "(cl_mkdir): Pass commit_info to svn_clinet_mkdir.  Call commit_info_to_array", 
+   "to return object.", 
+   "(cl_delete): Pass commit_info to svn_clinet_delete.  Call commit_info_to_array", 
+   "to return object.", 
+   "(cl_import): Pass commit_info to svn_clinet_import.  Call", 
+   "commit_info_to_array to return object.", 
+   "(cl_commit): Pass commit_info to svn_clinet_commit.  Call commit_info_to_array", 
+   "to return object.", 
+   "(cl_copy): Pass commit_info to svn_clinet_copy.  Call commit_info_to_array", 
+   "to return object."
+  ], 
+  "revision_id": "841090"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2002-01-22T12:03:07.884211Z", 
+  "msg": [
+   "Fix typo.  Thanks for trying to keep ruby bindings area up to date but", 
+   "it seems I need to repost build system patch. :-)", 
+   "* wc.c", 
+   "(wc_prop_set): Fix typo.", 
+   "(is_wc_prop): Fix typo."
+  ], 
+  "revision_id": "841089"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-22T11:43:49.364269Z", 
+  "msg": [
+   "Upgrade our SWIG stuff to use SWIG 1.3.10.", 
+   "* svn_types.i: replace the OUT_PARAM preprocessor macro with the", 
+   "OUTPARAM typemap. this is simpler, as the type is automatically", 
+   "parameterized and we don't need the OUT_PARAM_S variety.", 
+   "(MAKE_TYPE, MAKE_PLAIN_TYPE): eliminated. SWIG is better about", 
+   "tracking the types that it uses, so we don't have to force any", 
+   "into the file. (and if we should, there is a new %types directive", 
+   "in 1.3.10).", 
+   "('const char *' memberin typemap): SWIG was using the 'char *'", 
+   "typemap for member setters, but that failed for const", 
+   "members. define a new one that works, and will match first.", 
+   "(exception typemaps): remove the except typemap (deprecated) and", 
+   "just use an 'out' typemap to handle the svn_error_t return value.", 
+   "(svn_revnum_t * typemap): apply the 'long *OUTPUT' typemap to this", 
+   "rather than copying individual typemaps (which doesn't seem to", 
+   "work anyways).", 
+   "* svn_ra.i: use new OUTPARAM typemap for the svn_ra_plugin_t type.", 
+   "* svn_string.i: rename typemap vars to 1.3.10 names.", 
+   "* util.i: temporarily ignore svn_io_open_unique_file until we fix up", 
+   "the stringbuf handling, or change the function signature.", 
+   "(apr_size_t * typemap): apply the INOUT typemap rather than copying", 
+   "(const char ** typemap): apply instead of copy", 
+   "* svn_fs.i: replace some OUT_PARAM() macro usage with the new OUTPARAM", 
+   "typemap defined in svn_types.i.", 
+   "(int * typemap): apply the OUTPUT typemap rather than copying", 
+   "(svn_fs_parse_id typemap): use 1.3.10's new multi-var typemaps to", 
+   "properly handle the ptr/len pair here.", 
+   "(const char ** typemap): apply OUTPUT typemap instead of copying", 
+   "(apr_hash_t ** typemap): apply PROPHASH typemap instead of copying", 
+   "<various>: rename typemap vars to 1.3.10 names.", 
+   "eliminate the MAKE_* macro usage.", 
+   "* svn_repos.i: eliminate the MAKE_* macro usage.", 
+   "(svn_repos_t **): use the OUTPARAM typemap instead of the macro", 
+   "* svn_delta.i: use new OUTPARAM typemap for various types.", 
+   "<various>: rename typemap vars to 1.3.10 names.", 
+   "* apr.i (apr_off_t * typemap): apply the 'long * OUTPUT' typemap", 
+   "rather than copying it.", 
+   "<various>: rename typemap vars to 1.3.10 names.", 
+   "* svn_client.i: rename typemap vars to 1.3.10 names.", 
+   "* swigutil.h (MAKE_*): toss the MAKE_* macros; the new SWIG handles", 
+   "this stuff better.", 
+   "(SWIG_NewPointerObj): add a param", 
+   "* swigutil.c (convert_to_swigtype): SWIG_NewPointerObj grew a new", 
+   "variable ('owner'). it should be set to zero.", 
+   "* README: fix a minor nit"
+  ], 
+  "revision_id": "841088"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-22T03:51:16.198207Z", 
+  "msg": [
+   "Command-line client: rewrite the subcommand alias system to be", 
+   "similar to the options system.", 
+   "* main.c (svn_cl__cmd_desc_t): remove 'is_alias' boolean field.  add", 
+   "new field -- an array of alias names.", 
+   "(SVN_CL__MAX_ALIASES): new #define.", 
+   "(svn_cl__cmd_table):  remove is_alias field, add alias name arrays", 
+   "to each subcommand structure.", 
+   "(print_command_info): loop over aliases differently.", 
+   "(svn_cl__print_generic_help): remove extra alias check.", 
+   "(get_cmd_table_entry):  removed, folded into svn_cl__get_canonical_command.", 
+   "(svn_cl__get_canonical_command):  rewritten."
+  ], 
+  "revision_id": "841087"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-01-21T23:44:31.334068Z", 
+  "msg": [
+   "Use the SVN_ERR macros where appropriate.", 
+   "* subversion/libsvn_wc/props.c", 
+   "replace if (err) return err style code with SVN_ERR.  no functional", 
+   "changes.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "ditto.", 
+   "* subversion/libsvn_wc/get_editor.c", 
+   "ditto.", 
+   "* subversion/libsvn_delta/text_delta.c", 
+   "ditto.", 
+   "Approved By: gstein"
+  ], 
+  "revision_id": "841086"
+ }
+]

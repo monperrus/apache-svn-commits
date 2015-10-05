@@ -1,0 +1,77 @@
+[
+ {
+  "author": "jvanzyl", 
+  "date": "2007-09-01T19:20:38.541661Z", 
+  "msg": [
+   "o don't need this with the changes to maven-artifact"
+  ], 
+  "revision_id": "571860"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2007-09-01T19:15:55.102389Z", 
+  "msg": [
+   "o MARTIFACT-1: implement request/result mechanism for artifact resolution", 
+   "o MARTIFACT-3: remove the fail-fast behavior in the core", 
+   "o I have added a new class for which to make a request of the resolution system -> ArtifactResolutionRequest and a new method to accept this request:", 
+   "ArtifactResolutionResult result = artifactResolver.resolve( artifactResolutionRequest );", 
+   "So this just removes the many signatures required to perform differently. Based on the request the artifactResolver responses appropriately. So I'm following", 
+   "the pattern we have in the embedder where you have a request that can be constructed in a ruby-esque way:", 
+   "ArtifactResolutionRequest request = new ArtifactResolutionRequest()", 
+   ".setArtifact( projectArtifact )", 
+   ".setArtifactDependencies( project.getDependencyArtifacts() )", 
+   ".setLocalRepository( localRepository )", 
+   ".setRemoteRepostories( project.getRemoteArtifactRepositories() )", 
+   ".setManagedVersionMap( managedVersions )", 
+   ".setMetadataSource( artifactMetadataSource );", 
+   "ArtifactResolutionResult result = artifactResolver.resolve( request );", 
+   "So this was the first part of the changes that I made.", 
+   "The second part was to collect absolutely everything that can possibly go wrong during the resolution and collect all exceptions instead of blowing up when something is missing.", 
+   "The current behavior has lead to many integrators like Milos to have to reimplement large parts of the artifact resolution mechanism because the mechanism is essentially", 
+   "fail-fast which is pretty much useless in an integrated environment.", 
+   "So the ArtifactResolutionResult tries to capture what has gone wrong and currently this is what I tried to categorize:", 
+   "- metadata missing", 
+   "- metadata retrieval problems", 
+   "- version range violation", 
+   "- circular dependencies", 
+   "- artifacts missing", 
+   "- artifact retrieval problems", 
+   "These are the primary set of problems (there may be more, but this is a first pass) and there is no reason we can't tell the user exactly what went wrong. The current", 
+   "method of spewing out pile of mostly incomprehensible text (this is based on feedback from many clients I've worked with who look at the standard out put for missing", 
+   "artifacts and have a very difficult time understanding what the actual problem is) is not good. Instead the exact problem should be determined and by looking at", 
+   "the ArtifactResolutionResult client code like our CLI or more importantly in IDE integration we can very much help the user.", 
+   "So the code now goes as far as it possibly can to find all problems and is exposed via this one method that uses a request. All existing methods I have preserved and", 
+   "I wrapped new code in the old signatures and throw exceptions prematurely to mimic the old behavior. Nothing changes for most of the code. All these changes are", 
+   "currently only used by the project builder and ultimately the embedder.buildWithDependencies() method that needs to know everything that went wrong in order to", 
+   "provide useful information.", 
+   "Milos, Vlad, Eugene, you should soon be able to use this code instead of your local modifications. The one thing that needs to be added is method for mixing in local", 
+   "reactor dependencies so that within an IDE projects can be resolved from the module list in IDEA, the workspace in Eclipse, and the workspace in Netbeans. I made", 
+   "every attempt to be backward compatible but jardiff/clirr will be the arbiter of that."
+  ], 
+  "revision_id": "571859"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2007-09-01T19:04:56.222864Z", 
+  "msg": [
+   "Change the test per Simon's suggestion"
+  ], 
+  "revision_id": "571858"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2007-09-01T19:04:18.679236Z", 
+  "msg": [
+   "Clean up the JavaImplementationInvoker"
+  ], 
+  "revision_id": "571857"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2007-09-01T18:58:53.974266Z", 
+  "msg": [
+   "Update Javadoc"
+  ], 
+  "revision_id": "571856"
+ }
+]

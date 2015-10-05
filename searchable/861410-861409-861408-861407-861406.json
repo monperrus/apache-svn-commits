@@ -1,0 +1,105 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-09-01T22:16:30.474491Z", 
+  "msg": [
+   "* STATUS: Vote for r21333 (approving)."
+  ], 
+  "revision_id": "861410"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-01T22:13:12.780395Z", 
+  "msg": [
+   "On the merge-tracking branch: A follow-up to r21321, removing an", 
+   "unused variable.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(svn_rangelist_merge): Remove the unused local variable \"newrange\".", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>"
+  ], 
+  "revision_id": "861409"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-09-01T22:03:29.839137Z", 
+  "msg": [
+   "* STATUS: Nominate r21333."
+  ], 
+  "revision_id": "861408"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-09-01T22:00:10.883433Z", 
+  "msg": [
+   "If the 'commit_url' option is set, then add the URL to the top of the", 
+   "message that can lead the reader to a Trac, ViewVC or other view of", 
+   "the commit.", 
+   "* tools/hook-scripts/mailer/mailer.py", 
+   "(generate_content):", 
+   "Get the commit_url option and replace '%(rev)s' with the new", 
+   "revision.  Pass it into the data structure.", 
+   "(TextCommitRenderer.render):", 
+   "If data.commit_url is available, then put it at the top of the", 
+   "generated email.", 
+   "* tools/hook-scripts/mailer/mailer.conf.example:", 
+   "Add a section for 'commit_url'."
+  ], 
+  "revision_id": "861407"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-01T20:14:27.651279Z", 
+  "msg": [
+   "Make error messages that occur during ra_dav's REPORT parsing actually", 
+   "useful.", 
+   "Prior to this change, there was no way for the various parser callbacks", 
+   "to return an error during the parse.  This meant that each of them used", 
+   "their own means for propagating that error upstream (stashing it in the", 
+   "baton and looking for it later), but in many cases that would be in vain", 
+   "because ra_dav would notice that an error occurred and decide to return", 
+   "a svn_error_t based on the current neon error status, which is usually", 
+   "something like \"200 OK\" when nothing has gone wrong during the request,", 
+   "which isn't much of an error.  Thus the error that the callback stashed", 
+   "is ignored.", 
+   "This change creates a new set of callback types, which return svn_error_t", 
+   "just like most Subversion functions.  A set of wrappers accept the return", 
+   "value of those callbacks and do the stash-in-the-baton bit for us, so it", 
+   "doesn't have to be reimplemented every time and as a bonus will actually", 
+   "work.", 
+   "This has not been done for the old style parsing, since it seems likely", 
+   "that the compat code will go away someday, and it seems silly to implement", 
+   "this twice just to delete part of it later.", 
+   "This fixes issue #2601.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__startelm_cb_t,", 
+   "svn_ra_dav__cdata_cb_t,", 
+   "svn_ra_dav__endelm_cb_t): New callback types for report parsing.", 
+   "(svn_ra_dav__parsed_request): Take new callback types, fix docs, they", 
+   "were broken even before this change.", 
+   "* subversion/libsvn_ra_dav/file_revs.c", 
+   "(report_baton): Drop the error member.", 
+   "(CHKERR): Removed.", 
+   "(start_element, end_element, cdata_handler): Adapt to new callback type,", 
+   "returning a svn_error_t instead of a neon error code.", 
+   "(svn_ra_dav__get_file_revs): Remove handling of error field in the baton.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(CHKERR): Removed.", 
+   "(gloc_start_element, getlocks_start_element,", 
+   "getlocks_cdata_handler, getlocks_end_element,", 
+   "start_element, cdata_handler, end_element): Adapt to new callback", 
+   "interface.", 
+   "* subversion/libsvn_ra_dav/replay.c", 
+   "(replay_baton_t): Remove error field.", 
+   "(start_element, end_element, cdata_handler): Adapt to new callback", 
+   "interface.", 
+   "(svn_ra_dav__replay): Remove handling of baton's error field.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(parser_wrapper_baton_t): New baton.", 
+   "(wrapper_startelm_cb, wrapper_cdata_cb, wrapper_endelm_cb): Wrapper", 
+   "functions to handle errors that occur in callback functions.", 
+   "(parsed_request): Take new callback types.  Handle the errors they", 
+   "might return."
+  ], 
+  "revision_id": "861406"
+ }
+]

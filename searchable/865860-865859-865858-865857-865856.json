@@ -1,0 +1,100 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2007-07-18T22:39:07.121866Z", 
+  "msg": [
+   "On the merge-sensitive-blame branch:", 
+   "Move the file rev iteration types to svn_delta.h, and move the compatibility", 
+   "wrapper functions from being private in libsvn_repos to libsvn_delta.  This", 
+   "prepares the way for using the file rev types and compatibility wrappers in", 
+   "multiple libraries, each of which already has libsvn_delta as a dependency.", 
+   "Note that because of the duplicate types of svn_{ra,repos}_file_rev_handler_t,", 
+   "I had to introduce yet a *third* incarnation of the same type to avoid", 
+   "dependency problems and allow the compatibility wrapper to work.", 
+   "* subversion/include/svn_repos.h", 
+   "Remove inclusion of svn_file_rev.h", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_file_rev_handler_t): Moved from svn_file_rev.h", 
+   "(svn_file_rev_handler_old_t): New deprecated placeholder type.", 
+   "(svn_compat_wrap_file_rev_handler): New function prototype.", 
+   "* subversion/include/svn_file_rev.h:", 
+   "Remove, moving contents to svn_delta.h", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(file_rev_handler_wrapper_baton, file_rev_handler_wrapper,", 
+   "compat_wrap_file_rev_handler): Move from here...", 
+   "* subversion/libsvn_delta/compat.c", 
+   "(file_rev_handler_wrapper_baton, file_rev_handler_wrapper,", 
+   "svn_compat_wrap_file_rev_handler): ...to here."
+  ], 
+  "revision_id": "865860"
+ }, 
+ {
+  "author": "sage", 
+  "date": "2007-07-18T22:30:15.917504Z", 
+  "msg": [
+   "Change default for user argument in python ctypes repository and wc classes. At", 
+   "present, the constructors for the repository and wc classes default the user", 
+   "argument to None. This needs to be changed, as if the default is used an error", 
+   "is thrown as soon as a method of the user is called. This can be corrected by", 
+   "defaulting the user argument to a User object (with default username and", 
+   "password), so that even if the default argument is left the code will run,", 
+   "though authentication may fail.", 
+   "* csvn/wc.py:", 
+   "(__init__): Change default user argument to a new User object to avoid", 
+   "problems when no user is provided.", 
+   "* csvn/repos.py:", 
+   "(LocalRepository.__init__, RemoteRepository.__init__): Change default user", 
+   "argument to a new User object to avoid problems when no user is provided."
+  ], 
+  "revision_id": "865859"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-07-18T22:29:39.901266Z", 
+  "msg": [
+   "Re-position mergeinfo-related helper routines in preparation for", 
+   "implementing handling of implied merge info for WC -> WC copy", 
+   "operations.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(get_implied_mergeinfo, calculate_target_mergeinfo, extend_wc_mergeinfo):", 
+   "Move routines up above the WC -> WC copy code."
+  ], 
+  "revision_id": "865858"
+ }, 
+ {
+  "author": "sage", 
+  "date": "2007-07-18T22:21:27.193141Z", 
+  "msg": [
+   "Add a status method to the python ctypes WC class. The status method allows the", 
+   "user to register a callback to be called for each item in the WC, just like", 
+   "svn_client_status2, with a few differences:", 
+   "- The user provided callback is wrapped by a python method to ensure", 
+   "compatability.", 
+   "- The callback is retained between calls, so if a new callback function is not", 
+   "provided the previously registered one will be called.", 
+   "In addition to the status method, the callback can be set using set_status_func", 
+   "without walking entries.", 
+   "* csvn/wc.py:", 
+   "(__init__): Add code to store the user within the WC object and setup the", 
+   "auth baton. Also wrap the callback method and set the user callback to None.", 
+   "(_status_wrapper): Method to wrap the user status function.", 
+   "(set_status_func): Method to set the status callback without actually calling", 
+   "status.", 
+   "(status): Get the status of a given item in the WC using a callback."
+  ], 
+  "revision_id": "865857"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-18T22:03:48.541486Z", 
+  "msg": [
+   "Solve issue with doubled GET requests: when the headers of 401 authentication", 
+   "response arrive do not directly retry the request, but wait till the whole", 
+   "response has been received.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_response): don't retry the request if the whole response isn't", 
+   "available yet."
+  ], 
+  "revision_id": "865856"
+ }
+]

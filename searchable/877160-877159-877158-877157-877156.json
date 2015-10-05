@@ -1,0 +1,81 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-07T20:54:04.308736Z", 
+  "msg": [
+   "Slight optimization: open the PDH that we found, then use the opened", 
+   "wcroot for *both* PDHs.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(parse_local_abspath): call ensure_sdb_opened before we grab the wcroot", 
+   "out of the thing."
+  ], 
+  "revision_id": "877160"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-07T20:34:21.567696Z", 
+  "msg": [
+   "Various improvements to the wc_db code.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(wcroot_t): add a format number", 
+   "(create_wcroot): initialize the format number to 0", 
+   "(scan_upwards_for_repos): replace WC_ID and SDB parameters with a single", 
+   "wcroot parameter.", 
+   "(determine_obstructed_file): new function, yanked out of", 
+   "parse_local_abspath, as a tight encapsulation of this functionality", 
+   "(parse_local_abspath): shift code out to determine_obstructed_file", 
+   "(get_statement_for_path): switch STMT_IDX type to an enum", 
+   "(gather_children): rename parameter to STMT_IDX to align with", 
+   "get_statement_for_path. use that func to eliminate a bunch of code.", 
+   "change initial array size to 10 based on review of svn's trunk.", 
+   "(svn_wc__db_close): tweak to store wcroots rather than SDBs.", 
+   "(svn_wc__db_scan_base_repos): tweak params to scan_upwards_for_repos"
+  ], 
+  "revision_id": "877159"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-07T19:54:22.818333Z", 
+  "msg": [
+   "Little script to help hwright with his deprecated.c moves.", 
+   "* tools/dev/find-unmoved-deprecated.sh: print all functions marked as", 
+   "SVN_DEPRECATED, but which haven't moved."
+  ], 
+  "revision_id": "877158"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-07T19:43:39.588569Z", 
+  "msg": [
+   "Fix issue #3392, with an added bonus: Removal of some uneeded merge.c code!", 
+   "* subversion/libsvn_client/merge.c", 
+   "(mark_mergeinfo_as_inheritable_for_a_range): Remove.", 
+   "(do_directory_merge): Remove call to above.  Since r26803 we have", 
+   "correctly set mergeinfo inheritance when first recording mergeinfo for the", 
+   "merge, so cleaning it up after the fact with", 
+   "mark_mergeinfo_as_inheritable_for_a_range() is not necessary.", 
+   "Note: The parsing error in issue #3392 was due the passing of a reversed", 
+   "svn_merge_range_t to mark_mergeinfo_as_inheritable_for_a_range(), which", 
+   "happily created invalid mergeinfo with it and passed this mergeinfo to", 
+   "svn_mergeinfo_merge() which choked on that invalid input.  Obviously with", 
+   "the demise of mark_mergeinfo_as_inheritable_for_a_range, issue #3392 is", 
+   "no more.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_to_path_with_switched_children): Remove comment re XFail.", 
+   "(test_list): Remove XFail from merge_to_path_with_switched_children."
+  ], 
+  "revision_id": "877157"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T19:22:14.292023Z", 
+  "msg": [
+   "More deprecated function moving.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc_cleanup): Move from here...", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_cleanup): ... to here."
+  ], 
+  "revision_id": "877156"
+ }
+]

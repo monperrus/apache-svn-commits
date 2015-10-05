@@ -1,0 +1,122 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-01-16T22:53:33.755236Z", 
+  "msg": [
+   "Use the pool cleanup handler to ensure the temporary file is removed", 
+   "if an error occurs.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(temp_file_cleanup_handler_remover): New function installed as a", 
+   "child cleanup handler to remove the plain cleanup handler in a child", 
+   "process.", 
+   "(apply_textdelta): Install child pool cleanup handler.", 
+   "(close_file): Don't remove plain cleanup handler. Don't explicitly", 
+   "delete file as the cleanup handler will do it. Handle errors so that if", 
+   "diff_cmd and svn_io_remove_file both fail the diff_cmd error is", 
+   "returned."
+  ], 
+  "revision_id": "840995"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-01-16T22:15:57.542522Z", 
+  "msg": [
+   "* subversion/tests/libsvn_wc/translate-test.dsp:", 
+   "Renamed to subversion/tests/libsvn_wc/translate_test.dsp.", 
+   "(This is deliberate -- I didn't want to try 'svn mv' on an 'svn mv'd file.)"
+  ], 
+  "revision_id": "840994"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-01-16T22:13:29.325357Z", 
+  "msg": [
+   "Updated Win32 build.", 
+   "* subversion.dsp (tests_libsvn_subr_subst): Removed.", 
+   "(tests_linsvn_wc_translate): Added.", 
+   "(tests_libsvn_subr_target): Renamed project file and made .dsp path lowercase.", 
+   "(tests_libsvn_repos_repos): Made .dsp path lowercase.", 
+   "* subversion/libsvn_wc/libsvn_wc.dsp: Added translate.c", 
+   "* subversion/tests/libsvn_subr/subst_test.dsp:", 
+   "Renamed to subversion/tests/libsvn_wc/translate-test.dsp.", 
+   "* subversion/tests/libsvn_subr/tests_libsvn_subr_target_test.dsp:", 
+   "Renamed to subversion/tests/libsvn_subr/target_test.dsp."
+  ], 
+  "revision_id": "840993"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-16T18:59:18.895731Z", 
+  "msg": [
+   "Okay, I'm adding this new mini-feature since I heard no objections.", 
+   "Feel free to change it however you want.  I'll definitely be using it.", 
+   "Show last_changed_rev and last_author in status: 'svn st -V' now shows", 
+   "more information than 'svn st -v'.  -V is now an \"extra verbose\"", 
+   "option beyond the normal \"verbose\" switch.", 
+   "(By the way, unless you've done a fresh checkout of M8, you won't have", 
+   "this information in your working copy.)", 
+   "* cl.h (svn_cl__opt_state_t): add 'very_verbose' field.", 
+   "(svn_cl__print_status_list):  accept 'very_detailed' parameter.", 
+   "* main.c (main): parse --very-verbose (-V) option.", 
+   "* status.c (print_really_long_format): new function.", 
+   "(svn_cl__print_status_list): accept 'very_detailed' parameter.", 
+   "* status-cmd.c (svn_cl__status): change call to svn_cl__print_status_list."
+  ], 
+  "revision_id": "840992"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-16T18:46:38.762861Z", 
+  "msg": [
+   "Redesigned (and some cases, added) the ability to report to the client", 
+   "the information about what it just committed.  Also centralized the", 
+   "printing of that information.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_commit_info_t): New structure for commit info returned", 
+   "to the client.", 
+   "(svn_client_mkdir, svn_client_delete, svn_client_copy,", 
+   "svn_client_move):  Added commit_info parameter.", 
+   "(svn_client_import, svn_client_commit): Removed committed_rev,", 
+   "committed_author, and committed_date, added commit_info parameters.", 
+   "(svn_client_log, svn_client_diff): Changed formatting of", 
+   "docstrings.  ** No literary edits made here **", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_import, svn_client_commit, send_to_repos): Removed", 
+   "committed_rev, committed_author, and committed_date, added", 
+   "commit_info parameters.  Allocate and populate commit_info if the", 
+   "commit succeeds.", 
+   "* subversion/libsvn_client/add.c", 
+   "(svn_client_mkdir): Removed committed_rev, committed_author, and", 
+   "committed_date, added commit_info parameters.  Allocate and populate", 
+   "commit_info if the commit succeeds.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(svn_client_delete): Added commit_info parameter.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_repos_copy, wc_to_repos_copy, setup_copy, svn_client_copy,", 
+   "svn_client_move): Added commit_info parameter.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__print_commit_info): New function.", 
+   "* subversion/clients/cmdline/util.c", 
+   "(svn_cl__print_commit_info): New function.", 
+   "* subversion/clients/cmdline/commit-cmd.c", 
+   "(svn_cl__commit): Updated call to svn_client_commit, and now use new", 
+   "svn_cl__print_commit_info helper.", 
+   "* subversion/clients/cmdline/import-cmd.c", 
+   "(svn_cl__import): Updated call to svn_client_import, and now use new", 
+   "svn_cl__print_commit_info helper.", 
+   "* subversion/clients/cmdline/delete-cmd.c", 
+   "(svn_cl__delete): Updated call to svn_client_delete, and now use new", 
+   "svn_cl__print_commit_info helper.", 
+   "* subversion/clients/cmdline/copy-cmd.c", 
+   "(svn_cl__copy): Updated call to svn_client_copy, and now use new", 
+   "svn_cl__print_commit_info helper.", 
+   "* subversion/clients/cmdline/move-cmd.c", 
+   "(svn_cl__move): Updated call to svn_client_copy, and now use new", 
+   "svn_cl__print_commit_info helper.", 
+   "* subversion/clients/cmdline/mkdir-cmd.c", 
+   "(svn_cl__mkdir): Updated call to svn_client_copy, and now use new", 
+   "svn_cl__print_commit_info helper."
+  ], 
+  "revision_id": "840991"
+ }
+]

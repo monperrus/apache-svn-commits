@@ -1,0 +1,87 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T16:50:51.664041Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Track whether or not a node itself has mergeinfo in a field", 
+   "on the node-revision itself.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(struct node_revision_t): New field mergeinfo_count.  (It's an int,", 
+   "though it probably shouldn't be if we're scared of overflow.)", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(copy_node_revision): Copy has_mergeinfo field.", 
+   "(svn_fs_fs__dag_has_mergeinfo): New accessor.", 
+   "(svn_fs_fs__dag_set_has_mergeinfo): New mutator, flushing to", 
+   "disk each time.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_has_mergeinfo, svn_fs_fs__dag_set_has_mergeinfo):", 
+   "Declare.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(HEADER_MINFO_HERE): New header name.", 
+   "(HEADER_MINFO_CNT): Renamed from HEADER_MERGEINFO.", 
+   "(svn_fs_fs__get_node_revision): Read new field; adjust for name", 
+   "change.", 
+   "(write_noderev_txn): Write new field; adjust for name change.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Revision file format): Document new field; adjust for name change.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_change_node_prop): Set or clear the has_mergeinfo flag.  Also,", 
+   "use the old has_mergeinfo flag (not the old proplist) to determine", 
+   "if a change is happening (this means that the mergeinfo_count field", 
+   "is actually counting the number of descendents with has_mergeinfo", 
+   "true, technically not the number with an svn:mergeinfo property)."
+  ], 
+  "revision_id": "868215"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-29T15:55:53.411574Z", 
+  "msg": [
+   "Remove a TODO item."
+  ], 
+  "revision_id": "868214"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-29T15:54:48.364582Z", 
+  "msg": [
+   "Rework 'svn mergeinfo' in light of now-mergeinfoless copies.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(get_mergeinfo): New, abstracted from...", 
+   "(svn_client_mergeinfo_get_merged): ...this.", 
+   "(svn_client_mergeinfo_get_available): Rework this in light of mergeinfoless", 
+   "copies.  While here, teach this thing to examine all the history of", 
+   "the sources and potential target, which provides much more reliable", 
+   "and useful output."
+  ], 
+  "revision_id": "868213"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-11-29T15:49:17.873577Z", 
+  "msg": [
+   "Follow-up to r28116, minor fix of expectations for merge_tests.py 77.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_source_normalization_and_subtree_merges): Expected disk mergeinfo", 
+   "props require trailing newline if there are multiple path:range mappings."
+  ], 
+  "revision_id": "868212"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-11-29T14:58:29.228053Z", 
+  "msg": [
+   "Stop post-switch mergeinfo elision.", 
+   "Yes, it keeps mergeinfo concise, which is nice, but it can cause the switch", 
+   "of a pristine tree to end up with local mods, which is not so nice.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(mergeinfo.h, svn_mergeinfo_private.h): Stop #including.", 
+   "(svn_client__switch_internal): Stop eliding after switch.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(mergeinfo_switch_elision): Tweak to reflect that we no longer expect", 
+   "elision and redundant mergeinfo is permitted in this case."
+  ], 
+  "revision_id": "868211"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-02-23T01:29:28.436280Z", 
+  "msg": [
+   "Fix for issue #625.", 
+   "Patch by: Blair Zajac <blair@orcaware.com>", 
+   "* CHANGES: Update to use neon 0.19.2.", 
+   "* INSTALL (Contents): Update to use neon 0.19.2.", 
+   "* build/buildcheck.sh (NEON_WANTED): Check for neon 0.19.2", 
+   "* subversion/libsvn_ra_dav/session.c (svn_ra_dav__open): Upgrade to", 
+   "neon 0.19.2 which removed the ne_session_server() function and", 
+   "replaced it with ne_session_create() which takes the URI scheme,", 
+   "hostname and port.  Replace a call to removed ne_set_secure() to", 
+   "ne_supports_ssl().", 
+   "(ssl_set_verify_callback): New function.", 
+   "* packages/rpm/README: Update to use neon 0.19.2.", 
+   "* packages/rpm/subversion.spec: Update to use neon 0.19.2."
+  ], 
+  "revision_id": "841440"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-02-23T01:07:35.855470Z", 
+  "msg": [
+   "Add the new editor interface to svn_delta, and adjust some APIs to", 
+   "make room for new-interface functionality.", 
+   "The new editor interface sports a number of changes from the old", 
+   "interface:", 
+   "+ baton construction functions take a pool argument", 
+   "+ iterative functions (delete_entry and change_*_prop) now take a pool", 
+   "for any temporary allocations", 
+   "+ NAME parameter has been replaced with a PATH parameter, and the type", 
+   "has changed from stringbuf to char*", 
+   "+ copyfrom_path argument types were changed from stringbuf to char*", 
+   "+ change_*_prop NAME and VALUE params changed their type", 
+   "* svn_delta.h (svn_delta_editor_t): new editor structure. it was", 
+   "defined in-place over the old structure to clarify the", 
+   "diffs. added a bunch of docco on pool usage, relative to the", 
+   "editor interface.", 
+   "(svn_delta_edit_fns_t): re-added the old structure devoid of all", 
+   "comments and marked as deprecated.", 
+   "(svn_delta_compat_wrap): new function declaration for wrapping a", 
+   "new-style editor into an old-style wrapper.", 
+   "(svn_delta_default_editor): return type changed to the new-style", 
+   "editor.", 
+   "(svn_delta_old_default_editor): renamed from svn_delta_default_editor.", 
+   "ALL CALLERS CHANGED.", 
+   "* libsvn_delta/default_editor.c (svn_delta_old_default_editor):", 
+   "renamed from svn_delta_default_editor(). implementation tweaked to", 
+   "use apr_pmemdup()."
+  ], 
+  "revision_id": "841439"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-22T23:28:38.132118Z", 
+  "msg": [
+   "Cleanup some common errors in ra_local.", 
+   "* svn_error_codes.h (SVN_ERR_RA_REPOSITORY_NOT_FOUND):  renamed this", 
+   "ra_local error from SVN_ERR_RA_NOT_VERSIONED_RESOURCE -- which is a", 
+   "loaded phrase we should *not* be using in ra_local!", 
+   "* split_url.c (svn_ra_local__split_URL): use SVN_ERR_RA_REPOSITORY_NOT_FOUND.", 
+   "* ra_plugin.c (open, do_switch): add SVN_ERR_W wrapper to", 
+   "svn_ra_local__split_URL calls."
+  ], 
+  "revision_id": "841438"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-22T21:35:29.180613Z", 
+  "msg": [
+   "* README:  add a table of contents, to be consistent with INSTALL file.", 
+   "* merge.c (svn_wc_merge): new file, sketch of function not yet written."
+  ], 
+  "revision_id": "841437"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-22T21:26:02.571100Z", 
+  "msg": [
+   "Start making ra_dav's error responses more intelligible.", 
+   "* svn_error_codes.h (SVN_ERR_RA_OPTIONS_REQUEST_FAILED):  new error.", 
+   "* options.c (svn_ra_dav__get_activity_url): give more detailed error", 
+   "description.  This error happens a lot -- people try to access a URL", 
+   "that isn't under DAV control.", 
+   "* props.c (svn_ra_dav__get_one_prop): use more specific", 
+   "SVN_ERR_RA_PROPS_NOT_FOUND error codes.", 
+   "* commit.c (checkout_resource):  explicitly look for a 409 Conflict", 
+   "error when doing a commit."
+  ], 
+  "revision_id": "841436"
+ }
+]

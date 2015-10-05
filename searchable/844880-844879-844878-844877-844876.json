@@ -1,0 +1,104 @@
+[
+ {
+  "author": "mbk", 
+  "date": "2003-02-09T14:39:55.279802Z", 
+  "msg": [
+   "Rather than force a repository dump/load cycle just to create a new BDB", 
+   "table, create and initialize the UUIDs table if it does not exist.", 
+   "* subversion/libsvn_fs/bdb/uuids-table.c", 
+   "(svn_fs__bdb_open_uuids_table): create the UUIDs table if it is missing."
+  ], 
+  "revision_id": "844880"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-02-09T13:40:50.399680Z", 
+  "msg": [
+   "If we are to enable the internal diff library then we ought to have", 
+   "some regression tests.  So this tests some basic behaviour, but does", 
+   "not test the conflict handling.  Some of these tests fail.", 
+   "* build.conf: Added diff-diff3-test program.", 
+   "* subversion/tests/libsvn_delta/diff-diff3-test.c: New tests."
+  ], 
+  "revision_id": "844879"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-02-09T06:26:18.370620Z", 
+  "msg": [
+   "Add some notes motivated by a user who experienced tunnel mode", 
+   "corruption due to his dotfiles sending output to stdout."
+  ], 
+  "revision_id": "844878"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-02-09T00:59:17.810324Z", 
+  "msg": [
+   "start moving the config options into svn_client_ctx_t.  eventually, all", 
+   "configuration options will be passed down by the client application, rather", 
+   "than having the lower level libraries reading them in whenever they want.", 
+   "this gives us numerous advantages, like being able to turn off config options", 
+   "with a command line switch, and limiting the number of times the config files", 
+   "are parsed.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_ctx_t): add a 'config' hash member variable, which holds the", 
+   "client's config options.", 
+   "* subversion/include/svn_config.h", 
+   "(svn_config_get): document new behavior when we're passed a NULL config.", 
+   "* subversion/libsvn_subr/config.c", 
+   "(svn_config_get): if the config is NULL, just return the default.  this", 
+   "simplifies a lot of code where we're getting a config out of a hash, which", 
+   "would otherwise entail a lot of error checking to make sure the hash has", 
+   "the proper config in it.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__callback_baton): add a config hash member.", 
+   "* subversion/libsvn_client/auth.c", 
+   "(maybe_store_password): get the config out of the callback baton instead of", 
+   "reading it in ourselves.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__open_ra_session): initilize the config member of the callback", 
+   "baton, pass the context's config hash into ra_lib->open.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t::open): add a config hash argument, so the ra layers can", 
+   "get access to whatever configuration options they need.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_session_t): add a config hash member.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(get_server_settings): take a config hash argument and use the servers config", 
+   "in it instead of reading it ourselves.", 
+   "(svn_ra_dav__open): take a config hash argument, pass it to", 
+   "get_server_settings, cache it in the session.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(custom_get_request): take a config hash argument and use it instead of", 
+   "reading in our own.", 
+   "(simple_fetch_file): pass config to custom_get_request.", 
+   "(fetch_file): take a config hash argument and pass it on to", 
+   "simple_fetch_file.", 
+   "(svn_ra_dav__get_file): update call to custom_get_request.", 
+   "(svn_ra_dav__do_checkout): update call to fetch_file.", 
+   "(start_element, end_element): update call to simple_fetch_file.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__parsed_request): grab the config from the cached config hash", 
+   "instead of reading it ourselves.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__open): add config argument, although we don't actually use it.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(find_tunnel_agent): take a config hash argument and grab the servers config", 
+   "from it instead of opening it ourselves.", 
+   "(ra_svn_open): add a config hash argument, pass it to find_tunnel_agent.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): initialize the context's config hash and fill it with the various", 
+   "config file's contents."
+  ], 
+  "revision_id": "844877"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-02-09T00:39:55.775043Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "844876"
+ }
+]

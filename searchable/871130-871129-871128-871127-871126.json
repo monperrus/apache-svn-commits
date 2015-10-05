@@ -1,0 +1,100 @@
+[
+ {
+  "author": "epg", 
+  "date": "2008-05-07T15:43:25.856905Z", 
+  "msg": [
+   "* build.conf", 
+   "(__SWIG_PYTHON__): Enable svn.diff on Windows (sigh, I thought this", 
+   "was supposed to be automatic and transparent?)."
+  ], 
+  "revision_id": "871130"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-05-07T15:38:45.057908Z", 
+  "msg": [
+   "Fix the r30694 svn_wc_diff_callbacks2_t compatibility (it mistakenly used", 
+   "existing svn_wc_diff_callbacks_t wrappers, which can't work; the", 
+   "structures are very different).", 
+   "Make svn_wc_diff_callbacks2_t work in Python and add Python test for it.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(struct callbacks2_wrapper_baton, callbacks2_wrapper): Remove; we can", 
+   "provide compatibility with svn_wc_diff_callbacks2_t without these, as", 
+   "svn_wc_diff_callbacks3_t just adds to functions.", 
+   "(file_changed, file_added, file_deleted, dir_added, dir_deleted,", 
+   "dir_props_changed, callbacks_wrapper): Be specific in the doc string", 
+   "that these are for wrapping svn_wc_diff_callbacks_t.", 
+   "(dir_opened, dir_closed): Be specific in the doc string that these are for", 
+   "wrapping both svn_wc_diff_callbacks_t svn_wc_diff_callbacks2_t.", 
+   "(callbacks2_wrap): Add function to return a new svn_wc_diff_callbacks3_t", 
+   "with dir_opened and dir_closed fields pointing to the no-op compat", 
+   "implementations also used for wrapping svn_wc_diff_callbacks_t (in", 
+   "callbacks_wrapper), and all other fields pointing to the equivalent", 
+   "fields in the svn_wc_diff_callbacks2_t.", 
+   "(svn_wc_get_diff_editor4, svn_wc_diff4): Use callbacks2_compat.", 
+   "(svn_wc_get_diff_editor2): This uses svn_wc_diff_callbacks2_t and", 
+   "therefore must be wrapped separately; use callbacks_wrapper with", 
+   "svn_wc_get_diff_editor5 directly.", 
+   "(svn_wc_diff2): This uses svn_wc_diff_callbacks2_t and therefore must be", 
+   "wrapped separately; use callbacks_wrapper with svn_wc_diff5 directly.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "Provide svn_wc_diff_callbacks2_t binding infrastructure.", 
+   "(wc_diff_callbacks2_file_changed_or_added): Add helper for changed and", 
+   "added, which are almost the same.", 
+   "(wc_diff_callbacks2_file_changed,", 
+   "wc_diff_callbacks2_file_added,", 
+   "wc_diff_callbacks2_file_deleted", 
+   "wc_diff_callbacks2_dir_added,", 
+   "wc_diff_callbacks2_dir_deleted,", 
+   "wc_diff_callbacks2_dir_props_changed): Add wrapper callbacks, which", 
+   "call the Python callbacks in the baton.", 
+   "(svn_swig_py_setup_wc_diff_callbacks2): Return those callbacks in a new", 
+   "svn_wc_diff_callbacks2_t with the Python callbacks as the baton (based", 
+   "on the way we handle ra callbacks).", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.h", 
+   "(svn_swig_py_setup_wc_diff_callbacks2): Declare.", 
+   "* subversion/bindings/swig/svn_wc.i", 
+   "Hook svn_swig_py_setup_wc_diff_callbacks2 up for svn_wc_diff_callbacks2_t.", 
+   "* subversion/bindings/swig/python/svn/wc.py", 
+   "(DiffCallbacks2): Add base class for svn_wc_diff_callbacks2_t, so wc", 
+   "diff callers don't have something to build on, defining only the", 
+   "callbacks in which they're interested.", 
+   "* subversion/bindings/swig/python/tests/wc.py", 
+   "(test_diff_editor4): Add test for svn.wc.get_diff_editor4."
+  ], 
+  "revision_id": "871129"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-05-07T11:20:52.085868Z", 
+  "msg": [
+   "Fix documentation of deprecated function.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_do_update): Mention that send_copyfrom_args is always false."
+  ], 
+  "revision_id": "871128"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2008-05-07T07:06:00.650297Z", 
+  "msg": [
+   "Fix typo in comment.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(simple_first_creds_helper): s/usename/username/"
+  ], 
+  "revision_id": "871127"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-05-06T21:49:13.624531Z", 
+  "msg": [
+   "Fix more bug fallout from the recent dont-store-plaintext-passwords", 
+   "feature branch merge.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_setup_auth_baton): Keep non-prompting providers ahead", 
+   "of prompting ones.  Otherwise, even if Subversion finds valid cached", 
+   "auth creds, it still asks you for more, which is ... non-ideal."
+  ], 
+  "revision_id": "871126"
+ }
+]

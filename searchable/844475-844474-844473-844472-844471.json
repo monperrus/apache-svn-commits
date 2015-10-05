@@ -1,0 +1,115 @@
+[
+ {
+  "author": "striker", 
+  "date": "2003-01-16T09:49:57.571940Z", 
+  "msg": [
+   "Add the diff-test and diff3-test wrappers to the workspace."
+  ], 
+  "revision_id": "844475"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-01-16T01:38:22.825220Z", 
+  "msg": [
+   "Fix a problem with 'svn diff -rREV' for a property only change.", 
+   "* subversion/libsvn_wc/diff.c (close_file): Only run external diff if", 
+   "a temporary file has been created.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_only_property_change): Add -rREV case.  Restore original cwd", 
+   "on failure.", 
+   "* subversion/tests/clients/cmdline/svnlook_tests.py: set executable"
+  ], 
+  "revision_id": "844474"
+ }, 
+ {
+  "author": "rassilon", 
+  "date": "2003-01-15T23:10:51.704647Z", 
+  "msg": [
+   "For issue #1003: This completes the fix for #1003 by completing the test", 
+   "code changes, and schema changes discussed for this fix. i.e. Adding a", 
+   "committed-path to the NodeRevision table, and removing the path column", 
+   "from the Changes table.", 
+   "* subversion/libsvn_fs/structure (Change table): Remove PATH as a column", 
+   "of the changes table.", 
+   "* subversion/libsvn_fs/bdb/changes-table.c (dag.h): Add include.", 
+   "(fold_change): Add change_path parameter.", 
+   "(svn_fs__bdb_changes_fetch): Call svn_fs__dag_get_committed_path", 
+   "in order to pass the change_path into fold_change.", 
+   "* subversion/libsvn_fs/util/fs_skels.c (is_valid_copy_skel,", 
+   "svn_fs__parse_change_skel): Adjust the skel parsing for the schema", 
+   "change.", 
+   "* subversion/libsvn_fs/fs.h:", 
+   "(svn_fs__change_t): Remove the path member since this is no longer", 
+   "needed given the new svn_fs__dag_get_committed_path API.", 
+   "* subversion/libsvn_fs/tree.c:", 
+   "(add_change): Remove path parameter.", 
+   "(txn_body_change_node_prop, undelete_change, txn_body_make_dir,", 
+   "txn_body_delete, txn_body_copy, txn_body_make_file,", 
+   "txn_body_apply_textdelta, txn_body_apply_text): Fixup add_change", 
+   "callsites.", 
+   "(txn_body_node_created_rev, txn_body_dir_entries): Fixup", 
+   "formatting.", 
+   "* subversion/tests/libsvn_fs/fs-test.c (branch_test,", 
+   "lazy_copies_created_rev): Adjust svn_create_error callsites due to", 
+   "changes on trunk.", 
+   "* subversion/tests/libsvn_fs/changes-test.c (SET_STR): Borrow the SET_STR", 
+   "macro from fs-test.c.", 
+   "(standard_txns, standard_changes, get_ideal_changes): Renumber the", 
+   "transactions starting at 1 to reflect behavior with normal FS", 
+   "API calls instead of via direct table manipulation.", 
+   "(add_standard_changes): Remove setting change.path.", 
+   "(add_standard_fs_changes): New version of add_standard_changes", 
+   "that uses FS API function calls as opposed to direct table", 
+   "manipulation.", 
+   "(changes_fetch_raw): Remove PATH verification test.", 
+   "(changes_fetch): Modify test case to use new FS APIs that test the", 
+   "new schema change by calling add_standard_fs_changes."
+  ], 
+  "revision_id": "844473"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-15T22:58:35.190475Z", 
+  "msg": [
+   "For issue #689: Have the delta library compare checksums after", 
+   "completing a delta application, and have the working copy pass the", 
+   "expected checksum through during updates.  Note that no comparision", 
+   "will actually happen yet, however, because the working copy update", 
+   "editor is still receiving a null expected checksum from its driver.", 
+   "* subversion/include/svn_delta.h: Fix typo in the text delta overview.", 
+   "(svn_delta_editor_t.apply_textdelta): Clarify base_checksum docs.", 
+   "(svn_txdelta_apply): Take new result_checksum argument.", 
+   "* subversion/libsvn_delta/text_delta.c: Include svn_md5.h.", 
+   "(struct apply_baton): Add new md5_context, result_checksum fields.", 
+   "(svn_txdelta_apply): Take new result_checksum argument, stash it in", 
+   "the apply_baton, and initialize the baton's md5_context.", 
+   "(apply_window): Update the md5_context when processing a window;", 
+   "finalize and compare checksums when handling the last window.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(apply_textdelta): Compare base_checksum with text base's checksum.", 
+   "Pass result_checksum to svn_txdelta_apply.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(txn_body_apply_textdelta): Pass NULL as expected checksum to", 
+   "svn_texdelta_apply, for now anyway.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(apply_textdelta): Pass NULL as expected checksum to svn_texdelta_apply.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(apply_textdelta): Pass NULL as expected checksum to svn_texdelta_apply.", 
+   "* subversion/tests/libsvn_delta/random-test.c", 
+   "(random_test, do_random_combine_test): Pass NULL as expected", 
+   "checksum to svn_texdelta_apply."
+  ], 
+  "revision_id": "844472"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-15T20:49:34.059687Z", 
+  "msg": [
+   "Fix some commit-driver debugging code.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(apply_textdelta): Update to latest editor interface semantics.", 
+   "(add_directory, add_file): Show copyfrom info."
+  ], 
+  "revision_id": "844471"
+ }
+]

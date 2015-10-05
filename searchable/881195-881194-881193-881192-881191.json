@@ -1,0 +1,62 @@
+[
+ {
+  "author": "jleroux", 
+  "date": "2009-11-17T08:40:11.340530Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 881194\"", 
+   "------------------------------------------------------------------------", 
+   "r881194 | jleroux | 2009-11-17 09:36:35 +0100 (mar. 17 nov. 2009) | 10 lignes", 
+   "A patch from Philippe Mouawad \"Ofbiz freeze\" (https://issues.apache.org/jira/browse/OFBIZ-2124) - OFBIZ-2124", 
+   "In a certain scenario the application freezes, no more AJP connector threads are available.", 
+   "After analysis the lock seems to come from very slow response time in GenericDelegator.clearAllCaches and particularily in CacheLineTable.keySet.", 
+   "Furthermore, looking at org.ofbiz.base.util.cache.UtilCache, the class seems to have some synchronisation problems:", 
+   "1) utilCacheTable.put calls are not synchronized", 
+   "2) findCache synchronizes access to utilCacheTable while only getting an element which has big performance impact since utilCacheTable is static", 
+   "3) clearExpiredFromAllCaches and clearAllCaches does not synchronize while clearCachesThatStartWith does, why ?", 
+   "The patch synchronizes correctly the access to utilCacheTable and optimises findCache", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "881195"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2009-11-17T08:36:35.485083Z", 
+  "msg": [
+   "A patch from Philippe Mouawad \"Ofbiz freeze\" (https://issues.apache.org/jira/browse/OFBIZ-2124) - OFBIZ-2124", 
+   "In a certain scenario the application freezes, no more AJP connector threads are available.", 
+   "After analysis the lock seems to come from very slow response time in GenericDelegator.clearAllCaches and particularily in CacheLineTable.keySet.", 
+   "Furthermore, looking at org.ofbiz.base.util.cache.UtilCache, the class seems to have some synchronisation problems:", 
+   "1) utilCacheTable.put calls are not synchronized", 
+   "2) findCache synchronizes access to utilCacheTable while only getting an element which has big performance impact since utilCacheTable is static", 
+   "3) clearExpiredFromAllCaches and clearAllCaches does not synchronize while clearCachesThatStartWith does, why ?", 
+   "The patch synchronizes correctly the access to utilCacheTable and optimises findCache"
+  ], 
+  "revision_id": "881194"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2009-11-17T08:31:30.842293Z", 
+  "msg": [
+   "Implement parameterized value conversion."
+  ], 
+  "revision_id": "881193"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2009-11-17T08:30:46.356119Z", 
+  "msg": [
+   "And generic condition planning."
+  ], 
+  "revision_id": "881192"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2009-11-17T08:29:23.505516Z", 
+  "msg": [
+   "Handle nested alias.fieldName, which happens when nested conditions", 
+   "exist."
+  ], 
+  "revision_id": "881191"
+ }
+]

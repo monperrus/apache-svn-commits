@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gradha", 
+  "date": "2004-11-29T08:25:53.709414Z", 
+  "msg": [
+   "Book Spanish. Translated paragraph."
+  ], 
+  "revision_id": "852150"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2004-11-28T23:08:21.782569Z", 
+  "msg": [
+   "Add pre-v0.14 dump compatibility.", 
+   "You wouldn't believe it, but I encountered someone in IRC today who was", 
+   "actually upgrading from 0.13 and knows a *company* which is still using it!", 
+   "* notes/fs_dumprestore.txt: Update dumpfile format version 1 documentation.", 
+   "* subversion/libsvn_repos/load.c", 
+   "(parse_property_block): Add actual_length parameter hold the number of", 
+   "bytes read from stream on return.", 
+   "(svn_repos_parse_dumpstream2): Detect old v1 situation and read the", 
+   "properties and text blocks unless the number of bytes to read for", 
+   "the text block is zero."
+  ], 
+  "revision_id": "852149"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2004-11-28T22:48:59.678988Z", 
+  "msg": [
+   "Encapsulate the i/o channels managed by libsvn_ra_svn as streams.", 
+   "Use this encapsulation to more cleanly separate the SSL integration", 
+   "logic from the rest of the library.", 
+   "Patch by: Sigfred Haversen <bsdlist@mumak.com>", 
+   "me", 
+   "* subversion/libsvn_ra_svn/streams.c", 
+   "New file.", 
+   "* subversion/libsvn_ra_svn/ssl.c", 
+   "New file.", 
+   "* subversion/libsvn_ra_svn/ra_svn_ssl.h", 
+   "New file.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "Remove #include <openssl/ssl.h>", 
+   "Remove #include <openssl/bio.h>", 
+   "(svn_ra_svn_conn_st): Replace sock, in_file, out_file, proc, use_ssl,", 
+   "ssl, internal_bio, and network_bio members with in_stream and out_stream.", 
+   "(svn_ra_svn__sock_streams, svn_ra_svn__file_streams): New prototypes.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "Remove #include \"ra_svn.h\"", 
+   "Add #include \"ra_svn_ssl.h\"", 
+   "Remove #include <openssl/x509v3.h>", 
+   "(ra_svn_session_baton_t): Remove ssl_ctx.", 
+   "(asn1time_to_string, match_hostname, verify_hostname): Move to ssl.c", 
+   "(fill_server_cert_info): Move to ssl.c, rename to", 
+   "svn_ra_svn__fill_server_cert_info, replace session baton parameter", 
+   "with ssl_conn.", 
+   "(do_ssl_auth): Update call to fill_server_cert_info.", 
+   "(make_tunnel): Remove initialization of conn->proc.", 
+   "(init_ssl_ctx): Move to ssl.c, rename to svn_ra_svn__init_ssl_ctx,", 
+   "replace session baton parameter with ssl_conn, remove config parameter.", 
+   "(destroy_ssl_ctx): Move to ssl.c", 
+   "(ra_svn_open): Remove initialization of sess->ssl_ctx, update to use", 
+   "new ssl interface.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "Add #include \"svn_io.h\"", 
+   "(do_ssl_operation): Remove prototype and implementation.", 
+   "(svn_ra_svn_create_conn): Remove initialization of sock/file/ssl", 
+   "members, instead initialize conn->in_stream and conn->out_stream", 
+   "as appropriate.", 
+   "(svn_ra_svn__set_block_handler): Call the new svn_stream_timeout()", 
+   "function, rather than its file/socket analogs.", 
+   "(svn_ra_svn__input_waiting): Call svn_stream_data_pending(), rather", 
+   "than its file/socket/ssl analogs.", 
+   "(writebuf_output_ssl, readbuf_input_ssl): Remove.", 
+   "(writebuf_output, readbuf_input): Use stream interface rather than", 
+   "file/socket/ssl functions.", 
+   "(network_biopair_interop): Move to ssl.c, change parameter type to", 
+   "ssl_conn_t rather than svn_ra_svn_conn_t, update to use stream", 
+   "interface rather than socket functions.", 
+   "(do_ssl_operation): Move to ssl.c, change parameter type to", 
+   "ssl_conn_t rather than svn_ra_svn_conn_t.", 
+   "(cleanup_ssl, svn_ra_svn_ssl_start): Move to ssl.c", 
+   "(svn_ra_svn_ssl_init): Move to ssl.c, rename to", 
+   "svn_ra_svn__setup_ssl_conn, add ssl_conn_t output parameter.", 
+   "(svn_ra_svn_ssl_accept): Remove.", 
+   "(svn_ra_svn_ssl_connect): Move to ssl.c, rename to", 
+   "svn_ra_svn__ssl_connect."
+  ], 
+  "revision_id": "852148"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2004-11-28T22:44:38.799950Z", 
+  "msg": [
+   "* STATUS: r12072 should be merged with r11483."
+  ], 
+  "revision_id": "852147"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2004-11-28T22:36:31.750529Z", 
+  "msg": [
+   "Always use the ANSI code page when converting the executable path to UTF-8 in", 
+   "Win32.", 
+   "Suggested by: Max Bowsher <maxb@ukf.net>", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_init): Make sure to use the ANSI code page when converting the", 
+   "path, and get rid of the MB_PRECOMPOSED flag.  It doesn't make sense in this", 
+   "context."
+  ], 
+  "revision_id": "852146"
+ }
+]

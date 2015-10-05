@@ -1,0 +1,116 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-08-24T15:05:12.254092Z", 
+  "msg": [
+   "Follow-up to r38830 which broke svn sw --set-depth.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client__switch_internal): Don't pass a path to", 
+   "svn_dirent_get_absolute() that is relative to the access baton's", 
+   "directory, instead pass the path relative to the cwd (or which is already", 
+   "absolute).", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Unlike the above, we were passing the", 
+   "correct path to svn_dirent_get_absolute(), but we can do it in a simpler", 
+   "manner."
+  ], 
+  "revision_id": "878995"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-08-24T14:10:32.716776Z", 
+  "msg": [
+   "Split svnsync's synchronization editor out into a separate source file,", 
+   "for clarity. No functional change.", 
+   "* subversion/svnsync/main.c", 
+   "(normalize_string, normalize_revprops, edit_baton_t, node_baton_t,", 
+   "set_target_revision, open_root, delete_entry, add_directory, open_directory,", 
+   "add_file, open_file, apply_textdelta, close_file, absent_file,", 
+   "close_directory, absent_directory, change_file_prop, change_dir_prop,", 
+   "close_edit, abort_edit, get_sync_editor): Move to svnsync.c.", 
+   "(copy_revprops, replay_rev_started, replay_rev_finished): Adjust calls", 
+   "to two renamed functions.", 
+   "* subversion/svnsync/sync.c", 
+   "New file, containing the synchronization editor functions from main.c.", 
+   "(svnsync_normalize_revprops): Renamed from normalize_revprops.", 
+   "(svnsync_get_sync_editor): Renamed from get_sync_editor.", 
+   "* subversion/svnsync/sync.h", 
+   "New file, declaring svnsync_normalize_revprops and svnsync_get_sync_editor."
+  ], 
+  "revision_id": "878994"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-08-24T03:28:14.985930Z", 
+  "msg": [
+   "Scatter assertions across wc_db to ensure that it is working with an", 
+   "up-to-date version of the metadata storage system.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(VERIFY_USABLE_PDH): new macro to assert the PDH has a wcroot of the", 
+   "proper version.", 
+   "(...): use the macro"
+  ], 
+  "revision_id": "878993"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-08-24T00:53:31.366141Z", 
+  "msg": [
+   "Continue refining the upgrade flow, to better distinguish between manual", 
+   "upgrades, and automatic upgrades. Tighten up the old \"write lock\"", 
+   "mechanism to be applied onto to wc-1 working copies.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_open): add a new AUTO_UPGRADE parameter to signal the wc_db", 
+   "code to attempt an automatic upgrade to the working copy. all callers", 
+   "should use TRUE for this, and 'svn upgrade' will pass FALSE since it", 
+   "is actually handling the non-automatic case.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(struct svn_wc__db_t): record the AUTO_UPGRADE flag", 
+   "(create_wcroot): new AUTO_UPGRADE flag to determine whether to call the", 
+   "upgrade function when a non-current working copy is detected. Note", 
+   "that errors are thrown, regardless, if the working copy is pre-1.0", 
+   "(and, thus, non-upgradeable) or is too new (from a libsvn_wc newer", 
+   "than the one reading the on-disk wc).", 
+   "(parse_local_abspath): pass new AUTO_UPGRADE flag", 
+   "(svn_wc__db_open): record the new AUTO_UPGRADE flag", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(): include svn_wc_private for svn_wc__strictly_is_wc_root()", 
+   "(upgrade_format): renamed to ...", 
+   "(upgrade_to_wcng): ... this. open/close the access baton within this", 
+   "function, rather than the caller. don't bother checking the version,", 
+   "relying on the caller instead. take the old format as a parameter,", 
+   "rather than fetching it ourself.", 
+   "(upgrade_working_copy): don't deal with access batons. fetch the format,", 
+   "and use it to determine whether to call upgrade_to_wcng().", 
+   "(svn_wc__upgrade_sdb): remove the #if guards. this won't be called when", 
+   "we're actually inside a manual 'svn upgrade', so it is now safe to", 
+   "return that whenever a manual upgrade is necessary.", 
+   "(svn_wc_upgrade): forget the version checking. we could have subdirs", 
+   "that require an upgrade. add an #if'd-out check for whether the call", 
+   "has been invoked at the wcroot (can't call this code... yet). create a", 
+   "special DB that doesn't attempt to auto-upgrade.", 
+   "* subversion/libsvn_wc/context.c:", 
+   "(svn_wc_context_create): adjust call to svn_wc__db_open()", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc_ensure_adm3): adjust call to svn_wc__db_open()", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc_check_wc, alloc_db, svn_wc_adm_probe_open3): adjust call to", 
+   "svn_wc__db_open()", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(svn_wc_get_actual_target): adjust call to svn_wc__db_open()", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(test_getting_info, test_inserting_nodes, test_children,", 
+   "test_working_info, test_pdh, test_scan_addition, test_scan_deletion,", 
+   "test_global_relocate): adjust call to svn_wc__db_open()"
+  ], 
+  "revision_id": "878992"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-08-23T23:30:09.855689Z", 
+  "msg": [
+   "* notes/editor-v2.txt: Fix some flipped logic."
+  ], 
+  "revision_id": "878991"
+ }
+]

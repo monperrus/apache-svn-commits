@@ -1,0 +1,89 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-04-16T20:13:32.424230Z", 
+  "msg": [
+   "Make fsfs dump converter smarter about props-only directory changes.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(struct entry): Add children_changed field.", 
+   "(new_entry, copy_entry): Initialize children_changed to FALSE.", 
+   "(get_child, new_revision_record, new_node_record): Set", 
+   "children_changed to TRUE when creating a new directory or when", 
+   "modifying a directory's children.", 
+   "(write_entry, dump_txn_node_rev): Don't update directory text rep if", 
+   "children_changed isn't set."
+  ], 
+  "revision_id": "849470"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-04-16T20:04:10.217167Z", 
+  "msg": [
+   "Merge r8949, r9084.", 
+   "Use subpools when processing multiple update and commit targets. (#1635)", 
+   "Approved by: +1: sussman, kfogel, cmpilato"
+  ], 
+  "revision_id": "849469"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-04-16T20:02:49.915295Z", 
+  "msg": [
+   "* STATUS: Vote for r9197."
+  ], 
+  "revision_id": "849468"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-04-16T20:01:12.091464Z", 
+  "msg": [
+   "Follow up to r9197 with reformatting changes only:", 
+   "* subversion/clients/cmdline/propget-cmd.c", 
+   "(svn_cl__propget): Add some curly braces and spacing for readability.", 
+   "* subversion/clients/cmdline/proplist-cmd.c", 
+   "(svn_cl__proplist): Same, plus a variable rename for cleaner indentation."
+  ], 
+  "revision_id": "849467"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-16T19:50:04.169935Z", 
+  "msg": [
+   "Extend make-revs to be able to write a transaction.", 
+   "* libsvn_fs_fs/README: Note progress.", 
+   "* libsvn_fs_fs/structure: Flatten the transaction format for", 
+   "efficiency.  Rename \"contents\" to \"children\" to make clear that", 
+   "it is directory-specific.  Clarify that the transaction \"latest\"", 
+   "file doesn't include the leading underscores.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(struct parse_baton): Add a field txn_rev which marks the revision", 
+   "number from the dump where we should stop and output a transaction.", 
+   "(children_to_dirmap): New convenience function to convert a", 
+   "directory hash into dumpable form.", 
+   "(write_directory_rep): Remove; with children_to_dirmap this is too", 
+   "trivial to remain.", 
+   "(write_field): Take a stream, so we can use this for transactions.", 
+   "(write_node_rev): Adjust write_field call sites.", 
+   "(write_entry): Replace write_directory_rep call with write_hash_rep", 
+   "call.  Make a note that we should detect if children haven't", 
+   "changed.  Detect empty property lists and omit the props field.", 
+   "(write_hash_to_file): New convenience function to write a hash", 
+   "to a file given the filename.", 
+   "(write_current): New function to output a \"current\" file after all", 
+   "the node-revs are dumped.", 
+   "(txn_node_rev_id): Like node_rev_id, but works for the node node-rev", 
+   "IDs assigned during transactions.", 
+   "(txn_repstr): Like repstr, but handles reps which exist in the", 
+   "transaction directory.", 
+   "(write_txn_dir_children): New function to output the changes to a", 
+   "directory's children to a new node-rev's .children file.", 
+   "(dump_txn_node_rev): New function to write the appropriate files", 
+   "to a transaction directory for a new node rev and all its children.", 
+   "(dump_txn): New function to dump a transaction directory with the", 
+   "changes made from parsing a dumpfile's revision.", 
+   "(new_node_revision, close_revision): Support the txn_rev field.", 
+   "(main): If an argument is given, treat it as the txn_rev."
+  ], 
+  "revision_id": "849466"
+ }
+]

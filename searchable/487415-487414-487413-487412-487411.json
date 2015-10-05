@@ -1,0 +1,89 @@
+[
+ {
+  "author": "djencks", 
+  "date": "2006-12-15T01:04:15.814074Z", 
+  "msg": [
+   "GERONIMO-2657 intermediate checkin, new method in AbstractNamingBuilder and deal with spec refs in PersistenceUnitRefBuilder"
+  ], 
+  "revision_id": "487415"
+ }, 
+ {
+  "author": "bpendleton", 
+  "date": "2006-12-15T01:01:14.868304Z", 
+  "msg": [
+   "DERBY-1644: NPE when inserting values to tbl w/ identity col gen by default", 
+   "When the VALUES clause encounters multiple rows, it generates a UNION", 
+   "node tree to combine the rows to be inserted. InsertNode notices the", 
+   "top-level UNION node and calls the special checkAutoincrementUnion()", 
+   "method which knows how to recursively traverse the Union tree and", 
+   "call checkAutoIncrement() on the underlying RowResultSetNode instances", 
+   "at the leaf level of the tree.", 
+   "HOWEVER, when the number of columns in the rows in the VALUES clause", 
+   "is a subset of the number of columns in the table we're inserting into,", 
+   "the top node of the tree is not a UnionNode, but is rather a", 
+   "ProjectRestrictNode. This means that we skip past the UnionNode test and", 
+   "just call checkAutoincrement(), which processes the PRN but doesn't", 
+   "go down to the RowResultSetNode(s) at the leaf level.", 
+   "This leaves the ResultColumn instance at the leaf level with a NULL column", 
+   "descriptor, which causes the NPE during the code generation phase.", 
+   "And, there is a second, related problem. The enhanceRCLForInsert() call", 
+   "is also only made at the top level of the tree. However, this call is a", 
+   "necessary pre-condition for calling checkAutoincrement() because", 
+   "enhanceRCLForInsert() ensures that the proper ResultColumnList values are", 
+   "in place prior to the checkAutoincrement() reconciliation of the column lists.", 
+   "The patch solves these problems by merging the code from InsertNode.bind", 
+   "together with the current recursive processing in", 
+   "ResultColumnList.checkAutoincrementUnion() to produce a new recursive", 
+   "routine, which I have called enhanceAndCheckForAutoincrement(), which will", 
+   "recursively traverse the ResultSet tree, calling *both* enhanceRCLForInsert()", 
+   "and checkAutoincrement() on the various nodes in the tree.", 
+   "Thus the primary ideas involved in this patch are:", 
+   "- When an INSERT statement will insert multiple rows from the VALUES", 
+   "clause, the compiler will compile the various values into a tree of", 
+   "UnionNodes with RowResultSetNodes at the leaves of the three", 
+   "- The columns specified in the INSERT statement may be a subset", 
+   "of the rows in the table. The \"extra\" columns need to be constructed by", 
+   "the INSERT statement, either by generating NULL values for those", 
+   "columns which are nullable, or by compiling a default values for those", 
+   "columns which have DEFAULT values, or by generating a value for an IDENTITY", 
+   "column which is GENERATED. The work of constructing these extra", 
+   "column values is done by genNewRCForInsert.", 
+   "- For columns which are GENERATED ALWAYS, we must make sure that", 
+   "the INSERT statement doesn't allow the user to insert their own value for", 
+   "the generated column.", 
+   "- The columns which are specified in the INSERT column spec may not match", 
+   "the order in which the columns arise in the table. Therefore, the column", 
+   "values may need to be re-ordered by the INSERT statement so that they", 
+   "occur in the proper order.", 
+   "- In the case when the ResultSet which provides the values for the INSERT", 
+   "statement is not just a single node, but is rather a tree of UnionNodes, the", 
+   "above processing needs to happen throughout the tree, not just at", 
+   "the root node."
+  ], 
+  "revision_id": "487414"
+ }, 
+ {
+  "author": "", 
+  "date": "2006-12-15T01:00:36.151517Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "487413"
+ }, 
+ {
+  "author": "djencks", 
+  "date": "2006-12-15T00:58:24.795944Z", 
+  "msg": [
+   "GERONIMO-2654 make the ContextHandlerCollection work, although a couple tests fail.  Both welcome and console apps work for me"
+  ], 
+  "revision_id": "487412"
+ }, 
+ {
+  "author": "awiner", 
+  "date": "2006-12-15T00:57:16.965178Z", 
+  "msg": [
+   "Merge in two commits missed during the component generator branch, and clean up the code a little"
+  ], 
+  "revision_id": "487411"
+ }
+]

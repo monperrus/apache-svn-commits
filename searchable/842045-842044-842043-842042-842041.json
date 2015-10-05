@@ -1,0 +1,103 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-05-16T18:26:36.749838Z", 
+  "msg": [
+   "* subversion/libsvn_fs/fs.c", 
+   "(svn_fs_create_berkeley): Set lock inits to 2000 in DB_CONFIG.", 
+   "I'm pretty sure this won't hurt anything, based on the text at", 
+   "http://www.sleepycat.com/docs/ref/lock/max.html, and it may help solve", 
+   "the problem described by Sander Striker's mail", 
+   "Subject: DB_CONFIG on svn.collab.net", 
+   "at http://subversion.tigris.org/servlets/ReadMsg?msgId=72992&listName=dev.", 
+   "Anyone who feels they understand this issue well should please feel", 
+   "free to tweak these numbers :-)."
+  ], 
+  "revision_id": "842045"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-16T05:47:41.229675Z", 
+  "msg": [
+   "Completion of issue #658.  Man, this 'deleted' entry thing is a royal", 
+   "pain in the %#*$.  But it's a necessary evil if we're to allow", 
+   "mixed-revision working copies that remain accurate.  And the", 
+   "implementation is much cleaner this time around, thanks to a lot of", 
+   "rewriting of libsvn_wc over the last year.", 
+   "All six of my hand-tests pass, and 'make check' passes over ra_local", 
+   "and ra_dav.  I think this is about a good a guarantee as we can get", 
+   "for now.  (That is, a guarantee that the 'ghudson paradox' is now", 
+   "fixed, and that we've not regressed at all.)", 
+   "* adm_ops.c (svn_wc_add):  allow this function to see 'deleted'", 
+   "items.  it's totally fine to have an entry scheduled for addition", 
+   "and previously 'deleted'.", 
+   "(recursively_tweak_entries):  don't recurse on 'deleted' directories.", 
+   "(svn_wc_revert): after removing a 'schedule add' entry, be sure to", 
+   "leave a lone 'deleted' entry behind iff the entry was also 'deleted'", 
+   "to begin with.", 
+   "* entries.c (svn_wc__entry_modify): make this function aware of", 
+   "'deleted' entries.  necessary for above change;  deleted entries", 
+   "may need to have 'schedule=add' merged into them.", 
+   "(fold_scheduling): allow a schedule=add when entry exists and is deleted.", 
+   "(svn_wc__tweak_entry): duh, actually remove the deleted entry from the hash.", 
+   "* log.c (log_do_committed, svn_wc__run_log): oops, don't forget to", 
+   "write out the Kind when creating a 'deleted' entry.  also, for a", 
+   "re-added dir, make sure 'deleted' flag goes away in parent's entry.", 
+   "* adm_crawler.c (report_revisions): if entry is 'deleted', report it", 
+   "as missing in update transaction.  This is the Whole Point of", 
+   "implementing 'deleted' entries.  :-)", 
+   "* commit_tests.py (hudson_part_1, hudson_part_1_variation_1): these", 
+   "tests no longer expect a 'no-op' deletion during the update.", 
+   "* notes/ghudson_deleted_entries:  new file, my notes on this issue."
+  ], 
+  "revision_id": "842044"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-15T23:22:50.631616Z", 
+  "msg": [
+   "Continuation of issue #658... remove 'deleted' entries altogether", 
+   "after updates and committed adds.", 
+   "* entries.c (svn_wc__tweak_entry): if the server didn't overwrite the", 
+   "deleted entry during an update, then it's safe to assume that the", 
+   "entry is *meant* to be gone in the parent dir's revision... so", 
+   "remove the entry altogether.", 
+   "* log.c (log_do_committed): if we manage to get the point where a", 
+   "committed entry is being 'installed', then it's safe to remove any", 
+   "'deleted' state that might have co-existed with a 'schedule=add'", 
+   "state."
+  ], 
+  "revision_id": "842043"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-05-15T22:33:36.036244Z", 
+  "msg": [
+   "Fix issue 705.  Don't use the trail pool for the returned conflict path.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(merge): Change parameter to svn_stringbuf_t*, and set it using", 
+   "svn_stringbuf_set.", 
+   "(merge_args): Make conflict an svn_stringbuf_t*.", 
+   "(svn_fs_commit_txn, svn_fs_merge_txn): Initialise merge_args.conflict", 
+   "using svn_stringbuf_create."
+  ], 
+  "revision_id": "842042"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-15T22:20:31.755773Z", 
+  "msg": [
+   "Mark entries as 'deleted' as the appropriate times in post-commit", 
+   "processing.", 
+   "* log.c (log_do_committed): for a committed, deleted file, possibly", 
+   "recreate a 'deleted' entry after removing it from revision control.", 
+   "(svn_wc__run_log):  if a KILLME file cause the whole directory to be", 
+   "removed, also possibly put a 'deleted' dir entry in parent as well.", 
+   "Also:  only remove logfile *after* checking for KILLME file.  This", 
+   "allows the next change...", 
+   "(svn_wc_cleanup): ...no need to look for a KILLME file.  If the log", 
+   "was run, it was already handled."
+  ], 
+  "revision_id": "842041"
+ }
+]

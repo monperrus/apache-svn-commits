@@ -1,0 +1,90 @@
+[
+ {
+  "author": "kristwaa", 
+  "date": "2009-01-13T08:01:46.221337Z", 
+  "msg": [
+   "DERBY-3907 (partial): Save useful length information for Clobs in store.", 
+   "Added the framework required to handle multiple stream header formats for", 
+   "stream sources. Note that handling of the new header format is not yet added,", 
+   "so the code should behave as before, using only the old header format.", 
+   "A description of the changes:", 
+   "o EmbedResultSet and EmbedPreparedStatement", 
+   "Started using the new ReaderToUTF8Stream constructor, where the stream", 
+   "header is passed in. Also started to treat the DataValueDescriptor as a", 
+   "StringDataValue, which should always be the case at this point in the code.", 
+   "o ReaderToUTF8Stream", 
+   "Added field 'header', which holds a StreamHeaderHolder coming from a", 
+   "StringDataValue object. Updated the constructors with a new argument. The", 
+   "first execution of fillBuffer now uses the header holder to obtain the", 
+   "header length, and the header holder object is consulted when checking if", 
+   "the header can be updated with the length after the application stream has", 
+   "been drained. Note that updating the header with a character count is not", 
+   "yet supported.", 
+   "o StringDataValue", 
+   "Added new method generateStreamHeader.", 
+   "o SQLChar", 
+   "Implemented generateStreamHeader, which always return a header for a stream", 
+   "with unknown length (see the constant).", 
+   "o SQLClob", 
+   "Added a constant for a 10.5 stream header holder representing a stream with", 
+   "unknown character length. Also updated the use of the ReaderToUTF8Stream", 
+   "constructor.", 
+   "o StreamHeaderHolder (new file)", 
+   "Holder object for a stream header, containing the header itself and the", 
+   "following additional information; \"instructions\" on how to update the header", 
+   "with a new length, if the length is expected to be in number of bytes or", 
+   "characters, and if an EOF marker is expected to be appended to the stream.", 
+   "o UTF8UTilTest", 
+   "Updated usage of the ReaderToUTF8Stream constructor, and replaced the", 
+   "hardcoded byte count to skip with a call to the header holder object.", 
+   "o jdbc4.ClobTest", 
+   "Added some simple tests inserting and fetching Clobs to test the basics of", 
+   "stream header handling.", 
+   "o StreamTruncationTest (new file)", 
+   "New test testing truncation of string data values when they are inserted as", 
+   "streams.", 
+   "Patch file: derby-3907-2c-header_write_preparation.diff"
+  ], 
+  "revision_id": "734065"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2009-01-13T07:37:28.953195Z", 
+  "msg": [
+   "CAMEL-1240 Moved the ResloverUti OSGI relates code into camel-osgi"
+  ], 
+  "revision_id": "734064"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2009-01-13T07:34:35.355970Z", 
+  "msg": [
+   "Fix for TUSCANT-2763 & TUSCANY-2764"
+  ], 
+  "revision_id": "734063"
+ }, 
+ {
+  "author": "jeremias", 
+  "date": "2009-01-13T07:34:18.950161Z", 
+  "msg": [
+   "Added clipping support."
+  ], 
+  "revision_id": "734062"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2009-01-13T07:32:46.034537Z", 
+  "msg": [
+   "Merged revisions 734057-734058 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/activemq/camel/trunk", 
+   "........", 
+   "r734057 | davsclaus | 2009-01-13 15:12:52 +0800 (Tue, 13 Jan 2009) | 1 line", 
+   "CAMEL-1249: Added unit test", 
+   "........", 
+   "r734058 | davsclaus | 2009-01-13 15:14:23 +0800 (Tue, 13 Jan 2009) | 1 line", 
+   "CAMEL-1249: Added unit test", 
+   "........"
+  ], 
+  "revision_id": "734061"
+ }
+]

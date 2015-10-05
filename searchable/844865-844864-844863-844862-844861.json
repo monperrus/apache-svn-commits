@@ -1,0 +1,112 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-02-07T22:50:25.287947Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "(do_log, do_author): Don't do UTF-8 translation here -- the get_property()", 
+   "helper takes care of this for us."
+  ], 
+  "revision_id": "844865"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2003-02-07T22:46:27.349192Z", 
+  "msg": [
+   "Patch by: Kai Nacke <kai.nacke@redstar.de>", 
+   "\"C pointers in the Java module are stored in a Java long and cross", 
+   "the JNI boundary held within this 64 bit number. whereas other SWIG", 
+   "language modules use an encoding of the pointer in a string. These", 
+   "scripting languages use the SWIG runtime type checker for type", 
+   "checking as they do not support static type checking by a", 
+   "compiler. In order to implement static type checking of pointers", 
+   "within Java, they are wrapped by a simple Java class.", 
+   "This means that there is no need for functions like", 
+   "SWIG_NewPointerObj() and then there is no need for a runtime", 
+   "library. Consequently I found hints to swigjava in the SWIG", 
+   "sources.\"", 
+   "* subversion/bindings/swig/swigutil_java.h", 
+   "(SVN_NEED_SWIG_TYPES, swig_type_info, SWIG_TypeQuery): Removed as", 
+   "unnecessary.", 
+   "(svn_swig_java_convert_hash): Removed swig_type_info from function", 
+   "signature.", 
+   "* subversion/bindings/swig/swigutil_java.c", 
+   "(svn_swig_java_convert_hash): Removed swig_type_info from function", 
+   "signature.", 
+   "(convert_to_swigtype): Removed comment about ctx parameter which is", 
+   "no longer applicable.", 
+   "(make_pointer, convert_hash): Formatting tweaks."
+  ], 
+  "revision_id": "844864"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-02-07T22:44:11.547190Z", 
+  "msg": [
+   "* include/svn_string.h, libsvn_subr/string.c", 
+   "(svn_cstring_match_glob_list): Take a list, rather than a string", 
+   "containing a comma-separated list.  It's more general.", 
+   "* include/svn_wc.h, libsvn_wc/status.c", 
+   "(svn_wc_is_ignored): This is the same as svn_cstring_match_glob_list", 
+   "with the above change.  So remove it.", 
+   "All call sites changed for above functions."
+  ], 
+  "revision_id": "844863"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2003-02-07T21:59:00.060931Z", 
+  "msg": [
+   "Work towards usable SWIG/Java bindings.  Jesper says that this gives", 
+   "us hash conversion and a usable `svn st` command.", 
+   "Patch by: Jesper Steen M\u00f8ller <jesper@selskabet.org>", 
+   "* subversion/bindings/swig/apr.i", 
+   "* subversion/bindings/swig/svn_client.i", 
+   "* subversion/bindings/swig/svn_string.i", 
+   "* subversion/bindings/swig/svn_types.i", 
+   "* subversion/bindings/swig/util.i", 
+   "Typemaps for Java and JNI.", 
+   "* subversion/bindings/swig/swigutil_java.h", 
+   "(SWIG_NewPointerObj): Removed function.  Jesper indicates its not", 
+   "necessary.", 
+   "(svn_swig_java_add_to_map): Adds all the elements from a hash to an", 
+   "existing java.util.Map", 
+   "(svn_swig_java_notify_func): A notify function that executes a Java", 
+   "method on an object which is passed in via the baton argument.", 
+   "(svn_swig_java_get_commit_log_func): Thunked commit log fetcher.", 
+   "(svn_swig_java_log_message_receiver): Log messages are returned in", 
+   "this.", 
+   "* subversion/bindings/swig/swigutil_java.c", 
+   "(make_pointer): Now returns a java.lang.Long as a jobject.", 
+   "(make_ob_pool, make_ob_window): Removed functions.", 
+   "(convert_hash): converter_func argument now itself takes a JNIEnv *.", 
+   "(svn_swig_java_add_to_map): No longer static.  Now takes a JNIEnv *.", 
+   "Implementation heavily modified.", 
+   "(convert_to_swigtype): Now implemented using make_pointer().", 
+   "(convert_svn_string_t): Now implemented using JNI's NewStringUTF().", 
+   "(svn_swig_java_prophash_to_dict): Now implemented using JNI's", 
+   "NewStringUTF().", 
+   "(svn_swig_java_array_to_list): Improved impl.", 
+   "(make_baton): Notes new global references to editor and baton.", 
+   "(svn_swig_java_notify_func, svn_swig_java_get_commit_log_func,", 
+   "svn_swig_java_log_message_receiver): New stub functions."
+  ], 
+  "revision_id": "844862"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2003-02-07T20:06:04.577892Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(JDK, JAVAC): New Makefile variables which will be filled in by the", 
+   "preprocessor.", 
+   "(swig-java-ext): Depends upon new java target, which builds the", 
+   "interfaces which our SWIG/Java bindings will implement.  This", 
+   "dependency might be more appropriate on the swig-java-lib target.", 
+   "(java): New target which invokes the Makefile in the", 
+   "subversion/bindings/java/ directory with the appropriate Java", 
+   "compiler."
+  ], 
+  "revision_id": "844861"
+ }
+]

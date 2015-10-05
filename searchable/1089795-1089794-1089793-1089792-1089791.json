@@ -1,0 +1,66 @@
+[
+ {
+  "author": "dag", 
+  "date": "2011-04-07T10:00:15.047022Z", 
+  "msg": [
+   "DERBY-5158 Incomprehensible error message on client if attempting rollback after database has been shut down.", 
+   "Scenario: app code calling client JDBC connection commit or rollback", 
+   "after the database has been shut down. In the commit case the issue", 
+   "and fix only applies if a transaction has been started, since", 
+   "otherwise the client optimizes the commit away.", 
+   "Patch DERBY-5158b, which corrects the protocol code on the client side", 
+   "to cater for ENDUOWRM even in the error case (as sent by the", 
+   "server). Looking at the DRDA standard, I managed to satisfy myself", 
+   "that this is the correct behavior: section 7.5 Commit/Rollback", 
+   "processing, where CR2 says:", 
+   "\"Application servers using remote unit of work protocols and", 
+   "application servers using distributed unit of work but not protected", 
+   "by a sync point manager must inform the application requester when the", 
+   "current unit of work at the application server ends as a result of a", 
+   "commit or rollback request by an application or application requester", 
+   "request. This information is returned in the RPYDSS, containing the", 
+   "ENDUOWRM reply message.\"", 
+   "The \"remote unit of work\" is definitely ended, so...", 
+   "Note that the (new) error stack trace is still different than with the", 
+   "embedded driver, since there the 08003 will be directly reported as", 
+   "the error (not wrapped in 06006 as shown below for the client side).", 
+   "With this new code, on the client side, one can clearly see from the", 
+   "exception stack that the underlying cause of the error is 08003. \"No", 
+   "current connection\".", 
+   "I added a new test, Derby5158Test."
+  ], 
+  "revision_id": "1089795"
+ }, 
+ {
+  "author": "oheger", 
+  "date": "2011-04-07T09:54:05.301931Z", 
+  "msg": [
+   "Fixed some Eclipse warnings and removed duplicate code."
+  ], 
+  "revision_id": "1089794"
+ }, 
+ {
+  "author": "oheger", 
+  "date": "2011-04-07T09:45:51.887263Z", 
+  "msg": [
+   "Removed some duplicate code."
+  ], 
+  "revision_id": "1089793"
+ }, 
+ {
+  "author": "jogep", 
+  "date": "2011-04-07T09:44:15.194306Z", 
+  "msg": [
+   "Add missing else statement. Otherwise the IllegalStateException is also thrown when PortletResponse is instanceof ResourceRespons."
+  ], 
+  "revision_id": "1089792"
+ }, 
+ {
+  "author": "bdelacretaz", 
+  "date": "2011-04-07T09:29:15.324199Z", 
+  "msg": [
+   "STANBOL-138 - maven-scr-plugin 1.7.0 apparently has new and improved bugs, revert"
+  ], 
+  "revision_id": "1089791"
+ }
+]

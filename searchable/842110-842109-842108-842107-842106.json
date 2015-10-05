@@ -1,0 +1,108 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-29T21:31:51.517696Z", 
+  "msg": [
+   "Merging a recent change to /trunk into my branch (plus a little", 
+   "tweaking to make it work in the branch).  Here's the original:", 
+   "--", 
+   "Author: sussman", 
+   "New Revision: 2035", 
+   "Bugfixes for fs dump/load:", 
+   "1.  if the dumpstream parser successfully svn_fs_copy()'s a subtree,", 
+   "then make sure it *ignores* all child nodes of the subtree (...as they", 
+   "continue to come from the stream.)", 
+   "2.  the dumper was forgetting to add a blank line after outputting a", 
+   "set of 'delete' headers, so the headers were blending into the next", 
+   "set of 'new revision' headers, appearing to be one giant header block.", 
+   "* load.c", 
+   "(struct parse_baton): rename 'use_history' flag to 'require_copy_source',", 
+   "for readability.  change all instances of this flag.", 
+   "(struct node_baton): add new 'inside_copied_tree' flag.", 
+   "(make_node_baton):  initialize flag to FALSE.", 
+   "(struct revision_baton): add new 'copied_paths' array.", 
+   "(make_revision_baton): initialize array.", 
+   "(maybe_add_with_history):  after doing an svn_fs_copy(), store the", 
+   "path in the array.  before doing an svn_fs_make_{file|dir}, check to", 
+   "see if the node's path is a child of any copied-path in the array.", 
+   "(set_node_property): only set a node property if *not*", 
+   "inside_copied_tree.  otherwise, just ignore the property.", 
+   "(set_fulltext): if inside_copied_tree, return NULL textstream", 
+   "[meaning \"don't send me no text!\"]", 
+   "* dump.c", 
+   "(dump_node): add second \\n at the end of a delete header block."
+  ], 
+  "revision_id": "842110"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-29T20:30:45.567225Z", 
+  "msg": [
+   "Bugfixes for fs dump/load:", 
+   "1.  if the dumpstream parser successfully svn_fs_copy()'s a subtree,", 
+   "then make sure it *ignores* all child nodes of the subtree (...as they", 
+   "continue to come from the stream.)", 
+   "2.  the dumper was forgetting to add a blank line after outputting a", 
+   "set of 'delete' headers, so the headers were blending into the next", 
+   "set of 'new revision' headers, appearing to be one giant header block.", 
+   "* load.c", 
+   "(struct parse_baton): rename 'use_history' flag to", 
+   "'require_copy_source', for readability.  change all instances of", 
+   "this flag.", 
+   "(struct node_baton): add new 'inside_copied_tree' flag.", 
+   "(make_node_baton):  initialize flag to FALSE.", 
+   "(struct revision_baton): add new 'copied_paths' array.", 
+   "(make_revision_baton): initialize array.", 
+   "(maybe_add_with_history):  after doing an svn_fs_copy(), store the", 
+   "path in the array.  before doing an svn_fs_make_{file|dir}, check to", 
+   "see if the node's path is a child of any copied-path in the array.", 
+   "(set_node_property): only set a node property if *not*", 
+   "inside_copied_tree.  otherwise, just ignore the property.", 
+   "(set_fulltext): if inside_copied_tree, return NULL textstream", 
+   "[meaning \"don't send me no text!\"]", 
+   "* dump.c (dump_node): add second \\n at the end of a delete header block."
+  ], 
+  "revision_id": "842109"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-05-29T18:56:06.116576Z", 
+  "msg": [
+   "Contributed by Patrik Husfloen <pathu440@student.liu.se>.", 
+   "* INSTALL: Update info about diff and diff3 location on Windows.", 
+   "Remove references to patch."
+  ], 
+  "revision_id": "842108"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-29T17:34:45.635555Z", 
+  "msg": [
+   "More work on issue #517.  Don't set the property -- this code is", 
+   "untested.", 
+   "* subversion/libsvn_client/checkout.c: #include svn_types.h, for", 
+   "APR_ARRAY_IDX.", 
+   "(handle_externals): Take new arguments to support a checkout.  Parse", 
+   "the description and do the checkout.", 
+   "(process_externals): Take new arguments like above.  Destroy", 
+   "subpool when done looping.", 
+   "(svn_client_checkout): Adjust call to process_externals."
+  ], 
+  "revision_id": "842107"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-29T16:59:29.270338Z", 
+  "msg": [
+   "Thanks to Hadaka and Ben C-Suss for mentioning these.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos_get_committed_info): Check for null before", 
+   "dereferencing.  Remove duplicate doc string.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_get_committed_info): Update documentation.", 
+   "* subversion/libsvn_ra_local/checkout.c", 
+   "(set_any_props): Don't reallocate the property name."
+  ], 
+  "revision_id": "842106"
+ }
+]

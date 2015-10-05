@@ -1,0 +1,103 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-19T02:01:33.727841Z", 
+  "msg": [
+   "Continued removal of adm_retrieve.", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(get_copyfrom_url_rev_via_parent): forget all the complicated baton", 
+   "handling, and use svn_wc__get_entry.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(report_revisions_and_depths): don't worry about a subdir access baton,", 
+   "and just use get_entry() to get the sudir information."
+  ], 
+  "revision_id": "877435"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-19T01:31:02.651918Z", 
+  "msg": [
+   "Continue with the removal of svn_wc_adm_retrieve() from the props", 
+   "management. Only svn_wc_prop_set3() still calls it. There are a lot of", 
+   "uses of the access baton in there, so will leave it for now.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(write_wcprops): take a directory path rather than an access baton. pass", 
+   "that along to svn_wc__remove_adm_file. while here, also make sure the", 
+   "subpool is destroyed before exit.", 
+   "(wcprops_modify_allowed): take a DB and DIR_ABSPATH instead of an access", 
+   "baton. call into wc_db to get the format number.", 
+   "(delete_wcprops): take a DB and a couple paths instead of an access", 
+   "baton. revamp logic to use new values and new paramsets for called", 
+   "functions.", 
+   "(svn_wc__props_delete): pass new params to delete_wcprops.", 
+   "(svn_wc__wcprop_set): use svn_wc__get_entry, toss the batons, and", 
+   "compute the DIR_ABSPATH local a bit differently. update params to", 
+   "write_wcprops.", 
+   "(svn_wc_get_prop_diffs): switch from svn_wc_entry to svn_wc__get_entry.", 
+   "don't worry about access batons -- not needed.", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "(svn_wc__remove_adm_file): take a directory path rather than a baton", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__close_adm_stream): follow the ### marker and remove the", 
+   "TMP_PATH computation in favor of the parameter. add return tracing.", 
+   "(svn_wc__remove_adm_file): switch from an access baton to a path.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(close_single): update call to svn_wc__remove_adm_file()", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(run_log): grab the baton's abspath and use it in various calls"
+  ], 
+  "revision_id": "877434"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-19T00:09:13.001118Z", 
+  "msg": [
+   "Make svn_wc_prop_get() return an error when the requested PATH is not", 
+   "present or has some other problem (rather than quietly papering over the", 
+   "error).", 
+   "In 1.6, this condition might throw an SVN_ERR_WC_NOT_LOCKED error for", 
+   "obscure reasons (originating in svn_wc_adm_retrieve). That error is a bit", 
+   "weird since a *get* should not require a lock. This code will throw", 
+   "SVN_ERR_WC_PATH_NOT_FOUND.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_prop_get): handle errors from get_entry() better", 
+   "* subversion/libsvn_client/merge.c:", 
+   "(determine_merges_performed): remove a useless cast", 
+   "(update_wc_mergeinfo): handle NOT_LOCKED and PATH_NOT_FOUND as ways of", 
+   "determining that a merge target is not present.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__get_entry): if the caller doesn't know the node type, and we", 
+   "detect a directory, but have problems reading it, then something more", 
+   "subtle could be going on. look harder and return the right data."
+  ], 
+  "revision_id": "877433"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-04-18T22:50:55.757698Z", 
+  "msg": [
+   "Fix some typos.", 
+   "* subversion/libsvn_fs_base/notes/fs-history:", 
+   "* subversion/libsvn_fs_base/tree.c:", 
+   "* subversion/libsvn_fs_fs/tree.c: Fix some typos.", 
+   "* subversion/libsvn_fs_fs/tree.c: Correct line endings to '\\n' from '\\r\\n'."
+  ], 
+  "revision_id": "877432"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-18T22:43:03.630018Z", 
+  "msg": [
+   "The new svnpatch stuff was attempting to get property information for", 
+   "\"versioned files\" in the temp area. Not gonna work. We want to get the", 
+   "properties from the true versioned file, and apply the translation to some", 
+   "other file.", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(transmit_svndiff): change FILE_BATON parameter to its real type. no", 
+   "need for a void* since this is always called directly. in the call to", 
+   "svn_wc_translated_stream, pass file_baton->path for the VERSIONED_FILE", 
+   "rather than the file that we want to have translated"
+  ], 
+  "revision_id": "877431"
+ }
+]

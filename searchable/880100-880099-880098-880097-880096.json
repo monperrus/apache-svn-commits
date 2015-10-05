@@ -1,0 +1,75 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-14T16:36:11.398898Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(flush_log, flush_file_log): Following up on r40025, set the number of", 
+   "elements in an apr array to 0 instead of using a function that doesn't", 
+   "exist in apr 0.9."
+  ], 
+  "revision_id": "880100"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-14T15:27:43.731907Z", 
+  "msg": [
+   "Following up on issues discovered/worked around by gstein in r40000", 
+   "and in preparation for moving all property operations in the database,", 
+   "take baton lifetime in the update editor in our own hands. Construct per", 
+   "dir and per file pools in their parent pool and the top level directory", 
+   "in the editor pool.", 
+   "This moves the final cleanup for the directories to the close/bump of", 
+   "their parent or of the editor in case of the root, instead of at closing", 
+   "of the parent pool of the editor (read: at svn exit time).", 
+   "Use this functionality to introduce a per file log and a per file/dir", 
+   "wq item accumulator, which will be used for property operations soon.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(dir_baton): Remove copy of edit_baton->db, add wq_accumulator.", 
+   "(bump_dir_info): Add pool.", 
+   "(flush_log): Use db from edit baton. Also flush the wq_accumulator.", 
+   "(cleanup_dir_baton): Update user.", 
+   "(make_dir_baton): Create baton in parent and allocate everything in the", 
+   "baton pool.", 
+   "(maybe_bump_dir_info): Destroy the directory pool after bumping.", 
+   "(close_directory): Flush the log if skipping the directory.", 
+   "(file_baton): Add log and wq accumulator.", 
+   "(make_file_baton): Create pool in parent dir pool and allocate everything in", 
+   "this pool.", 
+   "(flush_file_log): New function, like flush_log()", 
+   "(open_file, add_file, merge_file):", 
+   "Add accumulated work to file accumulator.", 
+   "(close_file): If not skipping, send accumulated operations to the wq. Destroy", 
+   "file pool.", 
+   "(make_editor): Rename pools to match their usage."
+  ], 
+  "revision_id": "880099"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2009-10-14T14:59:44.733434Z", 
+  "msg": [
+   "* subversion/po/nb.po: Norwegian translation updates.", 
+   "Also restored obsolete messages to make merging to 1.6.x easier."
+  ], 
+  "revision_id": "880098"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2009-10-14T14:57:20.382052Z", 
+  "msg": [
+   "nb.po: Get rid of line number changes before I commit the updates.", 
+   "* subversion/po/nb.po", 
+   "\"make locale-gnu-po-update PO=nb\" at r40022."
+  ], 
+  "revision_id": "880097"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-14T13:51:29.680679Z", 
+  "msg": [
+   "* STATUS: Cast a -0 vote on r39019."
+  ], 
+  "revision_id": "880096"
+ }
+]

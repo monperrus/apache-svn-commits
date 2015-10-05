@@ -1,0 +1,105 @@
+[
+ {
+  "author": "striker", 
+  "date": "2002-07-03T14:02:23.295226Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_add_dir, commit_add_file): escape the uri before passing it to", 
+   "neon.  This fixes adding with history for dirs/files that contain", 
+   "spaces."
+  ], 
+  "revision_id": "842480"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-07-02T23:45:04.078647Z", 
+  "msg": [
+   "* tools/hook-scripts/commit-email.pl:", 
+   "The list of added, deleted and modified files had three spaces", 
+   "prepended to the path names and a \\n appended.  If a -m regular", 
+   "expression like ^trunk/proj1 was being used then it wouldn't", 
+   "match.  Add the proper spacing and \\n when putting the output", 
+   "together.", 
+   "To help users (like me) that automatically write -m regular", 
+   "expressions that match the root directory using ^/, remove the /", 
+   "character because subversion paths, while they start at the root", 
+   "level, do not begin with a /."
+  ], 
+  "revision_id": "842479"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-07-02T23:11:05.431358Z", 
+  "msg": [
+   "Continuing the work of revisions 2388, 2396, 2397.", 
+   "This is, somewhat tangentially, part of issue #494.", 
+   "* subversion/include/svn_io.h", 
+   "(apr_check_dir_empty): Remove public prototype.  We're wrapping it", 
+   "with the new function below now; in any case it will soon be moved", 
+   "to APR.", 
+   "(svn_io_dir_empty): New prototype.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(apr_dir_is_empty): Replaces apr_check_dir_empty, declare static.", 
+   "Document in APR style, in preparation for move to APR.  Rewrite", 
+   "body, now check for \".\" and \"..\" explicitly.  Change calling", 
+   "discipline.  I love saying that: \"calling discipline\".  There, I", 
+   "said it again.", 
+   "(svn_io_dir_empty): New function, wrapper for above.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(svn_repos_create): Use svn_io_dir_empty now.  Also, call", 
+   "svn_io_dir_make instead of apr_dir_make.", 
+   "* subversion/libsvn_subr/svn_error.c", 
+   "(allocator_reset_mutex): Fix typo in comment, was messing up my fancy", 
+   "grepping.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_DIR_NOT_EMPTY): Replaces SVN_ERR_FS_DIR_NOT_EMPTY.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(delete_mutables): Adjust error code accordingly.", 
+   "* subversion/bindings/ruby/error.c", 
+   "(svn_ruby_init_error): Same.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(delete_entry): Same.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_delete): Same."
+  ], 
+  "revision_id": "842478"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-02T20:13:55.540816Z", 
+  "msg": [
+   "Backport of r2402 to fs-convert-2092 branch.", 
+   "(\"Revert 2386, make dumper selectively dump text/props as necessary.\")"
+  ], 
+  "revision_id": "842477"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-02T19:34:15.100363Z", 
+  "msg": [
+   "A better solution to issue #776, after talking with cmpilato and kfogel.", 
+   "Revert r2386; instead, have the dumper call svn_fs_contents_changed on", 
+   "files, and svn_fs_props_changed on both files and dirs.  Based on the", 
+   "answers, conditionally write out text or props as necessary.", 
+   "(The inelegance is that the dumper is repeating some work already", 
+   "being done by dir_delta.  But on the other hand, if we allow dir_delta", 
+   "to do these tests for us, then the dumper editor gets a *lot* more", 
+   "complex: it grows file batons, close_file, apply_txdelta... and worse,", 
+   "we end up with a dilemma that would force us to write out added", 
+   "directories *after* their children (in close_dir()), which is a huge", 
+   "no-no for our dumpstream.  So in comparison, this solution is *much*", 
+   "more elegant;  we can continue to dump nodes as soon as we get an", 
+   "add_* or open_* call from dir_delta.)", 
+   "* tree.c (svn_fs_contents_changed):  revert r2386... force this", 
+   "function to only operate on files.", 
+   "* dump.c (struct edit_baton, get_dump_editor): add and initialize", 
+   "'current_rev' field, just a cached revnum that the root object", 
+   "represents.", 
+   "(dump_node): big changes, as described in first paragraph of log", 
+   "message.  Test for textual/prop changes when a node is 'changed' or", 
+   "added with history; unconditionally dump both text & props for", 
+   "simple adds or replaces;  never dump anything for a delete."
+  ], 
+  "revision_id": "842476"
+ }
+]

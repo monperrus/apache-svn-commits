@@ -1,0 +1,96 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2006-09-25T18:25:31.712679Z", 
+  "msg": [
+   "Replace anonymous data types with structs in setup of the path tests.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_uri_encode, test_uri_decode, test_uri_autoescape, test_basename,", 
+   "test_dirname, test_canonicalize, test_remove_component: replace the", 
+   "two-dimensional arrays of char *'s with arrays of struct {path, result}.", 
+   "Suggested by: philip", 
+   "dlr"
+  ], 
+  "revision_id": "861705"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-25T17:48:30.323195Z", 
+  "msg": [
+   "On the merge-tracking branch: Ignore missing paths when collecting the", 
+   "values for a property, fixing merge test #17.", 
+   "This change depends on the new WC walker error handler API added in", 
+   "r21629 (r21628 from trunk).", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(wc_walker_error_handler): Add error handler to squelch ERR by", 
+   "returning SVN_NO_ERROR if ERR is casued by a missing path.", 
+   "(svn_client__get_prop_from_wc): Use a svn_wc_entry_callbacks2_t data", 
+   "structure carrying a wc_walker_error_handler() callback to invoke", 
+   "svn_wc_walk_entries3()."
+  ], 
+  "revision_id": "861704"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-25T17:46:05.726226Z", 
+  "msg": [
+   "On the merge-tracking branch: Merge r21628 from trunk, adding a", 
+   "generic error handler callback to the WC walker API."
+  ], 
+  "revision_id": "861703"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-25T17:38:45.787979Z", 
+  "msg": [
+   "Add a generic error handler to routine to the WC walker API, adding", 
+   "the ability to modify or squelch errors which occur while walking the", 
+   "WC tree.", 
+   "While this will initially be used on the merge-tracking branch, I'm", 
+   "committing it to trunk as a (hopefully) generally useful API change.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_entry_callbacks2_t): Rev the WC walker callbacks, which", 
+   "adding a handle_error() callback hook.", 
+   "(svn_wc_walk_entries3): Rev the WC walker API, switching to", 
+   "svn_wc_entry_callbacks2_t.", 
+   "(svn_wc_walk_entries2): Deprecate the previous API.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(walker_helper): Accept a svn_wc_entry_callbacks2_t for the", 
+   "WALK_CALLBACKS parameter, and use its handle_error() API", 
+   "throughout.  When attempting recursion into entry sub-directories,", 
+   "skip them if a lock cannot be procured.", 
+   "(svn_wc_walk_entries3): Rev the svn_wc_walk_entries2() API, and use", 
+   "the handle_error() API.", 
+   "(svn_wc_walk_entries2): Replace with compat code.", 
+   "(walker_default_error_handler): A new no-op, compat error handler", 
+   "callback."
+  ], 
+  "revision_id": "861702"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-09-25T15:08:06.545858Z", 
+  "msg": [
+   "Add the ability to run the svnserve checks with Cyrus SASL turned on.", 
+   "Note that the svnserve tests are failing for me with this turned on. I'm", 
+   "still committing this now since it's off by default and it seems to be a", 
+   "problem unrelated to this particular patch.", 
+   "Patch by: Vlad Georgescu <vgeorgescu@gmail.com>", 
+   "(Tweaked by me.)", 
+   "* Makefile.in", 
+   "(check): Handle the 'ENABLE_SASL' command line argument.", 
+   "(svncheck): Document usage of ENABLE_SASL.", 
+   "* build/run_tests.py:", 
+   "Propagate the '--enable-sasl' option to the individual tests.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(enable_sasl): New global variable.", 
+   "(create_repos): Check the value of enable_sasl when", 
+   "creating svnserve.conf.", 
+   "(run_tests): Set enable_sasl to 1 if '--enable-sasl' was used.", 
+   "* subversion/tests/cmdline/authz_tests.py:", 
+   "(write_restrictive_svnserve_conf): Check the value of enable_sasl when", 
+   "creating svnserve.conf."
+  ], 
+  "revision_id": "861701"
+ }
+]

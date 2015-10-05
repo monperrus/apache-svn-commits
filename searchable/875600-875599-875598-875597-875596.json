@@ -1,0 +1,70 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-28T16:16:15.289311Z", 
+  "msg": [
+   "Merge r35525 from trunk.  Consistent test results are ... helpful."
+  ], 
+  "revision_id": "875600"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-28T15:39:29.188304Z", 
+  "msg": [
+   "Add a kludge to the merge tests to try to prevent unnecessarily", 
+   "reported test failures when testing ra-serf.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_merge2): If the dry-run and regular merge outputs", 
+   "differ, compare them again sorted just in case ra_serf's", 
+   "multi-threaded model has simply generated output in a different", 
+   "order across the two runs."
+  ], 
+  "revision_id": "875599"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-01-28T12:05:09.206594Z", 
+  "msg": [
+   "Add a new #define for debugging the packing functionality.  (Apparently,", 
+   "just having --fsfs-packing in the Python tests is not enough; see r35523).", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(PACK_AFTER_EVERY_COMMIT):", 
+   "Make svn_fs_commit_txn() pack the filesystem if the macro is defined at", 
+   "compile time.  Leave it not-defined by default."
+  ], 
+  "revision_id": "875598"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-01-28T11:52:59.379251Z", 
+  "msg": [
+   "Fix 'svnadmin hotcopy' of packed repositories.", 
+   "To reproduce (with vanilla trunk):", 
+   "#!/bin/sh", 
+   "rm -rf Foo Bar Bar2", 
+   "svnadmin create Foo", 
+   "sed -i 's/sharded 1000/sharded 1/' Foo/db/format", 
+   "svnadmin hotcopy Foo Bar", 
+   "svnadmin pack Foo", 
+   "echo \"=== *Now* it will error:\"", 
+   "svnadmin hotcopy Foo Bar2", 
+   "The bug was found by svnadmin_tests.py with -DPACK_AFTER_EVERY_COMMIT.  (It", 
+   "did not reproduce if only --fsfs-packing was used to enable packing in the", 
+   "post-commit hook in the tests.)", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__hotcopy):", 
+   "Account for packed shards when copying the revs/ directory."
+  ], 
+  "revision_id": "875597"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-01-28T10:38:24.938135Z", 
+  "msg": [
+   "Print a better error message on test failure.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(hotcopy_dot):  s/run_svnadmin/run_and_verify_svnadmin/."
+  ], 
+  "revision_id": "875596"
+ }
+]

@@ -1,0 +1,108 @@
+[
+ {
+  "author": "kou", 
+  "date": "2007-10-14T04:10:53.922636Z", 
+  "msg": [
+   "Split tools/hook-scripts/commit-email.rb to use as library.", 
+   "* tools/hook-scripts/commit-email.rb: Use Svn::CommitMailer.", 
+   "Interface should not be changed. If it is broken, this should be a bug.", 
+   "* subversion/bindings/swig/ruby/svn/commit-mailer.rb: New experimental library."
+  ], 
+  "revision_id": "867250"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-10-13T17:04:04.677137Z", 
+  "msg": [
+   "JavaHL: Simplify the merge API, but taking advantage of the r27133 which", 
+   "improved the interface to svn_client_merge_peg3().  This removes a merge", 
+   "API which is now largely trivial.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testMergeConflictResolution): Remove usage of removed API.", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2ZIZZ): Rename from this...", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_merge__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2_3Lorg_tigris_subversion_javahl_RevisionRange_2Ljava_lang_String_2ZIZZ): ...to this.", 
+   "Create an std::vector of RevisionRanges from the Java revision range array.", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(merge): Accept an std::vector, and use that the generate the array for", 
+   "use by svn_client_merge_peg3().", 
+   "* native/RevisionRange.h,", 
+   "native/RevisionRange.cpp", 
+   "(toRange): New method.", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java", 
+   "(merge): Remove extra API.", 
+   "* src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(merge): Remove extra API.", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java", 
+   "(merge): Remove extra API.", 
+   "(merge): Update wrappers."
+  ], 
+  "revision_id": "867249"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-10-13T14:57:42.667909Z", 
+  "msg": [
+   "Fix update_tests.py 39 in Windows: when locally adding a line in file 'rho',", 
+   "we're also changing the eol of the existing line in 'rho' from LF to CRLF.", 
+   "When we do a subsequent update this change will conflict with the incoming", 
+   "change as can be expected, but this is not what this test is about.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_handles_copyfrom_with_txdeltas): write all file changes in binary", 
+   "mode  instead of text."
+  ], 
+  "revision_id": "867248"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-10-13T12:39:18.093198Z", 
+  "msg": [
+   "Fix externals_tests.py 8: the test doesn't use the sandbox wc anymore, so", 
+   "creating temp files in wc_dir will fail on all platforms actually using", 
+   "the suggested directory in the os.tempnam() call. Change to create the temp", 
+   "files in the system's default temp directory.", 
+   "* subversion/tests/cmdline/externals_tests.py", 
+   "(disallow_dot_or_dotdot_directory_reference): create temp files in the", 
+   "system's temp directory."
+  ], 
+  "revision_id": "867247"
+ }, 
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-10-13T11:32:03.117835Z", 
+  "msg": [
+   "Only use the depth-filtering editor if the server doesn't understand depths.", 
+   "For ra_neon/ra_serf, we already do this (see r25990), by looking for a", 
+   "\"depth\" attribute in the response sent by mod_dav_svn.  Since r27168, we", 
+   "can use capabilities instead, so let's do that.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_get_reporter): Don't use a depth filtering editor if the server", 
+   "has the SVN_RA_SVN_CAP_DEPTH capability.", 
+   "* subversion/libsvn_ra_neon/fetch.c", 
+   "(report_baton_t): Remove 'depth' member.", 
+   "(start_element): Don't look for a depth attribute.  Move the code that", 
+   "installs the depth filtering editor from here...", 
+   "(make_reporter): ...to here.  Use svn_ra_neon__has_capability() to", 
+   "determine whether the server supports depths.  Don't store the requested", 
+   "depth in the report baton.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__has_capability): Remove 'static' qualifier.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__has_capability): New declaration.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_context_t): Remove 'depth' member.", 
+   "(start_report): Don't look for a depth attribute.  Move the code that", 
+   "installs the depth filtering editor from here...", 
+   "(make_update_reporter): ...to here.  Use svn_ra_serf__has_capability() to", 
+   "determine whether the server supports depths.    Don't store the requested", 
+   "depth in the report context.", 
+   "* mod_dav_svn/reports/update.c", 
+   "(update_ctx_t): Remove 'depth' member.", 
+   "(maybe_start_update_report): Don't put a depth attribute in the XML.", 
+   "(dav_svn__update_report): Don's stash away the requested depth."
+  ], 
+  "revision_id": "867246"
+ }
+]

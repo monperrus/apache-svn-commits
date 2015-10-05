@@ -1,0 +1,61 @@
+[
+ {
+  "author": "mikem", 
+  "date": "2009-06-03T18:25:51.740891Z", 
+  "msg": [
+   "DERBY-4239", 
+   "backporting svn #780352 from trunk to 10.4 branch.", 
+   "In the case of inplace compress it is necessary to get a valid checkpoint", 
+   "into the log file after any other log record for the table being compressed.", 
+   "This insures that if redo recovery is run, it will not be applied to any", 
+   "log record before the compress. This is necessary as compress will basically", 
+   "destroy a page and redo recovery will get various errors if it tries to", 
+   "apply a redo page operation at page version N against a new page.", 
+   "Before this fix the requested checkpoint would not be executed if a checkpoint", 
+   "was already in progress. The problem is that there is no way to tell if", 
+   "the executing checkpoint is after all operations on the table. So the fix", 
+   "in this case waits for the checkpoint to finish and starts a new one.", 
+   "The changes also apply this new behavior to all calls to checkpoint which", 
+   "previously had marked that the routine should wait until the checkpoint", 
+   "finished. This will affect backup and checkpoints initiated by a user", 
+   "calling the system procedure."
+  ], 
+  "revision_id": "781500"
+ }, 
+ {
+  "author": "fapeeler", 
+  "date": "2009-06-03T18:10:54.980364Z", 
+  "msg": [
+   "VCL-15,VCL-135", 
+   "Added ASF 2.0 license. Removed NCSU copyright", 
+   "Added xmlrpc_user,xmlrpc_pass for xmlrpc calls"
+  ], 
+  "revision_id": "781499"
+ }, 
+ {
+  "author": "gsim", 
+  "date": "2009-06-03T18:01:41.669548Z", 
+  "msg": [
+   "QPID-1890: Ensure option for alternate exchange is treated consistently (I also change the name as I didn't like the shortened form)."
+  ], 
+  "revision_id": "781498"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2009-06-03T18:00:44.277544Z", 
+  "msg": [
+   "Allow the JMS transport to allow one-way operations to proceed on the", 
+   "original thread so transactions will work."
+  ], 
+  "revision_id": "781497"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2009-06-03T18:00:31.353333Z", 
+  "msg": [
+   "Set the indentation the same as the non-corba rules so a diff can work", 
+   "better"
+  ], 
+  "revision_id": "781496"
+ }
+]

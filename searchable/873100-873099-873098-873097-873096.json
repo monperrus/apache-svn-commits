@@ -1,0 +1,97 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2008-09-11T17:57:33.885779Z", 
+  "msg": [
+   "Don't try to filter natural history from added mergeinfo during reverse", 
+   "merges.", 
+   "A reverse merge should simply return mergeinfo to a previous representation.", 
+   "See http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=142777.", 
+   "This change also improves reverse merge performance as it eliminates some", 
+   "unnecessary communication with the repository.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_props_changed): Filter natural history from incoming mergeinfo", 
+   "property changes only when performing forward merges."
+  ], 
+  "revision_id": "873100"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-11T17:49:03.721482Z", 
+  "msg": [
+   "Add support for ignoring arbitrary property modifications in 'svn st'.", 
+   "This currently only works locally, not with 'svn st -u'.", 
+   "* subversion/tests/cmdline/stat_tests.py", 
+   "(status_ignored_props): New test.", 
+   "(test_list): Run the new test.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): New hash to hold the ignore properties.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t, svn_cl__options, main): Add support for the", 
+   "'--ignore-prop' switch.", 
+   "(svn_cl__cmd_table): Let 'svn st' accept '--ignore-prop'.", 
+   "* subversion/svn/status-cmd.c", 
+   "(svn_cl__status): Pass along the ignored props to the client library.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_props_modified2): New.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_status4): Add ignored_prop parameter and update doc string.", 
+   "(svn_client_status3): Update docstring.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_props_modified2): New.", 
+   "* subversion/libsvn_client/externals.c,", 
+   "subversion/libsvn_client/client.h", 
+   "(svn_client__do_external_status): Pass ignored_props through for external", 
+   "statii.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status4): Add ignored_props param, and use it.", 
+   "(svn_client_status3): Use a NULL default ignored_props.", 
+   "(status_baton): Add a few additional members.", 
+   "(props_hash_diff_func): New.", 
+   "(tweak_status): Filter statii returned from the WC by ignored properties,", 
+   "if requested."
+  ], 
+  "revision_id": "873099"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-09-11T17:18:44.593766Z", 
+  "msg": [
+   "Include more information in the baton passed around during a merge. No", 
+   "functional change; this is a step in preparation for other changes.", 
+   "During a merge, pass around in the merge baton the repository location of", 
+   "the merge sources, instead of just the URL of the merge-right source, so", 
+   "that the information is available to all callbacks. (Some of the callbacks", 
+   "already receive some of this information through the svn_diff_callbacks3_t", 
+   "interface, but inconsistently and incompletely. This change is a local", 
+   "alternative to revving the callbacks API and making it consistent.)", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_source_t): Move ahead of merge_cmd_baton_t declaration.", 
+   "(merge_cmd_baton_t): Replace 'url' member with a merge_source_t member", 
+   "'merge_source'.", 
+   "(merge_file_added, merge_dir_added): Use new merge_cmd_baton_t member.", 
+   "(do_merge): Set merge_cmd_baton_t's new 'merge_source' member to reflect", 
+   "the current merge source being merged."
+  ], 
+  "revision_id": "873098"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-11T16:42:32.323652Z", 
+  "msg": [
+   "Create the ignore-prop-mods branch, to hold some working patches on an", 
+   "experimental '--ignore-prop' switch to status, diff, and log."
+  ], 
+  "revision_id": "873097"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-09-11T12:56:13.034929Z", 
+  "msg": [
+   "Follow-up to r33013, correct XFailing test expectations (again).", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(natural_history_filtering): Expect a property upate on the merge target."
+  ], 
+  "revision_id": "873096"
+ }
+]

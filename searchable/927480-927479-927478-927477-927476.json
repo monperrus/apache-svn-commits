@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jukka", 
+  "date": "2010-03-25T16:26:44.895345Z", 
+  "msg": [
+   "Prepare for the 1.1.0 release"
+  ], 
+  "revision_id": "927480"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2010-03-25T16:25:31.695435Z", 
+  "msg": [
+   "Update trunk version to 1.2.0-SNAPSHOT"
+  ], 
+  "revision_id": "927479"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-03-25T16:24:40.055614Z", 
+  "msg": [
+   "Fix up some pristine handling and log running/management.", 
+   "In r926814, I compensated for a case where an added file *had* a pristine", 
+   "and the code was expecting that. Thus, I disabled the special check for", 
+   "added files. This was incorrect: added files should NOT have pristines,", 
+   "and the code (svn_wc_add_repos_file4) which expected it... was wrong. This", 
+   "revision fixes that assumption, and restores the correct behavior to", 
+   "svn_wc__get_pristine_contents()", 
+   "This also eliminates svn_wc__run_log2() in favor of manual write checks", 
+   "and directly calling the wq_run() function. By directly using wq_run(), we", 
+   "also get to pass a cancel func/baton.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(cleanup_dir_baton): directly call wq_run and don't bother with a write", 
+   "check. when a dir was opened, that was performed.", 
+   "(do_entry_deletion, close_directory): directly call wq_run.", 
+   "(open_directory): perform a write check for this directory", 
+   "(svn_wc_add_repos_file4): svn_wc__open_writable_base returns an abspath,", 
+   "so note that with the localvar and remove a get_absolute later. only", 
+   "install a text base for copied fles. directly call wq_run. if the file", 
+   "is added, then construct the working file from the temp \"pristine\"", 
+   "rather than from the true pristine source. finally, only use", 
+   "OP_FILE_INSTALL for copied files (which have pristines).", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(svn_wc__get_pristine_contents): restore the check for \"added\" nodes,", 
+   "which have no pristine.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__run_log2): removed", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(svn_wc_merge4): move the computation of DIR_ABSPATH to a tighter scope.", 
+   "perform a write check, and then call wq_run with the cancel func/baton.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_merge_props3): move the declaration of KIND to a tighter scope", 
+   "and simplify the computation of DIR_ABSPATH. perform a write check,", 
+   "and then install the props and stuff, then call wq_run with the cancel", 
+   "func/baton. combined two if-blocks for clarity."
+  ], 
+  "revision_id": "927478"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2010-03-25T16:24:00.324107Z", 
+  "msg": [
+   "Created the PDFBox 1.1.x branch"
+  ], 
+  "revision_id": "927477"
+ }, 
+ {
+  "author": "gerdogdu", 
+  "date": "2010-03-25T16:22:41.286343Z", 
+  "msg": [
+   "compiler error correction"
+  ], 
+  "revision_id": "927476"
+ }
+]

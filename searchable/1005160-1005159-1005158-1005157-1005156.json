@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:38.977254Z", 
+  "msg": [
+   "THRIFT-929. cpp: Add tests to verify blocking read behavior", 
+   "Add tests that check to see whether or not read() and borrow() block", 
+   "when called with a length larger than the amount of data currently", 
+   "available.", 
+   "At the moment, not all of the transports behave the same way.  I believe", 
+   "the desired behavior is:", 
+   "When M bytes are available, and 0 < M < N:", 
+   "- read(N): return M bytes immediately", 
+   "- borrow(N): return NULL immediately", 
+   "When 0 bytes are available:", 
+   "- read(N): In this case, it is acceptable either to immediately return", 
+   "0, or to block until some data is available.  If the transport", 
+   "blocks, it returns immediately when some date becomes available,", 
+   "even if less than N bytes are available.", 
+   "- borrow(N): return NULL immediately", 
+   "- The borrow() tests fail when using TBufferedTransport.", 
+   "TBufferedTransport incorrectly blocks until the amount of data", 
+   "requested is available.", 
+   "- test_read_none_available() fails when using TFramedTransport.", 
+   "Calling read() on a TFramedTransport when no data is available throws", 
+   "an exception instead of returning 0.", 
+   "- test_read_none_available() fails when using TFDTransport.  This is", 
+   "partly just an artifact of the fact that I use SIGALRM as part of this", 
+   "test.  Unlike TSocket, TFDTransport doesn't retry after EINTR.", 
+   "- test_read_part_available() fails when using TZlibTransport around a", 
+   "transport that has blocking read() behavior.  TZlibTransport::read()", 
+   "loops calling read() on the underlying transport.  It should probably", 
+   "break out of the loop and return to the caller as soon as it has", 
+   "uncompressed any data, even if it is less than requested and more", 
+   "might be available.  Once some data has been uncompressed,", 
+   "TZlibTransport cannot risk calling read() again since it might block.", 
+   "Will commit fixes for these separately."
+  ], 
+  "revision_id": "1005160"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:37.792596Z", 
+  "msg": [
+   "THRIFT-929. cpp: Test wrapper transports more thoroughly", 
+   "UpdateS TransportTest so that the wrapper transports", 
+   "(TBufferedTransport, TFramedTransport, TZlibTransport) are tested with a", 
+   "wider variety of inner transports.  Previously they were only tested", 
+   "using TMemoryBuffer.  Now all other transports are also tested wrapped", 
+   "inside each of these transports."
+  ], 
+  "revision_id": "1005159"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:36.550813Z", 
+  "msg": [
+   "THRIFT-929. cpp: Update TransportTest to test TSocket", 
+   "Made the TSocket(int fd) constructor public, so TransportTest can create", 
+   "a connected pair of TSocket transports using socketpair()."
+  ], 
+  "revision_id": "1005158"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:35.477934Z", 
+  "msg": [
+   "THRIFT-929. cpp: Reduce default buffer sizes for TransportTest", 
+   "Reduce the default test buffer sizes by about 30x, reducing the time it", 
+   "takes to run TransportTest from about 1 minute to about 2 seconds.  I", 
+   "added a --size-multiplier argument that can be used to adjust the sizes", 
+   "of all test buffers, so developers can still run with large buffer sizes", 
+   "when desired."
+  ], 
+  "revision_id": "1005157"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:33.562009Z", 
+  "msg": [
+   "THRIFT-926. cpp: Fix bugs in TFileTransport::flush()", 
+   "Previously flush() had race conditions that could cause it to return", 
+   "before all data had actually been flushed to disk.  Now the writer", 
+   "makes sure both buffer queues have been flushed when forceFlush_ is set.", 
+   "Also, flush() did not wake up the writer thread, so it normally had to", 
+   "wait for the writer thread to wake up on its own time.  (By default,", 
+   "this could take up to 3 seconds.)"
+  ], 
+  "revision_id": "1005156"
+ }
+]

@@ -1,0 +1,123 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:19:30.025455Z", 
+  "msg": [
+   "HFile format version 2: HFile reader/writer hierarchy, and an updated fixed file trailer", 
+   "Summary:", 
+   "With the introduction of HFile format version 2, we still want to support", 
+   "reading the old format for the purpose of automatic migration. To better ensure", 
+   "backwards-compatibility, we keep the version 1 writer as well, and utilize", 
+   "existing unit tests to ensure our version 1 reader/writer implementations are", 
+   "consistent. The version 1 reader/writer are updated to significantly reuse", 
+   "version 2's functionality, and the block cache always contains version 2 blocks.", 
+   "As a result, we get a natural class hierarchy of HFile readers and writers for", 
+   "the two versions, and break the original monolithic HFile class into a class", 
+   "hierarchy. HFile block index has been moved out of HFile into its own class, which will be", 
+   "submitted separately. The new FixedFileTrailer implementation supports both v1", 
+   "and v2 trailers, and is aware of the fields that are valid in each version.", 
+   "Test Plan:", 
+   "Unit tests. Load testing using HBaseTest. New backwards-compatibility unit", 
+   "tests will be added. Will test in dark launch.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: kannan, liyintang, kranganathan, gqchen, aaiyer, nspiegelberg, jgray", 
+   "Commenters: jgray, kannan", 
+   "CC: hbase@lists, , mbautin, jgray, kenny, kannan, nspiegelberg", 
+   "Revert Plan:", 
+   "The HFile format v2 is a backwards-compatible, but non-reverse-compatible", 
+   "feature, and has to be tested thoroughly even before being deployed to dark", 
+   "launch.", 
+   "Differential Revision: 251875"
+  ], 
+  "revision_id": "1181555"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:19:21.789698Z", 
+  "msg": [
+   "Unified block format for the HFile format version 2", 
+   "Summary:", 
+   "In the HFile format version 2 we use unified-format blocks for almost", 
+   "everything stored within an HFile. A block consists of an 8-bit \"magic\"", 
+   "signature identifying the block type, 4-byte compressed size, 4-byte", 
+   "uncompressed size, and 8-byte offset of the previous block of the same type in", 
+   "the file, allowing to seek to the previous block efficiently without using", 
+   "block", 
+   "index. This diff contains the infrastructure necessary for writing and reading", 
+   "these new-format blocks in both compressed and uncompressed mode. I have tried", 
+   "to minimize read operations and fall back to two reads (header + data part) if", 
+   "the on-disk block size is unknown, but to improve this further we could e.g.", 
+   "always read the header of the next block just in case, as Karthik suggested.", 
+   "Also, I have tried to minimize byte array copy operations, even though they are", 
+   "sometimes necessary to achieve abstraction through writing to an in-memory data", 
+   "stream. I am planning to profile the complete system before trying to further", 
+   "refine this part.", 
+   "Test Plan:", 
+   "Unit test. Load test as part of larger HFile format version 2 testing.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, liyintang, kranganathan, gqchen, aaiyer, jgray", 
+   "Commenters: liyintang, nspiegelberg, kranganathan, jgray", 
+   "CC: hbase@lists, , liyintang, nspiegelberg, kranganathan,", 
+   "mbautin, jgray, kannan, kenny", 
+   "Revert Plan:", 
+   "These are new files so they can be checked in safely. However, the whole HFIle", 
+   "format v2 change is non-reverse-compatible.", 
+   "Differential Revision: 250060"
+  ], 
+  "revision_id": "1181554"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:19:15.193002Z", 
+  "msg": [
+   "Ability to Discard Bad HTable Puts", 
+   "Summary:", 
+   "While debugging an application consistency issue, we noticed", 
+   "that a single, synchronous Put request threw a", 
+   "NoServerForRegionException but eventually succeeded 90 seconds later.", 
+   "The problem is that failed put requests are not actually removed from", 
+   "the HTable's writeBuffer. This makes sense for asynchronous puts using", 
+   "setAutoFlush(false) but don't make sense for the default case where we", 
+   "expect synchronous operation. We should discard all failed puts for the", 
+   "synchronous case and provide an API so asynchronous requests can have", 
+   "their failed puts cleared.", 
+   "Test Plan:", 
+   "- test with appserver", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, jgray", 
+   "CC: , kannan, nspiegelberg, hbase@lists, pkhemani", 
+   "Differential Revision: 264990"
+  ], 
+  "revision_id": "1181553"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:19:08.943070Z", 
+  "msg": [
+   "Have NSFRE messages also display the row associated with the region request."
+  ], 
+  "revision_id": "1181552"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:19:05.592866Z", 
+  "msg": [
+   "Handle null pointer in getStoreFileList", 
+   "Summary:", 
+   "getStoreFileList API does not take care of an invalid regionName", 
+   "being passed in. This has been handled in this diff.", 
+   "Test Plan:", 
+   "Build it.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, aaiyer", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 263487"
+  ], 
+  "revision_id": "1181551"
+ }
+]

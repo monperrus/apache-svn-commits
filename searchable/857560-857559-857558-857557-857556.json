@@ -1,0 +1,100 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2005-11-23T01:17:27.515007Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/davautocheck.sh: Add a LockFile", 
+   "directive to the httpd.conf, since some apache installs seem to", 
+   "require it."
+  ], 
+  "revision_id": "857560"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-23T00:18:41.615255Z", 
+  "msg": [
+   "Fix issue #2442, verbose list broken with peg revisions over ra_dav.", 
+   "It turns out that the underlying issue here is a difference in the way", 
+   "that svn_ra_get_locks worked in ra_dav versus the other ra layers.  In", 
+   "both ra_local and ra_svn it's perfectly valid to give svn_ra_get_locks", 
+   "a nonexistent path, it'll just return no locks for it, but ra_dav says", 
+   "that's an error and returns path not found.", 
+   "Since this does seem to cause a problem in a reasonable case, I've made", 
+   "ra_dav act like the other RA layers, and just return no locks in that", 
+   "situation.  Because this is kind of strange behavior compared to other", 
+   "commands, I've noted it in the doxygen comments for svn_ra_get_locks.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_locks): Note behavior when path refers to a nonexistent", 
+   "location.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_locks): Don't return an error when the path doesn't", 
+   "exist in HEAD."
+  ], 
+  "revision_id": "857559"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2005-11-22T23:10:43.327381Z", 
+  "msg": [
+   "Working on issue #2449.", 
+   "Begin refactoring the BDB FS back-end in preparation for implementing", 
+   "a cache of open BDB environment handles.", 
+   "Incidentally, set the DB_AUTO_COMMIT property on the opened database", 
+   "environmentand remove other (now-redundant) uses of this flag.", 
+   "[in subversion/libsvn_fs_base]", 
+   "* bdb/bdb_compat.h", 
+   "(SVN_BDB_VERSION_AT_LEAST): New; compile-time check for the BDB version.", 
+   "Replace all explicit BDB version checks with this macro.", 
+   "(SVN_BDB_PATH_UTF8): New predicate. True if BDB expects paths to be", 
+   "encoded in UTF-8.", 
+   "* bdb/bdb-err.h: Include fs.h for bdb_errcall_baton_t.", 
+   "* bdb/env.h: New file.", 
+   "(SVN_BDB_STANDARD_ENV_FLAGS, SVN_BDB_PRIVATE_ENV_FLAGS): New constants.", 
+   "(svn_fs_bdb__open_env, svn_fs_bdb__close_env,", 
+   "svn_fs_bdb__path_from_utf8): New functions.", 
+   "* bdb/env.c: New file.", 
+   "(svn_fs_bdb__open_env, svn_fs_bdb__close_env,", 
+   "svn_fs_bdb__path_from_utf8): Implement.", 
+   "* fs.c: Include bdb/env.h.", 
+   "(open_databases): New function. Factor out common code from", 
+   "base_create() and base_open().", 
+   "(base_create, base_open): Call open_databases().", 
+   "Replace all calls to DB_ENV->open() and DB_ENV->close() with", 
+   "svn_fs_bdb__open_env() and Call svn_fs_bdb__open_env().", 
+   "Alwayse use SVN_BDB_STANDARD_ENV_FLAGS or SVN_BDB_PRIVATE_ENV_FLAGS", 
+   "instead of lists of BDB flags.", 
+   "* bdb/txn-table.c (svn_fs_bdb__open_transactions_table),", 
+   "bdb/reps-table.c (svn_fs_bdb__open_reps_table),", 
+   "bdb/locks-table.c (svn_fs_bdb__open_locks_table),", 
+   "bdb/copies-table.c (svn_fs_bdb__open_copies_table),", 
+   "bdb/strings-table.c (svn_fs_bdb__open_strings_table),", 
+   "bdb/uuids-table.c (svn_fs_bdb__open_uuids_table),", 
+   "bdb/lock-tokens-table.c (svn_fs_bdb__open_lock_tokens_table),", 
+   "bdb/rev-table.c (svn_fs_bdb__open_revisions_table),", 
+   "bdb/nodes-table.c (svn_fs_bdb__open_nodes_table),", 
+   "bdb/changes-table.c (svn_fs_bdb__open_changes_table):", 
+   "Remove uses of SVN_BDB_AUTO_COMMIT; svn_fs_bdb__open_env() sets", 
+   "this flag for the whole environment, and that affects all", 
+   "associated database handles."
+  ], 
+  "revision_id": "857558"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-22T22:14:15.280461Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(davautocheck): Run the autocheck script with bash, not sh, since it has", 
+   "some bashisms in it."
+  ], 
+  "revision_id": "857557"
+ }, 
+ {
+  "author": "danderson", 
+  "date": "2005-11-22T19:16:34.559238Z", 
+  "msg": [
+   "Tag release 1.3.0-rc4 with svn_version.h matching tarball."
+  ], 
+  "revision_id": "857556"
+ }
+]

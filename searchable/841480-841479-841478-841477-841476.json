@@ -1,0 +1,103 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-03-04T19:45:45.645182Z", 
+  "msg": [
+   "* subversion/libsvn_ra_local/commit_editor.c", 
+   "(delete_entry, add_directory, open_directory, add_file, open_file):", 
+   "Remove unnecessary call to apr_pstrdup.  Thanks to gstein for noticing."
+  ], 
+  "revision_id": "841480"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2002-03-04T19:26:21.625863Z", 
+  "msg": [
+   "move it to the right spot."
+  ], 
+  "revision_id": "841479"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2002-03-04T19:25:29.908358Z", 
+  "msg": [
+   "Add a file which will setup vim to use Subversion's coding style."
+  ], 
+  "revision_id": "841478"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-03-04T19:01:06.518237Z", 
+  "msg": [
+   "Conversion of libsvn_ra_local's commit editor to new editor", 
+   "interface.  I'm getting better at this, I think. :-)", 
+   "* subversion/libsvn_ra_local/commit_editor.c", 
+   "(struct file_baton): Renamed 'subpool' to 'pool'.  Added reference", 
+   "to top-level 'edit_baton'.  Make 'path' a const char *.", 
+   "(struct dir_baton): Renamed 'subpool' to 'pool'.  Removed", 
+   "'ref_count' field.  Make 'path' a const char *.", 
+   "(decrement_dir_ref_count, close_directory, close_file): Remove", 
+   "obsolete functions.", 
+   "(open_root): Add 'pool' argument, and use it to allocated the return", 
+   "directory baton.  No longer do refcounting.", 
+   "(delete_entry): Add 'pool' argument, make svn_stringbuf_t * 'name' a", 
+   "const char * 'path'.  Construct full path according to new editor", 
+   "interface semantics.", 
+   "(add_directory): Add 'pool' argument, rename 'name' to 'path' (and", 
+   "make const char *), remame 'copyfrom_path' to 'copy_path' (and make", 
+   "const char *), rename 'copyfrom_revision' to 'copy_revision'.", 
+   "Construct full path according to new editor interface semantics.  No", 
+   "longer do refcounting.", 
+   "(open_directory): Add 'pool' argument, rename 'name' to 'path' (and", 
+   "make const char *).  Construct full path according to new editor", 
+   "interface semantics.  No longer do refcounting.", 
+   "(apply_textdelta): Directory reference edit baton inside of file", 
+   "baton, not through the file's parent directory baton.  Further", 
+   "simplify the code.", 
+   "(add_file): Add 'pool' argument, rename 'name' to 'path' (and make", 
+   "const char *), make 'copy_path' a const char *, make 'copy_revision'", 
+   "an svn_revnum_t (was a long int from days of yore!!).  Construct", 
+   "full path according to new editor interface semantics.  No longer do", 
+   "refcounting.  Init new 'edit_baton' member of file baton.", 
+   "(open_file): Add 'pool' argument, rename 'name' to 'path' (and make", 
+   "const char *).  Construct full path according to new editor", 
+   "interface semantics.  No longer do refcounting.  Init new", 
+   "'edit_baton' member of file baton.", 
+   "(change_file_prop, change_dir_prop): Make 'name' a const char *,", 
+   "make 'value' a const svn_string_t *, and add 'pool' argument.  These", 
+   "are now *really* dumb wrappers around svn_fs_change_node_prop()!", 
+   "(close_edit): No longer destroy the edit baton pool.", 
+   "(abort_edit): Simplify this code.", 
+   "(svn_ra_local__get_editor): Now return svn_delta_editor_t *, not the", 
+   "old svn_delta_edit_fns_t *.  No longer init the close_directory and", 
+   "close_file editor vtable functions...just use the defaults.", 
+   "* subversion/libsvn_ra_local/ra_local.h", 
+   "(svn_ra_local__get_editor): Now return svn_delta_editor_t *, not the", 
+   "old svn_delta_edit_fns_t *", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(get_commit_editor): Temporarily wrap the commit editor (which is", 
+   "now an svn_delta_editor_t * instead of an olf svn_delta_edit_fns_t", 
+   "*) with a compatibility editor.", 
+   "* subversion/libsvn_delta/track_editor.c", 
+   "(svn_delta_get_commit_track_editor): Constify the 'editor' parameter.", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_delta_get_commit_track_editor): Constify the 'editor' parameter.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(svn_ra_dav__get_commit_editor): Tracking editor has been", 
+   "constified.  Deal with this.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(send_to_repos): Tracking editor has been constified.  Deal with", 
+   "this."
+  ], 
+  "revision_id": "841477"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-03-04T18:02:09.595658Z", 
+  "msg": [
+   "* subversion/libsvn_fs/dag.h (svn_fs__dag_get_revision): Rewrite doc", 
+   "string for consistency and clarity."
+  ], 
+  "revision_id": "841476"
+ }
+]

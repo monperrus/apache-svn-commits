@@ -1,0 +1,79 @@
+[
+ {
+  "author": "malcolm", 
+  "date": "2005-11-17T00:01:35.114401Z", 
+  "msg": [
+   "Prevent failing tests from obstructing following tests by ensuring that", 
+   "we always restore the current working directory after a failure.", 
+   "This is substantially the same idea as r17231, except that while that", 
+   "change updated tests that were XFailing (and so would obstruct any", 
+   "new tests added to the end of the file), this change updates tests", 
+   "that currently pass, and so is only really relevant to those of us who", 
+   "would like to be able to use the tests to pinpoint regressions during", 
+   "development.", 
+   "(Part of the reason that this change is necessary is r7808, which made", 
+   "run_svn() and friends raise an exception if any unexpected output to", 
+   "stderr was seen.)", 
+   "Again, the majority of this change simply re-indents existing code (and", 
+   "where it doesn't, it's noted below).  'diff -w' turns the result into", 
+   "something that's actually reviewable.", 
+   "In some cases, these changes result in 'check' functions being called", 
+   "from the working copy directory, where previously they were called from", 
+   "the original working directory.  However, these functions just check", 
+   "the expected stdout, so the directory they're running from is immaterial.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_check_repo_subset, just_diff, update_diff, repo_diff,", 
+   "diff_repo_subset): Use try and finally to ensure that the current", 
+   "working directory is always restored.", 
+   "(diff_pure_repository_update_a_file): Use try and finally, as above.", 
+   "Additionally, stop gratuitously bouncing in and out of the working", 
+   "copy directory to call some of the check functions and URL-based", 
+   "repos-repos diffs, since these don't care if we stay in the working", 
+   "copy or not (and the repos-repos tests don't appear to have been", 
+   "intended specifically to test this: r1024 is the revision to look", 
+   "at if you're interested).", 
+   "(diff_renamed_file): Use try and finally, as above.  Additionally,", 
+   "create local variables to hold the OS paths of the two test files", 
+   "(A/D/G/pi and A/D/pi2), so that the re-indentation doesn't push us", 
+   "over the 80-column boundary."
+  ], 
+  "revision_id": "857485"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T23:58:29.363560Z", 
+  "msg": [
+   "* STATUS: Vote for r17401."
+  ], 
+  "revision_id": "857484"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-11-16T23:36:30.159010Z", 
+  "msg": [
+   "* STATUS: Clarify description of r17401."
+  ], 
+  "revision_id": "857483"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T23:05:43.571419Z", 
+  "msg": [
+   "Merge r17395 from trunk to 1.3.x branch.", 
+   "Use the APR_BINARY flag on all calls to apr_file_open().", 
+   "Approved by: +1: maxb, dberlin, rooneg"
+  ], 
+  "revision_id": "857482"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T22:56:43.059044Z", 
+  "msg": [
+   "Merge r17394 from trunk to 1.3.x branch.", 
+   "Change ra_local \"invalid host\" test to SKIP under Cygwin,", 
+   "as Cygwin has UNC paths too.", 
+   "Approved by: +1: maxb, dberlin, rooneg"
+  ], 
+  "revision_id": "857481"
+ }
+]

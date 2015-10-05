@@ -1,0 +1,106 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:31.939050Z", 
+  "msg": [
+   "THRIFT-926. cpp: TFileTransportTest timing slightly more lenient", 
+   "Several of the TFileTransportTest tests check wall clock time to make", 
+   "sure the writer thread processes operations quickly enough, and isn't", 
+   "hanging.  However, this can easily result in false failures if we don't", 
+   "get enough processor time.  This commit makes a few changes to reduce", 
+   "the number of these failures.", 
+   "- No longer fail if a single destructor call takes more than 500us.", 
+   "We only require 90% of the calls to complete in 500us.  No call may", 
+   "take more than 100ms, though.  With this change, the test passes most", 
+   "of the time now, even while an \"fbmake opt\" task is running in", 
+   "parallel.", 
+   "- In the flush_max_us tests, make sure the writer thread is started", 
+   "before we start recording timing.  Otherwise, creating the thread", 
+   "could take long enough to throw off the numbers for the first fsync()", 
+   "call.", 
+   "Also tested with the pthread_cond_signal() in the TFileTransport", 
+   "destructor commented out, to make sure the test still fails properly", 
+   "when the destructor takes too long."
+  ], 
+  "revision_id": "1005155"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:30.677952Z", 
+  "msg": [
+   "THRIFT-926. cpp: Fix destructor behavior of TFileTransport", 
+   "Set closing_ to true before we wake up the writer thread in the", 
+   "destructor.  This way the writer thread flushes the data and exits when", 
+   "it is woken up.", 
+   "Previously the writer thread could end up going through 2 full timeout", 
+   "cycles before exiting.  The writer thread could wake up, notice it has", 
+   "nothing to do since closing_ is not set, and immediately go back to", 
+   "sleep.  The destructor would then proceed to call flush(), which would", 
+   "wait for the writer thread to wake up (1 full time out) and clear the", 
+   "forceFlush_ flag.  After flush returns, the destructor would set", 
+   "closing_.  It could take the writer thread another full timeout to wake", 
+   "up again and process this flag.", 
+   "There were also some points where the worker threads would detect the", 
+   "closing_ state in their loops and automatically close the file, but did", 
+   "not zero out the file descriptor, then the destructer attempted to close", 
+   "the same file.  Fix by simply zeroing out the fd_ at these points."
+  ], 
+  "revision_id": "1005154"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:29.102578Z", 
+  "msg": [
+   "THRIFT-926. cpp: Don't sleep in TFileTransport if we have data to write", 
+   "Previously, the TFileTransport writer thread behaved as follows:", 
+   "while true:", 
+   "wait for main thread to notify new data in enqueueBuffer_", 
+   "swap(enqueueBuffer_, dequeueBuffer_)", 
+   "write out everything in dequeueBuffer_", 
+   "Now the behavior is:", 
+   "while true:", 
+   "if enqueueBuffer_ is empty", 
+   "wait for main thread to notify new data in enqueueBuffer_", 
+   "swap(enqueueBuffer_, dequeueBuffer_)", 
+   "write out everything in dequeueBuffer_", 
+   "The old behavior had a couple problems:", 
+   "- Writes that arrived while the writer thread was writing", 
+   "dequeueBuffer_ wouldn't get processed immediately.  The writer thread", 
+   "would always wait until another write occurred after it started its", 
+   "condition variable wait, or until it timed out (3 seconds by default).", 
+   "- If the main thread was writing fast enough to fill up enqueueBuffer_", 
+   "while the writer thread was still writing out dequeueBuffer_, it would", 
+   "block the next write call until the writer thread swapped the buffers.", 
+   "Unfortunately, the writer thread waits to do this until it the main", 
+   "thread notifies it of another write.  This deadlock is only broken by", 
+   "the 3 second timeout.  Performance then tanks, since the writer thread", 
+   "now always sleeps 3 seconds each time around the loop."
+  ], 
+  "revision_id": "1005153"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:27.907826Z", 
+  "msg": [
+   "THRIFT-926. cpp: remove \"standalone\" distinction in TZlibTransport", 
+   "Now that TZlibTransport::flush() behaves the same way as other", 
+   "transports, there is no need to distinguish between RPC and standalone", 
+   "behavior for TZlibTransport."
+  ], 
+  "revision_id": "1005152"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:26.116852Z", 
+  "msg": [
+   "THRIFT-926. cpp: Make TZlibTransport::flush() behave like other transports", 
+   "Previously, TZlibTransport::flush() finished the zlib stream, so calling", 
+   "write() after flush() would result in an error.  Now it just flushes the", 
+   "data, without finishing the stream.  A new TZlibTransport::finish()", 
+   "function has been added to finish the stream.", 
+   "This breaks compatibility.  I'm aware of anyone using this code outside", 
+   "of Facebook, though."
+  ], 
+  "revision_id": "1005151"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-04-16T18:31:17.000000Z", 
+  "msg": [
+   "Start moving existing code into new 'libsvn_repos' library.", 
+   "This library represents tools that are needed by filesystem callers,", 
+   "but aren't strictly part of the filesystem.  (Rather, these tools are", 
+   "built on *top* of svn_fs.h)", 
+   "* libsvn_repos, Makefile.am:  new files", 
+   "* libsvn_repos/commit_editor.c:  renamed from plain 'editor.c' in", 
+   "libsvn_fs.", 
+   "(svn_repos_get_editor):  newly prefixed name.  also, remove", 
+   "unnecessary svn_fs__check_fs() call.", 
+   "* svn_repos.h (svn_repos_get_editor,", 
+   "svn_repos_commit_hook_t):", 
+   "new file, move declarations in here with new 'svn_repos' name", 
+   "prefixes.", 
+   "* svn_fs.h (svn_fs_get_editor, svn_fs_commit_hook_t):  remove old declarations.", 
+   "* configure.in (FS_BASED_DIRS):  add libsvn_repos to definition.", 
+   "(AC_OUTPUT):  build libsvn_repos/Makefile", 
+   "(LIBSVN_CLIENT_DEPS):  if you're building fs, build repos lib too.", 
+   "* libsvn_ra_local/ra_plugin.c (get_commit_editor):  call renamed", 
+   "svn_repos_get_editor, and #include svn_repos.h", 
+   "* libsvn_fs/Makefile.am:  stop compiling editor.c", 
+   "* svn-define-libs.m4:  define SVN_LIBSVN_REPOS_LIBS", 
+   "* fs-test.c (call_functions_with_unopened_fs): remove get_editor test", 
+   "at the bottom;  this will be moved into libsvn_repos' own test", 
+   "suite."
+  ], 
+  "revision_id": "839195"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-04-16T15:42:29.000000Z", 
+  "msg": [
+   "Updating status page."
+  ], 
+  "revision_id": "839194"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-04-16T13:00:04.000000Z", 
+  "msg": [
+   "Check the Content-Type header to see what is being PUT to the server, and", 
+   "process the (diff) stream accordingly.", 
+   "* dav_svn.h (struct dav_resource_private): add (hacky) is_svndiff flag.", 
+   "* repos.c (struct dav_stream): add a new writable stream field.", 
+   "(dav_svn_get_resource): check the Content-Type header and set the", 
+   "is_svndiff flag.", 
+   "(dav_svn_open_stream): open an svndiff->txdelta stream if is_svndiff has", 
+   "been set.", 
+   "(dav_svn_close_stream): close the wstream, if present", 
+   "(dav_svn_write_stream): write to the svndiff/txdelta stream, or create a", 
+   "window for writing plain text."
+  ], 
+  "revision_id": "839193"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-04-16T12:38:51.000000Z", 
+  "msg": [
+   "More fixes for MERGE processing (commits).", 
+   "(merge_elements[]): note that we need to collect CDATA for some elements", 
+   "(handle_resource): relax a check because the server is taking short cuts", 
+   "(validate_element): return _VALID for the merge_response child so that we", 
+   "actually get called on its children!", 
+   "(end_element): fill in an error when response_has_error gets set.", 
+   "(svn_ra_dav__merge_activity): drop the callbacks into the merge context"
+  ], 
+  "revision_id": "839192"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-04-16T12:35:00.000000Z", 
+  "msg": [
+   "(send_response): fix the XML response; the DAV:status should go outside of", 
+   "the DAV:prop element", 
+   "(dav_svn__merge_response): fix the location of the DAV:status element. add", 
+   "an [incorrect] resource type for the VCC."
+  ], 
+  "revision_id": "839191"
+ }
+]

@@ -1,0 +1,65 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2010-09-28T21:56:02.658851Z", 
+  "msg": [
+   "[SMX4NMR-225] Upgrade to Karaf 2.1.0."
+  ], 
+  "revision_id": "1002370"
+ }, 
+ {
+  "author": "andygumbrecht", 
+  "date": "2010-09-28T21:55:40.767550Z", 
+  "msg": [
+   "Hi all,", 
+   "I have a made a pretty thorough sweep through the entire pom tree and have brought just about everything up to date in all poms - I don't think there is one that has not been touched!", 
+   "All dependencies are looking good, and several erroneous dependencies that had crept in have been squeezed back out.", 
+   "Where possible I have pulled up dependency management into parent poms (where they should be) - All examples remain as standalone modules. This will encourage global version definition, rather than the current array of varying versions across the tree - The next step will be to define 'all' versions as properties (at the moment only several are defined). A further goal is to update the maven-assembly-plugin to a more current version, but this will need more reading up on my part to figure out what is required.", 
+   "I have also updated a few classes in Axis2 in order to use 1.4.1 - A move to 1.5.2 will also require more work. Do we need to maintain backwards compatibility on this dependency?", 
+   "The following two tests fail intermittently on:", 
+   "assertAttribute(\"Aged\", 5L);", 
+   "org.apache.openejb.core.stateless.StatelessPoolStatsTest.testAging()", 
+   "org.apache.openejb.core.stateless.StatelessPoolStatsTest.testAgingWithReplacement()", 
+   "This has to be some kind of synchronization or timing issue that returns inconsistent results - I have seen 'Aged' vary between 3L - 8L.", 
+   "-----------", 
+   "Also, I am not sure if this is a maven quirk (or an Andy on Windows quirk) but when the core fails at least one test then the core classes directory gets a file lock and the assembly plugin cannot create several assemblies even when -fn or -fae are specified?", 
+   "Running:", 
+   "mvn -e -fn -Dassemble clean install", 
+   "Followed by:", 
+   "mvn -e -fn -DskipTests -Dassemble", 
+   "Results in a successful build", 
+   "To reiterate, if I comment out the above two tests then a clean build succeeds.", 
+   "Finally to sum up. I have compared the build 'lib' directory with a previous build and I am pretty sure that the new build has dropped only erroneous dependencies. However, if you find a jar missing that you believe should be an included dependency then please let me know.", 
+   "If you have any problems then try the following:", 
+   "mvn dependency:purge-local-repository", 
+   "mvn -e -U -fn -Dassemble clean install", 
+   "mvn -e -fn -DskipTests -Dassemble", 
+   "Andy."
+  ], 
+  "revision_id": "1002369"
+ }, 
+ {
+  "author": "mbenson", 
+  "date": "2010-09-28T21:52:32.193644Z", 
+  "msg": [
+   "Make ObjectUtils.defaultIfNull generic"
+  ], 
+  "revision_id": "1002368"
+ }, 
+ {
+  "author": "niallp", 
+  "date": "2010-09-28T21:49:24.080481Z", 
+  "msg": [
+   "IO-238 Add sizeOf(File) Method to FileUtils - thanks to Michael Wooten for the patch"
+  ], 
+  "revision_id": "1002367"
+ }, 
+ {
+  "author": "lindner", 
+  "date": "2010-09-28T21:43:50.068995Z", 
+  "msg": [
+   "patch from Kuntal Loya |  HttpResponse.getCacheTtl returns time in milliseconds while ttl in cache headers is in seconds"
+  ], 
+  "revision_id": "1002366"
+ }
+]

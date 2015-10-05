@@ -1,0 +1,85 @@
+[
+ {
+  "author": "jmargaris", 
+  "date": "2006-12-20T08:18:05.904231Z", 
+  "msg": [
+   "Fixes for working in the browser dom where ownerDocument", 
+   "behaves a bit differently (go go unit tests!)"
+  ], 
+  "revision_id": "488950"
+ }, 
+ {
+  "author": "jliu", 
+  "date": "2006-12-20T08:13:36.740693Z", 
+  "msg": [
+   "* CXF-319: Access JAXB Payload from logical handler when using Dispatch", 
+   "* Register handlers programmatically on a Dispatch client"
+  ], 
+  "revision_id": "488949"
+ }, 
+ {
+  "author": "dandiep", 
+  "date": "2006-12-20T08:07:54.793191Z", 
+  "msg": [
+   "o Renamed SoapDestinationFactory to SoapTransportFactory as it now can work", 
+   "as a conduit too when creating client proxies.", 
+   "o Refactor Holder logic to interceptors. This is to help the seperation of", 
+   "JAX-WS logic from the EndpointInvocationHandler and also so we can support", 
+   "the XFire Aegis databinding Holder class (coming once I get the XFire", 
+   "Aegis support finished). I don't like the way I implemented this at all.", 
+   "Especially since SoapOutInterceptor needs to look for -1 in the type index.", 
+   "I think we should probably come up with a better method.", 
+   "o Separated JAX-WS EndpointInvocationHandler logic out so the Simple frontend", 
+   "can have clients.", 
+   "o Rename EndpointInvocationHandler to ClientProxy and add", 
+   "ClientProxy.getClient(Object) to make it easy to get the underlying client.", 
+   "This will make it easier to add interceptors to a Client.", 
+   "o Add a bunch of toString() methods to the service model to make debugging", 
+   "easier.", 
+   "o Move HeaderTest to jax-ws module and use local transport. Test now takes", 
+   ".3 seconds instead of 8. Makes for much faster debugging.", 
+   "o Support get/setServerBean on ServerFactoryBean", 
+   "o Add logging to PhaseInteceptorChain so it can be visualized. Just turn", 
+   "logging up to Fine and it will print out a diagram of the phases and the", 
+   "interceptors in that phase.", 
+   "o Fix race condition with PhaseInterceptorChain's pause/resume. There was a", 
+   "problem with WS-A/RM in that the executor was resuming the flow before", 
+   "the current interceptor had returned and the pausedMessage was set. Now", 
+   "doInterceptor notifies resume() once its finished pausing. resume() will", 
+   "wait for one second for the chain to finish pausing.", 
+   "A couple thoughts from things I noticed while going through the code:", 
+   "- we seem to be removing the ws-a/ws-rm headers from the header tree. Why??", 
+   "People will want to see these IMO and they'll be surprised that they're gone.", 
+   "- As noticed on the mailing list a few days ago, I think there are issues", 
+   "with the JaxwsInterceptorRemover approach long term. I had to add the holder", 
+   "interceptors to the list so that they were removed as well.", 
+   "- SequencetTest was failing sporadically depending on whether or not logging", 
+   "was turned up before I fixed the race condition. This took a very long time to", 
+   "figure out... Anyone have hints on how to best debug RM? I started adding a", 
+   "server side only test which played messages against the server and that helped.", 
+   "Single threaded tests are so much easier to debug. But I need to clean it up", 
+   "yet and get it fully working before I can commit. (only tests CreateSequence", 
+   "right now)"
+  ], 
+  "revision_id": "488948"
+ }, 
+ {
+  "author": "jmarino", 
+  "date": "2006-12-20T07:58:41.269819Z", 
+  "msg": [
+   "make context names immutable"
+  ], 
+  "revision_id": "488947"
+ }, 
+ {
+  "author": "freemant", 
+  "date": "2006-12-20T07:55:17.755964Z", 
+  "msg": [
+   "1) Moved parameters from LinkImpl into InAppInvocation.", 
+   "2) Moved context path from InAppInvocationPathSource into LinkImpl, thus eliminating the need for the former and PathSource.", 
+   "3) Added InvocationTarget so that an InAppInvocation has an InvocationTarget instead of using subclasses.", 
+   "4) Moved ValidationMessages.properties from src/main/java into src/main/resources."
+  ], 
+  "revision_id": "488946"
+ }
+]

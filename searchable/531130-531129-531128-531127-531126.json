@@ -1,0 +1,93 @@
+[
+ {
+  "author": "bago", 
+  "date": "2007-04-22T00:34:24.240174Z", 
+  "msg": [
+   "Another step toward event based flow.", 
+   "macroExpand.expand now will return null if the clientDomain is needed to be resolved and it has not been resolved yet, so the client can do the dns lookup and try again."
+  ], 
+  "revision_id": "531130"
+ }, 
+ {
+  "author": "abrown", 
+  "date": "2007-04-22T00:08:27.992103Z", 
+  "msg": [
+   "DERBY-2488: Patch to ensure that JDBC 4 Pooled and XA connections are returned", 
+   "from JDBC 3 DataSources if the app is running with Java SE 6.  In particular:", 
+   "1. Adds two methods, \"getNewPooledConnection()\" and \"getNewXAConnection()\",", 
+   "to the Driver30 class and makes those methods return JDBC 3 objects.", 
+   "2. Overides the two methods from #1 in Driver40 to return JDBC 4 objects.", 
+   "3. Changes the \"createPooledConnection()\" method and \"createXAConnection()\"", 
+   "methods in EmbeddedConnectionPoolDataSource and EmbeddedXADataSource", 
+   "(respectively) to call the new methods on the DriverXX object returned", 
+   "from the existing \"findDriver()\" method.", 
+   "4. Removes the now unused \"createPooledConnection()\" method from", 
+   "EmbedConnectionionPoolDataSource40, and removes \"createXAConnection()\"", 
+   "from EmbedXADataSource40.", 
+   "5. Changes ClientXADataSource, which had a problem similar to the Embedded", 
+   "data sources, to match the behavior of ClientConnectionPoolDataSource", 
+   "so that client now correctly returns JDBC 4 objects for Java SE 6 apps.", 
+   "6. Includes a new test, jdbc4/JDBC4FromJDBC3DataSourceTest, which verifies", 
+   "that JDBC 4 connections will be returned from JDBC 3 data sources if the", 
+   "JDK in use is JDK 1.6."
+  ], 
+  "revision_id": "531129"
+ }, 
+ {
+  "author": "mprudhom", 
+  "date": "2007-04-22T00:03:29.053060Z", 
+  "msg": [
+   "Changed docbook processing to use the docbkx-maven-plugin, which enables us to easily also generate PDF documentation"
+  ], 
+  "revision_id": "531128"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2007-04-21T23:36:57.974900Z", 
+  "msg": [
+   "http://issues.apache.org/activemq/browse/AMQCPP-103", 
+   "Building Decaf lib"
+  ], 
+  "revision_id": "531127"
+ }, 
+ {
+  "author": "dandiep", 
+  "date": "2007-04-21T23:34:13.662984Z", 
+  "msg": [
+   "Flesh out the Feature concept in CXF and try to bring together Features & Policy.", 
+   "I added 3 Feature implementations in this commit:", 
+   "- LoggingFeature. This simply adds the logging interceptors to the specifed endpoint.", 
+   "- WSAddressingFeature", 
+   "- WSPolicyFeature", 
+   "The most interesting of these is probably the WSPolicyFeature. This allows inlining", 
+   "of WS-Policy inside Spring configurations. This eliminates the need for an external", 
+   "policy file when using Policy. For instance:", 
+   "<endpoint>", 
+   "<features>", 
+   "<Policy><UsingAddressing/></Policy>", 
+   "</features>", 
+   "<endpoint>", 
+   "Or you can also reference policies in a Spring config and create <beans>:", 
+   "<Policy wsu:Id=\"FooPolicy\">...</Policy>", 
+   "<endpoint>", 
+   "<features>", 
+   "<ref bean=\"FooPolicy\"/>", 
+   "<bean class=\"org.apache.cxf.feature.LoggingFeature\"/>", 
+   "</features>", 
+   "<endpoint>", 
+   "One of the things this made painfully clear (after an hour or two of banging", 
+   "my head against the desk), is that we need to have different spring IDs for", 
+   "both <endpoint> and <client>. Otherwise they clash. So I changed the syntax to", 
+   "this:", 
+   "<jaxws:client id=\"...FooPort\" createdFromAPI=\"true\"/>", 
+   "<jaxws:server id=\"...FooPort\" createdFromAPI=\"true\"/>", 
+   "What this does is signal to the DefinitionParser that we should append", 
+   "\".jaxws-client\" or \".jaxws-endpoint\" to the id internally. I would love a", 
+   "better name than  \"createdFromAPI\" if you have any ideas. I didn't", 
+   "automatically append \".jaxws-foo\" when abstract=true because that would", 
+   "break \"pure spring\" users who are doing parent/child relationships with", 
+   "their beans."
+  ], 
+  "revision_id": "531126"
+ }
+]

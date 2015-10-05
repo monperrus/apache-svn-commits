@@ -1,0 +1,83 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-07-25T15:53:08.000000Z", 
+  "msg": [
+   "Remove task \"Send usage to stdout or stderr as appropriate\", which was", 
+   "issue #402.", 
+   "The patch to fix it was submitted by Chris Conrad", 
+   "<cconrad@valinux.com>, applied by Brian Fitzpatrick", 
+   "<fitz@red-bean.com>, and reviewed with only minor tweaks by Karl Fogel", 
+   "<kfogel@collab.net>.  See related commits of today and yesterday."
+  ], 
+  "revision_id": "839790"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-25T15:48:53.000000Z", 
+  "msg": [
+   "(svn_cl__help): Make `-v' and `--version' work again.  Make `help'", 
+   "print a full usage message to stdout, like `-h' and `--help'.", 
+   "(print_version_info): Shorter version message, remove leading newline."
+  ], 
+  "revision_id": "839789"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-25T15:21:30.000000Z", 
+  "msg": [
+   "Re-acquire grip on sanity (confessing a faint hope that Brane will", 
+   "make some re-mark about how \"re\" is a prefix and needs no hyphen).", 
+   "We will indeed do hooks and sentinels in libsvn_repos, adding a few", 
+   "public accessor functions to the fs interface where necessary.  This", 
+   "is basically a partial reversion of my change of 2001-07-24 18:36,", 
+   "plus some more coding.", 
+   "* include/svn_fs.h (svn_fs_commit_txn): Doc fix.", 
+   "(svn_fs_txn_pool): New func.", 
+   "* svn_error_codes.h (svn_errno_t): New error", 
+   "SVN_ERR_REPOS_HOOK_FAILURE.", 
+   "* libsvn_fs/tree.c (svn_fs_commit_txn): Don't run pre- and post-commit", 
+   "hooks here, we'll do it in libsvn_repos instead.", 
+   "* libsvn_fs/txn.c (svn_fs_txn_pool): Define.", 
+   "* libsvn_fs/hooks.c, libsvn_fs/hooks.h: Remove these files.", 
+   "* libsvn_repos/hooks.c: Restore this file.", 
+   "(run_pre_commit_hooks, run_post_commit_hooks): New funcs.", 
+   "(svn_repos_fs_commit_txn): Define.", 
+   "* include/svn_repos.h (svn_repos_fs_commit_txn): Re-declare.", 
+   "* libsvn_repos/commit_editor.c (close_edit): Use", 
+   "svn_repos_fs_commit_txn, instead of svn_fs_commit_txn.", 
+   "* mod_dav_svn/version.c (dav_svn_merge): Same."
+  ], 
+  "revision_id": "839788"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-07-25T04:56:02.000000Z", 
+  "msg": [
+   "'Whack.' Ball's in your court, Karl."
+  ], 
+  "revision_id": "839787"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-07-25T04:49:15.000000Z", 
+  "msg": [
+   "This patch submitted by Christopher Conrad <cconrad@valinux.com>", 
+   "Issue 402 has been worked out as follows:", 
+   "svn --no-such-option -> stderr, non-zero exit code", 
+   "svn --help ->stdout, zero exit code", 
+   "svn help -> stdout, zero exit code (it prints the same message as svn help", 
+   "help)", 
+   "* clients/cmdline/help-cmd.c (print_command_info, print_generic_help):", 
+   "Added FILE *stream to parameter lists to allow callers to select the", 
+   "output stream to use.  Switched all printf's to fprintf's to take", 
+   "advantage of the new parameter.", 
+   "* clients/cmdline/help-cmd.c (svn_cl__help): Added a case to handle when", 
+   "svn is invoked with help or --help.  Updated calls to print_generic_help", 
+   "and print_command_info to use new parameter list.", 
+   "* clients/cmdline/help-cmd.c (svn_cl__subcommand_help): Updated call", 
+   "to print_command_info to use new parameter list."
+  ], 
+  "revision_id": "839786"
+ }
+]

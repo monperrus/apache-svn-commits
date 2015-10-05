@@ -1,0 +1,96 @@
+[
+ {
+  "author": "brane", 
+  "date": "2003-03-17T03:35:26.524164Z", 
+  "msg": [
+   "Add --cleanup processing and --verbose output to the C test suite.", 
+   "This lets fs-test and repos-test clean up after themselves.", 
+   "Add a machanism for creating new working copy and repository paths", 
+   "(and --cleanup processing for same) to the Python tests.", 
+   "Enhance the Windows tests so that they can run outside the source", 
+   "tree (for example, on a RAM-backed volume).", 
+   "* subversion/include/svn_test.h", 
+   "(svn_test_add_dir_cleanup): New prototype.", 
+   "* subversion/tests/svn_tests_main.c", 
+   "(verbose_mode, cleanup_mode) New flags.", 
+   "(cleanup_pool): New global pool for registering cleanups.", 
+   "(cleanup_rmtree, svn_test_add_dir_cleanup): New functions.", 
+   "(main): Scan the argument list for --cleanup and --verbose flags, and", 
+   "initialize cleanup_mode and verbose_mode accordingly.", 
+   "Create and clear cleanup_pool in lockstep with test_pool.", 
+   "* subversion/tests/fs-helpers.c", 
+   "(svn_test__create_fs, svn_test__create_repo): Register the path of", 
+   "the new file system or repository for cleanup.", 
+   "* build/run_tests.py", 
+   "(TestHarness.run): Pass the --verbose flag to C tests.", 
+   "* subversion/tests/python-libs/exectest.py", 
+   "(run_tests): Pass all command line arguments to the sub-tests.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(Sandbox.__init__): Set self.repo_url to the URL of self.repo_dir.", 
+   "(Sandbox.add_test_path): New parameter 'remove'; when non-zero (which is", 
+   "the default), delete the directory tree at 'path'.", 
+   "(Sandbox.add_repo_path, Sandbox.add_wc_path): New. Create WC or repo", 
+   "paths for the tests, and register them for cleanup.", 
+   "* subversion/tests/clients/cmdline/copy_tests.py,", 
+   "subversion/tests/clients/cmdline/stat_tests.py,", 
+   "subversion/tests/clients/cmdline/svnversion_tests.py,", 
+   "subversion/tests/clients/cmdline/prop_tests.py,", 
+   "subversion/tests/clients/cmdline/basic_tests.py,", 
+   "subversion/tests/clients/cmdline/update_tests.py,", 
+   "subversion/tests/clients/cmdline/trans_tests.py,", 
+   "subversion/tests/clients/cmdline/commit_tests.py,", 
+   "subversion/tests/clients/cmdline/merge_tests.py,", 
+   "subversion/tests/clients/cmdline/switch_tests.py,", 
+   "subversion/tests/clients/cmdline/externals_tests.py: Use Sandbox.add_wc_path", 
+   "and Sandbox.add_repo_path to crate new test paths, and use sbox.repo_url", 
+   "instead of calculating.", 
+   "* subversion/tests/clients/cmdline/stat_tests.py", 
+   "(status_uninvited_parent_directory): Adjust the regex to the new WC name.", 
+   "* subversion/tests/clients/cmdline/externals_tests.py", 
+   "(externals_test_cleanup): Gone. Superseded by the new Sandbox code.", 
+   "* win-tests.py: Accept an optional target dir for running the tests, then", 
+   "copy the test programs there and chdir to it before running the tests."
+  ], 
+  "revision_id": "845430"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-03-16T22:52:56.984012Z", 
+  "msg": [
+   "* build/run_tests.py (main): Run the test with the rest of args, not sys.argv.", 
+   "* Makefile.in (check): Build all flags for run_tests.py in one shell variable."
+  ], 
+  "revision_id": "845429"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-16T22:01:26.879145Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(check): Fix typo from revision 5352."
+  ], 
+  "revision_id": "845428"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-16T22:00:25.830335Z", 
+  "msg": [
+   "More work on issue #1004: Make 'svn add' cancellable.", 
+   "* subversion/libsvn_client/add.c", 
+   "(add_dir_recursive): Check for cancellation."
+  ], 
+  "revision_id": "845427"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-03-16T20:44:40.999443Z", 
+  "msg": [
+   "Make verbose mode the default for the \"check\", \"davcheck\", and", 
+   "\"svncheck\" targets so that tests.log gets complete test output, and", 
+   "add an option to turn on cleanup mode.", 
+   "* Makefile.in (check): Send the --verbose flag to run_tests.py,", 
+   "and the --cleanup flag if the CLEANUP variable is non-empty."
+  ], 
+  "revision_id": "845426"
+ }
+]

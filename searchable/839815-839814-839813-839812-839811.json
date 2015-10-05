@@ -1,0 +1,109 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-08-01T16:43:30.000000Z", 
+  "msg": [
+   "Big changes: new authentication architecture based on the PAM model.", 
+   "RA_local now uses \"username only\" authentication, and now usernames", 
+   "are passed all the way through to transactions and revisions.  RA_dav", 
+   "compiles, but is (temporarily) non-functional until we upgrade it to", 
+   "use either \"username only\" and/or \"username/password\" authentication.", 
+   "The next step on the agenda is to allow storage of usernames &", 
+   "passwords in the working copy.", 
+   "* svn_ra.h", 
+   "(svn_ra_simple_password_authenticator): \"authenticator\" vtable object.", 
+   "(svn_ra_username_authenticator):  another \"authenticator\" object.", 
+   "(svn_ra_plugin_t):  remove open().", 
+   "new replacement method: get_authenticator().", 
+   "new 'auth_methods' flag.", 
+   "* auth.c:  new file and routines, the implementation of...", 
+   "* svn_client.h (svn_client_authenticate):  new master interface.", 
+   "(svn_client_auth_info_callback_t):  new function type, added as a", 
+   "new argument to all svn_client.h interfaces that use repositories.", 
+   "* svn_error_codes.h (SVN_ERR_RA_NOT_AUTHORIZED):  renamed, added RA part.", 
+   "(SVN_ERR_RA_UNKNOWN_AUTH):  new error val.", 
+   "* libsvn_ra_dav/props.c (svn_ra_dav__get_props): rename to", 
+   "SVN_ERR_RA_NOT_AUTHORIZED.", 
+   "(process_results): comment out pc variable to remove warning.", 
+   "* libsvn_ra_dav/util.c (svn_ra_dav__parsed_request): rename to", 
+   "SVN_ERR_RA_NOT_AUTHORIZED.", 
+   "* libsvn_ra_dav/session.c (svn_ra_get_authenticator): dummy func.", 
+   "(svn_ra_open): now deprecated and unused.  needs to be rewritten as", 
+   "dummy func above.", 
+   "* libsvn_ra_dav/commit.c, ra_dav.h (svn_ra_dav__get_commit_editor):", 
+   "remove the bogus user argument.  It should already be living in 'cc'", 
+   "after authentication finishes.", 
+   "* libsvn_ra_local/ra_plugin.c (get_authenticator):  implement.", 
+   "(authenticate):  essentially renamed & hacked from open().", 
+   "(set_username):  implement.", 
+   "(close):  don't free whole pool, since we're no longer subpooling.", 
+   "(get_commit_editor):  send session_baton->username to libsvn_repos!", 
+   "* libsvn_ra_local/ra_local.h (svn_ra_local__session_baton_t): add", 
+   "username field.", 
+   "* commit.c (send_to_repos): replace ra->open() call with", 
+   "svn_client_authenticate() call.", 
+   "* status.c (svn_client_status): same.", 
+   "* update.c (svn_client_update): same.", 
+   "* checkout.c (svn_client_checkout): same.", 
+   "* prompt.c (svn_cl__prompt_user):  new file and callback routine.", 
+   "* cl.h (svn_cl__prompt_user): declare.", 
+   "* checkout-cmd.c (svn_cl__checkout):  send callback to svn_client_*() call.", 
+   "* commit-cmd.c (svn_cl__commit): same.", 
+   "* import-cmd.c (svn_cl__import): same.", 
+   "* update-cmd.c (svn_cl__update): same.", 
+   "* status-cmd.c (svn_cl__status): same.", 
+   "* target.c (svn_path_get_absolute): rename to SVN_ERR_RA_NOT_AUTHORIZED.", 
+   "* svnadmin/main.c (main):  make svnadmin print authors."
+  ], 
+  "revision_id": "839815"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-01T15:10:50.000000Z", 
+  "msg": [
+   "* alpha-checklist.txt", 
+   "cvs2svn is now a 1.0 requirement, not M3."
+  ], 
+  "revision_id": "839814"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-31T21:19:58.000000Z", 
+  "msg": [
+   "Hook system now passes all hand-tests.", 
+   "The automated test (see tests/libsvn_repos/repos-test.c) is commented", 
+   "out because it still doesn't pass.  I think it's something to do with", 
+   "the test itself, or maybe with the fact that \"$user\" isn't usefully", 
+   "expanded yet because the auth system is still being worked on.", 
+   "* hooks.c: include ctype.h, for character class tests.", 
+   "(read_char, eat_to_eol, expand, is_irrelevant_line): New funcs.", 
+   "(read_hook_line): Rewrite, using above new funcs."
+  ], 
+  "revision_id": "839813"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-07-31T17:28:42.000000Z", 
+  "msg": [
+   "* build.conf", 
+   "(md5args): New binary for repos hook testing.", 
+   "* subversion/tests/libsvn_repos/md5argcs.c", 
+   "New file (for new binary, md5args).", 
+   "* subversion/tests/libsvn_repos/.cvsignore", 
+   "Ignore new binary md5args.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(verify_hooks): New function.", 
+   "(test_funcs): References new test function, verify_hooks() --", 
+   "currently #ifdef'd out because the test fails."
+  ], 
+  "revision_id": "839812"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-07-31T16:39:48.000000Z", 
+  "msg": [
+   "(svn_fs_repository): Doc fix."
+  ], 
+  "revision_id": "839811"
+ }
+]

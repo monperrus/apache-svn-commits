@@ -1,0 +1,92 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-05-23T20:20:18.133337Z", 
+  "msg": [
+   "Optimization: make ra_dav updates issue a depth-1 PROPFIND on", 
+   "directories, rather than issue both a GET and PROPFIND on each file.", 
+   "[NOTE: this ra_dav optimization is only triggered by a new-style", 
+   "report-response from the latest mod_dav_svn.  If either the client or", 
+   "server is \"old\", this optimization won't happen.]", 
+   "This is somewhat related to issue #1161 (\"ra_dav makes too many", 
+   "requests\"), but mainly it's a precursor to making", 
+   "svn_client_checkout() call svn_client_update() internally.", 
+   "* mod_dav_svn/update.c (add_helper): when sending <add-directory>", 
+   "element, attach a 'bc-url' attribute.", 
+   "* libsvn_ra_dav/fetch.c (dir_item_t):  add new 'children' hash.", 
+   "(start_element): in <add-directory>, look for the new 'bc-url'", 
+   "attribute.  if present, do a depth-1 propfind and cache the results", 
+   "in a hash indexed by vr-url.", 
+   "(add_node_props): in the file case, check to see if parent", 
+   "dir_item_t already contains the file's props.  in the dir case,", 
+   "check the dir_item_t directly to see if its full props already", 
+   "exist.  if they don't, fall back on calling __get_props_resource()", 
+   "as usual, per-item.", 
+   "(add_props): take a prop hash as first argument, instead of a resource_t.", 
+   "(fetch_file, svn_ra_dav__do_checkout, add_node_props): update", 
+   "callers of add_props(): pass rsrc->propset instead of rsrc."
+  ], 
+  "revision_id": "846100"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-05-23T18:38:47.435958Z", 
+  "msg": [
+   "Issue 1142, make 'svn diff URL1@N URL2@M' work.", 
+   "* subversion/clients/cmdline/diff-cmd.c (svn_cl__diff): Extract @N revisions", 
+   "when needed.", 
+   "* subversion/clients/cmdline/main.c (svn_cl__cmd_table): Tweak diff", 
+   "help text.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py (diff_branches): Add", 
+   "further tests."
+  ], 
+  "revision_id": "846099"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-23T16:07:58.417607Z", 
+  "msg": [
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(TreeMirror.delete_path): Fix silly typo."
+  ], 
+  "revision_id": "846098"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-05-23T16:05:21.952576Z", 
+  "msg": [
+   "* tools/cvs2svn/cvs2svn.1: Bring up to date.", 
+   "Patch by: Martin Furter <mf@rola.ch>"
+  ], 
+  "revision_id": "846097"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-05-23T16:00:25.294797Z", 
+  "msg": [
+   "Issue 1142, change to 'svn diff [--old] [--new]' syntax.", 
+   "This is a new interface on the old backend, so with appropriate", 
+   "arguments, the diff output is unchanged.  The new interface allows", 
+   "working copy to branch comparisons, some of these work but sometimes", 
+   "the backend will generate errors.", 
+   "* subversion/clients/cmdline/diff-cmd.c (svn_cl__diff): Rewrite.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(enum svn_cl__longopt_t): Add svn_cl__old_cmd_opt and svn_cl__new_cmd_opt.", 
+   "(struct svn_cl__opt_state_t): Add old_target and new_target.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__options): Add --old and --new. Tweak diff-cmd, diff3-cmd and", 
+   "editor-cmd capitalization for consistency.", 
+   "(svn_cl__cmd_table): Rewrite diff help text, add --old and --new.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_nonextant_urls): Use new diff syntax.", 
+   "(diff_targets, diff_branches): New.", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Tweak for diff3-cmd capitalization change.", 
+   "* tools/client-side/bash_completion (svn_): Add --old and --new to diff,", 
+   "add --ignore-ancestry to diff and merge, add --strict to propget, add", 
+   "-q to proplist.", 
+   "* CHANGES: Record new diff syntax."
+  ], 
+  "revision_id": "846096"
+ }
+]

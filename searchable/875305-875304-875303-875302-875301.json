@@ -1,0 +1,93 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2009-01-14T14:06:22.212480Z", 
+  "msg": [
+   "Add to the test suite a \"run_and_verify_resolve\" function.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(_run_and_verify_resolve): New function, factored out of", 
+   "run_and_verify_resolved().", 
+   "(run_and_verify_resolve): New function, using _run_and_verify_resolve().", 
+   "(run_and_verify_resolved): Re-implement as a wrapper around", 
+   "_run_and_verify_resolve()."
+  ], 
+  "revision_id": "875305"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-14T13:41:43.611336Z", 
+  "msg": [
+   "Constify the string passd to svn_stream_from_string().", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_stream_from_string): constify the STR parameter", 
+   "* subveresion/libsvn_subr/stream.c:", 
+   "(struct string_stream.baton): constify the STR member", 
+   "(svn_stream_from_string): constify the STR parameter"
+  ], 
+  "revision_id": "875304"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-14T11:07:30.373337Z", 
+  "msg": [
+   "Begin some cleaning up of the translation APIs. Long term goal is to focus", 
+   "on stream translation and to deprecate all file-based APIs. Callers can", 
+   "easily map files to/from streams.", 
+   "- svn_subst_translate_stream4 has been added to ensure that the streams", 
+   "passed to it will always be closed (simplifies and fixes some error", 
+   "cleanup logic)", 
+   "- internal function create_special_file_from_stringbuf has been changed to", 
+   "take a stream instead", 
+   "Note: there appears to be a lot of churn in svn_subst.h, but I simply", 
+   "moved the svn_subst_translate_stream* functions together", 
+   "* subversion/include/svn_subst.h:", 
+   "(svn_subst_translate_stream4): new function to obsolete ...", 
+   "(svn_subst_translate_stream3): ... this one", 
+   "* subversion/libsvn_subr/subst.c:", 
+   "(svn_subst_translate_stream3): moved to deprecated.c", 
+   "(svn_subst_translate_stream4): rebuilt on the ashes of stream3,", 
+   "including some argument renames. be very careful of all error returns,", 
+   "in order to make sure that the streams are closed before returning.", 
+   "(svn_subst_translate_cstring2): simplify in terms of stream4.", 
+   "(create_special_file_from_stringbuf): renamed into ...", 
+   "(create_special_file_from_source): ... this. take a source stream and", 
+   "read its first line, and create a special file (e.g. symlink) based on", 
+   "that information.", 
+   "(create_special_file): rewrite in terms of create_special_file_from_source", 
+   "(svn_subst_copy_and_translate3): rebuild and simplify using stream4.", 
+   "(svn_subst_create_translated): simplify special file creation using", 
+   "_from_stream. simplify and correct code and error return logic using", 
+   "the new stream4 variant.", 
+   "(close_handler_special): use new _from_stream function", 
+   "* subversion/libsvn_subr/deprecated.c:", 
+   "(svn_subst_translate_stream3): moved here from subst.c and implemented", 
+   "in terms of the new stream4 function.", 
+   "* subversion/libsvn_client/cat.c:", 
+   "(cat_local_file): switch to svn_subst_translate_stream4() and ensure", 
+   "that input is disowned for both branches. clarified err return logic."
+  ], 
+  "revision_id": "875303"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-01-14T08:55:20.924553Z", 
+  "msg": [
+   "* subversion/libsvn_wc/copy.c", 
+   "(svn_wc_copy2): Fix typo in comment."
+  ], 
+  "revision_id": "875302"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-14T01:58:15.459352Z", 
+  "msg": [
+   "Rework some logic in svn_wc_translated_file2() to show that it is always", 
+   "just some extra glue around svn_subst_copy_and_translate3(). This makes it", 
+   "easier to reason about these crazy subst/translate functions.", 
+   "* subversion/libsvn_wc/translate.c:", 
+   "(svn_wc_translated_file2): set up flags appropriately and then always", 
+   "call svn_subst_copy_and_translate3()"
+  ], 
+  "revision_id": "875301"
+ }
+]

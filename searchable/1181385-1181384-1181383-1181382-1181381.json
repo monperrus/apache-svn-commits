@@ -1,0 +1,92 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:06.746094Z", 
+  "msg": [
+   "HBASE-2889 : Fixed minor Log4j problem"
+  ], 
+  "revision_id": "1181385"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:04:04.377914Z", 
+  "msg": [
+   "avoid log spew for regions already in compaction queue", 
+   "Summary:", 
+   "We were debug logging compaction requests even in cases the region was already", 
+   "in queue.", 
+   "Small diff to only report when the region is *actually* added to the compaction", 
+   "queue. Also now print the pending compaction queue whenever a compaction is", 
+   "completed.", 
+   "Test Plan:", 
+   "* run on cluster and check the new messages.", 
+   "* kicked off unit test suite run in the background.", 
+   "DiffCamp Revision: 162055", 
+   "Reviewed By: nspiegelberg", 
+   "CC: jgray, nspiegelberg, kannan, kranganathan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181384"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:03:58.007227Z", 
+  "msg": [
+   "HBASE-2933 : Skip EOF Errors during Log Recovery", 
+   "Summary:", 
+   "If we get an EOF error during log recovery, the file was transferred fine but", 
+   "contains bad application-level information, either due to a write/parse error or", 
+   "master death while splitting.  Either way, we should continue instead of failing", 
+   "and having the master reassign this region to another server and continue the", 
+   "cycle.", 
+   "Test Plan:", 
+   "mvn test", 
+   "DiffCamp Revision: 161212", 
+   "Reviewed By: kannan", 
+   "CC: nspiegelberg, kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181383"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:03:54.807588Z", 
+  "msg": [
+   "HBASE-2889 : HFile Pretty Printer", 
+   "Summary:", 
+   "Added to help us debug EOF problems that we've been seeing", 
+   "Test Plan:", 
+   "mvn clean install", 
+   "bin/hbase org.apache.hadoop.hbase.regionserver.wal.HLog --dump /debug/1.log >", 
+   "badfile.out 2>&1", 
+   "DiffCamp Revision: 161534", 
+   "Reviewed By: kannan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181382"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:03:49.049174Z", 
+  "msg": [
+   "Increase RS Timeout", 
+   "Summary:", 
+   "HBASE_SLEEP_TIMEOUT is used to determine that an RS connection is hosed so you", 
+   "can move to the next one.  For our uber-large, uber-loaded clusters, a legit", 
+   "stop can take 1-2 minutes.  Raise this threshold.  Long-term solution = bound", 
+   "close time in RS code.", 
+   "Test Plan:", 
+   "bin/rolling-restart.sh", 
+   "DiffCamp Revision: 160116", 
+   "Reviewed By: kannan", 
+   "CC: kannan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181381"
+ }
+]

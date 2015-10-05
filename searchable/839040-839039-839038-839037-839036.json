@@ -1,0 +1,78 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-03-27T09:08:14.000000Z", 
+  "msg": [
+   "Process Baseline resource URIs.", 
+   "* dav_svn.h (DAV_SVN_RESTYPE_BLN_COLLECTION): new enumerated constant", 
+   "* repos.c (dav_svn_parse_baseline_coll_uri): don't tweak if we don't find a", 
+   "slash character. it means they are referring to the root.", 
+   "(dav_svn_parse_baseline_uri): new function", 
+   "(special_subdirs[]): add entry for the baselines"
+  ], 
+  "revision_id": "839040"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-27T09:05:37.000000Z", 
+  "msg": [
+   "(dav_svn_db_nextkey): make sure that a hash index is available before", 
+   "skipping to the next one. (if the hash was empty, then firstkey ends up", 
+   "setting db->hi == NULL)"
+  ], 
+  "revision_id": "839039"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-27T07:53:21.000000Z", 
+  "msg": [
+   "(dav_svn_insert_prop): handle the DAV:checked-in property for VCCs"
+  ], 
+  "revision_id": "839038"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-27T00:32:40.000000Z", 
+  "msg": [
+   "We have a convention about how working-copy entry info is stored.", 
+   "Make *retrieval* match this convention.", 
+   "- If the object is a file, then *all* info is in its entry.  Any", 
+   "missing URL or revision info is implicitly inherited from", 
+   "THIS_DIR.", 
+   "- If the object is a dir, but not THIS_DIR, then the entry should", 
+   "contain *only* a \"name\" and \"kind\" field, and optionally some", 
+   "state flags (ADD, DELETE, etc.)", 
+   "- If the object is THIS_DIR, all ancestry is *required*.  This is", 
+   "also where to find timestamps and other info.  (The reason its", 
+   "flags are in the parent are because adds/deletes are changes to", 
+   "the parent, not the dir.)", 
+   "PR: 325", 
+   "It also paves the way for 'svn cp' to work correctly someday.", 
+   "* entries.c (resolve_to_defaults):  take a path argument, the one that", 
+   "produced the *entries hash.  Add better logic for deriving ancestry", 
+   "at the bottom of this routine.", 
+   "(read_entries):  take new boolean arg, indicating whether it's okay", 
+   "to search up and down for missing entry info.", 
+   "(svn_wc_entries_read):  call read_entries with TRUE flag.", 
+   "* adm_crawler.c (report_local_mods):  when committing an added dir,", 
+   "be sure to supply \"copyfrom\" args that are either both invalid or", 
+   "both valid.  Also be sure not to look for ADD/DELETE flags on a", 
+   "THIS_DIR entry.  Those should only be honored in a parent entry.", 
+   "* status.c (svn_wc_statuses):  make this routine recurse and build the", 
+   "hash of statuses correctly, given what svn_wc_entries_read() returns", 
+   "now."
+  ], 
+  "revision_id": "839037"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-27T00:14:20.000000Z", 
+  "msg": [
+   "* commit.c (send_to_repos): New internal func for shared internals of", 
+   "commit and import, the latter in progress.", 
+   "(commit): Use above.", 
+   "(import): New func, use above."
+  ], 
+  "revision_id": "839036"
+ }
+]

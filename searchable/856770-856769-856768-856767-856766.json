@@ -1,0 +1,118 @@
+[
+ {
+  "author": "nori", 
+  "date": "2005-10-13T12:50:53.091045Z", 
+  "msg": [
+   "Japanese translation updates.", 
+   "* subversion/po/ja.po: Update translation against r16694 by working on a", 
+   "fuzzy entry added at r16631:16694.", 
+   "Now ja.po has 1390 translated messages against r16694 (Emacs PO-mode", 
+   "status: \"1391t126o\")."
+  ], 
+  "revision_id": "856770"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-13T12:49:04.469027Z", 
+  "msg": [
+   "* STATUS: Nominate r16693."
+  ], 
+  "revision_id": "856769"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-13T12:10:27.371758Z", 
+  "msg": [
+   "Introduce an svn_ra_reparent call that makes it possible to", 
+   "give an existing RA session a new parent URL (in the same repository).", 
+   "This fixes issue #1833.", 
+   "The motivation for this change is to avoid opening lots of RA sessions", 
+   "for one operation, which can be costly depending on the RA layer in use", 
+   "(e.g. establishing SSL or SSH connections).  This commit also makes use", 
+   "of the new API to get rid of this problem in many cases.  For example,", 
+   "a repos->repos diff used to open five RA sessions, and now opens two", 
+   "instead.  Most svn operations required an extra RA session just to get the", 
+   "correct repository URL for a path@rev, which isn't necessary any longer.", 
+   "For ra_dav, this is entirely a client operation, so there are no", 
+   "compatibility concerns.  For ra_svn, a new command reparent was added", 
+   "to svnserve.  If this command isn't supported, a new connection is", 
+   "established instead.", 
+   "* subversion/include/svn_ra.h (svn_ra_reparent): New declaration.", 
+   "* subversion/libsvn_ra/ra_loader.c (svn_ra_reparent): New function.", 
+   "* subversion/libsvn_ra/ra_loader.h (svn_ra__vtable_t): Add reparent member.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__open): Allocate repository_URL and fs_path in the new", 
+   "path_pool.", 
+   "(svn_ra_local__reparent): New function.", 
+   "(ra_local_vtable): Add svn_ra_local__reparent.", 
+   "* subversion/libsvn_ra_local/ra_local.h", 
+   "(svn_ra_local__session_baton_t): Add path_pool member.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_session_baton_t): Add pool and config members.", 
+   "(open_session): New function, mostly factored out of ra_svn_open.", 
+   "(ra_svn_open): Use open_session to do the actual work.  Open the session", 
+   "in a subpool of the RA session pool.", 
+   "(ra_svn_reparent): New function.", 
+   "(ra_svn_vtable): Add ra_svn_reparent.", 
+   "* subversion/libsvn_ra_svn/protocol (reparent): New command.", 
+   "* subversion/svnserve/serve.c", 
+   "(server_baton_t): Add path_pool member.", 
+   "(reparent): New function.", 
+   "(main_commands): Add reparent.", 
+   "(find_repos): Initialize the baton's path_pool and allocate fs_path", 
+   "therein.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__session_t): Add url_pool member.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(parse_url): New function, factored out of svn_ra_dav__open.", 
+   "(svn_ra_dav__open): Use parse_url.  Initialize the session url_pool and", 
+   "allocate the url string therein.", 
+   "(svn_ra_dav__reparent): New function.", 
+   "(dav_vtable): Add svn_ra_dav__reparent.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__repos_locations): Add ra_session argument.", 
+   "Callers updated.", 
+   "* subversion/libsvn_client/info.c", 
+   "(same_resource_in_head): Add ra_session argument and use it instead of", 
+   "opening a temporary session.", 
+   "(svn_client_info): Pass the RA session to same_resource_in_head.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__repos_locations): Add ra_session argument and use it", 
+   "if possible instead of opening a temporary session.", 
+   "(svn_client__ra_session_from_path): Open the RA session before getting the", 
+   "repos locations, so we don't need a temporary session for that purpose,", 
+   "and reparent the session before returning it.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(struct diff_repos_repos): Add ra_session member.", 
+   "(diff_prepare_repos_repos): Rework to only use one RA session for everything.", 
+   "Pass that RA session to the caller.", 
+   "(diff_repos_repos, diff_summarize_repos_repos): Use the session provided", 
+   "by diff_prepare_repos_repos instead of opening another one."
+  ], 
+  "revision_id": "856768"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-13T11:30:01.351850Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/session.c (svn_ra_dav__get_repos_root): Fix", 
+   "crash caused by allocating the repository root URL in the temporary pool", 
+   "instead of the session pool (and then caching it in the session).", 
+   "There is no test for this since it will be covered by my next commit, which", 
+   "triggered this bug."
+  ], 
+  "revision_id": "856767"
+ }, 
+ {
+  "author": "nori", 
+  "date": "2005-10-13T05:52:04.034638Z", 
+  "msg": [
+   "Japanese translation in the 1.3.x branch updates.", 
+   "* subversion/po/ja.po: Merge update of ja.po in the trunk tree at", 
+   "r16309:16691.", 
+   "Now ja.po has 1388 translated messages against r16691 (Emacs PO-mode", 
+   "status: \"1389t+127o\")."
+  ], 
+  "revision_id": "856766"
+ }
+]

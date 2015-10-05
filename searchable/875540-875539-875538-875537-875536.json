@@ -1,0 +1,101 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-01-26T14:30:02.085196Z", 
+  "msg": [
+   "Fix another symptom of issue #3302.", 
+   "Like unordered rangelists (see r35297 and r35358) it appears that", 
+   "svnmerge-migrate-history*.py can create svn:mergeinfo properties that are", 
+   "considered invalid by svn_mergeinfo_parse().  This time the problem is", 
+   "overlapping ranges: http://svn.haxx.se/users/archive-2009-01/0490.shtml.", 
+   "I've been unable to replicate the problem with svnmerge-migrate-history*.py", 
+   "but like with the unordered ranges, it would be nice to save users from", 
+   "encountering parsing failures for overlapping ranges.  This commit allows", 
+   "svn_mergeinfo_parse() to tolerate overlapping rangelists of the *same*", 
+   "inheritance type, while still guaranteeing the mergeinfo it creates has", 
+   "no overlapping rangelists, which is what the rest of our rangelist", 
+   "manipulating APIs require.", 
+   "Note that it is still a parsing error if the overlapping ranges have", 
+   "differing inheritance types, e.g. mergeinfo like '/trunk:3-10,5-15*' is", 
+   "still invalid and will result in an error.", 
+   "* subversion/include/svn_mergeinfo.h", 
+   "(svn_mergeinfo_parse): Tweak doc string to reflect loosened restrictions.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(parse_revision_line): Parse overlapping ranges of the same", 
+   "inheritance type, but combine them into a single range.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(inappropriate_props): Adjust two attempts to set invalid mergeinfo,", 
+   "instead of overlapping ranges of the same inheritance type, which now", 
+   "succeeds, try overlapping ranges of different inheritance, which should", 
+   "still fail.", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(NBR_MERGEINFO_VALS, mergeinfo_vals, mergeinfo_paths): Add some new test", 
+   "cases for test_parse_single_line_mergeinfo().", 
+   "(NBR_BROKEN_MERGEINFO_VALS, broken_mergeinfo_vals): Add some new test", 
+   "cases for test_parse_broken_mergeinfo()."
+  ], 
+  "revision_id": "875540"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-26T11:30:42.608202Z", 
+  "msg": [
+   "Various cleanups after all the subst work.", 
+   "* subversion/include/svn_subst.h:", 
+   "(SVN_SUBST_NATIVE_EOL_STR): new definition for the EOL format used in", 
+   "the repository (\"Normal Form\")", 
+   "* subversion/libsvn_subr/subst.c:", 
+   "(SVN_SUBST__DEFAULT_EOL_STR): removed in favor of above", 
+   "(svn_subst_translation_required): use SVN_SUBST_NATIVE_EOL_STR", 
+   "(svn_subst_copy_and_translate3): fold old svn_subst_create_translated", 
+   "into this function.", 
+   "* subversion/libsvn_subr/deprecated.c:", 
+   "(svn_subst_stream_translated_to_normal_form,", 
+   "svn_subst_translate_to_normal_form): use SVN_SUBST_NATIVE_EOL_STR", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(compare_and_verify): use SVN_SUBST_NATIVE_EOL_STR", 
+   "* subversion/libsvn_wc/translate.c:", 
+   "(svn_wc_translated_stream, svn_wc_translated_file2): use", 
+   "SVN_SUBST_NATIVE_EOL_STR", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(detranslate_wc_file): use SVN_SUBST_NATIVE_EOL_STR", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(copy_file_administratively): use SVN_SUBST_NATIVE_EOL_STR", 
+   "* subversion/libsvn_client/export.c:", 
+   "(close_file): simplify via ternary operator removal", 
+   "* subversion/libsvn_client/commit.c:", 
+   "(send_file_contents): use SVN_SUBST_NATIVE_EOL_STR", 
+   "Suggestion (of SVN_SUBST_NATIVE_EOL_STR) by: rhuijben"
+  ], 
+  "revision_id": "875539"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-26T08:11:12.631953Z", 
+  "msg": [
+   "Add a couple little scripts that help to find problems in our codebase.", 
+   "* tools/dev/find-bad-style.py: locate function calls with whitespace", 
+   "before the opening parentheses.", 
+   "* tools/dev/min-includes.sh: helper script to minimize the set of includes", 
+   "in our headers."
+  ], 
+  "revision_id": "875538"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-01-26T06:47:51.369924Z", 
+  "msg": [
+   "On the 'svnpatch-diff' branch:", 
+   "Merge r35300:35462 from trunk."
+  ], 
+  "revision_id": "875537"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-26T00:47:16.633096Z", 
+  "msg": [
+   "More notes about failing tests."
+  ], 
+  "revision_id": "875536"
+ }
+]

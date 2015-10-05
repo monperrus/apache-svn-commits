@@ -1,0 +1,93 @@
+[
+ {
+  "author": "neels", 
+  "date": "2009-06-13T23:55:54.495122Z", 
+  "msg": [
+   "* www/getting.html: Add link to OpenCSW under \"Solaris\".", 
+   "Patch by: Mike Watters <valholla75@gmail.com>", 
+   "Tweaked by: me"
+  ], 
+  "revision_id": "878100"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-13T18:53:08.988886Z", 
+  "msg": [
+   "Implement a stream interface which allows reading inside a range of a file.", 
+   "'svn patch' will make use of this interface later to read hunks directly", 
+   "from the patch file, instead of loading them into memory.", 
+   "Loading hunks into memory can be too expensive e.g. when large files", 
+   "are added as part of a unidiff.", 
+   "An additional stream interface which will allow filtering while reading", 
+   "lines from a stream will also need to be created. This will allow", 
+   "'svn patch' to make use of streams for the original text, modified text,", 
+   "and unidiff text of hunks, all backed directly by the patch file.", 
+   "The amount of memory used by 'svn patch' to manage a hunk will then", 
+   "be determined by the length of lines inside the hunk, rather than the", 
+   "size of the entire hunk.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(baton_apr): Add new fields start and end.", 
+   "(read_handler_apr): If start and end of a range were specified,", 
+   "do not allow reads outside of the range.", 
+   "(reset_handler_apr): If the start of a range was specified, reset", 
+   "the stream to the start of the range instead of the start of the file.", 
+   "(svn_stream_from_aprfile2): Initialise new start and end fields of", 
+   "the baton to an invalid range.", 
+   "(svn_stream_from_aprfile_range_readonly): New function. Allows creating", 
+   "of a stream to read inside a range of a file.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(test_stream_range): New test to test streams reading inside a range of", 
+   "a file.", 
+   "(test_funcs): Add new tests.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_from_aprfile_range_readonly): Declare."
+  ], 
+  "revision_id": "878099"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-13T14:01:12.062207Z", 
+  "msg": [
+   "Follow-up to r38023:", 
+   "* subversion/tests/cmdline/svntest/testcase.py", 
+   "(FunctionTestCase.__init__, FunctionTestCase.get_function_name):", 
+   "Simplify slightly to avoid adding an extra class member variable."
+  ], 
+  "revision_id": "878098"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-13T13:51:00.594126Z", 
+  "msg": [
+   "Allow specifying the names of test functions to run.", 
+   "Saves the hassle of having to run the test file with the --list", 
+   "option just to find out the index your new shiny test is at in", 
+   "order to run it.", 
+   "For example:", 
+   "$ ./basic_tests.py basic_checkout basic_commit", 
+   "PASS:  basic_tests.py 1: basic checkout of a wc", 
+   "PASS:  basic_tests.py 3: basic commit command", 
+   "* subversion/tests/cmdline/svntest/testcase.py", 
+   "(TestCase.get_function_name): New member function in abstract class.", 
+   "(FunctionTestCase.__init__): Remember name of test function for retrieval", 
+   "by get_function_name().", 
+   "(FunctionTestCase.get_function_name): Implement new member function.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(TestRunner.get_function_name): New function, making the private TestCase's", 
+   "get_function_name() function available to the public.", 
+   "(usage): Mention the possibility of passing test function names.", 
+   "(run_tests): When parsing the argument as a number of range of numbers", 
+   "has failed, try to find a test function to call, which should be named", 
+   "by the argument."
+  ], 
+  "revision_id": "878097"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-06-12T19:16:12.981435Z", 
+  "msg": [
+   "Recommend r38021 for backport."
+  ], 
+  "revision_id": "878096"
+ }
+]

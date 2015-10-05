@@ -1,0 +1,57 @@
+[
+ {
+  "author": "mrglavas", 
+  "date": "2010-07-18T23:25:54.527742Z", 
+  "msg": [
+   "Fixing JIRA Issue #1461: http://issues.apache.org/jira/browse/XERCESJ-1461. A couple averaging computations in binary search and divide and conquer methods could overflow for large values. Corrected by using \"x >>> 1\" instead of \"x / 2\"."
+  ], 
+  "revision_id": "965320"
+ }, 
+ {
+  "author": "alally", 
+  "date": "2010-07-18T23:25:42.513247Z", 
+  "msg": [
+   "UIMA-1817: applied patch which fixes namespace handling.  Sends empty string instead of null as the namespace uri for attributes, and calls startPrefixMapping appropriately on the content handler.  Also added matching calls to endPrefixMapping."
+  ], 
+  "revision_id": "965319"
+ }, 
+ {
+  "author": "brianf", 
+  "date": "2010-07-18T23:24:32.300853Z", 
+  "msg": [], 
+  "revision_id": "965318"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2010-07-18T23:20:09.639887Z", 
+  "msg": [
+   "DERBY-4731", 
+   "Previous change did not completely solve the problem.  There is a problem with", 
+   "the initial fix, not sure why it only showed an error in the 10.3 backport.", 
+   "The temporary tables are stored in the transaction context, so using a nested", 
+   "transaction creates a new context and the work there is not reflected in the", 
+   "parent context.  Thus the previous fix which used a nested transaction does", 
+   "not work.", 
+   "This patch delays the work on the XA global temporary tables until after the xa transaction has committed but before control returns to the client executing", 
+   "the commit.  The delay solves the issue of attempting to do work in a", 
+   "prepared transaction.", 
+   "It drops all global temporary tables following an XA commit.  This gives us", 
+   "consistent behavior between embedded and network server implementations.  At", 
+   "the time of an xa end the system \"Ends the work performed on behalf of a transaction branch. The resource manager disassociates the XA resource from the transaction branch specified and lets the transaction complete.\"  Given this", 
+   "description of the behavior of XAResource it seems reasonable to document", 
+   "that global temporary tables are not supported across the XA commit boundary.", 
+   "In the worst case one might be connecting to an resource in completely another", 
+   "database and the temp table implementation is tied to the transaction", 
+   "context in a single connection to a existing server."
+  ], 
+  "revision_id": "965317"
+ }, 
+ {
+  "author": "mrglavas", 
+  "date": "2010-07-18T23:07:03.213653Z", 
+  "msg": [
+   "Making XSNamedMapEntry static. Should reduce memory usage slightly."
+  ], 
+  "revision_id": "965316"
+ }
+]

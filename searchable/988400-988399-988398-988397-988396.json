@@ -1,0 +1,78 @@
+[
+ {
+  "author": "rpluem", 
+  "date": "2010-08-24T06:33:01.146559Z", 
+  "msg": [
+   "Merge r620133, r724515, r724805, r725077, r952828 from trunk:", 
+   "Sub-requests are created and used with two purposes; sometimes", 
+   "simply to 'see' what a request would do; as to fill out an SSI,", 
+   "validate access or similar - and is then discarded. And sometimes", 
+   "as the precursor to becoming the actual request; e.g. when mod_dir", 
+   "checks if an /index.html can be served for a '/'.", 
+   "In the latter case it is important to preserve the output filters", 
+   "'for real'; whereas in the first case they have to be reset to", 
+   "purely the minimal proto filters (if at all). This patch instates", 
+   "the output filters in 3 cases where sub-requests are/may in fact", 
+   "be used as the real request later on.", 
+   "This is a relatively risky change (which should not be back-ported", 
+   "without further discussion) and may break caches in combination", 
+   "with internal redirects/vary/negotiation in subtle ways.", 
+   "See the thread starting at [1] and in particular the general", 
+   "concerns of rpluem at [2] with respect to sub requests", 
+   "and (fast_)internal redirects possibly needing a more", 
+   "thorough overhaul.", 
+   "1: http://mail-archives.apache.org/mod_mbox/httpd-dev/200802.mbox/ajax/%3c335D1A4B-25E2-4FF1-8CDF-5010A7FBD293@webweaving.org%3e", 
+   "2: http://mail-archives.apache.org/mod_mbox/httpd-dev/200802.mbox/%3c47ACE1D4.4060702@apache.org%3e", 
+   "* Correctly remove the SUBREQ_CORE filter from the filter chain if we do an", 
+   "internal fast redirect and if the new redirected request is NO subrequest.", 
+   "This fixes at least one of the possible subtle issues mentioned in the", 
+   "comment to r620133.", 
+   "reset chain if we need to...", 
+   "Hopefully the final fix for the subreq/filter issue. The", 
+   "prob was that we at this point could still have some", 
+   "stale and incorrect refs when we adjusted the f-stack.", 
+   "So move the update earlier so when we adjust, we're", 
+   "affecting r. Ruediger and Jim pretty much", 
+   "simultaneously :)", 
+   "* modules/http/http_request.c (internal_internal_redirect): For a", 
+   "subrequest, preserve any filters in the output filter chain which", 
+   "were not specific to the subrequest across the redirect (where", 
+   "f->r does not point to the subreq's request_rec).", 
+   "PR: 17629, 43939", 
+   "Reviewed by: rpluem, jim, niq"
+  ], 
+  "revision_id": "988400"
+ }, 
+ {
+  "author": "hiranya", 
+  "date": "2010-08-24T06:19:24.675269Z", 
+  "msg": [
+   "Refactoring"
+  ], 
+  "revision_id": "988399"
+ }, 
+ {
+  "author": "ctan", 
+  "date": "2010-08-24T06:18:00.324803Z", 
+  "msg": [
+   "[CONTINUUM-2565] added ability to do release prepare, release perform, release cleanup and release rollback from continuum xmlrpc"
+  ], 
+  "revision_id": "988398"
+ }, 
+ {
+  "author": "hiranya", 
+  "date": "2010-08-24T06:17:01.245288Z", 
+  "msg": [
+   "Refactoring"
+  ], 
+  "revision_id": "988397"
+ }, 
+ {
+  "author": "eric", 
+  "date": "2010-08-24T06:14:33.412316Z", 
+  "msg": [
+   "Rename getDocument method to getMessage (IMAP-207)"
+  ], 
+  "revision_id": "988396"
+ }
+]

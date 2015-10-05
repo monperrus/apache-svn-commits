@@ -1,0 +1,55 @@
+[
+ {
+  "author": "ritchiem", 
+  "date": "2007-11-28T01:01:05.443054Z", 
+  "msg": [
+   "CommitRollbackTest - this one just was never right.. now we have something better."
+  ], 
+  "revision_id": "598835"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-11-28T00:45:32.278576Z", 
+  "msg": [
+   "QPID-679 : Patch provided by Aidan Skinner and additional from odd problems during test runs.", 
+   "AMQChannel - Catch and log AMQException occuring when requeue()-ing. Previously exceptions wouldn't be caught at all. The requeue() is called during closure so there is nothing we can do protocol wise on error other than log the issue and continue with any other shutdown that is needed.", 
+   "AMQMinaProtocolSession & AMQPFastProtocolHandler . Additions to catch and log AMQExceptions. Changes to AMQMinaProtocolSession were done to ignore all input on a closing session other than the close-ok. Previously only Protocol frames were ignored this resulted in Content*Body-s still being processed. Additional checks were made for the MessageStoreClosedException to log and continue. As said else were we need to seperate protocol exceptoions(AMQException) from internal code exception handling. Further All AMQExceptions occuring in the frameReceived method are now caught and logged. Allowing them to propogate higher will only result in thread death.", 
+   "AMQPFastProtocolHandler Caught AMQExceptions occuring whilst closing the session. Again allowing these to continue will result in thread death. There is not a lot that can be done other than log the problem as the session is already closed by this point. Prevented the stacktrace associated with a session exception being printed in the exceptionCaught method when the problem was an IO Exception. This doesn't add anything useful and only adds to the log file sizes.", 
+   "ApplicationRegistry - Added removeAll option which ensures that all ARs are correctly purged so that we can attempt to clean up between Unit Tests.", 
+   "MemoryMessageStore - This was causing us real problems during the failover testing. Similar checks should probably be made to any other Message Store Impl. The issue was that when shutting down the broker the MS.close() method is called this sets all the storage to null. However, there may still be message processing going on as the close() does not attempt to stop connection processing. Hence we now check to see if the Store is close throwing a MSClosedException if required. This prevents NPEs that have been seen during Unit failover testing. In fact the close() is called as a request to shutdown the ApplicationRegistry, but this only occurs from tests and broker shutdown, no attempt to unbind or prevent further connections during this period is yet done.", 
+   "CLIENT CHANGES", 
+   "AMQConnection - Added method to check if failover is in progress.", 
+   "AMQClient - Upgraded acknowledge() exception to JMSException for errors due to failover. Also , added call to update consumers as a result of failover.", 
+   "BasicMessageConsumer - Changes to acquireReceiving to take in to consideration blocking for failover to occur. wrt receiveNoWait.. which previously blocked for failover to complete... not exactly noWait. acknowledge will now", 
+   "TransportConnection - Update to ensure all inVM brokers are correctly killed.", 
+   "FailoverTest - QPID-679 - Finder of all the above problems."
+  ], 
+  "revision_id": "598834"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2007-11-28T00:40:36.132536Z", 
+  "msg": [
+   "Create bean describing a layout type to OM.", 
+   "Start using bean maps for layout and coplet types.", 
+   "Fix Avalon configuration for layouts."
+  ], 
+  "revision_id": "598833"
+ }, 
+ {
+  "author": "dos", 
+  "date": "2007-11-28T00:36:58.469420Z", 
+  "msg": [
+   "updated scores for revision 598562 active rules added since last mass-check"
+  ], 
+  "revision_id": "598832"
+ }, 
+ {
+  "author": "mcaisse", 
+  "date": "2007-11-28T00:35:00.472644Z", 
+  "msg": [
+   "To impl.html, added datasources for Xcalia, per request by Eric Samson"
+  ], 
+  "revision_id": "598831"
+ }
+]

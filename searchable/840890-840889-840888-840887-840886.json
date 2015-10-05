@@ -1,0 +1,93 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-01-11T01:27:32.598075Z", 
+  "msg": [
+   "Solutions for tricky problems:  what happens if you get a property", 
+   "conflict on 'svn:eol-style' during an update?  And how do we make sure", 
+   "calls to svn_wc_text_modified_p are always using the \"correct\"", 
+   "eol-style during the update?", 
+   "* get_editor.c (close_file): Remove redundant call to", 
+   "svn_wc_text_modified_p.  Do property merge in the beginning, and", 
+   "notice if svn:eol-style was in a state of conflict, and possibly set", 
+   "the property early on.  This affects the correct choice of which", 
+   "eol-style to use when doing textual merges, and also whether the", 
+   "call to svn_text_modified_p will find the 'latest' eol-style or not.", 
+   "(struct file_baton): add eol value field.", 
+   "(change_file_prop):  fill in new eol value field.", 
+   "(close_directory):  update call to svn_wc__do_property_merge.", 
+   "* props.c (svn_wc__do_property_merge): new feature -- return a hash of", 
+   "conflicts, if any occurred.", 
+   "* wc.h (svn_wc__do_property_merge): update declaration."
+  ], 
+  "revision_id": "840890"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-11T00:25:37.497764Z", 
+  "msg": [
+   "Doc changes made while researching another [upcoming] change:", 
+   "* subversion/libsvn_wc/wc.h (svn_wc__get_eol_style): Make doc string a", 
+   "bit more specific.", 
+   "(svn_wc__files_contents_same_p): Add note about why this isn't in the", 
+   "io library."
+  ], 
+  "revision_id": "840889"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-11T00:15:17.196388Z", 
+  "msg": [
+   "* subversion/tests/libsvn_subr/subst-test.c", 
+   "(substitute_and_verify): Minor comment edit.  Fixed Line 24 and Line", 
+   "50 cases.  Added handling for Line 30 case."
+  ], 
+  "revision_id": "840888"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-01-10T23:07:25.932779Z", 
+  "msg": [
+   "Error out if the configured diff program no longer exists.  In the process,", 
+   "consolidate the code calling diff, which was replicated in several places.", 
+   "This closes issue #596", 
+   "* subversion/includes/svn_error_codes.h", 
+   "(SVN_ERR_EXTERNAL_PROGRAM): new error type for when an external", 
+   "program fails in an unexpected way.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_io_run_diff): new prototype.", 
+   "* subversion/libsvn_wc/get_editor.c", 
+   "(close_file): use svn_io_run_diff instead of calling diff by hand.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_run_diff): new function that calls diff (via svn_io_run_cmd),", 
+   "so we don't have to reproduce the logic all over the place.  most of", 
+   "this logic comes from libsvn_client/diff.c", 
+   "* subversion/libsvn_client/diff.c", 
+   "(svn_client__diff_cmd): use svn_io_run_diff instead of calling diff", 
+   "by hand.", 
+   "* subversion/svnlook/main.c", 
+   "(print_diff_tree): ditto.", 
+   "Approved By: gstein"
+  ], 
+  "revision_id": "840887"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-01-10T22:51:55.738488Z", 
+  "msg": [
+   "New EOL logic for commits.  Again, don't go turning on svn:eol-style", 
+   "properties just yet.", 
+   "* adm_crawler.c (do_postfix_text_deltas):  when committing a file, if", 
+   "the eol-style is 'native' or 'fixed', then make a translated (to LF", 
+   "or specific fixed-style, respectively) copy in .svn/tmp/.  Commit", 
+   "that.", 
+   "* log.c (replace_text_base): in post-commit processing, if the", 
+   "eol-style is 'fixed', then copy the committed tmpfile back on top of", 
+   "working with specific fixed-style eol translation.  We do this", 
+   "because mixed-styles may have been \"repaired\" when creating", 
+   "the tmpfile.  Therefore we want the working file to reflect what was", 
+   "actually committed."
+  ], 
+  "revision_id": "840886"
+ }
+]

@@ -1,0 +1,113 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-01-06T03:21:27.650622Z", 
+  "msg": [
+   "Get the swig wrappers linked and installed. Still more work on", 
+   "installing to the right location and to get the .py files installed.", 
+   "* Makefile.in:", 
+   "- add dirs for installing the swig-related bits (swig_pydir,", 
+   "swig_javadir, swig_java_libdir); these need more work, especially", 
+   "to be set from configure.", 
+   "- add SWIG_PY_LINK for linking Python extensions.", 
+   "- add SWIG_LDFLAGS for the flags needed to link against the SWIG", 
+   "runtime libraries (usually a -L to specify where those libs are).", 
+   "- shift the special libtool flags to LINK_APACHE_MOD so we can toss", 
+   "the link-flags stuff from the system.", 
+   "- add LINK_*_WRAPPER symbols for linking the wrappers", 
+   "- add INSTALL_SWIG_* for installing the various swig bits", 
+   "* ac-helpers/get-py-info.py: add --link switch for figuring out how to", 
+   "link Python extensions.", 
+   "* ac-helpers/swig.m4: add code for setting up SWIG_PY_LINK", 
+   "* build.conf: toss 'link-flags' because we specify that in the", 
+   "Makefile now. add libraries to the swig wrappers.", 
+   "* build/gen_base.py:", 
+   "(GeneratorBase.__init__): don't worry about setting up .ldflags", 
+   "because we specify the custom flags in the Makefile now. refactor", 
+   "how we locate the libraries specified in the \"libs\" option line", 
+   "into _find_libs and use it for adding intra-library dependencies.", 
+   "also use it for finding libs we need to add to the swig wrappers.", 
+   "(GeneratorBase._find_libs): refactored code for mapping \"libs\"", 
+   "options into dependent objects.", 
+   "(SWIGLibrary.ldflags): removed; no longer needed.", 
+   "(TargetSWIG.add_dependencies): add the dependent libraries. add some", 
+   "hacky code for adding some language-specific libraries.", 
+   "(_cfg_defaults): no need to provide a 'link-flags' default", 
+   "* build/gen_make.py:", 
+   "(MakefileGenerator.write): remove the use of .ldflags"
+  ], 
+  "revision_id": "844340"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-01-06T00:22:22.180147Z", 
+  "msg": [
+   "two more down...", 
+   "* subversion/include/svn_subst.h", 
+   "add doxygen markup to comments.", 
+   "* subversion/include/svn_xml.h", 
+   "add doxygen markup to comments."
+  ], 
+  "revision_id": "844339"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-01-05T22:42:15.621224Z", 
+  "msg": [
+   "Change mime-type to image/png."
+  ], 
+  "revision_id": "844338"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-05T14:14:23.186148Z", 
+  "msg": [
+   "More refinement...", 
+   "* build/gen_base.py:", 
+   "(...): note some of the constructs which are Makefile-specific.", 
+   "these should probably move at some point.", 
+   "(class SWIGLibrary): move some instance variables to (constant)", 
+   "class variables instead.", 
+   "(SWIGLibrary.__init__): shifted some variables to class attrs. add a", 
+   "new .link_cmd variable to store the (Makefile-based) command to", 
+   "link the SWIG wrapper library.", 
+   "(Target.__init__): forget the .custom instance var. instead, look up", 
+   "and store the class for object files based on the passed-in custom", 
+   "value.", 
+   "(Target.add_dependencies): use the stored object class.", 
+   "(class TargetLinked): add a new .link_cmd class attr.", 
+   "(TargetLib.__init__): set a new .link_cmd value if we have an apache", 
+   "module. if the module is an RA module, then set a new instance", 
+   "variable to denote that.", 
+   "* build/gen_make.py:", 
+   "(...): remove the 'glob' import; it isn't used any more.", 
+   "(MakefileGenerator.write): remove the testing of the target's", 
+   ".custom attribute and just refer to the .link_cmd attribute.", 
+   "(MakefileGenerator.write_symbols): look for 'is_ra_module' rather", 
+   "than a .custom attribute."
+  ], 
+  "revision_id": "844337"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-05T13:44:54.328606Z", 
+  "msg": [
+   "Streamline the various code for custom building of objects.", 
+   "* build/gen_base.py:", 
+   "(ApacheObject.build_cmd): new class attr for the build command", 
+   "(class SWIGUtilPython, class SWIGUtilJava): new ObjectFile", 
+   "subclasses for the swigutil_*.c files. each has a custom build", 
+   "command in the .build_cmd class attr.", 
+   "(_custom_build): new dictionary to map a \"custom\" option value to an", 
+   "object file subclass for custom building.", 
+   "(Target.add_dependencies): use _custom_build to determine the class", 
+   "for the object to insert into the graph.", 
+   "* build/gen_make.py:", 
+   "(MakefileGenerator.write): eliminate all the special code for custom", 
+   "building the swig utility files. eliminate the custom building", 
+   "code for ApacheObject and SWIGObject objects. just look for a", 
+   ".build_cmd attribute instead."
+  ], 
+  "revision_id": "844336"
+ }
+]

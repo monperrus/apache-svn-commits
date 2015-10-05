@@ -1,0 +1,85 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2004-02-10T22:30:47.655279Z", 
+  "msg": [
+   "Continue work on issue #1510 (vendor branch support).", 
+   "Issue #1510 recently absorbed two other issues", 
+   "#1505 - handling unlabeled branches", 
+   "#1474 - revision 1.1.1.1 is not always the same as 1.1", 
+   "not because they're exact dups of #1510, but because their resolution", 
+   "is required for vendor branch support anyway.  This commit fixes both", 
+   "of them, but with some easy optimization left for #1474: we'll want to", 
+   "notice when the deltatext of 1.1.1.1 is empty, and not commit a", 
+   "spurious 'M'odification in that revision.  The deltatext_code changes", 
+   "below are preparation for that optimization, but note that they aren't", 
+   "actually used yet.  See also the adjustment to the 'simple_tags' test.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(write_revs_line, parse_revs_line): Take and return new argument", 
+   "deltatext_code.", 
+   "(pass2, pass4): Adjust to handle new deltatext_code field.", 
+   "(CollectData.define_revision): If this revision is on a branch", 
+   "previously unheard of, then record the branch metadata now.", 
+   "(CollectData.set_revision_info): Look for the default branch in", 
+   "self.branch_names with confidence.", 
+   "(is_vendor_first_revision): Remove this now unnecessary method.", 
+   "(Commit.commit): Don't treat first vendor revision specially.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(simple_tags): Expect the T_ALL_INITIAL_FILES_BUT_ONE activity in", 
+   "r39 instead of r38, as the inclusion of unlabeled branches has", 
+   "changed the ordering a bit.  Expand r17 to expect a bunch of", 
+   "spurious modifications, because we don't yet notice when the first", 
+   "vendor revision is the same as the first trunk revision -- when we", 
+   "do, we'll have to adjust this test back.", 
+   "(enroot_race): Stop expecting the creation of /branches in r6, as it", 
+   "will have already been created in r2 due to unlabeled 1.1.1.", 
+   "* tools/cvs2svn/design-notes.txt: Document the new deltatext emptiness", 
+   "indicator letter."
+  ], 
+  "revision_id": "848685"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-10T21:34:33.362255Z", 
+  "msg": [
+   "Ignore 'utf-test', too"
+  ], 
+  "revision_id": "848684"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-10T20:53:07.094599Z", 
+  "msg": [
+   "Add a blank line after dumping file contents.", 
+   "* tools/cvs2svn/cvs2svn.py (Dumper.add_or_change_path)"
+  ], 
+  "revision_id": "848683"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-02-10T18:03:51.836240Z", 
+  "msg": [
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(CollectData.add_branch_point): Remove this unused method."
+  ], 
+  "revision_id": "848682"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-02-10T17:59:58.669316Z", 
+  "msg": [
+   "Resolve issue 1255: recode filenames to UTF-8 before writing to dumpfile.", 
+   "Patch(es) -- and amazing recipe! -- by Erik H\u00fclsmann <e.huelsmann@gmx.net>.", 
+   "Patch by: Erik H\u00fclsmann <e.huelsmann@gmx.net>", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(Dumper class): Changed to encode path information when writing to", 
+   "the dumpfile.", 
+   "(Dumper.__init__): Copy encoding to new member path_encoding.", 
+   "(Dumper.utf8_path): New. Recode path argument from path_encoding to utf-8.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(test_list): Make the 'nonascii_filenames' test no longer XFail --", 
+   "we expect that sucker to pass now, baby."
+  ], 
+  "revision_id": "848681"
+ }
+]

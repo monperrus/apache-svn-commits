@@ -1,0 +1,53 @@
+[
+ {
+  "author": "jim", 
+  "date": "2011-10-05T18:42:28.549471Z", 
+  "msg": [
+   "Add these as showstoppers..."
+  ], 
+  "revision_id": "1179375"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2011-10-05T18:38:43.609928Z", 
+  "msg": [
+   "DERBY-5445 (Enhance existing concurrency test to stress sequence generators to also stress identity columns)", 
+   "DERBY-4565 added a concurrency test to stress sequence generation. I am making simple modifications to that test to add\tidentity column stress testing. Based on a command line parameter, the test will either do sequence generation testing or identity column testing. If no parameter is specified, it will default to doing sequene generation testing.", 
+   "The test already takes number of parameters. One of those parameters is load options parameter. Load option parameter is indicated by -load_opts on command line and it is followed by a comma separated list of sub-parameters. An eg of load option parameter is as follows", 
+   "-load_opts debugging=1,numberOfGenerators=5,tablesPerGenerator=10,insertsPerTransaction=100", 
+   "I am adding another pair to the comma separated sub-parameters,namely identityTest=aNumber. If identityTest is 1, then the test will do identity column stress testing. For any other value for identityTest, the test will do sequence generation testing. If the user doesn't specify identityTest in load options, the test will perform sequence generation testing.", 
+   "eg of asking the test to do identity column testing", 
+   "java org.apache.derbyTesting.perf.clients.Runner -driver org.apache.derby.jdbc.EmbeddedDriver -init -load seq_gen -load_opts debugging=1,numberOfGenerators=5,tablesPerGenerator=10,insertsPerTransaction=100,identityTest=1 -gen b2b -threads 10", 
+   "Two possible way of asking the test to do sequence generation testing(identityTest set to a value other than 1 or identityTest is not specified)", 
+   "java org.apache.derbyTesting.perf.clients.Runner -driver org.apache.derby.jdbc.EmbeddedDriver -init -load seq_gen -load_opts debugging=1,numberOfGenerators=5,tablesPerGenerator=10,insertsPerTransaction=100,identityTest=2 -gen b2b -threads 10", 
+   "OR", 
+   "java org.apache.derbyTesting.perf.clients.Runner -driver org.apache.derby.jdbc.EmbeddedDriver -init -load seq_gen -load_opts debugging=1,numberOfGenerators=5,tablesPerGenerator=10,insertsPerTransaction=100 -gen b2b -threads 10", 
+   "When I run the test for identity columns, I can consistently see it running into derby lock time out with nested sequencec contention error while trying to get current identity value and advancing(this is what we want to achieve from the test ie that it is able to stress the functionality enough to run into contention while trying to get next range for identity columns.) Additionally, there are some lock time out errors raised by store while trying to update system catalog(this is expected too because of multiple threads simulataneously trying to do inserts into a table with identity column). I also in my codeline reverted to changes before DERBY-5426 (DERBY-4526 is Improve the error raised by too much contention on a sequence/identity.) was fixed and saw sequence contention errors (without the lock time out error encapsulation)."
+  ], 
+  "revision_id": "1179374"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2011-10-05T18:38:32.814119Z", 
+  "msg": [
+   "Add patch... both backport and showstopper."
+  ], 
+  "revision_id": "1179373"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2011-10-05T18:37:45.832983Z", 
+  "msg": [
+   "AVRO-907. Java: Optimize access to protobuf message fields."
+  ], 
+  "revision_id": "1179372"
+ }, 
+ {
+  "author": "phunt", 
+  "date": "2011-10-05T18:34:32.894051Z", 
+  "msg": [
+   "ZOOKEEPER-1190. ant package is not including many of the bin scripts in the package (zkServer.sh for example) (Eric Yang via phunt)"
+  ], 
+  "revision_id": "1179371"
+ }
+]

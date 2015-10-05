@@ -1,0 +1,73 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-04-06T06:35:09.338173Z", 
+  "msg": [
+   "* subversion/libsvn_client/copy.c", 
+   "(svn_client_copy5): Formatting tweak only, no functional change."
+  ], 
+  "revision_id": "877090"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-06T02:13:05.066715Z", 
+  "msg": [
+   "Reorder some code. No functional change.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_read_info): the OUT parameters are handled in the order they", 
+   "appear in the param list. move the LOCK param processing down to its", 
+   "proper place."
+  ], 
+  "revision_id": "877089"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-06T00:43:11.268441Z", 
+  "msg": [
+   "Add more test cases for scan_deletion.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(data_loading_sql): add more nodes to set up test scenarios", 
+   "(test_scan_deletion): test the new scenarios"
+  ], 
+  "revision_id": "877088"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-05T22:53:21.344424Z", 
+  "msg": [
+   "Use scan_deletion to get information about the deletions in our test data", 
+   "set. The data set also had some inconsistencies that needed to be", 
+   "corrected.", 
+   "- if a node is moved away, then it must exist in the BASE_NODE table. the", 
+   "\"J/J-e\" subtree was moved, so rows were added to BASE_NODE", 
+   "- the root of a WORKING subtree cannot be deleted, so switch \"K\" over to", 
+   "be base-deleted and add a corresponding BASE node for it", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(data_loading_sql): add some BASE_NODE rows. fix presence of \"K\"", 
+   "(test_base_children): J and K were added. bump to 11 children", 
+   "(test_scan_deletion): add tests for each of the scenarios in the current", 
+   "data set. additional tests will be added later."
+  ], 
+  "revision_id": "877087"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-05T22:38:17.740247Z", 
+  "msg": [
+   "Fixes to the new scan_deletion function.", 
+   "- deletions are recorded in the WORKING_NODE table, but there may not be a", 
+   "corresponding BASE_NODE row (eg. deletion of a subtree of a copy). thus,", 
+   "I had to swap the left/right tables in my outer join.", 
+   "- adjust the scan logic to look for \"no row\" when we fall/scan off the top", 
+   "of the WORKING tree scan", 
+   "- at scan exit time, only set BASE_DEL_ABSPATH if there was a BASE_NODE", 
+   "- make sure to reset the stmt", 
+   "- when looking for a transition in the WORKING tree, check for not-present", 
+   "rather than deleted (the latter is not a presence value)", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(statements): adjust the left/right tables for our presence query", 
+   "(svn_wc__db_scan_deletion): algorithm fixes, per above"
+  ], 
+  "revision_id": "877086"
+ }
+]

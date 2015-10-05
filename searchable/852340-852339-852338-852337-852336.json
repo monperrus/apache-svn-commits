@@ -1,0 +1,122 @@
+[
+ {
+  "author": "xsteve", 
+  "date": "2004-12-09T21:04:43.089501Z", 
+  "msg": [
+   "Minor fixes.", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-process-sentinel): Call svn-process-sentinel-fixup-path-seperators", 
+   "in the *svn-process* buffer", 
+   "(svn-status-parse-commit-output): Fixed regexp for Committed revision", 
+   "(svn-status-property-set-property): Ensure that the *svn-property-edit*", 
+   "buffer does exist", 
+   "(svn-prop-edit-do-it): Don't switch to", 
+   "svn-status-pre-propedit-window-configuration, if it is not set."
+  ], 
+  "revision_id": "852340"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2004-12-09T20:16:30.750064Z", 
+  "msg": [
+   "Fixes recommended in code review by Philip Martin.", 
+   "* subversion/libsvn_fs_fs/lock.c (locks_dir_walker): Remove cast of", 
+   "void *.  Add space before paren.", 
+   "(svn_fs_fs__get_locks): Remove cast to void *."
+  ], 
+  "revision_id": "852339"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-12-09T20:00:28.454200Z", 
+  "msg": [
+   "Locking branch:  add optional revnum arg to svn_fs_lock()/svn_fs_attach_lock().", 
+   "We don't allow an svn client to lock an out-of-date working file, so", 
+   "this new argument allows the fs to do an optional out-of-dateness", 
+   "check, which prevents a bunch of needless network turnarounds.", 
+   "(A generic DAV client has no working copy, and won't use this argument.)", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_OUT_OF_DATE): new error code returnable by", 
+   "svn_fs_lock().  Also usable someday when we implement", 
+   "on-the-fly OOD checking in the fs.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_lock, svn_fs_expire_lock): take new 'current_rev' arg.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_lock, svn_repos_fs_expire_lock): take new 'current_rev' arg.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t->lock): take new 'current_rev' arg.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_lock, svn_repos_fs_expire_lock): take new 'current_rev' arg.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t):  update vtable function signatures accordingly.", 
+   "* subversion/libsvn_fs/fs_loader.c", 
+   "(svn_fs_lock, svn_fs_expire_lock): update dispatch functions.", 
+   "* subversion/libsvn_fs_base/tree.h, tree.c", 
+   "(svn_fs_base__get_path_created_rev):  new helper function.", 
+   "* subversion/libsvn_fs_base/lock.h, lock.c", 
+   "(struct attach_lock_args):  new structure.", 
+   "(svn_fs_base__lock, svn_fs_base__attach_lock, struct lock_args):", 
+   "take new 'current_rev' arg.", 
+   "(txn_body_lock, txn_body_attach_lock): if possible, do an", 
+   "out-of-dateness check.", 
+   "* subversion/libsvn_fs_fs/lock.h, lock.c", 
+   "(svn_fs_fs__lock, svn_fs_fs__attach_lock):  take new 'current_rev' arg.", 
+   "add ### FITZ TODO comments!", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__lock):   take new 'current_rev' arg, pass it on.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__lock):  take new 'current_rev' arg.", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(dav_svn_refresh_locks): update call to svn_repos_fs_attach_lock().", 
+   "(dav_svn_append_locks):  update call to svn_repos_fs_attach_lock().", 
+   "add ### TODO comment for sussman.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_lock):  take new 'current_rev' arg.  add ### LUNDBLAD TODO comment!", 
+   "* subversion/svnserver/serve.c", 
+   "(lock):  update call to svn_repos_fs_lock(). add ### LUNDBLAD TODO comment!", 
+   "* subversion/libsvn_client/locking_commands.c", 
+   "(svn_client_lock):   pass entry->revision to RA->lock().", 
+   "* subversion/svnadmin/main.c", 
+   "(subcommand_lock):  update call to svn_fs_lock().", 
+   "* subversion/tests/libsvn_fs/locks-test.c", 
+   "(lock_out_of_date):  new test to exercise the out-of-dateness check.", 
+   "(test_funcs):  add new test.", 
+   "(check_hash):  remove unused function.", 
+   "(lock_only, lookup_lock_by_token, lookup_lock_by_path, get_locks,", 
+   "basic_lock, lock_credentials, final_lock_check, lock_dir_propchange,", 
+   "lock_name_reservation, lock_expiration, lock_break_steal_refresh,", 
+   "attach_lock):   pass SVN_INVALID_REVNUM to all svn_fs_lock() calls,", 
+   "since we have no working copy."
+  ], 
+  "revision_id": "852338"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-12-09T17:40:51.803773Z", 
+  "msg": [
+   "Cast some votes and propose BDB 4.3 fix for 1.1.2.", 
+   "(Leave one of the votes with 3 +1s in unreviewed state as it probably should", 
+   "get some more feedback due to the discussions on-list.)"
+  ], 
+  "revision_id": "852337"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2004-12-09T17:30:23.749683Z", 
+  "msg": [
+   "Add test for get_locks functionality, and write fsfs code to implement", 
+   "get_locks, and subsequently pass the test.", 
+   "* subversion/tests/libsvn_fs/locks-test.c (get_locks): New function.", 
+   "(test_funcs): Add above function to array of tests.", 
+   "* subversion/libsvn_fs_fs/lock.c (base_path_to_lock_file): New", 
+   "function.", 
+   "(struct dir_walker_baton): New baton to pass to the locks_dir_walker", 
+   "callback function.", 
+   "(locks_dir_walker): New function for svn_io_dir_walk.  When", 
+   "svn_io_dir_walk is passed a directory, this function will gather all", 
+   "locks in that directory.", 
+   "(svn_fs_fs__get_locks): Implement function."
+  ], 
+  "revision_id": "852336"
+ }
+]

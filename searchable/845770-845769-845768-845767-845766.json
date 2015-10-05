@@ -1,0 +1,79 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-04-22T01:52:33.935938Z", 
+  "msg": [
+   "Take Philip Martin's advice about a dangling baton:", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_committed): Close the access baton for the parent", 
+   "directory when done, but only if that baton is not associated with", 
+   "the log context's access baton set."
+  ], 
+  "revision_id": "845770"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-04-22T01:22:27.604403Z", 
+  "msg": [
+   "Make ra_dav optional, removing the dependency on neon for users who don't", 
+   "need it.  This fixes issue 617.  I don't think this will hurt the windows", 
+   "build, as it appears those parts of gen-make.py are hardcoding the ra libs", 
+   "they link against, but if someone with an available windows box could test", 
+   "this i would appreciate it.", 
+   "* Makefile.in", 
+   "(INSTALL_DAV_LIB): new macro definition.", 
+   "* build.conf", 
+   "(libsvn_ra_dav): move from base-lib to dav-lib.", 
+   "* configure.in:", 
+   "check for $svn_lib_neon and if it's \"yes\" add dav-lib to BUILD_RULES,", 
+   "and install-dav-lib to INSTALL_STATIC_RULES and INSTALL_RULES.  only", 
+   "define SVN_LIBSVN_CLIENT_LINKS_RA_DAV when $svn_lib_neon is \"yes\".", 
+   "* build/ac-macros/neon.m4", 
+   "(SVN_LIB_NEON): set $svn_lib_neon to \"yes\" when we find an in-tree neon.", 
+   "document new behavior.", 
+   "(SVN_NEON_CONFIG): set $svn_lib_neon to \"yes\" when we find neon.  check", 
+   "that $neon_config is a file before we try to run it.  when we can't find", 
+   "neon, set $svn_lib_neon to \"no\" and print instructions on how to find it", 
+   "instead of erroring out."
+  ], 
+  "revision_id": "845769"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-04-22T01:21:18.282205Z", 
+  "msg": [
+   "Add checksums and cancellation ability to the new export editor, and", 
+   "start using the editor:", 
+   "* subversion/libsvn_client/export.c: Include apr_md5.h and svn_md5.h.", 
+   "(struct file_baton): New field text_digest.", 
+   "(apply_textdelta): Pass digest address to svn_txdelta_apply.", 
+   "(close_file): Compare checksums, error if they mismatch.", 
+   "(svn_client__get_export_editor): Wrap a cancellation editor around", 
+   "the returned editor.", 
+   "(svn_client_export): Enable the new editor, but leave the #else", 
+   "code, just in case.", 
+   "This could close issue #1230, but Ben should make the call (we", 
+   "should remove the #else code when we close the issue, I guess)."
+  ], 
+  "revision_id": "845768"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-04-22T00:59:47.334048Z", 
+  "msg": [
+   "* build/buildcheck.sh", 
+   "(NEON_LATEST_WORKING_VER): version 0.23.9 of neon seems to work just fine,", 
+   "so bump the latest working version up to it.  people should be using at", 
+   "least version 0.23.8 anyway, since it has a security fix."
+  ], 
+  "revision_id": "845767"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-04-21T23:51:02.426680Z", 
+  "msg": [
+   "* configure.in: Require Berkeley DB 4.1.25 or later on OS X."
+  ], 
+  "revision_id": "845766"
+ }
+]

@@ -1,0 +1,103 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-02-09T05:52:56.731379Z", 
+  "msg": [
+   "* autogen.sh: Fix comments to reflect reality and the dictionary.", 
+   "Remove an annoying stray tab.", 
+   "* build/buildcheck.sh: The fact that we are out-of-sync with APR{util}", 
+   "is not worthy of a fatal error.  Some people may not commit access to", 
+   "fix this themselves (not to mention newbies who have commit access to", 
+   "nothing).  So, just print out a message if we are out-of-sync.  The", 
+   "right people will know what to do with it."
+  ], 
+  "revision_id": "841305"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-09T05:42:10.140753Z", 
+  "msg": [
+   "Heh, I was so worried about not breaking 'svn up' in my last commit,", 
+   "that I never actually tested 'svn switch file'.  Seems to work", 
+   "correctly on ra_local now.  On Monday, I'll finish up the ra_dav", 
+   "side.  :-)", 
+   "* svn_wc.h, get_editor.c (svn_wc_install_file): take a URL parameter,", 
+   "so the caller can either allow the file to inherit a URL from", 
+   "parent, or can specify a new one.", 
+   "(close_file): pass NULL url param to above.", 
+   "* switch.c (svn_client_switch):  segfault protection -- initialize err", 
+   "to NULL.  In file case, pass the 'switch' url to svn_wc_install_file.", 
+   "* entries.c (svn_wc__atts_to_entry): bugfix!  No wonder we couldn't", 
+   "modify a url via log commands before!  It helps to set the", 
+   "modify_flag correctly before calling svn_wc__entry_modify.  :-)"
+  ], 
+  "revision_id": "841304"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-02-09T04:58:08.646497Z", 
+  "msg": [
+   "Update 0.9, 0.10 milestones."
+  ], 
+  "revision_id": "841303"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-02-09T02:22:04.867278Z", 
+  "msg": [
+   "One power plant, coming right up.", 
+   "The newest solution(s) related to 'svn switch <file>'.  It involves a", 
+   "lot of factorization and cleanup, but everything works out better this", 
+   "way.  In particular, the bulk of this change is converting the", 
+   "update-editor's close_file() into a standalone public wc routine", 
+   "called 'svn_wc_install_file'.  This has many (good) repercussions.", 
+   "As big as this change is, we're still not done.  'svn switch' still", 
+   "doesn't work at all with ra_dav yet, only ra_local.  And we still need", 
+   "to teach updates and commits not to freak out when they encounter", 
+   "disjoint urls in the wc.", 
+   "* switch.c (svn_client_switch): if switching a file, skip the whole", 
+   "report/dir_delta dance; just fetch the file directly, and integrate", 
+   "it into the working copy using our new routine below.", 
+   "* svn_ra.h (get_file):  change docstring promise -- return *all* props.", 
+   "* libsvn_ra_local/ra_plugin.c (get_file):  return 'entryprops' in the", 
+   "hash along with regular fs node props.  ra_local has no wcprops to return.", 
+   "* libsvn_ra_dav/fetch.c (svn_ra_dav__get_file): get all props from", 
+   "server, then convert names like mad.  'svn:custom:' prefixes are", 
+   "stripped altogether, certain other props are changed into", 
+   "'svn:entry:' props, and vsn-rsc-urls become 'svn:wc:' props.", 
+   "(add_prop_to_hash): tiny helper func for above.", 
+   "* wc.h (svn_wc__merge_prop_diffs):  renamed from 'svn_wc__do_property_merge'.", 
+   "(svn_prop_t):  remove from this location.", 
+   "* svn_string.h (svn_prop_t):  move to here.", 
+   "* svn_types.h (svn_property_kind, svn_categorize_props):  declare.", 
+   "* svn_error_codes.h (SVN_ERR_UNKNOWN_PROP_KIND): new error code.", 
+   "* libsvn_subr/sorts.c (svn_property_kind, svn_categorize_props): implement.", 
+   "* props.c (svn_wc__merge_prop_diffs):  renamed from 'svn__do_property_merge'.", 
+   "* copy.c (repos_to_wc_copy): only write out 'regular' props returned", 
+   "by RA->get_file.", 
+   "* svn_wc.h (svn_wc_install_file):  new func declaration.", 
+   "* get_editor.c (struct file_baton): remove 'text_conflict' and", 
+   "'prop_conflict' fields -- totally unused old cruft!  Also remove", 
+   "now-useless 'entryprop_changed' and 'wcprop_changed' fields.  Remove", 
+   "wcpropchanges and entrypropchanges arrays too.", 
+   "(make_file_baton): don't initialize non-existent arrays.", 
+   "(change_file_prop):  place all propchanges into a single array in", 
+   "the file baton.  Stop caching newly-received keywords or eol-style", 
+   "props too.", 
+   "(svn_wc_install_file): lots of changes: most of the guts of", 
+   "close_file are in here now, more abstracted for the new interface.", 
+   "(close_file): this is now a wrapper around svn_wc_install_file."
+  ], 
+  "revision_id": "841302"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-02-09T00:33:39.033415Z", 
+  "msg": [
+   "If \"svn mv\" had removed this file, then I would have seen the break a", 
+   "lot earlier :-(", 
+   "* Makefile.in: use new path for build/pycheck.py"
+  ], 
+  "revision_id": "841301"
+ }
+]

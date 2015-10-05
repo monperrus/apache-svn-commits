@@ -1,0 +1,60 @@
+[
+ {
+  "author": "jim", 
+  "date": "2007-12-08T18:57:31.517134Z", 
+  "msg": [
+   "Latest patch folds in rpluem's v. nice tunings"
+  ], 
+  "revision_id": "602530"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2007-12-08T18:56:11.553874Z", 
+  "msg": [
+   "If you have a multi-threaded client which share 1 connection to the broker it is possible you may have seen errors like:", 
+   "2007-12-05 14:14:52,606 [VMTransport] ERROR - org.apache.activemq.broker.TransportConnection.Service - Async error occurred: java.lang.IllegalStateException: Cannot lookup a connection that had not been registered: ID:bubba-38184-1196882086290-2:1", 
+   "java.lang.IllegalStateException: Cannot lookup a connection that had not been registered: ID:bubba-38184-1196882086290-2:1", 
+   "at org.apache.activemq.broker.SingleTransportConnectionStateRegister.lookupConnectionState(SingleTransportConnectionStateRegister.java:113)", 
+   "at org.apache.activemq.broker.TransportConnection.lookupConnectionState(TransportConnection.java:1313)", 
+   "at org.apache.activemq.broker.TransportConnection.processRemoveConsumer(TransportConnection.java:538)", 
+   "at org.apache.activemq.command.RemoveInfo.visit(RemoveInfo.java:64)", 
+   "at org.apache.activemq.broker.TransportConnection.service(TransportConnection.java:281)", 
+   "at org.apache.activemq.broker.TransportConnection$1.onCommand(TransportConnection.java:178)", 
+   "at org.apache.activemq.transport.ResponseCorrelator.onCommand(ResponseCorrelator.java:100)", 
+   "at org.apache.activemq.transport.TransportFilter.onCommand(TransportFilter.java:67)", 
+   "at org.apache.activemq.transport.vm.VMTransport.iterate(VMTransport.java:202)", 
+   "at org.apache.activemq.thread.PooledTaskRunner.runTask(PooledTaskRunner.java:118)", 
+   "at org.apache.activemq.thread.PooledTaskRunner$1.run(PooledTaskRunner.java:42)", 
+   "at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:885)", 
+   "at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:907)", 
+   "at java.lang.Thread.run(Thread.java:619)", 
+   "root cause is that the client side has multiple threads calling close() on consumer/session and the connection objects. If the timing of those concurrent calls was just right, it is possible for the client to send the connection close message followed by a session or consumer close message which is invalid and would result in IllegalStateException reported by the broker.", 
+   "- Simplified the ActiveMQConnection and TransportConnection shutdown so that this does does not happen."
+  ], 
+  "revision_id": "602529"
+ }, 
+ {
+  "author": "niq", 
+  "date": "2007-12-08T18:55:44.023858Z", 
+  "msg": [
+   "Vote&promote some more"
+  ], 
+  "revision_id": "602528"
+ }, 
+ {
+  "author": "", 
+  "date": "2007-12-08T18:55:40.853288Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "602527"
+ }, 
+ {
+  "author": "", 
+  "date": "2007-12-08T18:54:10.268210Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "602526"
+ }
+]

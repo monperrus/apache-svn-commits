@@ -1,0 +1,83 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-08-16T19:27:46.000000Z", 
+  "msg": [
+   "Make sure autogen.sh is executable, since later, when this dist script", 
+   "exports the tree using subversion, the permissions won't be right.", 
+   "Until we get permission versioning done, at least. :-)", 
+   "Also, format sections more clearly."
+  ], 
+  "revision_id": "839975"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-16T18:43:23.000000Z", 
+  "msg": [
+   "* subversion/libsvn_repos/libsvn_repos.dsp", 
+   "(node_tree.c): Added to Source Files", 
+   "* subversion/svnlook/svnlook.dsp", 
+   "(editors.c, nodetree.c): Removed obsolete Source Files", 
+   "(svnlook.h): Removed obsolete Header Files"
+  ], 
+  "revision_id": "839974"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-16T17:38:27.000000Z", 
+  "msg": [
+   "* subversion/libsvn_ra_local/checkout.c", 
+   "(walk_tree): Try a per-iteration pool out for size.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_node_t): Removed ID member.", 
+   "(svn_repos_node_editor): Added NODE_POOL argument.  Now memory used", 
+   "to build linked-list tree is not necessarily the same memory used to", 
+   "during the editor drive.", 
+   "* subversion/svnlook/main.c", 
+   "(print_tree): Remove SHOW_IDS and POOL argument.  This function", 
+   "won't handle ID printing anymore.", 
+   "(print_ids_tree): New function for printing trees with their IDs.", 
+   "(do_tree): Call print_ids_tree() if we're printing ids, else use", 
+   "print_tree().", 
+   "* subversion/libsvn_repos/node_tree.c", 
+   "(struct edit_baton): Added NODE_POOL member.", 
+   "(replace_root, replace_directory, add_directory, replace_file,", 
+   "add_file): All calls to create_node(), create_child_node(), and", 
+   "create_sibling_node() use the editor's new NODE_POOL now instead of", 
+   "the editor's POOL.  Removed all calls to svn_fs_node_id() throughout", 
+   "(there's no longer an ID member in the svn_repos_node_t structure).", 
+   "(svn_repos_node_editor): Add NODE_POOL argument, used to initialize", 
+   "the edit baton's new NODE_POOL member.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_delete, svn_wc_unadd, svn_wc_undelete): Make sure ENTRY is", 
+   "non-NULL before dereferencing its members."
+  ], 
+  "revision_id": "839973"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-16T08:49:06.000000Z", 
+  "msg": [
+   "Fix a typo in an error message."
+  ], 
+  "revision_id": "839972"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-08-16T08:23:13.000000Z", 
+  "msg": [
+   "Implement (fill in) the \"missing WC files\" functionality. The client sends", 
+   "svn:missing elements to the server to record the missing WC items.", 
+   "Some bug fixes in the update report generation.", 
+   "* libsvn_ra_dav/fetch.c (reporter_delete_path, reporter_abort_report):", 
+   "implement these functions.", 
+   "* mod_dav_svn/update.c (add_helper): the add-* element should not be an", 
+   "empty element (leave it open).", 
+   "(upd_apply_textdelta): if the file was noted as \"added\", then there is no", 
+   "reason to tell the client to fetch it -- it will automagically do so.", 
+   "(dav_svn__update_report): detect and handle svn:missing elements by", 
+   "calling svn_repos_delete_path."
+  ], 
+  "revision_id": "839971"
+ }
+]

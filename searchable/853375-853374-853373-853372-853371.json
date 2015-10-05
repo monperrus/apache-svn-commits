@@ -1,0 +1,92 @@
+[
+ {
+  "author": "sunny256", 
+  "date": "2005-03-08T03:53:35.765962Z", 
+  "msg": [
+   "Update changes between r13249:13288 in the Norwegian nb.po file.", 
+   "* subversion/po/nb.po", 
+   "Updated 17 fuzzy and 14 new messages and added some new entries to the", 
+   "dictionary."
+  ], 
+  "revision_id": "853375"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-08T01:27:45.212089Z", 
+  "msg": [
+   "Revert r13242, which itself was a reversion of r13208.  In other", 
+   "words, re-introduce the changes from r13208.", 
+   "See, first time 'round, these changes exposed a nasty bug in the pool", 
+   "lifetimes of cached node_revision_t's.  With pool debugging enabled,", 
+   "fs-test would die like so:", 
+   "$ ./fs-test", 
+   "...", 
+   "PASS: lt-fs-test 23: merging commit *** glibc detected *** free():", 
+   "invalid next size (fast): 0x0a1f1948 *** Aborted", 
+   "$", 
+   "I've killed that cache altogether now (see r13299), and have verified", 
+   "that now the tests run to completion with failure.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(merge, svn_fs_base__commit_txn): Use an iteration subpool."
+  ], 
+  "revision_id": "853374"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-08T01:23:52.952448Z", 
+  "msg": [
+   "Kiss libsvn_fs_base node_revision_t caching goodbye.", 
+   "The benefit of this cache was questionable once we no longer kept file", 
+   "contents in the `nodes' table, and the complexity tradeoff when", 
+   "dealing with trails and pools and such is just not worth the little", 
+   "bit of benefit.  For example, during a checkout of, say, the", 
+   "Subversion source code, the cache miss rate was *over 99%*.  Commit type", 
+   "operations fared better, but I'm willing to take a little performance", 
+   "hit there to reduce code complexity.", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(svn_fs_base__dag_get_node): Formatting change only (for internal", 
+   "consistency).", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(struct dag_node_t): Remove 'node_revision' member.  Also, drop a", 
+   "note about what is and isn't safe to keep in this structure.", 
+   "(cache_node_revision, uncache_node_revision): Remove.", 
+   "(set_node_revision, get_node_revision): Remove.  Callers changed to", 
+   "use the BDB layer functions directly, and (in some cases) to avoid", 
+   "unnecessary duplication because of now-matching pool lifetimes.", 
+   "(svn_fs_base__dag_dup): Lose meaningless comment.", 
+   "(svn_fs_base__dag_is_ancestor, svn_fs_base__dag_is_parent): Minor", 
+   "formatting changes."
+  ], 
+  "revision_id": "853373"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-03-08T00:10:12.274231Z", 
+  "msg": [
+   "* notes/locking/TODO.txt: expand, reorganize a bit."
+  ], 
+  "revision_id": "853372"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-03-07T23:55:02.288600Z", 
+  "msg": [
+   "Locking branch:  Fix ra_dav crash in 'unlock --force' when no token is present.", 
+   "Subversion's semantics for svn_ra_unlock() state that if 'force' is", 
+   "passed, that the locktoken need not be available.  Unfortunately, DAV", 
+   "absolutely demands a valid locktoken be sent in an UNLOCK request;", 
+   "neon insists on sending one, and mod_dav insists on looking up by it.", 
+   "So that means svn_ra_dav__unlock() has to \"discover\" the token with an", 
+   "extra PROPFIND.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_NOT_LOCKED):  new error code.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__get_lock):  declare here.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__get_lock):  make this not static.", 
+   "(shim_svn_ra_dav__unlock): don't try to ne_strdup() a NULL pointer.", 
+   "if no token is available, call svn_ra_dav__get_lock() to find it."
+  ], 
+  "revision_id": "853371"
+ }
+]

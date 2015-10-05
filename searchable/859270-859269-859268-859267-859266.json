@@ -1,0 +1,107 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2006-04-06T07:26:06.494419Z", 
+  "msg": [
+   "Avoid quadratic behaviour when closing access batons in a working copy.", 
+   "Funny enough, we had O(n^2) behaviour for two reasons here:", 
+   "- We were removing pool cleanup handlers for each baton", 
+   "(removing a cleanup handler searches through a linked list).", 
+   "- We traversed the set of all batons when closing each baton in the set.", 
+   "This change has an effect on working copies with large numbers of directories.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(pool_cleanup): Don't do anything if the baton was already closed.", 
+   "(do_close): Add recurse argument, callers updated.", 
+   "Don't kill the pool cleanup function.", 
+   "Don't call ourselves recursively, but instead close all descendants", 
+   "in a single loop."
+  ], 
+  "revision_id": "859270"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-04-06T01:56:02.832308Z", 
+  "msg": [
+   "Refine the output of 'svnmerge.py integrated' when in verbose mode.", 
+   "* contrib/client-side/svnmerge.py", 
+   "(display_revisions): Add revisions_msg argument to parameterize the", 
+   "message shown in verbose mode before the revision list.", 
+   "(action_avail): Update arguments to display_revisions().", 
+   "(action_integrated): Add some output when in verbose mode when", 
+   "removing revisions which predate the branch, and update arguments", 
+   "to display_revisions().", 
+   "Suggested by: blair"
+  ], 
+  "revision_id": "859269"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-04-06T00:37:49.374261Z", 
+  "msg": [
+   "On the fs-atomic-renames branch:", 
+   "Rev the delta editor interface to support renames.  In order to keep", 
+   "the diff small, this only revs the consumers of the delta editor that", 
+   "are necessary to support dump/load, all other consumers use the old", 
+   "version of the editor for the time being.", 
+   "* subversion/include/svn_delta.h", 
+   "(svn_delta_editor2_t): New editor, includes rename specific functions", 
+   "and documents that it must be created via a constructor.", 
+   "(svn_delta_default_editor2): Constructor for new editor.", 
+   "(svn_delta_editor_t): Deprecate, point to docs on new editor, remove", 
+   "the rename functions that were placed here temporarily.", 
+   "(svn_delta_default_editor): Deprecate.", 
+   "(svn_delta_editor_to_editor2): Helper function for converting an old", 
+   "editor into a new editor.", 
+   "(svn_delta_path_driver2): New version of svn_delta_path_driver, uses", 
+   "the new editor.", 
+   "(svn_delta_path_driver): Deprecate.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_dir_delta2): New version of svn_repos_dir_delta, uses", 
+   "new editor.", 
+   "(svn_repos_dir_delta): Deprecate.", 
+   "(svn_repos_replay3): New version of svn_repos_replay, uses new editor.", 
+   "(svn_repos_replay2): Deprecate.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(get_dump_editor): Use new editor.", 
+   "(svn_repos_dump_fs2): Use svn_repos_dir_delta2 and svn_repos_replay3.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(struct context): Store a new editor.", 
+   "(svn_repos_dir_delta2): New function that uses the new editor.", 
+   "(svn_repos_dir_delta): Implement in terms of svn_repos_dir_delta2.", 
+   "* subversion/libsvn_repos/replay.c", 
+   "(struct path_driver_cb_baton): Use new editor.", 
+   "(add_subdir): Take new editor.", 
+   "(path_driver_cb_func): Use new editor.", 
+   "(svn_repos_replay3): New function that uses new editor.", 
+   "(svn_repos_replay2): Implement in terms of svn_repos_replay3.", 
+   "* subversion/libsvn_delta/path_driver.c", 
+   "(open_dir): Use new editor.", 
+   "(svn_delta_path_driver2): New function that uses new editor.", 
+   "(svn_delta_path_driver): Implement in terms of svn_delta_path_driver.", 
+   "* subversion/libsvn_delta/default_editor.c", 
+   "(default_editor): Remove rename functions.", 
+   "(default_editor2): New editor.", 
+   "(svn_delta_default_editor2,", 
+   "svn_delta_editor_to_editor2): New functions."
+  ], 
+  "revision_id": "859268"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-04-05T22:21:38.444296Z", 
+  "msg": [
+   "* STATUS: Add r19181 and r19192 to r19143."
+  ], 
+  "revision_id": "859267"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2006-04-05T22:19:12.082492Z", 
+  "msg": [
+   "* build.conf", 
+   "(test-scripts): Add authz_tests.py.", 
+   "Suggested by: Lieven Govaerts <lgo@mobsol.be>"
+  ], 
+  "revision_id": "859266"
+ }
+]

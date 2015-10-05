@@ -1,0 +1,84 @@
+[
+ {
+  "author": "xsteve", 
+  "date": "2007-05-23T18:08:32.402482Z", 
+  "msg": [
+   "Improved the support for svn-status-verbose == nil", 
+   "* trunk/contrib/client-side/emacs/psvn.el:", 
+   "(svn-parse-status-result): Handle the output from \"svn status -u\"", 
+   "call correct.", 
+   "(svn-status-toggle-svn-verbose-flag): New function, bound to O v"
+  ], 
+  "revision_id": "865200"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-05-23T18:05:55.667616Z", 
+  "msg": [
+   "* STATUS: Vote for the r25095 group."
+  ], 
+  "revision_id": "865199"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2007-05-23T17:59:58.293926Z", 
+  "msg": [
+   "SVN config section option names are treated in a case insensitive way. This", 
+   "breaks autoprops setting on a patterns which differs only in case.", 
+   "Changing the SVN config parser code to be case sensitive would be backward", 
+   "incompatible change.", 
+   "So we tackle this problem by making the autoprops match for pattern and", 
+   "filename to be case-insensitive.", 
+   "<snip>", 
+   "$cat ~/.subversion/config", 
+   "[miscellany]", 
+   "enable-auto-props = yes", 
+   "[auto-props]", 
+   "makefile* = svn:eol-style=native", 
+   "Makefile* = svn:eol-style=native", 
+   "maKEfile = foo=bar", 
+   "</snip>", 
+   "Only files matching 'makefile*' are getting autoprops set as it is defined first.", 
+   "With this change makefile will be set with a auto-prop 'foo' with a value 'bar',", 
+   "i.e last autoprops setting will be taken.", 
+   "* subversion/libsvn_client/add.c", 
+   "(auto_props_enumerator): Update docstring for this new approach.", 
+   "Call apr_fnmatch with a flag 'APR_FNM_CASE_BLIND'.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): The default config file to mention about auto-props's", 
+   "case insensitive match of file with a pattern.", 
+   "Patch by: me", 
+   "dlr", 
+   "Approved by: malcolm", 
+   "dlr"
+  ], 
+  "revision_id": "865198"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-05-23T17:55:15.088798Z", 
+  "msg": [
+   "Recommend r25095 and friends for backport."
+  ], 
+  "revision_id": "865197"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-05-23T17:54:37.332239Z", 
+  "msg": [
+   "On the 1.4.x-r25095 branch:", 
+   "Backport the bugfix portions of r25095 and friends, without", 
+   "backporting the API changes.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(get_readable): Backport from trunk basically the diffs between", 
+   "get_readable (before it was deleted) and", 
+   "svn_repos_check_revision_access(), which supercedes it.", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(copy_from_unreadable_dir, copy_with_mod_from_unreadable_dir,", 
+   "copy_with_mod_from_unreadable_dir_and_copy): Tweak tests to not", 
+   "expect log messages in revisions for which a path is readable but", 
+   "its copyfrom-path is not."
+  ], 
+  "revision_id": "865196"
+ }
+]

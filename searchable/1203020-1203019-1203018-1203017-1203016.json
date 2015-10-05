@@ -1,0 +1,84 @@
+[
+ {
+  "author": "gawor", 
+  "date": "2011-11-17T02:19:12.847177Z", 
+  "msg": [
+   "set svn properties - no other changes"
+  ], 
+  "revision_id": "1203020"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T02:17:21.224835Z", 
+  "msg": [
+   "pulled version 6 of the patch for persist memstoreTS to disk", 
+   "Test Plan:", 
+   "mvn test.", 
+   "Passes all (without enabling the TestAcidGuarantees for Scan test)", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan, aaiyer", 
+   "Differential Revision: 352616"
+  ], 
+  "revision_id": "1203019"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T02:17:11.732534Z", 
+  "msg": [
+   "Fix stuck thread during DLS.", 
+   "Summary:", 
+   "During DLS the splitLog thread would get stuck since a cluster", 
+   "shutdown would be requested and all regionservers would shut down, but", 
+   "the split log thread would still keep trying forever to split logs and", 
+   "hence the master would never shut down.", 
+   "Test Plan:", 
+   "1) Ran it on dev cluster and verified master shuts down", 
+   "cleanly.", 
+   "Reviewers: pkhemani", 
+   "Reviewed By: pkhemani", 
+   "CC: hbase-eng@lists, pkhemani, kannan", 
+   "Differential Revision: 362261"
+  ], 
+  "revision_id": "1203018"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T02:17:07.665563Z", 
+  "msg": [
+   "Don't set watch after region is opened.", 
+   "Summary:", 
+   "There is a race condition where after setting region to OPENED, RS will try to", 
+   "set a watch", 
+   "on the Znode, and master will try to delete the ZNode.", 
+   "Test Plan: Compiled.", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, madhuvaidya, kranganathan, kannan, pkhemani", 
+   "Differential Revision: 361506", 
+   "Task ID: 800359"
+  ], 
+  "revision_id": "1203017"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T02:17:03.779845Z", 
+  "msg": [
+   "Fix master startup when running on a single machine", 
+   "Summary:", 
+   "As part of master failover unit test changes I removed public access from", 
+   "HMaster.LocalHMaster, which broke local HBase startup (a pseudo-distributed", 
+   "configuration).", 
+   "This is a quick fix. A more thorough fix would ideally add a unit test.", 
+   "Test Plan:", 
+   "./start-hbase.sh", 
+   "Go to localhost:60010 and verify that the master is up.", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan", 
+   "Differential Revision: 362257", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1203016"
+ }
+]

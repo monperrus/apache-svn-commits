@@ -1,0 +1,98 @@
+[
+ {
+  "author": "niallp", 
+  "date": "2010-03-12T10:31:38.785393Z", 
+  "msg": [
+   "Make links relative"
+  ], 
+  "revision_id": "922200"
+ }, 
+ {
+  "author": "niallp", 
+  "date": "2010-03-12T10:25:34.746478Z", 
+  "msg": [
+   "Fix tables headers"
+  ], 
+  "revision_id": "922199"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-03-12T10:20:58.031651Z", 
+  "msg": [
+   "Revamp the nastiness of the *Output classes. Their use of overridden", 
+   "methods made them very difficult to understand. Way too many classes and", 
+   "interactions for what is really a simple problem.", 
+   "Also switched the classes away from direct comparison (via == or !=) which", 
+   "doesn't help the reader to understand these are objects rather than basic", 
+   "types being compared.", 
+   "The various classes now define class variables to control the behavior of", 
+   "the set of classes. (it would be nice to simply remove them, but their", 
+   "usage is widespread, so it is easier to revamp and keep compat)", 
+   "The various is_equivalent_line() methods are tossed and simply inlined.", 
+   "* subversion/tests/cmdline/svntest/verify.py:", 
+   "(createExpectedOutput): test for AnyOutput using \"is\" rather than an", 
+   "equality comparison. if the expected value is an object, it will", 
+   "trigger the (undesirable) comparator method.", 
+   "(ExpectedOutput): define class variables 'is_regex' and 'is_unordered'", 
+   "to control the behavior of the set of classes.", 
+   "(ExpectedOutput.__init__): don't bother setting the 'is_reg_exp'", 
+   "instance variable.", 
+   "(ExpectedOutput.__cmp__): raise an error to detect incorrect usage", 
+   "(ExpectedOutput.matches): new method based on old __cmp__ method.", 
+   "rebuilt to always use lists of expected content and actual content.", 
+   "the return values are now inverted: returning non-zero for 'matching'", 
+   "rather than zero.", 
+   "(ExpectedOutput.is_equivalent_list): refer to self.is_regex rather than", 
+   "the old is_reg_exp value. simplify the testing code: we don't need to", 
+   "use is_equivalent_line since we know there are only a couple ways to", 
+   "do comparisons, and knowing each dramatically simplifies the code", 
+   "(e.g. do list compares rather than iterating over each item).", 
+   "(ExpectedOutput.is_equivalent_line): remove", 
+   "(ExpectedOutput.display_differences): use the class variables for the", 
+   "params to display_lines, rather than having every subclass override", 
+   "this dumb method.", 
+   "(AnyOutput.is_equivalent_list): stop using is_equivalent_line, assume an", 
+   "input list, and dramatically simplify.", 
+   "(AnyOutput.is_equivalent_line): remove", 
+   "(RegexOutput): set class variable 'is_regex' to denote regex usage", 
+   "(RegexOutput.__init__): remove. superclass init method is fine", 
+   "(RegexOutput.is_equivalent_line): remove. superclass already knew about", 
+   "special handling for regexes, but only halfway (still deferred to this", 
+   "method). now it knows all, so this is not needed.", 
+   "(RegexOutput.display_differences): remove. super method knows enough.", 
+   "(UnorderedOutput): set class variable 'is_unordered'", 
+   "(UnorderedOutput.__cmp__): raise an error, as this shouldn't be used.", 
+   "(UnorderedOutput.is_equivalent_list): revamp using sets, knowing whether", 
+   "we're looking at regexes, and avoid using is_equivalent_line.", 
+   "(UnorderedOutput.is_equivalent_line): remove, unused.", 
+   "(UnorderedOutput.display_differences): remove. super knows best.", 
+   "(UnorderedRegexOutput): set appropriate class vars.", 
+   "(UnorderedRegexOutput.is_equivalent_line): remove. super knows how to", 
+   "handle regex expectations.", 
+   "(UnorderedRegexOutput.display_differences): remove. super knows.", 
+   "(compare_and_display_lines): use the 'matches' method rather than the", 
+   "more opaque operator overloading.", 
+   "* subversion/tests/cmdline/svntest/actions.py:", 
+   "(run_and_verify_svn, run_and_verify_svn2): avoid operator comparisons on", 
+   "expected_stderr, if that is an ExpectedOutput class. only use op", 
+   "compares on basic objects. use 'matches' for the output objects."
+  ], 
+  "revision_id": "922198"
+ }, 
+ {
+  "author": "niallp", 
+  "date": "2010-03-12T10:17:04.212422Z", 
+  "msg": [
+   "Add site plugin to plugin management"
+  ], 
+  "revision_id": "922197"
+ }, 
+ {
+  "author": "niallp", 
+  "date": "2010-03-12T10:13:00.906585Z", 
+  "msg": [
+   "Change parent from commons-parent to apache pom (gets rid of reports such as surefire and gives more control over the menu)"
+  ], 
+  "revision_id": "922196"
+ }
+]

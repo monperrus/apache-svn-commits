@@ -1,0 +1,106 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:26.724383Z", 
+  "msg": [
+   "HBASE-4434: Don't do HFile Scanner next() unless the next KV is needed", 
+   "Summary:", 
+   "StoreFileScanner does HFileScanner.next() ahead of time even if the next KV is", 
+   "never actually required.", 
+   "Change itself seems simple, so putting it out there for review. Haven't run", 
+   "much unit tests yet.", 
+   "Test Plan:", 
+   "1) running unit tests first...", 
+   "2) will also run the set of tests we are adding for other related optimizations", 
+   "we are working on, namely:", 
+   "* Lazy Seeks", 
+   "* INCLUDE_AND_SEEK_NEXT_{ROW,COL} for Explicit Column Tracker.", 
+   "Reviewers: liyintang, mbautin, kranganathan, nspiegelberg", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, hbase@lists, , kranganathan, mbautin", 
+   "Differential Revision: 328305"
+  ], 
+  "revision_id": "1181980"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:24.237335Z", 
+  "msg": [
+   "Caching blocks in seekBefore and refactoring HFile reader access in HFileBlockIndex", 
+   "Summary:", 
+   "This fixes a couple of long-existing code issues in HFile v2:", 
+   "- Making seekBefore cache the previous block it has to read when the scanner", 
+   "happens to be at the first key of a block (this was a performance regression", 
+   "introduced in HFile v2).", 
+   "- Fixing the accounting of the number of blocks read for the one-level index", 
+   "case in HFileBlockIndex.seekToDataBlock if the current block is the same as the", 
+   "requested block.", 
+   "- Getting rid of HFileBlock.BasicReader, which was used both by FSReaderV2 and", 
+   "HFileReaderV2, but the former did not cache blocks (a source of confusion).", 
+   "- Adding a new interface HFile.CachingBlockReader instead, which is implemented", 
+   "by HFile readers and passed to HFileBlockIndex.", 
+   "Test Plan: Unit tests, dev cluster, dark launch", 
+   "Reviewers: kannan, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan", 
+   "Differential Revision: 328625", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1181979"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:20.443316Z", 
+  "msg": [
+   "Fix race condition on RS exit that could lead to multiple region assignment.", 
+   "Summary: Fixed race condition - more details in attached task.", 
+   "Test Plan:", 
+   "Tested on dev cluster with repro conditions - regions were not multiply", 
+   "assigned.", 
+   "(Will run full test suite before checking in)", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: hbase@lists, kannan", 
+   "Differential Revision: 327405", 
+   "Task ID: 697996"
+  ], 
+  "revision_id": "1181978"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:17.866500Z", 
+  "msg": [
+   "Added HBase load tester stats output for OpenTSDB", 
+   "Summary:", 
+   "Load tester reader and writer threads now make stats available", 
+   "over JMX. Stats include keys per second, columns per second, average", 
+   "latency and errors counts. The script which runs the load tester as a", 
+   "map-reduce job sets the necessary parameters to enable JMX access. Added", 
+   "a script to collect collect stats from JMX and output JSON to stdout for", 
+   "exporting to OpenTSDB.", 
+   "Test Plan: ran the load test on a dev cluster and observed stats in OpenTSDB", 
+   "Reviewers: kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase@lists, kranganathan, python-diffs@lists", 
+   "Differential Revision: 325412", 
+   "Task ID: 697920"
+  ], 
+  "revision_id": "1181977"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:45:15.066685Z", 
+  "msg": [
+   "Typo fix in MonitoredTask Reporting", 
+   "Summary:", 
+   "A missing space in a reported monitoredtask status makes for confusing", 
+   "reporting.", 
+   "Test Plan:", 
+   "Compiled and ran on dev server", 
+   "Reviewers: nspiegelberg", 
+   "Reviewed By: nspiegelberg", 
+   "Differential Revision: 320716"
+  ], 
+  "revision_id": "1181976"
+ }
+]

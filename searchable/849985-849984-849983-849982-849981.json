@@ -1,0 +1,103 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-05-31T04:46:47.921090Z", 
+  "msg": [
+   "Resolve compile warnings due to unsigned char mismatches with Forte.", 
+   "* subversion/libsvn_ra_svn/cram.c (hex_encode, svn_ra_svn__cram_client),", 
+   "subversion/libsvn_fs_fs/fs_fs.c (write_hash_rep): apr_md5_* takes in", 
+   "unsigned chars, so change associated variable types to be unsigned.", 
+   "* subversion/libsvn_delta/svndiff.c: Weakly resolve mismatch between", 
+   "svn_stream_read and decode_window by casting buf to char* to svn_stream_read.", 
+   "Incorporates feedback from: Greg Hudson"
+  ], 
+  "revision_id": "849985"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-31T04:30:15.217332Z", 
+  "msg": [
+   "Dump hash tables in sorted order, for determinism and to open up the", 
+   "long-term possibility of searching large dumped hash tables in", 
+   "O(lg(n)) time if we only care about one entry.", 
+   "* include/svn_sorts.h, libsvn_subr/sorts.c", 
+   "(svn_sort_compare_items_lexically): New generic key-sorting", 
+   "function.", 
+   "* libsvn_subr/hash.c", 
+   "(hash_write): Sort hash and oldhash and iterate over the resulting", 
+   "arrays, instead of iterating over the hash tables directly."
+  ], 
+  "revision_id": "849984"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-05-30T23:50:16.859927Z", 
+  "msg": [
+   "Fix error handling bug, where an apr_file_t * was treated as a char*.", 
+   "* libsvn_subr/io.c (svn_io_file_flush_to_disk): Use do_io_file_wrapper_cleanup,", 
+   "instead of handling APR error directly, thereby fixing a type mismatch."
+  ], 
+  "revision_id": "849983"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2004-05-29T21:30:27.939574Z", 
+  "msg": [
+   "Fix issue #1896, 'Directory not empty' errors when removing a committed", 
+   "transaction under libsvn_fs_fs on Mac OS X.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(MACOSX_READDIR_HACK): New macro.  On Mac OS X expands to an apr_dir_rewind,", 
+   "since the rewind keeps us from triggering a bug that makes us skip entries", 
+   "in the directory when removing entries in the directory while calling", 
+   "readdir in a loop if the directory has 338 or more files in it.  On other", 
+   "platforms this is a no-op.", 
+   "(svn_io_remove_dir): Insert calls to MACOSX_READDIR_HACK after we remove", 
+   "entries from the directory."
+  ], 
+  "revision_id": "849982"
+ }, 
+ {
+  "author": "pmayweg", 
+  "date": "2004-05-29T13:35:18.172003Z", 
+  "msg": [
+   "To integrate javahl into the main build system for windows too,", 
+   "I have moved the constants needed by the native code from", 
+   "subclasses to independend interfaces. So I can run first javac", 
+   "and than javah for all java source files.", 
+   "* subversion/bindings/java/javahl", 
+   "* subversion/bindings/java/javahl/native", 
+   "new svn:ignore property.", 
+   "* subversion/bindings/java/javahl/native/Revision.cpp", 
+   "* subversion/bindings/java/javahl/native/SVNClient.cpp", 
+   "* subversion/bindings/java/javahl/native/", 
+   "org_tigris_subversion_javahl_SVNClient.cpp", 
+   "* subversion/bindings/java/javahl/native/Notify.cpp", 
+   "changed include files and constant names.", 
+   "* subversion/bindings/java/javahl/native/svnjavahl.dsp", 
+   "changed compile and javah build rules.", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/NotifyAction.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/NotifyStatus.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/StatusKind.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/RevisionKind.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/SVNClientLogLevel.java", 
+   "new interfaces with the constants.", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/Notify.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/Revision.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/Status.java", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/", 
+   "javahl/SVNClient.java", 
+   "classes with subclasses. The constants of the subclasses have", 
+   "been moved to interfaces. The subclasses implement the", 
+   "interfaces. Users of these classes do not have to be changed."
+  ], 
+  "revision_id": "849981"
+ }
+]

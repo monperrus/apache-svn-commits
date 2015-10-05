@@ -1,0 +1,103 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:48:05.378911Z", 
+  "msg": [
+   "HBase shell can pre-split a new table at creation", 
+   "Summary:", 
+   "This change adds optional arguments to the HBase shell's create command", 
+   "to split a table into a specified number of regions using a specified", 
+   "splitting algorithm as defined by RegionSplitter.", 
+   "Test Plan:", 
+   "Created tables with and without splits using the shell; also attempted", 
+   "to give incorrect arguments to shell create command.", 
+   "Reviewers: kranganathan, nspiegelberg", 
+   "Reviewed By: nspiegelberg", 
+   "CC: hbase-eng@lists, nspiegelberg, cgist, alasla", 
+   "Differential Revision: 353287", 
+   "Task ID: 743529"
+  ], 
+  "revision_id": "1203000"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:59.211219Z", 
+  "msg": [
+   "Optimize the parallel log splitting", 
+   "Summary:", 
+   "When testing the original diff D356996 in titanmigrate001-snc4 cluster by", 
+   "killing more than 10 region servers, I found it is not efficient to put this", 
+   "ProcessServerShutDownOperation back to the todo queue, it should put back to the", 
+   "delayed queue instead.", 
+   "Test Plan:", 
+   "Tested in titan migrate001 cluster and kill 10 region servers at one time. The", 
+   "distributed log splitting runs very faster and split all the logs in parallel in", 
+   "less than 30 secs.", 
+   "Reviewers: pkhemani, mbautin", 
+   "Reviewed By: mbautin", 
+   "CC: hbase-eng@lists, pkhemani, liyintang, mbautin", 
+   "Differential Revision: 357329"
+  ], 
+  "revision_id": "1202999"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:50.421203Z", 
+  "msg": [
+   "Let the HFile Pretty Printer print all the key values for a specific row.", 
+   "Summary:", 
+   "Port: https://reviews.facebook.net/D111", 
+   "HBase-4698 Let the HFile Pretty Printer print all the key values for a specific", 
+   "row.", 
+   "When using HFile Pretty Printer to debug HBase issues,", 
+   "it would very nice to allow the Pretty Printer to seek to a specific row, and", 
+   "only print all the key values for this row.", 
+   "Test Plan: tested in the dev cluster and running all the unit tests", 
+   "Reviewers: kannan, mbautin, nspiegelberg", 
+   "Reviewed By: mbautin", 
+   "CC: hbase-eng@lists, mbautin", 
+   "Differential Revision: 353229", 
+   "Task ID: 783028"
+  ], 
+  "revision_id": "1202998"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:44.532874Z", 
+  "msg": [
+   "enable tab-completion on hbase shell", 
+   "Summary:", 
+   "Tab completion is helpful for debugging scripts.  I am not 100% sure what this", 
+   "option actually does, but without it tab-completion frequently crashes and", 
+   "requests this option to be present.  Error/crash message:", 
+   "https://our.intern.facebook.com/intern/paste/?pid=41846", 
+   "If there is a reason we shouldn't do this, I won't be offended.  But I find it", 
+   "quite useful.", 
+   "Test Plan:", 
+   "could pipe in commands and invoke shell as usual, and tab-completion now works.", 
+   "https://our.intern.facebook.com/intern/paste/?pid=41848", 
+   "Reviewers: kannan, kranganathan, dhruba, jgray, nspiegelberg", 
+   "Reviewed By: nspiegelberg", 
+   "CC: hbase-eng@lists, hbase-ops@lists, nspiegelberg, rthiessen, dhruba", 
+   "Differential Revision: 356985"
+  ], 
+  "revision_id": "1202997"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:47:40.651748Z", 
+  "msg": [
+   "Fix TestRegionSplitter: pass correct ZK client port", 
+   "Summary: TestRegionSplitter currently uses a deprecated HTable constructor that", 
+   "instantiates a new configuration and does not use the correct ZK client port as", 
+   "a result.", 
+   "Test Plan: mvn -Dtest=TestHRegionSplitter test", 
+   "Reviewers: cgist", 
+   "Reviewed By: cgist", 
+   "CC: hbase-eng@lists, cgist", 
+   "Differential Revision: 357250", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1202996"
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "author": "kraai", 
+  "date": "2003-03-14T20:21:24.426596Z", 
+  "msg": [
+   "Partially fix issue #1169:", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t): Add pool argument to check_path.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__do_check_path): Add pool argument.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__do_check_path): Likewise.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_check_path): Likewise.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_check_path): Likewise.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(svn_client_delete): Pass pool to ra->check_path.", 
+   "* subversion/libsvn_client/cat.c", 
+   "(svn_client_cat): Likewise.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_repos_copy, repos_to_wc_copy, wc_to_repos_copy):", 
+   "Likewise.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(do_diff): Likewise.", 
+   "* subversion/libsvn_client/ls.c", 
+   "(svn_client_ls): Likewise.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client_propget, svn_client_proplist): Likewise.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(delete_entry): Likewise."
+  ], 
+  "revision_id": "845415"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-03-14T19:49:34.387703Z", 
+  "msg": [
+   "The log message baton creator does validation on (what is essentially)", 
+   "the contents of the file specified by the --file (-F) argument.  It", 
+   "errors out if those contents contain a NULL character.  But -F is used", 
+   "for other things, too, like 'svn propset', which should *allow*", 
+   "NULL-character-having property values.  By moving the log message", 
+   "baton creation to only the subcommands that need a log message baton,", 
+   "*only* log messages (and not property values provided via -F) will", 
+   "suffer this validation.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): No longer make the log message baton.", 
+   "These functions now make their own log message batons.", 
+   "* subversion/clients/cmdline/copy-cmd.c (svn_cl__copy)", 
+   "* subversion/clients/cmdline/move-cmd.c (svn_cl__move)", 
+   "* subversion/clients/cmdline/delete-cmd.c (svn_cl__delete)", 
+   "* subversion/clients/cmdline/mkdir-cmd.c (svn_cl__mkdir)", 
+   "* subversion/clients/cmdline/import-cmd.c (svn_cl__import)"
+  ], 
+  "revision_id": "845414"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-14T19:24:28.382493Z", 
+  "msg": [
+   "More work on issue #1004: Make the second half of exports cancellable.", 
+   "* subversion/libsvn_client/export.c", 
+   "(remove_admin_dirs, copy_versioned_files): Take a ctx parameter, use", 
+   "it to invoke the cancellation function at appropriate points.  All", 
+   "callers changed."
+  ], 
+  "revision_id": "845413"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-14T19:10:26.120938Z", 
+  "msg": [
+   "More work on issue #1004: Make imports cancellable.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(import_dir): Check for cancellation in the loop over dir entries."
+  ], 
+  "revision_id": "845412"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-03-14T18:54:47.886790Z", 
+  "msg": [
+   "Move some code that was meant to restrict binary log messages to a", 
+   "place where it would only restrict log messages (not every operation", 
+   "that used the --file (-F) cmdline argument).", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__make_log_msg_baton): Now return an error.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): Move file-based property value restriction code to", 
+   "svn_cl__make_log_msg_baton, and update call to that function.", 
+   "* subversion/clients/cmdline/util.c", 
+   "(svn_cl__make_log_msg_baton): Now returns an error, and does the", 
+   "error check that main() used to do.", 
+   "* subversion/clients/cmdline/commit-cmd.c", 
+   "(svn_cl__commit): Update call to svn_cl__make_log_msg_baton()."
+  ], 
+  "revision_id": "845411"
+ }
+]

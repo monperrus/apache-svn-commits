@@ -1,0 +1,108 @@
+[
+ {
+  "author": "dws", 
+  "date": "2002-06-19T21:35:51.271505Z", 
+  "msg": [
+   "* packages/rpm/subversion.spec : *sigh*, I don't know what I did wrong", 
+   "previously, but it now seems to work without all the -L options in the", 
+   "./configure setup.", 
+   "Also changed the mod_dav_svn.so load script only pay attention to", 
+   "lines starting with LoadModule so it will correctly put the", 
+   "mod_dav_svn.so into the httpd.conf file after all the other LoadModule", 
+   "lines."
+  ], 
+  "revision_id": "842360"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-19T19:20:09.109016Z", 
+  "msg": [
+   "Put a band-aid on issue #748.  Instead of digging into the real reason", 
+   "why 'svn merge' ignores the third 'wc-path' argument, just remove that", 
+   "argument for now, and make users do all merging into '.', since that's", 
+   "the behavior that happens regardless.  At least unsuspecting users", 
+   "can't accidentally mess up their local mods now (assuming they read", 
+   "the helpstring.)  Put off real issue till Beta.", 
+   "* svn_client.h", 
+   "(svn_client_merge): remove the wcpath argument, and place big", 
+   "comment in docstring about the temporariness of this.", 
+   "* libsvn_client/diff.c", 
+   "(svn_client_merge): remove the target_wcpath argument, and make the", 
+   "variable a constant \".\" internally instead.  Add big note.", 
+   "* cmdline/merge-cmd.c", 
+   "(svn_cl__merge):  don't pass wcpath into svn_client_merge anymore.", 
+   "Make a big note about it.", 
+   "* cmdline/main.c", 
+   "(svn_cl__cmd_table):  change the help string appropriately."
+  ], 
+  "revision_id": "842359"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-19T18:51:50.307864Z", 
+  "msg": [
+   "Print \"At revision N\" instead of \"Updated to revision N\" for", 
+   "effectless updates, as we did before the recent notification system", 
+   "changes (see revision 2213 in particular).", 
+   "* subversion/clients/cmdline/feedback.c", 
+   "(notify): Be more conservative about registering a change."
+  ], 
+  "revision_id": "842358"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-19T17:34:53.129327Z", 
+  "msg": [
+   "Change commit/copy/import over to the new notification system.  Now", 
+   "only \"svn merge\" notification remains to be done.  This resolves", 
+   "issue #736, and continues work on issue #662.", 
+   "This commit merges all the saved changes from branches/issue-662-dev/,", 
+   "and then completes them.  The merge command was:", 
+   "svn merge -r2202:2199 http://svn.collab.net/repos/svn/branches/issue-662-dev", 
+   "...but then continued tweaking until everything worked again.", 
+   "(Note that this log message is complete -- it shouldn't be necessary", 
+   "to consult revision 2202's log.)", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_import): Use notify_func and notify_baton instead of", 
+   "before and after editors.", 
+   "(svn_client_commit, svn_client_copy): Lose before and after", 
+   "editors.  Existing notify_func and notify_baton will be used for", 
+   "everything now.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(svn_client_copy): Same as header changes.", 
+   "(wc_to_repos_copy): Take notify_func and notify_baton instead of", 
+   "before and after editors.", 
+   "(repos_to_wc_copy, setup_copy): Don't take before and after editors", 
+   "anymore; use notify_func and notify_baton for everything.", 
+   "(svn_client_move): Adjust call to setup_copy.", 
+   "* subversion/libsvn_client/commit.c:", 
+   "(svn_client_import, svn_client_commit): Same as header changes.", 
+   "(import_file, import_dir): Take notify_func and notify_baton, invoke", 
+   "them when appropriate.", 
+   "(import): Take notify_func and notify_baton, pass them along, and do", 
+   "notifications for postfix text deltas.  Add code to notify for the", 
+   "top-level path, but leave it inactive", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__get_trace_update_editor): Add notice of obsoleteness.", 
+   "(svn_cl__get_trace_commit_editor): Removed prototype.", 
+   "* subversion/clients/cmdline/trace-commit.c: Remove this file.", 
+   "* subversion/clients/cmdline/copy-cmd.c", 
+   "(svn_cl__copy): Handle notification the new way.", 
+   "* subversion/clients/cmdline/commit-cmd.c", 
+   "(svn_cl__commit): Same.", 
+   "* subversion/clients/cmdline/import-cmd.c", 
+   "(svn_cl__import): Same.", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "(guarantee_greek_repository): Expect the new import output."
+  ], 
+  "revision_id": "842357"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-06-19T08:44:05.756813Z", 
+  "msg": [
+   "* libsvn_fs.dsp: Some files moved to subdirectories."
+  ], 
+  "revision_id": "842356"
+ }
+]

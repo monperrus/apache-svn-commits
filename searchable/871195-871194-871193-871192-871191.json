@@ -1,0 +1,77 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-05-11T09:44:08.110764Z", 
+  "msg": [
+   "Remove assertions and other debugging code ifdef'd with", 
+   "NDEBUG if debugging is not enabled at compile time.", 
+   "So far, this code was always compiled in, even in releases.", 
+   "In path handling functions, assert that paths supplied", 
+   "are canonical when debugging is enabled. This isn't new,", 
+   "some functions already did so before this change, but now", 
+   "it is consistent, and together with the above change,", 
+   "doing this now actually makes sense.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(is_canonical): Document, extend a little, and rewrite partly", 
+   "for obviousness. This function has been around for much longer", 
+   "than svn_path_is_canonical, and tries to provide the same", 
+   "functionality, but does not quite match up. Confine its use", 
+   "to functions that don't have a pool around.", 
+   "(svn_path_join, svn_path_join_many, svn_path_add_component,", 
+   "svn_path_remove_component, svn_path_dirname, svn_path_basename,", 
+   "svn_path_is_empty, svn_path_compare_paths, svn_path_is_child,", 
+   "svn_path_decompose, svn_path_is_single_path_component,", 
+   "svn_path_split_if_file): When debugging is enabled, assert that", 
+   "paths supplied are canonical, using svn_path_is_canonical if possible,", 
+   "otherwise using is_canonical. The API requires all paths supplied to", 
+   "be canonical. Some of these functions have already done the same", 
+   "assertion with is_canonical before, but for a few the assertion was", 
+   "commented out because the call to strlen involved was considered", 
+   "expensive ...eh? This is debugging code, it's not supposed to", 
+   "perform well, it's a safety net.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_is_single_path_component): Don't use a non-canonical path", 
+   "in test set, the API being tested here does not support this.", 
+   "This was only working because the assertion in the function", 
+   "being tested was commented out.", 
+   "* configure.ac: Compile with -DNDEBUG if debugging is off."
+  ], 
+  "revision_id": "871195"
+ }, 
+ {
+  "author": "jensseidel", 
+  "date": "2008-05-11T01:48:46.430574Z", 
+  "msg": [
+   "* COMMITTERS (jensseidel): Add Jens Seidel for German translation."
+  ], 
+  "revision_id": "871194"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2008-05-10T09:56:11.582091Z", 
+  "msg": [
+   "* STATUS: Propose r30629/r30787 for backport to 1.5"
+  ], 
+  "revision_id": "871193"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-05-09T20:55:54.376865Z", 
+  "msg": [
+   "On the 'kwallet' branch:", 
+   "Merge r31097:31117 from trunk."
+  ], 
+  "revision_id": "871192"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-05-09T20:18:08.335549Z", 
+  "msg": [
+   "Use other password_set_t functions when the first tried one failed.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(simple_save_creds_helper): Set saved to the value returned by", 
+   "password_set()."
+  ], 
+  "revision_id": "871191"
+ }
+]

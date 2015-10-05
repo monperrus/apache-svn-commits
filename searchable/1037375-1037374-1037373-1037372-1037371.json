@@ -1,0 +1,90 @@
+[
+ {
+  "author": "jcorvel", 
+  "date": "2010-11-21T03:04:30.925686Z", 
+  "msg": [
+   "On the diff-optimizations-bytes branch: put TODO list in BRANCH-README"
+  ], 
+  "revision_id": "1037375"
+ }, 
+ {
+  "author": "jcorvel", 
+  "date": "2010-11-21T03:02:31.676070Z", 
+  "msg": [
+   "On the diff-optimizations-bytes branch:", 
+   "Make svn_diff skip identical suffix, in addition to prefix.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(svn_diff__file_baton_t): Inside the struct file_info, add members", 
+   "suffix_start_chunk and suffix_offset_in_chunk.", 
+   "(find_identical_suffix): New function.", 
+   "(datasources_open): Use find_identical_suffix to find the identical suffix", 
+   "of the datasources, so it can be excluded from the rest of the diff", 
+   "algorithm. From the identical suffix, 50 lines are kept to help the diff", 
+   "algorithm find the nicest possible diff representation in case of ambiguity.", 
+   "(datasource_get_next_token): Stop at start of identical suffix."
+  ], 
+  "revision_id": "1037374"
+ }, 
+ {
+  "author": "dos", 
+  "date": "2010-11-21T02:44:17.482084Z", 
+  "msg": [
+   "bug 6513: change anubis rules to new mailspike rules per their request"
+  ], 
+  "revision_id": "1037373"
+ }, 
+ {
+  "author": "erans", 
+  "date": "2010-11-21T02:36:14.800121Z", 
+  "msg": [
+   "Refined test (follow-up of MATH-441)."
+  ], 
+  "revision_id": "1037372"
+ }, 
+ {
+  "author": "jcorvel", 
+  "date": "2010-11-21T02:36:07.283489Z", 
+  "msg": [
+   "On the diff-optimizations-bytes branch:", 
+   "Make svn_diff skip identical prefix to make diff and blame faster.", 
+   "* subversion/include/svn_diff.h", 
+   "(svn_diff_fns_t): Added new function type datasources_open to the vtable.", 
+   "* subversion/libsvn_diff/diff_memory.c", 
+   "(datasources_open): New function (does nothing).", 
+   "(svn_diff__mem_vtable): Added new function datasources_open.", 
+   "* subversion/libsvn_diff/diff_file.c", 
+   "(increment_pointers, decrement_pointers): New functions.", 
+   "(is_one_at_bof, is_one_at_eof): New functions.", 
+   "(find_identical_prefix): New function.", 
+   "(datasources_open): New function, to open multiple datasources and find", 
+   "their identical prefix, so this can be excluded from the rest", 
+   "of the diff algorithm, as a performance optimization.", 
+   "(svn_diff__file_vtable): Added new function datasources_open.", 
+   "* subversion/libsvn_diff/diff.h", 
+   "(svn_diff__get_tokens): Added argument \"datasource_opened\", to indicate that", 
+   "the datasource was already opened, and argument \"prefix_lines\", the number", 
+   "of identical prefix lines. Use prefix_lines as the starting offset for the", 
+   "token we're getting.", 
+   "* subversion/libsvn_diff/token.c", 
+   "(svn_diff__get_tokens): Added arguments \"datasource_opened\" and", 
+   "\"prefix_lines\". Only open the datasource if datasource_opened is FALSE.", 
+   "Set the starting offset of the position list to the number of prefix_lines.", 
+   "* subversion/libsvn_diff/lcs.c", 
+   "(svn_diff__lcs): Added argument \"prefix_lines\". Use this to correctly set", 
+   "the offset of the sentinel position for EOF, even if one of the files", 
+   "became empty after eliminating the identical prefix.", 
+   "* subversion/libsvn_diff/diff.c", 
+   "(svn_diff__diff): Add a chunk of \"common\" diff for identical prefix.", 
+   "(svn_diff_diff): Use new function datasources_open to open original and", 
+   "modified at once and find their identical prefix. Pass", 
+   "prefix_lines to svn_diff__get_tokens, svn_diff__lcs and svn_diff__diff.", 
+   "* subversion/libsvn_diff/diff3.c", 
+   "(svn_diff_diff3): Pass datasource_opened = FALSE and prefix_lines = 0 to", 
+   "svn_diff__get_tokens. Pass prefix_lines = 0 to svn_diff__lcs.", 
+   "* subversion/libsvn_diff/diff4.c", 
+   "(svn_diff_diff4): Pass datasource_opened = FALSE and prefix_lines = 0 to", 
+   "svn_diff__get_tokens. Pass prefix_lines = 0 to svn_diff__lcs."
+  ], 
+  "revision_id": "1037371"
+ }
+]

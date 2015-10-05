@@ -1,0 +1,86 @@
+[
+ {
+  "author": "joerg", 
+  "date": "2008-04-01T06:21:53.967626Z", 
+  "msg": [
+   "Fix synchronization issues in ContinuationsManager implementation."
+  ], 
+  "revision_id": "643295"
+ }, 
+ {
+  "author": "joerg", 
+  "date": "2008-04-01T06:20:52.927424Z", 
+  "msg": [
+   "remove LogEnabled from WebContinuation, change display() to toString(), logging is done \"externally\""
+  ], 
+  "revision_id": "643294"
+ }, 
+ {
+  "author": "joerg", 
+  "date": "2008-04-01T06:17:35.123468Z", 
+  "msg": [
+   "fix threading issue (DateFormat is not thread-safe)"
+  ], 
+  "revision_id": "643293"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-04-01T06:16:53.512030Z", 
+  "msg": [
+   "DERBY-3320 This commit will ensure that if the Collator support does not exist during", 
+   "a territory based database creation, then we will throw an exception saying Collator", 
+   "support does not exist. In case of subsequent boot of a successfully created territory", 
+   "based database, we will check for the Collator support from JVM at the time first collation", 
+   "related operation is run on the database. This can happen if the database recovery needs", 
+   "to be done at the boot time or it can happen after the database has booted and user has", 
+   "issued a SQL which requires Collator support.", 
+   "The details of the changes that went into different classes are as follows.", 
+   "DataDictionaryImpl", 
+   "With this patch, the collation attribute on JDBC url now gets verified in DVF.boot method", 
+   "and hence we do not need to verify the value again in DataDictionaryImpl.boot. We can assume", 
+   "that if the user has provided the collation attribute, then it will be set to UCS_BASIC or", 
+   "TERRITORY_BASED. If user did not supply this attribute, then we will use the default", 
+   "territory of UCS_BASIC", 
+   "BasicDatabase", 
+   "The boot method here would call DVF.setLocale in order to set the correct locale and", 
+   "Collator object on DVF. With this patch, DVF.boot method does the setting of locale", 
+   "and Collator object and hence BasicDatabase.boot does not need to make a special call", 
+   "on DVF.setLocale. I have removed setLocale method from DVF because there are no other", 
+   "callers of the setLocale method.", 
+   "DVF and DVFImpl", 
+   "The boot method here has been modified so that it will set the locale on itself rather than", 
+   "rely on BasicDatabase.boot to do it. In addition, it will it will check if the user has", 
+   "supplied collation attribute on JDBC url at database create time. If none specified, we will", 
+   "user the default of UCS_BASIC. If user has provided a value for collation attribute, then", 
+   "this method will verify that it is set to UCS_BASIC or TERRITORY_BASED. If not, it will", 
+   "throw an exception. During database create time, boot method will make sure that the", 
+   "Collator support is available for the requested locale for TERRITORY_BASED database. If not,", 
+   "it will throw an exception. In case of subsequent database boot, the verification for the", 
+   "Collator support will be done the first time a collation operation is executed on the DB.", 
+   "This can happen at database recovery time if the database has to be recovered or it can", 
+   "happen later when user issues a SQL which required a collation operation. This collation", 
+   "support check is done in the new method called verifyCollatorSupport().", 
+   "In addition to changes in the boot method, I had to change the signature of existing apis", 
+   "like getNullChar, getNullVarchar etc to throw StandardException. These methods can throw", 
+   "an exception if they are the first ones to require collation support and during the", 
+   "collation support check, we can throw exception if the Collator support from JVM is not", 
+   "found.", 
+   "messages.xml and SQLState.java", 
+   "Added a new SQL State XBM04 for the case when the requested locale for territory based", 
+   "database does not have Collator support from the jvm.", 
+   "CollationTest", 
+   "Added a test case which tries to use a non-existent locale to create a territory based", 
+   "database. The creation fails as expected and we throw exception that the Collator support", 
+   "does not exist for the requested locale."
+  ], 
+  "revision_id": "643292"
+ }, 
+ {
+  "author": "dinesh", 
+  "date": "2008-04-01T06:16:12.340811Z", 
+  "msg": [
+   "code formatting , more log messages and comments into code."
+  ], 
+  "revision_id": "643291"
+ }
+]

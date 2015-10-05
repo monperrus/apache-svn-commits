@@ -1,0 +1,72 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-06-13T09:10:36.000000Z", 
+  "msg": [
+   "And the mother is back...", 
+   "Change svn_string_FUNC to svn_stringbuf_FUNC."
+  ], 
+  "revision_id": "839520"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-06-13T03:26:51.000000Z", 
+  "msg": [
+   "* libsvn_subr/svn_error.c", 
+   "(initialize_svn_error_descriptions): Squash some compile warnings."
+  ], 
+  "revision_id": "839519"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-06-12T21:43:47.000000Z", 
+  "msg": [
+   "* svn_error.c (initialize_svn_error_descriptions):  duh, we have to", 
+   "*copy* the key before setting it in the hash.", 
+   "(set_error_hash):  new helper routine for this purpose."
+  ], 
+  "revision_id": "839518"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-06-12T20:48:58.000000Z", 
+  "msg": [
+   "* svn_error.c (initialize_svn_error_descriptions): new func - build a", 
+   "hash table that maps svn errorcodes to english descriptions.", 
+   "(svn_strerror):  take a pool instead of stringbuf.  pass", 
+   "this pool to initialize_svn_error_descriptions() the first time this", 
+   "routine is called, and then cache the hash in a static variable", 
+   "thereafter.  use the hash for lookups.", 
+   "(svn_error_strings[]):  removed, now part of hash initialization.", 
+   "* svn_error.h (svn_strerror):  update declaration."
+  ], 
+  "revision_id": "839517"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-06-12T17:41:28.000000Z", 
+  "msg": [
+   "Really, truly fixing bug #388, the Right Way:", 
+   "* svn_delta.h, default_editor.c (abort_edit):  new editor function!", 
+   "Allows the editor-driver to inform the editor of a bailout, so that", 
+   "the editor can do cleanup if it needs to.  All editors now have a", 
+   "'dummy' version of this routine which does nothing.", 
+   "* libsvn_client/commit.c (send_to_repos):  if import() or", 
+   "svn_wc_crawl_local_mods() returns an error, call editor->abort_edit().", 
+   "* compose_editors.c (abort_edit):  write a composed version of this", 
+   "new routine.", 
+   "(svn_delta_compose_editors):  add pointer to composed abort_edit.", 
+   "* svn_repos.h (svn_repos_get_commit_txn):  removed.  this was a Bad Idea.", 
+   "* commit_editor.c (svn_repos_get_commit_txn):  removed.", 
+   "(abort_edit):  this is the only non-dummy version of this editor", 
+   "routine.  It actually calls svn_fs_abort_txn().", 
+   "(svn_repos_get_editor):  add abort_edit to editor.", 
+   "* svn_ra.h (abort_commit):  remove this RA interface, no longer needed.", 
+   "* libsvn_ra_local/ra_plugin.c (abort_commit):  removed.", 
+   "(ra_local_plugin):  remove abort_commit.", 
+   "* libsvn_ra_dav/session.c (dav_plugin):  remove svn_ra_dav__abort_commit", 
+   "* libsvn_ra_dav/commit.c (svn_ra_dav__abort_commit):  removed."
+  ], 
+  "revision_id": "839516"
+ }
+]

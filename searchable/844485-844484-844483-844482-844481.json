@@ -1,0 +1,122 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-01-17T17:07:50.832537Z", 
+  "msg": [
+   "Update the bindings for the apply_textdelta checksum change, plus a", 
+   "couple tweaks to the mailer.py script.", 
+   "* bindings/swig/swigutil_py.c", 
+   "(thunk_apply_textdelta): add the two new checksum parameters and", 
+   "pass them off to the Python callback.", 
+   "* bindings/swig/python/svn/delta.py", 
+   "(Editor.apply_textdelta): take two new checksum params", 
+   "* tools/examples/svnlook.py", 
+   "(ChangedEditor.apply_textdelta): take the new checksum params", 
+   "(DiffEditor.apply_textdelta): take the new checksum params", 
+   "* tools/hook-scripts/mailer.py", 
+   "(PipeOutput.start): pass extra params to the mailer command line so", 
+   "that the proper envelope header can be set.", 
+   "(ChangeCollector.apply_textdelta): take the new checksum params", 
+   "(Config._prep_groups): sections might not have a for_paths option,", 
+   "so they should match everything."
+  ], 
+  "revision_id": "844485"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-17T16:18:55.904760Z", 
+  "msg": [
+   "* subversion/libsvn_fs/tree.c", 
+   "(txn_body_txdelta_finalize_edits): Was txn_body_finalize_edits.", 
+   "(txn_body_fulltext_finalize_edits): Was another_txn_body_finalize_edits.", 
+   "(window_consumer, text_stream_closer): Adjust for above."
+  ], 
+  "revision_id": "844484"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-17T16:04:16.417619Z", 
+  "msg": [
+   "Finish commit checksumming for issue #689, by finishing the work begun", 
+   "in revision 4407: Close the write stream before finalizing the node", 
+   "revision, so the new rep's checksum is stored in time to be available", 
+   "to the dag finalization code.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(window_consumer, text_stream_closer): Don't close streams here...", 
+   "(txn_body_finalize_edits, another_txn_body_finalize_edits):", 
+   "... close them here, but before svn_fs__dag_finalize_edits.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(svn_fs__dag_finalize_edits): Unblock the checksum comparison."
+  ], 
+  "revision_id": "844483"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-01-17T05:16:14.101747Z", 
+  "msg": [
+   "Decided to ditch markup until O'Reilly gets back to me about how they", 
+   "want it (a gazillion subcommands isn't something I want to markup", 
+   "twice).  Dumping everything in a screen block for now.", 
+   "* /trunk/doc/book/book/ch08.xml: About halfway through svn subcommands", 
+   "with the rest of them laid out.", 
+   "* /trunk/doc/book/book/ch05.xml: Change broken xref and mark as TODO."
+  ], 
+  "revision_id": "844482"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-17T04:40:02.103969Z", 
+  "msg": [
+   "More work on issue #689: Put the end-to-end checksum path for commits", 
+   "in place, but leave it disabled at very last step, in", 
+   "svn_fs__dag_finalize_edits, due to mysterious lossage.  CMike, CYa in", 
+   "the morning :-).", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(struct put_baton_t): Add base_checksum and result_checksum fields.", 
+   "(commit_apply_txdelta): Copy the checksums into the put_baton.", 
+   "(commit_stream_close): Put checksums into headers if present.", 
+   "Also, remove obsolete comment.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc_transmit_text_deltas): Pass base_checksum and", 
+   "result_checksum to apply_textdelta.  Also, fix error string.", 
+   "* subversion/mod_dav_svn/dav_svn.h", 
+   "(dav_resource_private): Add base_checksum, result_checksum fields.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_get_resource): Snarf checksums from r->headers_in.", 
+   "(dav_svn_open_stream): Pass checksums through to", 
+   "svn_fs_apply_textdelta.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_apply_textdelta): Take base_checksum and result_checksum", 
+   "arguments.", 
+   "* subversion/libsvn_fs/tree.c: Include svn_md5.h.", 
+   "(txdelta_baton_t): New base_checksum and result_checksum fields.", 
+   "(svn_fs_apply_textdelta): Take base_checksum and result_checksum", 
+   "arguments, copy them into baton.  Also, remove obsolete comment.", 
+   "(txn_body_apply_textdelta): Compare the base_checksum.", 
+   "(txn_body_finalize_edits): Pass the result_checksum through to", 
+   "svn_fs__dag_finalize_edits.", 
+   "* subversion/libsvn_fs/dag.h", 
+   "(svn_fs__dag_finalize_edits): Take new checksum arg.", 
+   "* subversion/libsvn_fs/dag.c: Include svn_md5.h.", 
+   "(svn_fs__dag_finalize_edits): Take new checksum arg, compare it", 
+   "with noderev->edit_key's checksum.  But temporarily set the", 
+   "comparison behind an impossible conditional, as not yet working.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(apply_textdelta): Pass checksum arguments through to", 
+   "svn_fs_apply_textdelta.", 
+   "* subversion/tests/libsvn_repos/dir-delta-editor.c", 
+   "(test_apply_textdelta): Pass checksum arguments through to", 
+   "svn_fs_apply_textdelta.", 
+   "* subversion/tests/fs-helpers.c", 
+   "(svn_test__set_file_contents): Pass nulls for checksum arguments to", 
+   "svn_fs_apply_textdelta.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(file_integrity_helper): Pass nulls for checksum arguments to", 
+   "svn_fs_apply_textdelta.", 
+   "* various files: Deposit \"### todo#689: \" comments in some unhandled", 
+   "transmission cases that don't go through the editor interface, and", 
+   "in some of the locations we'll have to tweak later for updates."
+  ], 
+  "revision_id": "844481"
+ }
+]

@@ -1,0 +1,104 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2008-10-27T11:03:54.072923Z", 
+  "msg": [
+   "Fix the summary of conflicts in updating an external item: the counters were", 
+   "uninitialized.", 
+   "* subversion/svn/notify.c", 
+   "(svn_cl__get_notifier): Initialize the counters of conflicts in externals."
+  ], 
+  "revision_id": "873970"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-10-27T04:46:09.859348Z", 
+  "msg": [
+   "On branch: tree-conflicts-notify", 
+   "Ensure existence of an entry when encountering a tree-conflict on delete of", 
+   "the target itself.", 
+   "Fit a handful of scattered tests to the new tree-conflicts behaviour,", 
+   "after checking that the new results make sense. However, there is one thing", 
+   "still to be verified, marked TODO in revert_tree_conflicts_in_updated_files().", 
+   "* subversion/libsvn_wc/update_editor.c (do_entry_deletion): When encountering", 
+   "a tree-conflict on delete, make sure there is an entry if the victim is", 
+   "also the target of the operation (imitating a non-tree-conflicts case).", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_delete_modified_files, update_deleted_missing_dir,", 
+   "another_hudson_problem): Match new behaviour.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(failed_anchor_is_target): Match new behaviour.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(revert_tree_conflicts_in_updated_files): Match new behaviour.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(tree_conflicts_resolved): Match new behaviour."
+  ], 
+  "revision_id": "873969"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-10-27T02:31:44.674267Z", 
+  "msg": [
+   "On the 'svnpatch-diff' branch:", 
+   "Merge r33500:33893 from trunk."
+  ], 
+  "revision_id": "873968"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-10-26T16:24:54.456879Z", 
+  "msg": [
+   "On the '1.5.x' branch:", 
+   "Polish translation update.", 
+   "* subversion/po/pl.po: Backport some changes from trunk."
+  ], 
+  "revision_id": "873967"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-10-26T08:47:22.069218Z", 
+  "msg": [
+   "When can't print a bad filename, then at least print the directory it's in.", 
+   "(Reproduction recipe given below.)", 
+   "* subversion/libsvn_subr/io.c", 
+   "(entry_name_to_utf8): New helper function to give a better error.", 
+   "(svn_io_get_dirents2, svn_io_copy_dir_recursively, svn_io_remove_dir2,", 
+   "svn_io_get_dir_filenames, svn_io_dir_walk): Use new helper.", 
+   "(svn_io_dir_read): Explain why we don't use the new helper here.", 
+   "* subversion/libsvn_subr/utf.c", 
+   "(invalid_utf8, check_utf8, check_cstring_utf8): Document that the", 
+   "error code is APR_EINVAL.", 
+   "* subversion/include/svn_utf.h: Document that when conversion fails the", 
+   "error code is APR_EINVAL.", 
+   "This change replaces cryptic and uninformative errors...", 
+   "$ svn st -q", 
+   "subversion/libsvn_subr/utf.c:597: (apr_err=22)", 
+   "svn: Valid UTF-8 data", 
+   "(hex: 20)", 
+   "followed by invalid UTF-8 sequence", 
+   "(hex: 90 1b 0a 5a)", 
+   "$", 
+   "...with equally cryptic but more informative errors:", 
+   "$ svn st -q", 
+   "subversion/libsvn_subr/io.c:126: (apr_err=22)", 
+   "svn: Error converting entry in directory 'www' to UTF8", 
+   "subversion/libsvn_subr/utf.c:597: (apr_err=22)", 
+   "svn: Valid UTF-8 data", 
+   "(hex: 20)", 
+   "followed by invalid UTF-8 sequence", 
+   "(hex: 90 1b 0a 5a)", 
+   "$", 
+   "This program will create such a file in cwd for testing:", 
+   "#include <stdio.h>", 
+   "#include <string.h>", 
+   "int main()", 
+   "{", 
+   "const char fname[] = { 0x20, 0x90, 0x1b, 0x0a, 0x5a, 0 };", 
+   "FILE *fp = fopen(fname, \"w\");", 
+   "fclose(fp);", 
+   "}", 
+   "In most Unix shells, you can remove the file with \"rm ' '*\" afterwards."
+  ], 
+  "revision_id": "873966"
+ }
+]

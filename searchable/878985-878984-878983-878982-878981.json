@@ -1,0 +1,92 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-08-22T03:17:22.842132Z", 
+  "msg": [
+   "Follow-up to r38832, fix a callback filter bug.  This fixes the segfaulting", 
+   "JavaHL tests.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_log_entry_t): Add new non_inheritable member.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(filter_log_entry_with_rangelist): Fix bug from r38832, pass the callback", 
+   "baton to the log receiver callback, *that* is what it is expecting.", 
+   "Determine if the log entry is represented in the the mergeinfo by an", 
+   "inheritable or non-inheritable revision (if at all) and stash this info", 
+   "in the new svn_log_entry_t member.", 
+   "* subversion/svn/mergeinfo-cmd.c", 
+   "(print_log_rev): Print the '*' decorator for partially merged/available", 
+   "revisions based on the new svn_log_entry_t member."
+  ], 
+  "revision_id": "878985"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-08-22T00:52:49.394202Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_replace_causes_tree_conflict): Comment."
+  ], 
+  "revision_id": "878984"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-08-21T22:49:57.346122Z", 
+  "msg": [
+   "Doc string tweaks in svnsync.", 
+   "* subversion/svnsync/main.c", 
+   "(filter_props): Clarify wording in the doc string.", 
+   "(write_revprops): Add missing info to the doc string.", 
+   "(filter_exclude_date_author_sync, filter_include_date_author_sync,", 
+   "filter_exclude_log, filter_include_log): Improve doc strings."
+  ], 
+  "revision_id": "878983"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-08-21T22:38:10.739919Z", 
+  "msg": [
+   "A trivial tweak to a local variable's type in svnsync.", 
+   "* subversion/svnsync/main.c", 
+   "(remove_props_not_in_source): Give the hash key variable its proper data", 
+   "type, not \"void *\"."
+  ], 
+  "revision_id": "878982"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-08-21T20:57:01.503983Z", 
+  "msg": [
+   "Use conflict action and reason types for replaced items added in r38903", 
+   "when flagging and reporting tree conflicts during update and merge.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_wc_with_replaced_file): Adjust some comments.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(check_tree_conflict): If an item is schedule-replace, use this as", 
+   "the conflict reason (a.k.a. local change). Apart from that, treat the", 
+   "replaced case just like delete (an open question, for me, is whether", 
+   "this is fine in all situations).", 
+   "(schedule_existing_item_for_re_add): Make tweaking copy-from info", 
+   "optional, controlled by new boolean parameter MODIFY_COPYFROM.", 
+   "(do_entry_deletion): If the update wants to delete a replaced item,", 
+   "don't carry out the delete. Instead, bump the item to the revision", 
+   "being updated to (to avoid the merry-go-around problem), and re-schedule", 
+   "it as newly added, with or without history depending on whether the", 
+   "replacing item had copyfrom info to begin with.", 
+   "(open_directory, open_file): Treat the replaced case like the deleted case.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(tree_conflict_on_add): If a victim is replaced, keep the reason (the local", 
+   "change) and source-left-version information from the first time we flagged", 
+   "a tree conflict for the victim, and set the action (the incoming change)", 
+   "to 'replace'. Also, stop bothering about node kinds here -- we can change", 
+   "the tree conflict reason to 'replace' no matter what the node kinds are.", 
+   "(merge_file_added): When a locally versioned file blocks the addition", 
+   "of a file during merge, figure out the scheduling state of the local", 
+   "file and use it to describe the conflicting local change more precisely.", 
+   "Patch by: me", 
+   "julianfoad", 
+   "Review by: sbutler", 
+   "(for an earlier version of this diff)"
+  ], 
+  "revision_id": "878981"
+ }
+]

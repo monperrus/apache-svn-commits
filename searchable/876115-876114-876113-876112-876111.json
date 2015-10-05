@@ -1,0 +1,112 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-02-22T06:16:35.050669Z", 
+  "msg": [
+   "Reserve space for a wc_db in the shared area of the adm_access baton.", 
+   "To support continued future modifications, this revision simplifies a", 
+   "number of codepaths and functions within lock.c for better readability,", 
+   "understandability, and (for the short term needed) maintenance.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_upgrade_format): remove ADM_ACCESS parameter. unused.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_steal_write_lock): remove ASSOCIATED parameter. unused.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_upgrade_format): remove ADM_ACCESS parameter.", 
+   "(svn_wc_cleanup2): adjust call to svn_wc__adm_steal_write_lock.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_shared_t): add a DB field to hold a reference to a wc_db", 
+   "handle (for future use).", 
+   "(maybe_upgrade_format): adjust call to svn_wc__loggy_upgrade_format.", 
+   "(create_lock): remove WAIT_FOR param. all callers passed 0.", 
+   "(adm_access_alloc): return an error, move lock to an OUT param. take a", 
+   "lock type, and (if a write lock) create the actual lock.", 
+   "(add_to_shared): helper function to add a lock into a shared set.", 
+   "(adm_ensure_set): use add_to_shared.", 
+   "(svn_wc__adm_steal_write_lock): remove ASSOCIATED param. adjust call to", 
+   "adm_access_alloc and remove unneeded call to create_lock.", 
+   "(do_open): remove UNDER_CONSTRUCTION param. the one caller grabbed the", 
+   "six lines out of this function needed for when that was true. remove", 
+   "the SHARED param. if the caller wants the new lock to be part of a", 
+   "shared set, then the *caller* should manage that once the lock has", 
+   "been created. adjust call to adm_access_alloc. simplify recursion code", 
+   "by joining all child baton's into the new lock's shared set (rather", 
+   "than the 'fake_shared' stuff. use add_to_shared to mark off missing or", 
+   "obstructed children in the new lock.", 
+   "(svn_wc_adm_open3): look in ASSOCIATED to see if the new/requested path", 
+   "is already present (this test was in do_open). adjust call to do_open.", 
+   "after the lock has been created, possibly join it into the ASSOCIATED", 
+   "sharead set.", 
+   "(svn_wc__adm_pre_open): remove the do_open call and just put the", 
+   "appropriate code here (short when you considered the const params)", 
+   "(join_batons): target shared set can be identified by just the shared", 
+   "info rather than a whole batan, so adjust param. use add_to_shared", 
+   "within the function to simplify. leave calling adm_ensure_set to the", 
+   "caller.", 
+   "(svn_wc_adm_open_anchor): switch do_close calls to svn_wc_adm_close2 now", 
+   "that the latter takes a pool. adjust do_open calls to remove unused", 
+   "parameters. adust call to join_batons. tweak error case where we know", 
+   "p_access is non-NULL, so no need to test. use add_to_shared."
+  ], 
+  "revision_id": "876115"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2009-02-22T04:00:17.852325Z", 
+  "msg": [
+   "* subversion/libsvn_auth_gnome_keyring/gnome_keyring.c", 
+   "(): Remove include of <svn_cmdline.h>", 
+   "Suggested by: danielsh"
+  ], 
+  "revision_id": "876114"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2009-02-22T03:53:00.578434Z", 
+  "msg": [
+   "* build/run_tests.py", 
+   "(run): Report the number of 'PASSED' tests in the test summary.", 
+   "Suggested by: Kevin Radke <kmradke@gmail.com>"
+  ], 
+  "revision_id": "876113"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-02-22T01:35:41.948805Z", 
+  "msg": [
+   "On the 'python-3-compatibility' branch:", 
+   "Merge r35909:36037 from trunk."
+  ], 
+  "revision_id": "876112"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-21T01:27:40.833069Z", 
+  "msg": [
+   "[This revision was mostly reverted in r36061. The functionality of", 
+   "svn_dirent_entryname was folded into svn_dirent_basename]", 
+   "In preparation for fixing issue #2556 (and as part of issue #1711), add", 
+   "functions to split a dirent in a path and an entry name (the name of the", 
+   "entry as it is known in its parent). This will allow handling drive roots", 
+   "(E.g. \"G:/\" on Windows) like normal paths..", 
+   "Note that svn_dirent_entryname and svn_dirent_splitentry are almost", 
+   "identical to svn_dirent_basename and svn_dirent_split, with roots as", 
+   "notable exception.", 
+   "Generally client libraries should use the basename variants while the", 
+   "administrative area handling should use the entryname variants.", 
+   "* subversion/include/svn_dirent_uri.h", 
+   "(svn_dirent_entryname): New function.", 
+   "(svn_dirent_split): Fix documentation of windows specific examples.", 
+   "(svn_dirent_splitentry): New function.", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(svn_dirent_entryname): New function.", 
+   "(svn_dirent_splitentry): New function.", 
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(test_dirent_entryname): New function.", 
+   "(test_dirent_splitentry): New function.", 
+   "(test_funcs): Add test_dirent_entryname and", 
+   "test_dirent_splitentry."
+  ], 
+  "revision_id": "876111"
+ }
+]

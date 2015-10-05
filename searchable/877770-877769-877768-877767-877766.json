@@ -1,0 +1,85 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T09:22:28.913733Z", 
+  "msg": [
+   "Fix up merge_tests 101. This has been failing due to API Errata wc003.txt.", 
+   "In short, the merge code records state for all children in a copied tree", 
+   "as if each child was individually added. However, the *net* effect is the", 
+   "same as a single copy of the root. The wc-ng code coalesces these apparent", 
+   "multiple adds into a single add of the root.", 
+   "This has a visible effect of removing the 'A' status on child nodes, and", 
+   "adding just the root (and recursively, its children) at commit time.", 
+   "Adjust the test to reflect this New World Order.", 
+   "* subversion/tests/cmdline/merge_tests.py:", 
+   "(commit_to_subtree_added_by_merge): adjust test output per wc003.txt"
+  ], 
+  "revision_id": "877770"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T08:00:52.924227Z", 
+  "msg": [
+   "For the work items, split one requirement into two (idempotent, and", 
+   "resumable). Also, add another requirement about completeness.", 
+   "* notes/wc-ng-design: further detail on work items"
+  ], 
+  "revision_id": "877769"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-05-12T05:18:38.193237Z", 
+  "msg": [
+   "Explain (sorta) some disabled code for posterity.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(end_report): Use a proper #if-0 instead of a random #ifdef, and", 
+   "explain why the code is disabled.  Also, handle the error from the", 
+   "get_wc_prop callback, rather than potentially leaking it."
+  ], 
+  "revision_id": "877768"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-05-12T05:17:58.923527Z", 
+  "msg": [
+   "Get some more DAV tests passing again by restoring old-wc behavior to", 
+   "the wc-ng wcprops fetching code.", 
+   "### Reverted in r37702 ###", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_base_get_dav_cache): Tolerate requests on unversioned", 
+   "items like the old WC did."
+  ], 
+  "revision_id": "877767"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-11T22:00:26.922798Z", 
+  "msg": [
+   "Clean out a bunch of obsolete stuff from log.c. Since we no longer write", 
+   "certain log actions, and we never have to process logs from *before* 1.7,", 
+   "then we can simply eliminate support for the deprecated actions.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(SVN_WC__LOG_ATTR_ARG_1, SVN_WC__LOG_ATTR_ARG_2, SVN_WC__LOG_ATTR_ARG_4,", 
+   "SVN_WC__LOG_ATTR_ARG_5): removed. these attrs never used.", 
+   "(SVN_WC__LOG_CP, SVN_WC__LOG_CP_AND_DETRANSLATE, SVN_WC__LOG_MERGE):", 
+   "removed. these log actions are never used.", 
+   "(struct log_runner): remove 'diff3_cmd' member. we no longer do merges", 
+   "here, so this is not required.", 
+   "(svn_wc__xfer_cp, svn_wc__xfer_cp_and_detranslate): these xfer", 
+   "operations are no longer used.", 
+   "(file_xfer_under_path): remove some xfer operations that are not used", 
+   "(log_do_merge): this action is no longer used", 
+   "(start_handler): remove some actions that are no longer used", 
+   "(run_log_from_memory): without the merge action, this is not used.", 
+   "(run_log): remove the DIFF3_CMD parameter. don't stash it into the", 
+   "log_runner structure.", 
+   "(svn_wc__run_log): update call to run_log()", 
+   "(run_existing_logs): remove the DIFF3_CMD parameter. update calls to", 
+   "cleanup_internal and run_log.", 
+   "(cleanup_internal): remove the DIFF3_CMD parameter. update call to", 
+   "run_existing_logs.", 
+   "(svn_wc_cleanup2): update the call to cleanup_internal"
+  ], 
+  "revision_id": "877766"
+ }
+]

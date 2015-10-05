@@ -1,0 +1,122 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-07-03T21:54:42.395255Z", 
+  "msg": [
+   "More prop wc-ng API cleanup.  (Almost done with the client-layered stuff.)", 
+   "* subversion/libsvn_client/merge.c", 
+   "(files_same_p): Add a wc_ctx param, and use it with the updated APIs.", 
+   "(merge_file_deleted): Update calls to functions with wc_ctx param.", 
+   "(get_mergeinfo_walk_baton): Add wc_ctx member.", 
+   "(get_subtree_mergeinfo_walk_cb, get_mergeinfo_walk_cb,", 
+   "record_mergeinfo_for_added_subtrees): Get a local path, and update API calls.", 
+   "(svn_client_merge_reintegrate, get_mergeinfo_paths): Initialize new baton", 
+   "member.", 
+   "(get_subtree_mergeinfo_walk_baton): New member."
+  ], 
+  "revision_id": "878405"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-03T21:42:55.969827Z", 
+  "msg": [
+   "Update a few wc-ng deprecated function calls in libsvn_client.", 
+   "* subversion/libsvn_client/cat.c", 
+   "(cat_local_file): Add a wc_ctx parameter, and use it to call the updated", 
+   "APIs.", 
+   "(svn_client_cat2): Create (or reuse) a wc_context, and update the call to", 
+   "cat_local_file()."
+  ], 
+  "revision_id": "878404"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-03T21:29:24.196832Z", 
+  "msg": [
+   "A few more wc_context and API updates to mergeinfo.c.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(elide_mergeinfo): Use a wc_ctx and absolute path.  Update calls to the old", 
+   "wc API.", 
+   "(svn_client__elide_children, svn_client__elide_mergeinfo): Update calls to", 
+   "elide_mergeinfo() with absolute paths and wc_ctx."
+  ], 
+  "revision_id": "878403"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-03T19:25:44.921106Z", 
+  "msg": [
+   "Let callers to svn_client__get_prop_from_wc() supply a working copy context,", 
+   "in place of creating one each time this function is called.", 
+   "The result of this change is many new wc_ctx function parameters, primarily", 
+   "within mergeinfo.c and merge.c.  The paradigm we are shooting for is that", 
+   "client APIs create a wc_ctx (or reuse ctx->wc_ctx), and then pass it around", 
+   "where ever needed.  Although this is similar to passing adm_access batons", 
+   "everywhere, the key insight is that the wc_ctx doesn't change depending on", 
+   "which working copy directory or path we are accessing, which ultimately", 
+   "means less trouble for the callers.", 
+   "Also, as much as I would love to, we can't yet remove all the adm_access", 
+   "batons, since there are still many APIs which require them. :(", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_prop_from_wc): Add wc_ctx param.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): Add wc_ctx member.", 
+   "(get_full_mergeinfo, inherit_implicit_mergeinfo_from_parent,", 
+   "ensure_implicit_mergeinfo, filter_merged_revisions,", 
+   "calculate_remaining_ranges, populate_remaining_ranges,", 
+   "calculate_merge_inheritance, do_merge,", 
+   "merge_cousins_and_supplement_mergeinfo):", 
+   "Add wc_ctx param and propogate it to other function calls.", 
+   "(record_skips, get_mergeinfo_paths, do_file_merge,", 
+   "process_children_with_new_mergeinfo, record_mergeinfo_for_dir_merge,", 
+   "record_mergeinfo_for_added_subtrees):", 
+   "Use the wc_ctx from the merge_baton to call other functions.", 
+   "(svn_client_merge3, svn_client_merge_reintegrate, svn_client_merge_peg3):", 
+   "Create (or reuse) a wc_ctx for further use.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(svn_client__get_prop_from_wc): Add wc_ctx param, and use it instead of", 
+   "creating one.", 
+   "(svn_client_propget3): Get a wc_ctx for later use.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo, extend_wc_mergeinfo, repos_to_repos_copy,", 
+   "wc_to_repos_copy, repos_to_wc_copy_single, try_copy):", 
+   "Add wc_ctx param and propogate it to other function calls.", 
+   "(svn_client_copy5): Allocate the context from the correct pool.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__parse_mergeinfo, svn_client__get_wc_mergeinfo,", 
+   "svn_client__get_wc_or_repos_mergeinfo, svn_client__elide_children,", 
+   "svn_client__elide_mergeinfo, svn_client__elide_mergeinfo_for_tree,", 
+   "get_mergeinfo):", 
+   "Add wc_ctx param and propogate it to other function calls.", 
+   "(svn_client__record_wc_mergeinfo):", 
+   "Add wc_ctx param, remove access baton, and make sure the path we", 
+   "receive is an absolute path.  Update deprecated function call while", 
+   "we're here.", 
+   "(svn_client_mergeinfo_log_merged, svn_client_mergeinfo_get_merged,", 
+   "svn_client_mergeinfo_log_eligible, svn_client_suggest_merge_sources):", 
+   "Get a wc_ctx to use.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo, svn_client__get_wc_or_repos_mergeinfo,", 
+   "svn_client__elide_mergeinfo, svn_client__elide_children,", 
+   "svn_client_elide_mergeinfo_for_tree):", 
+   "Add wc_ctx param.", 
+   "(svn_client__record_wc_mergeinfo): Remove adm_access baton param, and add", 
+   "a wc_ctx param.  Update docs."
+  ], 
+  "revision_id": "878402"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-03T15:11:27.082536Z", 
+  "msg": [
+   "Migrate very important information to a place where it's much easier", 
+   "to find.", 
+   "* subversion/tests/cmdline/README:", 
+   "Explain how to run tests in a RAM disk. Copied verbatim from the FAQ.", 
+   "* www/faq.html", 
+   "(ramdisk-tests): Instead of having the answer to the \"ram disk\" question", 
+   "here, link to cmdline/README."
+  ], 
+  "revision_id": "878401"
+ }
+]

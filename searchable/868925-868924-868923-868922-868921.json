@@ -1,0 +1,87 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-01-10T17:07:59.919771Z", 
+  "msg": [
+   "Step 4 in removing repos-level checks using mergeinfo created on a copy:", 
+   "Remove svn_repos__is_branching_copy(), which now always returns FALSE, and", 
+   "update callers.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(find_interesting_revisions): Don't check for branching copies, because we", 
+   "can't reliably detect them now.", 
+   "* subversion/libsvn_repos/repos.h,", 
+   "subversion/libsvn_repos/log.c", 
+   "(svn_repos__is_branching_copy): Remove."
+  ], 
+  "revision_id": "868925"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-01-10T16:43:20.782189Z", 
+  "msg": [
+   "Step 3 in removing repos-level checks using mergeinfo created on a copy:", 
+   "Remove the mergeinfo filter function argument and baton from", 
+   "svn_fs_get_mergeinfo_for_tree().  The filter was only used in one place, was", 
+   "a giant hack to begin with, and is now no longer needed.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(get_combined_mergeinfo): Remove filter and baton parameters for", 
+   "svn_fs_get_mergeinfo_for_tree().", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(svn_fs_mergeinfo__get_mergeinfo_for_tree, get_mergeinfo_for_children):", 
+   "Stop using the filter parameters.", 
+   "* subversion/include/svn_fs.h,", 
+   "subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_get_mergeinfo_for_tree): Remove filter and baton parameters.", 
+   "(svn_fs_mergeinfo_filter_func_t): Remove.", 
+   "* subversion/include/private/svn_fs_mergeinfo.h", 
+   "(svn_fs_mergeinfo__get_mergeinfo_for_tree): Same.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t.get_mergeinfo_for_tree): Same."
+  ], 
+  "revision_id": "868924"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-01-10T16:27:52.658093Z", 
+  "msg": [
+   "Step 2 in removing repos-level checks using mergeinfo created on a copy:", 
+   "Remove branching_copy_filter() and its associated baton.  Because", 
+   "svn_repos__is_branching_copy() always returns FALSE, the filter function", 
+   "would always return FALSE also, and is now redundant.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(branching_copy_filter, filter_baton): Remove.", 
+   "(get_combined_mergeinfo): Just use NULL for the filter and baton when calling", 
+   "svn_fs_get_mergeinfo_for_tree()."
+  ], 
+  "revision_id": "868923"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-01-10T16:22:43.086304Z", 
+  "msg": [
+   "Step 1 in removing repos-level checks using mergeinfo created on a copy:", 
+   "Stop duplicating functionality of the long-gone", 
+   "libsvn_client/copy.c:get_implied_mergeinfo(), and update callers.", 
+   "Note: This creates a failure in blame test 11.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(calculate_branching_copy_mergeinfo): Remove.", 
+   "(svn_repos__is_branching_copy): Remove use of", 
+   "calculate_branching_copy_mergeinfo(), and always return FALSE."
+  ], 
+  "revision_id": "868922"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-01-10T16:14:40.677363Z", 
+  "msg": [
+   "On the issue-2897 branch:", 
+   "Be *paranoid* about corrupting 'WC adm files'.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(reflective_merge_file_changed): Make a disk copy of OLDER,", 
+   "merge the reflected ranges to the COPIED_OLDER and merge", 
+   "the difference between COPIED_OLDER and YOURS to MINE.", 
+   "Found by: glasser"
+  ], 
+  "revision_id": "868921"
+ }
+]

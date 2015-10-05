@@ -1,0 +1,96 @@
+[
+ {
+  "author": "brane", 
+  "date": "2006-12-31T01:05:40.971577Z", 
+  "msg": [
+   "Support building DLLs on Windows. This closes #1627.", 
+   "Patch by: Vlad Georgescu <vgeorgescu@gmail.com>", 
+   "rey4", 
+   "(Tweaked by me.)", 
+   "* build.conf:", 
+   "(libsvn_client, libsvn_delta, libsvn_diff, libsvn_fs,", 
+   "libsvn_ra, libsvn_repos, libsvn_subr, libsvn_wc):", 
+   "Replace the msvc_static option with a msvc_export option containing the", 
+   "list of public header files for that library.", 
+   "(swig_client, swig_delta, swig_fs, swig_ra, swig_repos):", 
+   "Add dependency on APR.", 
+   "(svnserve): Add dependency on advapi32.lib", 
+   "* build/generator/extractor.py:", 
+   "Handle svn_ctype_table.", 
+   "(_filter_names): Add svn_auth_get_keychain_simple_provider.", 
+   "* build/generator/gen_win.py", 
+   "(create_dll_target): New. Given a static library, it creates a new", 
+   "dynamic library target that depends on that library.", 
+   "(get_install_targets): Call create_dll_target for each target that has", 
+   "msvc_export set.", 
+   "(get_linked_win_depends): Scan the dependency tree in breadth-first", 
+   "order, allowing us to prevent cases when both a dll and its", 
+   "corresponding static library are linked into a project.", 
+   "(get_def_file): Return a name that's in a generated directory, not", 
+   "in the source tree.", 
+   "* build/generator/vcnet_vcproj.ezt,", 
+   "build/generator/msvc_dsp.ezt:", 
+   "Add empty.c as a source file for dll projects, because Visual Studio", 
+   "refuses to build a project's outputs if it has no source files.", 
+   "* build/win32/empty.c: New file.", 
+   "* gen-make.py:", 
+   "Handle the new --disable-shared option.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_dav_init, svn_ra_svn_init, svn_ra_local_init, svn_ra_serf_init):", 
+   "Implement these here if their corresponding libraries are not linked in,", 
+   "and have them return a \"not implemented\" error.", 
+   "* subversion/libsvn_subr/ctype.c", 
+   "(svn_ctype_table_internal): Rename from ctype_table. Remove 'static'", 
+   "qualifier.", 
+   "* win-tests.py:", 
+   "Append the paths to our libraries' dlls to the PATH environment variable."
+  ], 
+  "revision_id": "862915"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2006-12-30T23:56:02.880535Z", 
+  "msg": [
+   "Avoid shell-meta fun when constructing a test WC path.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_wc_on_windows_drive): Use '/' to construct the WC path."
+  ], 
+  "revision_id": "862914"
+ }, 
+ {
+  "author": "marcelg", 
+  "date": "2006-12-30T16:24:56.220977Z", 
+  "msg": [
+   "Fix French translation", 
+   "* subversion/po/fr.po:", 
+   "Fix French translation", 
+   "Patch by: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>"
+  ], 
+  "revision_id": "862913"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-12-30T07:02:52.661209Z", 
+  "msg": [
+   "Don't setup svnserve if svnserve isn't needed.", 
+   "* subversion/bindings/swig/ruby/test/util.rb", 
+   "(SvnTestUtil#setup_basic): Add flag to determin whether svnserve is", 
+   "setup or not.", 
+   "(SvnTestUtil#teardown_basic): Don't teardown if svnserve isn't setup.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#setup): Setup svnserve."
+  ], 
+  "revision_id": "862912"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-12-30T06:01:39.476242Z", 
+  "msg": [
+   "Support preparing test environment for non-installation test on Windows.", 
+   "* subversion/bindings/swig/ruby/test/run-test.rb: Use copy instead of", 
+   "symbolic link on Windows.", 
+   "Suggested by: Joe Swatosh"
+  ], 
+  "revision_id": "862911"
+ }
+]

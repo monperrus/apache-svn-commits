@@ -1,0 +1,104 @@
+[
+ {
+  "author": "striker", 
+  "date": "2003-05-26T10:28:35.146806Z", 
+  "msg": [
+   "* INSTALL", 
+   "(III.A.1): Correct the cvs command to retrieve the HEAD of httpd-2.0.  The", 
+   "previous instructions would lead to retrieval of httpd-2.1.", 
+   "(III.C): Add a note about ordering of LoadModule directives in httpd.conf."
+  ], 
+  "revision_id": "846120"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-26T06:06:41.901302Z", 
+  "msg": [
+   "Clean up ra_svn error handling as it pertains to reporters and editors", 
+   "and command loops.  Pipeline reporter operations.  (Still to do: clean", 
+   "up error handling of get-file and apply-textdelta; pipeline", 
+   "change-dir-prop and change-file-prop.)", 
+   "This is a mondo incompatible protocol change.", 
+   "* include/svn_repos.h", 
+   "(svn_repos_finish_report): Document that the caller has the", 
+   "responsibility for aborting the edit if there is an error, if", 
+   "anyone is going to do so.", 
+   "* libsvn_ra_svn/protocol:", 
+   "(commit): Note that we only get commit info on successful edit.", 
+   "(update, switch, status, diff): Delay response until after report", 
+   "and edit, so that the client can find out about reporter or editor", 
+   "errors.", 
+   "(log): Document that a log-entry can be the word \"done\".  Document", 
+   "that the response is delayed until the end (as of rev 5371).", 
+   "(set-path, delete-path, link-path, finish-report, abort-report):", 
+   "Pipeline, by eliminating the command responses.  Errors will be", 
+   "reported in the command response of the command which invokes the", 
+   "report.", 
+   "* include/svn_ra_svn.h, libsvn_ra_svn/editor.c, libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_handle_commands, svn_ra_svn_drive_editor): Eliminate", 
+   "pass_through_errors.  It's no longer needed now that we can report", 
+   "server->client editing errors back to the client.f", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_set_path, ra_svn_delete_path, ra_svn_link_path,", 
+   "ra_svn_abort_report): For pipelining, don't read a response.  For", 
+   "now, we still have to flush on each report operation because of the", 
+   "double-flushing conundrum presented by APR pipe objects.", 
+   "(ra_svn_finish_report): Read a command response after driving the", 
+   "editor; this is where we find out errors resulting from reporter or", 
+   "editor operations.", 
+   "(ra_svn_update, ra_svn_switch, ra_svn_status, ra_svn_diff): Delay", 
+   "command response until after report and edit operations.  We also", 
+   "have to flush here because of the double-flushing problem.", 
+   "* svnserve/serve.c", 
+   "(report_driver_baton_t): Add a new field \"err\" to record failures", 
+   "resulting from reporter or editor operations.", 
+   "(set_path, delete_path, link_path, finish_report, abort_report):", 
+   "Remove command responses, for pipelining.", 
+   "(handle_report): Removed in favor of accept_report.", 
+   "(accept_report): New function to implement the back half of", 
+   "update/switch/status/diff.  Accept a report, drive an editor, and", 
+   "write out a command response or return a command error.", 
+   "(commit): If a client edit command results in an error, don't pass", 
+   "it through; wait for the client to abort the edit or abandon the", 
+   "connection.  If the client aborts the edit, don't try to report", 
+   "commit info.", 
+   "(update, switch_cmd, status, diff): Use new accept_report function", 
+   "to implement the back half.", 
+   "(serve): Fix up call site of svn_ra_svn_handle_commands."
+  ], 
+  "revision_id": "846119"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-26T05:58:30.718343Z", 
+  "msg": [
+   "Make it easier (though not trivial) to run just one kind of test.", 
+   "* Makefile.in", 
+   "(TESTS): New variable combinng $(TEST_PROGRAMS) and", 
+   "@FS_TEST_PROGRAMS@, so that they can both be overridden at once.", 
+   "(check): Document TESTS and CLEANUP variables in comments."
+  ], 
+  "revision_id": "846118"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-26T00:18:31.498973Z", 
+  "msg": [
+   "* libsvn_ra_svn/marshal.c (svn_ra_svn_handle_commands): Style police."
+  ], 
+  "revision_id": "846117"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-05-25T23:06:20.138610Z", 
+  "msg": [
+   "Get \"make install\" working on Cygwin.", 
+   "Patch by: Max Bowsher <maxb@ukf.net>", 
+   "* Makefile.in (EXEEXT): New make variable set by configure.", 
+   "* configure.in: AC_SUBST(EXEEXT).", 
+   "* build/generator/gen_make.py (_extension_map): For programs, allow", 
+   "configure to detect the correct extension."
+  ], 
+  "revision_id": "846116"
+ }
+]

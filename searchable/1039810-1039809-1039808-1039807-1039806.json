@@ -1,0 +1,95 @@
+[
+ {
+  "author": "boisvert", 
+  "date": "2010-11-28T01:47:20.103650Z", 
+  "msg": [
+   "BUILDR-544 Support  in pom files (Chris Dean)"
+  ], 
+  "revision_id": "1039810"
+ }, 
+ {
+  "author": "igalic", 
+  "date": "2010-11-28T01:37:39.402616Z", 
+  "msg": [
+   "s/cvs/svn/"
+  ], 
+  "revision_id": "1039809"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-11-28T00:52:56.732735Z", 
+  "msg": [
+   "[ Note from the future: reverted in r1040135 ]", 
+   "Add a new wc-ng API for recursive property listing.", 
+   "Make svn_client_propset3() use the new API for proplist with depth=infinity.", 
+   "With this API the working copy library \"crawls\" nodes using DB queries,", 
+   "without requiring callers to manually crawl the working copy with", 
+   "svn_wc__node_walk_children() and call svn_wc_prop_list2() on each node.", 
+   "A callback is invoked for each node found in the working copy that", 
+   "has properties. Each callback invocation corresponds to one result", 
+   "row of the queries issued and one sqlite step.", 
+   "The API is not fully implemented yet -- the only depth currently supported", 
+   "is 'infinity'. I hope to fix this soon. It will require tweaking the queries", 
+   "a little (and my SQL is a bit rusty...).", 
+   "gprof says this change speeds up \"svn proplist -R svn-trunk-wc >/dev/null\"", 
+   "on my box from about 0.35s to about 0.11s. During profiled runs, the function", 
+   "sqlite3Step() went from using 27% of the total time down to 15%. The time spent", 
+   "within and below svn_client_proplist3() went down from 51% to 36%.", 
+   "The profiler overhead accounted for about 31% of the total run time", 
+   "before this change and about 45% after.", 
+   "I hope this is going in the right direction -- I'm a bit detached from", 
+   "current wc-ng developments so I cannot be sure if this commit is in", 
+   "accordance with The Plan. If it is wrong for some reason just let me know :)", 
+   "I'm currently planning to create a similar interface for getting pristine", 
+   "props, and looking into making recursive propget use a similar approach.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_prop_list_receiver_func_t): Declare new callback type.", 
+   "(svn_wc_prop_list_recursive): Declare.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_prop_list_recursive): New API described above.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_NODE_PROPS_RECURSIVE,", 
+   "STMT_SELECT_ACTUAL_PROPS_RECURSIVE): New queries to read properties", 
+   "from the NODES and ACTUAL_NODE tables. The queries filter nodes that", 
+   "svn_client_proplist3() isn't interested in (e.g. nodes that are locally", 
+   "deleted). Each query also filters nodes selected by the other query,", 
+   "so they can be run one after the other to produce a valid property listing.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(read_props_recursive_run_query): New. Issues a given query for properties", 
+   "within a working copy subtree and invokes a receiver callback for", 
+   "each node with properties.", 
+   "(svn_wc__db_read_props_recursive): New. Low-level interface invoked by", 
+   "svn_wc_prop_list_recursive().", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_props_recursive): Declare.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(recursive_proplist_receiver_baton): New. Very similar to the existing", 
+   "propget_walk_baton but kept separate in anticipation of the latter", 
+   "baton's eventual removal.", 
+   "(recursive_proplist_receiver): New. Similar to propget_walk_cb() but a lot", 
+   "simpler because the working copy library does the bulk of the work now.", 
+   "(svn_client_proplist3): Call svn_wc_prop_list_recursive() for the case it", 
+   "already supports (depth=infinity)."
+  ], 
+  "revision_id": "1039808"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2010-11-28T00:45:33.266954Z", 
+  "msg": [
+   "o Renamed the AbstractReadByteArray class", 
+   "o Added an AbstractReadOctetString class"
+  ], 
+  "revision_id": "1039807"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2010-11-28T00:44:45.643395Z", 
+  "msg": [
+   "o removed unused imports", 
+   "o fixed typos", 
+   "o fixed code formatting convention"
+  ], 
+  "revision_id": "1039806"
+ }
+]

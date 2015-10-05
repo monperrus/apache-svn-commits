@@ -1,0 +1,107 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T00:49:11.137417Z", 
+  "msg": [
+   "Remove some unused code.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc__loggy_props_delete): remove the wcprop branch. no caller ever", 
+   "asks to delete all wcprops."
+  ], 
+  "revision_id": "877165"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T00:28:22.274491Z", 
+  "msg": [
+   "Revamp the opening of a wc DB and some bits on how per-directory", 
+   "information is handled. In particular, we no longer require a path at open", 
+   "time. Instead, we'll simply work with any/all paths thrown at the DB. It", 
+   "is intended to be multi-wcroot, multi-directory, and there is no need to", 
+   "know anything at open time.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_open): remove LOCAL_ABSPATH parameter. rewrite docstring.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(UNKNOWN_FORMAT): new distinguished constant", 
+   "(create_wcroot): store UNKNOWN_FORMAT into the new wcroot", 
+   "(open_one_directory, new_db_state): removed", 
+   "(get_or_create_pdh): get a PDH from the hash, or slap one together. some", 
+   "of the concept is from the old open_one_directory.", 
+   "(svn_wc__db_open): remove the LOCAL_ABSPATH parameter. fold new_db_state", 
+   "into this function.", 
+   "(svn_wc__db_pristine_get_handle): gut, in favor of get_or_create_pdh", 
+   "(svn_wc__db_temp_get_format): rename parameter. use get_or_create_pdh to", 
+   "fetch a PDH, and return the format from its wcroot.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_get_db): don't worry about paths. just open the DB."
+  ], 
+  "revision_id": "877164"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T22:19:26.201236Z", 
+  "msg": [
+   "Followup to r36088: Don't error on the experimental wc-ng format.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(check_format): Accept by SVN_WC__VERSION and SVN_WC__VERSION_EXPERIMENTAL."
+  ], 
+  "revision_id": "877163"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-07T21:58:02.805065Z", 
+  "msg": [
+   "Move the actual upgrading of working copies from any write operation to", 
+   "'svn cleanup'.  If a user attempts to use an old-style working copy, ask", 
+   "them to do an explicit cleanup to upgrade.", 
+   "This change may be a little rough around the edges, so copious review", 
+   "is encouraged.  Specifically, I'm not yet sure how it handles existing", 
+   "logs in various states.  I plan on adding future tests for these scenarios.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(check_format): New.", 
+   "(basic_upgrade): Adjust expectations to reflect the actual error message", 
+   "in the code.", 
+   "(upgrade_1_5): New test.", 
+   "(test_list): Run the new test, mark the exist test as passing.", 
+   "* subversion/tests/cmdline/upgrade_tests_data/upgrade_1_5.tar.bz2:", 
+   "Add a 1.5-era working copy for the tests.", 
+   "* subversion/svn/cleanup-cmd.c", 
+   "(svn_cl__cleanup): Call the new API.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_cleanup2): Deprecate.", 
+   "(svn_wc_cleanup3): New.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_cleanup2): New.", 
+   "(svn_client_cleanup): Deprecate.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_cleanup2): Add as a wrapper around the new function.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc__upgrade_format): Renamed from maybe_upgrade_format().  Pool", 
+   "variables renamed per convention, also don't worry about existing logs,", 
+   "since we now want to upgrade prior to running logs.", 
+   "(create_lock): Adjust comments.", 
+   "(check_format_upgrade): New.", 
+   "(svn_wc__adm_steal_write_lock): Don't check the format, or attempt to upgrade", 
+   "the working copy.  Leave a note as to why.", 
+   "(do_open): Check the format on *any* access, not just a write.", 
+   "* subversion/libsvn_wc/lock.h", 
+   "(svn_wc__upgrade_format): New.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(upgrade_working_copy, post_upgrade_cleanup, svn_wc_cleanup3): New.", 
+   "(cleanup_internal): Largely copied from the old svn_wc_cleanup2().", 
+   "* subversion/libsvn_client/cleanup.c", 
+   "(svn_client_cleanup2): New.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_cleanup): Added as a wrapper around svn_client_cleanup2()."
+  ], 
+  "revision_id": "877162"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-04-07T21:14:08.305676Z", 
+  "msg": [
+   "* STATUS: Nominate r37072 and r37083."
+  ], 
+  "revision_id": "877161"
+ }
+]

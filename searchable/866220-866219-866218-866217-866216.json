@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-08-18T00:09:09.208497Z", 
+  "msg": [
+   "Add the underpinnings for issue #2822, handling propagation of", 
+   "mergeinfo for WC -> WC copy/move operations.", 
+   "This commit makes WC -> WC copy/move operations now require repository", 
+   "access (e.g. users may need to be online to use 'svn cp wcpath1", 
+   "wcpath2' with a remote repository).  This breaks behavioral backward", 
+   "compatibility.  The plan is to restore it through use of an option", 
+   "which doesn't propagate mergeinfo (e.g. --no-merge-history).", 
+   "* subversion/libsvn_client/copy.c", 
+   "(propagate_mergeinfo_within_wc): New function to propagate implied", 
+   "and explicit mergeinfo for WC-local copy/move operations.", 
+   "(do_wc_to_wc_copies): Rename local variable adm_access to dst_access", 
+   "to better reflect what it is.  Add code to acquire a src_access", 
+   "read lock for use with propagate_mergeinfo_within_wc(), and call", 
+   "that function.", 
+   "(do_wc_to_wc_moves): Rename local variable adm_access to dst_access", 
+   "to better reflect what it is.  Call propagate_mergeinfo_within_wc().", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(copy_peg_rev_local_files): Adjust expected mergeinfo.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(avoid_repeated_merge_using_inherited_merge_info,", 
+   "avoid_repeated_merge_on_subtree_with_merge_info,", 
+   "obey_reporter_api_semantics_while_doing_subtree_merges,", 
+   "detect_copy_src_for_target_with_multiple_ancestors): Adjust", 
+   "expected mergeinfo and/or expected status for property merge of", 
+   "mergeinfo.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_wc_with_replaced_file): Adjust expected status for property", 
+   "merge of mergeinfo.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(test_list): Mark", 
+   "status_of_missing_dir_after_revert_replaced_with_history_dir as", 
+   "XFAIL (per trigger of issue #2874).", 
+   "* www/merge-tracking/func-spec.html", 
+   "(wc-wc-copy-move): Move remaining work to \"compatibility mode\" bullet."
+  ], 
+  "revision_id": "866220"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-17T21:59:16.711263Z", 
+  "msg": [
+   "On the merged-sensitive-blame branch:", 
+   "Fix an infinite loop when normalizing revisions for blame.", 
+   "* subversion/libsvn_client/blame.c", 
+   "(normalize_revisions): When tacking extra revisions on the end, advance", 
+   "the linked list pointer, so as to avoid a infinite loop."
+  ], 
+  "revision_id": "866219"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-17T21:50:28.584438Z", 
+  "msg": [
+   "On the merged-sensitive-blame branch:", 
+   "Fix a segfault when normalizing revisions for blame.", 
+   "* subversion/libsvn_client/blame.c", 
+   "(normalize_revisions): When tacking extra revisions on the end, use the", 
+   "current revision, not the revision of the (nonexistent) next node."
+  ], 
+  "revision_id": "866218"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-17T20:49:57.656210Z", 
+  "msg": [
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir):", 
+   "Clarify inline comment about expected output (related to issue #571)."
+  ], 
+  "revision_id": "866217"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-17T19:52:16.240353Z", 
+  "msg": [
+   "Revert r26136, which will be handled under the auspices of issue #571,", 
+   "rather than issue #2874.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir): Expect", 
+   "'A ' instead of 'R ' again (for now).", 
+   "(test_list): Unmark", 
+   "status_of_missing_dir_after_revert_replaced_with_history_dir as XFAIL."
+  ], 
+  "revision_id": "866216"
+ }
+]

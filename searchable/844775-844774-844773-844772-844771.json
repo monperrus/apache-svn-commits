@@ -1,0 +1,83 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-02-01T23:58:35.265005Z", 
+  "msg": [
+   "Make ra_svn pass 'make check' again:", 
+   "* subversion/libsvn_ra_svn/editor.c", 
+   "(ra_svn_editor): Removed.", 
+   "(svn_ra_svn_get_editor): Use svn_delta_default_editor() to", 
+   "construct the editor, so it gets the pass-through implementation", 
+   "of apply_text that drivers are depending on for issue #510 work."
+  ], 
+  "revision_id": "844775"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-02-01T19:09:13.710120Z", 
+  "msg": [
+   "ok, i admit it, gstein was right.  making the context object opaque was", 
+   "premature, and if it turns out we need to do so (for caching config options", 
+   "or something), we can always make part of it private (concealed behind a", 
+   "void pointer) later on.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_ctx_t): make the definition of this struct public information,", 
+   "so we can stop using the annoying accessor functions.", 
+   "(svn_client_ctx_*): remove, we don't need these now that the internals of", 
+   "the context object are a matter of public record.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__open_ra_session): access the members of the context object", 
+   "directly instead of using accessor functions.", 
+   "* subversion/libsvn_client/context.c: deleted.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): declare the context on the stack, and switch from the old accessors", 
+   "to direct access.", 
+   "* subversion/svnversion/main.c", 
+   "(main): declare the context on the stack."
+  ], 
+  "revision_id": "844774"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-02-01T16:43:42.507116Z", 
+  "msg": [
+   "for consistency, refactor the single file merge code to use the same callback", 
+   "functions the rest of the merge code uses.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(svn_client_merge): move initialization of the merge baton up and pass it", 
+   "in to do_single_file_merge as well as do_merge.", 
+   "(do_single_file_merge): take a merge baton as an argument, remove all the", 
+   "arguments that come in as a part of that baton now, and call", 
+   "merge_file_changed and merge_props_changed instead of reimplementing them", 
+   "here.", 
+   "(merge_props_changed): only call svn_wc_merge_prop_diffs if there are some", 
+   "elements in the regular_props array.  this is unrelated to the other stuff", 
+   "in this commit, but i noticed it while i was here."
+  ], 
+  "revision_id": "844773"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-02-01T07:17:04.717417Z", 
+  "msg": [
+   "The great markup sweep.  This sorta kinda seems to be what the tools", 
+   "guys at ORA told me, but I think that they didn't understand what I", 
+   "really wanted to do.  In any case, this does parse, but I believe I'm", 
+   "going to have to do more monkeying around with this at a later date.", 
+   "But for our weekend review, it should be just fine.  There are still a", 
+   "number of TODOs, and a couple of sections left to markup.", 
+   "* /trunk/doc/book/book/ch08.xml: Markup all the subcommand stuff.", 
+   "Ready for Saturday's review session, Mike and Ben."
+  ], 
+  "revision_id": "844772"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2003-02-01T07:13:42.832674Z", 
+  "msg": [
+   "Fix validation errors.", 
+   "* /trunk/doc/book/book/appa.xml: Validation fix-ups."
+  ], 
+  "revision_id": "844771"
+ }
+]

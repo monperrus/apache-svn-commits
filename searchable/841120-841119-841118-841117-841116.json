@@ -1,0 +1,98 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-24T20:04:03.471461Z", 
+  "msg": [
+   "Alrighty.  Recursive on-demand (un-)deltification via the public", 
+   "libsvn_fs interface (or svnadmin) exists.", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "(deltify_by_id, deltify_undeltify): New helper functions.", 
+   "(txn_body_deltify): Cored out all the find-the-best-source", 
+   "functionality.  Use deltify_undeltify() helper.", 
+   "(txn_body_undeltify): Use deltify_undeltify() helper.", 
+   "(struct deltify_args): Added 'recursive' field.", 
+   "(svn_fs_deltify, svn_fs_undeltify): Stuff 'recursive' argument into", 
+   "deltify_args structure, and remove the unsupported feature error", 
+   "for attempting to recurse.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(call_functions_with_unopened_fs): Change description string to have", 
+   "lower-case beginning (like all other tests).", 
+   "(random_data_to_buffer): Changed dataset for random data to increase", 
+   "repetition.", 
+   "(undeltify_deltify): Update this test to use recursive deltification", 
+   "and undeltification.", 
+   "* subversion/svnadmin/main.c", 
+   "(main): Use 1 and 0 instead of TRUE and FALSE in calls to", 
+   "svn_fs_deltify() and svn_fs_undeltify()."
+  ], 
+  "revision_id": "841120"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-24T18:26:38.972332Z", 
+  "msg": [
+   "* subversion/libsvn_wc/questions.c (svn_wc_check_wc): Better error", 
+   "code in case of non-existent path."
+  ], 
+  "revision_id": "841119"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-01-24T18:20:19.726598Z", 
+  "msg": [
+   "* subversion/libsvn_wc/questions.c (svn_wc_check_wc): Return error if", 
+   "path does not exist, as doc string has always promised.", 
+   "* subversion/libsvn_wc/entries.c (svn_wc_entry): Use correct path in", 
+   "error if dir is not a working copy.", 
+   "This fixes a bug reported by Daniel Stenberg <daniel@haxx.se>.  It", 
+   "didn't live long enough to get an issue, so here is his original", 
+   "report:", 
+   "From: Daniel Stenberg <daniel@haxx.se>", 
+   "Subject:  interesting error when server is being silly", 
+   "To: dev@subversion.tigris.org", 
+   "Date: Thu, 24 Jan 2002 15:46:53 +0100 (MET)", 
+   "[...]", 
+   "$ svn st -u", 
+   "svn_error: #21022 : <Obstructed update>", 
+   "svn_wc_entry: ./subversion/bindings/swig/python/fstest.py \\", 
+   "is not a working copy directory", 
+   "This is a very odd error, since:", 
+   "$ ls -l ./subversion/bindings/swig/python/", 
+   "ls: ./subversion/bindings/swig/python/: No such file or directory", 
+   "[...]"
+  ], 
+  "revision_id": "841118"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-24T16:03:50.903017Z", 
+  "msg": [
+   "Turning off deltification of directory entries lists (should this be", 
+   "wrapped in #ifdef SVN_FS_DELTIFY_DIR_ENTRIES and made into a", 
+   "compile-time feature?)", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "(deltify): Added 'props_only' argument.", 
+   "(svn_fs__stable_node): Pass 1 for 'props_only' argument to deltify()", 
+   "if node we are stabilizing is a directory."
+  ], 
+  "revision_id": "841117"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-24T15:34:43.241501Z", 
+  "msg": [
+   "Preparing for some work in the deltification code by breaking it all", 
+   "out into its own file.  There should be no actual code changes herein,", 
+   "just moved functions.", 
+   "* subversion/libsvn_fs/reps-table.h", 
+   "Include \"skel.h\".", 
+   "* subversion/libsvn_fs/node-rev.c", 
+   "(deltify, undeltify, struct deltify_args, txn_body_deltify,", 
+   "txn_body_undeltify, svn_fs_deltify, svn_fs_undeltify,", 
+   "svn_fs__stable_node): Move to new deltify.c files.", 
+   "* subversion/libsvn_fs/deltify.c", 
+   "New file (created from stuff removed from node-rev.c)."
+  ], 
+  "revision_id": "841116"
+ }
+]

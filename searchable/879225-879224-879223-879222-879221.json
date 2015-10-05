@@ -1,0 +1,92 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-05T11:56:59.741820Z", 
+  "msg": [
+   "Following up on r39150, make libsvn_client open all its access batons in", 
+   "a shared context.", 
+   "NOTE: r39150 introduced two places where new working copy contexts are", 
+   "created, so not all these contexts are the global shared context in", 
+   "svn_client_context_t yet.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_repos_copy):", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_wc_wc):", 
+   "* subversion/libsvn_client/info.c", 
+   "(crawl_entries):", 
+   "* subversion/libsvn_client/locking_commands.c", 
+   "(organize_lock_targets):", 
+   "* subversion/libsvn_client/patch.c", 
+   "(svn_client_patch):", 
+   "* subversion/libsvn_client/resolved.c", 
+   "(svn_client_resolve):", 
+   "Open access batons in the shared context instead of standalone."
+  ], 
+  "revision_id": "879225"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-05T11:17:14.738312Z", 
+  "msg": [
+   "Use the shared wc_ctx from svn_client_*merge*(). To do this the status", 
+   "editors used for verifying if a file can be deleted and if the working copy", 
+   "is safe for merge --reintegrate temporarily need their own working copy", 
+   "context.", 
+   "The temporary working copy contexts should be removed when the status", 
+   "editor is access baton free.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(svn_client_merge3): Probe the access baton using a context.", 
+   "(ensure_wc_reflects_repository_subtree): Temporarily use a private", 
+   "working copy context to avoid assertions on double access batons", 
+   "in the same context.", 
+   "(svn_client_merge_reintegrate, svn_client_merge_peg3):", 
+   "Probe the access baton using a context.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status5): Temporarily use a private working copy context", 
+   "to avoid assertions on double access batons in the same context."
+  ], 
+  "revision_id": "879224"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-09-05T06:34:24.267123Z", 
+  "msg": [
+   "Add a new test for the issue described in the '\"svn up format9-wc\" doesn't", 
+   "error' thread.", 
+   "The new test is identical to the existing test 'upgrade_1_5' except that it", 
+   "runs 'update' instead of 'info'.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(upgrade_1_5_body): Renamed from upgrade_1_5() and", 
+   "make the subcommand a parameter.", 
+   "(upgrade_1_5): Now just calls upgrade_1_5_body().", 
+   "(update_1_5): New.", 
+   "(test_list): Run the new test, XFail."
+  ], 
+  "revision_id": "879223"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-09-05T03:35:07.891204Z", 
+  "msg": [
+   "Follow-up to r39061: Fix WC mergeinfo catalog getting functions when", 
+   "obtaining subtree mergeinfo but there is no mergeinfo on the root target.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(get_mergeinfo_catalog_walk_baton): Make mergeinfo_catalog member a", 
+   "svn_mergeinfo_t * rather than just an svn_mergeinfo_t as it will", 
+   "not always have been initialized.", 
+   "on the target.", 
+   "(get_subtree_mergeinfo_walk_cb, svn_client__get_wc_mergeinfo_catalog):", 
+   "Account for addition level of indirection in mergeinfo_catalog member."
+  ], 
+  "revision_id": "879222"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-05T00:55:50.722758Z", 
+  "msg": [
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Const-ify a couple of variables."
+  ], 
+  "revision_id": "879221"
+ }
+]

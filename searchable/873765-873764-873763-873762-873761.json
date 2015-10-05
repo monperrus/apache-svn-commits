@@ -1,0 +1,93 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-10-16T10:57:44.587181Z", 
+  "msg": [
+   "On the fsfs-pack branch:", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(packer_func): Return the error from svn_stream_close().", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "873765"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-16T10:42:00.559532Z", 
+  "msg": [
+   "Fix the control flow, variable naming, etc in svn_wc_transmit_text_deltas2()", 
+   "for clarity, and to remove some redundant checksum computation.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(svn_wc_transmit_text_deltas2): renamed checksums to expected_checksum", 
+   "and verify_checksum to clarify their purpose. Move the tmp_base and", 
+   "tempbasefile to a tighter scope, and (when needed) remove the temp", 
+   "file via the func param. Only compute verify_checksum if we have an", 
+   "expected value in *ent. If we need an expected_checksum for the", 
+   "apply_textdelta and *ent doesn't have it, then compute it from the", 
+   "pristine stream rather than path-to-file. Clarify the comparison logic", 
+   "for expected/actual value of the pristine text base."
+  ], 
+  "revision_id": "873764"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-16T09:59:00.288782Z", 
+  "msg": [
+   "On the fsfs-pack branch:", 
+   "Add cancellation support for fs packing.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_library_vtable_t.pack): Add cancel func/baton.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_pack): Same.", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_bdb_pack): Same.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_pack): Same.", 
+   "* subversion/include/svn_repos.h,", 
+   "subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_pack): Same.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__pack): Same.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(packer_baton): Same.", 
+   "(packer_func, pack_shard): Pass the cancellation func/baton to lower-level", 
+   "APIs.", 
+   "(svn_fs_fs__pack): Check cancellation between shard packing, and send the", 
+   "cancellation func/baton to the lower-level APIs.", 
+   "* subversion/svnadmin/main.c", 
+   "(subcommand_pack): Use the standard svnadmin cancellation check."
+  ], 
+  "revision_id": "873763"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-16T09:41:58.335513Z", 
+  "msg": [
+   "On the fsfs-pack branch:", 
+   "Create a pack file from the full shards on disk.  Note that once the shards are", 
+   "created, we don't have any way of reading them yet, so this will leave", 
+   "repositories in an unusable state.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(PACK_MANIFEST_ENTRY_LEN): New.", 
+   "(packer_baton, packer_func): New.", 
+   "(pack_shard): Build the pack file and the manifest, then glue them together", 
+   "and remove the old shard."
+  ], 
+  "revision_id": "873762"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-10-16T09:18:49.546888Z", 
+  "msg": [
+   "ra_serf: Avoid destroying body buckets when the request is scheduled to be", 
+   "resent later.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(handle_response): Don't cleanup body_bucket when the request needs to be", 
+   "resent, either because no response was received or the connection was closed -", 
+   "resulting in a read error.", 
+   "(setup_request): Add empty else block so that the comment about non-successful", 
+   "snapshots makes sense.", 
+   "Found by: arfrever"
+  ], 
+  "revision_id": "873761"
+ }
+]

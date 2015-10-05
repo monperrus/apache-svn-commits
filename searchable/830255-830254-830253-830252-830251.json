@@ -1,0 +1,67 @@
+[
+ {
+  "author": "lu4242", 
+  "date": "2009-10-27T17:21:47.501995Z", 
+  "msg": [
+   "MYFACES-2366 RestoreViewExecutor should check also if the server is showing an error page when check for postback (Thanks to Jakob Korherr for provide this patch)"
+  ], 
+  "revision_id": "830255"
+ }, 
+ {
+  "author": "johnh", 
+  "date": "2009-10-27T17:14:32.684980Z", 
+  "msg": [
+   "Use of the gadgets.rpc library has slowly changed over time due to the", 
+   "transports that underlie it. This has led to a scenario in which it's", 
+   "unnecessarily confusing and error-prone to set up and use the library.", 
+   "This is particularly so now that no transports require a custom relay to be", 
+   "served and used. All a gadget/child needs is its parent's URL and an rpctoken.", 
+   "All the container needs is the child's IFRAME URL and the token it created", 
+   "itself.", 
+   "Further, many people are using this library in a generic child IFRAME context.", 
+   "The primary complication with this is how the in-IFRAME initialization routine", 
+   "works, namely that it uses gadgets.config, which is confusing to mock out.", 
+   "This CL attempts to remedy all of the above. It sets up a dead-simple way to use", 
+   "the library. Any container wishing to create and communicate with an", 
+   "alternate-domain IFRAME need only follow this protocol:", 
+   "* Include rpc.js lib.", 
+   "* Create IFRAME with id=\"<ID>\" and a src URL with parameters \"parent=<MY_URL>\"", 
+   "and \"rpctoken=<RANDOM_STRING>\" and add it (anywhere) to the DOM.", 
+   "- For optimal caching, these params may be placed on the fragment/hash.", 
+   "* Call gadgets.rpc.setupReceiver(\"<ID>\");", 
+   "Assuming the child IFRAME includes rpc.js as well, all communication setup", 
+   "happens automatically from here. Variations on this are supported if absolutely", 
+   "necessary, but are not recommended.", 
+   "This implementation is fully backward-compatible w/ the existing", 
+   "gadget-initialized mechanism. It's not exactly a drop-in cross-domain solution", 
+   "in that gadgets.util.getUrlParameters() is required (meaning you need to source", 
+   "gadget.com/gadgets/js/rpc.js?c=1 on both sides, not the raw rpc.js files), but", 
+   "is nevertheless much cleaner."
+  ], 
+  "revision_id": "830254"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2009-10-27T17:11:44.586655Z", 
+  "msg": [
+   "MYFACES-2375 <managed-bean-scope> could also be an EL expression, to allow easy implementation of new scopes (Thanks to Jakob Korherr for provide this patch)"
+  ], 
+  "revision_id": "830253"
+ }, 
+ {
+  "author": "tvolkert", 
+  "date": "2009-10-27T17:10:48.498312Z", 
+  "msg": [
+   "Fixed bug in TerraFormSkin - wasn't handling section removal properly"
+  ], 
+  "revision_id": "830252"
+ }, 
+ {
+  "author": "monteith", 
+  "date": "2009-10-27T17:06:31.734890Z", 
+  "msg": [
+   "Missing licence on test. and add more tests."
+  ], 
+  "revision_id": "830251"
+ }
+]

@@ -1,0 +1,77 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-06-05T00:28:32.033786Z", 
+  "msg": [
+   "Stop propagation of self-referential mergeinfo via --reintegrate merges.", 
+   "While we recommend that users delete a branch once they reintegrate it, it", 
+   "should still be possible to keep sync merging to the branch if a --record-only", 
+   "merge is performed to avoid cyclical merge problems.  However there is a bug", 
+   "where, even if the record only merge is performed correctly, subsequent", 
+   "reintegrations can produce self-referential mergeinfo on the target.  This", 
+   "mergeinfo can then propagate to other branches where it can appear as", 
+   "legitimate (non-self-referential) mergeinfo.  This in turn can make it", 
+   "appear that sync merges have been performed when they have not and", 
+   "vice-versa", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_cmd_baton_t): New boolean flag reintegrate_merge.", 
+   "(filter_self_referential_mergeinfo): *Do* filter during reintegrate merges.", 
+   "(do_merge): Add boolean flag signaling reintegrate merges and use it to", 
+   "initialize the new merge_cmd_baton_t member.", 
+   "(merge_cousins_and_supplement_mergeinfo, svn_client_merge3,", 
+   "svn_client_merge_peg3): Update calls to do_merge().", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(basic_reintegrate, reintegrate_with_rename,", 
+   "reintegrate_with_subtree_mergeinfo): Don't expect notifications from the", 
+   "application of self-referential mergeinfo during a reintegrate merge.", 
+   "(multiple_reintegrates_from_the_same_branch): New test showing how", 
+   "reintegrate can produce self-referential mergeinfo and the problems that", 
+   "can arise from it.", 
+   "(test_list): Add multiple_reintegrates_from_the_same_branch."
+  ], 
+  "revision_id": "878005"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-04T13:01:09.832663Z", 
+  "msg": [
+   "Update a few deprecated function calls.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(do_wc_to_wc_moves, wc_to_repos_copy): Replace calls to", 
+   "svn_path_get_absolute() with svn_dirent_get_absolute()."
+  ], 
+  "revision_id": "878004"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-04T11:44:14.521694Z", 
+  "msg": [
+   "* subversion/libsvn_wc/relocate.c", 
+   "(svn_wc_relocate3): Add some parenthesis.  While not strictly required, this", 
+   "follows the counsel of HACKING to \"be generous with parentheses even when", 
+   "you're sure about the operator precedence\"."
+  ], 
+  "revision_id": "878003"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-04T10:12:46.123835Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(entries_write_body): Remove unused variable."
+  ], 
+  "revision_id": "878002"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-04T10:11:25.645048Z", 
+  "msg": [
+   "Fix a couple of switch tests which were broken by r37926.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(statements.STMT_SELECT_REPOSITORY): Also select the repository root.", 
+   "(create_repos_id): Look at all the rows which match a given UUID, not just", 
+   "the first one."
+  ], 
+  "revision_id": "878001"
+ }
+]

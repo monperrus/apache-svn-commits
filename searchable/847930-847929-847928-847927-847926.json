@@ -1,0 +1,76 @@
+[
+ {
+  "author": "brane", 
+  "date": "2003-11-26T21:39:38.782582Z", 
+  "msg": [
+   "The ra_dav and ra_svn tests were failing spuriously on Windows with", 
+   "BDB 4.2 and the --cleanup option set. The server seems to hold onto", 
+   "the repository longer than before, causing the cleanup to fail with", 
+   "a permission denied error. So, I changed the cleanup code to a) not", 
+   "stop the test if the cleanup fails, and b) retry the cleanup at the", 
+   "end of the test run.", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(Sandbox.cleanup_test_paths): Move cleanup code to _cleanup_test_path.", 
+   "(_deferred_test_paths): New. Global list of paths to remove.", 
+   "(_cleanup_deferred_test_paths): New. Retry deferred cleanups.", 
+   "(_cleanup_test_path): New. If the cleanup fails, append the path", 
+   "to the _deferred_test_paths list.", 
+   "(_internal_run_tests, run_tests): Call _cleanup_deferred_test_paths."
+  ], 
+  "revision_id": "847930"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-26T16:40:17.360716Z", 
+  "msg": [
+   "* subversion/libsvn_repos/delta.c", 
+   "(compare_files): Remove some unnecessary comments and brace-work", 
+   "after reviews by Greg Hudson and Osku Salerma revealed the errors", 
+   "of my ways."
+  ], 
+  "revision_id": "847929"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-11-26T16:07:56.611851Z", 
+  "msg": [
+   "Partially wrap apr_file_t input for perl bindings. Currently it just", 
+   "opens the given path name.", 
+   "* swig/swigutil_pl.c, swig/swigutil_pl.h", 
+   "(svn_swig_pl_make_file): New.", 
+   "* swig/apr.i: Wrap apr_file_t *"
+  ], 
+  "revision_id": "847928"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-11-26T15:43:47.506670Z", 
+  "msg": [
+   "Enable svn_diff library in perl bindings.", 
+   "* swig/core.i:", 
+   "Include svn_diff.h for perl.", 
+   "Add svn_diff_t ** to output param list.", 
+   "* swig/perl/Makefile.PL: Link libsvn_diff."
+  ], 
+  "revision_id": "847927"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-26T08:04:15.843785Z", 
+  "msg": [
+   "Keep dir-delta from producing no-op apply_textdelta()s when ignoring", 
+   "ancestry.  This makes many things work better in the case of two", 
+   "mutually merged branches, since editors now know the source and target", 
+   "stream are the same without having to construct the fulltext from the", 
+   "noop txdelta.  As a result, 'svn diff' between the two branches will", 
+   "no longer show a lot of empty diffs.", 
+   "Patch by: Chia-liang Kao <clkao@clkao.org>", 
+   "(Tweaked by me.)", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(compare_files): New.", 
+   "(delta_files): Use the new compare_files() instead of", 
+   "svn_fs_contents_changed() when ignore_ancestry is on."
+  ], 
+  "revision_id": "847926"
+ }
+]

@@ -1,0 +1,76 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2002-10-08T03:57:57.004915Z", 
+  "msg": [
+   "Added several new pages listing active Subversion repositories. Yay!", 
+   "* index.html: Added link to svn-repositories.html", 
+   "* svn-repositories.html: New file", 
+   "* svn-repositories2.html: New file"
+  ], 
+  "revision_id": "843395"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-10-08T02:40:39.924522Z", 
+  "msg": [
+   "Make 'svn propedit -r' work on revision properties.", 
+   "This is the final nail in the coffin for our CGI interface that runs", 
+   "'svnadmin setlog' on the server.  From now on, it's just:", 
+   "svn propedit svn:log -rN", 
+   "* propedit-cmd.c (svn_cl__propedit): if -r is present, do the", 
+   "propset/propget remotely, instead of on a local property.", 
+   "* main.c (svn_cl__cmd_table):  update propedit subcommand entry."
+  ], 
+  "revision_id": "843394"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-10-08T02:17:44.223289Z", 
+  "msg": [
+   "Make 'svn propdel -r' work on revision properties.  (Just a variant of", 
+   "'svn propset -r'.)", 
+   "* fetch.c (svn_ra_dav__change_rev_prop): tweak, so that a NULL", 
+   "propvalue sends a ne_propremove action over the network.", 
+   "* svn_client.h (svn_client_propset, svn_client_revprop_set):  tweak", 
+   "docstrings to mention that NULL propval implies deletion.", 
+   "* propdel-cmd.c (svn_cl__propdel): if -r switch is present, call", 
+   "svn_client_revprop_set instead of svn_client_propset.", 
+   "* main.c (svn_cl__cmd_table):  update propdel subcommand entry."
+  ], 
+  "revision_id": "843393"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-10-08T01:08:37.723376Z", 
+  "msg": [
+   "Make 'svn propset -r' work over DAV.", 
+   "[Unfortunately, DAV/deltaV has no notion of unversioned properties at", 
+   "all.  So for now, we have no choice but to violate deltaV and allow", 
+   "the client to PROPPATCH a theoretically immutable baseline object,", 
+   "without any auto-versioned creation of a new baseline.  We'll deal", 
+   "with fixing this interop problem in svn 2.0.  In the meantime, see", 
+   "issue #916 for tracking this interop problem.]", 
+   "* fetch.c (svn_ra_dav__change_rev_prop): do a PROPPATCH on a baseline.", 
+   "* version.c (dav_svn_auto_versionable):  allow only baselines to be", 
+   "auto-checked-out by mod_dav, and nothing else.", 
+   "(dav_svn_checkout): an auto-checkout of a baseline returns the", 
+   "baseline itself, unchanged.", 
+   "* deadprops.c (save_value, dav_svn_db_remove): expand these routines", 
+   "to notice non-working baselines, and call fs_change_rev_prop.", 
+   "(dav_svn_db_open):  allow a baseline resource to sneak through in", 
+   "r/w mode, even though it's not technically a 'working' resource.", 
+   "* repos.c (dav_svn_copy_resource):  add safeguard -- prevent a COPY", 
+   "where the Destination is an auto-checked-out baseline."
+  ], 
+  "revision_id": "843392"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-10-07T17:51:00.210138Z", 
+  "msg": [
+   "* index.html:  it's freednode.net now, not openprojects.net"
+  ], 
+  "revision_id": "843391"
+ }
+]

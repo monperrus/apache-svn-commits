@@ -1,0 +1,76 @@
+[
+ {
+  "author": "veithen", 
+  "date": "2010-12-05T19:21:52.760239Z", 
+  "msg": [
+   "Merged changes required for AXIS2-4261 to the 1.5 branch (r752906, r804541 and r1042416)."
+  ], 
+  "revision_id": "1042420"
+ }, 
+ {
+  "author": "apetrelli", 
+  "date": "2010-12-05T19:21:24.037500Z", 
+  "msg": [
+   "TILES-518", 
+   "Applied patch by David Hay."
+  ], 
+  "revision_id": "1042419"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2010-12-05T19:20:42.829657Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1042411\"  (conflicts resolved by hand)", 
+   "------------------------------------------------------------------------", 
+   "r1042411 | jleroux | 2010-12-05 20:09:57 +0100 (dim., 05 d\u00e9c. 2010) | 12 lines", 
+   "A patch from Anne Jessel \"Wrong product displayed as associated product\" (https://issues.apache.org/jira/browse/OFBIZ-4023) - OFBIZ-4023", 
+   "To reproduce:", 
+   "* add two associated products to a main product, both with \"Complementary or Cross-Sell\" association type", 
+   "* view the main product in ecommerce", 
+   "Expected behaviour: the two associated products are listed near the bottom of the page", 
+   "Actual behaviour: two products are listed at the bottom of the page, but only one of them is an associated product. The other is the main product.", 
+   "The problem is caused by the value of a freemarker variable changing at a point where other freemarker code assumes the variable does not change. The execution path is complicated.", 
+   "The patch fixes the problem by saving the value of the key variable into another variable, and restoring it later. However I do wonder if there is a better solution.", 
+   "JLR: I did not try to find a better solution", 
+   "------------------------------------------------------------------------"
+  ], 
+  "revision_id": "1042418"
+ }, 
+ {
+  "author": "rwesten", 
+  "date": "2010-12-05T19:18:22.659703Z", 
+  "msg": [
+   "General Note:", 
+   "Building of FISE is now dependent on RICK. That means you need first to build/install RICK before you can build/install FISE.", 
+   "To build/install RICK please follow the first two steps described at http://wiki.iks-project.eu/index.php/RickInstallation#Building_the_RICK_Framework", 
+   "Entity Tagging Engine", 
+   "This is a FISE Enhancement Engine that uses a RICK Referenced Site for semantic lifting of TextAnnotations (text entities extracted by a NLP engine)", 
+   "This engine supports multiple instances with different configuration.", 
+   "Configurations include", 
+   "- the ID of the referenced Site to use for semantic lifting", 
+   "- if Persons, Organizations, Places are semantically lifted", 
+   "- rdf:types used to search for Persons, Organizations, Places", 
+   "- field used to search for the label", 
+   "Note that this engine returns -1 as score if no score is available", 
+   "Note about Clerezza Literals", 
+   "Clerezza defines two implementations of the Literal interface", 
+   "1) TypedLiteral: used for Literals with an xsd data type", 
+   "2) PlainLiteralImpl: used for natural language texts with a language.", 
+   "Within the FISE code Literal instances are created by using the LiteralFactory. However this Factory supports only TypedLiterals. Clerezza does not contain a Factory for PlainLiteralImpl. Also when converting TypedLiterals back to there Java Object representation the LiteralFactory requires a TypedLiteral Instance ( see LiteralFactory#createObject(Object,TypedLiteral) method). Therefore there it is very inviting to use a type cast for TypedLiteral when converting Literals to Java Objects.", 
+   "For Literals that represent natural language text one should not use the LiteralFactory at all but directly call the Literal#getLexicalForm() method! FISE currently does only use TypedLiterals, therefore such bugs currently do not have any effect.", 
+   "This commit corrects such a Code segment in the ContentItemResource. However the FISE code needs to be checked for other possible occurrences.", 
+   "Launchers FULL", 
+   "- added RICK to the full launcher", 
+   "- added the RICK based Entity Tagging Engine to the FULL launcher"
+  ], 
+  "revision_id": "1042417"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2010-12-05T19:16:41.767451Z", 
+  "msg": [
+   "Added missing documentation for AXIS2-4261."
+  ], 
+  "revision_id": "1042416"
+ }
+]

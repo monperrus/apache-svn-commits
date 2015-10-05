@@ -1,0 +1,108 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-02-10T00:09:58.975622Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Fix basic_tests 7 (along with others).", 
+   "This reduces the number of failing tests to 556.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Populate the entry->repos field.", 
+   "(write_entry): Set the correct working node kind (if it's not a delete)."
+  ], 
+  "revision_id": "875855"
+ }, 
+ {
+  "author": "sbutler", 
+  "date": "2009-02-09T23:12:50.584396Z", 
+  "msg": [
+   "In the issue-3334-dirs branch, tidy up the add_directory() and", 
+   "add_file() callbacks used by update and switch, and fix part of issue", 
+   "3209.", 
+   "In add_file(), first check for \"true obstructions\" (e.g., a directory", 
+   "with the same name as the incoming file), before raising a tree", 
+   "conflict.", 
+   "In add_file() and add_directory(), allow the incoming add of a", 
+   "locally-added item to proceed if the local item was added without", 
+   "history.  A partial fix for issue 3209.", 
+   "Also, in both callbacks, do the sanity checks of UUID and URL in", 
+   "more cases, and flatten the nested logic for easier reading.", 
+   "Change a checkout test to reflect the new UUID sanity check.", 
+   "In the update & switch tests, and in tree_conflict_tests.py,", 
+   "tweak some expectations.", 
+   "In tree_conflict_tests.py, the tree conflict test generator, the case", 
+   "of \"local add with history, incoming add with (same) history\" fails if", 
+   "the remote file was edited before commit, and the local file has the", 
+   "same edit, uncommitted.  Update fails with \"Delta source ended", 
+   "unexpectedly\".  Update seems to have missed that the incoming text", 
+   "diff has already been applied manually.  Apparently related to issue", 
+   "1739.  Currently set to XFAIL.", 
+   "* subversion/libsvn_sc/update_editor.c", 
+   "(add_directory): Consolidate comments, simplify control logic,", 
+   "sanity-check the UUID and URL directly instead of via the", 
+   "problematic svn_wc_adm_retrieve().  No change to the tree conflict", 
+   "code.", 
+   "(add_file): Consolidate comments, simplify control logic.  Add", 
+   "UUID and URL sanity checks.  Check for tree conflicts only after", 
+   "checking for obstructions.", 
+   "* subversion/tests/cmdline/checkout_tests.py", 
+   "(forced_checkout_with_versioned_obstruction): Add a case in which", 
+   "the checkout is from the same repo and url (currently, raise a", 
+   "tree conflict, but see issue 3209).", 
+   "* subversion/tests/cmdline/tree_conflict_tests.py", 
+   "(f_adds, d_adds): Comment out add-without-history.  Add comment", 
+   "about issue 1736 for a file add-with-history.", 
+   "(test_list): up_sw_dir_add_onto_add no longer fails.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(obstructed_switch):  Tweak expected file-exists message.", 
+   "(switch_with_obstructing_local_adds):  Fix expectations (locally", 
+   "added-without-history items don't cause a tree conflict and are", 
+   "fully updated including text conflicts).", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(restarted_delete_should_delete_dir_prop):  Tweak expected", 
+   "file-exists message."
+  ], 
+  "revision_id": "875854"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-02-09T22:59:18.912344Z", 
+  "msg": [
+   "On the issue-3334-dirs branch: Tweak an update test's expectations to", 
+   "reflect the fact that issue #3334 is not completely addressed.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_wc_with_replaced_file): When a text edit lands on a locally", 
+   "replaced file expect a tree conflict on the delete half of the", 
+   "replacement (as always) but also expect the revert-base to be updated", 
+   "to the target revision, see", 
+   "http://svn.haxx.se/dev/archive-2009-02/0150.shtml.", 
+   "(test_list): Set update_wc_with_replaced_file as XFail."
+  ], 
+  "revision_id": "875853"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-09T22:24:51.492522Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Use the sqlite transaction wrapper API to ensure that our transactions get", 
+   "rolled back in the event of an error.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(entries_write_txn_baton, entries_write_body): New.", 
+   "(svn_wc__entries_write, svn_wc__entries_init): Put sqlite reads and writes", 
+   "inside a transaction, and ensure that the transaction is cleaned up when", 
+   "it returns.", 
+   "(init_txn_baton, init_body): New."
+  ], 
+  "revision_id": "875852"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-02-09T22:20:10.871087Z", 
+  "msg": [
+   "* subversion/include/svn_path.h", 
+   "(svn_path_url_add_component): Indentation tweaks only."
+  ], 
+  "revision_id": "875851"
+ }
+]

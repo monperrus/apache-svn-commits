@@ -1,0 +1,105 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-19T19:49:28.048747Z", 
+  "msg": [
+   "Make sure to copy a return-value string away from SQLite's memory", 
+   "space.", 
+   "* subversion/libsvn_fs_util/node-origins-sqlite-index.c", 
+   "(get_origin): Copy returned string into a pool passed as a new", 
+   "argument.", 
+   "(set_origin): Take a pool argument and pass it through to", 
+   "get_origin.", 
+   "(svn_fs__set_node_origins, svn_fs__get_node_origin): Adjust.", 
+   "Found by: pburba"
+  ], 
+  "revision_id": "868000"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-19T19:30:30.356160Z", 
+  "msg": [
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(node_origin_rev): Revert hackish changes that attempted to test", 
+   "the operation when the filesystem is read-only."
+  ], 
+  "revision_id": "867999"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-19T19:30:25.229841Z", 
+  "msg": [
+   "Turn an overcomplicated macro into a function.", 
+   "* subversion/libsvn_fs_util/sqlite-util.h", 
+   "(SVN_FS__SQLITE_STEP_DONE): Remove macro, replacing with ...", 
+   "(svn_fs__sqlite_step_done): ... function declaration.", 
+   "* subversion/libsvn_fs_util/sqlite-util.c", 
+   "(svn_fs__sqlite_step_done): Implement.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(index_path_mergeinfo): Adjust.", 
+   "* subversion/libsvn_fs_util/node-origins-sqlite-index.c", 
+   "(set_origin): Adjust."
+  ], 
+  "revision_id": "867998"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-19T19:30:19.055427Z", 
+  "msg": [
+   "Make svn_fs__set_node_origins ignore errors due to a readonly", 
+   "database.", 
+   "I am committing a somewhat hacky change to fs-test.c to test this; I", 
+   "will revert this in two revisions.", 
+   "* subversion/include/private/svn_fs_node_origins.h", 
+   "(svn_fs__set_node_origins): Document that in the case of a readonly", 
+   "database, this function may be a no-op.", 
+   "* subversion/libsvn_fs_util/node-origins-sqlite-index.c", 
+   "(svn_fs__set_node_origins): If the database operations return a", 
+   "\"readonly\" error, ignore it.", 
+   "* subversion/libsvn_fs_util/sqlite-util.h", 
+   "(SVN_FS__SQLITE_STEP_DONE): Make sure to finalize the statement", 
+   "before returning an error; otherwise the call to sqlite3_close will", 
+   "fail.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "Add some horribly hacky test code to wipe the node_origins table and", 
+   "set it readonly a little later.  Will be reverted in two revisions.", 
+   "But both tests do pass."
+  ], 
+  "revision_id": "867997"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-19T19:30:11.647678Z", 
+  "msg": [
+   "Standardize error handling in SQLite code, so that the SQLITE_READONLY", 
+   "error is given a different SVN-level error code from other SQLITE", 
+   "errors.  This will allow caches that are \"optional\" to ignore errors", 
+   "due to readonly filesystems while still raising more serious errors.", 
+   "In order to do this, we add a few new helper macros, and make sure to", 
+   "always use sqlite3_prepare_v2 instead of sqlite3_prepare; the \"v2\"", 
+   "version returns the precise error code from sqlite3_step instead of", 
+   "just returning SQLITE3_ERROR.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_SQLITE_READONLY): New error code for an attempt to write", 
+   "to a read-only SQLite db.", 
+   "* subversion/libsvn_fs_util/sqlite-util.h", 
+   "(SVN_FS__SQLITE_ERROR_CODE): New macro to convert a SQLite error", 
+   "code to a SVN error code; either the new \"read-only\" one or the", 
+   "generic SVN_ERR_FS_SQLITE_ERROR.", 
+   "(SVN_FS__SQLITE_ERR): Update to use SVN_FS__SQLITE_ERROR_CODE.", 
+   "(SVN_FS__SQLITE_STEP_DONE): New macro, encapsulating a common idiom:", 
+   "run the given statement for one step, throwing the appropriate", 
+   "error if the statement isn't done.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(index_path_mergeinfo, parse_mergeinfo_from_db,", 
+   "get_mergeinfo_for_path, get_mergeinfo_for_children):", 
+   "* subversion/libsvn_fs_util/node-origins-sqlite-index.c", 
+   "(get_origin, set_origin):", 
+   "* subversion/libsvn_fs_util/sqlite-util.c", 
+   "(svn_fs__sqlite_exec, check_format):", 
+   "Update to use sqlite3_prepare_v2, SVN_FS__SQLITE_STEP_DONE, and/or", 
+   "SVN_FS__SQLITE_ERROR_CODE as appropriate."
+  ], 
+  "revision_id": "867996"
+ }
+]

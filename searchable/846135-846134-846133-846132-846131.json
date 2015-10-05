@@ -1,0 +1,77 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-05-27T02:58:46.727644Z", 
+  "msg": [
+   "Revert rev 6060; I was confused about the direction of the change."
+  ], 
+  "revision_id": "846135"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-27T02:55:49.761660Z", 
+  "msg": [
+   "Add diff programs from rev 5613 to svn:ignore."
+  ], 
+  "revision_id": "846134"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-05-27T01:40:36.608818Z", 
+  "msg": [
+   "I figured out a way of skipping leading garbage more robustly without", 
+   "changing the way read-buffering works, by using a separate buffer in", 
+   "readbuf_skip_leading_garbage().  It's now a more complicated function,", 
+   "but it doesn't complicate the rest of the code, so I'll go with it.", 
+   "* include/svn_ra_svn.h", 
+   "(svn_ra_svn_skip_leading_garbage): Document more robust functionality.", 
+   "* libsvn_ra_svn/marshal.c", 
+   "(readbuf_skip_leading_garbage): Use a separate buffer and a simple", 
+   "state machine to search for '(' followed by whitespace followed by", 
+   "a digit.  Then stuff \"( \" followed by the digit and everything", 
+   "after it into the read buffer."
+  ], 
+  "revision_id": "846133"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-05-27T01:40:04.082818Z", 
+  "msg": [
+   "Make the .svn directory hidden on Windows and other platforms that", 
+   "support the \"hidden\" file attribute but don't hide .dot files.", 
+   "Note: This feature requires a recent of APR from CVS. Version 0.9.3 that's", 
+   "distributed with httpd-2.0.45 does not support the \"hidden\" file", 
+   "attribute. Version 0.9.4 will, but is not released yet.", 
+   "* subversion/include/svn_io.h (svn_io_dir_make_hidden): New prototype.", 
+   "* subversion/libsvn_wc/adm_files.c (make_empty_adm): Make the .svn dir hidden.", 
+   "* subversion/libsvn_subr/io.c (dir_make): New function. Common implementation", 
+   "for svn_io_dir_make and svn_io_dir_make_hidden.", 
+   "(svn_io_dir_make, svn_io_dir_make_hidden): Call dir_make."
+  ], 
+  "revision_id": "846132"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-05-27T01:01:55.533526Z", 
+  "msg": [
+   "Fix 'svn merge --dry-run' to handle merges that delete files and/or", 
+   "directories.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__delete): Delete.", 
+   "(svn_client__wc_delete). New.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(svn_client__delete): Delete, split into two functions delete_url", 
+   "and svn_client__wc_delete.", 
+   "(delete_url): New, the URL part of svn_client__delete.", 
+   "(svn_client__wc_delete). New, the wc part of svn_client__delete with", 
+   "dry_run processing added.", 
+   "(svn_client_delete): Call delete_url/svn_client__wc_delete.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(merge_file_deleted, merge_dir_deleted): Call svn_client__wc_delete.", 
+   "* subversion/tests/clients/cmdline/merge_tests.py", 
+   "(delete_file_and_dir): Add --dry-run and --force tests.", 
+   "(merge_with_implicit_target): Convert a return to a raise."
+  ], 
+  "revision_id": "846131"
+ }
+]

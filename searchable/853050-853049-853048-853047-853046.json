@@ -1,0 +1,99 @@
+[
+ {
+  "author": "danpat", 
+  "date": "2005-02-12T07:54:32.639509Z", 
+  "msg": [
+   "Only show revisions that are either the source of a copy, or the", 
+   "start or end of a set of changes to a path.  Graphs are a lot", 
+   "smaller than the previous revision.", 
+   "This revision also adds some colouring to copy edges (green) and", 
+   "delete nodes (red).  Codelines are also weighted, so dot will put", 
+   "them closer together.  Edges between codeline nodes are put in", 
+   "bold.", 
+   "* tools/client-side/svn-graph.pl", 
+   "(process_revision): store an additional hashtable which is the", 
+   "reverse of changed_paths so we can later find which change is", 
+   "the first one for a given path.", 
+   "Also, don't print out path changes while traversing history.", 
+   "We need to acumulate the complete list of copyfrom values before", 
+   "we can know which paths need to be displayed.", 
+   "Also, display a revision counter to STDERR", 
+   "(main): After parsing the log, print out linked changed paths, filtering", 
+   "out paths that are not the source of a copy, or the first or last", 
+   "change to that path."
+  ], 
+  "revision_id": "853050"
+ }, 
+ {
+  "author": "danpat", 
+  "date": "2005-02-12T04:14:06.957734Z", 
+  "msg": [
+   "Rewrite of the history tracing algorithm.  It now actually generates", 
+   "a graph that matches what's in the repository.  The old method was", 
+   "somewhat buggy.", 
+   "The output is now also produced in a single loop, while we're traversing", 
+   "the history.", 
+   "The new algorithm goes something like this:", 
+   "For each revision:", 
+   "For each changed path in this revision:", 
+   "If the action was \"D\", and we are tracking that path", 
+   "Set the label as \"Deleted in rREVISION\" in the .dot output", 
+   "Remove this path from the tracking list", 
+   "If this path has a copyfrom value, and that value is in our \"interesting\" list:", 
+   "Put this path in our interesting list", 
+   "Put this path in our tracking list", 
+   "Print out an edge from the copyfrom -> this", 
+   "For each parent path of this path:", 
+   "If we're tracking the parent path, and it's last revision was not this one:", 
+   "Print out an edge from the last update to the parent to this one", 
+   "Put this parent path in the interesting list", 
+   "Update the tracking revision for the parent path to this one", 
+   "And viola, we get a graph.", 
+   "This algorithm has the drawback that it prints a new node every time a path", 
+   "is updated (i.e. update /trunk/asdf/foo, and you get a new node for /trunk).", 
+   "Even though this is correct, we're probably not interested in it for", 
+   "the purposes of this graph.  Still TODO is to filter out all the nodes", 
+   "that are never copied from (or at least, make it optional to print them", 
+   "out, you probably rarely want them).", 
+   "* tools/client-side/svn-graph.pl (process_revision): Complete rewrite", 
+   "of the history tracing algorithm."
+  ], 
+  "revision_id": "853049"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-02-11T22:33:09.498982Z", 
+  "msg": [
+   "Continue work on implementing the behaviors of the svn:needs-lock", 
+   "property: When locking and unlocking a file, flip the perms on the", 
+   "file if it has the svn:needs-lock property.", 
+   "* libsvn_client/locking_commands.c (svn_client_lock): If", 
+   "svn:needs-lock is set on a path that was just locked, change the", 
+   "file to read-write.", 
+   "(svn_client_unlock): If svn:needs-lock is set on a path that was", 
+   "just unlocked, change the file to read-only."
+  ], 
+  "revision_id": "853048"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-02-11T20:18:18.582912Z", 
+  "msg": [
+   "Comment fix.", 
+   "* include/svn_client.h(svn_client_propget2): Refer to", 
+   "peg_revision->kind, not just peg_revision."
+  ], 
+  "revision_id": "853047"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-02-11T18:35:06.324140Z", 
+  "msg": [
+   "* COMMITTERS:", 
+   "Rename the \"complete or inactive\" heading to \"complete or abandoned\".", 
+   "Document the specific area of interest of bindings committers.", 
+   "As a result, move \"xela\" (Java JNI b.) to the abandoned section."
+  ], 
+  "revision_id": "853046"
+ }
+]

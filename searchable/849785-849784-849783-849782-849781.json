@@ -1,0 +1,105 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-05-14T14:03:42.858051Z", 
+  "msg": [
+   "Cleanup the new logic introduced in r9709 with feedback from cmpilato.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__prev_log_path): Improve comments and re-organize logic", 
+   "so that it is easier to read."
+  ], 
+  "revision_id": "849785"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-14T11:14:15.743438Z", 
+  "msg": [
+   "Add two new tests that check 'svn diff's ability to follow copy", 
+   "history.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_renamed_file): New, renames a file and makes sure that diff", 
+   "can see the history before and after the rename.", 
+   "(diff_within_renamed_dir): New, renamed a directory and makes sure", 
+   "that diff can see the history of files within the dir before and", 
+   "after the rename."
+  ], 
+  "revision_id": "849784"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-14T10:41:37.328325Z", 
+  "msg": [
+   "Make svn_client__prev_log_path handle the case when a file is both", 
+   "part of a copied subdirectory and modified in the same revision.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__prev_log_path): Only skip the parent path copy search", 
+   "if the path was explicitly added or replaced in this revision."
+  ], 
+  "revision_id": "849783"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2004-05-14T01:43:24.079641Z", 
+  "msg": [
+   "Remove the way too complicated svn_ver_error_generator_t.", 
+   "Thanks to Greg Hudson for showing the True Path.", 
+   "* subversion/include/svn_version.h (svn_ver_error_generator_t): Kill.", 
+   "(svn_ver_check_list): Remove mismatch_error parameter and update docs.", 
+   "* subversion/libsvn_subr/version.c: Include svn_private_config.h for _().", 
+   "(svn_ver_check_list): Remove mismatch_error, generate the error here.", 
+   "* subversion/clients/cmdline/main.c (version_mismatch_error): Remove.", 
+   "(check_lib_versions): Sync with changes to svn_ver_check_list."
+  ], 
+  "revision_id": "849782"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-05-14T01:27:52.862884Z", 
+  "msg": [
+   "Issue 1093: Make 'svn diff' follow copy history.  This necessitates a", 
+   "syntax change for 'svn diff'.  The new syntax has two forms and a", 
+   "third shortcut format.", 
+   "1.  diff [-r N[:M]] [TARGET[@REV]...]", 
+   "2.  diff [-r N[:M]] --old=OLD-TGT[@OLDREV] [--new=NEW-TGT[@NEWREV]] \\", 
+   "[PATH...]", 
+   "3.  diff OLD-URL[@OLDREV] NEW-URL[@NEWREV]", 
+   "Where case 1 performs pegged diffs, and case 3 is a shortcut for case", 
+   "2 when no PATHs are specified and both targets are URLs.", 
+   "Several minor behavior changes from the old diff result.  First, 'svn", 
+   "diff -r N:M URL1 URL2' used to diff URL1@N versus URL2@M, but now", 
+   "performs two separate diffs, equivalent to 'svn diff -r N:M URL1; svn", 
+   "diff -rN:M URL2'.  To obtain the old behavior use 'svn diff URL1@N", 
+   "URL2@M'.  Some error messages are slightly changed when revisions are", 
+   "not found in the repository.  Finally, the extra parenthetical path", 
+   "information displayed in a diff is included more often, whever the two", 
+   "pathnames differ at all instead of only if the two paths are in the", 
+   "same revision.", 
+   "* subversion/include/client.h", 
+   "(svn_client_diff_peg): New, performs a pegged diff.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_file_changed): Always attempt to output the parenthetical", 
+   "different path markers, the code is smart enough to not do it when", 
+   "the paths are the same.", 
+   "(diff_repos_repos, diff_repos_wc): Accept a peg revision option that", 
+   "will cause the actual paths to be diffed to be selected by", 
+   "following copy history.", 
+   "(do_diff): Let the helper functions know this is not a pegged diff.", 
+   "(do_diff_peg): New, implements the logic of svn_client_diff_peg.", 
+   "(svn_client_diff_peg): New, performs a pegged diff on a filesystem", 
+   "object between two revisions.", 
+   "* subversion/clients/cmdline/diff-cmd.c", 
+   "(parse_path): New, copied from libsvn_subr/opt.c, parses out the", 
+   "optional @REV from the end of paths.", 
+   "(svn_cl__diff): Implement the new syntax.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Add new help text for 'svn diff'.", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(diff_deleted_in_head): In the new syntax, to specify a deleted file", 
+   "you must give a peg revision when the file existed.", 
+   "(diff_targets): The error message returned when a file does not", 
+   "exist in a revision depends upon whether a pegged or normal diff was", 
+   "underway."
+  ], 
+  "revision_id": "849781"
+ }
+]

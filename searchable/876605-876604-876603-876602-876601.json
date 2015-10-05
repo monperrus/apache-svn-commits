@@ -1,0 +1,87 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-03-13T18:01:35.731997Z", 
+  "msg": [
+   "More copy/paste implementation.  Perhaps there is a way to fold the", 
+   "two functions together?", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_read_prop): Implement.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_prop): Document."
+  ], 
+  "revision_id": "876605"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-13T17:51:33.207017Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(statement_keys, statements): Remove an unused statement."
+  ], 
+  "revision_id": "876604"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-13T17:50:20.587729Z", 
+  "msg": [
+   "Implement YAPF (Yet Another Property Function).", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(statement_keys, statements): Add new statement.", 
+   "(svn_wc__db_read_pristine_props): Implement.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_pristine_prop): Document."
+  ], 
+  "revision_id": "876603"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-13T17:35:45.246666Z", 
+  "msg": [
+   "Implement another property reading function.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(statement_keys, statements): Add new statement.", 
+   "(svn_wc__db_read_props): Implement.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_read_prop): Document."
+  ], 
+  "revision_id": "876602"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-13T17:11:36.898490Z", 
+  "msg": [
+   "Yet another merge performance improvement: Potentially reduce server queries", 
+   "about subtree mergeinfo during reverse merges.", 
+   "Prior to this change, at the start of a merge we looked at every subtree in", 
+   "the merge target with explicit mergeinfo and asked the server if that subtree", 
+   "existed in the merge source.  If it didn't exist then we ignored that", 
+   "subtree, since the merge couldn't change it.  Problem is, if you have a lot", 
+   "of subtrees with mergeinfo this can really slow the merge down as if asks", 
+   "the server about each one.  Worse, we might later need to contact the", 
+   "server about these subtree's implicit mergeinfo.  If all or most of the", 
+   "subtrees existed in the source then we contact the server twice for each one.", 
+   "This checking of each subtree's existence in the merge source was put in", 
+   "place to address issue #2877, but AFAICT subsequent fixes for issue #3067", 
+   "have made these fixes moot.", 
+   "This change turns off the intial checking of each subtree to see if it exists", 
+   "in the merge source.  At worst the number of server round-trips will be", 
+   "identical (i.e. if all of the subtrees didn't exist in the source) but in", 
+   "most cases performance will improve.", 
+   "Why make this change only for reverse merges?  Why not forward merges too?", 
+   "Because reverse merges can only remove explicit mergeinfo, we currently", 
+   "have no way of representing reverse merges from a path's natural history.", 
+   "So this change will not result in different post-merge mergeinfo.  For", 
+   "forward merges we would record mergeinfo on *every* subtree every time", 
+   "(which I confess I thought we already were!), so the behavior would change.", 
+   "Not to say that change isn't coming soon, but this change is less debatable", 
+   "so it's going in now.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_mergeinfo_walk_cb): If we are performing a reverse merge and a subtree", 
+   "has explicit mergeinfo then let this be sufficient for inclusion in the", 
+   "WB->CHILDREN_WITH_MERGEINFO array.", 
+   "(get_mergeinfo_paths): Update doc string."
+  ], 
+  "revision_id": "876601"
+ }
+]

@@ -1,0 +1,102 @@
+[
+ {
+  "author": "woonsan", 
+  "date": "2010-05-19T14:00:00.972730Z", 
+  "msg": [
+   "Removing jetspeed api dependency. Instead, use beanutils to retrieve portal request path info from any request attribute bean."
+  ], 
+  "revision_id": "946190"
+ }, 
+ {
+  "author": "lofwyr", 
+  "date": "2010-05-19T13:58:36.478056Z", 
+  "msg": [
+   "TOBAGO-882: resizable for tc:column"
+  ], 
+  "revision_id": "946189"
+ }, 
+ {
+  "author": "kahatlen", 
+  "date": "2010-05-19T13:57:59.089705Z", 
+  "msg": [
+   "DERBY-4665: Unidiomatic error handling in TimestampArithTest", 
+   "Use helper methods that preserve the stack trace on errors instead", 
+   "of printing to the console and exiting."
+  ], 
+  "revision_id": "946188"
+ }, 
+ {
+  "author": "woonsan", 
+  "date": "2010-05-19T13:57:31.941591Z", 
+  "msg": [
+   "Merging dynamic content path resolving into in GenericContentPortlet. So other descendant portlets are also dynamic."
+  ], 
+  "revision_id": "946187"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-05-19T13:55:51.571751Z", 
+  "msg": [
+   "Stop flagging tree conflicts due to sparse working copies and skip", 
+   "obstructed and missing (from disk) directories during merge.", 
+   "Whenever a merge sees a child of a directory excluded due to depth", 
+   "restrictions, it sets non-inheritable subtree mergeinfo on the sparse", 
+   "directory. This means that later merges into a deeper working copy", 
+   "will pull in any changes the current merge has missed.", 
+   "Flagging conflicts in this case is counter-productive, because", 
+   "no real conflict has occurred. A partial merge has happened, but", 
+   "Subversion can track it just fine, and if the partial merge was", 
+   "an accident another merge can be done to rectify the situation.", 
+   "We still alert the user by reporting such children as skipped.", 
+   "The subtree mergeinfo created by the merge should also raise", 
+   "eyebrows if it is unexpected.", 
+   "Obstructed or missing (from disk) files were already being skipped, rather", 
+   "than causing a tree conflict. Skipping obstructed or missing (from disk)", 
+   "directories (rather than flagging a tree conflict) makes the behaviour", 
+   "regarding obstructed and missing nodes in the working copy consistent.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_diff_callbacks4_t): Add new output parameter SKIP_CHILDREN", 
+   "to the dir_opened() callback. If this is set to TRUE, the directory", 
+   "is not considered tree-conflicted, but its children will still be skipped.", 
+   "Previously we only skipped children of tree-conflicted directories.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_dir_opened): Add SKIP_CHILDREN output parameter (always set to", 
+   "FALSE by this function).", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_file_changed): If the file isn't there due to depth restrictions,", 
+   "do not flag a conflict.", 
+   "(merge_dir_opened): Add SKIP_CHILDREN output parameter.", 
+   "This function was using a very simple heuristic:", 
+   "\"It's not here -> flag a TC with local reason delete\".", 
+   "Now we're being a bit more clever:", 
+   "If the directory is obstructed or missing, skip it. If the parent is", 
+   "too shallow to contain this directory, and the directory is not", 
+   "present on disk, skip it. Flag a tree conflict if the directory is locally", 
+   "deleted, or is missing in the DB as well as on disk, or if the DB says it", 
+   "should be on disk but it's not (e.g. due to a mixed-revision working copy).", 
+   "If there is a file here, flag a tree conflict with local reason 'replaced'.", 
+   "Because the merge is trying to open the directory, rather than adding it,", 
+   "the directory must have existed in the history of the target branch and", 
+   "has been replaced with a file.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(dir_baton): Add SKIP_CHILDREN field, to be used by dir_opened() callback.", 
+   "(delete_entry, open_directory, add_file, open_file): If the parent has", 
+   "SKIP_CHILDREN set, set the SKIP flag in the baton and return immediately.", 
+   "Also make open_directory() pass SKIP_CHILDREN to the dir_opened() callback.", 
+   "(close_directory): Do not ask get_dir_abspath() to error out during dry-run.", 
+   "Fixes mismatching output during dry-run and real merge which triggered", 
+   "due to above changes.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_to_sparse_directories, reintegrate_on_shallow_wc,", 
+   "tree_conflicts_on_merge_local_ci_4_1,", 
+   "tree_conflicts_merge_edit_onto_missing,", 
+   "tree_conflicts_merge_del_onto_missing): Adjust test expectations.", 
+   "The latter two tests trigger an apparent bug in the wc-ng work", 
+   "queue code. Committing from a WC where a subdirectory has been", 
+   "removed with rm -rf can corrupt a wc-ng working copy beyond repair.", 
+   "This should be looked at. The tests will start failing when this", 
+   "problem is fixed. See comments in tests for details."
+  ], 
+  "revision_id": "946186"
+ }
+]

@@ -1,0 +1,69 @@
+[
+ {
+  "author": "jimb", 
+  "date": "2000-10-02T18:14:51.000000Z", 
+  "msg": [
+   "Add skel-test executable."
+  ], 
+  "revision_id": "837415"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-02T05:12:22.000000Z", 
+  "msg": [
+   "Tighten up the restrictions on text delta producers so that it is", 
+   "actually possible to streamily generate XML deltas.  The producer will", 
+   "decide whether text deltas come inline or at the end (the consumer", 
+   "can't possibly make that decision without buffering all the text", 
+   "deltas); however, the consumer can now intuit whether a text delta", 
+   "will be coming at the end by the lack of a `close_file' call before", 
+   "the next directory operation.", 
+   "I feel like our edit_fns interface now has \"too much rope.\"", 
+   "dir_batons are now redundant (there is only one allowable value for", 
+   "the dir_baton argument for any call which takes one), and there is no", 
+   "explicit call made when a text delta is being deferred to the end of", 
+   "the call sequence.  In general, the tree structure of an editing", 
+   "operation is enforced through documentation rather than through the", 
+   "interface, and it doesn't have to be that way.  However, I don't feel", 
+   "comfortable unilaterally instituting a major design change at the", 
+   "moment, so for the moment I am just documenting the restrictions on", 
+   "the call sequence."
+  ], 
+  "revision_id": "837414"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-01T21:52:56.000000Z", 
+  "msg": [
+   "(svn_txdelta_next_window): Improve our windowing algorithm performance", 
+   "by padding the source view with half a target view's worth of data on", 
+   "each side.  This change doesn't appreciably slow down delta generation", 
+   "in my tests, even though we're passing twice as much source data to", 
+   "the vdelta engine.", 
+   "(svn_txdelta_stream_t, svn_txdelta): Add new fields sbuf and sbuf_len", 
+   "to stash source data in between calls to svn_txdelta_next_window."
+  ], 
+  "revision_id": "837413"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-01T19:55:55.000000Z", 
+  "msg": [
+   "(svn_txdelta__vdelta): When the destination of a copy straddles the", 
+   "source/target boundary, we were failing to output an opcode for the", 
+   "part of the copy which wrote target data.  Bug discovered using random", 
+   "input testing and an assertion in text_delta.c's apply_instructions()", 
+   "which compared the length of the regenerated output against tview_len."
+  ], 
+  "revision_id": "837412"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-01T19:52:05.000000Z", 
+  "msg": [
+   "Incorporate the test framework boilerplate and put random-test in", 
+   "SVN_TESTS."
+  ], 
+  "revision_id": "837411"
+ }
+]

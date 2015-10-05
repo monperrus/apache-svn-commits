@@ -1,0 +1,92 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-07-26T12:27:13.697297Z", 
+  "msg": [
+   "* www/links.html: Link to PixelNovel Timeline Subversion client.", 
+   "Patch by: Anatoly Paraev <anatoly@pixelnovel.com>", 
+   "(tweaked by me to indicate that this is a closed-source commercial client)"
+  ], 
+  "revision_id": "878555"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-24T23:31:51.558509Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_patch): Fix typo in comment."
+  ], 
+  "revision_id": "878554"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-24T23:23:39.599509Z", 
+  "msg": [
+   "Make 'svn patch' unidiff application smarter about file deletions.", 
+   "We now skip files which are versioned and scheduled for deletion,", 
+   "and schedule files which are empty after patching for deletion.", 
+   "Also, we're now a small bit smarter about figuring out whether", 
+   "a file was added by the patch.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff): Test file deletion.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(patch_target_t): New members DELETED and ADDED. Enhance a comment", 
+   "while here.", 
+   "(init_patch_target): Initialise new members. Skip targets which", 
+   "are versioned and scheduled for deletion.", 
+   "(maybe_send_patch_target_notification): Send a deleted notification", 
+   "for deleted patch targets.", 
+   "(apply_one_patch): Retrieve sizes of the working file to be patched", 
+   "and the temporary file which contains the patched result. Based on", 
+   "this information, decide whether the patch target should be scheduled", 
+   "for deletion, was newly added, or should be skipped."
+  ], 
+  "revision_id": "878553"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-24T20:03:50.035254Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_hunk): Plug an error leak."
+  ], 
+  "revision_id": "878552"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-23T23:59:53.487506Z", 
+  "msg": [
+   "Add an upgrade function to wc_db which allows the tree conflict information to", 
+   "be migrated during a f12->f13 format upgrade.", 
+   "* subversion/tests/libsvn_wc/db-test.c", 
+   "(I_TC_DATA): New.", 
+   "(data_loading_sql): Add some tree conflict data to a node so we can later", 
+   "upgrade it.", 
+   "(create_fake_wc): Accept an optional format argument.", 
+   "(test_getting_info, test_inserting_nodes, test_children, test_working_info,", 
+   "test_pdh, test_scan_addition, test_scan_deletion, test_global_relocate):", 
+   "Update callers to create_fake_wc().", 
+   "(test_upgrading_to_f13): New.", 
+   "(test_funcs): Run the new test.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "Add a format 14, which we don't actually upgrade to since we can just", 
+   "postpone all the column removal until the final format before release.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(conflict_kind_to_word, conflict_action_to_word, conflict_reason_to_word,", 
+   "wc_opeation_to_word, db_kind_from_node_kind, migrate_single_tree_conflict,", 
+   "svn_wc__db_upgrade_func): New.", 
+   "(parse_local_abspath, svn_wc__db_init): When opening the db, provide the", 
+   "upgrade function.", 
+   "(create_repos_id): Accept an optionally prepared statement to use (because", 
+   "we need to run this on different databases sometimes.)", 
+   "(svn_wc__db_base_add_directory, svn_wc__db_base_add_file,", 
+   "svn_wc__db_base_add_symlink, svn_wc__db_base_add_absent_node,", 
+   "svn_wc__db_temp_base_add_subdir, svn_wc__db_repos_ensure, relocate_txn,", 
+   "svn_wc__db_temp_get_sdb): Pass some NULLs into create_repos_id() (thus", 
+   "allowing the API to use it's own prepared statements).", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_upgrade_func): New."
+  ], 
+  "revision_id": "878551"
+ }
+]

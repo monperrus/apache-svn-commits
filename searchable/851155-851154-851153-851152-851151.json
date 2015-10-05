@@ -1,0 +1,113 @@
+[
+ {
+  "author": "breser", 
+  "date": "2004-09-22T21:04:34.991144Z", 
+  "msg": [
+   "Merge r11077, r11078, r1180 from 1.0.x.  Security issue CAN-2004-0749."
+  ], 
+  "revision_id": "851155"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-09-22T20:58:18.986550Z", 
+  "msg": [
+   "CAN-2004-0749: path-based authz fixes for svn 1.0.  Patch 3 of 3.", 
+   "Implement new svn_repos__fs_revision_prop() and", 
+   "svn_repos__fs_revision_proplist() wrappers, both of which take a", 
+   "read_authz callback.  Also define a new", 
+   "svn_repos__fs_change_rev_prop2() that takes a read_authz callback.", 
+   "Have mod_dav_svn call these new functions privately.", 
+   "If a revision's changed-paths are entirely unreadable:", 
+   "- return NULL value when fetching any revprop.", 
+   "- disallow all revprop writes (throw an APR_EGENERAL error)", 
+   "If a revision has a mixture of readable/unreadable changed-paths:", 
+   "- return 'svn:author' and 'svn:date', but NULL values for anything else.", 
+   "- disallow all property writes (throw an APR_EGENERAL error)", 
+   "(Note: this patch assumes you've applied the 'common' patch first.)", 
+   "* libsvn_repos/repos.h", 
+   "(svn_repos__fs_revision_prop): new wrapper for svn_fs_revision_prop.", 
+   "(svn_repos__fs_revision_proplist): new wrapper for svn_fs_revision_proplist.", 
+   "(svn_repos__fs_change_rev_prop2):  new func, takes authz callback.", 
+   "* libsvn_repos/fs-wrap.c", 
+   "(enum readability_level, get_readability):  new helper enum and func.", 
+   "(svn_repos__fs_revision_prop):  new func.", 
+   "(svn_repos__fs_revision_proplist):  new func.", 
+   "(svn_repos__fs_change_rev_prop2):  new func.", 
+   "(svn_repos_fs_change_rev_prop):  implement as dumb wrapper.", 
+   "* mod_dav_svn/deadprops.c", 
+   "(dav_db):  grow new fields to hold authz_func and baton.", 
+   "(dav_svn_db_open):  store dav_svn_authz_read() and baton in dav_db context.", 
+   "(get_value, dav_svn_db_exists, dav_svn_db_first_name, save_value,", 
+   "dav_svn_db_remove): call new repos wrapper with authz_func.", 
+   "* mod_dav_svn/liveprops.c", 
+   "(dav_svn_insert_prop, dav_svn_get_last_modified_time): call new", 
+   "repos wrapper with dav_svn_authz_read()."
+  ], 
+  "revision_id": "851154"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2004-09-22T20:57:10.840769Z", 
+  "msg": [
+   "Undo accidental change to subversion/libsvn_fs_fs/tree.c whilst committing a", 
+   "STATUS vote in r11072. Sorry!"
+  ], 
+  "revision_id": "851153"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-09-22T20:56:50.168103Z", 
+  "msg": [
+   "CAN-2004-0749: path-based authz fixes for svn 1.0.  Patch 2 of 3.", 
+   "Implement svn_repos__history2() and svn_repos__get_logs2() for private", 
+   "use by mod_dav_svn.  Both new functions use a read_authz callback.", 
+   "The former uses the callback when walking backwards through history.", 
+   "The latter uses the callback to validate changed-paths when returning", 
+   "a revision:", 
+   "- If a revision has no readable changed-paths, push only the revnum", 
+   "at the log reciever -- nothing else.", 
+   "- If a revision has a mixture of readable/unreadable changed-paths,", 
+   "then omit the log message and the unreadable paths.", 
+   "* libsvn_repos/repos.h", 
+   "(svn_repos__get_logs2): new declaration, takes an authz_func/baton.", 
+   "(svn_repos__history2):  new declaration, takes an authz_func/baton.", 
+   "* libsvn_repos/rev_hunt.c", 
+   "(svn_repos_history):  become dumb wrapper around svn_repos__history2().", 
+   "(svn_repos__history2): validate the initial peg-object's readability.", 
+   "also validate every history rev/path pair.  if an unreadable", 
+   "pair is discovered, just stop tracing history and return.", 
+   "* libsvn_repos/log.c", 
+   "(svn_repos_get_logs): become dumb wrapper around svn_repos__get_logs2().", 
+   "(detect_changed): use authz_read func on every changed-path.  omit", 
+   "unreadable paths from returned hash.  Return either no error or", 
+   "one of two specific errorcodes.", 
+   "(svn_repos_get_logs2): pass the authz_func to svn_repos_history2().", 
+   "if authz_func is present, always call detect_changed().  if", 
+   "detect_changed() returns 'unreadable' error, then only send", 
+   "revnum, nothing else.  if it returns 'partially readable'", 
+   "error, then omit logmsg.", 
+   "* mod_dav_svn/log.c", 
+   "(repos.h): #include this \"private\" header in a creepy way.", 
+   "(dav_svn__log_report): build an authz baton.  invoke svn_repos__get_logs2()", 
+   "with the authz func."
+  ], 
+  "revision_id": "851152"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-09-22T20:54:59.561050Z", 
+  "msg": [
+   "CAN-2004-0749: path-based authz fixes for svn 1.0.  Patch 1 of 3.", 
+   "* mod_dav_svn/dav_svn.h", 
+   "(dav_svn_authz_read, dav_svn_authz_baton): new library-level", 
+   "declarations of things that were formerly static.", 
+   "* mod_dav_svn/update.c", 
+   "(authz_read_baton):  remove local declaration.", 
+   "(dav_svn_authz_read):  new name of formerly static 'authz_read'.", 
+   "(dav_svn__update_report):  update caller to use new symbol names.", 
+   "* notes/authz_policy.txt:  new file explaining path-based", 
+   "authorization policies, expectations, and how to implement correctly."
+  ], 
+  "revision_id": "851151"
+ }
+]

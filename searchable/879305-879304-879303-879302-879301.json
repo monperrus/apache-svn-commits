@@ -1,0 +1,122 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T23:24:20.251606Z", 
+  "msg": [
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(lock_twice_in_one_wc): Use A/B instead of just B. (For some reason this B is", 
+   "not available in the dav tests)."
+  ], 
+  "revision_id": "879305"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-10T23:04:56.466264Z", 
+  "msg": [
+   "Update the pristine and revert file apis to provide a working copy", 
+   "context/db and to work with absolute paths. Also change the internal apis", 
+   "to allow returning an error.", 
+   "This only broke one testcase: The test for the exact filenames passed", 
+   "to diff tools. This test is changed to expect the full path.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_get_pristine_contents): Fix documentation; accidentally already", 
+   "deprectated before this patch.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(restore_file, svn_wc__internal_transmit_text_deltas): Update callers/", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__text_base_path, svn_wc__text_revert_path,", 
+   "svn_wc__get_revert_contents):", 
+   "Take a db and local_abspath.", 
+   "* subversion/libsvn_wc/adm_files.h", 
+   "(remove_revert_files, svn_wc_delete4, svn_wc_add4,", 
+   "revert_admin_things): Update callers.", 
+   "(svn_wc_get_pristine_copy_path): Create wc context and use it for retrieving", 
+   "the path.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_get_pristine_contents): Renamed to ...", 
+   "(svn_wc_get_pristine_contents2): ... this and take a context and abspath.", 
+   "(svn_wc__get_pristine_contents): New function.", 
+   "(svn_wc_remove_from_revision_control): Update caller.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Update caller.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_get_pristine_contents): New function.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(file_diff, report_wc_file_as_added, delete_entry, apply_textdelta,", 
+   "close_file): Update callers.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(install_committed_file, log_do_committed): Update callers.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__text_modified_internal_p): Update caller.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_file_with_history, choose_base_paths, apply_textdelta,", 
+   "svn_wc_add_repos_file4): Update callers.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_external_diffcmd): Expect an absolute path to the pristine file."
+  ], 
+  "revision_id": "879304"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-10T21:45:24.083726Z", 
+  "msg": [
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_prop_list2): Remove unused variable."
+  ], 
+  "revision_id": "879303"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-10T21:41:02.528899Z", 
+  "msg": [
+   "Add a helper function to duplicate svn_wc_conflict_description2_t structures.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc__conflict_description2_dup): New.", 
+   "* subversion/libsvn_wc/util.c", 
+   "(svn_wc__conflict_description2_dup): New."
+  ], 
+  "revision_id": "879302"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-10T20:47:35.799160Z", 
+  "msg": [
+   "Add a couple of temporary conversion functions to make an", 
+   "svn_wc_conflict_description_t into an svn_wc_conflict_description2_t.", 
+   "Use these functions to begin a transition to the new datatype, first", 
+   "by updating the interfaces to svn_wc__db_op_read_tree_conflict(), and", 
+   "svn_wc__db_op_set_tree_conflict().", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_internal, resolve_found_entry_callback): Update to use the new struct.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(assemble_status, get_dir_status): Same.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(already_in_a_tree_conflict): Same.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__internal_conflicted_p): Same.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(visit_tc_too_error_handler, svn_wc__walk_entries_and_tc): Same.", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__add_tree_conflict, svn_wc__get_tree_conflict): Same.", 
+   "(svn_wc__cd2_to_cd, svn_wc__cd_to_cd2): New.", 
+   "* subversion/libsvn_wc/tree_conflicts.h", 
+   "(svn_wc__loggy_add_tree_conflict, svn_wc__write_tree_conflicts):", 
+   "Remove senseless Since tags.", 
+   "(svn_wc__cd2_to_cd, svn_wc__cd_to_cd2): New.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(remove_tc_baton): Update conflict description type.", 
+   "(remove_tc_txn): Convert tree conflicts after reading them.", 
+   "(svn_wc__db_op_set_tree_conflict): Update param type.", 
+   "(svn_wc__db_op_get_tree_conflict): Rename to...", 
+   "(svn_wc__db_op_read_tree_conflict): ...this, and convert the incoming", 
+   "tree conflict to something we can use.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(run_log): Convert the passed in tree conflict.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_op_get_tree_conflict): Rename to...", 
+   "(svn_wc__db_op_read_tree_conflict): ...this.", 
+   "(svn_wc__db_op_set_tree_conflict): Add a comment."
+  ], 
+  "revision_id": "879301"
+ }
+]

@@ -1,0 +1,50 @@
+[
+ {
+  "author": "vsiveton", 
+  "date": "2009-02-27T13:39:32.901378Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release maven-project-info-reports-plugin-2.1.1"
+  ], 
+  "revision_id": "748520"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2009-02-27T13:37:03.242404Z", 
+  "msg": [
+   "QPID-1635,QPID-1636,QPID-1638 : Updated QueueEntries to contain additional values from AMQMessage, _flags and expiry this allows the checking of immediate delivery and expiry on unloaded messages.", 
+   "Updated nomenclature to use load/unload rather than the overloaded flow/recover.", 
+   "Created new FileQueueBackingStoreFactory to ensure that validates and creates initial flowToDiskLocation and creates a new BackingStore.", 
+   "Responsibility for FlowToDisk has been added to the QueueEntryLists. This will allow the easy unloading of the structure in the future. Inorder to do this the size,count and memory count properties had to be moved from the SimpleAMQQueue to the QueueEntryList.", 
+   "An Inhaler thread was created in addition to the synchronous loading of messages. This is initiated as a result of a flowed QEL dropping below the minimumMemory value.", 
+   "A test to ensure that the queue never exceeds its set memory usage and that the count does not go negative has been added to SimpleAMQQueueTest.", 
+   "The SimpleAMQQueue is responsible for deciding when a message can be unloaded after delivery takes place. The QEL cannot decide this as there is no state for a message being marked as sent to a consumer. Only Aquired and Dequeued. The unloaded message is only deleted after the QueueEntry is deleted from the QEL. This negates the need to recreated the data on disk if the message needs to be unloaded again.", 
+   "All files/directories relating to FtD are created as deleteOnExit files so that under clean shutdown the VM will ensure that the files are deleted. On startup the flowToDiskLocation is also purged to ensure a clean starting point.", 
+   "SAMQQueueThreadPoolTest was augmented to take in to account the new inhaler executor reference."
+  ], 
+  "revision_id": "748519"
+ }, 
+ {
+  "author": "rdonkin", 
+  "date": "2009-02-27T13:36:58.209797Z", 
+  "msg": [
+   "Fix test broken by renaming RAT-38 https://issues.apache.org/jira/browse/RAT-38"
+  ], 
+  "revision_id": "748518"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2009-02-27T13:36:33.042952Z", 
+  "msg": [
+   "auto-generated test rules"
+  ], 
+  "revision_id": "748517"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2009-02-27T13:35:38.936459Z", 
+  "msg": [
+   "QPID-1635,QPID-1636 : Moved additional properties from AMQMessage up to QueueEntry to allow processing whilst messasge has been flowed. Moved : _flags (for Immediate and delivered status), expiry, messageID. Created base class to maintain counts of data and objects in queue. Removed this responsibility from the AMQQueues and on to the QueueEntryLists. This will more easily allow the QEL structure to be flowed to disk at a later stage. Updated tests as a result of moves."
+  ], 
+  "revision_id": "748516"
+ }
+]

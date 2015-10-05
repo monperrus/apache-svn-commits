@@ -1,0 +1,59 @@
+[
+ {
+  "author": "mamta", 
+  "date": "2011-03-16T17:51:10.951179Z", 
+  "msg": [
+   "DERBY-5121 Data corruption when executing an UPDATE trigger", 
+   "This commit will disable the selective column reading for row level triggers which was introduced by DERBY-1482. As a result of this, Derby will be required to read all the columns from the trigger table. The generated trigger action sql's columns will refer to the columns using theie actual column positions in the trigger table. I have disabled the selective colunm reading by simply assuming in the create trigger code that we are dealing with pre-10.7 database(as if we are in soft upgrade mode from pre-10.7). During the soft-upgrade mode with 10.7 and higher releases, we do not do column reading optimization because the system tables in pre-10.7 are not equipped to keep additional information about trigger action columns.", 
+   "This code change was done in DataDictionaryImpl.getTriggerActionString and looks as follows", 
+   "boolean in10_7_orHigherVersion = false;", 
+   "In addition to the above change, I also had to catch the column missing error in this same method. This can happen if ALTER TABLE DROP COLUMN is dropping a column from the trigger table and that column is getting referenced in the trigger action sql. This scenario currently in the 10.7 and 10.8 codelines get caught when we find that the column being dropped is getting used in trigger action's referenced column list and if so, then we go ahead and drop that trigger if we are doing alter table drop column cascade or we throw an error for trigger dependency if the alter table drop column restrict is being performed. But since with this commit, we do not keep the trigger action's referenced column list anymore, we can't catch the drop column's dependency in the trigger action's referenced column list. Because of this, I have to see if the trigger action column is not found, then I should throw a column not found exception. The catch of that exception will drop the trigger is we are dealing with alter table drop column cascade or it will throw a trigger dependency exception if we are dealing with alter table drop column restrict.", 
+   "In addition to the above 2 changes, I had to make following change in TriggerDescriptor.getActionSPS. The if condition used to be", 
+   "if((!actionSPS.isValid() ||", 
+   "(actionSPS.getPreparedStatement() == null)) &&", 
+   "isRow &&", 
+   "referencedColsInTriggerAction != null)", 
+   "But now with this commit, we don't maintain the information in list referencedColsInTriggerAction and because of that, the above if would always be false. We want to catch triggers that are using REFERENCING clause and because of this, the new if condition will look as follows", 
+   "if((!actionSPS.isValid() ||", 
+   "(actionSPS.getPreparedStatement() == null)) &&", 
+   "isRow && (referencingOld || referencingNew))", 
+   "In addition to the above three changes, I have added new test to incorporate Rick's reproducible case.", 
+   "I have not changed the comments in the code yet because I hope to work on the fix that I proposed earlier in the jira. Once I have that fix in, I can go ahead and change the comments to match that fix."
+  ], 
+  "revision_id": "1082235"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2011-03-16T17:50:11.281239Z", 
+  "msg": [
+   "o Added tests for LdifEntry class", 
+   "o Fixed many errors in the Ldif parsing"
+  ], 
+  "revision_id": "1082234"
+ }, 
+ {
+  "author": "kahatlen", 
+  "date": "2011-03-16T17:44:48.496092Z", 
+  "msg": [
+   "DERBY-5115: NetworkServerControlApiTest depends on implicit ordering of test cases", 
+   "Made the test ordering explicit."
+  ], 
+  "revision_id": "1082233"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2011-03-16T17:41:59.050465Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "1082232"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2011-03-16T17:41:53.970413Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag myfaces-core-project-1.1.9"
+  ], 
+  "revision_id": "1082231"
+ }
+]

@@ -1,0 +1,96 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2002-12-03T09:27:56.606257Z", 
+  "msg": [
+   "Some simplifications I probably should have made earlier:", 
+   "Add optional tuple support to svn_ra_svn_parse_tuple().  Add boolean", 
+   "support to svn_ra_svn_write_tuple() and svn_ra_svn_parse_tuple().", 
+   "Change the protocol to stop passing around boolean values as things", 
+   "like \"( has-props ) \"/\"( ) \" and just pass \"true\"/\"false\" instead; it", 
+   "doesn't make much sense to semantically tag boolean values but not", 
+   "numbers and strings and lists.", 
+   "* include/svn_ra_svn.h", 
+   "(svn_ra_svn_vwrite_tuple, svn_ra_svn_vparse_tuple): Make private.", 
+   "Nothing outside marshal.c uses these and we're about to make", 
+   "vparse_tuple take slightly weird parameters.", 
+   "(svn_ra_svn_write_tuple, svn_ra_svn_parse_tuple): Update docs.", 
+   "* libsvn/protocol: Simplify boolean values as noted above.", 
+   "* libsvn_ra_svn/client.c, libsvn_ra_svn/editor.c, svnserve/serve.c:", 
+   "Take advantage of optional-tuple parsing and boolean support; most", 
+   "functions changed.", 
+   "* libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_vwrite_tuple): Rename to vwrite_tuple.  Add boolean support.", 
+   "(vparse_optional_tuple): New helper function.", 
+   "(svn_ra_svn_vparse_tuple): Rename to vparse_tuple.  Add boolean and", 
+   "optional tuple support.  Take a va_list * so that the caller can", 
+   "see the argument pointer advance."
+  ], 
+  "revision_id": "844040"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2002-12-03T05:43:23.403026Z", 
+  "msg": [
+   "Fix ra_svn get_dir and get_file.  The existing code (apart from being", 
+   "just plain buggy) wasn't prepared to get just the props or just the", 
+   "contents.", 
+   "* libsvn_ra_svn/protocol: Add want-props and want-contents flags for", 
+   "get-dir and get-file.", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_get_file): Pass want-props and want-contents flags as", 
+   "appropriate.  Don't parse proplist or read contents if not", 
+   "requested.", 
+   "(ra_svn_get_dir): Pass want-props and want-contents flags as", 
+   "appropriate.  Don't parse proplist or dirlist if not requested.", 
+   "Fix a couple of simple bugs in the parsing of dirlist.", 
+   "* svnserve/serve.c", 
+   "(write_proplist): Allow a NULL argument for convenience in handling", 
+   "the case where properties aren't requested.", 
+   "(get_file, get_dir): Accept want-props and want-contents flags.", 
+   "Don't do unrequested work."
+  ], 
+  "revision_id": "844039"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2002-12-03T03:55:36.795833Z", 
+  "msg": [
+   "Add a new RA interface, svn_ra_svn.  This is a direct mapping on TCP.", 
+   "* build.conf: Add new directories libsvn_ra_svn and svnserve.", 
+   "* configure.in: Add new ra_lib dependencies.", 
+   "* subversion/include/svn_error_codes.h: Add ra_svn-specific error codes.", 
+   "* subversion/include/svn_ra.h (svn_ra_svn_init),", 
+   "subversion/libsvn_ra/ra_loader.c (ra_libraries): Add new ra layer.", 
+   "* subversion/tests/clients/cmdline/getopt_tests_data/svn--version_stdout:", 
+   "Change expected svn --version output.", 
+   "* subversion/libsvn_ra_svn/protocol: New file, describes protocol.", 
+   "* subversion/libsvn_ra_svn/todo: New file, lists remaining tasks.", 
+   "* subversion/libsvn_ra_svn/client.c: New file, implements client routines.", 
+   "* subversion/libsvn_ra_svn/editor.c: New file, implements editor routines.", 
+   "* subversion/libsvn_ra_svn/marshal.c: New file, implements marshalling.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h: New file, private declarations.", 
+   "* subversion/svnserve/main.c: New file, implements server control loop.", 
+   "* subversion/svnserve/serve.c: New file, implements server routines.", 
+   "* subversion/svnserve/server.h: New file, private server declarations."
+  ], 
+  "revision_id": "844038"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-12-03T02:40:18.679956Z", 
+  "msg": [
+   "whoops. I meant to use a \"finally\" to ensure that the baton was", 
+   "closed, whether an exception occurred or not."
+  ], 
+  "revision_id": "844037"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-12-03T02:33:19.253060Z", 
+  "msg": [
+   "Update the example to use the new access baton stuff."
+  ], 
+  "revision_id": "844036"
+ }
+]

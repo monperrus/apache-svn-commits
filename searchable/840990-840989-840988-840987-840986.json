@@ -1,0 +1,112 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-01-16T18:42:12.255362Z", 
+  "msg": [
+   "Remove the obsolete SVN_WC__ENTRY_MODIFY_EXISTENCE flag."
+  ], 
+  "revision_id": "840990"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-16T17:14:35.159608Z", 
+  "msg": [
+   "* subversion/libsvn_client/auth.c", 
+   "(get_username, get_password): Fix logic oversight.  Allow for NULL", 
+   "auth cache directory."
+  ], 
+  "revision_id": "840989"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-16T16:41:50.391307Z", 
+  "msg": [
+   "Tagging revision 909 as version 0.8.0"
+  ], 
+  "revision_id": "840988"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-01-16T16:07:32.036687Z", 
+  "msg": [
+   "* subversion/libsvn_wc/translate.c", 
+   "(svn_wc_keywords_differ): Logic bug.  `||'-separated conditionals", 
+   "are evaluated left-to-right until Truth is found or a SEGFAULT", 
+   "occurs.  Try to prevent the latter."
+  ], 
+  "revision_id": "840987"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-16T09:07:11.518503Z", 
+  "msg": [
+   "Get rid of a bunch of uses of svn_stringbuf_t in the property handling code", 
+   "(of the WC and its callers in the client).", 
+   "[ partial work towards issue #406 ]", 
+   "Generally, property names are now \"const char *\", property values are", 
+   "\"const svn_string_t *\", and paths are \"const char *\".", 
+   "This change smacked a lot of files. In many cases, \"changed all callers\"", 
+   "means simple changes on the calling side, so I won't detail those in the", 
+   "log. Where some logic needed to change, or where some data lifetimes may", 
+   "have changed, the details will be listed below.", 
+   "* include/svn_wc.h (svn_wc_prop_list, svn_wc_prop_get, svn_wc_prop_set,", 
+   "svn_wc_is_normal_prop, svn_wc_is_wc_prop, svn_wc_is_entry_prop): pass", 
+   "more natural data types for the params, rather than svn_stringbuf_t *.", 
+   "changed all callers.", 
+   "(svn_wc_keywords_t {}): make the values constant", 
+   "* include/svn_client.h (svn_client_propset, svn_client_propget,", 
+   "svn_client_proplist): pass more natural data types for the params,", 
+   "rather than svn_stringbuf_t *. changed all callers.", 
+   "* include/svn_delta.h (svn_prop_t): removed -- it doesn't belong in the", 
+   "delta interface. the data type moved to libsvn_wc/wc.h and was revamped", 
+   "to avoid svn_stringbuf_t.", 
+   "* libsvn_wc/wc.h (svn_prop_t): moved from svn_delta.h. changed the data", 
+   "types for the name and value. all users changed.", 
+   "(svn_wc__conflicting_propchanges_p, svn_wc__get_existing_prop_reject_file,", 
+   "svn_wc__load_prop_file, svn_wc__save_prop_file,", 
+   "svn_wc__do_property_merge): change params to more natural types.", 
+   "(svn_wc__get_keywords): constify the PATH and FORCE_LIST params.", 
+   "* libsvn_wc/props.c (svn_wc__get_local_propchanges): store svn_prop_t", 
+   "structures directly into the propchanges array, rather than pointers to", 
+   "structures on the heap.", 
+   "(svn_wc__conflicting_propchanges_p): modify the type for", 
+   "DESCRIPTION. constify the LOCAL and UDPATE params.", 
+   "(svn_wc__load_prop_file, svn_wc__save_prop_file,", 
+   "svn_wc__get_existing_prop_reject_file, svn_wc__do_property_merge):", 
+   "change params to more natural data types.", 
+   "(append_prop_conflict): change CONFLICT_DESCRIPTION to an svn_string_t.", 
+   "(svn_wc__do_propert_merge): the PROPCHANGES param is now a constant array", 
+   "of structures rather than structure pointers.", 
+   "* libsvn_wc/adm_crawler.c (do_prop_deltas): propchanges is now an array of", 
+   "the new svn_prop_t structures -- process accordingly.", 
+   "* libsvn_wc/get_editor.c (make_dir_baton, make_file_baton, change_dir_prop,", 
+   "change_file_prop, latest_keyword_data, close_file): propchanges arrays", 
+   "hold svn_prop_t structures rather than pointers. also, changed some", 
+   "callers to use new style property data types.", 
+   "* libsvn_wc/status.c (add_ignore_patterns): make sep[] a static, const", 
+   "var. update call to svn_wc_prop_get(). dup the entire prop value at", 
+   "once, and use the pieces returned by apr_strtok (rather than dup'ing", 
+   "each and every piece).", 
+   "* libsvn_wc/translate.c (translate_keyword_subst): constify the VALUE", 
+   "param. change to use a local variable for the value len, rather than", 
+   "trying to change the caller's value.", 
+   "* libsvn_client/prop_commands.c (svn_client_propset, recursive_propget,", 
+   "svn_client_propget, add_to_proplist, recursive_proplist,", 
+   "svn_client_proplist): update params to new types. change some callers", 
+   "to new types.", 
+   "* libsvn_wc/adm_ops.c (svn_wc_add): changed a caller", 
+   "* libsvn_wc/status_editor.c: changed some callers", 
+   "* libsvn_wc/questions.c: changed some callers", 
+   "* bindings/ruby/wc.c: changed some callers", 
+   "* bindings/ruby/client.c: changed some callers", 
+   "* clients/cmdline/propdel-cmd.c: changed some callers", 
+   "* clients/cmdline/propget-cmd.c: changed some callers", 
+   "* clients/cmdline/propset-cmd.c: changed some callers", 
+   "* clients/cmdline/proplist-cmd.c: changed some callers", 
+   "* clients/cmdline/trace-update.c: changed some callers", 
+   "* clients/cmdline/feedback.c: changed some callers", 
+   "* clients/cmdline/propedit-cmd.c: changed some callers"
+  ], 
+  "revision_id": "840986"
+ }
+]

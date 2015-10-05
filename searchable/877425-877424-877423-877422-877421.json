@@ -1,0 +1,81 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-04-18T02:20:36.380094Z", 
+  "msg": [
+   "Revert a bit of over-engineering introduced in r37349.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(resolve_target_path): Don't create missing directories here.", 
+   "We don't even know yet if we have any hunks to apply to the", 
+   "target file. And we don't want to be creating thousands of directories", 
+   "just because someone passed a wrong strip count, or applied a patch to", 
+   "the wrong path in the working copy, for example.", 
+   "It's safer to just skip targets if their containing directories do not", 
+   "exist, at least until we've figured out how to avoid associated problems.", 
+   "(init_patch_target): Fix typo in comment while here."
+  ], 
+  "revision_id": "877425"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-18T01:59:09.447409Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(copy_lines_to_target, read_lines_from_target): Don't ignore errors", 
+   "returned by svn_stream_close().", 
+   "Found by: gstein"
+  ], 
+  "revision_id": "877424"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-18T01:52:48.010023Z", 
+  "msg": [
+   "Various target-file-related improvements to svn patch.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(patch_target_t): Make abs_path non-const so we can pass it to", 
+   "svn_dirent_is_under_root(). Allow for the 'file' member to be", 
+   "NULL in case the target file is absent.", 
+   "(resolve_target_path): Add 'exists' output argument which upon", 
+   "indicates whether the target file already exists.", 
+   "Sanitize target path validation by using svn_dirent_is_under_root().", 
+   "Try to create non-existent parent directories of the target path.", 
+   "(init_patch_target): Only try to open the target file if it exists.", 
+   "When checking for local mods, consider that directories of the target", 
+   "path may be unversioned, e.g. if resolve_target_path() created them.", 
+   "(apply_one_patch): Only read from target file if it exists.", 
+   "(apply_one_hunk): As previous, and if it does not exist, use an empty", 
+   "string as latest text. This always creates a conflict in the created", 
+   "file, we might want to make this a bit smarter later."
+  ], 
+  "revision_id": "877423"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-04-18T01:02:34.493158Z", 
+  "msg": [
+   "Enhance interesting little script that analyzes what committers touched.", 
+   "It can now step into selected subdirectories.", 
+   "* tools/dev/analyze-svnlogs.py", 
+   "(get_key): New function to determine the summary key for a path.", 
+   "(print_report): Add parameter sectionroots, to indicate directories that", 
+   "should be stepped into by one level instead of being summarized as one.", 
+   "If sectionroots == [ ], this function behaves like it used to.", 
+   "Call new function get_key() to implement use of that list.", 
+   "Also make sure tags and branches are listed only once (now necessary).", 
+   "(run): Pass some default sectionroots to print_report()."
+  ], 
+  "revision_id": "877422"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-18T00:29:30.877344Z", 
+  "msg": [
+   "* subversion/include/svn_dirent_uri.h", 
+   "Update copyright year while here.", 
+   "(svn_dirent_is_under_root): Add @since marker.", 
+   "Found by: arfrever"
+  ], 
+  "revision_id": "877421"
+ }
+]

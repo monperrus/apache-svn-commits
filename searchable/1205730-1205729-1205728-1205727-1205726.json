@@ -1,0 +1,63 @@
+[
+ {
+  "author": "acmurthy", 
+  "date": "2011-11-24T06:09:01.593027Z", 
+  "msg": [
+   "MAPREDUCE-3468. Changed ant based infrastructure to use 0.23.1 version. Contributed by Siddharth Seth."
+  ], 
+  "revision_id": "1205730"
+ }, 
+ {
+  "author": "mattmann", 
+  "date": "2011-11-24T05:52:15.764246Z", 
+  "msg": [
+   "Fix for NUTCH-1209: Output from ParserChecker Url missing a newline"
+  ], 
+  "revision_id": "1205729"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2011-11-24T05:48:40.743736Z", 
+  "msg": [
+   "Propose r1205726 for backport to 1.6.x."
+  ], 
+  "revision_id": "1205728"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2011-11-24T05:48:07.391225Z", 
+  "msg": [
+   "Propose r1205726 for backport to 1.7.x."
+  ], 
+  "revision_id": "1205727"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2011-11-24T05:45:24.727615Z", 
+  "msg": [
+   "Plug a memory leak in the fs-base deltification logic.  Twice in a", 
+   "decade I've seen this code swallow all the memory on a server in the", 
+   "wild when trying to deltify some fairly large versioned files.  Now,", 
+   "such a deltification maintains a constant (and relatively low -- 17 MB", 
+   "in my verification against the second of these troublesome data sets)", 
+   "level of memory usage.", 
+   "NOTE: This patch appears to pass all the BDB tests on my laptop, but", 
+   "of course those aren't known to cover large datasets.  I would", 
+   "really, really appreciate some extra eyes on this change!", 
+   "Wondering aloud...  if this approach turns out to be correct, should", 
+   "the corresponding stream write function in this same file", 
+   "(rep_write_contents) use a similarly initialized scratch pool and", 
+   "clear it at the start of each invocation, too?", 
+   "* subversion/libsvn_fs_base/reps-strings.c", 
+   "(struct rep_read_baton): Rename (and repurpose) 'pool' to", 
+   "'scratch_pool'.", 
+   "(rep_read_get_baton): Now initialize scratch_pool (formerly, pool)", 
+   "from a subpool of the passed-in pool.  This allows us to clear it", 
+   "without destroying the baton.", 
+   "(txn_body_read_rep): Use the baton's scratch_pool instead of", 
+   "trail->pool in the call to rep_read_range().", 
+   "(rep_read_contents): Clear the baton's scratch_pool before use."
+  ], 
+  "revision_id": "1205726"
+ }
+]

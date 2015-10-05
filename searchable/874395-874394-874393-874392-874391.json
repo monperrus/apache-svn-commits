@@ -1,0 +1,109 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2008-11-21T21:51:23.619281Z", 
+  "msg": [
+   "Create branch for HTTP protocol rewrite."
+  ], 
+  "revision_id": "874395"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-11-21T21:12:10.403747Z", 
+  "msg": [
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_description_t): Add comment reminding", 
+   "people to update svn_wc__conflict_description_dup()", 
+   "if they add fields to this struct.", 
+   "Suggested by: danielsh"
+  ], 
+  "revision_id": "874394"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2008-11-21T20:55:01.286992Z", 
+  "msg": [
+   "Fix edge-case bug in svn_path_is_canonical() where a '.:' segment caused", 
+   "paths to be considered non-canonical.", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(svn_uri_is_canonical):", 
+   "When the first segment of a non-URL contains a colon, don't treat it as", 
+   "the end of the segment.", 
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(test_dirent_is_canonical, test_uri_is_canonical):", 
+   "Test paths with colons.", 
+   "Found by: hwright", 
+   "(during a dump|load of the ASF repos.  Brave man!)"
+  ], 
+  "revision_id": "874393"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-11-21T20:27:55.535028Z", 
+  "msg": [
+   "* subversion/svn/main.c", 
+   "(svn_opt_subcommand_desc2_t): Document the new tree conflict", 
+   "output of 'svn status' in 'svn help status'."
+  ], 
+  "revision_id": "874392"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-11-21T19:24:59.862711Z", 
+  "msg": [
+   "In 'svn status', print an additional line for tree conflict victims,", 
+   "describing the nature of the conflict.", 
+   "It currently looks like this:", 
+   "$ svn status", 
+   "M      .", 
+   "D     C alpha", 
+   ">   incoming edit, local missing", 
+   "M       beta", 
+   "$", 
+   "This makes it unnecessary to run 'svn info' in order to find out", 
+   "what kind of tree conflict happened, greatly improving usability.", 
+   "The information printed is also consistent with what 'svn info'", 
+   "reports, and easier to understand than if we tried to squash", 
+   "it into single letters in additional columns.", 
+   "Suggested by: danielsh", 
+   "(Daniel brought up the idea of the additional line.", 
+   "Myself and possibly others have been wanting this information", 
+   "in the default output of 'svn status' for quite some time now.)", 
+   "* subversion/svn/status.c", 
+   "(print_status): Print an additional line for tree conflict victims,", 
+   "containing the same human-readable description string as printed", 
+   "by 'svn info'.", 
+   "(svn_cl__print_status_xml): Track changed member in svn_wc_status2_t.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_status2_t): Remove member tree_conflicted_p, and replace", 
+   "with a new member tree_conflict. We now use an", 
+   "svn_wc_conflict_description_t instead of a boolean to indicate", 
+   "whether the path is a tree conflict victim. This provides clients", 
+   "with the necessary information to print meaningful messages when", 
+   "reporting status of a tree conflict victim.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__conflict_description_dup): Declare new function.", 
+   "* subversion/libsvn_wc/util.c", 
+   "(svn_wc__conflict_description_dup): New function.", 
+   "It makes a deep copy of an svn_wc_conflict_description_t,", 
+   "excluding the adm_access member. I could not figure out", 
+   "whether deep-copying an adm_access makes sense, and how", 
+   "to make a deep copy of it. If a deep copy of the adm_access", 
+   "member is possible and desired, this function should be updated.", 
+   "Not making a deep copy of the adm_access does not break any", 
+   "existing code.", 
+   "Clients should probably be told to ignore the adm_access", 
+   "returned in the tree_conflict member of svn_wc_status2_t.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(assemble_status): Track changed member in svn_wc_status2_t.", 
+   "Fill the tree_conflict member in the status structure with", 
+   "an svn_wc_conflict_description_t if the path is a tree conflict", 
+   "victim. Otherwise, set the member to NULL.", 
+   "(svn_wc__is_sendable_status): Track changed member in svn_wc_status2_t.", 
+   "(svn_wc_dup_status2): Make a deep copy of new tree_conflict member.", 
+   "* subversion/tests/cmdline/stat_tests.py", 
+   "(status_with_tree_conflicts): Tweak expected output."
+  ], 
+  "revision_id": "874391"
+ }
+]

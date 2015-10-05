@@ -1,0 +1,83 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T01:00:41.819242Z", 
+  "msg": [
+   "Add @since tags to document the new functions.", 
+   "Found by: arfrever", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_stream_open_readonly, svn_stream_open_writable): add @since tags."
+  ], 
+  "revision_id": "873505"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T00:39:04.049496Z", 
+  "msg": [
+   "Stop using the (deprecated) svn_wc_get_pristine_copy_path() function, and use", 
+   "svn_wc_get_pristine_contents() instead. The use of a stream in export.c", 
+   "then has downstream effect on needing a new API to do translation, so", 
+   "svn_subst_create_translated() was introduced.", 
+   "* subversion/include/svn_subst.h:", 
+   "(svn_subst_create_translated): new declaration", 
+   "* subversion/libsvn_client/cat.c:", 
+   "(cat_local_file): switch to _get_pristine_contents. adjust the logic to", 
+   "work with a stream rather than a pathname to copy that file to the", 
+   "output stream.", 
+   "* subversion/libsvn_client/export.c:", 
+   "(copy_one_versioned_file): switch to _get_pristine_contents. switch to", 
+   "the new svn_subst_create_translated() function to translate the", 
+   "stream. \"detranslate\" the symlink into normal form, then wrap a", 
+   "stream around it for the source of the translation.", 
+   "* subversion/libsvn_subr/subst.c:", 
+   "(detranslated_stream_special, svn_subst_stream_detranslated,", 
+   "detranslate_special_file_to_stream): simplify by using", 
+   "svn_stream_open_reaodnly().", 
+   "(svn_subst_copy_and_translate3): simplify by using", 
+   "svn_stream_open_readonly() and not disowning the apr file.", 
+   "(svn_subst_create_translated): new function"
+  ], 
+  "revision_id": "873504"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T00:11:20.094152Z", 
+  "msg": [
+   "Tweak to pool usage, and use new stream functions.", 
+   "Note: thanks to danielsh for a lifetime tweak to the get_pristine_fname", 
+   "function, made me look at their usage, and fix accordingly.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_pristine_read, svn_wc__db_pristine_write): the pathname", 
+   "should be constructed in the scratch pool. use the new", 
+   "svn_stream_open_*() functions to simplify."
+  ], 
+  "revision_id": "873503"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T00:04:14.773035Z", 
+  "msg": [
+   "Path-based APIs are bad -- it makes encapsulation much more difficult.", 
+   "Switch to stream-based APIs.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_get_pristine_contents): new declaration to return a stream of the", 
+   "pristine file's contents", 
+   "(svn_wc_get_pristing_copy_path): deprecated.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(svn_wc_get_pristine_contents): new function"
+  ], 
+  "revision_id": "873502"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T00:01:54.546310Z", 
+  "msg": [
+   "Add new functions to easily open a stream onto a file.", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_stream_open_readonly, svn_stream_open_writable): new declarations", 
+   "* subversion/libsvn_subr/stream.c:", 
+   "(svn_stream_open_readonly, svn_stream_open_writable): new functions"
+  ], 
+  "revision_id": "873501"
+ }
+]

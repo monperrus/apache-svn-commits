@@ -1,0 +1,119 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-06-10T04:07:18.325093Z", 
+  "msg": [
+   "Make external module checkout work (see issue #517).", 
+   "This required starting the changeover to notification callbacks (as", 
+   "opposed to before and after editors) in the libsvn_client api, see", 
+   "issue #662.  Only svn_client_checkout has been changed so far, as", 
+   "that's all we need for modules.", 
+   "Request For Comments: Rather than invent a new notify system, I", 
+   "expanded svn_wc_notify_func_t and friends to handle what was needed", 
+   "for checkouts.  I *think* the result is pointed in the general", 
+   "direction of a decent, flexible notification system, but it's not all", 
+   "the way there yet.  Comments welcome.", 
+   "* subversion/clients/cmdline/trace-update.c,", 
+   "subversion/clients/cmdline/trace-commit.c", 
+   "(close_edit): Don't free the edit_baton's pool here; that's up to", 
+   "the driver of the editor.  See also the very similar change in", 
+   "revision 2116 to subversion/libsvn_fs/fs.c.", 
+   "* subversion/tests/clients/cmdline/module_tests.py", 
+   "(externals_test_cleanup): Catch exceptions manually, until", 
+   "shutil.rmtree is fixed.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_func_t): Add revision, text_state, and prop_state", 
+   "args.  Document.  All callers changed.", 
+   "(svn_wc_notify_state_t): New enum type.", 
+   "(svn_wc_notify_action_t): Add svn_wc_notify_update_completed code.", 
+   "(svn_wc_get_checkout_editor): Take notify_func and notify_baton.", 
+   "(svn_wc_install_file): Add text_state and prop_state return params.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__get_checkout_notifier): New prototype.", 
+   "(svn_cl__notify_func): Adjust prototype, document.", 
+   "* subversion/clients/cmdline/feedback.c", 
+   "(svn_cl__get_checkout_notifier): New function.", 
+   "(update_notify, struct update_notify_baton): New struct and function.", 
+   "(svn_cl__notify_func): Adjust prototype.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_checkout): Take notify_func and notify_baton instead of", 
+   "before_editor, before_edit_baton, after_editor, after_edit_baton.", 
+   "All callers changed.", 
+   "(svn_client__handle_externals_changes): Same.", 
+   "* subversion/bindings/ruby/client.c", 
+   "(cl_checkout): Binding not adjusted, maintainer beware.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client_checkout): Same as header change.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_externals_desc_change_baton,", 
+   "struct handle_external_item_change_baton,", 
+   "svn_client__handle_externals_changes): Take notify_func and", 
+   "notify_baton instead of before_editor, before_edit_baton,", 
+   "after_editor, after_edit_baton.  All callers changed.", 
+   "(handle_external_item_change): Oops, that's \"else if\", not \"if\".", 
+   "Also, use notify_func/baton instead of before and after editors.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(make_editor, struct edit_baton): Take and store notify_func,", 
+   "notify_baton.", 
+   "(make_file_baton, struct file_baton): Take and store new `added'", 
+   "field.", 
+   "(delete_entry, add_directory, close_directory, close_file,", 
+   "close_edit): Invoke notify_func as appropriate.", 
+   "(svn_wc_get_checkout_editor): Take notify_func and notify_baton,", 
+   "pass them along to make_editor.", 
+   "(svn_wc_get_update_editor, svn_wc_get_switch_editor): Pass nulls", 
+   "for the notification callback and baton to make_editor.", 
+   "(svn_wc_install_file): Add text_state and prop_state return params.", 
+   "* subversion/libsvn_wc/props.h, subversion/libsvn_wc/props.c", 
+   "(svn_wc__merge_prop_diffs): Add `merged' return param, and move", 
+   "return param `conflicts' to top of argument list.  All callers", 
+   "changed."
+  ], 
+  "revision_id": "842205"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-06-10T00:48:13.415184Z", 
+  "msg": [
+   "* HACKING: fix a slight grammar error and update the path to svn-dev.el"
+  ], 
+  "revision_id": "842204"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-06-09T13:00:44.650370Z", 
+  "msg": [
+   "Fixing issue 721 (apr_dir_make_recursive available only in unix).", 
+   "* libsvn_subr/io.c (svn_io_make_dir_recursively): Comment out", 
+   "current implementation that uses apr_dir_make_recursive, and use", 
+   "<fitz@red-bean.com>'s original patch (slightly modified) instead."
+  ], 
+  "revision_id": "842203"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-08T13:49:58.029117Z", 
+  "msg": [
+   "Fix bug reported by Anders Rune Jensen, where 'svn diff' was segfaulting.", 
+   "'svn diff' was choking on the new <resource> walk being sent back by", 
+   "mod_dav_svn's REPORT-response.  A simple logic bug in fetch.c.", 
+   "* fetch.c (end_element): oops, because no set_wc_prop was available,", 
+   "the first 'if' was failing when it shouldn't, and we were then", 
+   "running the next 'else if' block instead, long after the editor was", 
+   "dead.  Separate the conditionals."
+  ], 
+  "revision_id": "842202"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-08T08:14:50.109567Z", 
+  "msg": [
+   "Fix repository loader bug that mishandled zero-length files.", 
+   "* subversion/libsvn_repos/load.c", 
+   "(struct parse_baton, struct revision_baton, struct node_baton): Move", 
+   "to the top of the file.", 
+   "(parse_content_block): Handle the zero-length file case."
+  ], 
+  "revision_id": "842201"
+ }
+]

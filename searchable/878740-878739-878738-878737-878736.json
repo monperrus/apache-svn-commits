@@ -1,0 +1,105 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-08-10T21:00:31.269969Z", 
+  "msg": [
+   "Update callers in libsvn_client to use svn_wc_status3() instead of", 
+   "svn_wc_status2().", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_one_versioned_file): Update caller.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(record_skips): Same.", 
+   "* subversion/libsvn_client/cat.c", 
+   "(cat_local_file): Same.", 
+   "* subversion/libsvn_client/blame.c", 
+   "(svn_client_blame5): Same.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(check_wc_context_t): Add a context member.", 
+   "(check_nonrecursive_dir_delete): Update callers.", 
+   "(svn_client_commit4): Initialize the wc_ctx in the baton."
+  ], 
+  "revision_id": "878740"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-10T20:13:14.367976Z", 
+  "msg": [
+   "Rev svn_wc_status2() to remove the adm_access baton and instead use a", 
+   "svn_wc_context_t and absolute path.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_status3): New.", 
+   "(svn_wc_status2): Deprecate.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_status2): New wrapper.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(svn_wc_status3): New, using absolute paths and a wc context."
+  ], 
+  "revision_id": "878739"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-10T19:30:47.722842Z", 
+  "msg": [
+   "* notes/api-errata/wc004.txt:", 
+   "Set svn:keywords to 'Id'"
+  ], 
+  "revision_id": "878738"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-10T19:22:52.536944Z", 
+  "msg": [
+   "Remove the use of an access baton by directly fetching an entry.  This slightly", 
+   "alters the behavior of svn_wc_status2(), so I've included an errata", 
+   "describing the change.", 
+   "* notes/api-errata/wc004.txt:", 
+   "New.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(tree_conflicts_on_switch_1_1, tree_conflicts_on_switch_1_2,", 
+   "tree_conflicts_on_switch_2_1, tree_conflicts_on_swtich_2_2,", 
+   "tree_conflicts_on_switch_3),", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_to_switched):", 
+   "Tweak expected status output to report switched on a subdirectory.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(svn_wc_status2): Directly fetch the parent entry, rather than getting it", 
+   "through an access baton."
+  ], 
+  "revision_id": "878737"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-08-10T18:28:52.785267Z", 
+  "msg": [
+   "Clean up some version checking code, and other \"preflight\" stuff for", 
+   "opening/creating working copies. The upgrade process is about to be", 
+   "revamped, and this is some prelim work.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_pre_open, svn_wc__adm_wc_format): remove", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(check_format): removed. wc_db will throw an appropriate error whenever", 
+   "it is pointed at an incompatible working copy directory", 
+   "(svn_wc__internal_check_wc): remove unneeded call to check_format", 
+   "(create_lock): remove obsolete comment about upgrade handling", 
+   "(check_format_upgrade): removed -- inlined into single caller.", 
+   "(open_single): inline the version check, and shift to before we even", 
+   "start constructing the lock.", 
+   "(svn_wc__adm_pre_open): removed. not needed.", 
+   "(svn_wc__adm_wc_format): removed. callers now directly call wc_db", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(create_wcroot): shift the code for format reading to earlier in the", 
+   "code. validate the format before constructing the wcroot.", 
+   "(get_old_version): rename parameter", 
+   "(parse_local_abspath): clarify a comment.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(upgrade_format): call wc_db directly to get the directory's format", 
+   "version. change some calls to adm_access_path to just use dir_abspath.", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(make_empty_adm): removed. inlined into single caller.", 
+   "(init_adm): inline make_empty_adm(). forget about the access baton, as", 
+   "we don't actually need/use it. this opens a theoretical race, but this", 
+   "code is short-lived anyways."
+  ], 
+  "revision_id": "878736"
+ }
+]

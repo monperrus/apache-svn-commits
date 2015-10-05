@@ -1,0 +1,119 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-10-21T01:32:40.251010Z", 
+  "msg": [
+   "Merge r32968, r32975 from trunk:", 
+   "* r32968, r32975", 
+   "Fix bug which occurs when a merge adds explicit mergeinfo to a subtree that", 
+   "had no explicit mergeinfo prior to the merge.  This new mergeinfo could", 
+   "obstruct any mergeinfo the path previously inherited and the new path", 
+   "was not getting mergeinfo set that described the merge itself -- See", 
+   "http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=142460.", 
+   "Notes:", 
+   "r32968 is a new test for this problem and r32975 is the fix.  When merging", 
+   "these changes there are some minor conflicts...Minor but sufficiently", 
+   "annoying to disuade review, hence the backport branch 1.5.x-r32968.", 
+   "Justification:", 
+   "Incorrect mergeinfo results when this bug is encountered and it has", 
+   "already been encountered in our own repository as described in the", 
+   "aforementioned thread.", 
+   "Votes:", 
+   "+1: pburba, rhuijben, kameshj", 
+   "+0: arfrever"
+  ], 
+  "revision_id": "873870"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-21T01:22:47.979448Z", 
+  "msg": [
+   "Switch the codebase over to svn_stream_copy3(). Some other simplifications", 
+   "around streams were made in the process, and an unrelated passthru of", 
+   "cancel func/baton in the \"svn cat\" code.", 
+   "* subversion/libsvn_subr/subst.c:", 
+   "(detranslate_special_file): rename param to scratch_pool for clarity.", 
+   "switch to using the new svn_stream_open_unique() and copy3().", 
+   "* subversion/libsvn_ra_local/ra_plugin.c:", 
+   "(svn_ra_local__get_file): switch to copy3(). note that we (now) close", 
+   "the FS contents stream. use svn_stream_disown() to protect the", 
+   "passed-in stream (which probably *should* be closed, but we can't", 
+   "alter the contract like that just yet)", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(get_file_for_validation): use svn_stream_open_readonly() to simplify", 
+   "and then use copy3(). disown the passed stream to avoid altering this", 
+   "function's api contract.", 
+   "* subversion/libsvn_client/cat.c:", 
+   "(cat_local_file): take cancel func/baton in order to pass to the stream", 
+   "copy function. switch to copy3(), noting that we must disown the", 
+   "output stream to retain the api contract.", 
+   "(svn_client_cat2): pass cancel func/baton along.", 
+   "* subversion/libsvn_repos/dump.c:", 
+   "(dump_node): switch to copy3() and disown the target stream cuz we're", 
+   "going to keep writing to it.", 
+   "* subversion/svnlook/main.c:", 
+   "(dump_contents): take a stream rather than a file handle. either leave", 
+   "it empty, or copy the given root/path into it. rewrite in terms of", 
+   "copy3() instead of the glom of other stuff.", 
+   "(prepare_tempfiles): revamp/simplify logic that calls dump_contents()."
+  ], 
+  "revision_id": "873869"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-21T01:01:43.217859Z", 
+  "msg": [
+   "Add svn_wc__get_revert_contents() as an analogue to the", 
+   "svn_wc_get_pristine_contents() function. Note that the former is", 
+   "internal-only. We will never expose it (as it will eventually go away when", 
+   "the new WC library is further developered).", 
+   "Note that this function is built in terms of svn_wc__text_revert_path()", 
+   "and it can only fetch the non-temp contents. The temporary flag is", 
+   "short-term obsolete, so even this function won't support the flag.", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "(svn_wc__get_revert_contents): new declaration", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__get_revert_contents): new implementation."
+  ], 
+  "revision_id": "873868"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-21T00:57:58.362289Z", 
+  "msg": [
+   "Add two new functions: svn_stream_copy3() and svn_stream_open_unique().", 
+   "The copy function gets a new iteration to close its stream parameters, as", 
+   "this is the typical scenario for the copy function. A caller can easily", 
+   "avoid the close by using svn_stream_disown(). Review shows there were", 
+   "several cases where a provided stream was never closed (and this change", 
+   "will get them closed).", 
+   "The svn_steam_open_unique() function is added for the scenarios where a", 
+   "new temp file is created and written into.", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_stream_copy3): close the stream arguments when done", 
+   "(svn_stream_open_unique): generate a unique file name, then open it for", 
+   "writing.", 
+   "* subversion/libsvn_subr/stream.c:", 
+   "(svn_stream_copy3): new function derived from copy2. add stream closing.", 
+   "rename parameter to scratch_pool.", 
+   "(svn_stream_copy2, svn_stream_copy): rename parameter to scratch_pool", 
+   "and reimplement in terms of copy3.", 
+   "(svn_stream_open_unique): new function"
+  ], 
+  "revision_id": "873867"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-10-21T00:54:35.621284Z", 
+  "msg": [
+   "Making two fatal errors non-translatable. They only occur in the presence", 
+   "of a corrupt working copy.", 
+   "Suggested by: jensseidel", 
+   "* subversion/svn/tree-conflicts.c", 
+   "(svn_cl__append_human_readable_tree_conflict_description): Remove a _().", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__write_tree_conflicts_to_entry): Remove a _()."
+  ], 
+  "revision_id": "873866"
+ }
+]

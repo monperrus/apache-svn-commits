@@ -1,0 +1,92 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-09T21:21:01.946826Z", 
+  "msg": [
+   "* subversion/tests/libsvn_fs_base/changes-test.c", 
+   "(standard_txns): Expand to include the last txn in standard_changes.", 
+   "Found by: Leo Katzenstein <lrk{_AT_}google.com>", 
+   "Patch by: kfogel"
+  ], 
+  "revision_id": "868905"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-01-09T19:42:59.419528Z", 
+  "msg": [
+   "Fix last outstanding portion of issue #2829 \"Improve handling for skipped", 
+   "paths encountered during a merge\"", 
+   "Specifically this addresses the problem where a merge adds a path, but that", 
+   "path's immediate parent has non-inheritable mergeinfo due to path having", 
+   "missing siblings (or from an earlier shallow merge).  Previously the added", 
+   "path would get no explicit mergeinfo for the merge and incorrectly inherit", 
+   "mergeinfo from its parent (if any ranges were actually inheritable) or just", 
+   "have the incomplete explicit mergeinfo from the merge source if any existed.", 
+   "Now the path always gets explicit mergeinfo, a combination of any explict", 
+   "mergeinfo it had from the merge source and the mergeinfo describing the merge", 
+   "that added it.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(notification_receiver_baton_t): Add member 'added_paths'.", 
+   "(notification_receiver): Store the root path of any added subtree in the", 
+   "new 'added_paths' member of notification_receiver_baton_t.", 
+   "(do_directory_merge): Add explicit mergeinfo describing the merge to the", 
+   "root of added subtrees which have parents with non-inheritable mergeinfo.", 
+   "(do_merge): Initialize new 'added_paths' member.", 
+   "* subversion/tests/cmdline/merge_authz_tests.py", 
+   "(mergeinfo_and_skipped_paths): Expand test to cover case where added path", 
+   "has missing sibling."
+  ], 
+  "revision_id": "868904"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-01-09T19:35:06.488154Z", 
+  "msg": [
+   "In already-bumped FSFS version 3, store the protorev and its lock", 
+   "separately from the rest of the transaction metadata, to make it easy", 
+   "for administrators to put the non-protorev metadata on a different", 
+   "filesystem from the immutable filesystem data.  (That is, if you can", 
+   "guarantee that any transaction is only used by one frontend server,", 
+   "and your repository is on a network filesystem, you can make", 
+   "transactions/ be a symlink to local disk but leave the protorev", 
+   "on the network filesystem.)", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_TXN_PROTOS_DIR, PATH_EXT_REV, PATH_EXT_REV_LOCK): New.", 
+   "(PATH_REV, PATH_REV_LOCK): Move later and document as legacy.", 
+   "(SVN_FS_FS__MIN_PROTOREVS_DIR_FORMAT): New.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_txn_proto_rev, path_txn_proto_rev_lock): Return the new path", 
+   "if the format is new enough.", 
+   "(svn_fs_fs__hotcopy): Make an empty txn-protorevs directory if the", 
+   "format supports it.", 
+   "(svn_fs_fs__purge_txn): If the format is new enough, try to delete", 
+   "the protorev file and its lock after removing the txn directory.", 
+   "(svn_fs_fs__create): If the format is new enough, create", 
+   "txn-protorevs directory.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Layout of the FS directory): Document txn-protorevs.", 
+   "(Filesystem formats): Document difference between versions.", 
+   "(Transaction layout): Document difference between versions."
+  ], 
+  "revision_id": "868903"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-09T18:37:19.751400Z", 
+  "msg": [
+   "* www/links.html (misc-utils): Add entry for SupoSE.", 
+   "Patch by: Shlomi Fish <shlomif@iglu.org.il>"
+  ], 
+  "revision_id": "868902"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-09T16:54:10.813977Z", 
+  "msg": [
+   "Fix issue #3064: treat 'add -N' like 'add --depth=empty', for compatibility.", 
+   "This follows up to r26607.", 
+   "* subversion/svn/main.c (main): Do the needful."
+  ], 
+  "revision_id": "868901"
+ }
+]

@@ -1,0 +1,96 @@
+[
+ {
+  "author": "epg", 
+  "date": "2008-02-13T22:21:28.733468Z", 
+  "msg": [
+   "Vote for and move to Approved section:", 
+   "* r29091", 
+   "* r29194", 
+   "* r29254, r29255", 
+   "* r29309"
+  ], 
+  "revision_id": "869405"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-02-13T21:54:14.004649Z", 
+  "msg": [
+   "Nominate r29329 for backport, and note that we must either backport", 
+   "this one or roll back r24559 on the 1.5.x branch."
+  ], 
+  "revision_id": "869404"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-02-13T21:51:45.627258Z", 
+  "msg": [
+   "Implement svn_repos_verify_fs and use it in svnadmin verify rather", 
+   "than using svn_repos_dump_fs2, restoring complete verification after", 
+   "losing it in r24559.", 
+   "In r24559, I changed verify's use of svn_repos_dump_fs2 to dump only", 
+   "the paths changed in the revision being dumped rather than dumping the", 
+   "entire repository as of that revision.  Without r24559, verifying", 
+   "large repositories is effectively impossible.  But without dumping the", 
+   "entire repository contents, we were no longer verifying the links back", 
+   "to previous revisions for the paths *not* changed in the revision", 
+   "being verified.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__get_node_revision): Check that the HEADER_ID field is", 
+   "actually in the node-rev header block; all other fields are", 
+   "already checked, only this one was not.  This led to a segmentation", 
+   "fault in the particular corrupted revs file I created, as I simply", 
+   "incremented an offset, resulting in a \"d\" header but no \"id\" header.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(verify_directory_entry): Add function that does a simple check that", 
+   "a directory entry is valid (svn_fs_dir_entries for directories and", 
+   "svn_fs_file_length for files).", 
+   "(verify_close_directory): Add svn_delta_editor_t.close_directory", 
+   "implementation that verify_directory_entry()s each entry.", 
+   "(svn_repos_verify_fs): Add new function to verify a file system,", 
+   "mostly by invoking svn_repos_replay2 with the dump editor, but", 
+   "with the additional check of verify_close_directory.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_verify_fs): Declare.", 
+   "(svn_repos_dump_fs2): Change doc string to point to", 
+   "svn_repos_verify_fs for verifying a file system.", 
+   "* subversion/svnadmin/main.c", 
+   "(dump_repo): Remove.", 
+   "(subcommand_dump): Fold dump_repo body into here.", 
+   "(subcommand_verify): Use svn_repos_verify_fs rather than dump_repo.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(verify_incremental_fsfs): Add test that corrupts a revision file in", 
+   "a way that svn_repos_dump_fs2 cannot detect and asserts that", 
+   "svnadmin verify detects it."
+  ], 
+  "revision_id": "869403"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-02-13T19:56:20.101112Z", 
+  "msg": [
+   "JavaHL: Follow up to r29228 by adding the new conflict callback enumerations.", 
+   "This fixes an error in the JavaHL tests.", 
+   "[ in subversion/bindings/javahl ]", 
+   "* src/org/tigris/subversion/javahl/ConflictResult.java", 
+   "(ConflictResult): Add the new enumerations, and adjust the values of the", 
+   "following ones."
+  ], 
+  "revision_id": "869402"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2008-02-13T19:52:10.254627Z", 
+  "msg": [
+   "Merge r29320 from trunk, which see for details.", 
+   "* r29320", 
+   "Rename the JavaHL MergeInfo class to Mergeinfo, for consistency with our", 
+   "mergeinfo-as-noun policy.", 
+   "Votes:", 
+   "+1: hwright, markphip", 
+   "Also:", 
+   "* STATUS", 
+   "Remove this change from the approved list."
+  ], 
+  "revision_id": "869401"
+ }
+]

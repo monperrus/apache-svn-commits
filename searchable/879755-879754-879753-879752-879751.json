@@ -1,0 +1,105 @@
+[
+ {
+  "author": "rdonch", 
+  "date": "2009-09-29T19:41:54.345278Z", 
+  "msg": [
+   "* STATUS: Nominate r39635-39637."
+  ], 
+  "revision_id": "879755"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-29T17:51:13.669640Z", 
+  "msg": [
+   "Start fixing issue #2543 \"Inconsistent svn diff after rename\"", 
+   "This commit changes the default output of 'svn diff'.", 
+   "We now diff files which were locally added-with-history against an empty", 
+   "file by default. The old behaviour (diffing the files against the copy", 
+   "source) can be obtained by passing the --notice-ancestry flag to 'svn diff'.", 
+   "There is a good reason to change the default. This will allow users to", 
+   "easily create diffs that will re-apply almost as expected with 'svn patch'.", 
+   "\"Almost\" because 'svn patch' currently has no way to represent copies since", 
+   "it only understands plain unidiff, and since 'svn diff' only generates plain", 
+   "unidiff. This will be improved later by adding support for git extensions", 
+   "to the unidiff format to both 'svn diff' and 'svn patch', so they can", 
+   "represent file copies.", 
+   "More work is still needed to completely address issue #2543 and make", 
+   "'svn diff' behave consistently in all cases.", 
+   "This commit does not cover all possible cases when diffing working copies", 
+   "to the repository. Diff test 22 has been adjusted to note where the behaviour", 
+   "is potentially inconsistent and further work may be needed.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(file_diff): Compare files schedule-add with history to the empty file", 
+   "by default, and diff against the copy source only if not ignoring ancestry.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_renamed_file): Where possible, test both with --notice-ancestry", 
+   "and without, with corresponding expected output. Note in comments where", 
+   "the --notice-ancestry option currently has no effect so more work may", 
+   "be needed.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_in_new_file_and_diff): Adjust expected output."
+  ], 
+  "revision_id": "879754"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-29T17:28:33.202607Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_read_info): Following up on r39666, fix another error leak.", 
+   "Found by: gstein"
+  ], 
+  "revision_id": "879753"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-29T16:19:44.116807Z", 
+  "msg": [
+   "Make the handling of conflicts and skipping consistent in the update", 
+   "editor. When opening the editor root, check for conflicts on the ancestor", 
+   "and its parent directories. This allows all editor operations to only", 
+   "check for skipping and conflicts on the target itself, helped by a few", 
+   "new booleans on the directory batons.", 
+   "Compared to the code accidentally committed in r39639, this is only a", 
+   "partial patch. This patch doesn't change the hashtable usage yet.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(dir_baton): Add 3 skip variables.", 
+   "(do_entry_deletion): Update prototype.", 
+   "(already_in_a_tree_conflict): Add prototype.", 
+   "(complete_directory): Remove obsolete check, and update caller.", 
+   "(file_baton): Move some fields to match order in dir baton. Rename skipped", 
+   "to skip_this and add skip_notify.", 
+   "(open_root): Check for conflicts on and above anchor, to initialize the", 
+   "skip fields on the root directory.", 
+   "(node_already_conflicted): New helper function.", 
+   "(do_entry_deletion): Take abspath instead of parent dir and relative path.", 
+   "(delete_entry, add_directory, open_directory, change_dir_prop,", 
+   "close_directory, add_file, open_file, apply_textdelta,", 
+   "change_file_prop, close_file): Move code in the order: verify arguments,", 
+   "check for skipping, security check, check for conflicts.", 
+   "(close_edit): Update caller", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(tree_conflicts_on_switch_1_1):", 
+   "Expect notifications for changes below deleted path. These should not", 
+   "be hidden on the update_editor level, but at the client level if we", 
+   "need them to be hidden.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(tree_conflicts_on_switch_1_1):", 
+   "Expect notifications for changes below deleted path. These should not", 
+   "be hidden on the update_editor level, but at the client level if we", 
+   "need them to be hidden."
+  ], 
+  "revision_id": "879752"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-29T16:18:26.695347Z", 
+  "msg": [
+   "Remove a call to the deprecated svn_wc_remove_from_revision_control() in favor of", 
+   "the updated version.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(handle_external_item_change): Call svn_wc_remove_from_revision_control2()."
+  ], 
+  "revision_id": "879751"
+ }
+]

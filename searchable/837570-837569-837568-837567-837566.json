@@ -1,0 +1,83 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2000-10-10T08:23:48.000000Z", 
+  "msg": [
+   "Document the svndiff format as clearly as I can at the moment."
+  ], 
+  "revision_id": "837570"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-10T07:41:35.000000Z", 
+  "msg": [
+   "Note new requirement on the use of the svn_txdelta_new operation.  If", 
+   "this requirement ever becomes onerous, it can be relaxed with some", 
+   "simple mods to svndiff.c's window_handler, but it seemed silly to make", 
+   "that function go to extra work when text delta producers conform to", 
+   "this requirement already."
+  ], 
+  "revision_id": "837569"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-10T07:27:51.000000Z", 
+  "msg": [
+   "Hook up svndiff generator/parser.  Make a few adjustments along the", 
+   "way.  I think all the relevant code works but the testing deltas need", 
+   "to contain real svndiff data now.  Hopefully this will settle out before", 
+   "the new Milestone 1 target.", 
+   "(svn_txdelta, svn_txdelta_apply, svn_txdelta_to_svndiff,", 
+   "svn_txdelta_parse_svndiff): These functions cannot fail; don't return", 
+   "an error.  Call sites changed.", 
+   "(svn_vcdiff_parser_t, svn_make_vcdiff_parser, svn_vcdiff_parse,", 
+   "svn_vcdiff__send_window, svn_vcdiff__send_terminal_window): Garbage", 
+   "collect stub vcdiff parsing functions.", 
+   "(svn_txdelta): Turn the call to vdelta back on so we get optimized", 
+   "text delta windows instead of faked up ones.", 
+   "* delta.h (svn_xml__digger_t): Switch over fields for svndiff", 
+   "interfaces.", 
+   "* xml_parse.c (do_close_file, do_begin_textdelta, xml_handle_end,", 
+   "xml_handle_data, svn_delta_make_parser): Use svndiff interfaces.", 
+   "* xml_output.c (output_svndiff_data, apply_delta): Use svndiff", 
+   "interfaces.", 
+   "* svndiff.c (svn_txdelta_to_svndiff, window_handler): Don't write", 
+   "header until we get the first call to window_handler.  The caller may", 
+   "not be ready to write at svn_txdelta_to_svndiff time."
+  ], 
+  "revision_id": "837568"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-10-10T05:13:11.000000Z", 
+  "msg": [
+   "tell Neon that we will be using a libtool version of libexpat."
+  ], 
+  "revision_id": "837567"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2000-10-10T03:56:58.000000Z", 
+  "msg": [
+   "I noticed a few issues with our vdelta generator: (1) if the source or", 
+   "target of a copy straddled the boundary, we didn't really take that into", 
+   "account when comparing to other possible copies, and (2) I don't think we", 
+   "were always picking the longest extension when trying to improve the", 
+   "current match.  I reorganized and simplified the code a bit to eliminate", 
+   "these problems, and made a few changes to the surrounding interfaces in", 
+   "the process.  These fixes have only marginal impact on performance,", 
+   "unfortunately; we are performing about a factor of 35 worse than what Phong", 
+   "Vo gets with his implementation.", 
+   "(svn_txdelta__init_window): Removed.", 
+   "(svn_txdelta_make_window): New function, returns window (can't fail), takes", 
+   "pool argument intead of stream argument.  Callers changed.", 
+   "(svn_txdelta__insert_op, svn_txdelta__vdelta): These functions can't fail;", 
+   "return void.  Callers changed.", 
+   "* vdelta.c (vdelta): New function, lives under svn_txdelta__vdelta,", 
+   "performs core algorithm.  svn_txdelta__vdelta runs it twice, once on the", 
+   "source region and once on the target region.  Also simplified and fixed up", 
+   "a bit from the old code."
+  ], 
+  "revision_id": "837566"
+ }
+]

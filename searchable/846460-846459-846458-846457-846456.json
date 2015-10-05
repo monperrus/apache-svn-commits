@@ -1,0 +1,74 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-07-01T22:39:25.754599Z", 
+  "msg": [
+   "sigh. keep this compatible with Python 1.5.2."
+  ], 
+  "revision_id": "846460"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-07-01T22:29:20.516901Z", 
+  "msg": [
+   "Fix the problem with rev-6382; introduction of \"nonlib\" dependencies on the", 
+   "link-line.  Re-configure mod_dav_svn as a nonlib-dependency of mod_authz_svn.", 
+   "* build.conf", 
+   "Uncomment nonlibs entry for mod_authz_svn.", 
+   "* build/generator/gen_base.py", 
+   "(dt_types): Add new dependency type: DT_NONLIB.", 
+   "(Generator.__init__): Create a DT_NONLIB edge in the graph for nonlib", 
+   "dependencies.", 
+   "(Generator.sorted_files): Include the effects of DT_NONLIB dependencies in", 
+   "the determination of sort-order."
+  ], 
+  "revision_id": "846459"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-07-01T21:58:54.767761Z", 
+  "msg": [
+   "Removed \"nonlibs\" record from build.conf, until kinks are worked out.", 
+   "* build.conf", 
+   "(mod_authz_svn): remove nonlibs-dependency on mod_dav_svn."
+  ], 
+  "revision_id": "846458"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-07-01T21:38:27.704331Z", 
+  "msg": [
+   "Fix several problems for such a tiny patch:", 
+   "-- try/except is *way* too aggressive at catching exceptions, and can", 
+   "hide things that you really want to see. In general, a bare", 
+   "'except:' should *never* be used. Certainly not to catch a simple", 
+   "case where 'nonlibs' was not defined by a section. There is a", 
+   "ConfigParser exception for that. But even that is wrong because it", 
+   "doesn't follow the pattern defined by this code.", 
+   "-- Put a default value for 'nonlibs' into the _cfg_defaults", 
+   "dictionary. This prevents error throwing when trying to fetch the", 
+   "value and it hasn't been defined.", 
+   "-- Fix the indentation to match local style.", 
+   "So...", 
+   "* build/generator/gen_base.py:", 
+   "(Generator.__init__): fix usage of 'nonlibs'", 
+   "(_cfg_defaults): add default for 'nonlibs'"
+  ], 
+  "revision_id": "846457"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-07-01T21:08:48.786173Z", 
+  "msg": [
+   "Add support for \"nonlib\" dependencies to the build-system.  This enables", 
+   "us to configure mod_authz_svn to depend on mod_dav_svn, which causes it", 
+   "to be loaded later.", 
+   "* build/generator/gen_base.py:", 
+   "(GeneratorBase.__init__): Create dependency-graph edges for \"nonlibs\" just", 
+   "like \"libs\", if they're specified.", 
+   "* build.conf:", 
+   "(mod_authz_svn): Specify that mod_authz_svn depends on mod_dav_svn."
+  ], 
+  "revision_id": "846456"
+ }
+]

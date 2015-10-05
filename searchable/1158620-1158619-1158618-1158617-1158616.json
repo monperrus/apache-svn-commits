@@ -1,0 +1,106 @@
+[
+ {
+  "author": "coheigea", 
+  "date": "2011-08-17T10:55:34.653817Z", 
+  "msg": [
+   "Updating the website for 1.5.12 release."
+  ], 
+  "revision_id": "1158620"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-08-17T10:42:16.074759Z", 
+  "msg": [
+   "* CHANGES: Add an entry for issue #3101, fixed for 1.8."
+  ], 
+  "revision_id": "1158619"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2011-08-17T10:34:33.306393Z", 
+  "msg": [
+   "Adding some missed files"
+  ], 
+  "revision_id": "1158618"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-08-17T10:33:12.349860Z", 
+  "msg": [
+   "Remove reverted copied files and directories from disk, if they weren't", 
+   "modified after being copied.", 
+   "To achieve this we add more columns to rows in the revert list:", 
+   "the node kind, the repos_id (which is not NULL for copies),", 
+   "the op_root, and, if the node is a file, the pristine checksum.", 
+   "While restoring the BASE on-disk state, process nodes in the revert list", 
+   "marked as copies in a special way: Compare reverted copied files with", 
+   "their pristines, and remove the ones that match from disk. Next, remove", 
+   "any reverted copied directories which are left empty as a result.", 
+   "This commit addresses issues #3101 and #876, and my own annoyance at", 
+   "unversioned things left behind in my testing WCs (been testing 'svn move'", 
+   "with subsequent 'revert' a lot lately).", 
+   "We could take this further and remove copied files which were modified", 
+   "post-copy (after all, we also destroy textual modifications to files which", 
+   "were not copied). But that's a decision for another day.", 
+   "Review by: julianfoad", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_away_subtrees_noninheritable_ranges): No longer need to remove", 
+   "unversioned files after revert.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(excluded_path_misc_operation): No longer need to remove unversioned files", 
+   "after revert.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir): No longer", 
+   "need to remove unversioned files. And don't expect them in status output.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(revert_restore_handle_copied_file, revert_restore_handle_copied_dirs,", 
+   "compare_revert_list_copied_children): New.", 
+   "(revert_restore): When reverting copies, remove their remains from disk,", 
+   "except for files which were modified after being copied, and directories", 
+   "that contain unversioned files.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(revert_list): Add new columns OP_DEPTH, REPOS_ID, KIND, CHECKSUM.", 
+   "Copy values from rows deleted from the NODES table into them.", 
+   "Nothing changes for actual-only nodes.", 
+   "(STMT_SELECT_REVERT_LIST): Get the new columns.", 
+   "(STMT_SELECT_REVERT_LIST_COPIED_CHILDREN): New statement which returns", 
+   "all copied children within a given reverted local_relpath.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__compare_file_with_pristine): Declare.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(compare_and_verify): Renamed to ...", 
+   "(svn_wc__compare_file_with_pristine): ... this, so the revert code can", 
+   "access this function. No modifications were made to the implementation.", 
+   "(svn_wc__internal_file_modified_p): Track above function rename.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(revert_list_read_baton): Add COPIED_HERE, KIND, and PRISTINE_CHECKSUM.", 
+   "(revert_list_read): Populate the new baton fields.", 
+   "(svn_wc__db_revert_list_read): Add COPIED_HERE, KIND, and PRISTINE_CHECKSUM", 
+   "output parameters.", 
+   "(revert_list_read_copied_children_baton): New.", 
+   "(revert_list_read_copied_children): New. Returns a list of all copied", 
+   "children which existed within a reverted subtree.", 
+   "(svn_wc__db_revert_list_read_copied_children): Exposes the", 
+   "revert_list_read_copied_children() function, wrapping it in an sqlite", 
+   "transaction.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_revert_list_read): Declare new output parameters COPIED_HERE,", 
+   "KIND, and PRISTINE_CHECKSUM. Update docstring.", 
+   "(svn_wc__db_revert_list_copied_child_info_t): New.", 
+   "(svn_wc__db_revert_list_read_copied_children): Declare."
+  ], 
+  "revision_id": "1158617"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-08-17T10:32:38.430938Z", 
+  "msg": [
+   "Following up on r1142088, make sure the destination folder exists. We are not", 
+   "interested in the tempfolder.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(run_file_install): Remove two obsolete comments and ensure that the", 
+   "destination folder exists."
+  ], 
+  "revision_id": "1158616"
+ }
+]

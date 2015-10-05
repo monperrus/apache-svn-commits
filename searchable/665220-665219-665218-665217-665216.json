@@ -1,0 +1,85 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2007-08-23T21:43:25.000000Z", 
+  "msg": [
+   "Thrift: Make use of get_true_type.", 
+   "Summary:", 
+   "We added a helper function for the generators: get_true_type,", 
+   "which finds the actual type behind a series of typedefs", 
+   "(though the compiler only supports one layer of typedefs now).", 
+   "This change uses it everywhere we used to have that loop.", 
+   "(It was a lot of places.)", 
+   "Reviewed By: mcslee", 
+   "Test Plan: test/ManyTypedefs.thrift", 
+   "Revert Plan: ok"
+  ], 
+  "revision_id": "665220"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2007-08-23T17:20:38.000000Z", 
+  "msg": [
+   "Thrift: TMemoryBuffer::getBufferAsString only returns written portion.", 
+   "(This change was by Adam, diff sent by email, I'm just checking it in.)", 
+   "Blame Rev: 55988", 
+   "Reviewed By: adam", 
+   "Test Plan: Thrift compiles.", 
+   "Revert Plan: ok"
+  ], 
+  "revision_id": "665219"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2007-08-23T02:37:19.000000Z", 
+  "msg": [
+   "Thrift: No using namespace.", 
+   "Summary:", 
+   "using namespace XXX; is tricky because it imports a lot of crap into your namespace.", 
+   "Also, if we ever decide to remove boost as a dependency, \"using namespace boost\"", 
+   "makes it harder.", 
+   "This patch removes all using namesapce XXX; with one or more using XXX::YYY;", 
+   "There are some exceptions, such as test, tutorial, namespace std, and", 
+   "facebook namespaces.", 
+   "Reviewed By: mcslee", 
+   "Test Plan:", 
+   "Recompiled thrift.", 
+   "grep --binary-files=without-match -r 'using namespace' . | \\", 
+   "egrep -v '^[^:]*: *using namespace (std;$|facebook)' | \\", 
+   "grep -v '<< endl' | \\", 
+   "grep -v '[^:]*/tutorial/' | \\", 
+   "grep -v '^./test/'", 
+   "Revert Plan: ok", 
+   "Notes: I wouldn't bother, but it is fixathon."
+  ], 
+  "revision_id": "665218"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-08-23T01:43:20.000000Z", 
+  "msg": [
+   "Fix TNonBlockingServer libevent issue in ThreadPool mode", 
+   "Summary: If using TNonBlockingServer with a ThreadManager, when you send a task off to the threadmanager you need to cancel the event that you have set on that client socket. Otherwise, when you give control back to libevent, it might trigger more read events if there are more requests coming down the pipe. This is an issue, because the server will be in the wrong state at that point and will have no way of handling reading more data if it is still in the WAIT_TASK state trying to see if it should write something back to the client. So, when we hit that control flow, we must setIdle() on the TConnection so that libevent doesn't trigger it anymore. Later, after the result is written, we'll setRead() and go back to the init state.", 
+   "Reviewed By: akhil", 
+   "Test Plan: Akhil's async + TNonBlocking karma server"
+  ], 
+  "revision_id": "665217"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2007-08-23T00:14:48.000000Z", 
+  "msg": [
+   "Thrift: TMemoryBuffer now handles NULLs again.", 
+   "Summary:", 
+   "Boz is using TMemoryBuffer by constructing it will a NULL buffer,", 
+   "then doing a resetBuffer later.  This patch re-enables that.", 
+   "Blame Rev: 55988", 
+   "Reviewed By: aditya", 
+   "Test Plan:", 
+   "Thrift compiles.", 
+   "Will test feed after this is comitted.", 
+   "Revert Plan: ok"
+  ], 
+  "revision_id": "665216"
+ }
+]

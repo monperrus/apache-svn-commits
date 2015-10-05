@@ -1,0 +1,113 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-10-21T14:53:45.609878Z", 
+  "msg": [
+   "Reuse prepared sqlite statements, and other sql improvements in the FSFS rep", 
+   "caching code.", 
+   "Suggested by: gstein", 
+   "rhuijben", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(rep_cache_t): New.", 
+   "(fs_fs_data_t): Use the new struct instead of just a db reference.", 
+   "* subversion/libsvn_fs_fs/rep-cache.c", 
+   "(upgrade_sql): Make static, and remove the redundant index.", 
+   "(cleanup_db_apr): Finalize any prepared sqlite statements.", 
+   "(svn_fs_fs__open_rep_cache): Change the reference to the database handle.", 
+   "(svn_fs_fs__get_rep_reference, svn_fs_fs__set_rep_reference,", 
+   "svn_fs_fs__inc_rep_reuse): Prepare sqlite statements if they haven't already", 
+   "been prepared, otherwise, just use 'em."
+  ], 
+  "revision_id": "873890"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-21T14:23:39.457862Z", 
+  "msg": [
+   "Continued cleanup, focusing around path-based APIs in adm_files.[ch].", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_adm_access_path, svn_wc_adm_access_pool, svn_wc_adm_locked): add", 
+   "const to the access baton parameter.", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "(svn_wc__remove_adm_file): simplify argument list. this function is used", 
+   "in a limited fashion (now), so shrink/simplify its parameter set to", 
+   "match current usage.", 
+   "(svn_wc__open_text_base, svn_wc__open_revert_base): eliminate these two", 
+   "functions. we want to return streams. also, these two functions were", 
+   "used in only one location, which wanted a stream, and with a retricted", 
+   "set of flags (i.e. for writing). they were replaced by ...", 
+   "(svn_wc__open_writable_base): new function to get a stream onto a temp", 
+   "file for writing a new text base. this will open either a regular are", 
+   "revert temp file for writing.", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(sync_adm_file): folded into svn_wc__sync_text_base() and params", 
+   "replaced with constants appropriate for a text base.", 
+   "(svn_wc__sync_text_base): revamped to directly use sync_adm_file.", 
+   "(open_adm_file): add SELECTED_PATH param to return the path that was", 
+   "actually opened.", 
+   "(close_adm_file): elminated and folded into ...", 
+   "(svn_wc__close_adm_file): ... here. revamped greatly by including the", 
+   "other function and ignoring the va_list crap.", 
+   "(svn_wc__open_adm_file): track change to open_adm_file().", 
+   "(svn_wc__remove_adm_file): revamp param list and simplify.", 
+   "(svn_wc__open_text_base, svn_wc__open_revert_base): removed", 
+   "(svn_wc__open_writable_base): new function, based on a simplified form", 
+   "of the prior two svn_wc__open_* functions.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(write_wcprops): adjust params to svn_wc__remove_adm_file", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(run_log): adjust params to svn_wc__remove_adm_file", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_is_cleanup_required, svn_wc__adm_access_wcprops,", 
+   "svn_wc__adm_missing, svn_wc__adm_wc_format,", 
+   "svn_wc__adm_write_check): add const to baton parameter", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_is_cleanup_required, svn_wc__adm_access_wcprops,", 
+   "svn_wc__adm_missing, svn_wc__adm_wc_format,", 
+   "svn_wc__adm_write_check): add const to baton parameter", 
+   "(remove_lock): removed and folded into its one caller ...", 
+   "(do_close): absorb contents of remove_lock, and simplify the call to", 
+   "svn_wc__remove_adm_file().", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(apply_textdelta): use new svn_wc__get_revert_contents() function to", 
+   "fetch the revert base (rather than svn_wc__open_revert_base). switch", 
+   "calls from the two obsolete functions over to", 
+   "svn_wc__open_writable_base."
+  ], 
+  "revision_id": "873889"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T12:09:39.196273Z", 
+  "msg": [
+   "Remove r33641, r33644 from the approved changes section as they", 
+   "have been backported via r33812."
+  ], 
+  "revision_id": "873888"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T12:05:38.224788Z", 
+  "msg": [
+   "Delete http://svn.collab.net/repos/svn/branches/1.5.x-r33641"
+  ], 
+  "revision_id": "873887"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T12:01:58.979814Z", 
+  "msg": [
+   "Merge r33641, r33644 from backport branch 1.5.x-r33641.", 
+   "* r33641, r33644", 
+   "Bug in which merging a path containing spaces would fail.  Generally", 
+   "URL-encode paths when appending them to URLs.", 
+   "Justification: silly bug, easy fix; similar to previously-ported fixes.", 
+   "Notes:", 
+   "There is a minor conflict with r33644 due to the whitespace cleanup", 
+   "done in r31766.", 
+   "Votes:", 
+   "+1: kfogel (r33641 only), danielsh, kameshj, pburba"
+  ], 
+  "revision_id": "873886"
+ }
+]

@@ -1,0 +1,110 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2005-11-28T23:23:07.766346Z", 
+  "msg": [
+   "Sanitize pool usage in the config reading code.", 
+   "* subversion/libsvn_subr/config_impl.h", 
+   "* subversion/libsvn_subr/config_win.h", 
+   "(svn_config__parse_registry): Take a pool argument.", 
+   "* subversion/libsvn_subr/config_impl.h", 
+   "* subversion/libsvn_subr/config_file.h", 
+   "(svn_config__parse_file, parse_option, parse_section_name):", 
+   "Take a pool argument.", 
+   "* subversion/libsvn_subr/config.c", 
+   "Update callers."
+  ], 
+  "revision_id": "857620"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-28T22:04:16.792219Z", 
+  "msg": [
+   "Modify python test scripts to run via file:// on IBM iSeries.", 
+   "There are a lot of changes here, but they all fall into one of three", 
+   "categories:", 
+   "1) These scripts have only been tested on Per Gummedal's iSeries Python", 
+   "version 2.3.3 - http://www.iseriespython.com/, which has some", 
+   "limitations:", 
+   "a) os.tempnam is not implemented, tempfile.mkstemp used instead.", 
+   "b) os.popen3 is not implemented, ebcdic.os400_run_cmd() used instead.", 
+   "c) Files created using open() have default permissions of -rwxrwxrwxc,", 
+   "different permissions explicitly set as needed.", 
+   "d) os.chmod() can only handle mode bits, e.g. 00 - 04000, values greater", 
+   "than that causes errno 3021, and are not used.", 
+   "2) Ebcdic assumptions:", 
+   "a) iSeries Python operates only on ebcdic encoded scripts, regardless", 
+   "of ccsid.  Therefore string literals in the script are converted to", 
+   "utf-8 with *.encode('utf-8') where appropriate.", 
+   "b) Files are opened for reading and/or writing only in binary mode to", 
+   "prevent OS conversion of the file contents based on CCSID.", 
+   "c) Regular expressions operate only on ebcdic encoded strings.", 
+   "d) When reading utf-8 text file contents in binary mode with readlines()", 
+   "only one line is returned regardless of home many lines are in the", 
+   "file.  os400_split_utf8_lines() from the new ebcdic.py file (r17543)", 
+   "splits the line on utf-8 newlines.", 
+   "3) Due to IBM APR hashing differences on the iSeries  the order of items", 
+   "returned by some commands, e.g. svn status, svn propget, differ from", 
+   "other platforms.  Hard coded expected output is reordered accordingly in", 
+   "these cases.", 
+   "* subversion/tests/clients/cmdline/autoprop_tests.py", 
+   "* subversion/tests/clients/cmdline/basic_tests.py", 
+   "* subversion/tests/clients/cmdline/blame_tests.py", 
+   "* subversion/tests/clients/cmdline/cat_tests.py", 
+   "* subversion/tests/clients/cmdline/commit_tests.py", 
+   "* subversion/tests/clients/cmdline/copy_tests.py", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "* subversion/tests/clients/cmdline/export_tests.py", 
+   "* subversion/tests/clients/cmdline/externals_tests.py", 
+   "* subversion/tests/clients/cmdline/history_tests.py", 
+   "* subversion/tests/clients/cmdline/import_tests.py", 
+   "* subversion/tests/clients/cmdline/lock_tests.py", 
+   "* subversion/tests/clients/cmdline/log_tests.py", 
+   "* subversion/tests/clients/cmdline/prop_tests.py", 
+   "* subversion/tests/clients/cmdline/revert_tests.py", 
+   "* subversion/tests/clients/cmdline/schedule_tests.py", 
+   "* subversion/tests/clients/cmdline/special_tests.py", 
+   "* subversion/tests/clients/cmdline/stat_tests.py", 
+   "* subversion/tests/clients/cmdline/svnadmin_tests.py", 
+   "* subversion/tests/clients/cmdline/svnlook_tests.py", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "* subversion/tests/clients/cmdline/svntest/tree.py", 
+   "* subversion/tests/clients/cmdline/svntest/wc.py", 
+   "* subversion/tests/clients/cmdline/svnversion_tests.py", 
+   "* subversion/tests/clients/cmdline/switch_tests.py", 
+   "* subversion/tests/clients/cmdline/trans_tests.py", 
+   "* subversion/tests/clients/cmdline/update_tests.py"
+  ], 
+  "revision_id": "857619"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-28T19:04:23.015958Z", 
+  "msg": [
+   "Followup to r17496, r17501.", 
+   "Kill more APR pre-0.9.5 compatibility code.", 
+   "* subversion/libsvn_fs_base/fs.c:", 
+   "Remove compatibility APR_LARGEFILE definition."
+  ], 
+  "revision_id": "857618"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-28T18:43:58.732200Z", 
+  "msg": [
+   "Merge r17542 from /branches/ebcdic/trunk to /branches/ebcdic/1.3.x."
+  ], 
+  "revision_id": "857617"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2005-11-28T18:40:23.524999Z", 
+  "msg": [
+   "Add new files to facilitate running of python test suite on IBM iSeries.", 
+   "* as400test.py: New file.", 
+   "* subversion/tests/clients/cmdline/ebcdic.py: New file."
+  ], 
+  "revision_id": "857616"
+ }
+]

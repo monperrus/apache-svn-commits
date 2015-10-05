@@ -1,0 +1,98 @@
+[
+ {
+  "author": "davisp", 
+  "date": "2011-09-02T04:31:10.616783Z", 
+  "msg": [
+   "Fix introduction of duplicates into _changes feed", 
+   "When a document is updated the new update_seq is assigned as part of the", 
+   "rev_tree merging in couch_db_updater:merge_rev_trees/7 based on the", 
+   "condition of whether the new rev_tree is equal to the old tree. This", 
+   "equality is done as a simple Erlang term comparison. If the trees are", 
+   "not equal a new update_seq is assigned to the #full_doc_info{} record", 
+   "that is stored in fulldocinfo_by_id_btree.", 
+   "During replication it is possible that a document update merges into the", 
+   "rev_tree internally without creating a leaf. If the terminal node of the", 
+   "replicated path happens to land on a node with a value of ?REV_MISSING", 
+   "the new document information will be preferred and replace the", 
+   "?REV_MISSING value.", 
+   "This preference ends up causing the rev_tree comparison to evaluate to", 
+   "false which ends up giving this document a new update_seq. Up until this", 
+   "point everything is fine. We write a bit of extra data (that will be", 
+   "cleared during compaction) because of a previous bug where we decided to", 
+   "be cautious and avoid losing data due to a broken rev_tree merging", 
+   "aglorithm. It is also important to note that this is the place were we", 
+   "calculate the update_seq to remove from the docinfo_by_seq_tree.", 
+   "After this point we get back to couch_db_udpater:update_docs_int/5 where", 
+   "we eventually call couch_db_updater:new_index_entries/3 which creates", 
+   "the new entries for the fulldocinfo_by_id_tree and docinfo_by_seq_btree.", 
+   "At this point we end up creating a #doc_info{} record based on the", 
+   "leaves in the rev_tree. As you recall, the update that caused the new", 
+   "update_seq was not a leaf, at this point we create a #doc_info{} record", 
+   "with an incorrect high_seq member pointing to the update_seq we are", 
+   "about to remove from the docinfo_by_seq_tree (remember we calculated the", 
+   "seq to remove before we consulted the leaves).", 
+   "The end result is that we remove the same update_seq we insert. This", 
+   "sets us up for the real bug. The next time we go to update this document", 
+   "the same procedure is applied. But what happens is at the point we", 
+   "calculate the seq to remove from docinfo_by_seq_tree, we calculate the", 
+   "wrong value. Thus when the update continues we remove an update_seq that", 
+   "doesn't exist in the tree and insert our new seq. But, the seq from the", 
+   "previous update is still in the tree. Thus, our docinfo_by_seq_tree now", 
+   "contains two entries pointing at the same document.", 
+   "At this point, we run into the observed behavior of this bug that ends", 
+   "up causing duplicate entries in views which then ends up throwing errors", 
+   "when the view is compaction. These errors are also particularly nasty", 
+   "because they bubble up the the couch_view gen_server which crashes and", 
+   "spiders out crashing every couch_view_group process. That part probably", 
+   "isn't important though.", 
+   "There's a simple test include with the patch to illustrate the behavior", 
+   "and maintain an assertion that it stays fixed.", 
+   "Fixes COUCHDB-1265"
+  ], 
+  "revision_id": "1164350"
+ }, 
+ {
+  "author": "tedyu", 
+  "date": "2011-09-02T04:20:04.352058Z", 
+  "msg": [
+   "HBASE-4310  SlabCache metrics bugfix (Li Pi)"
+  ], 
+  "revision_id": "1164349"
+ }, 
+ {
+  "author": "davisp", 
+  "date": "2011-09-02T04:16:16.294388Z", 
+  "msg": [
+   "Fix svn:ignore propert for new files."
+  ], 
+  "revision_id": "1164348"
+ }, 
+ {
+  "author": "tedyu", 
+  "date": "2011-09-02T04:14:27.783672Z", 
+  "msg": [
+   "HBASE-4273  java.lang.NullPointerException when a table is being disabled and", 
+   "HMaster restarts (Ming Ma)"
+  ], 
+  "revision_id": "1164347"
+ }, 
+ {
+  "author": "davisp", 
+  "date": "2011-09-02T04:03:05.797312Z", 
+  "msg": [
+   "Fix CouchJS compatibility with older Spidermonkey.", 
+   "The recent patch to enable support for SM 1.8.5 broke support for", 
+   "1.7.0. This patch updates couchjs to work with all of the major", 
+   "variants of Spidermonkey.", 
+   "Versions tested:", 
+   "1.7.0", 
+   "1.8.0rc1", 
+   "1.8.5", 
+   "1.9.2.something (XULRunner)", 
+   "Various combinations have been tested on OS X, Ubuntu, FreeBSD and", 
+   "Windows.", 
+   "Fixes COUCHDB-1260"
+  ], 
+  "revision_id": "1164346"
+ }
+]

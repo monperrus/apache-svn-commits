@@ -1,0 +1,119 @@
+[
+ {
+  "author": "rey4", 
+  "date": "2004-07-11T15:25:06.996451Z", 
+  "msg": [
+   "Get python bindings to build on unix and to not depend on an external", 
+   "swig runtime library.", 
+   "* build/ac-macros/swig.m4:", 
+   "(SWIG_RUNTIME_FLAG):", 
+   "new make variable for swig -runtime option", 
+   "* Makefile.in", 
+   "(RUN_SWIG_PY, RUN_SWIG_NORUN_PY, RUN_SWIG_JAVA, RUN_SWIG_NORUN_JAVA):", 
+   "use separate commands for running swig with and without runtime", 
+   "* build.conf", 
+   "(libsvn_swig_python):", 
+   "use \"nonlibs\" dependency on \"swig_core\" instead of \"libs\" dependency", 
+   "to avoid circular dependency error in make", 
+   "* build/generator/gen_base.py", 
+   "(SWIGObject.__init__, TargetSWIG.add_dependencies):", 
+   "add new \"target\" member to swig objects to expose more build", 
+   "information to make backend", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write):", 
+   "use \"include-runtime\" values on swig targets to determine whether to", 
+   "call swig with runtime or not"
+  ], 
+  "revision_id": "850310"
+ }, 
+ {
+  "author": "jaa", 
+  "date": "2004-07-11T03:04:46.606330Z", 
+  "msg": [
+   "Return a proper exit code back to the upper level. This will help", 
+   "the integration of check-javahl to the svntest framework.", 
+   "* subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/tests/BasicTests.java", 
+   "(main): Return proper exit code back to the upper level regarding", 
+   "the result of tests."
+  ], 
+  "revision_id": "850309"
+ }, 
+ {
+  "author": "jaa", 
+  "date": "2004-07-10T23:58:46.210602Z", 
+  "msg": [
+   "Fixed compiler warnings with gcc 3.3.3 and 3.4.1.", 
+   "They were all of this type:", 
+   "\"declaration of 'xxx' shadows a member of 'this'\"", 
+   "or", 
+   "\"declaration of 'xxx' shadows a previous local\".", 
+   "* subversion/bindings/java/javahl/native/SVNClient.h", 
+   "* subversion/bindings/java/javahl/native/SVNClient.cpp", 
+   "(SVNClient::username):  arg 'username' renamed to 'pi_username'", 
+   "(SVNClient::password):  arg 'password' renamed to 'pi_password'", 
+   "* subversion/bindings/java/javahl/native/Prompter.h", 
+   "* subversion/bindings/java/javahl/native/Prompter.cpp", 
+   "(Prompter::prompt): arg 'username' renamed to 'pi_username'", 
+   "* subversion/bindings/java/javahl/native/Notify.h", 
+   "* subversion/bindings/java/javahl/native/Notify.cpp", 
+   "(Notify::Notify): arg 'notify' renamed to 'p_notify'", 
+   "* subversion/bindings/java/javahl/native/Path.cpp", 
+   "(Path::Path, Path::init, Path::operator=): arg 'path' renamed to 'pi_path'", 
+   "* subversion/bindings/java/javahl/native/Path.h", 
+   "ditto, and fixed doc strings.", 
+   "* subversion/bindings/java/javahl/native/SVNAdmin.cpp", 
+   "(SVNAdmin::rmtxns): removed superflous svn_err_t decl. as it shadowed", 
+   "previous declaration."
+  ], 
+  "revision_id": "850308"
+ }, 
+ {
+  "author": "rey4", 
+  "date": "2004-07-10T23:22:35.244643Z", 
+  "msg": [
+   "Change build of swig bindings on windows. Export swig runtime functions", 
+   "from core module instead of building a separate runtime library.", 
+   "* build.conf", 
+   "(swig_core):", 
+   "include runtime code", 
+   "(swig_client, swig_delta, swig_fs, swig_ra, swig_repos, swig_wc,", 
+   "libsvn_swig_py, libsvn_swig_perl):", 
+   "depend on core library instead of runtime library", 
+   "(libsvn_swig_perl):", 
+   "build as static library instead of dll to prevent mutual dependency", 
+   "between this library and the core module. Our build system can't", 
+   "make two DLLs that depend on each other.", 
+   "* build/generator/gen_base.py", 
+   "(TargetSWIG.__init__):", 
+   "read new \"include-runtime\" option", 
+   "(TargetSWIGRuntime, _build_types):", 
+   "remove swig_runtime target type", 
+   "* build/generator/gen_win.py", 
+   "(WinGeneratorBase.get_proj_sources):", 
+   "remove handling of swig runtime targets", 
+   "add -runtime option for generating swig core modules", 
+   "* subversion/bindings/swig/core.i", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.h", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.c", 
+   "(current_pool, svn_swig_pl_get_current_pool,", 
+   "svn_swig_pl_set_current_pool):", 
+   "move the perl bindings' \"current_pool\" variable from swigutil_pl", 
+   "library to the core module. Neccessary because we're now building", 
+   "the utility library as a static library, and don't want a different", 
+   "copy of the global variable in each module that uses the library", 
+   "* subversion/bindings/swig/INSTALL", 
+   "don't copy nonexistent perl runtime and utility libraries", 
+   "* build/win32/gen_swig_runtime.py", 
+   "deleted"
+  ], 
+  "revision_id": "850307"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-07-10T22:26:36.164698Z", 
+  "msg": [
+   "* STATUS: Add votes and propose and vote for 10185."
+  ], 
+  "revision_id": "850306"
+ }
+]

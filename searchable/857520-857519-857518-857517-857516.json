@@ -1,0 +1,119 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T23:19:55.076556Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Since we're now using the RA session's URL", 
+   "to determine the portion of the repository we want to replay, make svnsync", 
+   "verify that it's actually being pointed at the root of the source and dest", 
+   "repositories.", 
+   "* subversion/svnsync/main.c", 
+   "(check_if_session_is_at_repos_root): New helper function.", 
+   "(do_initialize,", 
+   "initialize,", 
+   "do_synchronize,", 
+   "synchronize): Call check_if_session_is_at_repos_root after", 
+   "opening our RA session."
+  ], 
+  "revision_id": "857520"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T22:35:28.530629Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Revert revision 17443.  After talking to", 
+   "lundblad about it some more, we came to the conclusion that simply not", 
+   "allowing invalid revnums made more sense, and in that case there's no", 
+   "reason to have a special tuple with an optional revision.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_replay): Make the low water mark not optional.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(replay): Note the new syntax for the replay command.", 
+   "* subversion/svnserve/serve.c", 
+   "(replay): Update call to ra_svn_parse_tuple to account for the fact", 
+   "that the low water mark is no longer optional."
+  ], 
+  "revision_id": "857519"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T21:06:13.354859Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Move the svnsync revprop names into the", 
+   "svn: namespace instead of svnsync: where they were.", 
+   "Suggested by: maxb", 
+   "* subversion/svnsync/main.c", 
+   "(PROP_PREFIX): New #define for the prefix we use on our properties.", 
+   "(LOCK_PROP,", 
+   "FROM_URL_PROP,", 
+   "LAST_MERGED_REV_PROP,", 
+   "CORRENTLY_COPYING_PROP): Redefine using PROP_PREFIX.", 
+   "(do_initialize): Use PROP_PREFIX when looking for svnsync's props."
+  ], 
+  "revision_id": "857518"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T20:31:04.198909Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Bring the ra_svn protocol more in line", 
+   "with the way things are usually done there by making the low water", 
+   "mark an optional argument inside a tuple.", 
+   "Suggested by: lundblad", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_replay): Put the low water mark into a tuple and make it", 
+   "optional.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(replay): Update low-water-mark argument.", 
+   "* subversion/svnserve/serve.c", 
+   "(replay): Update call to svn_ra_svn_parse_tuple to note that the", 
+   "low-water-mark argument is now optional and inside a tuple."
+  ], 
+  "revision_id": "857517"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-11-18T19:45:17.601828Z", 
+  "msg": [
+   "On the ra-replay-dev branch: Remove the base_dir parameter from", 
+   "svn_ra_replay,  Instead, just infer which portion of the repos", 
+   "the client is interested in from the RA session's URL.", 
+   "On an unrelated note, fix svn_ra_replay over ra_svn, you can't", 
+   "pass an invalid revnum as a revision without tripping an assert.", 
+   "To avoid this problem we simply stop suggesting that you send", 
+   "SVN_INVALID_REVISION as your low water mark to indicate that", 
+   "there is no low water mark, since passing zero works just fine", 
+   "for that situation.", 
+   "Suggested by: lundblad", 
+   "(the base dir part)", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_replay): Remove the base_dir parameter and stop saying", 
+   "you should pass SVN_INVALID_REVISION for the low water mark.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__vtable_t): Remove base_path from the replay member.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_replay): Remove base_path parameter.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__replay): Remove base_path parameter, just use", 
+   "the session's fs_path instead.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_replay): Remove the base_path parameter and stop sending", 
+   "it to the server.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(replay): Remove the base-path parameter.", 
+   "* subversion/svnserve/serve.c", 
+   "(replay): Stop expecting the base_path from the client, use the", 
+   "fs_path instead.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__replay): Remove the base_path parameter.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__replay): Ditto.", 
+   "* subversion/svnsync/main.c", 
+   "(do_synchronize): Stop passing a base path, use zero instead of", 
+   "SVN_INVALID_REVNUM to indicate that we have all the history.", 
+   "(synchronize): Add a comment to remind me to verify that we're", 
+   "actually rooted at the root of the repos."
+  ], 
+  "revision_id": "857516"
+ }
+]

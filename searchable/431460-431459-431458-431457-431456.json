@@ -1,0 +1,100 @@
+[
+ {
+  "author": "chrisd", 
+  "date": "2006-08-14T22:55:45.801523Z", 
+  "msg": [
+   "Introduce a check_config phase between pre_config and open_logs,", 
+   "to allow modules to review interdependent configuration directive", 
+   "values and adjust them while messages can still be logged to the", 
+   "console.", 
+   "The open_logs phase is already used somewhat for this purpose by", 
+   "certain MPMs (winnt, prefork, worker, and event) but only by forcing", 
+   "their functions ahead of the core ap_open_logs() function, and", 
+   "since this phase runs after the ap_signal_server function during startup,", 
+   "it can not be used to generate messages on the console when restarting.", 
+   "Add the check_config phase to mod_info and mod_example.", 
+   "Handle relevant MPM directives during this phase and format messages", 
+   "for both the console and the error log, as appropriate.  Bounds and sanity", 
+   "checks on the values of the MPM directives are handled in sequence in", 
+   "this phase instead of in the various directive handling functions, since", 
+   "those functions (e.g., set_max_clients()) may not be called at all if their", 
+   "directives do not appear in the configuration files, and even if they", 
+   "are called, there is no guarantee that this will occur in any particular", 
+   "order.", 
+   "Remove from the worker and event MPMs the code in the pre_config phase", 
+   "that alters the configuration node tree by re-ordering ThreadsPerChild", 
+   "ahead of MaxClients.  This code is effective but insufficient; for", 
+   "example, if ServerLimit follows MaxClients, the test against server_limit", 
+   "in set_max_clients() is invalid.  (In practice, this only results in", 
+   "incorrect or absent warnings on the console, because server_limit is", 
+   "set to its configured value when the main loop re-runs the configuration", 
+   "process.)", 
+   "Prevent ap_threads_per_child from exceeding thread_limit in the", 
+   "winnt, worker, and event MPMs.  This situation could occur if", 
+   "ThreadsPerChild was not specified in the configuration files and", 
+   "ThreadLimit was set to a value smaller than DEFAULT_THREADS_PER_CHILD,", 
+   "because set_threads_per_child() would never be called and therefore", 
+   "its bounds check against thread_limit would not be performed.", 
+   "Remove from the winnt, prefork, worker, and event MPMs the", 
+   "changed_limit_at_restart flag.  Set the first_server_limit and", 
+   "first_thread_limit values during the first execution of the check_config", 
+   "function, and use them to detect changes to ServerLimit and ThreadLimit", 
+   "across restarts and issue appropriately formatted warnings.  Remove the", 
+   "comments about the error log being a \"bit bucket\"; this was true when", 
+   "the code was originally committed in r92530 but that was due to a bug", 
+   "fixed in r92769.", 
+   "Be consistent about setting all MPM configuration directive values in the", 
+   "pre_config phase.", 
+   "Rephrase and reformat the console and log file messages relating to", 
+   "MPM configuration directives to be consistent across all MPMs.  Use", 
+   "briefer messages when logging to the error log than to the console.", 
+   "Update miscellaneous stale comments and messages (e.g., reference to", 
+   "daemons_min_free in worker and event MPMs, \"prefork open_logs\" in", 
+   "winnt MPM, and StartServers in netware MPM).", 
+   "The winnt, netware, beos, and mpmt_os2 MPMs should be tested by developers", 
+   "with access to those platforms, especially the winnt MPM, which has", 
+   "unique logic with respect to distinguishing between parent and child", 
+   "processes during the configuration phases.", 
+   "Update the English documentation for the worker MPM's ThreadsPerChild", 
+   "directive, which no longer needs to precede other MPM directives in the", 
+   "configuration files if it has a non-default value.  The German (.de) and", 
+   "Japanese (.ja) translations should be updated by developers fluent in", 
+   "those languages."
+  ], 
+  "revision_id": "431460"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2006-08-14T22:52:38.264915Z", 
+  "msg": [
+   "Delete test output file that should never have been committed."
+  ], 
+  "revision_id": "431459"
+ }, 
+ {
+  "author": "jglick", 
+  "date": "2006-08-14T22:47:11.846378Z", 
+  "msg": [
+   "Mention of #39683."
+  ], 
+  "revision_id": "431458"
+ }, 
+ {
+  "author": "djd", 
+  "date": "2006-08-14T22:44:53.549249Z", 
+  "msg": [
+   "DERBY-1548 Document builtin functions - ACOS, ASIN, ATAN, COS, SIN, TAN, PI, DEGREES, RADIANS, EXP,", 
+   "LN, LOG, LOG10, CEIL, CEILING, FLOOR", 
+   "Patch contributed by Laura Stewart - scotsmatrix@gmail.com"
+  ], 
+  "revision_id": "431457"
+ }, 
+ {
+  "author": "jboynes", 
+  "date": "2006-08-14T22:39:06.240877Z", 
+  "msg": [
+   "restructure web distro to move runtime jars off the webapp classpath"
+  ], 
+  "revision_id": "431456"
+ }
+]

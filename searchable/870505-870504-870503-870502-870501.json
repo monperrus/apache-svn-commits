@@ -1,0 +1,120 @@
+[
+ {
+  "author": "epg", 
+  "date": "2008-04-07T23:40:11.928510Z", 
+  "msg": [
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(add_remove_changelists): Don't use dict.fromkeys (added in r29671),", 
+   "not in Python 2.2."
+  ], 
+  "revision_id": "870505"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-04-07T23:29:57.402536Z", 
+  "msg": [
+   "On the in-memory-cache branch:", 
+   "Error handling!", 
+   "Because caches are only a performance optimization, errors dealing", 
+   "with them (most likely problems with memcached, but also errors that", 
+   "are thrown in dup/serialize/deserialize functions) probably shouldn't", 
+   "stop the server from working.  On the other hand, such errors", 
+   "shouldn't be completely ignored.", 
+   "So we add a svn_cache_set_error_handler API, which lets consumers", 
+   "transform or ignore errors produced by svn_cache_get and", 
+   "svn_cache_set.  (We leave svn_cache_iter alone, since the only place", 
+   "we use it it's for a correctness issue: invalidating stale entries.)", 
+   "Now, what handler do we use in FSFS?  Well, there's a little corner of", 
+   "the FS API called the \"warning handler\".  So we just use that.", 
+   "Um.  Except that the default thing that the warning handler does is", 
+   "abort.  mod_dav_svn hooks it up to logging; svnadmin, svnlook, and the", 
+   "test suites print it out.  But svnserve and ra_local abort (as well as", 
+   "any third-party server which didn't read svn_fs.h carefully enough).", 
+   "We should get svnserve logging in 1.6, so I made its warning handler", 
+   "be a no-op for now.  And ra_local?  Well, as of this patch, only two", 
+   "things invoke the warning handler.  One is the new memcached stuff,", 
+   "which you probably are only going to bother setting up if you're", 
+   "running a Serious Server with performance issues, and thus not using", 
+   "ra_local.  And the other is some BDB errors while closing the db.  I", 
+   "figure, if this happens so rarely that nobody complains \"I get all", 
+   "these abort()s when using ra_local with BDB\", then ignoring the error", 
+   "isn't too big a deal either.  So we ignore them there.  If you want", 
+   "real error logging, use a real server.", 
+   "And if you really want to make sure that cache errors aren't masked", 
+   "(say, while developing Subversion or testing a new memcached-based", 
+   "installation), you can set a \"fail-stop\" config option in fsfs.conf to", 
+   "true.  (This also will make in-process caches fail-stop if there's an", 
+   "error in the dup function, say.)  This is off by default, but on by", 
+   "default in the test suite.", 
+   "*** CACHE LIBRARY ***", 
+   "* subversion/include/svn_cache.h", 
+   "(svn_cache_error_handler_t, svn_cache_set_error_handler): New.", 
+   "(svn_cache_iter): Explicitly note that the error handler isn't used", 
+   "for this.", 
+   "* subversion/libsvn_subr/cache.h", 
+   "(struct svn_cache_t): Add error_handler and error_baton fields.", 
+   "* subversion/libsvn_subr/cache-inprocess.c", 
+   "(svn_cache_create_inprocess): Explicitly set error handler fields to", 
+   "null.", 
+   "* subversion/libsvn_subr/cache-memcache.c", 
+   "(svn_cache_create_memcache): Explicitly set error handler fields to", 
+   "null.", 
+   "* subversion/libsvn_subr/cache.c", 
+   "(svn_cache_set_error_handler, handle_error): New.", 
+   "(svn_cache_get, svn_cache_set): Wrap return values with a call to", 
+   "handle_error.", 
+   "*** FSFS ***", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(read_config): Rename from find_memcache.  Read the fail-stop config", 
+   "item as well.", 
+   "(warn_on_cache_errors): New; pass cache errors to FS warning", 
+   "handler.", 
+   "(svn_fs_fs__initialize_caches): Set cache error handler, unless", 
+   "fail-stop was specified.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(CONFIG_SECTION_CACHES, CONFIG_OPTION_FAIL_STOP): New.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(write_config): Add caches section to generated file.", 
+   "* subversion/tests/tests.conf", 
+   "(caches): Default fail-stop to true in the test suite.", 
+   "*** IMPLEMENTATIONS OF THE FS WARNING HANDLER ***", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(ignore_warnings): New.", 
+   "(svn_ra_local__open): Set warning function on FS.", 
+   "* subversion/svnserve/serve.c", 
+   "(handle_fs_warnings): New (empty until we have svnserve logging).", 
+   "(find_repos): Set handle_fs_warnings as warning handler.", 
+   "* subversion/tests/svn_test_fs.c", 
+   "(svn_test__create_fs, svn_test__create_repos): If reopening the FS", 
+   "(because we installed a config file), set the warning function", 
+   "again."
+  ], 
+  "revision_id": "870504"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-04-07T23:23:20.853933Z", 
+  "msg": [
+   "* STATUS: Add r30428 to r30426, vote, and adjust existing votes as needed."
+  ], 
+  "revision_id": "870503"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-04-07T23:20:13.986405Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/reports/mergeinfo.c", 
+   "(dav_svn__get_mergeinfo_report): Extend format string to include", 
+   "newly added parameter, following up to r30426 (hi epg! :)"
+  ], 
+  "revision_id": "870502"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-07T23:19:10.997378Z", 
+  "msg": [
+   "Nominate r30426 for 1.5.0 (or 1.5.1)."
+  ], 
+  "revision_id": "870501"
+ }
+]

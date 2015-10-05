@@ -1,0 +1,64 @@
+[
+ {
+  "author": "snoopdave", 
+  "date": "2007-05-24T18:53:17.968597Z", 
+  "msg": [
+   "merging latest from trunk"
+  ], 
+  "revision_id": "541385"
+ }, 
+ {
+  "author": "snoopdave", 
+  "date": "2007-05-24T18:50:56.326044Z", 
+  "msg": [
+   "merging latest from trunk"
+  ], 
+  "revision_id": "541384"
+ }, 
+ {
+  "author": "joakime", 
+  "date": "2007-05-24T18:47:50.330423Z", 
+  "msg": [
+   "* Fixing test of propertyName values in ConfigurationNames class.", 
+   "* Updating ProxyTestCase to use trigger with appropriate values."
+  ], 
+  "revision_id": "541383"
+ }, 
+ {
+  "author": "dasarath", 
+  "date": "2007-05-24T18:47:09.256097Z", 
+  "msg": [
+   "Updates for code generation for ws-ba.", 
+   "Hannes Erven <hannes@erven.at>, Georg Hicker <georg.hicker@utanet.at>"
+  ], 
+  "revision_id": "541382"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-05-24T18:46:40.825095Z", 
+  "msg": [
+   "ResultColumn's convertConstant method has 2 calls to DataValueFactory.getVarcharDataValue(String) which will always create SQLVarchar", 
+   "and disregard any collation information that it should be using. This gets called for an INSERT statement while trying to do", 
+   "column type and length matching from the source resultset into the target. The change through this commit makes sure we set the correct", 
+   "collation type and derivation. Some background information on this change from a thread titled \"Possible missing collation info for DVDs?\"", 
+   "on Derby dev mailing list (http://www.nabble.com/Possible-missing-collation-info-for-DVDs--tf3798563.html#a10745343)", 
+   "Snippet start from the thread mentioned above.", 
+   "I looked at ResultColumn's convertConstant method which has the 2 calls to DataValueFactory.getVarcharDataValue(String). This method gets", 
+   "called in following sequence", 
+   "convertConstant(TypeId, int, DataValueDescriptor) - org.apache.derby.impl.sql.compile.ResultColumn", 
+   "columnTypeAndLengthMatch(ResultColumn) - org.apache.derby.impl.sql.compile.ResultColumn", 
+   "columnTypesAndLengthsMatch(ResultColumnList) - org.apache.derby.impl.sql.compile.ResultColumnList", 
+   "bindStatement() - org.apache.derby.impl.sql.compile.InsertNode", 
+   "It looks like InsertNode's bindStatement method calls columnTypesAndLengthsMatch to make sure that the source and target column types and", 
+   "lengths match and if not, then it should insert a NormalizeResultSetNode  on top of the source. If the source happens to have constants,", 
+   "then we try to convert the constant to the type of the target(this happens in ResultColumn's convertConstant method).", 
+   "Since none of this code flow happens for a collation operation, in theory, it will be ok with not setting the correct collation type and", 
+   "derivation and hence the code should not run into any problem even if it stayed as it is. If my understanding is wrong about how the", 
+   "constants in the insert statement can't be part of a collation operation, then please let me know. Ideally though, it will not hurt to", 
+   "have the correct collation type and derivation setting on constants in this case whether or not they get used in a collation method. So,", 
+   "I will go ahead and do that.", 
+   "Snippet end from the thread mentioned above."
+  ], 
+  "revision_id": "541381"
+ }
+]

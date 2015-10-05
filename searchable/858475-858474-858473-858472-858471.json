@@ -1,0 +1,100 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-09T17:27:45.831635Z", 
+  "msg": [
+   "ra_serf: Improve pool usage within the update report.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_dir_t, report_info_t): Add in pool field associated with directory", 
+   "and file; Store base_rev field with the dir and delta_base URL with file.", 
+   "(push_state): Create independent pool for root, dirs, and files. (may want", 
+   "to delay the pool creation even further); split the props to be dir-based", 
+   "instead of global.", 
+   "(open_dir): Lazily open dir_batons so we don't exhaust fds.", 
+   "(close_dir): Move from later in file; ensure our baton was opened; clear", 
+   "dir's pool when we close it; don't take an explicit pool - we'll use the dir", 
+   "pool instead.", 
+   "(handle_fetch): Open dir and file batons when we get our file response;", 
+   "use appropriate pools.", 
+   "(delta_file, fetch_file): Init prop_ctx to NULL; delay opening baton; use", 
+   "appropriate pools.", 
+   "(start_report): Store our base_rev; don't open batons here; use appropriate", 
+   "pools.", 
+   "(finish_report): Don't pass a pool; remove items from the pending_dir_close", 
+   "list."
+  ], 
+  "revision_id": "858475"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-02-09T15:48:15.141837Z", 
+  "msg": [
+   "Change the behaviour of 'svn blame' so that the default operative revision", 
+   "range will be taken from the target's peg revision (if so provided),", 
+   "for consistency with most of the other 'svn' commands.", 
+   "This is a minor change to existing behaviour: if a peg revision is", 
+   "provided without an explicit revision range, we will now display the", 
+   "file as it was at rPEG, rather than at HEAD/BASE.", 
+   "Review by: julianfoad", 
+   "* subversion/svn/blame-cmd.c", 
+   "(svn_cl__blame): Check for a peg revision before determining the", 
+   "operative end revision, and use that peg revision as the default", 
+   "operative end revision (or if no peg revision was specified,", 
+   "fall back to HEAD or BASE, as before).  Also rename local variable", 
+   "'is_head_or_base' to 'end_revision_unspecified', to better represent", 
+   "the condition that's being evaluated.", 
+   "* subversion/tests/cmdline/blame_tests.py", 
+   "(blame_peg_rev): New test.", 
+   "(test_list): Add the test."
+  ], 
+  "revision_id": "858474"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-02-09T14:51:14.789241Z", 
+  "msg": [
+   "Followup to r18363.  Reinstate checking of the svndiff version number", 
+   "when reading the svndiff header.  Also remove an assumption (added in", 
+   "r18363) that the svndiff header will arrive in one piece.", 
+   "* subversion/libsvn_delta/svndiff.c", 
+   "(write_handler): Check for the svndiff0 and svndiff1 headers explicitly,", 
+   "and raise an error if neither was found.  Use the same", 
+   "incremental-match logic that was used before to make sure that the", 
+   "version is still set correctly when the header arrives in more than", 
+   "one piece."
+  ], 
+  "revision_id": "858473"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-02-09T13:42:04.984386Z", 
+  "msg": [
+   "Followup to r18363.  Revert some unneeded changes made in that revision,", 
+   "per discussion with dberlin.", 
+   "* subversion/libsvn_delta/svndiff.c", 
+   "(read_window_header): Revert the changes made to this function in", 
+   "r18363, since the additional 'version' argument wasn't used for", 
+   "anything - and because version-checking is better handled by", 
+   "a different function anyway.", 
+   "(svn_txdelta_read_svndiff_window, svn_txdelta_skip_svndiff_window):", 
+   "Partially revert the changes made to these functions in r18363,", 
+   "removing the svndiff_version argument from the calls to", 
+   "read_window_header()."
+  ], 
+  "revision_id": "858472"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-02-09T01:36:05.899913Z", 
+  "msg": [
+   "A follow-up to r18382 to improve code cleanliness.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(relocate_beyond_repos_root): Move 'URL: ' portion of the regex used", 
+   "to verify that the switch worked outside of the call to re.escape()", 
+   "to improve comprehensibility (and insignificantly, performance).", 
+   "Suggested by: Peter Samuelson <peter@p12n.org>", 
+   "Review by: lundblad"
+  ], 
+  "revision_id": "858471"
+ }
+]

@@ -1,0 +1,122 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:51.894349Z", 
+  "msg": [
+   "Preserving locality of HRegions on rolling_restarts", 
+   "Summary:", 
+   "I created a new jruby script file to take advantage of the HBaseAdmin to", 
+   "directly hook into the running cluster and perform operations so as to not hack", 
+   "at it with bash scripts and kill signals.", 
+   "Then I added message processing between RSs and Master and holding mechanisms", 
+   "(in memory) at master's side to keep the regions in unassigned mode and not give", 
+   "them out to other needy servers.", 
+   "I also fixed a problem with the load balancing code path interfering with", 
+   "restarts due to some previous issues in the source that got the RS added to the", 
+   "list of servers used for load calculation before its actual load was refreshed.", 
+   "There are quite a couple of potential issues at the moment, but I'm putting", 
+   "this up for initial overview.", 
+   "Test Plan:", 
+   "I ran a loadtest on my cluster with 3 regionservers, then started a", 
+   "rolling-restart and checked in two browser tabs if the test-table region", 
+   "distribution was identical before and after.", 
+   "This should however be turned into some form of unit-test...", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kannan, nspiegelberg, liyintang, kranganathan", 
+   "Commenters: kannan", 
+   "CC: hbase@lists, bogdan, kannan, kranganathan", 
+   "Differential Revision: 279896", 
+   "Task ID: 619449"
+  ], 
+  "revision_id": "1181915"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:46.980194Z", 
+  "msg": [
+   "(HBASE-4078) Move corrupt store files out of main store file directory.", 
+   "Summary:", 
+   "During compaction of store files, at times the newly created store", 
+   "file is corrupt. The current logic to handle this is to keep the store file", 
+   "around but not change the list of store files served. For example if A, B, C", 
+   "was", 
+   "compacted to D and D was corrupt, the regionserver still keeps 'D' around but", 
+   "maintains the current list of store files as A, B, C. The problem now arises", 
+   "that when the region moves, the new RS sees A, B, C and D and tries to open 'D'", 
+   "as well and gets an error. This keeps happening as the region moves around.", 
+   "The fix for now is to move 'D' out of the main store files directory into a", 
+   "'tmp' location so that regionservers don't pick it up.", 
+   "Test Plan:", 
+   "1) Run TestCompaction, TestCompactSelection.", 
+   "2) Write a unit test which tests this specific case.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: kranganathan, kannan, mbautin, nspiegelberg", 
+   "Commenters: kannan, dhruba, mbautin, liyintang", 
+   "CC: , hbase@lists, nspiegelberg, kannan, pritam, dhruba,", 
+   "mbautin, liyintang", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 278958", 
+   "Task ID: 624621"
+  ], 
+  "revision_id": "1181914"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:43.599947Z", 
+  "msg": [
+   "fix for HBaseFsck", 
+   "Test Plan: run unit test", 
+   "Reviewed By: dhruba", 
+   "Reviewers: dhruba", 
+   "CC: dhruba", 
+   "Differential Revision: 286187"
+  ], 
+  "revision_id": "1181913"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:40.768246Z", 
+  "msg": [
+   "modify hbck to check if .regioninfo and .META. are consistent", 
+   "Summary:", 
+   "hbase_trunk (version 0.89) does not update the .regioninfo file after 'alter", 
+   "table'. For such tables", 
+   ".regioninfo is not consistent with the region information in .META. This", 
+   "revision adds the functionality in", 
+   "hbck to check if the two values are consistent.", 
+   "Test Plan:", 
+   "tested on my dev cluster. Modified a table using the alter table command to and", 
+   "verified that the", 
+   "tool reports the inconsistency correctly.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, dhruba, nspiegelberg", 
+   "Commenters: dhruba", 
+   "CC: hbase@lists, dhruba, kannan, kranganathan, nileema", 
+   "Differential Revision: 270336"
+  ], 
+  "revision_id": "1181912"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:41:37.436444Z", 
+  "msg": [
+   "Determining the hostname of the active HBase master", 
+   "Summary: This simple script reads the HBase master ZK node and outputs the", 
+   "hostname of the active master. This is needed so that hadoopctl can decide where", 
+   "the primary master should be running. I am also including a one-line hbase-jruby", 
+   "script so we can make our jruby scripts proper UNIX executables.", 
+   "Test Plan: Run it. Kill the master. Wait for znode to expire. Run again.", 
+   "Reviewed By: liyintang", 
+   "Reviewers: liyintang, nspiegelberg, pritam", 
+   "CC: andrewr, , hbase@lists, liyintang", 
+   "Revert Plan: OK", 
+   "Differential Revision: 285941", 
+   "Task ID: 613556"
+  ], 
+  "revision_id": "1181911"
+ }
+]

@@ -1,0 +1,90 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-07-08T22:20:24.816294Z", 
+  "msg": [
+   "Make 'svn patch' do offset searching when applying hunks.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff_offset): New unit test.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(match_hunk, scan_for_match): New helper functions for offset searching.", 
+   "(determine_hunk_line): Use new helpers to do offset searching while", 
+   "figuring out where a hunk should be applied.", 
+   "(apply_one_hunk): Adjust for changes made to determine_hunk_line(),", 
+   "and only call it if the patch target existed prior to patch application.", 
+   "If there's nothing to search, we might as well not bother."
+  ], 
+  "revision_id": "878450"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-07-08T20:27:10.937293Z", 
+  "msg": [
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc_adm_probe_retrieve):", 
+   "Following up on r38374, revert accidental change.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "878449"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-07-08T19:58:55.543211Z", 
+  "msg": [
+   "Add helper function to open an adm_access baton associated with a working copy", 
+   "context. This is necessary to workaround some temporary issues during the", 
+   "transition towards using svn_wc_context_t everywhere.", 
+   "This fixes most of the current Windows test failures.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__adm_open_in_context): New function.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_commit4): Open commit root using", 
+   "svn_wc__adm_open_in_context to allow closing open wc databases.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc_adm_probe_retrieve): Accidental change. [Reverted in r38375]", 
+   "(svn_wc__adm_open_in_context): New function."
+  ], 
+  "revision_id": "878448"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-07-08T15:39:08.924538Z", 
+  "msg": [
+   "Make our Windows crashdump handler compatible with the Windows Vista", 
+   "and newer DBGHELP.DLL versions.", 
+   "Windows Vista changed the version numbering of DBGHELP.dll to match", 
+   "the OS version number, which is lower than the version we checked for.", 
+   "Instead of looking for a version number, we now just check if the DLL exports", 
+   "the right functions.", 
+   "* subversion/libsvn_subr/win32_crashrpt.c", 
+   "(check_dbghelp_version): Remove function.", 
+   "(load_dbghelp_dll): Don't check version number before loading DLL."
+  ], 
+  "revision_id": "878447"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-08T13:27:23.986132Z", 
+  "msg": [
+   "Fix up the use of streams in unidiff application code a little.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(patch_target_t): New member STREAM, which is opened when the target", 
+   "is initialised and can be used to read lines from the target file.", 
+   "We were already opening and closing a stream in two separate", 
+   "places for this purpose, so it makes sense to put this here.", 
+   "Also, move a boolean field around so all booleans are grouped together.", 
+   "(init_patch_target): Initialise new STREAM member.", 
+   "(copy_lines_to_target): Don't open a new stream to read lines from", 
+   "the target, just use the existing one. Also, don't increment the", 
+   "line count if end-of-file was reached.", 
+   "(read_lines_from_target): Don't open a new stream to read lines from", 
+   "the target, just use the existing one. Also, mention the caller's", 
+   "responsibility to close the returned stream in the docstring.", 
+   "(copy_latest_text): There's no point in disowning an already disowned", 
+   "stream, so don't do that. Also don't forget to close any streams created.", 
+   "(apply_one_hunk): Close the stream returned by read_lines_from_target().", 
+   "(apply_one_patch): Close the new STREAM member of patch_target_t."
+  ], 
+  "revision_id": "878446"
+ }
+]

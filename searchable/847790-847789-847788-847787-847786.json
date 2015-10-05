@@ -1,0 +1,108 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-11-12T22:55:44.075353Z", 
+  "msg": [
+   "With Ben, fix some resource walk buglets:", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(dummy_window_handler): New function.", 
+   "(upd_apply_textdelta): If this is a resource walk, then just use", 
+   "dummy_window_handler instead of the real window_handler.", 
+   "(upd_change_xxx_prop): If this is a resource walk, then leave."
+  ], 
+  "revision_id": "847790"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-12T21:55:34.262319Z", 
+  "msg": [
+   "With Ben, stop using the Neon shim code for checkouts and updates.", 
+   "This means we no longer hold file contents in memory.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__lookup_xml_elem): New public prototype for the formerly", 
+   "private 'lookup_elem'.", 
+   "(svn_ra_dav__parsed_request): Don't take an elements argument.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__lookup_xml_elem): New name for lookup_elem.", 
+   "All callers changed.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(report_baton_t): New fields whandler, whandler_baton,", 
+   "svndiff_decoder, base64_decoder, cdata_accum.", 
+   "(cdata_handler): New function.", 
+   "(end_element): Extract small cdata from the report baton, and close", 
+   "the base64 stream, which in turn closes the txdelta window stream.", 
+   "(make_reporter): Initialize the new fields explicitly.", 
+   "(CHKERR): Return NE_XML_ABORT."
+  ], 
+  "revision_id": "847789"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2003-11-12T20:24:11.629957Z", 
+  "msg": [
+   "Eliminate duplicate error code SVN_ERR_CLIENT_UNVERSIONED. Use", 
+   "SVN_ERR_UNVERSIONED_RESOURCE instead.", 
+   "Patch by: Erik H\u00fclsmann <e.huelsmann@gmx.net>", 
+   "* subversion/include/svn_error_codes.h", 
+   "Eliminate SVN_ERR_CLIENT_UNVERSIONED.", 
+   "* subversion/libsvn_client/delete.c", 
+   "* subversion/clients/cmdline/delete-cmd.c", 
+   "Replace SVN_ERR_CLIENT_UNVERSIONED with SVN_ERR_UNVERSIONED_RESOURCE."
+  ], 
+  "revision_id": "847788"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-12T19:07:45.576696Z", 
+  "msg": [
+   "With Ben, start work on upgrading the report request parsing functions", 
+   "to the Neon 0.24 API, so we won't accumulate all file contents in a", 
+   "stringbuf anymore.", 
+   "This change is just the first step: make the shim layer that", 
+   "translates Neon 0.24 calls to our old <=0.23 code optional.  This is", 
+   "because we don't want to have to change every XML-parsing system to", 
+   "the 0.24 API at once, there are too many.  The next step is to change", 
+   "fetch.c's report response parsing to use the 0.24 API directly.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(shim_xml_push_handler): Renamed from svn_ra_dav__xml_push_handler,", 
+   "now a private static function.  All callers changed.", 
+   "(parsed_request): New static internal function, containing guts of", 
+   "old svn_ra_dav__parsed_request.  Take new use_neon_shim boolean,", 
+   "and callback types for of both old and new Neon.", 
+   "(svn_ra_dav__parsed_request): Just wrap above, passing false for", 
+   "use_neon_shim.", 
+   "(svn_ra_dav__parsed_request_compat): New function, also wraps", 
+   "parsed_request, but passing true for use_neon_shim.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__parsed_request): Take the Neon 0.24 callback types.", 
+   "(svn_ra_dav__parsed_request_compat): New prototype.", 
+   "(svn_ra_dav__xml_push_handler): Remove public prototype, is now the", 
+   "internal static function shim_xml_push_handler.", 
+   "(svn_ra_dav__xml_validate_cb, svn_ra_dav__xml_startelm_cb,", 
+   "svn_ra_dav__xml_endelm_cb): Doc fixes.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__get_props): Use the compat wrapper.", 
+   "* subversion/libsvn_ra_dav/log.c", 
+   "(svn_ra_dav__get_log): Use the compat wrapper.", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "(svn_ra_dav__merge_activity): Use the compat wrapper.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_dated_revision): Use the compat wrapper.", 
+   "(reporter_finish_report): Use the compat wrapper.", 
+   "* subversion/libsvn_ra_dav/options.c", 
+   "(svn_ra_dav__get_activity_collection): Use the compat wrapper."
+  ], 
+  "revision_id": "847787"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-12T17:05:55.305591Z", 
+  "msg": [
+   "With Mike, fix bug in receiving empty files:", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(window_handler): In send-all mode, still open and close the txdelta", 
+   "tags even if the file is empty."
+  ], 
+  "revision_id": "847786"
+ }
+]

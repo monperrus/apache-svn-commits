@@ -1,0 +1,93 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-04-05T23:47:47.601588Z", 
+  "msg": [
+   "WC merge info property handling refactoring.  No behavioral change.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(combine_forked_mergeinfo_props): Return any error from", 
+   "svn_mergeinfo__to_string() directly, rather than wrapping it with", 
+   "the SVN_ERR() macro, then returning SVN_NO_ERROR."
+  ], 
+  "revision_id": "864545"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-04-05T23:44:32.358576Z", 
+  "msg": [
+   "In NFS v3 and under, the server doesn't track opened files.  If you", 
+   "unlink(2) or rename(2) a file held open by another process *on the", 
+   "same host*, that host's kernel typically renames the file to .nfsXXXX", 
+   "and automatically deletes that when it's no longer open, but this", 
+   "behavior is not required.", 
+   "For obvious reasons, this does not work *across hosts*.  No one", 
+   "knows about the opened file; not the server, and not the deleting", 
+   "client.  So the file vanishes, and the reader gets stale NFS file", 
+   "handle.  We have this problem with revprops/* and current.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(SVN_ESTALE_RETRY_COUNT, SVN_RETRY_ESTALE, SVN_IGNORE_ESTALE): New", 
+   "macros for retrying opens and reads after ESTALE, and ignoring", 
+   "ESTALE errors from close, within a loop of SVN_ESTALE_RETRY_COUNT", 
+   "(10) iterations.  SVN_RETRY_ESTALE and SVN_IGNORE_ESTALE are defined", 
+   "as SVN_ERR when ESTALE is not defined.", 
+   "(read_current): New function for reading the current file using the", 
+   "ESTALE macros.", 
+   "(get_youngest, get_next_revision_ids): Use read_current.", 
+   "(svn_fs_fs__revision_proplist): Use the ESTALE macros."
+  ], 
+  "revision_id": "864544"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-04-05T21:54:00.346472Z", 
+  "msg": [
+   "Remove branch merged in r24466 and r24467."
+  ], 
+  "revision_id": "864543"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-05T21:51:49.676106Z", 
+  "msg": [
+   "A follow-up to r24453, *really* fixing reporter behavioral", 
+   "compatibility between pre-1.5 clients talking with 1.5+ repositories", 
+   "(r24453 fixed only reporter *API* compatibility, not client/server", 
+   "compat).", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(write_path_info): Default DEPTH to B->default_depth, still erroring", 
+   "out if both are svn_depth_unknown.  Improve corresponding error", 
+   "message.  Adjust doc string accordingly.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): Don't expect a \"depth\" element.  Just", 
+   "default to infinity, but set to svn_depth_files if \"recursive=no\".", 
+   "Reset depth used for svn_repos_set_path3() and svn_repos_link_path3()", 
+   "calls to default to unknown.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(update, switch, status, diff): Drop depth parameter from each", 
+   "command.  These commands are all reporter driven; depth is", 
+   "specified via the reporter's set-path and link-path sub-commands.", 
+   "* subversion/svnserve/serve.c", 
+   "(MAYBE_UNFOLD_TO_DEPTH): Remove macro (now unused).", 
+   "(set_path, link_path): Default depth to svn_depth_unknown.  If depth", 
+   "is not specified, libsvn_repos will end up using the depth", 
+   "equivalent of the recurse flag read by accept_report().", 
+   "(accept_report): Change DEPTH parameter to RECURSE.  Convert", 
+   "parameter value to depth before passing it on to svn_repos__begin_report().", 
+   "(update, switch_cmd, status, diff): Drop parsing of an optional depth", 
+   "parameter, and pass the recurse parameter to accept_report()", 
+   "instead of depth.", 
+   "Patch by: me", 
+   "kfogel", 
+   "vgeorgescu"
+  ], 
+  "revision_id": "864542"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-04-05T21:51:07.520558Z", 
+  "msg": [
+   "* configure.in: Revert inadvertently committed change from r24466."
+  ], 
+  "revision_id": "864541"
+ }
+]

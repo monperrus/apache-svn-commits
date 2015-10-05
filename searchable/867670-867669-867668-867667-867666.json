@@ -1,0 +1,111 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-05T18:34:43.009824Z", 
+  "msg": [
+   "Set svn:executable property."
+  ], 
+  "revision_id": "867670"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-11-05T17:53:47.655307Z", 
+  "msg": [
+   "Add log-revprops capability, and use that to determine whether the", 
+   "server can send custom revprops in log.", 
+   "First, add the capability.", 
+   "* subversion/include/svn_dav.h", 
+   "(SVN_DAV_PROP_NS_DAV_SVN_LOG_REVPROPS): Add header for response to", 
+   "OPTIONS request.", 
+   "* subversion/include/svn_ra.h", 
+   "(SVN_RA_CAPABILITY_LOG_REVPROPS): Add capability macro.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_CAP_LOG_REVPROPS): Add capability macro.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__has_capability): Handle SVN_RA_CAPABILITY_LOG_REVPROPS.", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(parse_capabilities): Handle SVN_RA_CAPABILITY_LOG_REVPROPS.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(capabilities_headers_iterator_callback,", 
+   "capabilities_response_handler): Handle SVN_RA_CAPABILITY_LOG_REVPROPS.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_has_capability): Handle SVN_RA_CAPABILITY_LOG_REVPROPS.", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(get_vsn_options): Add above new header to OPTIONS response.", 
+   "* subversion/svnserve/serve.c", 
+   "(serve): Send SVN_RA_SVN_CAP_LOG_REVPROPS.", 
+   "Then update the compat code.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client_log4): Use new capability to decide whether or not to go", 
+   "into pre-1.5 mode rather than try and assume SVN_ERR_RA_NOT_IMPLEMENTED", 
+   "means the server doesn't have this capability.", 
+   "* subversion/libsvn_ra_neon/log.c", 
+   "(struct log_baton): Remove seen_revprop_element and want_custom_revprop", 
+   "fields.", 
+   "(log_start_element): Stop looking for \"no-custom-revprops\" element and setting", 
+   "log_ctx->seen_revprop_element.", 
+   "(log_end_element): Don't raise SVN_ERR_RA_NOT_IMPLEMENTED here.", 
+   "(svn_ra_neon__get_log): Determine whether caller wants custom revprops in", 
+   "new want_custom_revprops local rather than log_ctx->want_custom_revprops", 
+   "and use that and new capability check to raise SVN_ERR_RA_NOT_IMPLEMENTED.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(ELEM_no_custom_revprops): Remove enumerated value.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(log_context_t): Remove seen_revprop_element and want_custom_revprop fields.", 
+   "(start_log): Stop looking for \"no-custom-revprops\" element and setting", 
+   "log_ctx->seen_revprop_element.", 
+   "(end_log): Don't raise SVN_ERR_RA_NOT_IMPLEMENTED here.", 
+   "(svn_ra_serf__get_log): Determine whether caller wants custom revprops in", 
+   "new want_custom_revprops local rather than log_ctx->want_custom_revprops", 
+   "and use that and new capability check to raise SVN_ERR_RA_NOT_IMPLEMENTED.", 
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(log_receiver): Stop sending \"no-custom-revprops\" element."
+  ], 
+  "revision_id": "867669"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-11-05T17:15:40.132554Z", 
+  "msg": [
+   "Some simplifications to ra-serf's get-locations implementation.", 
+   "* subversion/libsvn_ra_serf/getlocations.c", 
+   "(svn_ra_serf__get_locations): Use svn_ra_serf__get_baseline_info()", 
+   "helper function, and lose a bunch of duplicated logic as a result."
+  ], 
+  "revision_id": "867668"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-11-05T15:10:13.957804Z", 
+  "msg": [
+   "In the command line client, don't reference a pointer to a local variable", 
+   "outside of its declared scope.", 
+   "Found by: Barry Scott <barry@barrys-emacs.org>", 
+   "Patch by: Stefan Sperling <stsp@elego.de>", 
+   "* subversion/svn/copy-cmd.c", 
+   "(svn_cl__copy): Allocate the peg revision for each copy source on the heap,", 
+   "instead of just using a pointer to the loop variable (which changes each time", 
+   "through the loop)."
+  ], 
+  "revision_id": "867667"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2007-11-05T14:25:01.220907Z", 
+  "msg": [
+   "New tests to show that the depth (or recurse) arguments to propset, propget,", 
+   "and proplist on Svn::Client::Context are handled correctly.  Plus handling", 
+   "them correctly.", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest#recurse_and_depth_choices, SvnClientTest#test_file_prop,", 
+   "SvnClientTest#test_dir_prop): New methods.", 
+   "* subversion/bindings/swig/ruby/svn/client.rb", 
+   "(Svn::Client::Context#depth_from_depth_or_recurse): New private method.", 
+   "(Svn::Client::Context#propset, Svn::Client::Context#propget,", 
+   "Svn::Client::Context#proplist): Change the argument name to depth_or_recurse", 
+   "and calculate the depth from the argument.", 
+   "Reviewed by: kou"
+  ], 
+  "revision_id": "867666"
+ }
+]

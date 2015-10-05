@@ -1,0 +1,100 @@
+[
+ {
+  "author": "mukulg", 
+  "date": "2010-07-31T12:00:38.680313Z", 
+  "msg": [
+   "doing few improvements to comments and formatting"
+  ], 
+  "revision_id": "981040"
+ }, 
+ {
+  "author": "artagnon", 
+  "date": "2010-07-31T12:00:21.955805Z", 
+  "msg": [
+   "svnrdump: Restructure workflow to include revprops and handle r0", 
+   "Revprops are set at the time of creation of the commit_editor;", 
+   "therefore, every revision needs a corresponding", 
+   "commit_editor. Revprops are known only while parsing the dumpfile, so", 
+   "creating the commit_editor in advance is a mistake -- we must create", 
+   "it immediately after the revprops have been parsed in. Also, by virtue", 
+   "of the commit_editor being unable to rewrite any revisions, it cannot", 
+   "handle revision 0.", 
+   "Memory management has also changed due to the \"one commit_editor per", 
+   "revision\" design- within one revision, all allocations are done in a", 
+   "revision-specific pool in the parser_baton.", 
+   "* subversion/svnrdump/dumpfile_parser.c: Remove file and move all the", 
+   "code out into load_editor.c.", 
+   "* subversion/svnrdump/load_editor.c", 
+   "(build_dumpfile_parser, get_dumpstream_loader): Cosmetic", 
+   "rename. Change API to accept a session instead of editor/", 
+   "edit_baton. The editor/ edit_baton is created in new_node_record", 
+   "now. Add the code for setting up the parser and parse_baton.", 
+   "(drive_load_editor, get_load_editor): Remove both functions: There", 
+   "is no more load editor- just a dumpstream loader to be driven.", 
+   "(drive_dumpstream_loader): New function to simply call", 
+   "svn_repos_parse_dumpstream2 now.", 
+   "(new_revision_record): Don't open_root here since we don't have a", 
+   "commit_editor yet. Allocate memory to the revision-specific pool in", 
+   "the parser_baton pool and set the commit_editor/ commit_edit_baton", 
+   "to NULL.", 
+   "(uuid_record): Set the uuid field in parse_baton. Currenly unused.", 
+   "(new_node_record): If the commit_editor doesn't already exist, it", 
+   "means that this is the first node in the revision: take this", 
+   "opportunity to create the commit editor and call set_target_revision", 
+   "and open_root. Note that this commit editor will be used for all", 
+   "nodes in this revision. Also change the if-statement into a", 
+   "switch-case for the action, just like in the dumpfile_parser.", 
+   "(set_revision_property): Implement special handling for revision 0", 
+   "and stuff the datestamp into the parse_baton to use in", 
+   "close_revision.", 
+   "(set_node_property, delete_node_property, remove_node_props,", 
+   "set_fulltext, apply_textdelta, close_node): Import the relevant code", 
+   "from dumpfile_parser.c making minor semantic modifications where", 
+   "necessary.", 
+   "(close_revision): For revision 0, don't attempt to close a", 
+   "non-existant commit_editor; since revision 0 doesn't have any nodes,", 
+   "new_node_record is never fired and consequently, a commit_editor is", 
+   "never created. Also implement special handling for the datestamp", 
+   "after closing the revision (learnt from svnadmin).", 
+   "* subversion/svnrdump/load_editor.h", 
+   "(build_dumpfile_parser, get_dumpstream_loader): Track rename.", 
+   "(drive_load_editor, get_load_editor): Track removal.", 
+   "(drive_dumpstream_loader): Track new function creation.", 
+   "(revision_baton): Add a revprop_table to store the revprops before", 
+   "writing them.", 
+   "(parse_baton): Add session and uuid. Session is needed to make RA", 
+   "API calls outside the operation of the commit editor, and uuid is", 
+   "currently just set appropriately, not used anywhere.", 
+   "* subversion/svnrdump/svnrdump.c", 
+   "(load_revision): Track API changes."
+  ], 
+  "revision_id": "981039"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2010-07-31T11:57:40.025073Z", 
+  "msg": [
+   "Fixed SCM metadata in POMs:", 
+   "* Updated existing metadata to new TLP location.", 
+   "* Added new metadata to modules for which the default value calculated by Maven is incorrect (i.e. basically everywhere...)."
+  ], 
+  "revision_id": "981038"
+ }, 
+ {
+  "author": "mgrigorov", 
+  "date": "2010-07-31T11:52:28.291073Z", 
+  "msg": [
+   "Replace http://cwiki.apache.org/WICKET/ with https://cwiki.apache.org/confluence/display/WICKET/", 
+   "This URLs show styled view of the wiki pages (maybe even different Confluence instance ?!)"
+  ], 
+  "revision_id": "981037"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2010-07-31T11:32:40.937890Z", 
+  "msg": [
+   "Removed the maven-changes-plugin stuff (we don't use this elsewhere and the information is not up to date). Also remove the Javadoc stuff (we generate an aggregated Javadoc in the project root)."
+  ], 
+  "revision_id": "981036"
+ }
+]

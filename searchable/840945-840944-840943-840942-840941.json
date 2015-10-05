@@ -1,0 +1,107 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T14:14:37.275552Z", 
+  "msg": [
+   "Update mod_dav_svn to correspond to the new mod_dav API for performing", 
+   "GETs.", 
+   "* mod_dav_svn/repos.c (dav_svn_open_stream): this is no longer used", 
+   "for reading, so strip out some reading-related items. shift the big", 
+   "block that was in the DAV_MODE_READ section to the new dav_svn_deliver", 
+   "function.", 
+   "Note: the change looks bigger than it is, due to indentation changes", 
+   "(dav_svn_read_stream): no longer needed; removed", 
+   "(dav_svn_deliver): new function to deliver content into a filter. the", 
+   "bulk of this is from dav_svn_open_stream() plus a loop to read/write", 
+   "the data blocks. the svndiff code is still disabled for now.", 
+   "(dav_svn_hooks_repos): adjust the vtable"
+  ], 
+  "revision_id": "840945"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T12:26:20.015496Z", 
+  "msg": [
+   "Initial coding to enable the server to send deltas over the wire.", 
+   "Note: our code to generate an svndiff stream is a \"push\" model -- we", 
+   "push the svndiff content into a provided stream. however,", 
+   "mod_dav currently uses a \"pull\" model from the provider. this", 
+   "code is disabled until we update mod_dav.", 
+   "* include/svn_dav.h: new file containing WebDAV/DeltaV information for", 
+   "Subversion. specifically, it contains items that are shared", 
+   "between the client and the server.", 
+   "(SVN_SVNDIFF_MIME_TYPE): new definition for the svndiff MIME type", 
+   "(SVN_DAV_DELTA_BASE_HEADER): new defn for the custom header", 
+   "* mod_dav_svn/dav_svn.h: record the delta base header in the private", 
+   "structure of the DAV resource", 
+   "* mod_dav_svn/repos.c (dav_svn_get_resource): use new", 
+   "SVN_SVNDIFF_MIME_TYPE macro. initialize the delta_base field.", 
+   "(dav_svn_open_stream): add initial code for generating an svndiff", 
+   "stream when the client wants one.", 
+   "* libsvn_ra_dav/commit.c (commit_stream_close): use new", 
+   "SVN_SVNDIFF_MIME_TYPE macro.", 
+   "* libsvn_ra_dav/fetch.c (custom_get_request): use new", 
+   "SVN_DAV_DELTA_BASE_HEADER macro."
+  ], 
+  "revision_id": "840944"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T11:35:30.895462Z", 
+  "msg": [
+   "Pass a relative path to the prop-getter function so that we can get a", 
+   "version resource URL to pass to the server for computing diffs.", 
+   "* libsvn_ra_dav/fetch.c (dir_item_t {}): add comments. add pathbuf", 
+   "member for recording the directory's relative [to the editor root]", 
+   "path. This buffer is also used to hold relative file paths.", 
+   "(report_baton_t {}): remove unused 'fname' member", 
+   "(push_dir): take a pathbuf to store in the directory info", 
+   "structure. zero out the structure to ensure it is properly", 
+   "initialized.", 
+   "(start_element): construct the pathbuf for a new directory as", 
+   "appropriate: \".\" for the root, and concatenated with the parent", 
+   "for other directories (for both open/add directory). for the", 
+   "open/add file, append the file name to its directory's pathbuf.", 
+   "when fetching a file, pass the relpath for that file.", 
+   "(end_element): when fetching a file, pass its relpath. remove the", 
+   "file name when the open/add file element is seen."
+  ], 
+  "revision_id": "840943"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T10:12:23.778911Z", 
+  "msg": [
+   "Fix up some ra_dav to reuse the name buffer properly. Basically: there", 
+   "is an existing buffer that a name can be shoved into and used, rather", 
+   "than alloc'ing memory for every name.", 
+   "This exposed a bug in the WC where it was not copying an incoming name", 
+   "into its own memory space. The RA layer changed its memory, which", 
+   "\"propagated\" into the WC's file baton. Oops :-)", 
+   "* libsvn_ra_dav/fetch.c (start_element): use rb->namestr rather than", 
+   "block-local string buffers.", 
+   "* libsvn_wc/get_editor.c (make_file_baton): copy the name into our", 
+   "subpool so that we are independent of the caller's lifetime and", 
+   "any changes they make to that name."
+  ], 
+  "revision_id": "840942"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T06:54:59.517509Z", 
+  "msg": [
+   "Refactor the GET request logic.", 
+   "* libsvn_ra_dav/fetch.c (file_read_ctx_t {}): move err, checked_type,", 
+   "and ctype members to the new custom_get_ctx_t structure.", 
+   "(custom_get_ctx_t {}): new context structure", 
+   "(custom_get_request): new function; factored out of simple_fetch_file", 
+   "(fetch_file_reader): userdata is now a custom_get_ctx_t.", 
+   "(simple_fetch_file): refactor code out into custom_get_request()", 
+   "(get_file_reader): userdata is now a custom_get_ctx_t.", 
+   "(svn_ra_dav__get_file): use custom_get_request() rather then", 
+   "ne_read_file()", 
+   "* include/svn_ra.h: add a (future) warning comment"
+  ], 
+  "revision_id": "840941"
+ }
+]

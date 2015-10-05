@@ -1,0 +1,79 @@
+[
+ {
+  "author": "djh", 
+  "date": "2006-11-26T21:16:18.696962Z", 
+  "msg": [
+   "* STATUS: Nominate r22440"
+  ], 
+  "revision_id": "862515"
+ }, 
+ {
+  "author": "djh", 
+  "date": "2006-11-26T21:09:24.434911Z", 
+  "msg": [
+   "Fix a crash bug when using automatic authentication protocols such as SSPI.", 
+   "Neon automatically tries some auth protocols and bumps the attempt", 
+   "count without using Subversion's callbacks, so we can't depend", 
+   "on attempt == 0 the first time we are called.", 
+   "Patch by: Stefan Kung <tortoisesvn@gmail.com>", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "(request_auth): Don't depend on the attempt parameter being zero for", 
+   "the first auth callback we get from neon, just check the auth state itself."
+  ], 
+  "revision_id": "862514"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-26T20:30:23.897341Z", 
+  "msg": [
+   "Remove stale comment.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__request_dispatch): Remove comment about values which", 
+   "are no longer in the parameter list; they're held in the request struct."
+  ], 
+  "revision_id": "862513"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-26T20:08:41.884874Z", 
+  "msg": [
+   "Remove what has become overengineering.", 
+   "Note: *Some* callers want to know about the Location header,", 
+   "but since the request now lives past the", 
+   "svn_ra_dav__request_dispatch() call, they can simply query the value", 
+   "themselves.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__request_interrogator): Obsoleted.", 
+   "(svn_ra_dav__request_dispatch): Remove request interrogator and its baton.", 
+   "(svn_ra_dav__request_get_location): New. Function to query the location", 
+   "header without the manual free() hassle.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "Adjust callers.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "Adjust callers.", 
+   "(do_checkout,", 
+   "checkout_resource): Eliminate manual tracking and free()-ing of the", 
+   "Location header value."
+  ], 
+  "revision_id": "862512"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-26T19:47:06.454314Z", 
+  "msg": [
+   "Fix ordering problem: custom_get_ctx_t.ctype never gets set because", 
+   "interrogate_for_content_type is run *after* the request+response", 
+   "have been processed.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(custom_get_ctx_t): Remove 'err' and 'ctype' fields. Add 'req' field. We need", 
+   "access to the connection object anyway.", 
+   "(interrogate_for_content_type): Removed. Now obsolete.", 
+   "(custom_get_request): Adapt for changed custom_get_ctx_t.", 
+   "(fetch_file_reader): Fetch the content type itself. Store errors in", 
+   "the request structure, making them the preferred error returned by", 
+   "our custom request runner."
+  ], 
+  "revision_id": "862511"
+ }
+]

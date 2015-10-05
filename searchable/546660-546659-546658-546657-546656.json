@@ -1,0 +1,77 @@
+[
+ {
+  "author": "tcurdt", 
+  "date": "2007-06-12T23:11:15.620460Z", 
+  "msg": [
+   "[maven-release-plugin] rollback the release of 1.0-RC4"
+  ], 
+  "revision_id": "546660"
+ }, 
+ {
+  "author": "tcurdt", 
+  "date": "2007-06-12T23:09:36.070452Z", 
+  "msg": [
+   "was ok"
+  ], 
+  "revision_id": "546659"
+ }, 
+ {
+  "author": "tcurdt", 
+  "date": "2007-06-12T23:08:27.619791Z", 
+  "msg": [
+   "try without"
+  ], 
+  "revision_id": "546658"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2007-06-12T22:55:07.686287Z", 
+  "msg": [
+   "pom.xml: Links Nabble list archives, plus other minor changes."
+  ], 
+  "revision_id": "546657"
+ }, 
+ {
+  "author": "dandiep", 
+  "date": "2007-06-12T22:49:08.032750Z", 
+  "msg": [
+   "Refactoring of the low level IO layer inside CXF.", 
+   "Remove the dependence on flush() being called ONCE and only once", 
+   "inside CXF. There was the assumption in all the code that things would", 
+   "be cached until we actually finished databinding, which is a bad assumption.", 
+   "There are a couple problems with this:", 
+   "1. The Soap envelope writer was writing the envelope twice if a fault was", 
+   "thrown during databinding and the stream was already flushed. (i.e. during", 
+   "validation)", 
+   "2. The code didn't differentiate between the type of caching that was going", 
+   "on. i.e. are we a) writing to the underlying stream AND caching the message", 
+   "at the same time. Or b) are we caching the message and then writing on close()", 
+   "Ensure that the RM and Logging layers correctly do their work on close()", 
+   "instead of flush().", 
+   "Transports now pass in the underlying stream. The RM layer and logging", 
+   "interceptors correct detect when a cached stream is not being used", 
+   "and act accordingly. This is much more robust as I/O transformations", 
+   "are a very valid use case an many people will want to switch the", 
+   "underlying streams. We also shouldn't force transport writers to", 
+   "use CachedOutputStream.", 
+   "Rename AbstractCachedOutputStream to CachedOutputStream and make", 
+   "it a non-abstract class. This cuts down on the number of CachedOutputStream", 
+   "classes laying around! There are now two extended implementations of", 
+   "COS as well:", 
+   "1. WriteOnCloseOutputStream. This caches the message until the outputstream", 
+   "is closed. This is needed for the RM scenarios where we are caching the message", 
+   "until the CreateSequence is done. We don't want to open the connection until", 
+   "all of this is done. (I think we could probably reset this output stream", 
+   "as soon as the createsequence is finished though)", 
+   "2. CacheAndWriteOutputStream. This caches the message while it is written", 
+   "to the underlying stream at the same time. Useful for logging.", 
+   "Update the DataBinding code to have JAXB write directly to the OutputStream", 
+   "whenever possible. This gives a great performance improvement for some scenarios.", 
+   "Refactor the JAXB code so we don't have so many data readers/writers.", 
+   "TODO: Make RM and Logging work when the message is larger than memory or the", 
+   "CachedOutputStream writes to disk.", 
+   "TODO: Fix HTTPS 401 Redirect test"
+  ], 
+  "revision_id": "546656"
+ }
+]

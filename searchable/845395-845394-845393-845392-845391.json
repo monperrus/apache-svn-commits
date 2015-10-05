@@ -1,0 +1,116 @@
+[
+ {
+  "author": "brane", 
+  "date": "2003-03-14T06:10:18.109618Z", 
+  "msg": [
+   "Begin converting the Python tests to raise an exception on test", 
+   "failure rather rhan returning an error code.", 
+   "* svntest/__init__.py: (Failure): New. Base class for test failure exceptions.", 
+   "* svntest/main.py (SVNTreeError, SVNTreeUnequal, SVNTypeMismatch,", 
+   "SVNTreeIsNotDirectory): Derive from svntest.Failure instead of Excaption.", 
+   "(Sandbox.build): Raise a Failure instead of returning an error code.", 
+   "* svntest/testcase.py (Testcase.run): Handle svntest.Failure and", 
+   "remove handler for SVNTreeUnequal. Add a check that prints a warning", 
+   "when a testcase returns anything.", 
+   "* svnversion_tests.py: Convert to the exception model.", 
+   "* prop_tests.py (prop_value_conversions): Convert to the exception model.", 
+   "(prop_value_conversions.check_prop): Raise a svntest.Failure", 
+   "(_PropError): Removed."
+  ], 
+  "revision_id": "845395"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-14T05:29:52.905875Z", 
+  "msg": [
+   "Start on issue #952:", 
+   "Get the old revprop value set up for post-revprop-change hook, but", 
+   "don't actually send it to the hook yet, as we're still deciding the", 
+   "best way to do that:", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos__hooks_post_revprop_change): Take old_value as a param.", 
+   "* subversion/libsvn_repos/hooks.c", 
+   "(svn_repos__hooks_pre_revprop_change): Remove comment about passing", 
+   "value on hook's stdin.  Perhaps that comment was meant for", 
+   "svn_repos__post_revprop_change or something.", 
+   "(svn_repos__hooks_post_revprop_change): Take old value as a param,", 
+   "but don't do anything with it yet.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_change_rev_prop): Pass old property value to", 
+   "svn_repos__hooks_post_revprop_change.  Change name of incoming", 
+   "parameter to `new_value', to avoid confusion.  Remove redundant", 
+   "comments.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_fs_change_rev_prop): Change `value' to `new_value', for", 
+   "consistency with definition; and fix a rather broken doc string."
+  ], 
+  "revision_id": "845394"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-03-14T05:20:05.243055Z", 
+  "msg": [
+   "Disable support for old DAV namespaces in mod_dav_svn, and stop", 
+   "requesting the old baseline-relative-path in libsvn_ra_dav.  (This is", 
+   "the next-to-last step in issue #840.)", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "* subversion/mod_dav_svn/liveprops.c", 
+   "Remove all blocks of code #ifdef'd SVN_DAV_FEATURE_USE_OLD_NAMESPACES.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(elem_definitions, neon_descriptions, starting_props,", 
+   "validate_element, svn_ra_dav__get_baseline_props): Remove", 
+   "old-namespace \"baseline-relative-path\" support."
+  ], 
+  "revision_id": "845393"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-14T04:49:20.273080Z", 
+  "msg": [
+   "Formatting and comment fixes in preparation for upcoming new code:", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_change_rev_prop): Remove redundant comments.", 
+   "* subversion/libsvn_repos/hooks.c", 
+   "(svn_repos__hooks_start_commit, svn_repos__hooks_pre_commit,", 
+   "svn_repos__hooks_post_commit, svn_repos__hooks_pre_revprop_change,", 
+   "svn_repos__hooks_post_revprop_change): Same."
+  ], 
+  "revision_id": "845392"
+ }, 
+ {
+  "author": "mass", 
+  "date": "2003-03-14T04:35:46.813470Z", 
+  "msg": [
+   "Move the auth providers from svn_ra_dav to svn_client, and update the cmdline", 
+   "client to match. Also define local versions of some Neon constants to", 
+   "decouple clients.", 
+   "* include/svn_ra_dav.h", 
+   "(svn_ra_dav_get_ssl_server_file_provider,", 
+   "svn_ra_dav_get_ssl_client_file_provider,", 
+   "svn_ra_dav_get_ssl_pw_file_provider) : rename to", 
+   "svn_client_get_ssl_server_file_provider,", 
+   "svn_client_get_ssl_client_file_provider,", 
+   "and svn_client_get_ssl_pw_file_provider respectively, and move to", 
+   "svn_client.h", 
+   "* include/svn_auth.h", 
+   "(SVN_AUTH_SSL_NOTYETVALID, SVN_AUTH_SSL_EXPIRED,", 
+   "SVN_AUTH_SSL_CNMISMATCH, SVN_AUTH_SSL_UNKNOWNCA) : added local versions of", 
+   "NE_SSL_NOTYETVALID, NE_SSL_EXPIRED, NE_SSL_CNMISMATCH, and", 
+   "NE_SSL_UNKNOWNCA. This eliminates the dependancy on neon for the", 
+   "providers (except for retrieving additional data from the", 
+   "auth_baton later)", 
+   "* libsvn_ra_dav/session.c", 
+   "(get_server_setting, get_server_setting_int): made global functions", 
+   "in config, renamed to svn_config_get_server_setting and", 
+   "svn_config_get_server_setting_int and moved impl to", 
+   "libsvn_subr/config.c. Moved providers above into", 
+   "libsvn_client/auth.c", 
+   "* cients/cmdline/main.c (main) : update with new svn_client* provider names", 
+   "* libsvn_client/auth.c : See above", 
+   "* include/svn_client.h : See above", 
+   "* include/svn_config.h : See above", 
+   "* libsvn_subr/config.c : See above"
+  ], 
+  "revision_id": "845391"
+ }
+]

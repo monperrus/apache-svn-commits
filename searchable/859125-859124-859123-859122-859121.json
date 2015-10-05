@@ -1,0 +1,95 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-03-27T22:33:52.861619Z", 
+  "msg": [
+   "Add the ability to mark revisions as merged via 'merge --record-only',", 
+   "effectively a way to manipulate the merge memory stored in the", 
+   "\"svnmerge-integrated\" property.  This is the converse of the 'block'", 
+   "concept (which marks revisions which shouldn't be merged).", 
+   "* contrib/client-side/svnmerge.py", 
+   "(action_merge): When the \"--record-only\" argument is specified,", 
+   "avoid executing the 'svn merge' command, and adjust output", 
+   "accordingly.", 
+   "(common_opts): Add a new \"-M\"/\"--record-only\" Option.", 
+   "(command_table): Add support for \"--record-only\" to \"merge\", and", 
+   "expand \"merge\" help to cover it, and \"block\" help to mention it.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(testMergeRecordOnly): New test method for 'svnmerge.py merge --record-only'.", 
+   "Review by: djames", 
+   "giovannibajo"
+  ], 
+  "revision_id": "859125"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-27T22:27:04.312976Z", 
+  "msg": [
+   "ra_serf: Fix regression on basic test #17.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(end_propfind): Use the correct pool instead of an uninitialized pool."
+  ], 
+  "revision_id": "859124"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-27T22:01:56.823561Z", 
+  "msg": [
+   "ra_serf: Parse server-side error messages and return them; fix pool reuse bug", 
+   "when merging that would cause us not to print the commit.", 
+   "Pass copy test #5 (svn cp URL URL cannot overwrite destination) and #26 (svn cp", 
+   "src-URL non-existent-URL-path).", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__xml_parser_t): Add a flag to silently ignore errors.", 
+   "(svn_ra_serf__server_error_t): New structure to handle server-side errors.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(simple_request_context_t): Add error field.", 
+   "(return_response_err): Helper to return server-side error.", 
+   "(handle_status_only): Give the error context to the discard handler to let", 
+   "it create an error if it sees one while discarding.", 
+   "(checkout_dir, checkout_file): Return server-gen error and wrap with the", 
+   "error messages/strings that ra_dav uses to pass test suite.", 
+   "(delete_entry, close_file): Return server-gen error.", 
+   "(close_edit): Return error if our commit callback returns one.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(start_error, end_error, cdata_error): New funcs to parse DAV error responses.", 
+   "(svn_ra_serf__handler_discard_body): Handle the case where an error may be", 
+   "detected while discarding.", 
+   "(svn_ra_serf__handle_xml_parser): Allow the caller to opt out of any XML", 
+   "errors.", 
+   "* subversion/libsvn_ra_serf/merge.c", 
+   "(start_merge): Clear out ->type field when we see a new value."
+  ], 
+  "revision_id": "859123"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-03-27T20:43:22.179816Z", 
+  "msg": [
+   "Remove an unused struct member in xdelta.", 
+   "* subversion/libsvn_delta/xdelta.c (struct adler32): Remove mask member.", 
+   "(init_adler32): Don't initialize mask."
+  ], 
+  "revision_id": "859122"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-03-27T20:39:23.562853Z", 
+  "msg": [
+   "Optimize the xdelta algorithm by introducing a custom hash table instead", 
+   "of using the general-purpose apr_hash_t.", 
+   "* subversion/libsvn_delta/xdelta.c", 
+   "(MATCH_BLOCKSIZE): Move earlier in the file.", 
+   "(struct block): Rename from match; store the adler sum instead of the", 
+   "length.  Use apr_size_t for the position.", 
+   "(struct blocks): New struct.", 
+   "(hash_func, add_block, find_block): New functions.", 
+   "(init_blocks_table): Rename from init_matches_table.  Init the custom", 
+   "hash table.", 
+   "(find_match): Use custom hash table instead of apr_hash_t.", 
+   "(compute_delta): Use custom hash table.  Move the check for a small", 
+   "target before initializing the table."
+  ], 
+  "revision_id": "859121"
+ }
+]

@@ -1,0 +1,83 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-02T22:36:47.971122Z", 
+  "msg": [
+   "* subversion/libsvn_delta/path_driver.c", 
+   "(push_stack): Removed.", 
+   "(open_dir, pop_stack, svn_delta_path_driver): Remove the", 
+   "notion of a 'stack_ptr' throughout this file.  I wrote most of", 
+   "this code long ago, before there was an apr_array_pop().  Now that", 
+   "there is, Greg Hudson points out that I'm maintaining state I", 
+   "don't need to maintain.  Also, replace the calls to push_stack()", 
+   "with just array pushes."
+  ], 
+  "revision_id": "846195"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-06-02T21:46:58.586142Z", 
+  "msg": [
+   "Remove the ability of apply_textdelta to return a NULL window handler.", 
+   "In every case where we were using this ability, the driver already", 
+   "knew (via a parameter to svn_repos_begin_report or", 
+   "svn_repos_dir_delta) not to go to the effort of computing text deltas.", 
+   "This change removes one round-trip per file from ra_svn, which is an", 
+   "incompatible protocol change.", 
+   "* include/svn_delta.h, libsvn_delta/default_editor.c", 
+   "(svn_delta_null_window_handler): New function which can be used by", 
+   "editors which don't care about delta windows.", 
+   "(apply_textdelta): Remove last paragraph of comment; it's no longer", 
+   "valid to set *handler to NULL.  In default implementation, use", 
+   "svn_delta_null_window_handler instead of NULL.", 
+   "* bindings/swigutil_py.c", 
+   "(thunk_apply_textdelta): A NULL handler is no longer allowed.", 
+   "* libsvn_ra_svn/protocol", 
+   "(apply-textdelta): Eliminate the response step.", 
+   "* libsvn_ra_svn/editor.c", 
+   "(ra_svn_svndiff_handler, ra_svn_svndiff_close_handler): Must flush", 
+   "before returning control to caller.", 
+   "(ra_svn_apply_textdelta): Don't wait for a response; just gear up to", 
+   "send delta.", 
+   "(ra_svn_handle_apply_textdelta): Don't respond; just read delta and", 
+   "appply it.", 
+   "* libsvn_wc/adm_crawler.c (svn_wc_transmit_text_deltas)", 
+   "libsvn_repos/delta.c (send_text_delta)", 
+   "libsvn_ra_dav/fetch.c (simple_fetch_file):", 
+   "Don't check for a NULL handler returned by apply_textdelta.", 
+   "* libsvn_wc/status_editor.c (apply_textdelta)", 
+   "mod_dav_svn/update.c (upd_apply_textdelta)", 
+   "libsvn_repos/node_tree.c (apply_textdelta):", 
+   "Use svn_delta_null_window_handler instead of NULL to ignore text", 
+   "delta information."
+  ], 
+  "revision_id": "846194"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-02T20:11:24.670205Z", 
+  "msg": [
+   "Give a little feedback along the way while normalizing."
+  ], 
+  "revision_id": "846193"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-06-02T19:47:01.998650Z", 
+  "msg": [
+   "* subversion/svnserve/main.c (main): Remove -F and -S options.  Simplify", 
+   "pool handling by using the separate pool per connection model for both", 
+   "fork and thread mode."
+  ], 
+  "revision_id": "846192"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-02T19:46:24.862386Z", 
+  "msg": [
+   "* tools/dev/normalize-dump.py", 
+   "New debugging script for normalizing dumpfile output."
+  ], 
+  "revision_id": "846191"
+ }
+]

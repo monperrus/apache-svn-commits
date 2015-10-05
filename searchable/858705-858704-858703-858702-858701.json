@@ -1,0 +1,89 @@
+[
+ {
+  "author": "djames", 
+  "date": "2006-02-27T18:17:36.591893Z", 
+  "msg": [
+   "* www/hacking.html: Reformat example code to conform to no-space-before-paren style.", 
+   "Patch by: Ed Price <ed.price@gmail.com>"
+  ], 
+  "revision_id": "858705"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-02-27T17:08:29.993530Z", 
+  "msg": [
+   "Correct the behaviour of repos-wc diffs in the presence of schedule-delete", 
+   "files so that they are treated consistently - as if they had already", 
+   "been removed from WORKING.", 
+   "Previously, schedule-delete files were (sometimes) treated as if they", 
+   "were present but empty, leading to spurious 'empty' diffs.  Additionally,", 
+   "the schedule was not always ignored for diffs against BASE.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(report_wc_file_as_added): Make it an error to call this function", 
+   "for a schedule-deleted file, instead of reporting the addition of", 
+   "an empty file.", 
+   "(report_wc_directory_as_added): Skip entries that are schedule-deleted.", 
+   "(delete_entry): Skip entries that are schedule-deleted, rather than", 
+   "report the addition of an empty file.", 
+   "(close_file): Determine the path to the repository version of the file", 
+   "earlier, and use the same logic to deal with schedule-delete files as", 
+   "for added files.  This doesn't change the output of 'svn diff', but", 
+   "it does mean that we use the right callback functions (added/deleted", 
+   "vs. changed).", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_schedule_delete): Significantly extend this test to cover more", 
+   "combinations involving schedule-delete files.  Note that the previous", 
+   "expected result is not consistent with the new design."
+  ], 
+  "revision_id": "858704"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2006-02-27T15:49:50.729834Z", 
+  "msg": [
+   "* subversion/libsvn_wc/status.c (get_dir_status): Delay constructing the", 
+   "ignore patterns hash until just before it is used, this means the", 
+   "directory properties are not read if there are no unversioned items."
+  ], 
+  "revision_id": "858703"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2006-02-27T13:42:58.791183Z", 
+  "msg": [
+   "Use stream translation API to check for file modifications.", 
+   "This is the first part of work completed in r18656.", 
+   "Review by: lundblad", 
+   "* subversion/include/svn_io.h", 
+   "* subversion/libsvn_subr/streams.c", 
+   "(svn_stream_contents_same): New function to compare streams content.", 
+   "* subversion/include/svn_subst.h", 
+   "(svn_subst_stream_detranslated): New function declaration.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(detranslated_stream_special): Factor out implementation from", 
+   "detranslate_special_file().", 
+   "(detranslate_special_file): Use factored out detranslated_stream_special().", 
+   "(svn_subst_detranslated_stream): New function. Returns stream which performs", 
+   "translation of file from working copy form to normal form. Handles", 
+   "special files correctly.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__versioned_file_modcheck): If translation is required then", 
+   "compare versioned and base files using streamed translation API,", 
+   "instead of creating temporary files."
+  ], 
+  "revision_id": "858702"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2006-02-27T12:19:52.498525Z", 
+  "msg": [
+   "Don't use svn_io_check_path() to determine if an item is present on disk before", 
+   "using the item, just use it straight away and handle the error if it", 
+   "doesn't exist.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc_check_wc): First try read format file, check directory presence only", 
+   "on ENOENT or ENOTDIR error."
+  ], 
+  "revision_id": "858701"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "djames", 
+  "date": "2009-03-19T17:04:03.696025Z", 
+  "msg": [
+   "* www/tasks.html (ctypes-python): Describe the ctypes python bindings project."
+  ], 
+  "revision_id": "876755"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-19T15:25:30.375036Z", 
+  "msg": [
+   "Remove some needless code, and some now-unused code in entries.c.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(enum statement_keys, statements): remove some unused DELETE statements", 
+   "(entry_remove_body): remove. unused.", 
+   "(svn_wc__entry_remove): remove a chunk of code that immediately modified", 
+   "the database (in wc-ng). this is not needed since the database will be", 
+   "updated properly at entries_write() time.", 
+   "(svn_wc__entry_modify): remove operation on the show_hidden=FALSE list", 
+   "of entries. since that is simply a pruned list of references to the", 
+   "*same* entry structures, there is no need to attempt to modify the", 
+   "entry structure twice. this cleans out and simplifies the function."
+  ], 
+  "revision_id": "876754"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2009-03-19T15:00:26.130607Z", 
+  "msg": [
+   "* www/svn_1.6_releasenotes.html:  document new public historical URI syntax."
+  ], 
+  "revision_id": "876753"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-19T14:05:42.938199Z", 
+  "msg": [
+   "Try to minimize/centralize the number of places where we modify ENTRIES", 
+   "hash tables, and where we (manually) write them out to disk. This revision", 
+   "concentrates on the svn_wc__entry_remove() function.", 
+   "Every caller grabbed PARENT_DIR from an access baton, so we just pass that", 
+   "in directly (which we need anyways). Add a WRITE_TO_DISK parameter so this", 
+   "function can write the modification out to disk. Also, make the ENTRIES", 
+   "parameter optional -- we'll fetch the entries, do the removal, and then", 
+   "write the result to disk for this case.", 
+   "All callers updated.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__entry_remove): adjust parameters and docstring", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__entry_remove): adjust parameters. if ENTRIES is not provided,", 
+   "then read them. temporarily remove all the DB code since the entries", 
+   "will get written at some point, and the names should be removed *then*", 
+   "rather than removed immediately. and lastly, if WRITE_TO_DISK is true,", 
+   "then write out the (modified) entries.", 
+   "* subversion/libsvn_wc/crop.c:", 
+   "(crop_children): adjust call to entry_remove, and write to disk.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(tweak_entries): adjust call to entry_remove, but don't write to disk", 
+   "since we'll do a batch-write at the end.", 
+   "(svn_wc_delete3): adjust call to entry_remove and write to disk.", 
+   "(revert_entry): adjust call, and write to disk", 
+   "(svn_wc_remove_from_revision_control): adjust call to entry_remove,", 
+   "taking advantage of not needing the entries at all. a later loop does,", 
+   "though, so move the declaration. adjust the other calls to", 
+   "entry_remove, with the appropriate WRITE_TO_DISK values.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(complete_directory): adjust calls to entry_remove() and hold off on", 
+   "writing, in favor of a batch-write at the end.", 
+   "(do_entry_deletion): replace entries read/remove/write with a new call", 
+   "to entry_remove()", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_delete_entry): replace a read/remove/write with a single", 
+   "call to entry_remove()"
+  ], 
+  "revision_id": "876752"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-19T13:26:19.309565Z", 
+  "msg": [
+   "* www/index.html", 
+   "(rc-announcement): Bump latest RC number."
+  ], 
+  "revision_id": "876751"
+ }
+]

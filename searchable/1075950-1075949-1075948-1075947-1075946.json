@@ -1,0 +1,78 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2011-03-01T18:00:41.791521Z", 
+  "msg": [
+   "On the 1.6.x-issue3719 branch, backport a few performance-related", 
+   "changes in the way temporary files are created.", 
+   "Related thread:", 
+   "Date: Thu, 03 Feb 2011 16:18:32 +0000", 
+   "From: Neil Bird", 
+   "To: dev@", 
+   "Subject: [PATCH] issue #3719 fix slow large checkouts on Windows", 
+   "Message-ID: <4D4AD558.3010705@jibbyjobby.co.uk>", 
+   "http://svn.haxx.se/dev/archive-2011-02/0066.shtml", 
+   "This backport does not have any mergeinfo associated with it.", 
+   "The changes were made on trunk in several revisions, so it was easier", 
+   "to just copy the current trunk code over and tweak it into shape instead", 
+   "of merging individual revisions. For this reason, I've written a new log", 
+   "message that describes the change.", 
+   "Suggested by: Neil Bird <neil@jibbyjobby.co.uk>", 
+   "(who also provided an initial patch, and tested this patch)", 
+   "* subversion/libsvn_subr/io.c", 
+   "(): Include svn_dirent_uri.h.", 
+   "(temp_file_create): New helper. Uses apr_file_mktemp() on non-Windows systems.", 
+   "On Windows systems, it uses a custom implementation that works much like", 
+   "svn_io_open_uniquely_named(), but with a pseudo-random value for numbers", 
+   "within the filename.", 
+   "(svn_io_open_unique_file3): Instead of calling svn_io_open_uniquely_named(),", 
+   "use temp_file_create().", 
+   "(file_perms_set2): New helper. On trunk, this function has a sibling called", 
+   "file_perms_set() which we don't need here.", 
+   "(get_default_file_perms): Create a temporary file inside the function", 
+   "instead of opening a file at a path provided by the caller.", 
+   "As a performance optimisation, cache the default file permissions in", 
+   "a static variable upon the first call. Subsequent calls will not go", 
+   "to disk but return the cached value.", 
+   "(merge_default_file_perms): New helper.", 
+   "(io_set_file_perms): Don't overwrite existing permission bits when making", 
+   "a file read-write."
+  ], 
+  "revision_id": "1075950"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2011-03-01T17:59:08.756028Z", 
+  "msg": [
+   "fix broke link to mapreduce"
+  ], 
+  "revision_id": "1075949"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2011-03-01T17:58:58.555435Z", 
+  "msg": [
+   "[CODEC-117] Caverphone encodes names starting and ending with \"mb\" incorrectly."
+  ], 
+  "revision_id": "1075948"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2011-03-01T17:56:14.228278Z", 
+  "msg": [
+   "[CODEC-117] Caverphone encodes names starting and ending with \"mb\" incorrectly."
+  ], 
+  "revision_id": "1075947"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-03-01T17:55:41.581147Z", 
+  "msg": [
+   "* generator/gen_win.py", 
+   "(get_proj_sources): Following up on r1075869, temporarily remove quotes", 
+   "around arguments to unbreak VC 2002-2008 build of DLL projects until", 
+   "the proper quoting is enabled in the .ezt files."
+  ], 
+  "revision_id": "1075946"
+ }
+]

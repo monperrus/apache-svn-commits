@@ -1,0 +1,98 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2010-09-21T17:11:30.848536Z", 
+  "msg": [
+   "Disallow relocation of working copy subtrees and relocation at depths", 
+   "other than infinity.  This change breaks some compatibility with", 
+   "previous APIs at both the svn_client and svn_wc levels -- I'll just be", 
+   "honest about that.  But from what I've seen, while the APIs used to", 
+   "\"work\" (that is, do what they claimed), the result was a working copy", 
+   "that didn't.  Also, the command-line client disallowed some of this", 
+   "stuff already, and just errored out on some parts that it didn't", 
+   "disallow.  In all, relocation was a mess.  So I'm extremely", 
+   "comfortable with calling this a bugfix.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_relocate4): Note that local_abspath is the root directory of", 
+   "a working copy.", 
+   "(svn_wc_relocate3): Note that 'recurse' is replaced by 'depth' now.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_relocate2): New.", 
+   "(svn_client_relocate): Deprecated with noted limitations to backward", 
+   "compatibility.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "(svn_wc_relocate4): Check local_abspath to see if it's a strict", 
+   "working copy root; if not, disallow the relocation.  Try to tell", 
+   "the caller where to find the working copy root.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_relocate3): Disallow recurse=FALSE with an error.  Update", 
+   "call to svn_wc_relocate4().", 
+   "* subversion/libsvn_client/relocate.c", 
+   "(svn_client_relocate2): Rev svn_client_relocate(), this time without", 
+   "a 'recurse' parameter.", 
+   "(svn_client_relocate): Moved to deprecate.c.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_relocate): Moved here from relocate.c and made into a", 
+   "simple wrapper around svn_client_relocate2().", 
+   "* subversion/libsvn_client/externals.c", 
+   "(switch_dir_external): Now use svn_client_relocate2().", 
+   "* subversion/svn/main.c", 
+   "(main): Since we disallow --relocate with --depth, it makes sense to", 
+   "also disallow --relocate with --non-recursive, so do so.", 
+   "* subversion/svn/switch-cmd.c", 
+   "(rewrite_urls): Lose 'recurse' parameter, and now use", 
+   "svn_client_relocate2().", 
+   "(svn_cl__switch): Update call to rewrite_urls().", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(relocate_beyond_repos_root): Rewrite a bit to still test the", 
+   "intended things without triggering the new error situation.", 
+   "(single_file_relocate): Tweak expected error message."
+  ], 
+  "revision_id": "999505"
+ }, 
+ {
+  "author": "jglick", 
+  "date": "2010-09-21T17:11:13.806669Z", 
+  "msg": [
+   "If we cannot build Javadoc, we cannot copy it to the dist dir either.", 
+   "https://hudson.apache.org/hudson/view/Ant/job/Ant_Nightly/151/console", 
+   "javadoc_check:", 
+   "-javadocs.do:", 
+   "-javadocs.dont:", 
+   "[echo] Javadoc creation of Ant's API does not work with JDK 1.4. Please use a newer one.", 
+   "javadocs:", 
+   "dist_javadocs:", 
+   "[mkdir] Created dir: .../apache-ant-1.8.2alpha/docs/manual/api", 
+   "BUILD FAILED", 
+   ".../build.xml:1086: The following error occurred while executing this line:", 
+   ".../build.xml:850: .../build/javadocs not found."
+  ], 
+  "revision_id": "999504"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2010-09-21T17:10:53.369713Z", 
+  "msg": [
+   "*** THIS CHANGE WAS REVERTED IN r1000059 ***", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(deliver_report): Reduce some variable scope."
+  ], 
+  "revision_id": "999503"
+ }, 
+ {
+  "author": "lresende", 
+  "date": "2010-09-21T17:10:44.514391Z", 
+  "msg": [
+   "Updating test case to reflect recently catalog content changes"
+  ], 
+  "revision_id": "999502"
+ }, 
+ {
+  "author": "eric", 
+  "date": "2010-09-21T17:09:15.506979Z", 
+  "msg": [
+   "mailbox-api needed for UsersFileRepository (IMAP-1048)"
+  ], 
+  "revision_id": "999501"
+ }
+]

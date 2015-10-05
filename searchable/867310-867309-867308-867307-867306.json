@@ -1,0 +1,91 @@
+[
+ {
+  "author": "blair", 
+  "date": "2007-10-17T05:17:15.304968Z", 
+  "msg": [
+   "For relative externals, svn_opt_parse_path() needs to return the input", 
+   "path minus the trailing peg revision specification regardless of", 
+   "canonicalization; for example, the scheme relative URL", 
+   "//hostname/path@HEAD needs to retain the //, as changing it to a /", 
+   "leads to a server root relative URL.", 
+   "Currently svn_opt_parse_path() canonicalizes all input, even though", 
+   "the public documentation API does not state that.  Change the code to", 
+   "not canonicalize and also to reflect the documentation better.", 
+   "I checked all callers of svn_opt_parse_path() and they canonicalize", 
+   "the path to to svn_opt_parse_path() before calling it, except for", 
+   "svn_wc_parse_externals_description3(), which will need the", 
+   "uncanonicalized form anyway for relative externals.", 
+   "* subversion/include/svn_opt.h", 
+   "(svn_opt_parse_path):", 
+   "Add documentation that the function does not require a", 
+   "canonicalized path and does no canonicalization.", 
+   "Update the example output for a string.", 
+   "* subversion/libsvn_subr/opt.c", 
+   "(svn_opt_parse_path):", 
+   "Do not canonicalize the input path.", 
+   "* subversion/tests/libsvn_subr/opt-test.c", 
+   "(test_parse_peg_rev):", 
+   "Update the output for an input \"foo/bar/@13\"."
+  ], 
+  "revision_id": "867310"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-10-17T04:59:40.808620Z", 
+  "msg": [
+   "Follow up to r27234.  Really correct the documented output for an", 
+   "input of \"foo/bar@\".", 
+   "* subversion/include/svn_opt.h", 
+   "(svn_opt_parse_path):", 
+   "The returned revision is BASE, not HEAD or BASE depending upon the", 
+   "type of path, since in this case, foo/bar is a path."
+  ], 
+  "revision_id": "867309"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-10-17T04:56:48.430115Z", 
+  "msg": [
+   "* subversion/include/svn_opt.h", 
+   "(svn_opt_parse_path):", 
+   "Correct the documented output for an input of \"foo/bar@\"."
+  ], 
+  "revision_id": "867308"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-10-17T04:38:26.559560Z", 
+  "msg": [
+   "Fix a comment to use the function name that the code actually uses.", 
+   "* subversion/svn/changelist-cmd.c,", 
+   "* subversion/svn/diff-cmd.c,", 
+   "* subversion/svn/info-cmd.c,", 
+   "* subversion/svn/lock-cmd.c,", 
+   "* subversion/svn/log-cmd.c,", 
+   "* subversion/svn/propdel-cmd.c,", 
+   "* subversion/svn/propget-cmd.c,", 
+   "* subversion/svn/proplist-cmd.c,", 
+   "* subversion/svn/propset-cmd.c,", 
+   "* subversion/svn/revert-cmd.c,", 
+   "* subversion/svn/status-cmd.c,", 
+   "* subversion/svn/unlock-cmd.c,", 
+   "* subversion/svn/update-cmd.c:", 
+   "Replace", 
+   "Before allowing svn_opt_args_to_target_array() to canonicalize", 
+   "with", 
+   "Before allowing svn_opt_args_to_target_array2() to canonicalize"
+  ], 
+  "revision_id": "867307"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-10-17T04:30:06.556494Z", 
+  "msg": [
+   "* subversion/svn/copy-cmd.c", 
+   "(svn_cl__copy):", 
+   "Style change, use APR_ARRAY_IDX() instead of indexing explicitly", 
+   "into targets."
+  ], 
+  "revision_id": "867306"
+ }
+]

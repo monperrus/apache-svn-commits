@@ -1,0 +1,101 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-11-13T15:27:50.213742Z", 
+  "msg": [
+   "* rpm/redhat-7.x/README,", 
+   "rpm/redhat-8+/README : Took out references to other specific platforms as", 
+   "these RPMs are RedHat specific."
+  ], 
+  "revision_id": "847800"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-11-13T06:42:02.834673Z", 
+  "msg": [
+   "Bump the working copy version (follow-up to r7711).", 
+   "* subversion/libsvn_wc/wc.h (SVN_WC__VERSION): Bump to 4 and document", 
+   "the format change.", 
+   "* subversion/libsvn_wc/lock.c (maybe_upgrade_format): No-op upgrade", 
+   "from format version 3. The directory entry name will be updated", 
+   "automatically."
+  ], 
+  "revision_id": "847799"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-13T06:26:57.093625Z", 
+  "msg": [
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_purge_txn): Was svn_fs_cleanup_dead_txn.  This name is more k-r4d.", 
+   "* subversion/libsvn_fs/revs-txns.c", 
+   "(svn_fs_purge_txn): Was svn_fs_cleanup_dead_txn().", 
+   "(svn_fs_abort_txn): Update call to svn_fs_purge_txn()."
+  ], 
+  "revision_id": "847798"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-13T06:25:43.659923Z", 
+  "msg": [
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "Uh... oops.  I really didn't mean to leave these commented out."
+  ], 
+  "revision_id": "847797"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-13T06:11:34.666780Z", 
+  "msg": [
+   "It bothers me to have to create custom txn_body_* function batons when I", 
+   "have exactly one real piece of data to pass just because I *also* need", 
+   "to provide an svn_fs_t object.  Just make the trail remember what", 
+   "svn_fs_t it is associated with.  This log message is almost as long as", 
+   "the change itself, unfortunately.", 
+   "* subversion/libsvn_fs/trail.h", 
+   "(struct trail_t): Add 'fs' member.", 
+   "* subversion/libsvn_fs/trail.c", 
+   "(abort_trail, commit_trail): Remove 'fs' parameter -- use the one in", 
+   "the trail.", 
+   "(do_retry): Update calls to abort_trail() and commit_trail().", 
+   "In the following locations, reduce any txn_body_* batons by an", 
+   "svn_fs_t object, which might mean losing a structure in favor of a", 
+   "single \"real\" argument, or even losing a baton altogether (if the", 
+   "svn_fs_t object was the baton itself).  Make the txn_body_* function", 
+   "refer to trail->fs, and make both the txn_body_* function and the", 
+   "deferring function deal with the new baton.  I'll mention the symbols,", 
+   "but omit the details.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(txn_body_dag_init_fs, svn_fs__dag_init_fs)", 
+   "* subversion/libsvn_fs/revs-txns.c", 
+   "(struct youngest_rev_args, txn_body_youngest_rev,", 
+   "svn_fs_youngest_rev, struct revision_proplist_args,", 
+   "txn_body_revision_proplist, svn_fs_revision_proplist,", 
+   "svn_fs_revision_prop, txn_body_change_rev_prop, struct", 
+   "txn_proplist_args, txn_body_txn_proplist, svn_fs_txn_proplist,", 
+   "svn_fs_txn_prop, txn_body_change_txn_prop, svn_fs_change_txn_prop,", 
+   "struct begin_txn_args, txn_body_begin_txn, svn_fs_begin_txn, struct", 
+   "open_txn_args, txn_body_open_txn, svn_fs_open_txn, struct", 
+   "cleanup_txn_args, txn_body_cleanup_txn, struct", 
+   "cleanup_txn_copy_args, txn_body_cleanup_txn_copy, struct", 
+   "cleanup_txn_changes_args, txn_body_cleanup_txn_changes, struct", 
+   "get_dirents_args, txn_body_get_dirents, struct remove_node_args,", 
+   "txn_body_remove_node, delete_txn_tree, struct delete_txn_args,", 
+   "txn_body_delete_txn, svn_fs_cleanup_dead_txn, struct", 
+   "list_transactions_args, txn_body_list_transactions,", 
+   "svn_fs_list_transactions)", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(struct revision_root_args, txn_body_revision_root,", 
+   "svn_fs_revision_root, struct node_kind_args, txn_body_node_kind,", 
+   "node_kind, struct txn_deltify_args, struct txn_pred_count_args,", 
+   "struct txn_pred_id_args, deltify_mutable, struct", 
+   "rev_get_txn_id_args, txn_body_rev_get_txn_id,", 
+   "svn_fs_deltify_revision, svn_fs_dir_entries,", 
+   "txn_body_history_prev)", 
+   "* subversion/libsvn_fs/uuid.c", 
+   "(struct get_uuid_args, txn_body_get_uuid, svn_fs_get_uuid, struct", 
+   "set_uuid_args, txn_body_set_uuid, svn_fs_set_uuid)"
+  ], 
+  "revision_id": "847796"
+ }
+]

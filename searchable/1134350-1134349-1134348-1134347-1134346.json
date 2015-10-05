@@ -1,0 +1,69 @@
+[
+ {
+  "author": "tabish", 
+  "date": "2011-06-10T15:37:20.879719Z", 
+  "msg": [
+   "Adds a toString version that allows the multiline output logic to be disable if desired."
+  ], 
+  "revision_id": "1134350"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-06-10T15:37:00.069474Z", 
+  "msg": [
+   "align maven api to use maven 3 version", 
+   "temporary comment failing dependency tree"
+  ], 
+  "revision_id": "1134349"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-06-10T15:35:58.321431Z", 
+  "msg": [
+   "force spring-jdo version to be used"
+  ], 
+  "revision_id": "1134348"
+ }, 
+ {
+  "author": "kstam", 
+  "date": "2011-06-10T15:35:22.086740Z", 
+  "msg": [
+   "JUDDI-479, make sure we only bring up one listener endpoint"
+  ], 
+  "revision_id": "1134347"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2011-06-10T15:34:51.371701Z", 
+  "msg": [
+   "DERBY-3993 With IBM 1.6 T_RawStoreFactory fails with There should be 0 observers, but we still have 1 observers on Win 2K", 
+   "backporting change #1082197 from trunk to 10.5 branch.", 
+   "The problem will only show up in SANE builds as that is the only time we do", 
+   "the sanity check.", 
+   "Xact.doComplete() is called near the end of the transaction to take care of any", 
+   "cleanup prior to committing or aborting the transaction.", 
+   "It calls notifyObservers(commitOrAbort) and it expects on return that each", 
+   "observer has been notified, and all the observers are coded", 
+   "to delete themselves from the observer list as part of this process. It then", 
+   "asserts that the list should be empty on return.", 
+   "The problem is that one of the DropOnCommit observer as part of it's", 
+   "processing manages to add another observer to the list. I am guessing that the", 
+   "problem becomes intermittent because either different", 
+   "JVM's/memory layouts/hash algorithms", 
+   "result in the order processing of the observer list to be different,", 
+   "or different implementations handle the adding of an observer to the list", 
+   "while scanning the list differently. There is nothing in the Observable", 
+   "javadoc that guarantees and order or says anything about expected behavior", 
+   "of notifyObservers() execution if another observer is added during the", 
+   "execution so I don't think it is a jvm bug.", 
+   "In my case in order to process a drop of a container marked drop on commit the", 
+   "raw store interface requires it to first be opened. The code adds", 
+   "a TruncateOnCommit as part of this open as that layer of the code does not", 
+   "know why it is being opened. I believe it is this \"new\" TruncateOnCommit", 
+   "observer which is left on the observer queue. Adding an extra notify to the", 
+   "drop on commit processing seems to fix the unit test, I'll see if that causes", 
+   "any problems in the full set of tests."
+  ], 
+  "revision_id": "1134346"
+ }
+]

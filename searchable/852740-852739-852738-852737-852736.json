@@ -1,0 +1,111 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2005-01-10T23:12:26.069576Z", 
+  "msg": [
+   "* www/project_faq.html", 
+   "(auto-props): Add URL to new check-mime-type.pl script.", 
+   "Suggested by: Tom Brown <tom@thecap.org>"
+  ], 
+  "revision_id": "852740"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-01-10T23:11:51.897810Z", 
+  "msg": [
+   "Documentation fixups including all that remained relevant from issue 1729.", 
+   "* INSTALL: Remove implications that ra_dav is the only remote access method,", 
+   "and that Subversion is in an early stage of development. Standardize the", 
+   "names used to refer to other projects: \"APR\", \"APR-util\", \"APR-iconv\",", 
+   "\"Apache httpd\". Recommend APR 0.9.5 official release, not versions", 
+   "extracted from httpd. Fix erroneous statements regarding the preferences of", 
+   "configure for apr/apr-util versions. Emphasize the recommendation for", 
+   "BDB 4.2 over 4.3 at this time. Fix BDB download link. Mention svnserve.", 
+   "Tweak descriptions of integrated neon build. Don't imply that makeinfo is", 
+   "an important requirement to build the documentation.  Tidy up some", 
+   "alignment."
+  ], 
+  "revision_id": "852739"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-10T21:34:51.492092Z", 
+  "msg": [
+   "Locking branch:  weekly sync of trunk to branch.  Merged (trunk, r12554:12663)."
+  ], 
+  "revision_id": "852738"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-10T21:06:38.728632Z", 
+  "msg": [
+   "Locking branch:  fix some neon malloc leaks, pointed out by philip martin.", 
+   "* libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__lock, svn_ra_dav__unlock):  call ne_free-ish things", 
+   "before returning errors."
+  ], 
+  "revision_id": "852737"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-01-10T20:37:02.867273Z", 
+  "msg": [
+   "Locking branch:  clean up some locking APIs.", 
+   "-->  remove svn_fs_get_lock_from token(), it clutters the fs API.", 
+   "-->  add 'path' arg to svn_fs_unlock() and svn_repos_fs_unlock()", 
+   "to compensate (and also to consistify the API.)", 
+   "* include/svn_fs.h", 
+   "(svn_fs_get_lock_from_token):  remove declaration.", 
+   "(svn_fs_unlock):  add 'path' arg.", 
+   "* include/svn_repos.h", 
+   "(svn_repos_fs_unlock):  add 'path' arg.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t): remove 'lock_from_token' func ptr.  add 'path' to unlock().", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_get_lock_from_token):  remove function.", 
+   "(svn_fs_unlock):  add 'path' arg.", 
+   "* libsvn_fs_base/fs.c", 
+   "(fs_vtable):  remove svn_fs_base__get_lock_from_token.", 
+   "* libsvn_fs_base/lock.c, lock.h", 
+   "(svn_fs_base__unlock,", 
+   "struct unlock_args,", 
+   "txn_body_unlock):  add 'path' arg.  and use it for sanity-check.", 
+   "(struct lock_get_args,", 
+   "txn_body_get_lock_from_token,", 
+   "svn_fs_base__get_lock_from_token):  remove.", 
+   "* libsvn_fs_fs/fs.c", 
+   "(fs_vtable):  remove svn_fs_fs__get_lock_from_token.", 
+   "* libsvn_fs_fs/lock.c, lock.h", 
+   "(svn_fs_fs__get_lock_from_token):  rename to...", 
+   "(get_lock_from_token):  this name.  and make static.", 
+   "(svn_fs_fs__unlock):  update caller, add 'path' arg, sanity-check it.", 
+   "* libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_unlock): take 'path' arg, pass to fs and hooks.", 
+   "* libsvn_ra_local/ra_plugin.c", 
+   "(struct deltify_etc_baton):  add 'fs_path' field.", 
+   "(svn_ra_local__get_commit_editor2):  set 'fs_path' field in baton.", 
+   "(deltify_etc):  pass absolute fs path into svn_repos_fs_unlock().", 
+   "(svn_ra_local__unlock): pass 'path' arg to svn_repos_fs_unlock().", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_unlock): marshall the 'path' arg to svnserve with other things.", 
+   "(ra_svn_commit2): marshall *both* path-keys and token-values to server", 
+   "in a list.", 
+   "* svnserve/serve.c", 
+   "(unlock): unmarshal 'path' and pass to svn_repos_fs_unlock().", 
+   "(add_lock_tokens, unlock_paths): the token list is now a list of", 
+   "lists, not strings.  deal accordingly.", 
+   "update call to svn_repos_fs_unlock().", 
+   "* svnadmin/main.c", 
+   "(subcommand_rmlocks):  pass a path to svn_fs_unlock().", 
+   "* mod_dav_svn/lock.c", 
+   "(dav_svn_remove_lock):  update caller of svn_repos_fs_unlock().", 
+   "(dav_svn_find_lock, dav_svn_refresh_locks): call _lock_from_path", 
+   "instead of _lock_from_token.", 
+   "* tests/libsvn_fs/locks-test.c", 
+   "(lookup_lock_by_token, lookup_nonexistent_token):  delete these tests.", 
+   "(basic_lock):  don't try to lookup by token.", 
+   "(attach_lock, lock_break_steal_refresh):  update callers of svn_fs_unlock()."
+  ], 
+  "revision_id": "852736"
+ }
+]

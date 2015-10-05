@@ -1,0 +1,90 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2009-02-24T11:27:30.981111Z", 
+  "msg": [
+   "New patch manager.", 
+   "* www/hacking.html", 
+   "(patch-manager):", 
+   "Say that Gavin Baumanis is the patch manager."
+  ], 
+  "revision_id": "876165"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-24T03:00:33.484250Z", 
+  "msg": [
+   "WC-NG: Set and fetch the entry->deleted flag.", 
+   "Number of failing tests: 237", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Set the deleted flag when reading an entry.", 
+   "(insert_base_node): Set the presence field in the BASE_NODE table correctly.", 
+   "(write_entry): If the entry is deleted, set the correct presence and kind", 
+   "columns in the base node."
+  ], 
+  "revision_id": "876164"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-24T00:24:27.593330Z", 
+  "msg": [
+   "Change entries.c to use the wc_db APIs to read BASE tree information,", 
+   "rather than reading it directly.", 
+   "Of course, things aren't *that* clean, so the code still peeks into the", 
+   "BASE_NODE table for the \"incomplete_children\" flag and to see if the", 
+   "directory is there. Those'll get cleaned up in time.", 
+   "This change does not alter writing: that is still done \"manually\".", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(enum statement_keys, statements): add a couple SQL statements for", 
+   "peeking at specific items in BASE_NODE.", 
+   "(fetch_base_nodes, get_repos_info): remove. no longer needed.", 
+   "(determine_incomplete): helper function to determine whether a directory", 
+   "entry should be marked \"incomplete\". right now, it looks at the flag", 
+   "that we stored into the database.", 
+   "(read_entries): don't read all the base nodes. instead, ask wc_db for", 
+   "all the children, then iterate over that list. for each item, use", 
+   "base_get_info() to retrieve information. fill out ENTRY directly or", 
+   "with a few extra tweaks.", 
+   "(write_entry): fill out base_node->parent_relpath. put a period in", 
+   "the unknown author so that the author column in \"svn st -v\" remains", 
+   "one column."
+  ], 
+  "revision_id": "876163"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-23T23:59:34.404121Z", 
+  "msg": [
+   "Remove an unneeded memory copy.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_base_get_children): since we're about to parse out the", 
+   "basename from the result, we don't need a copy. we can just use the", 
+   "value the db provides."
+  ], 
+  "revision_id": "876162"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-02-23T22:35:55.462426Z", 
+  "msg": [
+   "ra_serf: Implement connection timeout, based on values specified in", 
+   "the servers configuration file.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(load_config): Read the 'http-timeout' from the global or", 
+   "server-group specific configuration area, store it in the serf", 
+   "session. Default is 3600s.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__session_t): Add new timeout member variable.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_DAV_CONN_TIMEOUT): New error code.", 
+   "* subversion/libsvn_ra_serf/util.c:", 
+   "(svn_ra_serf__context_run_wait): Use the new timeout when running", 
+   "the context. Return an error when timeout was exceeded.", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(finish_report): idem.", 
+   "* subversion/libsvn_ra_serf/replay.c:", 
+   "(svn_ra_serf__replay_range): idem."
+  ], 
+  "revision_id": "876161"
+ }
+]

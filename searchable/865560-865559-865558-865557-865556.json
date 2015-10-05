@@ -1,0 +1,115 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2007-06-21T18:44:34.041704Z", 
+  "msg": [
+   "Print a warning if the user seems to be trying to turn off a boolean", 
+   "property by running propset or propedit from the command-line client.", 
+   "This was first proposed here:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=127826", 
+   "From: Karl Fogel <kfogel@red-bean.com>", 
+   "To: \"David Glasser\" <glasser@mit.edu>", 
+   "Cc: dev@subversion.tigris.org", 
+   "References: <871wg9lxs1.fsf@red-bean.com>", 
+   "<1ea387f60706172110v37800639i835f5ed615744a49@mail.gmail.com>", 
+   "Subject: Re: Property values for boolean properties.", 
+   "Date: Sun, 17 Jun 2007 22:20:39 -0700", 
+   "Message-ID: <87ps3tkfdk.fsf@red-bean.com>", 
+   "...and is discussed more in the thread following that message.", 
+   "Part 1: Clean up and prepare library code for the client change.", 
+   "* subversion/include/svn_props.h", 
+   "(SVN_PROP_BOOLEAN_VALUE): New constant.", 
+   "(SVN_PROP_EXECUTABLE_VALUE,", 
+   "SVN_PROP_NEEDS_LOCK_VALUE,", 
+   "SVN_PROP_SPECIAL_VALUE): Deprecate, and set to SVN_PROP_BOOLEAN_VALUE.", 
+   "* subversion/include/svn_props.h, subversion/libsvn_subr/properties.c", 
+   "(svn_prop_is_boolean): New function, based on is_boolean_property()", 
+   "in libsvn_wc/props.c, but rewritten to collapse conditional chain.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(is_boolean_property): Renamed to svn_prop_is_boolean(), see above.", 
+   "(value_of_boolean_prop): Remove this unnecessary function.", 
+   "(svn_wc_prop_get): Just create the canonical value directly, instead", 
+   "of calling value_of_boolean_prop(), which merely duplicated", 
+   "conditional checks already done (!).", 
+   "(svn_wc_prop_set2): Declare a boolean svn_string_t value at the top", 
+   "of the function and use it when needed, instead of relying on", 
+   "correct-but-confusing static block-locals.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(import_file): Use SVN_PROP_BOOLEAN_VALUE.", 
+   "* subversion/libsvn_client/add.c", 
+   "(add_file): Use SVN_PROP_BOOLEAN_VALUE.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_BAD_PROPERTY_VALUE): New error code.", 
+   "Part 2: Add the check to the command-line client.", 
+   "* subversion/svn/cl.h, subversion/svn/props.c", 
+   "(svn_cl__check_boolean_prop_val): New function.", 
+   "* subversion/svn/propedit-cmd.c", 
+   "(svn_cl__propedit): Print a warning if we appear to have a bogus propset.", 
+   "* subversion/svn/propset-cmd.c", 
+   "(svn_cl__propset): Same, but only if opt_state->quiet is false.", 
+   "Part 3: Adjust test suite.", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(enforce_lock): Set svn:needs-lock to '*' instead of ''.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(prop_value_conversions): Set svn:executable to '*' instead of ''.", 
+   "Part 4: Improve help output, to prevent this situation in the first place.", 
+   "Suggested by: dlr", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table.\"propedit\"): Point to \"propset\" for more information.", 
+   "(svn_cl__cmd_table.\"propset\"): Mention that propdel should be used", 
+   "to clear svn:executable and svn:needs-lock."
+  ], 
+  "revision_id": "865560"
+ }, 
+ {
+  "author": "giorgio_valoti", 
+  "date": "2007-06-21T08:01:32.355866Z", 
+  "msg": [
+   "Updated italian translation.", 
+   "* subversion/po/it.po:  - Fixed all fuzzy translations and translated", 
+   "remaining messages."
+  ], 
+  "revision_id": "865559"
+ }, 
+ {
+  "author": "bhuvan", 
+  "date": "2007-06-21T02:53:45.950583Z", 
+  "msg": [
+   "Do not define SVNTreeUnequal exception handler in svntest.main library.", 
+   "It can be used directly from svntest.tree library, where it is", 
+   "originally defined.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "Do not import \"tree\" library and do not define SVNTreeUnequal exception", 
+   "handler here.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_singleton_handler): Raise tree.SVNTreeUnequal() exception.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(detect_extra_files): raise tree.SVNTreeUnequal() exception.", 
+   "Approved by: dlr"
+  ], 
+  "revision_id": "865558"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-06-21T02:27:40.383955Z", 
+  "msg": [
+   "Fix segfault in waiting and bug in update_wc_mergeinfo().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(update_wc_mergeinfo): Last argument to apr_pstrcat() must be NULL.", 
+   "Don't build a rel_path with \"//\"."
+  ], 
+  "revision_id": "865557"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-06-21T01:49:25.191625Z", 
+  "msg": [
+   "Clean up an error code collision between r9664 and r19660 that was", 
+   "revealed when branches/merge-tracking got merged to trunk in r24027:", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_MERGE_INFO_PARSE_ERROR): Move to right position in error code", 
+   "list, increment offset correctly, and document release introduced."
+  ], 
+  "revision_id": "865556"
+ }
+]

@@ -1,0 +1,111 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2007-11-06T10:35:21.091401Z", 
+  "msg": [
+   "Follow up to r27614. Fix the DLL build on Windows by exporting the newly added", 
+   "function declarations.", 
+   "* build.conf", 
+   "(libsvn_repos): export private\\svn_repos_private.h"
+  ], 
+  "revision_id": "867690"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2007-11-06T09:55:55.001666Z", 
+  "msg": [
+   "Refactor 'get_mergeinfo' to make it independent of the 'svn_fs_root_t *'", 
+   "structure, so that it can be used with just a revision number.", 
+   "This is useful for fix to issue #2897.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(get_mergeinfo): Change signature to accept 'svn_revnum_t' rather than", 
+   "'svn_fs_root_t *'.", 
+   "(svn_fs_mergeinfo__get_mergeinfo, svn_fs_mergeinfo__get_mergeinfo_for_tree):", 
+   "Ensure 'transaction root' here rather than on 'get_mergeinfo'.", 
+   "Adjust for the above signature change of 'get_mergeinfo'."
+  ], 
+  "revision_id": "867689"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-11-06T08:12:55.738717Z", 
+  "msg": [
+   "Finish issue #2991 on trunk, by merging r27590 and r27613 from", 
+   "branches/issues-2991-dev/.", 
+   "This leaves a few unresolved matters, which I've mailed dev@ about:", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=132177", 
+   "From: Karl Fogel <kfogel@red-bean.com>", 
+   "To: dev@subversion.tigris.org", 
+   "Subject: Issue #2991 resolved, but questions remain.", 
+   "Date: Tue, 06 Nov 2007 00:13:51 -0800", 
+   "Message-Id: <87d4un6bb4.fsf@red-bean.com>"
+  ], 
+  "revision_id": "867688"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-11-06T06:20:04.857843Z", 
+  "msg": [
+   "Finish issue #2991: client should announce capabilities to server, and", 
+   "server should pass them along to start-commit hook.  This would allow", 
+   "a server to reject commits from clients that don't don't know how to", 
+   "keep mergeinfo up to date, for example.", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(struct svn_repos_t): Add new capabilities field.", 
+   "(svn_repos__hooks_start_commit): Take new capabilities parameter.", 
+   "* subversion/svnserve/serve.c: Include svn_repos_private.h.", 
+   "(find_repos): Take new capabilities parameter, use it to set a", 
+   "capabilities list in the new repos object.", 
+   "(serve): Pass the capabilities to find_repos.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_begin_txn_for_commit2): Pass capabilities along to", 
+   "svn_repos__hooks_start_commit.", 
+   "* subversion/libsvn_repos/hooks.c", 
+   "(svn_repos__hooks_start_commit): Take new capabilities parameter,", 
+   "convert the list to a string, and pass along to the hook program.", 
+   "* subversion/include/private/svn_repos_private.h: New file.", 
+   "(svn_repos__capabilities_as_list): New declaration.", 
+   "(svn_repos__set_capabilities): New declaration.", 
+   "* subversion/libsvn_repos/repos.c: Include svn_ra.h, svn_repos_private.h.", 
+   "(svn_repos__capabilities_as_list): Define new function.", 
+   "(svn_repos__set_capabilities): Define new function.", 
+   "(create_hooks): Document the new capabilities list passed to the", 
+   "start-commit hook.", 
+   "* subversion/mod_dav_svn/repos.c: Include svn_repos_private.h.", 
+   "(get_resource): Handle new SVN_RA_CAPABILITY_LOG_REVPROPS; store", 
+   "all capabilities in repos.", 
+   "* subversion/libsvn_ra_local/split_url.c: Include svn_repos_private.h.", 
+   "(svn_ra_local__split_URL): Set capabilities in new repos object.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__setup_serf_req): Send new SVN_RA_CAPABILITY_LOG_REVPROPS.", 
+   "* subversion/include/svn_dav.h", 
+   "(SVN_DAV_PROP_NS_DAV_SVN_LOG_REVPROPS): Move definition, fix formatting.", 
+   "* subversion/libsvn_ra_serf/propfind_buckets.c", 
+   "(become_request): Send SVN_DAV_PROP_NS_DAV_SVN_LOG_REVPROPS.", 
+   "* subversion/libsvn_ra_neon/util.c", 
+   "(svn_ra_neon__request_dispatch): Send SVN_DAV_PROP_NS_DAV_SVN_LOG_REVPROPS.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(open_session): Count args correctly; send SVN_RA_SVN_CAP_LOG_REVPROPS.", 
+   "(ra_svn_has_capability): Rewrite for compactness.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_has_capability): Document error behavior.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(capabilities_headers_iterator_callback): Formatting fix for", 
+   "consistency with the rest of the capabilities code.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_CAP_LOG_REVPROPS): Fix comment formatting, for consistency.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(start_commit_detect_capabilities): New test.", 
+   "(test_list): Run it."
+  ], 
+  "revision_id": "867687"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2007-11-06T06:14:27.651102Z", 
+  "msg": [
+   "Merge from trunk."
+  ], 
+  "revision_id": "867686"
+ }
+]

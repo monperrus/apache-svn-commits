@@ -1,0 +1,103 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2007-12-19T02:20:28.754220Z", 
+  "msg": [
+   "Don't allow mergeinfo with no path preceding the \":\", it has no meaning and", 
+   "violates the svn:mergeinfo grammar.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(parse_pathname): Return an SVN_ERR_MERGEINFO_PARSE_ERROR if no path is", 
+   "found before the \":\".", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(NBR_BROKEN_MERGEINFO_VALS, broken_mergeinfo_vals): Add a new test case for", 
+   "the above.", 
+   "Suggested by: glasser"
+  ], 
+  "revision_id": "868625"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-12-19T01:48:25.695398Z", 
+  "msg": [
+   "Consolidate operational logging and log repository path and name.", 
+   "* subversion/mod_dav_svn/util.c", 
+   "(dav_svn__operational_log): Add helper function to log to SVN-ACTION", 
+   "environment variable as before, but also log repository in", 
+   "SVN-REPOS and SVN-REPOS-NAME.", 
+   "* subversion/mod_dav_svn/dav_svn.h", 
+   "(dav_svn__operational_log): Declare.", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(save_value): Use dav_svn__operational_log instead of calling", 
+   "setting SVN-ACTION directly here.", 
+   "* subversion/mod_dav_svn/lock.c", 
+   "(append_locks, remove_lock): same", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(do_walk): same", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(merge): same", 
+   "* subversion/mod_dav_svn/reports/file-revs.c", 
+   "(dav_svn__file_revs_report): same", 
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(dav_svn__log_report): same", 
+   "* subversion/mod_dav_svn/reports/mergeinfo.c", 
+   "(dav_svn__get_mergeinfo_report): same", 
+   "* subversion/mod_dav_svn/reports/replay.c", 
+   "(dav_svn__replay_report): same", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): same", 
+   "* subversion/tests/cmdline/davautocheck.sh", 
+   "Use SVN-REPOS-NAME in ops log."
+  ], 
+  "revision_id": "868624"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2007-12-19T01:36:18.654084Z", 
+  "msg": [
+   "* STATUS: Un-nominate r24497, since it was reverted from trunk in r28547."
+  ], 
+  "revision_id": "868623"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-12-19T01:34:57.969837Z", 
+  "msg": [
+   "On the reintegrate branch:", 
+   "Add some C tests for mergeinfo elision, in a new libsvn_client C", 
+   "test.  (I'd move elision to libsvn_subr, but it depends on", 
+   "libsvn_delta.)", 
+   "Fix some random issues that doing this revealed.", 
+   "* build.conf", 
+   "(client-test): Build info for new \"client-test\".", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(should_elide_mergeinfo): Fix serious bug that exists on trunk as", 
+   "well (pburba says he'll run tests on trunk and fix it there): we're", 
+   "basing elision on the wrong hash!", 
+   "(elide_mergeinfo_catalog_cb): I had been confusing the path-driver", 
+   "special case for the empty path with a special case for the root.", 
+   "We can guarantee that there's no empty path (or, um, as long as", 
+   "we fix svn_mergeinfo_parse to not allow it...), so get rid of the", 
+   "code that dealt with that case only.  And special-case the root,", 
+   "since svn_delta_path_driver has slightly different behavior for", 
+   "it.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "Include two headers that declare types used in this file.", 
+   "* subversion/tests/libsvn_client", 
+   "New directory.", 
+   "* subversion/tests/libsvn_client/client-test.c", 
+   "New test file, with a mergeinfo elision test."
+  ], 
+  "revision_id": "868622"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2007-12-19T01:33:44.716604Z", 
+  "msg": [
+   "* subversion/bindings/swig/svn_delta.i: Revert unnecessary extra", 
+   "wrapper for invoking svn_txdelta_window_handler_t (you can", 
+   "just use svn_txdelta_invoke_window_handler instead.) Followup", 
+   "to r24497."
+  ], 
+  "revision_id": "868621"
+ }
+]

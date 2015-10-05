@@ -1,0 +1,95 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-02-13T04:33:56.000000Z", 
+  "msg": [
+   "Updates to the new FS API", 
+   "* dav_svn.h (dav_svn_repos): toss the root info since one repository may", 
+   "have multiple roots opened (depending on what we're doing).", 
+   "(dav_svn_root): new struct to hold onto a repository root and its", 
+   "associated information.", 
+   "(dav_resource_private): add repos_path to state where the resource is", 
+   "located within the FS repository. toss object_name (obsolete), and", 
+   "activity_id and txn_name (moved to dav_svn_root)", 
+   "* deadprops.c (dav_svn_db_fetch, dav_svn_db_store, dav_svn_db_remove,", 
+   "dav_svn_db_exists, dav_svn_db_firstkey): path ROOT and REPOS_PATH to the", 
+   "FS functions.", 
+   "* version.c (dav_svn_checkout): use repos_path rather than object_name", 
+   "(dav_svn_make_activity): use root.activity_id rather than object_name", 
+   "* repos.c (dav_stream): remove \"file\" member from structure", 
+   "(dav_svn_parse_version_uri, dav_svn_parse_history_uri): use repos_path", 
+   "rather than object_name", 
+   "(dav_svn_parse_working_uri): use repos_path rather than object_name. use", 
+   "root.activity_id rather than activity_id.", 
+   "(dav_svn_parse_activity_uri): use root.activity_id rather than activity_id", 
+   "(dav_svn_parse_uri): fill in repos_path for REGULAR resources", 
+   "(dav_svn_prep_regular): update for new FS API taking priv.root.root and", 
+   "priv.repos_path parameters", 
+   "(dav_svn_prep_working, dav_svn_prep_activity): use", 
+   "root.activity_id/txn_name rather than activity_id/txn_name.", 
+   "(dav_svn_get_resource): initialize new priv.root structure", 
+   "(dav_svn_open_stream, dav_svn_getetag, dav_svn_set_headers,", 
+   "dav_svn_create_collection, dav_svn_remove_resource): use new FS API", 
+   "which take info->root.root and info->repos_path parameters", 
+   "(dav_svn_do_walk): update for new FS API; no longer needs to save/restore", 
+   "nodes, but just do path manipulation", 
+   "(dav_svn_walk): for now, only allow walking REGULAR resources; prep the", 
+   "repos_path value.", 
+   "(dav_svn_create_working_resource): update for new root structure"
+  ], 
+  "revision_id": "838560"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-13T01:29:39.000000Z", 
+  "msg": [
+   "(svn_fs__dag_open_path): Return child's name in its parent dir, too."
+  ], 
+  "revision_id": "838559"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-13T01:28:44.000000Z", 
+  "msg": [
+   "(svn_fs__dag_open_path): Return child' name in its parent dir, too."
+  ], 
+  "revision_id": "838558"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-13T01:20:31.000000Z", 
+  "msg": [
+   "Reworking to fit new FS interface.", 
+   "Saving current work. tree.c does *not* compile yet, but another", 
+   "iteration should get us there.", 
+   "(svn_fs_node_t): Renamed to svn_fs_root_t; some fields removed.", 
+   "(new_node_object): Renamed to new_root_object.", 
+   "(svn_fs_is_dir,", 
+   "svn_fs_is_file,", 
+   "svn_fs_node_id,", 
+   "svn_fs_node_prop,", 
+   "svn_fs_node_proplist,", 
+   "svn_fs_change_node_prop,", 
+   "svn_fs_merge,", 
+   "svn_fs_dir_entries,", 
+   "svn_fs_make_dir,", 
+   "svn_fs_delete,", 
+   "svn_fs_delete_tree,", 
+   "svn_fs_rename,", 
+   "svn_fs_copy): Renamed and/or changed to conform to new API.", 
+   "(svn_fs_open_node): Removed.", 
+   "(txn_body_delete): Partial rewrite, use DAG nodes instead of FS nodes.", 
+   "(svn_fs__txn_root_node): Reflect the svn_fs_node_t -> svn_fs_root_t change."
+  ], 
+  "revision_id": "838557"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-02-13T00:27:31.000000Z", 
+  "msg": [
+   "Reworking to fit new FS interface.", 
+   "(svn_fs__dag_open_path): Dummy implementation."
+  ], 
+  "revision_id": "838556"
+ }
+]

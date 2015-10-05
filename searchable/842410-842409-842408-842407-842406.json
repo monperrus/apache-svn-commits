@@ -1,0 +1,84 @@
+[
+ {
+  "author": "brane", 
+  "date": "2002-06-25T22:50:00.872497Z", 
+  "msg": [
+   "* libsvn_subr/time.c (find_matching_string): We always use apr_size_t,", 
+   "never plain size_t. And silence a compiler warning about signed/unsigned", 
+   "mismatch in the comparison."
+  ], 
+  "revision_id": "842410"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-06-25T22:47:09.279907Z", 
+  "msg": [
+   "I hereby solemnly swear this is the last XML-ish commit from me.", 
+   "* mod_dav_svn/repos.c (dav_svn_deliver): Separate the name and href of", 
+   "an index entry, so that the transformation can decide how to decorate", 
+   "the names.", 
+   "* svnindex.xsl: Handle the href attrubute."
+  ], 
+  "revision_id": "842409"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-25T21:06:08.666622Z", 
+  "msg": [
+   "Issue #728: fix some buglets in our SVNTreeNode class, the fundamental", 
+   "class of our (old) python test system.  This patch *used* to reveal", 
+   "all sorts of buglets in our tests, but kfogel has fixed most of our", 
+   "notification buglets, so only one test needed to be tweaked to expect", 
+   "correct output.", 
+   "* tree.py", 
+   "(compare_trees): when comparing two directories, start by comparing", 
+   "their *hashes*, not just their child nodes.  I can't believe this", 
+   "function never did this.", 
+   "(SVNTreeNode.add_child): inherit the newchild's atts directly, no", 
+   "need to 'merge' atts anymore.", 
+   "(attribute_merge):  delete this now-useless (and totally buggy!) routine.", 
+   "* basic_tests.py", 
+   "(basic_checkout):  pass the expected error regexp directly to", 
+   "run_svn.  Expect 'A/D/G' to be scheduled for deletion when we run status."
+  ], 
+  "revision_id": "842408"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2002-06-25T20:34:24.944613Z", 
+  "msg": [
+   "* packages/rpm/subversion.spec : Updated to latest apache version required", 
+   "because of previous version(s) missing error/ files.", 
+   "* packages/rpm/README : Added URL pointer to RPM source repositories."
+  ], 
+  "revision_id": "842407"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-25T17:15:07.526702Z", 
+  "msg": [
+   "Fix issue #753:  'svn diff -rX:Y' is no longer broken in many use-cases.", 
+   "This patch passes all our python tests over ra_dav, and it also passes", 
+   "my hand tests:", 
+   "svn diff -rX:Y fileURL", 
+   "svn diff -rX:Y wc-file", 
+   "svn diff -rX:Y .", 
+   "svn diff -rX:Y path/to/wc-dir", 
+   "svn diff -rX:Y dirURL", 
+   "This is a intermediate-term fix.  Please read issue #766, which", 
+   "explains a better long-term redesign that cmpilato thought of.", 
+   "* mod_dav_svn/update.c", 
+   "(dav_svn__update_report): if doing a switch and the incoming source", 
+   "is already split into anchor/target, then uc.dst_path *also* must to", 
+   "start life as the \"anchor\" parent of dst_path.  Without this, the", 
+   "telescoping of path2 in editor batons is bogus.  Also, don't attempt", 
+   "to do a final \"resource walk\" when switching a single file.", 
+   "* merge_tests.py", 
+   "(textual_merges_galore): unrelated bugfix.  a bad url was being", 
+   "passed to run_and_verify_merge(), which caused apache to get angry,", 
+   "but worked on ra_local (due to 'current_repo' being a symlink).  Our", 
+   "one merge test now passes over both local and dav."
+  ], 
+  "revision_id": "842406"
+ }
+]

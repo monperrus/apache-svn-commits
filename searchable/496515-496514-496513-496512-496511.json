@@ -1,0 +1,74 @@
+[
+ {
+  "author": "jm", 
+  "date": "2007-01-15T22:11:43.113377Z", 
+  "msg": [
+   "bug 4770: revert; need to sort out copyright and CLA first"
+  ], 
+  "revision_id": "496515"
+ }, 
+ {
+  "author": "taylor", 
+  "date": "2007-01-15T22:01:14.008962Z", 
+  "msg": [
+   "contribution from Woonsan Ko:", 
+   "Added 'deployment hints' and 'timeout option' features as attached.", 
+   "In my modification, I expected the deployment hint put like the following:", 
+   "<portlet>", 
+   "<portlet-name>PickANumberPortlet</portlet-name>", 
+   "<js:metadata name=\"timeout\">4000</js:metadata> <!-- ms -->", 
+   "</portlet>", 
+   "I used the metadata tag for simplicity.", 
+   "Currently, I think that a positive number for timeout means requiring a thread automatically.", 
+   "Because our unit test is incomplete, I tested this on a production server.", 
+   "My tests were as follows:", 
+   "- First, in the /WEB-INF/assembly/pipelines.xml, I replaced", 
+   "'org.apache.jetspeed.aggregator.PageAggregator' with", 
+   "'org.apache.jetspeed.aggregator.AsyncPageAggregator' for the 'aggregatorValve' bean constructor", 
+   "argument.", 
+   "- Second, to test an asynchronous portlet rendering, I added the timeout hints for the", 
+   "PickANumber portlet in the /demo/WEB-INF/jetspeed-portlet.xml, as mentioned above.", 
+   "In this case, only the PickANumber portlet is asynchronously rendered, and the others are", 
+   "synchronously rendered.", 
+   "Also, to test the PickANumber portlet to be interrupted, I added a line like", 
+   "'Thread.sleep(5000);' in the /demo/WEB-INF/demo/simple/PickANumber.jsp'.", 
+   "- Third, to test all portlets asynchronous-rendering, I modified the default portlet timeout", 
+   "constructor argument to 4000 for the 'org.apache.jetspeed.aggregator.PortletRenderer' bean in the", 
+   "/WEB-INF/assembly/aggregation.xml.", 
+   "In this case, all portlets are asynchronously rendered.", 
+   "On my implementations:", 
+   "- I added some methods and properties to the RenderingJob for timeout.", 
+   "- The WorkerMonitorImpl has a RenderingJobTimeoutMonitor thread, which will check timeouts", 
+   "periodically.", 
+   "If an asynchronous portlet exceeds the time limit, the RenderingJobTimeoutMonitor just", 
+   "interrupt the worker thread for the job. So, a worker thread is killed, and a new fresh worker may", 
+   "be created by getWorker() method of WorkerMonitorImpl if necessary."
+  ], 
+  "revision_id": "496514"
+ }, 
+ {
+  "author": "mszefler", 
+  "date": "2007-01-15T21:59:59.308226Z", 
+  "msg": [
+   "Fixed pom, OJPA needed xerces in the enhancer."
+  ], 
+  "revision_id": "496513"
+ }, 
+ {
+  "author": "ltheussl", 
+  "date": "2007-01-15T21:58:59.200308Z", 
+  "msg": [
+   "PR: MPDIST-32", 
+   "Apply lf filter before crlf in zip distributions."
+  ], 
+  "revision_id": "496512"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2007-01-15T21:56:23.348079Z", 
+  "msg": [
+   "* Client & broker using Requester/Responder to manage request/response IDs."
+  ], 
+  "revision_id": "496511"
+ }
+]

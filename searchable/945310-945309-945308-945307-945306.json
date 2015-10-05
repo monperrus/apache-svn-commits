@@ -1,0 +1,44 @@
+[
+ {
+  "author": "kaosko", 
+  "date": "2010-05-17T18:59:39.461910Z", 
+  "msg": [
+   "Incomplete - issue SHIRO-161: No SecurityManager accessible to the calling code", 
+   "https://issues.apache.org/jira/browse/SHIRO-161", 
+   "The root cause of this issue was \"resources = null;\" in line 261 of remove() in r944585. The ThreadLocal attribute itself should *never* be nullified as that'll remove ThreadLocal variables for all threads. There's no need to create ThreadLocal lazily, so therefore there's no need for the createThreadLocal() method either. Since the ThreadLocal is created at class loading time, there's no need for \"if (resources == null)\" checks either, so I've removed them in order to simplify the code. The usage of ThreadLocal was somewhat odd with the cast to Map; while it technically works, the proper way of accessing the threadlocal variable is always with ThreadLocal.get() so I changed all the occurrences to use that format. Finally, I don't see any benefit in doing clean() in remove() before get().remove() so I removed the clean() call and I also removed the whole operation since it wasn't being used anymore and I don't see any use case where it could be used. We can always add it in later. Issue is fixed barring code review and possibly re-adding some of the removed code if there's a validated need for it. There are no new test cases added because it'd be difficult to write a comprehensive unit test for the case, so we need to rely on code review."
+  ], 
+  "revision_id": "945310"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2010-05-17T18:53:39.456917Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "945309"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2010-05-17T18:53:35.330179Z", 
+  "msg": [
+   "[maven-scm] copy for tag maven-jar-plugin-2.3.1"
+  ], 
+  "revision_id": "945308"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2010-05-17T18:53:24.175245Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release maven-jar-plugin-2.3.1"
+  ], 
+  "revision_id": "945307"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2010-05-17T18:52:16.719651Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "945306"
+ }
+]

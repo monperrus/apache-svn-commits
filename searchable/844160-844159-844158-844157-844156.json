@@ -1,0 +1,107 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2002-12-11T03:26:59.912999Z", 
+  "msg": [
+   "* java.m4: Locate the JDK and its include files and libraries.", 
+   "Substitutes the @JDK@ token.", 
+   "* configure.in: Include java.m4 and use its SVN_CHECK_JDK macro", 
+   "immediately before invoking the SVN_CHECK_SWIG macro."
+  ], 
+  "revision_id": "844160"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-12-11T02:00:09.306177Z", 
+  "msg": [
+   "Issue #716: fix our O(1) copy bug.  When we run 'svn cp URL URL',", 
+   "every process involved is now O(1), not just stuff happening inside", 
+   "libsvn_fs.", 
+   "Whenever the client does a commit sans working copy (i.e. gives a NULL", 
+   "set_wc_prop callback to RA), ra_dav now sends a special", 
+   "\"X-SVN-Options: no-merge-response\" header in the MERGE request.", 
+   "mod_dav_svn recognizes the header and suppresses the O(1) walk of", 
+   "versioned-resources.  (No point in getting VR's if you can't store them!)", 
+   "* svn_dav.h (SVN_DAV_OPTIONS_HEADER,", 
+   "SVN_DAV_OPTION_NO_MERGE_RESPONSE): new #defines.", 
+   "* ra_dav.h, util.c (svn_ra_dav__parsed_request): take new optional", 
+   "'extra_headers' hash argument.  If non-NULL, parse the pairs and add", 
+   "new headers to HTTP request.", 
+   "* ra_dav.h, merge.c (svn_ra_dav__merge_activity): add new", 
+   "'disable_merge_response' argument.  If TRUE, then pass", 
+   "\"X-SVN-Options: no-merge-response\" header to svn_ra_dav__parsed_request.", 
+   "* log.c (svn_ra_dav__get_log): update call to svn_ra_dav__parsed_request.", 
+   "* fetch.c (svn_ra_dav__get_dated_revision, reporter_finish_report): same.", 
+   "* options.c (svn_ra_dav__get_activity_collection): same.", 
+   "* commit.c (commit_close_edit): pass cc->disable_merge_response to", 
+   "svn_ra_dav__merge_activity.", 
+   "(struct commit_ctx_t): add 'disable_merge_response' boolean.", 
+   "(svn_ra_dav__get_commit_editor):  if no push_wc_prop func available,", 
+   "set cc->disable_merge_response to TRUE.", 
+   "* dav_svn.h (dav_resource_private): new 'svn_client_options' field to", 
+   "hold the value of the SVN_DAV_OPTIONS_HEADER.", 
+   "* repos.c (dav_svn_get_resource): store the value of", 
+   "SVN_DAV_OPTIONS_HEADER in the resource's private structure.", 
+   "* merge.c (dav_svn__merge_response):  take 'disable_merge_response'", 
+   "argument.  If set, don't ever call dir_delta(), send a", 
+   "constant-sized response.", 
+   "* version.c (dav_svn_merge): look for SVN_DAV_OPTION_NO_MERGE_RESPONSE", 
+   "in the resource private structure, and pass boolean to", 
+   "dav_svn__merge_response."
+  ], 
+  "revision_id": "844159"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-12-11T00:47:15.977324Z", 
+  "msg": [
+   "Reduce the number of times the entries file gets written when running", 
+   "working copy log files.  My tests show it's twice as fast when checking", 
+   "out a directory containing 100 files, and three times as fast with", 
+   "500 files.  There are similar speed increases for updates that modify", 
+   "every file.  Commits show a smaller, but still substantial, speed", 
+   "increase in these cases.", 
+   "* subversion/libsvn_wc/entries.h (svn_wc_modify_entry): Add boolean", 
+   "parameter to control sync'ing changes to disk.", 
+   "* subversion/libsvn_wc/entries.c (svn_wc_modify_entry): Add boolean", 
+   "parameter to control sync'ing changes to disk.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(struct log_runner): Add boolean entries_modified member.", 
+   "(log_do_modify_entry, log_do_committed): Don't sync when calling", 
+   "svn_wc_modify_entry on the main access baton, sync when modifying", 
+   "other batons.", 
+   "(svn_wc__run_log): Write entries if any changes need to be sync'ed.", 
+   "* subversion/libsvn_wc/adm_ops.c (svn_wc_process_committed, mark_tree,", 
+   "svn_wc_delete, svn_wc_add, svn_wc_revert, resolve_conflict_on_entry):", 
+   "Sync when calling svn_wc_modify_entry.", 
+   "* subversion/libsvn_wc/merge.c (svn_wc_merge): Sync when calling", 
+   "svn_wc_modify_entry.", 
+   "* subversion/libsvn_wc/props.c (svn_wc_prop_set): Sync when calling", 
+   "svn_wc_modify_entry.", 
+   "* subversion/libsvn_wc/update_editor.c (maybe_bump_dir_info,", 
+   "change_dir_prop): Sync when calling svn_wc_modify_entry."
+  ], 
+  "revision_id": "844158"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-12-10T18:26:44.182661Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(swig-java-ext): Swapped use of perl for sed (thanks to Matt Kraai", 
+   "for the suggestion).  Added missing leading $(SWIG_SRC_DIR)/ to -o", 
+   "option."
+  ], 
+  "revision_id": "844157"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2002-12-10T16:41:55.616871Z", 
+  "msg": [
+   "'svn switch' applies to both directories and files.", 
+   "Thanks to Philip Martin (philip@codematters.co.uk) for catching this.", 
+   "* /trunk/doc/book/book/ch03.xml: Document svn switch status properly."
+  ], 
+  "revision_id": "844156"
+ }
+]

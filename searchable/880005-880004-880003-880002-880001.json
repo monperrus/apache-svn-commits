@@ -1,0 +1,86 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T20:37:45.356110Z", 
+  "msg": [
+   "Remove access baton usage from much of the loggy processing.", 
+   "Fold svn_wc__check_killme() directly into log.c and remove its use of an", 
+   "access baton.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(check_killme): ripped out of adm_files.c and rejiggered to take an", 
+   "ADM_ABSPATH rather than an access baton. some of the error processing", 
+   "was simplified a bit.", 
+   "(run_log): take an DB/ADM_ABSPATH pair, rather than an access baton.", 
+   "don't do a write-check, leaving that to the caller. update call to", 
+   "check_killme().", 
+   "(svn_wc__run_log, svn_wc__run_log2): perform a write-check before", 
+   "calling run_log() with updated params.", 
+   "(run_existing_logs): take a DB/ADM_ABSPATH pair rather than an access", 
+   "baton. there is no need to check for hidden nodes since the subdir", 
+   "will not be present on disk to recurse into. adjust param to", 
+   "cleanup_internal() since we (now) know it is always an adm_abspath.", 
+   "remove the entire section for files/symlinks since the (old) code will", 
+   "not actually update/repair the timestamp information per the comments.", 
+   "adjust call to check_killme() and run_log(). no need to check for the", 
+   "write-lock before run_log() since this func is only called while", 
+   "holding the lock.", 
+   "(cleanup_internal): rename param to ADM_ABSPATH since that's actually", 
+   "what the original caller (of the recursion; in cleanup3) passed as", 
+   "this parameter. adjust param to run_existing_logs()", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__check_killme): removed."
+  ], 
+  "revision_id": "880005"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T20:21:33.035588Z", 
+  "msg": [
+   "Small tweaks to follow actual usage.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_steal_write_lock): rename param to ADM_ABSPATH to indicate", 
+   "what is really being used in the single invocation. add a bit of", 
+   "commentary about this, too."
+  ], 
+  "revision_id": "880004"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T16:29:00.209667Z", 
+  "msg": [
+   "When tree conflicts were stored as one large mass per-directory, it was", 
+   "handy to record all the conflicts that occurred during a loggy run and", 
+   "process them at the end. But we can (now) record them one at a time, so", 
+   "just do that during the run.", 
+   "Then rip out all the unused logic. Woot.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(struct log_runner): remove the 'result_pool' and 'tree_conflicts' members", 
+   "(log_do_add_tree_conflict): immediately record the tree conflict, rather", 
+   "than stashing it away for later.", 
+   "(run_log): don't initialize the two removed struct members, and don't", 
+   "worry about processing the hash of conflicts"
+  ], 
+  "revision_id": "880003"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T14:29:55.736125Z", 
+  "msg": [
+   "Mark trans 1 as an XFail until I get the property stuffs corrected.", 
+   "* subversion/tests/cmdline/trans_tests.py:", 
+   "(test_list): mark trans 1 as an XFail, and give a description why"
+  ], 
+  "revision_id": "880002"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2009-10-10T13:39:50.139199Z", 
+  "msg": [
+   "* tools/server-side/svn-rep-sharing-stats.c", 
+   "Remove unneeded workarounds.  SVN_DBG works and always did."
+  ], 
+  "revision_id": "880001"
+ }
+]

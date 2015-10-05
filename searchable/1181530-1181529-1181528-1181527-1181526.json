@@ -1,0 +1,99 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:06.072485Z", 
+  "msg": [
+   "Add null check which otherwise causes NPE in logging", 
+   "Summary:", 
+   "Needed a not null check in a place we were logging", 
+   "Test Plan:", 
+   "Not tested, but a very straightforward fix.", 
+   "Reviewed By: kannan", 
+   "Reviewers: liyintang, kannan, nspiegelberg", 
+   "CC: , kannan", 
+   "Differential Revision: 240220"
+  ], 
+  "revision_id": "1181530"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:16:58.640948Z", 
+  "msg": [
+   "New changes to support export/snapshot", 
+   "Test Plan:", 
+   "To run the unit tests", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kannan, kranganathan", 
+   "CC: gqchen, liyintang, nspiegelberg, kranganathan", 
+   "Differential Revision: 239663"
+  ], 
+  "revision_id": "1181529"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:16:55.847887Z", 
+  "msg": [
+   "The HBase lease recovery should handle non-existant last block", 
+   "Summary:", 
+   "The RS may crash after allocating the a new block to a HLog but before it", 
+   "writes any data to that block. Without this patch, lease recovery on that file", 
+   "never succeeds because the last block is never found in HDFS-land.", 
+   "The HDFs changes were made here:", 
+   "https://phabricator.fb.com/D230657", 
+   "This patch enhances the RS to use the new recoverLease API. This API will", 
+   "discard the last block if fsync was not invoked earlier on that block.", 
+   "Test Plan:", 
+   "1. TestHLog", 
+   "2. Running it on two 5 node test clusters", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, hkuang", 
+   "CC: hbase@lists, kannan, dhruba", 
+   "Differential Revision: 239298"
+  ], 
+  "revision_id": "1181528"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:16:50.428202Z", 
+  "msg": [
+   "First cut of store based compactions", 
+   "Summary:", 
+   "Changed all compaction requests to be per store instead of per region.", 
+   "Note: this is not complete, wanted to get a diff out and continue working.", 
+   "CompactSplitThread.java:run() is not completely done the way we want to - wanted", 
+   "to discuss how we wanted to proceed here before doing it.", 
+   "Test Plan:", 
+   "Not tested yet.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: jgray, nspiegelberg, aaiyer, kannan", 
+   "Commenters: kannan", 
+   "CC: , kranganathan, nspiegelberg, kannan", 
+   "Differential Revision: 233737"
+  ], 
+  "revision_id": "1181527"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:16:42.403401Z", 
+  "msg": [
+   "Fixing incorrect ByteBuffer instances created by cache-on-write", 
+   "Summary:", 
+   "This fixes ByteBuffer objects with arrayOffset=0 and position=8 that were", 
+   "inserted into the block cache by the cache-on-write functionality, and rewound", 
+   "to position=0 in loadBlock, resulting in the IllegalArgumentException crash", 
+   "described in Task #536041, where the DATABLK* magic record was interpreted as a", 
+   "(key_length, value_length) pair. With this fix the cached buffer has", 
+   "arrayOffset=8 and position=0, so it is correctly rewound to the beginning of key", 
+   "length in loadBlock.", 
+   "Test Plan:", 
+   "Run HBaseTest with cacheOnWrite and evictOnClose turned on", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, kannan", 
+   "CC: kannan, liyintang, hbase@lists,", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 236138"
+  ], 
+  "revision_id": "1181526"
+ }
+]

@@ -1,0 +1,59 @@
+[
+ {
+  "author": "doogie", 
+  "date": "2010-03-11T18:59:34.378035Z", 
+  "msg": [
+   "Fix bad caching.  Previously, any call to getDelegator() would *always*", 
+   "walk the entire classpath, trying to find all implementations of", 
+   "DelegatorFactory.  This was fixed by moving the cache higher up.", 
+   "In detail, the entity caching system only stored a String delegator", 
+   "name.  It would then try to find the appropriate delegator to match that", 
+   "name.  However, during a custom importer, the caching system was being", 
+   "exercised very heavily, so DelegatorFactory.getDelegator() was being", 
+   "called in a very tight loop.  Since the delegator instances were not", 
+   "being cached at the high level, this caused a *big* slowdown; basically,", 
+   "a 15 minute importer was taking over 2 hours, and was no near finishing.", 
+   "This was because UtilObject.getObjectFromFactory would end up walking", 
+   "the entire classpath, finding every jar, looking at every zip entry, to", 
+   "try and find the appropriate file in META-INF/services."
+  ], 
+  "revision_id": "921990"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2010-03-11T18:58:13.301779Z", 
+  "msg": [
+   "Pass the delegator into any create/init methods that end up setting any", 
+   "field data."
+  ], 
+  "revision_id": "921989"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2010-03-11T18:58:10.548354Z", 
+  "msg": [
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_process_committed_queue2): Change tabs to spaces.", 
+   "Suggested by: julianfoad"
+  ], 
+  "revision_id": "921988"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2010-03-11T18:57:33.976627Z", 
+  "msg": [
+   "Don't fetch the delegator with UtilObject, instead using", 
+   "DelegatorFactory."
+  ], 
+  "revision_id": "921987"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2010-03-11T18:57:00.504399Z", 
+  "msg": [
+   "End-user type code should not be calling the GenericEntity factory", 
+   "methods."
+  ], 
+  "revision_id": "921986"
+ }
+]

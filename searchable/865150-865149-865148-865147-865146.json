@@ -1,0 +1,99 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2007-05-20T10:04:21.173817Z", 
+  "msg": [
+   "Fix issue #1808: if a file in a working copy is replaced by a special file,", 
+   "don't delete it during an update. This fixes a data loss issue.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_remove_from_revision_control): check if a local non-special file was", 
+   "overwritten by a special file. If that's the case, consider the file locally", 
+   "modified and don't delete it.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(update_obstructing_symlink): new test", 
+   "(test_list): run the new test"
+  ], 
+  "revision_id": "865150"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-05-20T02:21:03.939734Z", 
+  "msg": [
+   "If a 'svn mkdir' fails because intermediate directories don't exist,", 
+   "suggest using '--parents'.", 
+   "* subversion/svn/mkdir-cmd.c", 
+   "(svn_cl__mkdir): If svn_client_mkdir3 fails with one of a particular set", 
+   "of errors, wrap the error in a suggestion to try --parents.", 
+   "* subversion/tests/cmdline/basic_tests.py", 
+   "(basic_mkdir_url_with_parents, basic_mkdir_wc_with_parents): Verify", 
+   "that an erroneous mkdir gives the --parents suggestion."
+  ], 
+  "revision_id": "865149"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-05-20T01:38:55.038063Z", 
+  "msg": [
+   "On the merge-sensitive-log branch:", 
+   "Rev the svn_log_message_receiver_t interface, and the svn_repos_get_logs()", 
+   "interface to match it.  This introduces the svn_log_entry_t data structure so", 
+   "that we don't have to rev the interface again when adding more information", 
+   "to the log message.", 
+   "This doesn't update all affected APIs; it is more of a checkpoint commit as I", 
+   "work up our library stack.  Tests should still pass, though.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_log_entry_t): New datatype.", 
+   "(svn_log_entry_create): New function prototype.", 
+   "(svn_log_message_receiver2_t): New interface.", 
+   "(svn_log_message_receiver): Deprecate.", 
+   "* subversion/libsvn_subr/constructors.c", 
+   "(svn_log_entry_create): New func.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_get_logs4): New prototype.", 
+   "(svn_repos_get_logs3): Deprecate.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(send_change_rev): Use the new callback interface, creating a", 
+   "svn_log_entry_t structure to hold the outgoing data.", 
+   "(svn_repos_get_logs4): New function.  Use the new callback interface.", 
+   "(log3_baton): Compatibility baton.", 
+   "(log3_receiver): New function.  Compatibility receiver.", 
+   "(svn_repos_get_logs3): Reimplement as a wrapper around svn_repos_get_logs4()."
+  ], 
+  "revision_id": "865148"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-05-19T22:40:57.763660Z", 
+  "msg": [
+   "Fix issue 2047: make the 'implicit path' merge syntax work for local paths", 
+   "somewhere deeper in the directory structure.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): if the sourcepath is a local path (relative to the working", 
+   "directory), use it to determine the expected target path.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_with_implicit_target_file): new test", 
+   "(test_list): run the new merge_with_implicit_target_file test"
+  ], 
+  "revision_id": "865147"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-05-19T21:14:37.716225Z", 
+  "msg": [
+   "Fix handling of svn:eol-style property updates during merge. Pass the list", 
+   "of property changes to be applied during the merge down to", 
+   "svn_wc__merge_internal which already has the required logic to translate the", 
+   "target file based on incoming svn:eol-style property changes.", 
+   "* subversion/include/svn_wc.h", 
+   "* subversion/libsvn_wc/merge.c", 
+   "(svn_wc_merge3, svn_wc_merge2, svn_wc_merge): add new svn_wc_merge3. This", 
+   "adds the prop_diff parameter, used by svn_wc__merge_internal to translate", 
+   "the target file to the new eol-style if needed.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_file_changed): use svn_wc_merge3 from now on. Update comments.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(test_list): merge_eolstyle_handling test now passes"
+  ], 
+  "revision_id": "865146"
+ }
+]

@@ -1,0 +1,98 @@
+[
+ {
+  "author": "epg", 
+  "date": "2008-04-28T23:23:31.225627Z", 
+  "msg": [
+   "Kill spurious errors from one side legitimately closing the connection; we", 
+   "couldn't see these before, but with the upcoming change to log errors,", 
+   "they fill the log with noise.", 
+   "One more bogus SVN_ERR_RA_SVN_CONNECTION_CLOSED remains, that I have not", 
+   "been able to track down.  It only manifests under authz_tests.py 13 (authz", 
+   "issue #2712), so not so bad.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(svn_ra_svn_handle_commands2): Add rev'd interface.", 
+   "* subversion/libsvn_ra_svn/editorp.c", 
+   "(svn_ra_svn_drive_editor2): While discarding edit commands after", 
+   "sending the other side an error, don't consider it an error if the", 
+   "other side drops the connection.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_handle_commands2): Rev from svn_ra_svn_handle_commands,", 
+   "adding error_on_disconnect argument, and suppress", 
+   "SVN_ERR_RA_SVN_CONNECTION_CLOSED errors unless it is TRUE.", 
+   "* subversion/svnserve/serve.c", 
+   "(accept_report): Use svn_ra_svn_handle_commands2, with", 
+   "error_on_disconnect TRUE.", 
+   "(serve): Use svn_ra_svn_handle_commands2, with error_on_disconnect FALSE;", 
+   "dropping the connection is proper when the client is done.", 
+   "* subversion/svnserve/main.c", 
+   "(main): Don't ignore SVN_ERR_RA_SVN_CONNECTION_CLOSED errors here.  We", 
+   "have no idea here whether it was a real error or not!  The ones that", 
+   "are not real errors are now suppressed in the right places."
+  ], 
+  "revision_id": "870900"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-28T22:52:24.925040Z", 
+  "msg": [
+   "Merge the svnserve-logging branch, in its entirety, to trunk, using the", 
+   "following command:", 
+   "svn merge http://svn.collab.net/repos/svn/trunk@30530 \\", 
+   "http://svn.collab.net/repos/svn/branches/svnserve-logging@30700", 
+   "(svn merge --reintegrate does not handle renames on the branch)", 
+   "See the branch for the details, but here is a summary:", 
+   "- Add very simple --log-file functionality to svnserve, with no support", 
+   "for log rotation beyond simply killing the listener, rotating, and", 
+   "restarting.", 
+   "- Move the logic for constructing the operational log line from all the", 
+   "places in mod_dav_svn where an operation is logged to the new svn_log__", 
+   "functions in libsvn_subr.", 
+   "- Use svn_log__ functions to log operations in svnserve.", 
+   "- Copy escape_errorlog_item from Apache 2.2.4 to new log-escape.c file,", 
+   "for escaping whatever random crap may be in logged error messages", 
+   "(e.g. newlines).", 
+   "- Rename tools/server-side/svn_dav_log_parse.py and", 
+   "test_svn_dav_log_parse.py to tools/server-side/svn_server_log_parse.py", 
+   "and test_svn_server_log_parse.py and add support for svnserve format."
+  ], 
+  "revision_id": "870899"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2008-04-28T22:36:31.023618Z", 
+  "msg": [
+   "On the 1.5.x branch, approve a one-byte patch."
+  ], 
+  "revision_id": "870898"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-04-28T21:52:13.552247Z", 
+  "msg": [
+   "On the dont-save-plaintext-passwords-by-default branch:", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_save_credentials): Document expected lifetime of the", 
+   "pool passed to this function."
+  ], 
+  "revision_id": "870897"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-04-28T21:48:52.758996Z", 
+  "msg": [
+   "On the fs-rep-sharing branch:", 
+   "Finish updating rep-strings.c with svn_checksum_t.", 
+   "* subversion/libsvn_fs_base/reps-strings.h,", 
+   "subversion/libsvn_fs_base/reps-strings.c", 
+   "(svn_fs_base__rep_contents_checksum): Update to return the digest in an", 
+   "svn_checksum_t.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_file_checksum, svn_fs_base__dag_finalize_edits,", 
+   "store_checksum_rep): Use a svn_checksum_t to fetch the checksum of a file.", 
+   "* subversion/include/svn_checksum.h,", 
+   "subversion/libsvn_subr/checksum.c", 
+   "(svn_checksum_clear): New."
+  ], 
+  "revision_id": "870896"
+ }
+]

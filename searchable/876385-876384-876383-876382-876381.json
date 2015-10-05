@@ -1,0 +1,95 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-04T16:35:41.105456Z", 
+  "msg": [
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config__sys_config_path, svn_config_get_user_config_path):", 
+   "Update comment and non-Windows code to use svn_dirent functions."
+  ], 
+  "revision_id": "876385"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-04T16:28:30.640293Z", 
+  "msg": [
+   "For issue #2028, #2556 (and probably a few others), stop assuming '/' and", 
+   "drive roots in 'F:File' format are absolute on Windows as the first is relative", 
+   "to a drive and the second to the current directory on that drive.", 
+   "Update tests to start with the first testvalue.", 
+   "(Simple tests give more information on what fails than everything combined).", 
+   "* subversion/include/svn_dirent_uri.h", 
+   "(svn_dirent_join): Update documentation to say that joining is platform", 
+   "defined.", 
+   "(svn_dirent_dirname, svn_dirent_is_root, svn_dirent_is_absolute):", 
+   "Turn the implementation details into examples as the real implementation is", 
+   "platform defined.", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(dirent_root_length): New function.", 
+   "(dirent_previous_segment): Check root length instead of svn_is_root.", 
+   "(dirent_is_rooted): New function. Checks if a dirent contains", 
+   "an absolute or non absolute root.", 
+   "(is_child, is_ancestor): Check for non absolute roots.", 
+   "(svn_dirent_is_root): Stop threating '/', 'F:' and '//drive' dirents", 
+   "as root on Windows.", 
+   "(svn_dirent_join, svn_dirent_join_many): Handle joining of absolute and", 
+   "non absolute roots to combine them to absolute roots when possible.", 
+   "(svn_dirent_dirname): Return non relative roots as is.", 
+   "(svn_dirent_is_absolute): Filter non absolute roots.", 
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(COUNT_OF): New macro, used in all testcases to calculate the number of", 
+   "tests.", 
+   "(test_dirent_is_root): Update and add expectations.", 
+   "(test_dirent_is_absolute): Update expectations.", 
+   "(test_dirent_join): Add and update expectations."
+  ], 
+  "revision_id": "876384"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-04T16:23:57.731427Z", 
+  "msg": [
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(COUNT_OF): New Macro.", 
+   "(*): Use COUNT_OF to calculate the number of tests and run tests from", 
+   "first to last instead of the other way around."
+  ], 
+  "revision_id": "876383"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-04T16:12:21.196872Z", 
+  "msg": [
+   "Rip out wc_db transaction APIs.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_txn_begin, svn_wc__db_txn_rollback, svn_wc__db_txn_commit):", 
+   "Remove.", 
+   "(svn_wc__db_close): Return not implemented.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_txn_begin, svn_wc__db_txn_rollback, svn_wc__db_txn_commit):", 
+   "Remove.", 
+   "(svn_wc__db_close): Update doc."
+  ], 
+  "revision_id": "876382"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-04T14:28:05.423024Z", 
+  "msg": [
+   "Refine the SCHEDULE field of returned entries, and make sure that DELETED", 
+   "nodes are recorded properly.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): for added nodes, it might be a simple add (rather than", 
+   "replace) when there isn't a node in the current BASE tree (ie. the", 
+   "database records it as \"not present at this revision\"). if we're", 
+   "attempting to reading all the entries for a directory, and that", 
+   "directory is obstructed/missing, then the dir itself should be listed", 
+   "as schedule \"normal\" (the real state is in the parent). lastly, any", 
+   "entry marked DELETED should be in the \"normal\" state since we aren't", 
+   "actually going to try and delete anything.", 
+   "(write_entry): a node that is marked DELETED should get a row in the", 
+   "BASE_NODE table to record its not-present status."
+  ], 
+  "revision_id": "876381"
+ }
+]

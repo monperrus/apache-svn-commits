@@ -1,0 +1,95 @@
+[
+ {
+  "author": "mbk", 
+  "date": "2006-04-08T16:03:55.234107Z", 
+  "msg": [
+   "Revert accidentally introduced piece of r19264.", 
+   "* subversion/libsvn_ra_svn/streams.c", 
+   "(sock_read_cb): Don't save and restore the timeout."
+  ], 
+  "revision_id": "859340"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-08T15:42:19.333065Z", 
+  "msg": [
+   "Add configury for OpenSSL detection.", 
+   "Patch by: Sigfred H\u00e5versen <bsdlist@mumak.com>", 
+   "(Tweaked by me.)", 
+   "* Makefile.in", 
+   "(SVN_SSL_LIBS): New autoconf-provided macro.", 
+   "(INCLUDES): Updated to include SVN_SSL_INCLUDES, an autoconf-provided", 
+   "macro.", 
+   "* build.conf", 
+   "([svn], [svnserve]): Add dependant library \"ssl\".", 
+   "([ssl]): New library definition.", 
+   "* configure.in: Add call to SVN_LIB_SSL.", 
+   "* build/ac-macros/ssl.m4: New file.", 
+   "* aclocal.m4: Include build/ac-macros/ssl.m4."
+  ], 
+  "revision_id": "859339"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-08T15:31:41.012215Z", 
+  "msg": [
+   "Encapsulate ra_svn's i/o with a stream-based wrapper.", 
+   "This does clean things up slightly, but it is principally to", 
+   "facilitate the subsequent introduction of an SSL integration", 
+   "layer.", 
+   "Patch by: Sigfred H\u00e5versen <bsdlist@mumak.com>", 
+   "(Tweaked by me.)", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(make_tunnel): Remove (now)-obsolete population of the connections \"proc\"", 
+   "member.", 
+   "* subversion/libsvn_ra_svn/streams.c: New file.", 
+   "* subversion/libsvn_ra_svn/marshal.c:", 
+   "#include \"svn_io.h\"", 
+   "(svn_ra_svn_create_conn): Don't initialize obsolete members of the", 
+   "connection, instead use the new svn_ra_svn__stream_pair_from_* functions", 
+   "to initialize the new stream members.", 
+   "(svn_ra_svn__set_block_handler, svn_ra_svn__input_waiting, writebuf_output,", 
+   "readbuf_input): Use the stream API on the new members, rather than the", 
+   "APR socket and pipe APIs on the old.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "(SVN_RA_SVN__IOCTL_TIMEOUT, SVN_RA_SVN__IOCTL_PENDING): New macros.", 
+   "(struct svn_ra_svn_conn_st): Remove \"in_file\", \"out_file\", and \"proc\"", 
+   "members in favor of \"in_stream\" and \"out_stream\".", 
+   "(svn_ra_svn__stream_pair_from_sock, svn_ra_svn__stream_pair_from_files):", 
+   "New function prototypes."
+  ], 
+  "revision_id": "859338"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-04-08T15:17:31.209720Z", 
+  "msg": [
+   "Support svn_commit_callback2_t.", 
+   "* subversion/bindings/swig/ruby/svn/ra.rb", 
+   "(Svn::Ra::Session#commit_editor2),", 
+   "subversion/bindings/swig/ruby/svn/repos.rb", 
+   "(Svn::Repos::ReposCore#commit_editor2): New methods which use", 
+   "svn_commit_callback2_t.", 
+   "* subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.c,", 
+   "subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.h", 
+   "(svn_swig_rb_commit_callback2): New function.", 
+   "* subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.c", 
+   "(DEFINE_DUP2(commit_info)): New duplicate function.", 
+   "* subversion/bindings/swig/include/svn_types.swg", 
+   "(%typemap(ruby, in)", 
+   "(svn_commit_callback2_t callback, void *callback_baton)): New typemap."
+  ], 
+  "revision_id": "859337"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2006-04-08T15:09:38.192190Z", 
+  "msg": [
+   "Change the string property value for the svn:executable from '' to '*'", 
+   "to match the svn comand line value when an executable file is added.", 
+   "* contrib/client-side/svn_load_dirs.pl.in:", 
+   "Set the svn:executable property value '*' instead of ''."
+  ], 
+  "revision_id": "859336"
+ }
+]

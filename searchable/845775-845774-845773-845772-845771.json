@@ -1,0 +1,85 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-04-22T16:19:30.047951Z", 
+  "msg": [
+   "* subversion/tests/clients/cmdline/basic_tests.py", 
+   "(basic_ls): Add test cases for wc_root directory, nested directory,", 
+   "and implicit current directory.", 
+   "Suggested by: Chris Stork <cstork@ics.uci.edu>", 
+   "(See his patch in issue #1235.)"
+  ], 
+  "revision_id": "845775"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-04-22T16:11:51.700006Z", 
+  "msg": [
+   "Finish issue #977:  \"support 'svn diff -rBASE:N'\"", 
+   "Make propdiffs work, too.  Time to close this issue.", 
+   "* libsvn_wc/diff.c (close_file, close_directory): if the", 
+   "'reverse_order' flag is set, don't forcibly reverse the propchanges array.", 
+   "(file_diff, directory_elements_diff): if 'use_text_base' flag is", 
+   "set, avoid ever showing local prop mods."
+  ], 
+  "revision_id": "845774"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-04-22T15:47:35.742776Z", 
+  "msg": [
+   "More work on issue #977:  \"support 'svn diff -rBASE:N'\"", 
+   "Various cases of diffing -rBASE:N and -rN:BASE seem to work now; that", 
+   "is, diff_tests.py #14, which tests a whole lot of things, is now", 
+   "passing correctly.  However, we still need to get prop-diffs working", 
+   "correctly.  Almost there.", 
+   "* svn_wc.h (svn_wc_get_diff_editor): grow two new boolean arguments:", 
+   "one indicating we want to use text-base (instead of working files)", 
+   "for comparisons, and one indicating we want the diff run backwards.", 
+   "* libsvn_wc/diff.c (struct edit_baton, make_editor_baton): take two", 
+   "new boolean args.", 
+   "(svn_wc_get_diff_editor): take two new boolean args, pass to", 
+   "make_editor_baton().", 
+   "(svn_wc_diff): update caller of make_editor_baton.", 
+   "(close_file, delete_entry): make use of the new args; possibly use", 
+   "text-base instead of working file, and possibly diff backwards.", 
+   "(file_diff):  for files not mentioned in the server's tree delta,", 
+   "honor the flags as well.  this means (possibly) showing an addition", 
+   "of the text-base rather than the working file, and (possibly) not", 
+   "showing purely local mods at all.", 
+   "* libsvn_client/diff.c (do_diff): add a new use-case for using the", 
+   "libsvn_wc diff editor -- compare BASE against some repository", 
+   "revision.  this code is essentially copied and tweaked from the", 
+   "previous \"WORKING vs. repos\" use-case.", 
+   "* diff_tests.py (diff_base_to_repos):  add final comparison between", 
+   "-rBASE:2 and -r3:2.  This tests passes now, so remove the XFail()."
+  ], 
+  "revision_id": "845773"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-04-22T15:32:03.778650Z", 
+  "msg": [
+   "Turns out the new export editor doesn't yet do keyword expansion:", 
+   "* subversion/libsvn_client/export.c", 
+   "(svn_client_export): Toggle the #if back to the old editor,", 
+   "reversing that portion of revision 5694."
+  ], 
+  "revision_id": "845772"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2003-04-22T04:21:48.771482Z", 
+  "msg": [
+   "**** NOTE:  This patch will be needed to build an RPM of subversion-0.21.0.", 
+   "I goofed and didn't get it into the repository before 0.21 came out.", 
+   "This patch is included in the RPMs on summersoft.fay.ar.us.", 
+   "* packages/rpm/redhat-7.x/subversion.spec : Added libsvn_diff library.", 
+   "Added automake >= 1.6.3 requirement. It won't build correctly without it.", 
+   "Added libtool >= 1.4.2-12 requirement. It won't build correctly without it.", 
+   "Added needed swig-runtime requirement.", 
+   "* packages/rpm/redhat-8.x/subversion.spec : Added libsvn_diff library."
+  ], 
+  "revision_id": "845771"
+ }
+]

@@ -1,0 +1,98 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-01-17T03:13:07.647427Z", 
+  "msg": [
+   "Some minor auto-fu cleanups.", 
+   "* build/ac-macros/sasl.m4:", 
+   "(SVN_LIB_SASL): I don't have /usr/local and I don't want it in my Makefile.", 
+   "Be gone!", 
+   "* build/ac-macros/serf.m4", 
+   "(SVN_LIB_SERF): Simplify test and eliminate redundant redundancy."
+  ], 
+  "revision_id": "875375"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-01-17T02:37:49.091256Z", 
+  "msg": [
+   "Improve SQLite auto-fu so that you don't require 'python' at build-time by", 
+   "using more traditional auto-fu.  Also permit pre-configured sqlite to just", 
+   "'work' (and not require it to be in /usr).", 
+   "* build/ac-macros/sqlite.m4", 
+   "(SVN_LIB_SQLITE): Always parse minimum version; don't pass /usr rather let", 
+   "the compiler do its magic (via CPPFLAGS/LDFLAGS already set);", 
+   "(SVN_SQLITE_DIR_CONFIG, SVN_SQLITE_FILE_CONFIG): Rewrite to use AC_EGREP_CPP", 
+   "rather than call into 'python'.", 
+   "(SVN_SQLITE_VERNUM_PARSE): Split out into... (N.B. could still be improved)", 
+   "(SVN_SQLITE_MIN_VERNUM_PARSE): this."
+  ], 
+  "revision_id": "875374"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-01-17T02:28:56.745255Z", 
+  "msg": [
+   "* subversion/libsvn_wc/merge.c", 
+   "(svn_wc__merge_internal): Fix a typo in variable name:", 
+   "destranslated_target -> detranslated_target", 
+   "^"
+  ], 
+  "revision_id": "875373"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-01-17T02:05:21.508083Z", 
+  "msg": [
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_bdb_pack): Update arguments to match the pack_fs method", 
+   "in fs_library_vtable_t", 
+   "(To resolve warning on further unused argument)"
+  ], 
+  "revision_id": "875372"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-01-17T01:53:26.644116Z", 
+  "msg": [
+   "Fix a symptom of issue #3302.", 
+   "Though I still don't know *how* it can happen, it appears that it is (was?)", 
+   "possible for svnmerge-migrate-history.py to convert svnmerge-integrated", 
+   "properties into svn:mergeinfo properties with unordered rangelists.  This", 
+   "breaks any subcommand which encounters this mergeinfo (you know, useful", 
+   "little things like svn merge and log -g) when svn_mergeinfo_parse()", 
+   "encounters the unordered rangelists.", 
+   "Even if we fix svnmerge-migrate-history.py (issue #3302 even if it needs", 
+   "fixing that is) it would be nice to save users from encountering this", 
+   "problem.  So this commit allows svn_mergeinfo_parse() to tolerate unordered", 
+   "rangelists while still guaranteeing the mergeinfo it creates has sorted", 
+   "rangelists -- so there is still no way via the command line to set or", 
+   "otherwise create unordered mergeinfo in the repository.", 
+   "* subversion/include/svn_mergeinfo.h", 
+   "(svn_mergeinfo_parse): Tweak doc string to reflect loosened restrictions.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(combine_with_adjacent_lastrange): Remove.  Among other things this", 
+   "function enforced the no overlapping revision ranges and no unordered", 
+   "revision ranges restrictions of svn_mergeinfo_parse().", 
+   "(parse_revlist): Don't combine adjacent ranges here, just push each one", 
+   "onto the rangelist.", 
+   "(parse_revision_line): Sort the rangelist created by parse_revlist(),", 
+   "then collapse adjacent ranges, and make sure there are no overlapping", 
+   "ranges.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_canonicalize_svn_prop): Ensure that canonical svn:mergeinfo", 
+   "has sorted rangelists.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(inappropriate_props): Stop expecting a propset of unordered mergeinfo", 
+   "to fail.", 
+   "* subversion/tests/libsvn_subr/mergeinfo-test.c", 
+   "(MAX_NBR_RANGES, NBR_MERGEINFO_VALS, mergeinfo_vals, mergeinfo_paths,", 
+   "mergeinfo_ranges): Add some test data for test_parse_single_line_mergeinfo", 
+   "which tries to parse mergeinfo with unordered rangelists.  Expect these to", 
+   "succeed, but for the results to be sorted.", 
+   "(NBR_BROKEN_MERGEINFO_VALS, broken_mergeinfo_vals): Remove some test data", 
+   "for test_parse_broken_mergeinfo()."
+  ], 
+  "revision_id": "875371"
+ }
+]

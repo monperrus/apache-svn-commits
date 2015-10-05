@@ -1,0 +1,109 @@
+[
+ {
+  "author": "jpieper", 
+  "date": "2004-04-20T12:00:17.206063Z", 
+  "msg": [
+   "Prepare to support the writing of transactions in libsvn_fs_fs.  Point", 
+   "many existing routines that involve writing transactions into new stub", 
+   "routines.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(uncache_node_revision, set_node_revision): Removed", 
+   "(svn_fs__dag_check_mutable): Check for the existence of the", 
+   "txn_id field to determine mutability.", 
+   "(set_entry): Call the fs_fs equivalent.", 
+   "(make_entry): Implemented using the original logic and a few", 
+   "calls to fs_fs routines.", 
+   "(svn_fs__dag_set_entry): Add the extra kind parameter that", 
+   "set_entry needs now.", 
+   "(svn_fs__dag_clone_child): Call the fs_fs routine to create a", 
+   "successor node and pass the kind parameter to set_entry.", 
+   "(svn_fs__dag_get_edit_stream): Implement using the fs_fs", 
+   "routines.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(svn_fs__representation_t): Add field for transaction id and", 
+   "directory contents flag that allow representations to be", 
+   "located in transactions.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(check_already_open): Removed", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(validate_transaction_field): Added new factorized function that", 
+   "parses the transaction_id field in the fs_fs node_id string.", 
+   "(svn_fs__create_id, svn_fs_parse_id): Use the new", 
+   "validate_transaction_field function.", 
+   "(svn_fs__id_eq): Fix a bug in the transaction_id check.", 
+   "(svn_fs_unparse_id): Fix a bug when the transaction_id is not", 
+   "set.", 
+   "* subversion/libsvn_fs_fs/revs-txns.c", 
+   "(get_txn): Implement using the original logic.", 
+   "(txn_body_change_txn_prop, make_txn, txn_body_begin_txn,", 
+   "txn_body_cleanup_txn, txn_body_cleanup_txn_copy,", 
+   "txn_body_cleanup_txn_changes, txn_body_delete_txn): Removed", 
+   "(svn_fs_change_txn_prop, svn_fs_begin_txn, svn_fs_purge_txn):", 
+   "Implement using fs_fs routines.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(svn_fs_txn_root): Implemented", 
+   "(get_copy_inheritance): Implement using mostly the original", 
+   "logic, with a few tweaks for fs_fs.", 
+   "(make_path_mutable): Remove abort as there is no copies table in", 
+   "fs_fs.", 
+   "(add_change, update_ancestry): Implement using fs_fs routines.", 
+   "(txn_body_rev_get_txn_id, txn_body_contents_changed): Removed", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "Add many defines for the constant textual elements of the", 
+   "transaction directory format.", 
+   "(svn_fs__fs_begin_txn, svn_fs__fs_change_txn_prop,", 
+   "svn_fs__fs_get_txn, svn_fs__fs_create_node,", 
+   "svn_fs__fs_purge_txn, svn_fs__fs_set_entry,", 
+   "svn_fs__fs_add_change, svn_fs__fs_set_contents,", 
+   "svn_fs__fs_create_successor): New stub functions."
+  ], 
+  "revision_id": "849515"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2004-04-20T00:00:44.356553Z", 
+  "msg": [
+   "Fix Issue #1777: 'svn blame' should default to the working revision,", 
+   "when no revision is specified.", 
+   "* subversion/clients/cmdline/blame-cmd.c", 
+   "(svn_cl__blame): Set end revision to svn_opt_revision_base if", 
+   "the target is a working copy, and to svn_opt_revision_head if", 
+   "the target is a URL.", 
+   "Patch by: S. Ramaswamy <ramaswamy@collab.net>"
+  ], 
+  "revision_id": "849514"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2004-04-19T23:06:33.737620Z", 
+  "msg": [
+   "* build/buildcheck.sh,", 
+   "* INSTALL,", 
+   "* packages/rpm/redhat-7.x/subversion.spec,", 
+   "* packages/rpm/redhat-8+/subversion.spec,", 
+   "* packages/rpm/fedora-1/subversion.spec:", 
+   "Update neon refs, s/0.24.4/0.24.5/, to fix format string", 
+   "vulnerabilities in XML/207 response handling.  See", 
+   "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CAN-2004-0179 ."
+  ], 
+  "revision_id": "849513"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-04-19T21:23:13.882831Z", 
+  "msg": [
+   "* CHANGES: Should match 1.0.2 release."
+  ], 
+  "revision_id": "849512"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-04-19T21:15:27.984506Z", 
+  "msg": [
+   "* tools/dev/stress.pl", 
+   "(ParseCommandLine): Hrm.  Make the -h integration mo' better."
+  ], 
+  "revision_id": "849511"
+ }
+]

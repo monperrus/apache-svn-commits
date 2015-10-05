@@ -1,0 +1,115 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2006-04-09T18:54:20.816615Z", 
+  "msg": [
+   "* /branches/nonxml-entries: Create branch for working on changing the format of", 
+   ".svn/entries to a new non-XML-based format."
+  ], 
+  "revision_id": "859360"
+ }, 
+ {
+  "author": "nori", 
+  "date": "2006-04-09T07:49:09.231542Z", 
+  "msg": [
+   "Correct trivial mistakes, following the \"obvious fix\" rule.", 
+   "* www/hacking.html (docs): Supply a missing period.", 
+   "* www/project_status.html (done): Supply some missing periods and a", 
+   "semicolon."
+  ], 
+  "revision_id": "859359"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-09T05:09:52.630062Z", 
+  "msg": [
+   "Add support for SSL to svnserve.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(svn_ra_svn_conn_ssl_server): New prototype.", 
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_OPTION_SSL_SERVER_CERT_FILE,", 
+   "SVN_CONFIG_OPTION_SSL_SERVER_KEY_FILE): New macros.", 
+   "* subversion/libsvn_ra_svn/ssl.c", 
+   "(ssl_last_error, svn_ra_svn_conn_ssl_server): New function.", 
+   "* subversion/svnserve/serve.c", 
+   "(server_baton_t): Add \"cert_file\" and \"key_file\" members.", 
+   "(send_mechs): Add \"showtls\" parameter.  Send STARTTLS as a", 
+   "mechanism if showtls is TRUE.", 
+   "(auth_request): Add \"dotls\" parameter.  Initiate an SSL", 
+   "connection if dotls is TRUE.", 
+   "(must_have_access): Update auth_request call-site.", 
+   "(find_repos): Populate the server baton with the cert_file", 
+   "and key_file information from the cfg.", 
+   "(serve): Update send_mechs and auth_request call-sites, and", 
+   "refuse to support SSL for version 1 clients."
+  ], 
+  "revision_id": "859358"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-09T03:55:29.694174Z", 
+  "msg": [
+   "Remove the ioctl interface added to svn_stream_t in r19258, and use a", 
+   "wrapper object (svn_ra_svn_stream_t) instead.", 
+   "Suggested by: Greg Hudson <ghudson@mit.edu>", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_t): Update docstring.", 
+   "(svn_ioctl_fn_t): Removed.", 
+   "(svn_stream_set_ioctl, svn_stream_ioctl): Removed.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(struct svn_stream_t): Removed \"ioctl_fn\" member.", 
+   "(svn_stream_set_ioctl, svn_stream_ioctl): Removed.", 
+   "* subversion/libsvn_ra_svn/streams.c", 
+   "(pending): Update interface to work more cleanly with the new", 
+   "pending_fn_t interface.", 
+   "(file_ioctl_cb): Split into file_timeout_cb and file_pending_cb.", 
+   "(sock_ioctl_cb): Split into sock_timeout_cb and sock_pending_cb.", 
+   "(file_timeout_cb, file_pending_cb, sock_timeout_cb, sock_pending_cb):", 
+   "New functions.", 
+   "(svn_ra_svn__stream_pair_from_files, svn_ra_svn__stream_pair_from_sock):", 
+   "Update interfaces, create wrapper streams.", 
+   "(svn_ra_svn__stream_timeout, svn_ra_svn__stream_pending): New functions.", 
+   "* subversion/libsvn_ra_svn/ssl.c", 
+   "(ssl_baton): Change datatype of \"in\" and \"out\" to svn_ra_svn_stream_t", 
+   "from svn_stream_t.", 
+   "(network_biopair_interop): Update stream call-sites.", 
+   "(ssl_ioctl_cb): Split into ssl_timeout_cb and ssl_pending_cb.", 
+   "(ssl_timeout_cb, ssl_pending_cb): New functions.", 
+   "(wrap_conn): Create wrapper streams.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn__set_block_handler): Call svn_ra_svn__stream_timeout rather", 
+   "than the ioctl interface.", 
+   "(svn_ra_svn__input_waiting): Call svn_ra_svn__stream_pending rather than", 
+   "the ioctl interface.", 
+   "(writebuf_output, readbuf_input): Update stream call-sites.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "(SVN_RA_SVN__IOCTL_TIMEOUT, SVN_RA_SVN__IOCTL_PENDING): Removed.", 
+   "(pending_fn_t, timeout_fn_t): New callback types.", 
+   "(svn_ra_svn_stream_t): New type.", 
+   "(svn_ra_svn_conn_st): Change datatype of \"in_stream\" and \"out_stream\"", 
+   "to svn_ra_svn_stream_t from svn_stream_t.", 
+   "(svn_ra_svn__stream_pair_from_sock, svn_ra_svn__stream_pair_from_files):", 
+   "Update prototype.", 
+   "(svn_ra_svn__stream_timeout, svn_ra_svn__stream_pending): New prototypes."
+  ], 
+  "revision_id": "859357"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2006-04-09T02:03:48.131064Z", 
+  "msg": [
+   "Move SSL initialization to a more appropriate place.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(svn_ra_svn__ssl_initialize): New function prototype.", 
+   "* subversion/libsvn_subr/cmdline.c:", 
+   "(svn_cmdline_init): Remove SSL initialization.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(svn_ra_svn__init): Call svn_ra_svn__ssl_initialize().", 
+   "* subversion/libsvn_ra_svn/ssl.c", 
+   "(svn_ra_svn__ssl_initialize): New function.", 
+   "* subversion/svnserve/main.c", 
+   "(main): Call svn_ra_svn__ssl_initialize()."
+  ], 
+  "revision_id": "859356"
+ }
+]

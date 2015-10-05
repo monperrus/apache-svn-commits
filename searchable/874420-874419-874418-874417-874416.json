@@ -1,0 +1,85 @@
+[
+ {
+  "author": "sbutler", 
+  "date": "2008-11-22T23:53:30.035837Z", 
+  "msg": [
+   "TODO-1.6: Remove a done item."
+  ], 
+  "revision_id": "874420"
+ }, 
+ {
+  "author": "sbutler", 
+  "date": "2008-11-22T23:46:26.535061Z", 
+  "msg": [
+   "Properly loggify the recording of tree conflict data during update and", 
+   "switch.  The desired end result is the same as before; only the timing", 
+   "of the entry-writing has changed.  It's now consistent with the other", 
+   "loggy commands.", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__loggy_add_tree_conflict): Move to log.c, where the other", 
+   "svn_wc__loggy_* functions are.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(#include tree_conflicts.h): We need tree conflict helper functions.", 
+   "(svn_wc__loggy_add_tree_conflict): Move here from tree_conflicts.", 
+   "Change this function to simply write an <add-tree-conflict> log", 
+   "element in the victim's parent's log.", 
+   "(SVN_WC__LOG_ADD_TREE_CONFLICT,", 
+   "SVN_WC__LOG_ATTR_DATA): New XML element and attribute names.", 
+   "(log_runner): Add fields tree_conflicts_added (boolean) and", 
+   "tree_conflicts (array).  Add field result_pool to hold the tree", 
+   "conflicts.", 
+   "(log_do_add_tree_conflict): Sanity check a new tree conflict and", 
+   "add it to loggy->tree_conflicts.", 
+   "(start_handler): Support <add-tree-conflict> log elements.", 
+   "(run_log_from_memory): Note: no tree conflict support needed because", 
+   "this function doesn't update the entry.", 
+   "(run_log): If the log_runner has tree conflicts, encode them as text", 
+   "data and include them in the entry rewrite.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(make_depth_tree_conflicts): Correct errors in expected status.", 
+   "(verify_lines): New function borrowed from merge tests.", 
+   "(tree_conflicts_resolved_depth_immediates,", 
+   "tree_conflicts_resolved_depth_infinity): Allow expected output in", 
+   "any order."
+  ], 
+  "revision_id": "874419"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-11-22T23:34:51.619967Z", 
+  "msg": [
+   "Fix failing svnsync test 22, which does a byte-for-byte comparison of a", 
+   "dumpfile.", 
+   "Why this test only fails on Windows is beyond me, but the source of the", 
+   "failure isn't.  When retrieving a rep from the rep-cache, we only have the", 
+   "sha1 (since that's all that's stored in the rep cache), so the md5 wasn't", 
+   "being recorded in the dumpfile.  We solve this by simply copying the md5", 
+   "from the replaced rep.", 
+   "Found by: rhuijben", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(representation_string): Unconditionally print the md5, since we know we", 
+   "will always have one.", 
+   "(rep_write_contents_close): Copy the md5 from the current rep to the old", 
+   "one."
+  ], 
+  "revision_id": "874418"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-11-22T21:27:23.630381Z", 
+  "msg": [
+   "* TODO-1.6: Remove an item, specifically the bit about storing both sha1", 
+   "and md5 checksums for FSFS representations.  There's still a couple of ###", 
+   "comments in the code, but those fall under a different item in TODO-1.6."
+  ], 
+  "revision_id": "874417"
+ }, 
+ {
+  "author": "sbutler", 
+  "date": "2008-11-22T21:15:39.663476Z", 
+  "msg": [
+   "Create experimental branch for loggy writing of tree conflicts during update."
+  ], 
+  "revision_id": "874416"
+ }
+]

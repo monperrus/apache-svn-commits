@@ -1,0 +1,97 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2001-03-07T05:25:54.000000Z", 
+  "msg": [
+   "Patch by Mo DeJong  <mdejong@redhat.com>, reviewed and applied as is.", 
+   "Removed a block in main that was adding a \".\" argument if the command", 
+   "type is one of the commands that takes an implicit dot. This seems to", 
+   "be a bad idea since the main() function needs to know about every", 
+   "possible command and it is easy to miss one. For example, the diff", 
+   "command is not included in this list.  It really should be, `svn diff`", 
+   "should really work the same as `cvs diff`. It seems like a much better", 
+   "solution would be to do this implicit dot check inside the functions", 
+   "that actually need to do it.", 
+   "* subversion/client/cl.h (push_implicit_dot_target):", 
+   "Add header for new method defined in main.c.", 
+   "* subversion/client/commit-cmd.c (svn_cl__commit):", 
+   "Call push_implicit_dot_target.", 
+   "* subversion/client/diff-cmd.c (svn_cl__diff):", 
+   "Call push_implicit_dot_target.", 
+   "* subversion/client/main.c: #include <assert.h>,", 
+   "define push_implicit_dot_target. Remove error", 
+   "prone block of code to push implicit dot target", 
+   "by comparing to known commands.", 
+   "* subversion/client/propget-cmd.c (svn_cl__propget):", 
+   "* subversion/client/proplist-cmd.c (svn_cl__proplist):", 
+   "* subversion/client/status-cmd.c (svn_cl__status):", 
+   "* subversion/client/update-cmd.c (svn_cl__update):", 
+   "Call push_implicit_dot_target."
+  ], 
+  "revision_id": "838850"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-07T01:05:26.000000Z", 
+  "msg": [
+   "(abort_txn): Doc fixes and tweaks."
+  ], 
+  "revision_id": "838849"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-07T00:58:56.000000Z", 
+  "msg": [
+   "Finished svn_fs_abort_txn and friends:", 
+   "* fs-test.c (abort_txn): Completed.", 
+   "* txn.c (delete_from_id): New func.", 
+   "(svn_fs_abort_txn, txn_body_abort_txn, abort_txn_args): Filled in.", 
+   "* nodes-table.h, nodes-table.c (svn_fs__delete_nodes_entry): New name", 
+   "for what was svn_fs__delete_node_revision.", 
+   "* node-rev.h, node-rev.c (svn_fs__delete_node_revision): New wrapper", 
+   "for above, also taking the old name of above.  Don't be confused.", 
+   "* dag.h (svn_fs__dag_get_node): Doc fix.", 
+   "* dag.c (svn_fs__dag_get_node): Indentation fix.", 
+   "* svn_error.h (svn_errno_t): Doc fix for SVN_ERR_FS_NOT_MUTABLE.", 
+   "* svn_fs.h (svn_fs_open_txn): Promise that the error returned is", 
+   "SVN_ERR_FS_NO_SUCH_TRANSACTION if no such txn.", 
+   "* txn-table.h (svn_fs__get_txn): Same."
+  ], 
+  "revision_id": "838848"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-07T00:19:56.000000Z", 
+  "msg": [
+   "Oops, missed part of the previous commit."
+  ], 
+  "revision_id": "838847"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-07T00:17:53.000000Z", 
+  "msg": [
+   "Begin rewrite of filesystem commit-editor, using svn_fs.h interface", 
+   "instead of the dag.h layer.  Woohoo!", 
+   "* svn_fs.h (svn_fs_get_editor):  new base_path argument, change", 
+   "docstring promises accordingly.", 
+   "* editor.c (svn_fs_get_editor):  accept new base_path argument", 
+   "(struct edit_baton):  reorder args by hierarchy for readability.", 
+   "add base_path arg.", 
+   "(struct dir_baton):  remove dag_node_t, add absolute path, simplify.", 
+   "(struct file_baton): remove dag_node_t, add absolute path, simplify.", 
+   "(txn_body_clone_root, txn_body_delete, delete_args,", 
+   "txn_body_add_directory, txn_body_replace_directory, add_repl_args,", 
+   "txn_body_get_base_contents, txn_body_handle_window,", 
+   "handle_txdelta_args, txn_body_add_file, txn_body_replace_file,", 
+   "change_prop_args, txn_body_change_prop):", 
+   "remove all these things. We don't \"do\" db txns at this level.", 
+   "(replace_root):  greatly simplify.", 
+   "(close_edit): call svn_fs_abort_txn() if commit_txn", 
+   "fails.  call svn_fs_change_rev_prop to set log message.  (see code", 
+   "comments on both of these changes.)", 
+   "* svn_types.h (SVN_PROP_REVISION_LOG):  our very first reserved prop name. :)"
+  ], 
+  "revision_id": "838846"
+ }
+]

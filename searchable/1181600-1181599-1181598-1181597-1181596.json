@@ -1,0 +1,113 @@
+[
+ {
+  "author": "devinhan", 
+  "date": "2011-10-11T02:24:30.724595Z", 
+  "msg": [
+   "#ODFTOOLKIT-291# Adapt Simple API to the newest ODFDOM trunk.[Developer:Devin]"
+  ], 
+  "revision_id": "1181600"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:17.839937Z", 
+  "msg": [
+   "HFile-level load tester with compaction and random-read workloads", 
+   "Summary:", 
+   "This is a load testing tool for HFile implementations, which supports two", 
+   "workloads:", 
+   "- Compactions (merge the input HFiles). A special case of this is only one", 
+   "input, which allows to do HFile format conversions.", 
+   "- Random reads. Launches the specified number of threads that do seeks and", 
+   "short scans on randomly generated keys.", 
+   "The purpose of this tool is to ensure that HFile format v2 does not introduce", 
+   "performance regressions.", 
+   "Keys for the read workload are generated randomly between", 
+   "the first and the last key of the HFile. At each position, instead of precisely", 
+   "calculating the correct probability for every byte value b, we select a", 
+   "uniformly random byte between in the allowed [low, high] range. In addition,", 
+   "there is a heuristic that determines the positions at which the key has hex", 
+   "characters, and the random key contains hex characters at those positions as", 
+   "well.", 
+   "Example output for the random read workload:", 
+   "Time: 120 sec, seek/sec: 8290, kv/sec: 30351, kv bytes/sec: 91868121, blk/sec:", 
+   "10147, unique keys: 232779", 
+   "Test Plan: Run it (this is a test tool)", 
+   "Reviewed By: gqchen", 
+   "Reviewers: gqchen, pritam, liyintang, madhuvaidya", 
+   "CC: hbase@lists, , gqchen, mbautin", 
+   "Revert Plan: OK", 
+   "Differential Revision: 266598"
+  ], 
+  "revision_id": "1181599"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:10.233296Z", 
+  "msg": [
+   "Increase sleep times on unit tests for async operations.", 
+   "Summary:", 
+   "A few unit tests in TestFromClientSide.java used to sleep for a", 
+   "while after async operations. Due to the sleep duration being small, at", 
+   "times the unit tests would fail as a result of the async operations not", 
+   "completing for the duration of the sleep.", 
+   "Test Plan: 1) Run unit tests", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan", 
+   "CC: riley, , hbase@lists, kannan", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 278758"
+  ], 
+  "revision_id": "1181598"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:02.416728Z", 
+  "msg": [
+   "Some columns should be absent in TestMultiColumnScanner", 
+   "Summary: Modifying TestMultiColumnScanner to make sure that some queried", 
+   "columns are absent from some rows, as well as from the entire region. This might", 
+   "be a tricky case for D276420.", 
+   "Test Plan: Run test.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, liyintang", 
+   "CC: hbase@lists, , kannan", 
+   "Revert Plan: OK", 
+   "Differential Revision: 278299"
+  ], 
+  "revision_id": "1181597"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:23:58.159645Z", 
+  "msg": [
+   "HLog Pretty Printer Implementation (HBASE-3968)", 
+   "Summary:", 
+   "A pretty printer for write-ahead-logs in HBase, targeted for debugging", 
+   "purposes. Includes options for output to JSON as well as pretty formatting.", 
+   "Also implements filtering by region, sequence, or row, all handled by command", 
+   "line switches.", 
+   "Can be used on the command line or from within HBase itself.", 
+   "Test Plan:", 
+   "1. Build HBase including the pretty printer.", 
+   "2. Start HBase and create a table with multiple rows.", 
+   "3. Run `HBasePrettyPrinter -p <logfilepath>` and ensure sanity of output.", 
+   "4. Try filtering by region using '-r'", 
+   "5. Try filtering by sequence using '-s'", 
+   "6. Try filtering by row using '-w'", 
+   "7. Get JSON output for a desired query using '-j' and pipe this output to a PHP", 
+   "script that runs 'json_decode' on its input. Sanity check that the script", 
+   "correctly decoded valid JSON.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg", 
+   "CC: nspiegelberg, riley, hbase@lists", 
+   "Revert Plan: Simple removal of the new class is safe; nothing depends on it.", 
+   "Differential Revision: 274539", 
+   "Task ID: 592510"
+  ], 
+  "revision_id": "1181596"
+ }
+]

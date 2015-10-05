@@ -1,0 +1,123 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2011-03-22T20:08:57.622676Z", 
+  "msg": [
+   "Add a command line option (--source-prop-encoding) to the svnsync", 
+   "init, sync, and copy-revprops subcommands that allows the user to", 
+   "specify the character encoding of translatable properties from the", 
+   "source repository. This is needed to allow svnsync to sync some older", 
+   "Subversion repositories that have properties that were not encoded in", 
+   "UTF-8.", 
+   "As discussed at:", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.user/100020", 
+   "Message-ID: loom.20100909T000542-92@post.gmane.org", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.devel/122518", 
+   "Message-ID: AANLkTimYFxPkOs9OkCd3TV8tDJZnHB6Y0AwBXNT+r-PO@mail.gmail.com", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.devel/122550", 
+   "Message-ID: AANLkTik11JLJxnNQGBUnZwenyJJ5_Yutut0wkSbEyPp5@mail.gmail.com", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.devel/124731", 
+   "Message-ID: AANLkTikJD3bWBigqWKJdeAKUb49-WjaWSZj8iYZAEwE8@mail.gmail.com", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.devel/125057", 
+   "Message-ID: AANLkTin48EYeJiG4TYVpTOVELYGR1RFXk-_tKjHwoJEX@mail.gmail.com", 
+   "http://thread.gmane.org/gmane.comp.version-control.subversion.devel/125783", 
+   "Message-ID: AANLkTimjj48xt4s=zOqC6GxoPPEdLpfSB9YmBY=7B4-5@mail.gmail.com", 
+   "Most of the work is just to pass the value of the --source-prop-encoding", 
+   "option through to the functions that need it, the foremost of which is", 
+   "subversion/svnsync/sync.c:normalize_string().", 
+   "* subversion/svnsync/main.c", 
+   "(svnsync__opt) Add svnsync_opt_source_encoding.", 
+   "(svnsync_cmd_table): Add svnsync_opt_source_encoding to the list of", 
+   "acceptable options for the init, sync, and copy-revprops subcommands.", 
+   "(svnsync_options): Add a description of the --source-prop-encoding option.", 
+   "(opt_baton_t, subcommand_baton_t): Add the SOURCE_PROP_ENCODING field.", 
+   "(copy_revprops): Add the SOURCE_PROP_ENCODING parameter.  Pass it", 
+   "through to svnsync_normalize_revprops().", 
+   "(make_subcommand_baton): Set the SOURCE_PROP_ENCODING field of the", 
+   "resulting subcommand_baton_t object to the value of", 
+   "SOURCE_PROP_ENCODING from the opt_baton_t object.", 
+   "(do_initialize, do_synchronize, do_copy_revprops,", 
+   "replay_rev_started, replay_rev_finished): Pass SOURCE_PROP_ENCODING", 
+   "to svnsync_* functions and copy_revprops().", 
+   "(main): Handle the case when the command line option is", 
+   "--source-prop-encoding. Set the SOURCE_PROP_ENCODING field of the", 
+   "opt_baton_t object to either OPT_ARG or NULL.", 
+   "* subversion/svnsync/sync.c", 
+   "(normalize_string): Add the SOURCE_PROP_ENCODING parameter.  Always", 
+   "call svn_subst_translate_string2().  Switch to the \"two pools\"", 
+   "(result/scratch) pattern.", 
+   "(svnsync_normalize_revprops): Add the SOURCE_PROP_ENCODING", 
+   "parameter.  Pass the value through to normalize_string().", 
+   "(edit_baton_t): Add the SOURCE_PROP_ENCODING field.", 
+   "(change_file_prop, change_dir_prop): Pass SOURCE_PROP_ENCODING from", 
+   "the edit baton to normalize_string().", 
+   "(svnsync_get_sync_editor): Add the SOURCE_PROP_ENCODING parameter.", 
+   "* subversion/svnsync/sync.h", 
+   "(svnsync_normalize_revprops): Add the SOURCE_PROP_ENCODING", 
+   "parameter. Update the documentation of the function.", 
+   "(svnsync_get_sync_editor): Add the SOURCE_PROP_ENCODING", 
+   "parameter. Update the documentation of the function.", 
+   "* subversion/tests/cmdline/svnrdump_tests.py", 
+   "(copy_bad_line_endings2_dump): New test case.", 
+   "(test_list): Add copy_bad_line_endings2_dump.", 
+   "* subversion/tests/cmdline/svnsync_tests.py", 
+   "(run_sync): Add the SOURCE_PROP_ENCODING parameter. Build up the", 
+   "command line arguments to `svnsync synchronize`.", 
+   "(run_copy_revprops): Add the SOURCE_PROP_ENCODING parameter. Build", 
+   "up the command line arguments to `svnsync copy-revprops`.", 
+   "(run_init): Add the SOURCE_PROP_ENCODING parameter. Build up the", 
+   "command line arguments to `svnsync initialize`.", 
+   "(setup_and_sync): Add the SOURCE_PROP_ENCODING parameter. Pass the", 
+   "value through to run_init(), run_sync(), and run_copy_revprops().", 
+   "(run_test): Add the SOURCE_PROP_ENCODING parameter. Pass the value", 
+   "through to setup_and_sync().", 
+   "(copy_bad_line_endings2, copy_bad_encoding, identity_copy): New test", 
+   "cases.", 
+   "(test_list): Add reference to new test cases.", 
+   "* subversion/tests/cmdline/svnrdump_tests_data/copy-bad-line-endings2.dump,", 
+   "* subversion/tests/cmdline/svnrdump_tests_data/copy-bad-line-endings2.expected.dump,", 
+   "* subversion/tests/cmdline/svnsync_tests_data/copy-bad-encoding.dump,", 
+   "* subversion/tests/cmdline/svnsync_tests_data/copy-bad-encoding.expected.dump,", 
+   "* subversion/tests/cmdline/svnsync_tests_data/copy-bad-line-endings2.dump,", 
+   "* subversion/tests/cmdline/svnsync_tests_data/copy-bad-line-endings2.expected.dump", 
+   "Data files for new tests.", 
+   "Patch by: Danny Trebbien <dtrebbien@gmail.com>"
+  ], 
+  "revision_id": "1084335"
+ }, 
+ {
+  "author": "jgomes", 
+  "date": "2011-03-22T20:06:40.670953Z", 
+  "msg": [
+   "Update EMS provider to use the TIBCO.EMS 6.0.1 assembly."
+  ], 
+  "revision_id": "1084334"
+ }, 
+ {
+  "author": "thomasm", 
+  "date": "2011-03-22T20:06:37.017956Z", 
+  "msg": [
+   "Events with Jsop (Json diff) serialization"
+  ], 
+  "revision_id": "1084333"
+ }, 
+ {
+  "author": "thomasm", 
+  "date": "2011-03-22T20:05:38.632809Z", 
+  "msg": [
+   "Json/Jsop Tokenizer"
+  ], 
+  "revision_id": "1084332"
+ }, 
+ {
+  "author": "dblevins", 
+  "date": "2011-03-22T20:00:26.410605Z", 
+  "msg": [
+   "XBEAN-165: Meta Annotation Support", 
+   "XBEAN-166 : Class Name Filtering for Optimized Scanning", 
+   "XBEAN-167:  Archive Interface for cleaner integration of Classpath and OSGi based systems", 
+   "Moving these over to an AnnotationFinder class with restored svn history"
+  ], 
+  "revision_id": "1084331"
+ }
+]

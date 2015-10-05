@@ -1,0 +1,84 @@
+[
+ {
+  "author": "jvanzyl", 
+  "date": "2010-04-10T11:34:15.763844Z", 
+  "msg": [
+   "[maven-scm] copy for tag maven-compiler-plugin-2.3"
+  ], 
+  "revision_id": "932695"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2010-04-10T11:34:09.161827Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release maven-compiler-plugin-2.3"
+  ], 
+  "revision_id": "932694"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T11:16:39.660550Z", 
+  "msg": [
+   "Adjust install_text_base (in update_editor) to directly queue operations,", 
+   "rather than place them into an accumulator.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(install_text_base): adjust params, and alter internal logic to directly", 
+   "queue the operations.", 
+   "(merge_file): shift the flushing of *LOG_ACCUM to before the", 
+   "install_text_base call (we don't need it to catch ops from that func).", 
+   "adjust params to install_text_base.", 
+   "(svn_wc_add_repos_file4): adjust params to install_text_base"
+  ], 
+  "revision_id": "932693"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T11:11:36.679775Z", 
+  "msg": [
+   "Convert loggy_entry_modify() to direct queueing, rather than using an", 
+   "accumulator.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_entry_modify): adjust params", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_entry_modify): take a DB, and lose the LOG_ACCUM and", 
+   "RESULT_POOL. adjust logic to directly queue the resulting ops.", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(save_merge_result): unrelated varname consistency changes", 
+   "(preserve_pre_merge_files): adjust logic for calling loggy_entry_modify", 
+   "(merge_binary_file): change params to loggy_entry_modify, and no need to", 
+   "flush LOG_ACCUM afterwards.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc__merge_props): adjust logic for calling loggy_entry_modify", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(do_entry_deletion, svn_wc_add_repos_file4): adjust logic for calling", 
+   "loggy_entry_modify."
+  ], 
+  "revision_id": "932692"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T10:58:57.919604Z", 
+  "msg": [
+   "Boom! Get rid of a bunch of tweaky edits during update, in favor of a", 
+   "single atomic add/replace of the BASE node.", 
+   "This also happens to fix depth_tests 32. Haven't investigated why.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(make_file_baton): ensure that FB->NEW_RELPATH is set. leave a comment", 
+   "asking why this isn't a simple value derivation.", 
+   "(loggy_tweak_base_node): die, beyotch.", 
+   "(merge_file): skip all attempts at entry-based modifications.", 
+   "(construct_base_node): you die, too, sucka.", 
+   "(close_file): skip calls to construct_base_ndoe,", 
+   "svn_wc__db_temp_op_set_base_last_change, and loggy_tweak_base_node.", 
+   "they all did partial edits of the node, which is... bad. add new code", 
+   "to call svn_wc__db_base_add_file to insert/replace the BASE node with", 
+   "all the right values, in one fell swoop. once that is done, then we", 
+   "jigger around with other crap: maintaining file external data, and", 
+   "possibly create/delete a corresponding WORKING node.", 
+   "* subversion/tests/cmdline/depth_tests.py:", 
+   "(test_list): excluded_path_update_operation now succeeds. seems that we", 
+   "might be managing the depth value better."
+  ], 
+  "revision_id": "932691"
+ }
+]

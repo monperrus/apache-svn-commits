@@ -1,0 +1,67 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2000-10-19T22:54:23.000000Z", 
+  "msg": [
+   "* io.c (svn_io_file_reader, svn_io_file_writer):  generic routines to", 
+   "read and write open filehandles, conforming to svn_read_fn_t and", 
+   "svn_write_fn_t.   Lots of folks need these, I think.", 
+   "* svn_io.h (svn_io_file_reader, svn_io_file_writer): declarations of", 
+   "above.", 
+   "* commit.c (generic_write) removed in favor of above, changed one", 
+   "caller to it.", 
+   "* adm_crawler.c (posix_reader) removed in favor above, changed callers.", 
+   "* commit-test.c: add -x flag to optionally use Greg Hudson's XML", 
+   "output editor instead of the \"generic\" test editor.", 
+   "KARL:  please fix the above.  commit-test.c is trying to open a", 
+   "filehandle to stdout.  Apparently the \"-\" doesn't work.  :)"
+  ], 
+  "revision_id": "837735"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-10-19T22:30:50.000000Z", 
+  "msg": [
+   "(svn_wc__cleanup): added bail_on_lock argument.  All callers changed."
+  ], 
+  "revision_id": "837734"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-10-19T22:09:28.000000Z", 
+  "msg": [
+   "(svn_wc__cleanup): new func.", 
+   "(svn_wc_close_commit): filled in."
+  ], 
+  "revision_id": "837733"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-10-19T21:54:04.000000Z", 
+  "msg": [
+   "(svn_wc__adm_path, svn_wc__locked, svn_wc__log_commit): new funcs."
+  ], 
+  "revision_id": "837732"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-10-19T21:49:52.000000Z", 
+  "msg": [
+   "Add directory locking to the commit-crawler; also make it send diffs", 
+   "against a temporary *copy* of the working file, not the file itself.", 
+   "* adm_files.c (apr_copy_file):  add declaration, to make compiler happy.", 
+   "* adm_crawler.c (do_lock): new routine which locks a dir and stores in", 
+   "a hash.  If lock fails, all locks in the hash are unlocked and the", 
+   "commit bails.", 
+   "(do_dir_replaces): now takes a `locks' hash and top-level pool; the", 
+   "main caller of do_lock(), since we want to lock a directory whenever", 
+   "we call replace_directory().", 
+   "(do_apply_textdelta): copy working file to tmp area, then open *that*", 
+   "file handle for diffing.", 
+   "(process_subdirectory): now takes `locks' hash; changed calls to", 
+   "do_dir_replaces().", 
+   "(svn_wc_crawl_local_mods):  adjust call to to process_subdirectory()."
+  ], 
+  "revision_id": "837731"
+ }
+]

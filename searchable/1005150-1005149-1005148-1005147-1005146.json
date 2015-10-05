@@ -1,0 +1,70 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:24.483374Z", 
+  "msg": [
+   "THRIFT-929. cpp: Use boost::lognormal_distribution in ZlibTest", 
+   "This way we no longer have to have a huge hard-coded list of numbers in", 
+   "the source code.  The distribution is randomly generated for each run.", 
+   "(Although the --seed argument can be used for repeatablity.)"
+  ], 
+  "revision_id": "1005150"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:23.319122Z", 
+  "msg": [
+   "THRIFT-929. cpp: Convert ZlibTest to use the boost unit test framework"
+  ], 
+  "revision_id": "1005149"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:21.992875Z", 
+  "msg": [
+   "THRIFT-929. cpp: Remove TZlibTest dependency on filesystem data", 
+   "Previously, ZlibTest read a file from disk to get data to test with.", 
+   "It would fail unless gen-cpp/DebugProtoTest_types.tcc was present in the", 
+   "current directory and was at least 32kB long.", 
+   "Now ZlibTest simply generates 3 separate buffers to test with.  The", 
+   "first buffer is just all \"a\"s, the second is some random sequential", 
+   "runs, and the third is completely random.  They usually seem to have", 
+   "compression ratios of around 315:1, 4:1, and 1:1, respectively."
+  ], 
+  "revision_id": "1005148"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:20.882761Z", 
+  "msg": [
+   "THRIFT-929. cpp: Fix a couple minor issues in ZlibTest", 
+   "- Add a necessary cast.", 
+   "- Check buffer sizes more carefully to allow for different read/write", 
+   "size distributions."
+  ], 
+  "revision_id": "1005147"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:19.505121Z", 
+  "msg": [
+   "THRIFT-929. cpp: Add unit test for transport functionality", 
+   "Tests various transport types by writing data, and verifying it can be", 
+   "read back successfully.  Tests both virtual calls (accessed as", 
+   "TTransport*) and non-virtual calls (accessed as the appropriate pointer", 
+   "type, or as TBufferBase* when appropriate).", 
+   "This is similar to some of the tests already performed in", 
+   "TMemoryBufferTest and ZlibTest.cpp.  However, this tests a few more", 
+   "transport types, and it interleaves read and write calls more heavily.", 
+   "(It currently exposes some bugs in flush() in a couple transports.) It", 
+   "also exercises both the virtual and non-virtual code paths, now that", 
+   "read() and write() only result in virtual calls when invoked on a", 
+   "TTransport*.", 
+   "TFileTransport currently has several race condition bugs, so most of the", 
+   "TFileTransport tests ususally fail.  It also has some performance bugs,", 
+   "causing the TFileTransport tests to take a long time.  Will fix those", 
+   "issues separately."
+  ], 
+  "revision_id": "1005146"
+ }
+]

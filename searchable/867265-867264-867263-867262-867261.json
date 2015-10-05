@@ -1,0 +1,99 @@
+[
+ {
+  "author": "kameshj", 
+  "date": "2007-10-15T14:24:56.538179Z", 
+  "msg": [
+   "Fix #2963 'Fix merge range notification which gives a false alarm of", 
+   "repeat merge'.", 
+   "This commit makes", 
+   "* the merge notification to happen only for an operative merge in case", 
+   "of same url merge.", 
+   "* the merge notification target would be the nearest item in", 
+   "'children_with_mergeinfo' from the current notify->path and", 
+   "the merge revisions shown in the notification is first item from", 
+   "the 'remaining_ranges' of corresponding item from children_with_mergeinfo.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_fails_if_subtree_is_deleted_on_src): Fix the expected output as per", 
+   "above explanation.", 
+   "(test_list): Remove XFail marker on", 
+   "'merge_fails_if_subtree_is_deleted_on_src'.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(notification_receiver_baton_t): Add 'is_single_file_merge',", 
+   "'children_with_mergeinfo', 'cur_ancestor_index', 'merge_b'.", 
+   "(find_nearest_ancestor): New function.", 
+   "(notification_receiver): Notify merge notification lines as appropriate.", 
+   "(do_merge): Do merge begin notification only for 3 way merge only, same url", 
+   "merge will be taken care by 'notification_receiver'.", 
+   "(discover_and_merge_children): Populate 'notify_b->children_with_mergeinfo'.", 
+   "Initialize notify_b->cur_ancestor_index to '-1' before each do_merge call.", 
+   "(svn_client_merge3, svn_client_merge_peg3):", 
+   "Initialize 'notification_receiver_baton_t' with new members."
+  ], 
+  "revision_id": "867265"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-10-15T13:57:04.923733Z", 
+  "msg": [
+   "Fix authz_tests 2 over ra_neon, where writing to /A/B/E needs write access to", 
+   "/A and /A/B.", 
+   "This change eliminates ra_neon getting the version resource URL from the", 
+   "server for those intermediate directories, thereby currently failing", 
+   "authorization if those directories aren't writeable to the user. The version", 
+   "resource URL can be calculated from the parent's version resource URL and the", 
+   "name of the child resource. This also avoids unneeded PROPFIND requests to", 
+   "the server.", 
+   "* subversion/libsvn_ra_neon/commit.c", 
+   "(version_rsrc_t): add member variable for the name of the resource.", 
+   "(get_version_url): take parent resource parameter, use it to calculate the", 
+   "child version resource URL if we don't have it stored already, or we're", 
+   "forced to get it from the server.", 
+   "(add_child): fill in name of the child resource. Update call to", 
+   "get_version_url to pass the parent resource.", 
+   "(checkout_resource, commit_open_root): update calls to get_version_url.", 
+   "* subversion/tests/cmdline/authz_tests.py", 
+   "(test_list): mark authz_open_directory as passing now."
+  ], 
+  "revision_id": "867264"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-15T12:09:25.565153Z", 
+  "msg": [
+   "Add initial ra-neon implementation of the get-location-segments RA API.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(ELEM_get_location_segments_report): New enum value.", 
+   "* subversion/libsvn_ra_neon/fetch.c", 
+   "(gls_report_elements, get_location_segments_baton_t,", 
+   "gls_start_element): New.", 
+   "(dav_svn__get_location_segments_report): Actually implement this function."
+  ], 
+  "revision_id": "867263"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-15T12:05:22.625604Z", 
+  "msg": [
+   "Add mod_dav_svn REPORT handler for get-location-segments RA API.", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(deliver_report): Handle new get-location-segments REPORT request.", 
+   "* subversion/mod_dav_svn/dav_svn.h", 
+   "(dav_svn__get_location_segments_report): New prototype.", 
+   "* subversion/mod_dav_svn/reports/get-location-segments.c", 
+   "New file with get-location-segments REPORT handler implementation."
+  ], 
+  "revision_id": "867262"
+ }, 
+ {
+  "author": "markphip", 
+  "date": "2007-10-15T12:00:23.841183Z", 
+  "msg": [
+   "A follow-up to r27186, fixing the breakage it caused to the JavaHL tests.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java", 
+   "(testMergeConflictResolution): Adjust for rename of", 
+   "ConflictResolverCallback.Result to ConflictResolverCallback.Choice."
+  ], 
+  "revision_id": "867261"
+ }
+]

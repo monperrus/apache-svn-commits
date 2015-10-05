@@ -1,0 +1,75 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-07-17T14:31:20.579171Z", 
+  "msg": [
+   "Add a note about conflict resolution for r32153."
+  ], 
+  "revision_id": "872230"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-07-17T14:23:37.058023Z", 
+  "msg": [
+   "STATUS: Vote for all revisions in issue-3067 group."
+  ], 
+  "revision_id": "872229"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-07-17T14:14:36.907055Z", 
+  "msg": [
+   "Propose r32153 for backport."
+  ], 
+  "revision_id": "872228"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-07-17T14:10:23.585553Z", 
+  "msg": [
+   "Finish issue #3220 ('svn log -g' seems quite slow) and, as a bonus", 
+   "side-effect, also finish issue #3235 ('log -g' merge determination", 
+   "logic faulty).", 
+   "[Merge the entirety of the issue-3220-dev branch to trunk.]", 
+   "Prior to this change, the method used by 'log -g' for determining what", 
+   "merges were made in a revision was:", 
+   "- fetch all the mergeinfo found in REV", 
+   "- fetch all the mergeinfo found in REV-1", 
+   "- compare, contrast, and collapse the results", 
+   "The problems with this approach are two-fold.  First, it's slow, and", 
+   "it gets slower as more paths in a revision grow mergeinfo.  Secondly,", 
+   "it's just wrong.  Just because mergeinfo appears or disappears doesn't", 
+   "mean a merge was done -- perhaps a path that held some mergeinfo was", 
+   "merely deleted.", 
+   "This new approach is to look at only the paths changed in REV, and see", 
+   "if/how their mergeinfo changed.  This is much, much faster on average", 
+   "for a repository actually using mergeinfo, and much more accurate as", 
+   "well.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(fs_mergeinfo_changed): New (pretty-generic) mergeinfo change", 
+   "calculation function.", 
+   "(get_combined_mergeinfo_changes): New, supercedes ...", 
+   "(get_combined_mergeinfo, get_merged_rev_mergeinfo): ...these, which", 
+   "are now removed.", 
+   "(do_logs): Use get_combined_mergeinfo_changes() instead of", 
+   "get_merged_rev_mergeinfo().", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos__prev_location): New prototype.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos__prev_location): Was prev_location(), now module-public.", 
+   "Allow prev_rev, prev_path, and appeared_rev parameters to be NULL,", 
+   "in which case (for each) don't try to set their pointer values.", 
+   "Callers updated."
+  ], 
+  "revision_id": "872227"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2008-07-17T13:33:19.859937Z", 
+  "msg": [
+   "French translation update for r32150:", 
+   "* subversion/po/fr.po: po-update, 4 new and 7 fixes."
+  ], 
+  "revision_id": "872226"
+ }
+]

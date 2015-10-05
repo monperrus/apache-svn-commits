@@ -1,0 +1,70 @@
+[
+ {
+  "author": "hansbak", 
+  "date": "2011-05-11T04:14:47.776837Z", 
+  "msg": [
+   "commenting out the supplierCommissionPerc field on product supplier. Field not used in processing and can only confuse people because we now have the commission run in accounting which can take care of this."
+  ], 
+  "revision_id": "1101740"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-11T04:10:59.893117Z", 
+  "msg": [
+   "Merge -r 1101736:1101737 from trunk to branch-0.22. Fixes: HDFS-1544"
+  ], 
+  "revision_id": "1101739"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-05-11T04:06:57.441860Z", 
+  "msg": [
+   "Factor out the notification work for op_delete() and op_set_changelist()", 
+   "into new callbacks, which are then used by a new utility function that", 
+   "ensures the \"finalization\" statements are executed (to delete the", 
+   "temporary tables and triggers).", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(with_triggers): ensure the DROP_TRIGGER statements are executed before", 
+   "this function returns.", 
+   "(work_callback_t): new type for the \"work\" callback from the", 
+   "finalization utility. the work callback is where the notification code", 
+   "will be executed.", 
+   "(with_finalization): new utility function to run a transaction, run some", 
+   "work (the notifications), and then ensure that cleanup is performed.", 
+   "(set_changelist_txn): create the temporary table and triggers at the", 
+   "start of the transaction.", 
+   "(do_changelist_notify): factored out of svn_wc__db_op_set_changelist().", 
+   "it runs all the notifications for the changelist changes (as a \"work\"", 
+   "callback for with_finalization)", 
+   "(svn_wc__db_op_set_changelist): factor out the notification t", 
+   "do_changelist_notify, and rejigger to call with_finalization.", 
+   "(svn_wc__db_op_revert): leave a note that the flush_entries() call is", 
+   "insufficient for infinite-depth reverts.", 
+   "(do_delete_notify): factored out of svn_wc__db_Op_delete(). it runs all", 
+   "the notifications for the deletions (as a \"work\" callback for", 
+   "with_finalization).", 
+   "(svn_wc__db_op_delete): factor out the notifications and call", 
+   "with_finalization.", 
+   "* subversion/libsvn_wc/wc-queries.sql:", 
+   "(STMT_DROP_CHANGELIST_LIST_TRIGGERS): removed. folded the DROP TRIGGER", 
+   "statements into STMT_DROP_CHANGELIST_LIST"
+  ], 
+  "revision_id": "1101738"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-11T04:06:26.584855Z", 
+  "msg": [
+   "HDFS-1544. Ivy resolve force mode should be turned off by default. Contributed by Luke Lu."
+  ], 
+  "revision_id": "1101737"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-11T03:59:10.875176Z", 
+  "msg": [
+   "Merge -r 1101734:1101735 from trunk to branch-0.22. Fixes: HADOOP-7068"
+  ], 
+  "revision_id": "1101736"
+ }
+]

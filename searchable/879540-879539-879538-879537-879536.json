@@ -1,0 +1,116 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-19T20:43:30.541228Z", 
+  "msg": [
+   "Shift revert_admin_things() from a loggy-based process in adm_ops.c to a", 
+   "workqueue-based approach.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_add_revert): adjust params to include WILL_REVERT output", 
+   "parameter, to take USE_COMMIT_TIMES, and to no longer pass", 
+   "ORIG_SCHEDULE.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(OP_REVERT): put the operation name into a symbolic constant to prevent", 
+   "typos (which actually happened once already :-P)", 
+   "(copy_and_translate): new function to install a translated text file,", 
+   "based on the svn_wc__xfer_cp_and_translate option in log.c", 
+   "(run_revert): brand new implementation, based on revert_admin_things", 
+   "from adm_ops.c.", 
+   "(dispatch_table): switch to OP_REVERT", 
+   "(svn_wc__wq_run): work items are skel lists, with the first child an", 
+   "atom specifying the operation. correct the extract-and-test.", 
+   "(verify_pristine_present): new function to handle issue #2101 and", 
+   "produce an error informing the user of the problem. copy_tests 24", 
+   "produces this (erroneous) situation and checks for proper output, so", 
+   "we need to faithfully reproduce it.", 
+   "(svn_wc__wq_add_revert): rejigger the parameters and flesh out the", 
+   "implementation. much of this is to determine *whether* a revert should", 
+   "take place, and to gather a few parameters for that operation."
+  ], 
+  "revision_id": "879540"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2009-09-19T17:36:54.734079Z", 
+  "msg": [
+   "Typo fixes.", 
+   "* notes/object-model.txt", 
+   "(Guidelines): Subverion \u2192 Subversion", 
+   "* subversion/libsvn_fs_base/bdb/txn-table.h", 
+   "Suversion \u2192 Subversion", 
+   "* subversion/libsvn_subr/subst.c", 
+   "substition \u2192 substitution", 
+   "* subversion/tests/libsvn_subr/error-test.c", 
+   "(test_error_root_cause): teh \u2192 the", 
+   "* www/links.html", 
+   "(Suafe): Subverion \u2192 Subversion", 
+   "* www/svn_1.6_releasenotes.html", 
+   "(sparse-directory-exclusion): Subvesion \u2192 Subversion", 
+   "* www/testimonials.html", 
+   "TortiseSVN \u2192 TortoiseSVN"
+  ], 
+  "revision_id": "879539"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-19T12:35:42.800964Z", 
+  "msg": [
+   "Follow-up to r39463:", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(svn_diff__parse_next_patch): Destroying an iterpool in the same scope", 
+   "that created it is a good idea."
+  ], 
+  "revision_id": "879538"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-09-19T12:26:52.364967Z", 
+  "msg": [
+   "Tweak the diff parsing API so that all hunks from a patch can be", 
+   "parsed with a single function call. All information about all hunks", 
+   "is now immediately available to the caller.", 
+   "No functional change. Rather, this is a first step towards more correctness", 
+   "during patch application. Right now, hunks which match very late (e.g. at", 
+   "the end of the target file) can cause subsequent hunks read from the patch", 
+   "to be dropped silently. This is obviously not ideal and upcoming changes", 
+   "will address this problem.", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(svn_diff__parse_next_patch): Move to the end of this file to avoid", 
+   "forward declarations. Parse all hunks from the patch within here.", 
+   "(svn_diff__parse_next_hunk): Renamed to ...", 
+   "(parse_next_hunk): ... this, and now static. Also take a STREAM argument", 
+   "to avoid opening and closing a stream for each hunk parsed.", 
+   "(svn_diff__destroy_hunk): Renamed to ...", 
+   "(close_hunk): ... this, and now static.", 
+   "(svn_diff__close_patch): New.", 
+   "* subversion/libsvn_client/patch.c,", 
+   "subversion/tests/libsvn_diff/parse-diff-test.c", 
+   "(apply_one_patch, apply_textdiffs, test_parse_unidiff): Track changes", 
+   "made to diff parsing API.", 
+   "* subversion/include/private/svn_diff_private.h", 
+   "(svn_patch_t): New member HUNKS.", 
+   "(svn_diff__close_patch): Declare.", 
+   "(svn_diff__destroy_hunk): Undeclare, moved to parse-diff.c"
+  ], 
+  "revision_id": "879537"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-19T12:08:50.482903Z", 
+  "msg": [
+   "Use result_pool/scratch_pool paradigm in libsvn_wc.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(...): renamed all pool parameters to result_pool or scratch_pool, or", 
+   "split them into result_pool and scratch_pool depending on a functions", 
+   "pool usage.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "* subversion/libsvn_wc/props.c:", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(...): adjusted all calls to log.h to use two pool parameters.", 
+   "Patch by: Martin Hauner <martin.hauner{_at_}gmx.net>"
+  ], 
+  "revision_id": "879536"
+ }
+]

@@ -1,0 +1,93 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-08-17T18:06:42.913730Z", 
+  "msg": [
+   "*** Reverted in r26142.  Will be handled under the auspices of issue #571. ***", 
+   "Change the expected output for the scenario of removing a directory,", 
+   "commiting the removal, coping another directory in place of the old", 
+   "directory, commiting that, then performing a reverse merge to restore", 
+   "the initial directory from 'A ' (add of the directory) to 'R '", 
+   "(replace of the directory).", 
+   "Eric H. suggests fixing this by changing the merge callbacks maintain", 
+   "some state in their baton to track whether a remove has already", 
+   "occurred on a path which is getting a subsequent add.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir): Expect", 
+   "'R ' instead of 'A ' for the reverse merge which replaces 'A/D/G'.", 
+   "(test_list): Mark", 
+   "status_of_missing_dir_after_revert_replaced_with_history_dir as XFAIL."
+  ], 
+  "revision_id": "866210"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-08-17T17:48:36.198789Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(single_file_replace_style_merge_capability): Use issue reference", 
+   "style consistent with that of other tests."
+  ], 
+  "revision_id": "866209"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-17T17:18:42.582017Z", 
+  "msg": [
+   "On the merged-sensitive-blame branch:", 
+   "Add a couple of TODOs with possible optimization ideas.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(get_merged_path_revisions):  Add a note about repeated revision searching.", 
+   "* subversion/libsvn_client/blame.c", 
+   "(svn_client_blame4): Add a note about multiple RA invocations."
+  ], 
+  "revision_id": "866208"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-17T17:05:58.588323Z", 
+  "msg": [
+   "On the merged-sensitive-blame branch:", 
+   "When finding interesting revisions, check to make sure that the file exists.", 
+   "If on the initial line of history, return the error.  If checking for merged", 
+   "revisions, catch the error, and continue.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(get_merged_path_revisions): Catch the SVN_ERR_FS_NOT_FILE error from", 
+   "find_interesting_revisions().", 
+   "(find_interesting_revisions): Make sure that the path exists in the last", 
+   "revision as a file.", 
+   "(svn_repos_get_file_revs2): Remove the check for file existence, and", 
+   "rearrange a couple of variable declarations.", 
+   "* subversion/tests/cmdline/blame_tests.py", 
+   "(blame_merge_out_of_range): New test.", 
+   "(test_list): Run the new test."
+  ], 
+  "revision_id": "866207"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-08-17T17:03:24.807563Z", 
+  "msg": [
+   "Optimizations and improvements to fsfs-reshard.py.", 
+   "* tools/server-side/fsfs-reshard.py", 
+   "(check_fs_format): Return bool whether the filesystem is sharded.", 
+   "(main): Use check_fs_format's return value to skip the linearise call if", 
+   "the repository is not sharded.", 
+   "* tools/server-side/fsfs-reshard.py", 
+   "(current_file): New function to return the contents of the current file.", 
+   "(shard): Take new start and end arguments, specifying the start and end", 
+   "revisions to shard.  Use xrange to iterate from start to end rather", 
+   "than listing the directories.", 
+   "(main): Accept optional start/end revisions from the command-line; if", 
+   "they're missing, use 0 for start and HEAD for end (using current_file).", 
+   "Pass start and end to shard.", 
+   "* tools/server-side/fsfs-reshard.py", 
+   "(shard): Create temporary .reshard directories directly under db, so that", 
+   "repositories which have already reached the limit on directory size can", 
+   "be resharded; don't complain if they already exist, to allow parallel", 
+   "reshard jobs.", 
+   "Patch by: epg"
+  ], 
+  "revision_id": "866206"
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2009-12-18T00:31:31.890697Z", 
+  "msg": [
+   "On the 'issue-3550-dev' branch, continue teaching the BDB backend to", 
+   "correctly find and manipulate path change records.", 
+   "NOTE: This change makes svn_fs_paths_changed2() and friends read path", 
+   "change records using a BDB transaction.  Back in r847868, I", 
+   "explicitly made this code not use a BDB transaction, but I can't", 
+   "find anything that reminds me if that was done because of actual", 
+   "problems seen, or if it was done pre-emptively.  When I do some", 
+   "testing of lock usage before and after this change, though, I", 
+   "see no change in maximum lock usage, and actually a *reduction*", 
+   "in total number of requested locks (by, like, 50%).", 
+   "* subversion/libsvn_fs_base/fs.h", 
+   "(struct transaction_t): Tweak comment for 'changes_id' member to", 
+   "correct a typo, but also to no longer indicate that this member", 
+   "may be NULL.", 
+   "* subversion/libsvn_fs_base/bdb/txn-table.c", 
+   "(svn_fs_bdb__get_txn): Ensure that the returned transaction_t has a", 
+   "valid 'changes_id' member.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(verify_locks): Call svn_fs_base__txn_get_changes_id() and", 
+   "use the result to lookup changed paths.", 
+   "(txn_body_paths_changed): Call svn_fs_base__txn_get_changes_id() and", 
+   "use the result to lookup changed paths.  Remove comment about", 
+   "lacking BDB transaction protection.", 
+   "(base_paths_changed): Use svn_fs_bdb__retry_txn() instead of", 
+   "svn_fs_bdb__retry() when fetching changed paths -- we can no", 
+   "longer expect the changed-path information to be immutable.", 
+   "* subversion/libsvn_fs_base/revs-txns.c", 
+   "(svn_fs_base__txn_get_changes_id, txn_body_begin_obliteration_txn):", 
+   "Expect non-NULL 'changes_id' transaction_t members.", 
+   "(svn_fs_base__purge_txn): Delete the right set of changes!"
+  ], 
+  "revision_id": "892030"
+ }, 
+ {
+  "author": "pquerna", 
+  "date": "2009-12-18T00:28:23.917041Z", 
+  "msg": [
+   "Add a cache busting parameter to all API queries to Rackspace, to work around", 
+   "their use of HTTP caching of operations for long periods."
+  ], 
+  "revision_id": "892029"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2009-12-18T00:21:02.158662Z", 
+  "msg": [
+   "More portable solution to this type mess, extensible to other \\r\\n platforms"
+  ], 
+  "revision_id": "892028"
+ }, 
+ {
+  "author": "gertv", 
+  "date": "2009-12-18T00:17:40.065148Z", 
+  "msg": [
+   "Prepare for release: update parent pom and SL version"
+  ], 
+  "revision_id": "892027"
+ }, 
+ {
+  "author": "gertv", 
+  "date": "2009-12-18T00:15:42.290876Z", 
+  "msg": [
+   "Upgrade to components-pom and sl snapshots until after the release vote"
+  ], 
+  "revision_id": "892026"
+ }
+]

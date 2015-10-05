@@ -1,0 +1,94 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-05-14T21:31:01.594973Z", 
+  "msg": [
+   "* modules/: Set `svn:module' property on this directory.", 
+   "* modules/svn-docs: Set `svn:module' property on this directory.", 
+   "Later, we'll make this property inherit, so future files added here", 
+   "get it automatically..."
+  ], 
+  "revision_id": "842030"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-14T20:58:00.541062Z", 
+  "msg": [
+   "* modules/svn-docs: New module, for hand testing."
+  ], 
+  "revision_id": "842029"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-05-14T19:43:04.552791Z", 
+  "msg": [
+   "New top-level \"modules/\" directory, for holding module descriptions."
+  ], 
+  "revision_id": "842028"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-05-14T19:36:27.487433Z", 
+  "msg": [
+   "Part I of issue #658: reinstate the 'deleted' flag on entries, so that", 
+   "updating clients can once again give accurate state-reports to the", 
+   "server.", 
+   "[This is one aspect of the \"ghudson paradox\", originally solved via", 
+   "CVS commit on 2001-07-18 15:30, and then removed in svn r642.]", 
+   "This change simply creates the *potential* for an entry to be marked", 
+   "as deleted.  Nothing is being marked this way yet.  I just want to", 
+   "make sure everything compiles and passes tests up to this point, to", 
+   "lower the power-plant factor.", 
+   "* svn_wc.h", 
+   "(svn_wc_entry_t): add 'deleted' boolean field to entry struct.", 
+   "(svn_wc_entry, svn_wc_entries_read):  new 'show_deleted' argument.", 
+   "* entries.h", 
+   "(SVN_WC__ENTRY_ATTR_DELETED): new xml attribute name.", 
+   "(SVN_WC__ENTRY_MODIFY_DELETED): new modify-flag; renumber", 
+   "successive flag values.", 
+   "* entries.c", 
+   "(svn_wc__atts_to_entry): read 'deleted' attribute into entry", 
+   "structure.", 
+   "(write_entry): write entry 'deleted' flag into xml att hash.", 
+   "(fold_entry): if modify-flags dictate, absorb value of 'deleted' flag.", 
+   "(svn_wc_entries_read, svn_wc_entry, read_entries, struct", 
+   "entries_accumulator, handle_start_tag): take and process", 
+   "'show_deleted' boolean arg.", 
+   "* adm_ops.c", 
+   "(svn_wc__do_update_cleanup, recursively_tweak_entries,", 
+   "svn_wc_process_committed): pass TRUE for 'show_deleted' flag.", 
+   "* log.c", 
+   "(log_do_committed): pass TRUE for 'show_deleted' flag.", 
+   "* adm_crawler.c", 
+   "(report_revisions) pass TRUE for 'show_deleted' flag.", 
+   "[ Every other caller is passing FALSE for 'show_deleted'.  (I have the", 
+   "massive list of callers, but am omitting it here for clarity.) ]"
+  ], 
+  "revision_id": "842027"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-05-14T16:22:11.618179Z", 
+  "msg": [
+   "Actually instantiate and initialize the new `copies' table.", 
+   "* subversion/libsvn_fs/copies-table.c", 
+   "(svn_fs__open_copies_table): Put initial entry into the `copies' table.", 
+   "(put_copy): Constify `copy'.", 
+   "(allocate_copy_id): Update call to svn_fs__err_corrupt_next_id.", 
+   "* subversion/libsvn_fs/fs.c", 
+   "(cleanup_fs, svn_fs_create_berkeley, svn_fs_open_berkeley): Process", 
+   "new `copies' table along with others.", 
+   "* subversion/libsvn_fs/err.c", 
+   "* subversion/libsvn_fs/err.h", 
+   "(svn_fs__err_corrupt_next_id): Was svn_fs__err_corrupt_next_txn_id.", 
+   "Now accepts `table' parameter.", 
+   "* subversion/libsvn_fs/txn-table.c", 
+   "(allocate_txn_id): Update call to svn_fs__err_corrupt_next_id.", 
+   "* subversion/libsvn_fs/fs_skels.h", 
+   "(svn_fs__unparse_copy_skel): Constify `copy'.", 
+   "* subversion/libsvn_fs/fs_skels.c", 
+   "(svn_fs__unparse_copy_skel): Constify `copy'."
+  ], 
+  "revision_id": "842026"
+ }
+]

@@ -1,0 +1,93 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-10-17T15:46:00.613730Z", 
+  "msg": [
+   "Report statistics about conflicts and skipped paths during", 
+   "an update or merge operation.", 
+   "* subversion/svn/notify.c", 
+   "(notify_baton): Add new members text_conflicts, prop_conflicts,", 
+   "tree_conflicts, and skipped_paths.", 
+   "(print_conflict_stats): New function.", 
+   "(notify): Gather conflict stats during notifications.", 
+   "(svn_cl__get_notifier): Initialise new notify_baton members.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): New constant svn_wc_notify_merge_completed.", 
+   "This is needed to trigger stat reporting in case of a merge.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_merge): Send a notification when the merge is done."
+  ], 
+  "revision_id": "873790"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2008-10-17T15:20:27.983374Z", 
+  "msg": [
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_lock_state_t, svn_wc_notify_t):", 
+   "Add empty lines for readability.  No functional change."
+  ], 
+  "revision_id": "873789"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-17T11:34:19.457048Z", 
+  "msg": [
+   "Skip an extra pass over a copied file: compute the checksum as we copy it.", 
+   "Also, make sure that we always have a checksum for the new (updated) text", 
+   "base, and get that installed.", 
+   "Note: there was some crappy old logic in there that said \"if this file was", 
+   "replaced, then it has no checksum\". Totally bogus. LOOK for the checksum,", 
+   "rather than make random implied assumptions. The WC library is full of", 
+   "this kind of bogosity :-(", 
+   "I also tweaked tree_has_local_mods() to take a cancel func/baton, which I", 
+   "found readily available in the caller's edit baton.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(tree_has_local_mods): take a cancel func/baton and pass it to", 
+   "svn_wc_walk_entries3().", 
+   "(check_tree_conflict): pass cancel func/baton", 
+   "(choose_base_paths): remove the use_revert_base_p argument. an earlier", 
+   "change made it a simple duplicate of replaced_p.", 
+   "(apply_textdelta): adjust call to choose_base_paths() and just use the", 
+   "replaced flag as appropriate.", 
+   "(merge_file): take the actual checksum computed for the (new) text base,", 
+   "and install it unconditionally into the entries file.", 
+   "(close_file): redo the checksum logic and computation, and pass the base", 
+   "checksum to merge_file()."
+  ], 
+  "revision_id": "873788"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-17T11:18:37.930203Z", 
+  "msg": [
+   "* STATUS: Vote for the r33693 group"
+  ], 
+  "revision_id": "873787"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-17T11:07:09.036143Z", 
+  "msg": [
+   "Two items:", 
+   "1. Split the permission copying out into a new function.", 
+   "2. Fix the svn_stream_open_writable() function.", 
+   "The latter was never used, so I never saw that it had poor utility.", 
+   "Specifically, it expected the file to be there, and it would open it for", 
+   "writing. That is almost never the case; instead, we want to create a new", 
+   "file. I set up the flags to create (exclusively) the file and open it for", 
+   "writing. If other modes are needed, then people can use the \"long hand\" of", 
+   "manually opening the file and wrapping a stream around it.", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_io_copy_perms): new declaration", 
+   "(svn_stream_open_writable): change documentation to state the new", 
+   "functionality.", 
+   "* subversion/libsvn_subr/io.c:", 
+   "(svn_io_copy_file): move permission copying to ...", 
+   "(svn_io_copy_perms): ... here.", 
+   "* subversion/libsvn_subr/stream.c:", 
+   "(svn_stream_open_writable): add more flags to apr_file_open()"
+  ], 
+  "revision_id": "873786"
+ }
+]

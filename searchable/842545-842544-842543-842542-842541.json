@@ -1,0 +1,112 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-07-11T22:15:56.947219Z", 
+  "msg": [
+   "* subversion/libsvn_wc/diff.c", 
+   "(directory_elements_diff): Remove an unnecessary call to", 
+   "svn_pool_destroy.", 
+   "I think there are other questionable pool creation/destruction", 
+   "patterns going on in this file, but not as localized as this one, so", 
+   "I've left them for the nonce.", 
+   "\"Nonce, you take it from here...\""
+  ], 
+  "revision_id": "842545"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-07-11T19:10:22.889377Z", 
+  "msg": [
+   "Continue issue #749.  Pass the access baton into more functions, mainly", 
+   "connected with running log files.  The locks acquired before starting", 
+   "a commit are now held until the post-commit processing is complete.", 
+   "* subversion/include/svn_wc.h", 
+   "(struct svn_wc_adm_access_t): Make this a forward declaration by", 
+   "moving the definition to wc.h.", 
+   "(typedef svn_wc_adm_access_t, svn_wc_adm_open, svn_wc_adm_close,", 
+   "svn_wc_adm_write_check, svn_wc_locked): Move earlier in file.", 
+   "(svn_wc_remove_from_revision_control): Change parameter from char*", 
+   "path to svn_wc_adm_access_t* baton.", 
+   "(svn_wc_process_committed): Add svn_wc_adm_access_t* baton parameter.", 
+   "* subversion/libsvn_wc/wc.h (struct svn_wc_adm_access_t): Moved from", 
+   "svn_wc.h. Added include for apr_hash.h.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_process_committed): Add svn_wc_adm_access_t* baton parameter.", 
+   "Use access baton path to open log file.  Open an access baton when", 
+   "recursing into child directories.", 
+   "(svn_wc_delete): Open an access baton when removing added directories.", 
+   "(svn_wc_revert): Open an access baton when recursing into child", 
+   "directories.", 
+   "(svn_wc_remove_from_revision_control): Change parameter from char*", 
+   "path to svn_wc_adm_access_t* baton. Open an access baton when recursing", 
+   "into child directories.", 
+   "* subversion/libsvn_wc/log.h (svn_wc__run_log): Change parameter", 
+   "from char* path to svn_wc_adm_access_t* baton parameter.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(struct log_runner): Change char* member to an svn_wc_adm_access_t*", 
+   "access baton. Changed all uses of path within the file to use the", 
+   "access baton path instead.", 
+   "(log_do_delete_entry): Open an access baton if the item being deleted", 
+   "is a directory.", 
+   "(log_do_committed): Remove temporary access baton for KILLME file. Open", 
+   "an access baton if the item being replaced is a directory.", 
+   "(svn_wc__run_log): Change parameter from char* path to", 
+   "svn_wc_adm_access_t* baton.", 
+   "(svn_wc_cleanup): Pass access baton to svn_wc__run_log.", 
+   "* subversion/libsvn_wc/adm_files.h (svn_wc__adm_destroy): Change parameter", 
+   "from char* path to svn_wc_adm_access_t* baton parameter.", 
+   "* subversion/libsvn_wc/adm_files.c (svn_wc__adm_destroy): Change parameter", 
+   "from char* path to svn_wc_adm_access_t* baton parameter. Remove temporary", 
+   "baton creation.  Check for write lock. Tweak baton after lock file removed.", 
+   "* subversion/libsvn_wc/lock.c (svn_wc_adm_close): Don't check for lock file", 
+   "if it is not expected to be present.", 
+   "* subversion/libsvn_wc/props.c (svn_wc_merge_prop_diffs): Pass access baton", 
+   "to svn_wc__run_log.", 
+   "* subversion/libsvn_wc/update_editor.c (delete_entry, close_directory,", 
+   "svn_wc_install_file): Pass access baton to svn_wc__run_log.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(get_ra_editor): Remove misleading comment.", 
+   "(svn_client_commit): Move directory unlocking so that the locks are", 
+   "held when svn_wc_process_committed is called.  Get access baton from", 
+   "hash and pass to svn_wc_process_committed.", 
+   "* subversion/libsvn_client/externals.c (handle_external_item_change,", 
+   "relegate_external): Open an access baton, pass it to", 
+   "svn_wc_remove_from_revision_control, then close the baton.", 
+   "* subversion/libsvn_client/client.h (svn_client__harvest_committables):", 
+   "Document the hash contents.", 
+   "* subversion/libsvn_client/copy.c (wc_to_repos_copy): Remove misleading", 
+   "comment."
+  ], 
+  "revision_id": "842544"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-07-11T18:48:40.186112Z", 
+  "msg": [
+   "* tools/dev/bash_completion (_svn): Add --recursive to info and resolve."
+  ], 
+  "revision_id": "842543"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-07-11T18:09:38.048516Z", 
+  "msg": [
+   "* subversion/include/svn_path.h: Add note about UTF-8."
+  ], 
+  "revision_id": "842542"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-07-11T18:01:32.917036Z", 
+  "msg": [
+   "This move has been pending for some time, but was delayed due to", 
+   "outstanding patches.  Those patches have now been applied, so:", 
+   "* subversion/libsvn_subr/target.c", 
+   "(svn_path_get_absolute, svn_path_split_if_file): Moved from here...", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_get_absolute, svn_path_split_if_file): ... to here.", 
+   "Also moved includes of svn_utf.h and apr_file_info.h."
+  ], 
+  "revision_id": "842541"
+ }
+]

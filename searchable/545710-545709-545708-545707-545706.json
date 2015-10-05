@@ -1,0 +1,87 @@
+[
+ {
+  "author": "ckoppelt", 
+  "date": "2007-06-09T08:08:55.213795Z", 
+  "msg": [
+   "doap_dirstudio.rdf updated"
+  ], 
+  "revision_id": "545710"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-06-09T08:08:13.939201Z", 
+  "msg": [
+   "DERBY-2777", 
+   "Earlier checkins 543266 and 542646 were incorrectly trying to set collation for DATA and TIME DataTypeDescriptors. With this checkin, I am", 
+   "removing that code. Collation only applies to character string types."
+  ], 
+  "revision_id": "545709"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-06-09T08:01:29.950728Z", 
+  "msg": [
+   "DERBY-2777", 
+   "Make sure that for operators like BOOLEAN, the collation information is picked from the context and not from the current compilation schema."
+  ], 
+  "revision_id": "545708"
+ }, 
+ {
+  "author": "ckoppelt", 
+  "date": "2007-06-09T07:51:16.669174Z", 
+  "msg": [
+   "renamed studio-proxy, studio-rcp..., studio-schemas-..., studio-updatesite, studio-valueeditors"
+  ], 
+  "revision_id": "545707"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-06-09T07:32:03.616457Z", 
+  "msg": [
+   "DERBY-2599", 
+   "Committing changes explained by following paragraphs", 
+   "DataTypeDescriptor has a method called getDominantType which compares itself with the DTD passed as parameter to getDominantType and creates a new DTD with the dominant type of the 2 DTDs, But, while doing so, It was not setting the collation information on the new DTD based on the 2 involved DTDs. I have made changes into the method which now will set the correct collation information on the new DTD. The algorithm, as copied from the method javadoc, is as follows", 
+   "* If dealing with character string types, then make sure to set the", 
+   "* collation info on the dominant type. Following algorithm will be used", 
+   "* for dominant DTD's collation determination. Each of the steps of the", 
+   "* algorithem have been numbered in the comments below and those same", 
+   "* numbers are used in the actual algorithm below so it is easier to", 
+   "* understand and maintain.", 
+   "*", 
+   "* Step 1", 
+   "* If the DTD for \"this\" node has the same collation derivation as the", 
+   "* otherDTS, then check if their collation types match too. If the", 
+   "* collation types match too, then DTD for dominant type will get the same", 
+   "* collation derivation and type.", 
+   "*", 
+   "* Step 2", 
+   "* If the collation derivation for DTD for \"this\" node and otherDTS do not", 
+   "* match, then check if one of them has the collation derivation of NONE.", 
+   "* If that is the case, then dominant DTD will get the collation type and", 
+   "* derivation of DTD whose collation derivation is not NONE.", 
+   "*", 
+   "* Step 3", 
+   "* If the collation derivation for DTD for \"this\" node and otherDTS do not", 
+   "* match, and none of them have the derivation of NONE then it means that", 
+   "* we are dealing with collation derivation of IMPLICIT and EXPLICIT and", 
+   "* hence the dominant DTD should get collation derivation of NONE. This is", 
+   "* not a possibility in Derby 10.3 because the only 2 possible collation", 
+   "* derivation supported are IMPLICIT and NONE.", 
+   "*", 
+   "* Step 4", 
+   "* If the collation derivation for DTD for \"this\" node and otherDTS match,", 
+   "* then check if the collation types match too. If not, then the dominant", 
+   "* DTD should get collation derivation of NONE.", 
+   "Now, note that ValueNodeList has a method called getDominantTypeServices where it could deal with any number of DTDs to determine the dominant DTD. It calls DataTypeDescriptor.getDominantType on 2 DTDs at a time. At the beginning, the 2 DTDs are the first two in it's vector. It gets an intermediate dominantDTS back for those 2 DTDs. Next, it calls DataTypeDescriptor.getDominantType with the intermediate dominantDTS and the 3rd element in it's vector and so on and so forth. It is not enough to just use 2 DTDs at a time to determine the collation info for the final dominantDTS. We need to consider all the DTDs in the vector together to determine the correct collation info for the final dominantDTS. The algorithm used by ValueNodeList.getDominantTypeServices is in that method's javadoc and included here for reference", 
+   "* Algorithm for determining collation information", 
+   "* This method will check if it is dealing with character string datatypes.", 
+   "* If yes, then it will check if all the character string datatypes have", 
+   "* the same collation derivation and collation type associated with them.", 
+   "* If not, then the resultant DTD from this method will have collation", 
+   "* derivation of NONE. If yes, then the resultant DTD from this method will", 
+   "* have the same collation derivation and collation type as all the", 
+   "* character string datatypes."
+  ], 
+  "revision_id": "545706"
+ }
+]

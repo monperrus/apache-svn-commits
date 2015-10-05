@@ -1,0 +1,78 @@
+[
+ {
+  "author": "philip", 
+  "date": "2009-11-13T14:36:32.053019Z", 
+  "msg": [
+   "* Makefile.in: Remove misc-docs support as r40489 removed doc/misc-docs/."
+  ], 
+  "revision_id": "880570"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-13T11:57:51.709429Z", 
+  "msg": [
+   "Don't happily dump core upon svn status --ignore-externals, which we've", 
+   "been doing since probably r39213.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status5): Flip mistaken boolean logic, we need to pass", 
+   "an external_func + baton to svn_wc_walk_status() when *not* ignoring", 
+   "externals."
+  ], 
+  "revision_id": "880569"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2009-11-13T09:02:52.526134Z", 
+  "msg": [
+   "Allocate hashes before using them (gcc warns \"may be used unitialized\").", 
+   "* subversion/libsvn_wc/upgrade.c (migrate_props): Allocate hashes."
+  ], 
+  "revision_id": "880568"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-11-13T02:37:57.051811Z", 
+  "msg": [
+   "Fix issue #3524 'Locking path via ra_serf which doesn't exist in HEAD", 
+   "triggers assert'.", 
+   "* subversion/libsvn_fs_base/lock.c (txn_body_lock):", 
+   "* subversion/libsvn_fs_fs/lock.c (lock_body):", 
+   "svn_fs_lock's API promises that if the \"current_rev is a valid revnum,", 
+   "then do an out-of-dateness check.  If the revnum is less than the", 
+   "last-changed-revision of path (or if path doesn't exist in HEAD), return", 
+   "SVN_ERR_FS_OUT_OF_DATE.\"  So let's actually start *doing* that for both", 
+   "FS implementations.", 
+   "* subversion/libsvn_ra_neon/lock.c (do_lock):", 
+   "* subversion/libsvn_ra_serf/locks.c (handle_lock):", 
+   "If a 405 error results from a LOCK request then return a", 
+   "SVN_ERR_FS_OUT_OF_DATE error so ultimately the neon/serf svn_ra_lock", 
+   "implementations will behave as promised by the API, i.e. \"If the revnum", 
+   "is less than the last-changed-revision of any path (or if a path doesn't", 
+   "exist in  HEAD), call lock_func/lock_baton with an", 
+   "SVN_ERR_RA_OUT_OF_DATE error.\"", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(lock_path_not_in_head): Tweak test expectations to reflect that attempts", 
+   "to lock paths that don't exist in HEAD are not fatal errors, see", 
+   "SVN_ERR_IS_LOCK_ERROR."
+  ], 
+  "revision_id": "880567"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-11-12T23:37:51.213115Z", 
+  "msg": [
+   "Replace deprecated svn_path_join().", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__path_join): New.", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__path_join): Wrap svn_path_join().", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff, summarize_xml, summarize_regular): Replace svn_path_join()", 
+   "with svn_cl__path_join() since the resulting path is allowed to be both", 
+   "uri and dirent.", 
+   "Patch by: Daniel N\u00e4slund <daniel{_AT_}longitudo.com>", 
+   "Suggested by: julianfoad"
+  ], 
+  "revision_id": "880566"
+ }
+]

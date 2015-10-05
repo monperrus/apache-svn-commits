@@ -1,0 +1,115 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2002-12-06T14:22:42.504403Z", 
+  "msg": [
+   "Clean up config information, particularly in the servers file.  But", 
+   "also replace underscores with dashes in all config option names.", 
+   "A summary of the option name changes:", 
+   "In config:", 
+   "editor_cmd            -> editor-cmd", 
+   "store_password        -> store-password", 
+   "diff_cmd              -> diff-cmd", 
+   "diff3_cmd             -> diff3-cmd", 
+   "diff3_has_program_arg -> diff3-has-program-arg", 
+   "global_ignores        -> global-ignores", 
+   "In servers:", 
+   "host     -> http-proxy-host", 
+   "port     -> http-proxy-port", 
+   "username -> http-proxy-username", 
+   "password -> http-proxy-password", 
+   "timeout  -> http-timeout", 
+   "no_proxy -> no-http-proxy", 
+   "* include/svn_config.h, libsvn_subr/config.c", 
+   "(svn_config_find_group): New function to do the work of finding a", 
+   "server group given a hostname.  (It's generic enough to find any", 
+   "kind of group given any kind of key, but right now it will only be", 
+   "used for the servers file.)", 
+   "(search_groups_baton, search_groups): Helper functions for", 
+   "svn_config_find_group.", 
+   "* include/svn_string.h, libsvn_subr/svn_string.c", 
+   "(svn_cstring_match_glob_list): Helper function to do the matching", 
+   "work required by svn_config_find_group.  Also used by libsvn_ra_dav", 
+   "for the no-http-proxy option.", 
+   "* libsvn_ra_dav/session.c", 
+   "(search_groups_baton, match_in_list, search_groups): Remove.", 
+   "(get_server_settings): Use new functions.  Rename optionss to make", 
+   "it clear they apply to http proxying, since the servers file is", 
+   "supposed to be generic:", 
+   "* libsvn_subr/config_file.c (svn_config_ensure): Update default text", 
+   "with new option names.", 
+   "* libsvn_client/auth.c (maybe_store_password),", 
+   "clients/cmdline/util.c (svn_cl__edit_externally),", 
+   "libsvn_subr/io.c (svn_io_run_diff, svn_io_run_diff3),", 
+   "libsvn_wc/status.c (get_default_ignores): s/_/-/ in option names."
+  ], 
+  "revision_id": "844100"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-12-06T09:44:40.175339Z", 
+  "msg": [
+   "Bunch o' updates to shift more dependency stuff from gen_make to", 
+   "gen_base, along with better info in the graph itself.", 
+   "* trunk/gen-make.py (main): alter the logic a bit to call", 
+   ".compute_hdr_deps() if the dependencies need to be calculated. In", 
+   "all cases, just call .write() to write out the info.", 
+   "* build/gen_base.py", 
+   "(GeneratorBase.__init__): pass the custom flag into the target", 
+   "instantiation. compute intra-library deps.", 
+   "(DependencyGraph.get_sources): optionally filter the return list to", 
+   "only those items of a particular class.", 
+   "(class DependencyNode): new class to record items in the dependency", 
+   "graph. These nodes are based around a single filename, but (being", 
+   "a class instance) allow for further annotation. The class also", 
+   "helps to provide more information about the particular item.", 
+   "(class ObjectFile, class ApacheObject, class SWIGObject): new", 
+   "classes to provide further detail about particular build items.", 
+   "(_Target.__init__): store the 'custom' information. do not record a", 
+   ".deps attr -- this has been moved entirely into the graph.", 
+   "(_Target.add_dependencies): if the target is an Apache module, then", 
+   "use a new object type for the dep graph arc.", 
+   "(_sorted_files): revamp to use the graph rather than _Target.deps.", 
+   "* build/gen_make.py", 
+   "(MakefileGenerator.write): extract the object files and dependent", 
+   "libs for the target a bit differently. no longer update the .deps", 
+   "attribute of the target objects. update the call to", 
+   "_sorted_files(). process the apache module inputs a bit", 
+   "differently, rather than relying on _Target.deps. incorporate the", 
+   "writing of object dependencies [from .write_depends()] and add", 
+   "variable output styles based on the object type (the Apache module", 
+   "output is disabled for now.)", 
+   "(MakefileGenerator.write_ra_modules): use the graph rather than", 
+   "_Target.deps for the dependent library selection."
+  ], 
+  "revision_id": "844099"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-12-06T03:47:44.161162Z", 
+  "msg": [
+   "* subversion/include/svn_config.h", 
+   "add doxygen markup to comments."
+  ], 
+  "revision_id": "844098"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2002-12-06T02:57:21.025124Z", 
+  "msg": [
+   "Fix issue #1012.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(do_single_file_merge): Only merge regular properties."
+  ], 
+  "revision_id": "844097"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2002-12-06T02:51:21.014846Z", 
+  "msg": [
+   "* subversion/clients/cmdline/main.c", 
+   "(svn_cl__cmd_table): Add PROPNAME to propdel description."
+  ], 
+  "revision_id": "844096"
+ }
+]

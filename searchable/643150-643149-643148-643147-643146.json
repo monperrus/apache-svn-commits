@@ -1,0 +1,58 @@
+[
+ {
+  "author": "ate", 
+  "date": "2008-03-31T21:10:08.521392Z", 
+  "msg": [
+   "Big change: switching maven surefire testcase running to use forkMode=never.", 
+   "The first reason for wanting to do this is simplyfied support for using m2eclipse plugin (see: m2eclipse.codehaus.org).", 
+   "This great plugin support running maven 2 on a project pom.xml as well as provides a dynamic maven based classpath container to eclipse.", 
+   "For debugging testcases, this works perfectly (just set a breakpoint and run the goal), but it only works (for tests) with surefire forkMode=never.", 
+   "But setting forkMode=never unearthed many, very many, unexpected and unknown (to me) issues and bugs!", 
+   "It took most of previous week to debug and fix all of them, but as far as I'm concerned, much for the better.", 
+   "Once I've committed all fixes for the testcases (shortly) a full Jetspeed test build can now be done without need for forking.", 
+   "Among things, I expect it now to be likely that the Jetspeed Spring container (or maybe even the portal application itself too) can be hot restarted!", 
+   "I haven't tested it yet (still working on a full portal deployment), but even if there still might be some issues, many now are fixed at least.", 
+   "BTW: I'm also upgrading to latest Derby 10.3.2.1", 
+   "WARNING WARNING WARNING", 
+   "Maven surefire when run with forkMode=never creates new/separate classloaders for each module it executes in, to ensure separate (static) object instances.", 
+   "As a consequence of this (on a Sun JVM), a full Jetspeed test build now leads to: \"java.lang.OutOfMemoryError: PermGen space\" :(", 
+   "It seems the JRocket JVM shouldn't/cannot have this problem and might be interesting to evaluate, but I haven't tested it out yet.", 
+   "Anyway, for Jetspeed committers and other developers/testers who are required to do a full test build, make sure to set the following evironment variable", 
+   "to overcome this problem:", 
+   "export MAVEN_OPTS=\"-XX:MaxPermSize=256m\""
+  ], 
+  "revision_id": "643150"
+ }, 
+ {
+  "author": "nick", 
+  "date": "2008-03-31T21:06:55.089211Z", 
+  "msg": [
+   "Add examples and documentation for xssf eventusermodel code"
+  ], 
+  "revision_id": "643149"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2008-03-31T21:00:33.162596Z", 
+  "msg": [
+   "This method override seems like it's causing out of order dispatch in the JmsTempDestinationTest disabling for now until we can research this further."
+  ], 
+  "revision_id": "643148"
+ }, 
+ {
+  "author": "ngn", 
+  "date": "2008-03-31T21:00:04.157609Z", 
+  "msg": [
+   "Tests now set up FtpServer using the Java API rather than configuration"
+  ], 
+  "revision_id": "643147"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2008-03-31T20:56:38.016700Z", 
+  "msg": [
+   "HTTPCORE-156: Fixed connect timeout problem"
+  ], 
+  "revision_id": "643146"
+ }
+]

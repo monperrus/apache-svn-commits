@@ -1,0 +1,67 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-03-27T16:24:40.403542Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Fix a few test failures as the result of r36810: the", 
+   "op_root_abspath, and the entry_abspath may be the same, leading to an", 
+   "attempt to join a NULL value to the parent relpath.  Also, the code was", 
+   "just wrong. :)"
+  ], 
+  "revision_id": "876885"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-27T16:07:01.390178Z", 
+  "msg": [
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): Followup to r36809 by changing an if clause to an assert(),", 
+   "and properly build the repos_relpath."
+  ], 
+  "revision_id": "876884"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-27T15:16:08.463560Z", 
+  "msg": [
+   "Some work on wc-ng depth test 17.  This doesn't yet fix the test, but it", 
+   "prevents it from segfaulting.", 
+   "The issue is is deleted children of a mix rev copy.  Some of our callers", 
+   "request that we return a url, which we currently aren't populating, since", 
+   "we don't have a base node to scan up to populate it with.  So, we scan", 
+   "the working node instead.  This, in turn, uncovered a problem in", 
+   "svn_wc__db_scan_working(), which this commit also fixes.", 
+   "Still more work to be done here, but it's a start.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): On a deleted child of a copy, scan upward through the", 
+   "working nodes to find the repos information.  We may have to scan twice,", 
+   "since the operation parent may not have the repos_relpath we need.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_scan_working): If we've got a copy and we haven't found", 
+   "anything yet, only process it if the status is normal."
+  ], 
+  "revision_id": "876883"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-03-27T14:19:54.968417Z", 
+  "msg": [
+   "Followup to r36806: Ignore the generated test.", 
+   "* subversion/tests/libsvn_wc", 
+   "(svn:ignore): Ignore entries-test", 
+   "[reverted in r36842]"
+  ], 
+  "revision_id": "876882"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-27T14:13:04.227487Z", 
+  "msg": [
+   "* build.conf", 
+   "(__ALL_TESTS__): Add dependency on entries-test to fix windows test runner.", 
+   "[reverted in r36842]"
+  ], 
+  "revision_id": "876881"
+ }
+]

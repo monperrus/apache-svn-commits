@@ -1,0 +1,113 @@
+[
+ {
+  "author": "dustin", 
+  "date": "2007-07-28T15:45:03.262359Z", 
+  "msg": [
+   "Clarify uses of xml.dom.", 
+   "* contrib/client-side/svnmerge/svnmerge.py", 
+   "(getAttributeOrNone): New function.", 
+   "(SvnLogParser): provide more informative error message if expected name is", 
+   "not found.", 
+   "(SvnLogRevision): call getAttributeOrNone instead of", 
+   "xml.dom.Element.getAttribute directly, to integrate more cleanly with", 
+   "get_copyfrom() by returning None instead of an empty string.", 
+   "Patch by: Luke Call <lacall186@onemodel.org>", 
+   "Review by: Giovanni Bajo <rasky@develer.com>"
+  ], 
+  "revision_id": "865945"
+ }, 
+ {
+  "author": "giorgio_valoti", 
+  "date": "2007-07-28T09:44:40.337534Z", 
+  "msg": [
+   "Updated italian translation.", 
+   "* subversion/po/it.po:  - Fixed all fuzzy translations and translated", 
+   "remaining messages."
+  ], 
+  "revision_id": "865944"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2007-07-28T02:22:47.723716Z", 
+  "msg": [
+   "Follow up to r25430.  The new fsfs transaction generation code that", 
+   "used apr_time_now() in the transaction name would result in duplicate", 
+   "transaction IDs on Windows because its clock is too granular.", 
+   "Move to a new method which no longer uses the hostname, current time", 
+   "and pid, replacing it with a new transaction-current file in the db", 
+   "directory which contains a base 36 sequence number which is used in", 
+   "the transaction ID.", 
+   "* subversion/include/private/svn_fs_private.h", 
+   "(SVN_FS__TXN_MAX_LEN):", 
+   "Set the new maximum length to 220, which has space for a revision", 
+   "and a 200 digit base 36 number, plus some overhead.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_TXN_CURRENT):", 
+   "New define for the transaction current filename.", 
+   "(SVN_FS_FS__MIN_TXN_CURRENT_FORMAT):", 
+   "New define specifying the minimum filesystem format number to use", 
+   "the transaction-current filename.", 
+   "(fs_fs_shared_txn_data_t):", 
+   "Update the description of txn_id.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "Do not include sys/types.h and unistd.h, since the getpid()", 
+   "declaration is no longer needed.", 
+   "(svn_fs_fs__hotcopy):", 
+   "Copy the transaction-current file if the filesystem is new", 
+   "enough.", 
+   "(svn_fs_fs__create):", 
+   "Create the transaction-current file if the filesystem is new", 
+   "enough.", 
+   "(get_and_increment_txn_key_body):", 
+   "New function used as a callback for svn_fs_fs__with_write_lock().", 
+   "This gets the current base 36 value in transaction-current and", 
+   "increments it.  It returns the original value by the baton.", 
+   "(get_and_increment_txn_key_baton):", 
+   "New structure used by get_and_increment_txn_key_body().", 
+   "(create_txn_dir):", 
+   "Replace entirely with a new implementation that uses", 
+   "svn_fs_fs__with_write_lock() and", 
+   "get_and_increment_txn_key_body().", 
+   "(create_txn_dir_pre_1_5):", 
+   "New function but with the contents of create_txn_dir() from", 
+   "r25429, the revision before the previous transaction id", 
+   "generation code.", 
+   "(svn_fs_fs__create_txn):", 
+   "Call create_txn_dir() or create_txn_dir_pre_1_5() depending upon", 
+   "the filesystem format.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(test_funcs):", 
+   "Reenable the txn_names_are_not_reused() test.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Layout of the FS directory),", 
+   "(Filesystem formats):", 
+   "Update the text to describe the new transaction-current file."
+  ], 
+  "revision_id": "865943"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-07-28T00:07:21.690389Z", 
+  "msg": [
+   "On the merge-sensitive-blame branch:", 
+   "Add the include_merged_revisions parameter for get_file_revs() to the svnserve", 
+   "protocol.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_get_file_revs): Send the include_merged_revisions parameter.", 
+   "* subversion/libsvn_ra_svn/protocol:", 
+   "Update protocol doc.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_file_revs): Parse and use the include_merged_revisions parameter."
+  ], 
+  "revision_id": "865942"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-07-28T00:06:11.091479Z", 
+  "msg": [
+   "* subversion/libsvn_repos/log.c", 
+   "(get_merged_rev_mergeinfo): Docstring fix."
+  ], 
+  "revision_id": "865941"
+ }
+]

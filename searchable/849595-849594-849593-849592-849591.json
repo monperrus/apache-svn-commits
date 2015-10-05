@@ -1,0 +1,123 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-04-26T23:21:24.943670Z", 
+  "msg": [
+   "In fs-abstraction branch, fix up txn, root, and history objects within", 
+   "libsvn_fs_base to use the fsap_data field of the generic structures", 
+   "for private data.  The base FS implementation now compiles, although", 
+   "it will need a bunch of symbol renaming and vtable assembly before it", 
+   "actually plugs into the FS loader properly.", 
+   "* libsvn_fs_base/tree.c", 
+   "(root_kind_t): Remove.", 
+   "(struct svn_fs_root_t): Rename to base_root_data_t; remove generic", 
+   "fields.", 
+   "(svn_fs_close_root, svn_fs_root_fs, svn_fs_is_txn_root,", 
+   "svn_fs_is_revision_root, svn_fs_txn_root_name,", 
+   "svn_fs_revision_root_revision): Remove; they live in the FS loader", 
+   "library.", 
+   "Adjust other functions to use root->is_txn_root instead of", 
+   "root->kind and to use root->fsap_data for the private fields.", 
+   "(struct svn_fs_history_t): Rename to base_history_data_t.", 
+   "(svn_fs_node_history, txn_body_history_prev, svn_fs_history_prev,", 
+   "svn_fs_history_location): Adjust to use fsap_data field for the", 
+   "actual contents of the history object.", 
+   "* libsvn_fs_base/revs-txns.c", 
+   "(make_txn): Set fsap_data to NULL; leave a note to set the vtable.", 
+   "* libsvn_fs_base/revs-txns.h", 
+   "(struct svn_fs_txn_t): Delete.  Don't make a private data structure", 
+   "for this; the generic structure fields are all we need.", 
+   "* libsvn_fs/fs_loader.h, libsvn_fs/fs_loader.c", 
+   "(svn_fs_txn_t): Align with base FS implementation by removing the", 
+   "generic pool field (we don't need one in the generic since there is", 
+   "no svn_fs_close_txn) and by renaming the generic \"name\" field to", 
+   "\"id\"."
+  ], 
+  "revision_id": "849595"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-26T22:40:49.014193Z", 
+  "msg": [
+   "In fs-abstraction branch, remove node-ID handling from libsvn_fs_base.", 
+   "* libsvn_fs_base/id.h, libsvn_fs_base/id.c: Remove.", 
+   "* libsvn_fs_base/bdb/copies-table.c,", 
+   "libsvn_fs_base/bdb/nodes-table.c,", 
+   "libsvn_fs_base/bdb/changes-table.c,", 
+   "libsvn_fs_base/revs-txns.c,", 
+   "libsvn_fs_base/dag.c:", 
+   "Don't include id.h."
+  ], 
+  "revision_id": "849594"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-26T22:36:28.994585Z", 
+  "msg": [
+   "Commit missing part of r9518, the log message for which was:", 
+   "In fs-abstraction branch, fix up remaining libsvn_fs_base references", 
+   "to private svn_fs_t fields.  Combined with an id.h workaround (id.h", 
+   "will be removed in a future commit), all of libsvn_fs_base now", 
+   "compiles except for dag.c, id.c, revs-txns.c, and tree.c.", 
+   "* libsvn_fs_base/tree.c,", 
+   "libsvn_fs_base/id.h,", 
+   "libsvn_fs_base/bdb/reps-table.c,", 
+   "libsvn_fs_base/bdb/txn-table.c,", 
+   "libsvn_fs_base/bdb/copies-table.c,", 
+   "libsvn_fs_base/bdb/bdb-err.c,", 
+   "libsvn_fs_base/bdb/uuids-table.c,", 
+   "libsvn_fs_base/bdb/strings-table.c,", 
+   "libsvn_fs_base/bdb/rev-table.c,", 
+   "libsvn_fs_base/bdb/nodes-table.c,", 
+   "libsvn_fs_base/bdb/changes-table.c,", 
+   "libsvn_fs_base/uuid.c,", 
+   "libsvn_fs_base/revs-txns.c,", 
+   "libsvn_fs_base/trail.c,", 
+   "libsvn_fs_base/err.c,", 
+   "libsvn_fs_base/dag.c:", 
+   "Include fs_loader.h.  Reference private fields through fsap_data", 
+   "field."
+  ], 
+  "revision_id": "849593"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-04-26T22:35:25.556658Z", 
+  "msg": [
+   "In fs-abstraction branch, fix up remaining libsvn_fs_base references", 
+   "to private svn_fs_t fields.  Combined with an id.h workaround (id.h", 
+   "will be removed in a future commit), all of libsvn_fs_base now", 
+   "compiles except for dag.c, id.c, revs-txns.c, and tree.c.", 
+   "* libsvn_fs_base/tree.c,", 
+   "libsvn_fs_base/id.h,", 
+   "libsvn_fs_base/bdb/reps-table.c,", 
+   "libsvn_fs_base/bdb/txn-table.c,", 
+   "libsvn_fs_base/bdb/copies-table.c,", 
+   "libsvn_fs_base/bdb/bdb-err.c,", 
+   "libsvn_fs_base/bdb/uuids-table.c,", 
+   "libsvn_fs_base/bdb/strings-table.c,", 
+   "libsvn_fs_base/bdb/rev-table.c,", 
+   "libsvn_fs_base/bdb/nodes-table.c,", 
+   "libsvn_fs_base/bdb/changes-table.c,", 
+   "libsvn_fs_base/uuid.c,", 
+   "libsvn_fs_base/revs-txns.c,", 
+   "libsvn_fs_base/trail.c,", 
+   "libsvn_fs_base/err.c,", 
+   "libsvn_fs_base/dag.c:", 
+   "Include fs_loader.h.  Reference private fields through fsap_data", 
+   "field."
+  ], 
+  "revision_id": "849592"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-04-26T21:05:24.018002Z", 
+  "msg": [
+   "Set svn:eol-style to native on po files.", 
+   "* subversion/po/es.po", 
+   "* subversion/po/sv.po", 
+   "Set svn:eol-style to native."
+  ], 
+  "revision_id": "849591"
+ }
+]

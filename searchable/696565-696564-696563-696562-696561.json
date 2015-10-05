@@ -1,0 +1,54 @@
+[
+ {
+  "author": "baerrach", 
+  "date": "2008-09-18T05:50:38.983476Z", 
+  "msg": [
+   "[MECLIPSE-423] Fix NullPointerException when existing Manifest.MF file has no Class-Path element", 
+   "EclipseManifestWriter and RadManifestWriter are a cut-and-paste. Created AbstractEclipseManifestWriter as shared parent class", 
+   "and moved all the common stuff up.  Where the code varied EclipseManifestWriter's implementation was chosen.  This was because the variation was often a bug fix.", 
+   "The only variation that could not be easily sorted was in addDependencyToClassPath where they only differ at the end:", 
+   "EclipseManifestWriter:", 
+   "classpath.append( dependency.getEclipseProjectName() + \".jar\" );", 
+   "RadManifestWriter", 
+   "classpath.append( dependency.getArtifactId() + \".jar\" );", 
+   "I have taken the eclipse one as being correct and changed RadPlugin to override getProjectNameForArifact() to return artifact.getArtifactId() to match RadManifestWriter dependency.getArtifactId() as above.  Integration tests still work but I need a RAD person to validate this for me.", 
+   "Added testProject8 for IT test. Prior to patch this exercised the defect.  After the patch it looks like it is fixed.", 
+   "However have asked for clarifiction about write() when a new MANIFEST.MF needs to be written but there is already an existing file.", 
+   "See http://www.nabble.com/m-eclipse-p%3A-EclipseManifestWriter.write%28%29---doesn%27t-retain-any-keys-except-CLASS_PATH-and-MANIFEST_VERSION-td19546126.html", 
+   "The problem is that the old values will be lost.  Need to check if that is the correct intention."
+  ], 
+  "revision_id": "696565"
+ }, 
+ {
+  "author": "damitha", 
+  "date": "2008-09-18T05:40:34.956285Z", 
+  "msg": [
+   "Supporting ref params in acks_to element"
+  ], 
+  "revision_id": "696564"
+ }, 
+ {
+  "author": "dblevins", 
+  "date": "2008-09-18T05:10:51.623616Z", 
+  "msg": [
+   "Consolodated some of the code that pulls and parses properties into ints, booleans, etc."
+  ], 
+  "revision_id": "696563"
+ }, 
+ {
+  "author": "ffang", 
+  "date": "2008-09-18T05:01:29.556588Z", 
+  "msg": [
+   "[SMX4-110]add missing pax lib to m2-repo"
+  ], 
+  "revision_id": "696562"
+ }, 
+ {
+  "author": "ffang", 
+  "date": "2008-09-18T04:59:28.097435Z", 
+  "msg": [
+   "[SMX4-110]add missing pax lib to m2-repo"
+  ], 
+  "revision_id": "696561"
+ }
+]

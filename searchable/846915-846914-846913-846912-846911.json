@@ -1,0 +1,80 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-08-23T18:57:09.169855Z", 
+  "msg": [
+   "Improve handling of errors opening a repository over ra_svn.", 
+   "The methods used by ra_local and svnserve to find the repository of an", 
+   "URL were different.  This was causing different behavior in case of", 
+   "errors.  Fix the error handling to make sure that the error codes are", 
+   "propagated to the user.", 
+   "From Tobias Ringstrom, with an added comment from me.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_find_root_path): New", 
+   "* libsvn_repos/repos.c", 
+   "(check_repos_path): New", 
+   "(check_repos_version): Require an existing format file.", 
+   "(svn_repos_find_root_path): New", 
+   "* libsvn_ra_local/split_url.c", 
+   "(svn_ra_local__split_URL): Use the new svn_repos_find_root_path", 
+   "function instead of looping and calling svn_repos_open.  Propagate", 
+   "the error from svn_repos_open if it fails so the user can get a", 
+   "clue.", 
+   "* svnserve/serve.c", 
+   "(find_repos): Use the new svn_repos_find_root_path function instead", 
+   "of looping and calling svn_repos_open.  Propagate the error from", 
+   "svn_repos_open if it fails so the user can get a clue."
+  ], 
+  "revision_id": "846915"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2003-08-23T17:12:47.161720Z", 
+  "msg": [
+   "* subversion/libsvn_subr/config_file.c : Fix build broken of r6839.", 
+   "The problem was an extra newline in the configuration file.", 
+   "Verified with \"make check\".", 
+   "Patch by: Erik H\u00fclsmann <e.huelsmann@gmx.net>"
+  ], 
+  "revision_id": "846914"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-08-23T03:19:41.017549Z", 
+  "msg": [
+   "Warn Windows users about the backslash issue in tunnel agents.", 
+   "(I'd rather there weren't an issue, especially since many users", 
+   "will use environment variables and won't see this documentation,", 
+   "but it's something.)", 
+   "* libsvn_subr/config.c (svn_config_ensure): Add some text about", 
+   "backslashes in tunnel agent specifications."
+  ], 
+  "revision_id": "846913"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-08-22T23:19:56.269392Z", 
+  "msg": [
+   "Fix issue 1487, \"svn diff -r PREV:HEAD fails if tmp/ exists in current", 
+   "directory\".   This was happening because on Win32, CreateFile fails", 
+   "with an \"Access Denied\" error code, rather than \"File Already Exists\",", 
+   "if the colliding name belongs to a directory.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_open_unique_file): Continue on APR_STATUS_IS_EACCES as well as", 
+   "APR_STATUS_IS_EEXIST."
+  ], 
+  "revision_id": "846912"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-08-22T22:37:07.375284Z", 
+  "msg": [
+   "Obtain a shared lock on the repository *before* opening it, rather than", 
+   "*afterwards*.   This should prevent a potential race-condition that may", 
+   "or may not have been the root cause of some repository corruptions.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(get_repos): move call to svn_fs_open_berkeley to after lock acquisition."
+  ], 
+  "revision_id": "846911"
+ }
+]

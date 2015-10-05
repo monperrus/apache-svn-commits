@@ -1,0 +1,100 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-09-17T03:32:56.196011Z", 
+  "msg": [
+   "On the ignore-mergeinfo branch:", 
+   "Rev the client diff APIs to add the ignore-mergeinfo flag.", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff): Update callers.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Allow 'svn diff' to accept --ignore-mergeinfo.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_diff_summarize_dup):  Update docs.", 
+   "(svn_client_diff5, svn_client_diff_peg5, svn_client_diff_summarize3,", 
+   "svn_client_diff_summarize_peg3): New.", 
+   "(svn_client_diff4, svn_client_diff_peg4, svn_client_diff_summarize2,", 
+   "svn_client_diff_summarize_peg2): Deprecate.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(display_prop_diffs, diff_cmd_baton, diff_prepare_repos_repos,", 
+   "unsupported_diff_error, diff_wc_wc, diff_repos_repos): Update docs.", 
+   "(diff_parameters): Add the ignored_props member.", 
+   "(svn_client_diff5, svn_client_diff_peg5, svn_client_diff_summarize3,", 
+   "svn_client_diff_summarize_peg3): New.", 
+   "(svn_client_diff4, svn_client_diff_peg4, svn_client_diff_summarize2,", 
+   "svn_client_diff_summarize_peg2): Deprecate, implement as wrappers."
+  ], 
+  "revision_id": "873190"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-09-17T03:22:41.935506Z", 
+  "msg": [
+   "* contrib/client-side/svnmerge/svnmerge-migrate-history-remotely.py", 
+   "New remotely usable svnmerge history migration script for folks who", 
+   "lack direct server-side repository access and want to do piecemeal", 
+   "migration of svnmerge.py tracking data.  Checkout a depth-empty", 
+   "working copy of the branch you wish to convert, run this script", 
+   "on it, review the results, and either commit or revert."
+  ], 
+  "revision_id": "873189"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-09-17T03:01:13.508128Z", 
+  "msg": [
+   "Resurrect the old SQLite utility functions from r29035. These used to be", 
+   "FS-specific, but are now moved into libsvn_subr as svn-internal functions.", 
+   "A few new error codes have been resurrected, too, and renamed appropriately.", 
+   "The header and implementation have been renamed away from the FS label. A", 
+   "new type (svn_sqlite__db_t) was introduced so that clients would not need", 
+   "to include the sqlite3.h header file, thus limiting the sqlite exposure.", 
+   "The schema handling has also been switched to a more generic mechanism,", 
+   "allowing for multiple clients to use SQLite databases.", 
+   "Note: the .c file has guards around the code to prevent a \"hard\"", 
+   "dependency upon SQLite at this time. ENABLE_SQLITE_TESTING must be", 
+   "(manually) defined in order to compile this code into libsvn_subr.", 
+   "* subversion/include/private/svn_sqlite.h: new (resurrected) header", 
+   "* subversion/libsvn_subr/sqlite.c: new (resurrected) file", 
+   "* subversion/include/svn_error_codes.h:", 
+   "(SVN_ERR_SQLITE_ERROR, SVN_ERR_SQLITE_READONLY,", 
+   "SVN_ERR_SQLITE_UNSUPPORTED_SCHEMA): new error codes"
+  ], 
+  "revision_id": "873188"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-09-17T01:49:53.230997Z", 
+  "msg": [
+   "Rename the ignore-prop-mods branch to the ignore-mergeinfo branch.", 
+   "At this point, the branch is specifically about allowing st, diff, and log", 
+   "to ignore mergeinfo mods, and the branch name should reflect that."
+  ], 
+  "revision_id": "873187"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-09-17T00:21:53.296442Z", 
+  "msg": [
+   "Fix a bug and greatly improve merge performance in a common use case.", 
+   "Quite a while back glasser pointed out that the code to filter", 
+   "self-referential mergeinfo was a performance hog - see", 
+   "http://svn.haxx.se/dev/archive-2008-02/0206.shtml.  More recently arfrever", 
+   "found a merge bug where this filtering code removed valid mergeinfo - see", 
+   "http://subversion.tigris.org/servlets/ReadMsg?list=dev&&msgNo=142849.", 
+   "This change implements glasser's suggestion, which also fixes the problem", 
+   "arfrever noted.", 
+   "Suggested by: glasser", 
+   "* subversion/libsvn_client/merge.c", 
+   "(split_mergeinfo_on_revision): New.", 
+   "(filter_self_referential_mergeinfo): Where possible use", 
+   "svn_client__get_history_as_mergeinfo() one time per incoming mergeinfo", 
+   "merge source rather than svn_client__repos_locations() for each discrete", 
+   "range in each merge source's rangelist.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(natural_history_filtering): Remove comment about XFail.", 
+   "(test_list): Remove XFail from natural_history_filtering."
+  ], 
+  "revision_id": "873186"
+ }
+]

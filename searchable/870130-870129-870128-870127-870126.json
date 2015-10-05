@@ -1,0 +1,82 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-03-26T04:32:28.606322Z", 
+  "msg": [
+   "* STATUS: Move r29980 to approved."
+  ], 
+  "revision_id": "870130"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-03-26T04:31:03.096725Z", 
+  "msg": [
+   "* STATUS: Nominate r30054, to go along with r30050."
+  ], 
+  "revision_id": "870129"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-03-26T04:30:09.325058Z", 
+  "msg": [
+   "Followup to r30050: Use an existing error instead of defining a new one.", 
+   "Suggested by: kfogel", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_BAD_PATH): Remove.", 
+   "* subversion/svn/commit-cmd.c", 
+   "(svn_cl__commit): Use SVN_ERR_WC_BAD_PATH instead of SVN_ERR_BAD_PATH."
+  ], 
+  "revision_id": "870128"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-03-26T03:26:30.571519Z", 
+  "msg": [
+   "Fix an intermittent problem with diff_tests 47 ('svn diff -x wc -r#'", 
+   "should return error).", 
+   "The problem was that the RA session got opened before the diff options", 
+   "were parsed.  Since sbox.wc_dir came right after the -x option (that's", 
+   "the pilot error we're testing for), the client would first contact the", 
+   "repository of `.' -- the repository of the regression suite's own", 
+   "working copy, i.e., the svn.collab.net repository.  If contacting that", 
+   "repository went fine, then later the client would hit the expected", 
+   "option-parsing error (right before trying to diff a file), and we'd", 
+   "never even know about the spurious RA traffic.  But if contacting the", 
+   "repository failed (say, because of a cert error over https://, which", 
+   "could happen because the test suite uses its own config dir different", 
+   "from the tester's), then the test would fail, because it's expecting a", 
+   "parse error not an RA error.", 
+   "The fix is to set up the diff command and its options earlier, before", 
+   "the repository is contacted.  Now that we parse the options earlier,", 
+   "we also parse them just once, instead of on each diff_content_changed().", 
+   "As a bonus, we no longer need to pass diff parameters around so much,", 
+   "so we don't (but note that removing all those parameters makes this", 
+   "commit look hairier than it really is).", 
+   "* subversion/libsvn_client/diff.c", 
+   "(struct diff_cmd_baton): Replace options with field with two new", 
+   "fields: diff_cmd and options.  Remove config field.", 
+   "(struct diff_parameters): Remove options field entirely.", 
+   "(set_up_diff_cmd_and_options): New helper function.  Remove ancient", 
+   "and redundant assert() from inherited code (see r1195).  Note: a", 
+   "problem with this function was fixed in r30101.", 
+   "(svn_client_diff4, svn_client_diff_peg4): Don't set up options in", 
+   "diff_params anymore.  Use above new helper to set up the diff_cmd", 
+   "and options part of the diff_cmd_baton.", 
+   "(svn_client_diff_summarize2, svn_client_diff_summarize_peg2): Don't", 
+   "set up options in diff_params anymore.", 
+   "(diff_content_changed): Get diff command options from diff_cmd_baton,", 
+   "for both external and internal invocation.", 
+   "(diff_wc_wc, diff_repos_wc): Remove options parameter.", 
+   "(do_diff): Don't pass options to diff_wc_wc or diff_repos_wc anymore."
+  ], 
+  "revision_id": "870127"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2008-03-26T03:20:09.460257Z", 
+  "msg": [
+   "Vote for r29980"
+  ], 
+  "revision_id": "870126"
+ }
+]

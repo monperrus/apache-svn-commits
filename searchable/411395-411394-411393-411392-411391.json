@@ -1,0 +1,56 @@
+[
+ {
+  "author": "jdillon", 
+  "date": "2006-06-03T07:07:00.023543Z", 
+  "msg": [
+   "Added debug to dump inputed line as hex, trying to hunt down corruption problem using telnet"
+  ], 
+  "revision_id": "411395"
+ }, 
+ {
+  "author": "dennisbyrne", 
+  "date": "2006-06-03T07:05:54.935111Z", 
+  "msg": [
+   "1.5 allowed"
+  ], 
+  "revision_id": "411394"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2006-06-03T07:02:32.268629Z", 
+  "msg": [
+   "DERBY-1329: Set ColumnReference in CurrentOfNode when a match is found.", 
+   "Attaching a patch to address this issue. In a word, the problem is that the ColumnReference in a CurrentOfNode can, in certain situations, end up with a tableNumber that is never set, and hence it defaults to -1. The fix I've made ensures that the ColumnReference's tableNumber will always be set when necessary--i.e. when we've found the ResultColumn that matches the received ColumnReference. I think this is the correct fix for two reasons:", 
+   "1) In FromList.bindColumnReferences(), there is the following comment:", 
+   "/* TableNumbers are set in the CR in the underlying", 
+   "* FromTable. This ensures that they get the table", 
+   "* number from the underlying table, not the join node.", 
+   "* This is important for beging able to push predicates", 
+   "* down through join nodes.", 
+   "*/", 
+   "The place where \"TableNumbers are set\" is in the getMatchingColumn() call, which means that the underlying FromTable (which includes CurrentOfNode) is responsible for setting the table number.", 
+   "2) Inspection of all other FromTables that implement getMatchingColumn() shows that they all set the ColumnReference's table number if the corresponding ResultColumn is found. The one exception is JoinNode, but the getMatchingColumn() method in JoinNode in turn calls the method of the same name on the join's left and right nodes, so we know that, eventually, the ColumnReference's tableNumber will get set by one of the other FromTable's getMatchingColumn() calls. So the only FromTable that does not set the tableNumber is CurrentOfNode, and that's the reason for the failure described in this issue.", 
+   "The change seems fairly minor but if anyone has a chance to double-check it, that'd be great. I also added a test case (using the repro posted in the above comments) to lang/update.sql.", 
+   "I ran derbyall on Linux Red Hat (RHEL4) using ibm142 and saw no new failures.", 
+   "Submitted by Army Brown (gozinx@gmail.com)"
+  ], 
+  "revision_id": "411393"
+ }, 
+ {
+  "author": "dennisbyrne", 
+  "date": "2006-06-03T06:54:10.862129Z", 
+  "msg": [
+   "java syntax error in invokeOnComponent"
+  ], 
+  "revision_id": "411392"
+ }, 
+ {
+  "author": "jdillon", 
+  "date": "2006-06-03T06:34:40.041788Z", 
+  "msg": [
+   "Added simple test... more as a placeholder for future integration tests", 
+   "Fixed bug found in echo command thanks to tests"
+  ], 
+  "revision_id": "411391"
+ }
+]

@@ -1,0 +1,89 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-10-20T01:17:06.949229Z", 
+  "msg": [
+   "Handle a deletion's post-commit behavior using new workqueue operations,", 
+   "rather than the old-style loggy operations.", 
+   "This shifts a large block of code from log.c::log_do_committed() into the", 
+   "workqueue. A future step can shift the code to wc-ng mechanisms.", 
+   "* subversion/libsvn_wc/workqueue.h:", 
+   "(svn_wc__wq_add_deletion_postcommit): queu an operation to handle the", 
+   "post-commit work for a deletion.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(OP_DELETION_POSTCOMMIT): new operation for a deletion's post-commit work", 
+   "(run_deletion_postcommit): new func to do all the postcommit work for a", 
+   "deletion. the bulk is from log_do_committed, with a little preparation", 
+   "to get parameters from the skel", 
+   "(svn_wc__wq_add_deletion_postcommit): new function to assemble a skel", 
+   "and queue it up", 
+   "(dispatch_table): add handler for OP_DELETION_POSTCOMMIT", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_deletion_postcommit): new function to handle deletions'", 
+   "post-commit work. it simply queues up a new work item.", 
+   "(process_committed_leaf): for schedule-delete nodes, call the new", 
+   "process_deletion_postcommit function.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_committed): rip out a big section. it is now in the workqueue."
+  ], 
+  "revision_id": "880195"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-20T00:26:07.803132Z", 
+  "msg": [
+   "Use the new svn_skel__parse_int() function, and simplify some skel", 
+   "navigation with a standard ARG1 skel localvar.", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(run_revert, run_prepare_revert_files, run_killme, run_loggy): switch to", 
+   "use parse_int() and the new ARG1 standard"
+  ], 
+  "revision_id": "880194"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-20T00:02:47.236540Z", 
+  "msg": [
+   "Add a utility function to easily get integers out of a skel.", 
+   "* subversion/include/private/svn_skel.h:", 
+   "* subversion/libsvn_subr/skel.c:", 
+   "(svn_skel__parse_int): new function"
+  ], 
+  "revision_id": "880193"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-19T22:49:33.115387Z", 
+  "msg": [
+   "Run the workqueues immediately, and in a top-down fashion. The old code", 
+   "attempted to collect all the places workqueues were present, and run them", 
+   "at the end via (unordered) hash iteration. This is Bad since we must do", 
+   "post-commit in a top-down order.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(process_committed_internal): right before recursing, run the workqueue", 
+   "to process anything in the queue for the current directory. if that", 
+   "causes the directory to go away, then just bail out. directly use", 
+   "wq_run() for the subdir's queue -- we don't need run_log2's write", 
+   "checking since process_committed_leaf() has done that", 
+   "(svn_wc_process_committed_queue): remove UPDATED_ADMS and the related", 
+   "code. after the call to process_committed_internal() run the workqueue", 
+   "associated with that node", 
+   "(svn_wc_process_committed4): switch to wq_run()"
+  ], 
+  "revision_id": "880192"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-19T22:37:49.987255Z", 
+  "msg": [
+   "Fix the test for a missing workqueue. The old code using adm_available()", 
+   "throws PATH_NOT_FOUND if the requested node does not exist. We'll simply", 
+   "state that the node must exist, and it must not be a missing/obstructed", 
+   "directory (where the latter is detected by wc_db itself).", 
+   "* subversion/libsvn_wc/workqueue.c:", 
+   "(svn_wc__wq_run): look for non-existent nodes rather than specifically", 
+   "looking for missing/obstructed subdirs."
+  ], 
+  "revision_id": "880191"
+ }
+]

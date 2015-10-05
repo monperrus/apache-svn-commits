@@ -1,0 +1,61 @@
+[
+ {
+  "author": "mcslee", 
+  "date": "2007-12-13T22:47:33.000000Z", 
+  "msg": [
+   "Use HAVE_SYS_TIME_H instead of HAVE_CLOCK_GETTIME", 
+   "Summary: Still need the right include here", 
+   "Reviewed By: mcslee", 
+   "Test Plan: Paul Saab used this fix to build on Leopard"
+  ], 
+  "revision_id": "665390"
+ }, 
+ {
+  "author": "pfung", 
+  "date": "2007-12-13T22:30:47.000000Z", 
+  "msg": [
+   "[Thrift] message debugging for std::exceptions", 
+   "std::exceptions did not have debug messages printed", 
+   "reviewed by dreiss", 
+   "test plan: compiles"
+  ], 
+  "revision_id": "665389"
+ }, 
+ {
+  "author": "jwang", 
+  "date": "2007-12-13T19:46:27.000000Z", 
+  "msg": [
+   "Fix to TThriftTransport corruption detection", 
+   "Summary: O_APPEND means that even if the file pointer is in the middle of the file, the next write will go to the end of the file. So when initializing the TThriftTransport to be written to, we need to truncate the file after the last good event.  I'm pretty sure this was what was causing queuemap log corruption when the multiplexer is restarted.", 
+   "The corruption doesn't necessarily go away at the next chunk boundary because of the offset being recalculated.  I think it's good to have the offset recalculated, but then we shouldn't use the old chunk boundary data there, but rather use the newly calculated offset to determine the padding (could be an entire chunk, but that's okay -- way better than corruption)", 
+   "Reviewed By: mcslee", 
+   "Test Plan: Wrote to a ThriftFile using local scribe instance. Printed it. Then cat'd garbage to it from the command line. Then wrote to it again. Then printed it again.  Seems to work fine, whereas with old scribe binary the later entries were corrupted.", 
+   "Revert: OK", 
+   "DiffCamp Revision: 4683"
+  ], 
+  "revision_id": "665388"
+ }, 
+ {
+  "author": "aditya", 
+  "date": "2007-12-11T22:23:51.000000Z", 
+  "msg": [
+   "-- better error checking for setRecvTimeout and setSendTimeout", 
+   "Summary:", 
+   "- could help prevent a 2.6.13 kernel bug", 
+   "Reviewed By: mcslee, dreiss", 
+   "Test Plan:", 
+   "- Testing kernel crashes"
+  ], 
+  "revision_id": "665387"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-12-05T23:20:54.000000Z", 
+  "msg": [
+   "Failing to init eventBase_ to NULL in one constructor", 
+   "Reviewed By: dreiss", 
+   "Test Plan: See if scribe works for powerset"
+  ], 
+  "revision_id": "665386"
+ }
+]

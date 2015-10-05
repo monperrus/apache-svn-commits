@@ -1,0 +1,89 @@
+[
+ {
+  "author": "davisp", 
+  "date": "2010-11-05T23:14:02.860228Z", 
+  "msg": [
+   "Enable CouchDB to manage OS process daemons.", 
+   "This is a simple feature that allows useres to configure CouchDB", 
+   "so that it maintains a given OS level process alive. If the process", 
+   "dies for any reason, CouchDB will restart it. If the process restarts", 
+   "too often, then CouchDB will mark it has halted and not attempt", 
+   "to restart it. The default max restart rate is three times in the", 
+   "last five seconds. These parameters are adjustable.", 
+   "Commands that are started in this manner will have access to a simple", 
+   "API over stdio to request configuration parameters or to add log", 
+   "statements to CouchDB's logs.", 
+   "To configure an OS process as a CouchDB os_daemon, create a section", 
+   "in your local.ini like such:", 
+   "[os_daemons]", 
+   "daemon_name = /path/to/command -with args", 
+   "This will make CouchDB bring up the command and attempt to keep it", 
+   "alive. To request a configuration parameter, an os_daemon can write", 
+   "a simple JSON message to stdout like such:", 
+   "[\"get\", \"os_daemons\"]\\n", 
+   "which would return:", 
+   "{\"daemon_name\": \"/path/to/command -with args\"}", 
+   "Or:", 
+   "[\"get\", \"os_daemons\", \"daemon_name\"]\\n", 
+   "which would return:", 
+   "\"/path/to/command -with args\"", 
+   "There's no restriction on what configuration variables are visible.", 
+   "There's also no method for altering the configuration.", 
+   "If you would like your OS daemon to be restarted in the event that", 
+   "the configuration changes, you can send the following messages:", 
+   "[\"register\", $(SECTION)]\\n", 
+   "When anyting in that section changes, your OS process will be", 
+   "rebooted so it can pick up the new configuration settings. If you", 
+   "want to listen for changes on a specific key, you can send something", 
+   "like:", 
+   "[\"register\", $(SECTION), $(KEY)]\\n", 
+   "In this case, CouchDB will only restart your daemon if that exact", 
+   "section/key pair changes, instead of anything in that entire section.", 
+   "Logging commands look like:", 
+   "[\"log\", $(JSON_MESSAGE)]\\n", 
+   "Where $(JSON_MESSAGE) is arbitrary JSON data. These messages are", 
+   "logged at the 'info' level. If you want to log at a different level", 
+   "you can pass messages like such:", 
+   "[\"log\", $(JSON_MESSAGE), {\"level\": $(LEVEL)}]\\n", 
+   "Where $(LEVEL) is one of \"debug\", \"info\", or \"error\".", 
+   "When implementing a daemon process to be managed by CouchDB you", 
+   "should remember to use a method like checking the parent process", 
+   "id or if stdin has been closed. These flags can tell you if", 
+   "your daemon process has been orphaned so you can exit cleanly."
+  ], 
+  "revision_id": "1031875"
+ }, 
+ {
+  "author": "benoitc", 
+  "date": "2010-11-05T23:12:33.965485Z", 
+  "msg": [
+   "useless js logging"
+  ], 
+  "revision_id": "1031874"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2010-11-05T23:08:00.529075Z", 
+  "msg": [
+   "whitespace"
+  ], 
+  "revision_id": "1031873"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-11-05T22:59:49.881783Z", 
+  "msg": [
+   "HBASE-3203 We can get an order to open a region while shutting down and it'll hold up regionserver shutdown"
+  ], 
+  "revision_id": "1031872"
+ }, 
+ {
+  "author": "namit", 
+  "date": "2010-11-05T22:55:47.919362Z", 
+  "msg": [
+   "HIVE-1768 Update transident_lastDdlTime only if not specified", 
+   "(Paul Yang via namit)"
+  ], 
+  "revision_id": "1031871"
+ }
+]

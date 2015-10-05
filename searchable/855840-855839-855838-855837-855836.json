@@ -1,0 +1,105 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-08-16T21:45:57.716445Z", 
+  "msg": [
+   "Initial stab at thread-local implementation of user-specific locale", 
+   "preferences.  Much of this code is likely to be ripped out in some", 
+   "subsequent refactoring (moving away from thread-locals), but for the", 
+   "time being the implementation provides useful scaffolding from which", 
+   "to build and test the multi-user gettext-like functionality useful on", 
+   "the server-side.", 
+   "* subversion/include/svn_intl.h", 
+   "(svn_intl_get_locale_prefs): Removed void *context parameter in", 
+   "favor of just an apr_pool_t *.", 
+   "(svn_intl_set_locale_prefs): Swapped order of parameters to put the", 
+   "apr_pool_t last (consistent with other SVN API decls).", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_NLS_CATEGORY_START): A new section for svn_nls/svn_intl", 
+   "error codes.", 
+   "(SVN_ERR_NLS_UNRECOGNIZED_LOCALE): New error code for use when a", 
+   "locale is not recognized (e.g. \"es\" might not be recognized when", 
+   "\"es_ES\" is).", 
+   "* subversion/libsvn_subr/nls.c", 
+   "Improved doc string.", 
+   "* subversion/libsvn_subr/intl.c", 
+   "Removed #if APR_HAS_THREADS around decl of cache_lock, since we", 
+   "clean that up in svn_intl_terminate().", 
+   "(locale_prefs_threadkey): New static module variable referencing", 
+   "thread-local storage of user-specific locale preferences.", 
+   "(svn_intl_terminate): Cleanup after our new locale_prefs_threadkey", 
+   "storage, and our existing cache_lock mutex.", 
+   "(svn_intl_initialize): Init locale_prefs_threadkey.  Add some inline", 
+   "comments to the setlocale() block, and use", 
+   "SVN_ERR_NLS_UNRECOGNIZED_LOCALE if it fails.", 
+   "(NO_LOCALE_PREFS): Removed.  Locale prefs can now be NULL.", 
+   "(svn_intl_get_locale_prefs): Adjusted API, and implemented", 
+   "user-specific preferences using thread-local storage.", 
+   "(svn_intl_set_locale_prefs): Adjusted API, and implemented", 
+   "user-specific preferences using thread-local storage.", 
+   "(svn_intl_dgettext): Leveraged svn_intl_get_locale_prefs(), and used", 
+   "the locale(s) it returns to lookup the preferred localization.", 
+   "* subversion/mod_dav_svn/lang.c", 
+   "(svn_dav__negotiate_lang_prefs): Only bother allocating a new array", 
+   "if some language preferences were parsed.  Otherwise, use the NULL", 
+   "value for lang prefs which is now allowed.  Updated for", 
+   "svn_intl_set_locale_prefs() API change.", 
+   "* subversion/tests/libsvn_subr/intl-test.c", 
+   "(verbose_mode): Corrected data type from char * to svn_boolean_t.", 
+   "(LOCALE_PREFS): New set of user locale preferences used by test3.", 
+   "(test1, test2): Updated for API changes, avoided compilation", 
+   "warnings by using const, improved descriptive text.", 
+   "(test3): New test of user-specific locale preferences.", 
+   "(test_funcs): Switched test2 from XFAIL to PASS (may not always be", 
+   "true if you haven't installed .po files?), and added pointer to", 
+   "test3.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(parsed_request): Updated for svn_intl_get_locale_prefs() API", 
+   "change."
+  ], 
+  "revision_id": "855840"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-08-16T21:37:31.847774Z", 
+  "msg": [
+   "* STATUS: Propose r15361 with r14980. This change updates the Ruby", 
+   "documentation to show that the Ruby bindings work with SWIG 1.3.25.", 
+   "Both changes merge cleanly."
+  ], 
+  "revision_id": "855839"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-08-16T21:13:17.535485Z", 
+  "msg": [
+   "* STATUS: Propose r14980 for Subversion 1.2.x branch. This change upgrades", 
+   "the Ruby bindings to support SWIG 1.3.25. It's a trivial change, and it", 
+   "only affects the Ruby bindings for SWIG 1.3.25."
+  ], 
+  "revision_id": "855838"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-08-16T21:07:07.012922Z", 
+  "msg": [
+   "Merge r15734 from trunk to 1.2.x branch.", 
+   "Fix crash when calling svn_client_lock/_unlock with no targets.", 
+   "Votes:", 
+   "+1: lundblad, kfogel, dlr"
+  ], 
+  "revision_id": "855837"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-08-16T21:04:40.450454Z", 
+  "msg": [
+   "Merge r15737 from trunk to 1.2.x branch.", 
+   "Fix crash in javahl with revision with no dates.", 
+   "Votes:", 
+   "+1: pmayweg", 
+   "+0: lundblad, dlr"
+  ], 
+  "revision_id": "855836"
+ }
+]

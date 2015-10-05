@@ -1,0 +1,90 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-08T16:04:54.540344Z", 
+  "msg": [
+   "Remove the separate wc apis that registered a file external before it was", 
+   "inserted in the working copy. The external editor can install externals in", 
+   "a single step, which removes intermediate database states.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__set_file_external_location): Remove function.", 
+   "(svn_wc__get_file_external_editor): Provide the definition to the editor.", 
+   "(svn_wc__register_file_external): Remove function.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(switch_file_external): Stop registering file externals before they are", 
+   "inserted.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc__register_file_external): Remove function.", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(svn_wc__set_file_external_location): Remove function.", 
+   "(edit_baton): Add some comments. Add to be recorded information.", 
+   "(close_file): Register the provided information instead of the actual", 
+   "information.", 
+   "(svn_wc__get_file_external_editor): Store to be recorded information in", 
+   "baton."
+  ], 
+  "revision_id": "1100760"
+ }, 
+ {
+  "author": "lgentis", 
+  "date": "2011-05-08T15:44:34.570839Z", 
+  "msg": [
+   "Updates."
+  ], 
+  "revision_id": "1100759"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-08T15:39:45.657957Z", 
+  "msg": [
+   "Complete the file external editor in libsvn_wc and enable its use in", 
+   "libsvn_client. This removes the dependency on an existing parent directory", 
+   "from the updating of file externals.", 
+   "So this opens the door for moving file externals to their own storage outside", 
+   "NODES.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(switch_file_external): Remove ancestor checks. Start using the file external", 
+   "editor. Add missing update completed notification.", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(): Update includes.", 
+   "(edit_baton): Add missing variables for callbacks and file closed.", 
+   "(close_file): Handle property and file merging. Extend notification to make", 
+   "svn actually show output.", 
+   "(close_edit): Bump revisions if the file didn't change while updating.", 
+   "(svn_wc__get_file_external_editor): Fill more baton fields."
+  ], 
+  "revision_id": "1100758"
+ }, 
+ {
+  "author": "metskem", 
+  "date": "2011-05-08T15:27:09.648072Z", 
+  "msg": [
+   "2011-05-08  Harry Metske <metskem@apache.org>", 
+   "* 3.0.0-svn-228", 
+   "* fixed JSPWIKI-689 (InstallActionBean does not create admin user), most code", 
+   "taken from JSPWiki 2.8.", 
+   "* On Install.jsp I also moved the logdir and workdir fields from Advanced to Basic,", 
+   "since they are required fields.", 
+   "* Removed unmappable characters from CreoleToJSPWikiTranslatorTest (causing compile warnings)"
+  ], 
+  "revision_id": "1100757"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-08T15:22:01.483404Z", 
+  "msg": [
+   "Extract some logic from the update_editor's merge_file code to its own function", 
+   "to allow reusing it from the file external editor.", 
+   "This in preparation for moving file externals from the NODES table to their", 
+   "own EXTERNALS table in wc.db.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(close_directory): Remove unnecessary NULL check.", 
+   "(svn_wc__perform_file_merge): New function. Extracted from...", 
+   "(merge_file): ... here. Which calls svn_wc__perform_file_merge now.", 
+   "(close_file): Remove unnecessary NULL check.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(svn_wc__perform_file_merge): New function."
+  ], 
+  "revision_id": "1100756"
+ }
+]

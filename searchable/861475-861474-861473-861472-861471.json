@@ -1,0 +1,103 @@
+[
+ {
+  "author": "djames", 
+  "date": "2006-09-10T18:01:59.142996Z", 
+  "msg": [
+   "Make it possible to invoke callback functions directly in the", 
+   "Python bindings. You can now treat any callback object as a", 
+   "regular Python function, and invoke it directly.", 
+   "[ In build/generator/swig ]", 
+   "* header_wrappers.py", 
+   "(_write_callback_typemaps): New function.", 
+   "(_write_callbacks): Generate proxy methods / proxy objects", 
+   "for callbacks.", 
+   "[ In subversion/bindings/swig ]", 
+   "* include/proxy.swg", 
+   "(__getattr__): Only call the assert_valid function if it actually", 
+   "exists on the returned value. If we're returning a function, for", 
+   "example, it won't have a assert_valid member function.", 
+   "(funcptr_proxy, funcptr_member_proxy): New macros for generating", 
+   "proxy methods.", 
+   "* include/svn_types.swg", 
+   "(OUTPARAM): Add several types to the list of OUTPARAMS, so that", 
+   "they will be wrapped correctly. Skip svn_txdelta_window_handler_t", 
+   "for Python, because it is wrapped as a CALLABLE_CALLBACK.", 
+   "(CALLABLE_CALLBACK): New typemap.", 
+   "(PY_AS_VOID): Add 'out' typemap for PY_AS_VOID, so that it is", 
+   "possible to look at batons in Python.", 
+   "* python/tests/delta.py", 
+   "(testTxWindowHandler): Actually test the generated", 
+   "tx_invoke_window_handler function.", 
+   "* python/tests/client.py", 
+   "(testMethodCalls): Test direct method calls to callbacks.", 
+   "* python/tests/ra.py", 
+   "(test_commit2, test_commit, test_update): Invoke methods directly,", 
+   "instead of via the generated invoke function. Test that return", 
+   "values are not None."
+  ], 
+  "revision_id": "861475"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-09-10T15:00:53.450696Z", 
+  "msg": [
+   "Improve interface.", 
+   "* subversion/bindings/swig/svn_repos.i", 
+   "(%apply svn_stream_t *MAY_BE_NULL): svn_stream_t *dumpstream_may_be_null", 
+   "may be NULL.", 
+   "(svn_repos_dump_fs2): Re-define dummy svn_repos_dump_fs2 for changing", 
+   "parameter name to dumpstream_may_be_null from dumpstream.", 
+   "* subversion/bindings/swig/ruby/test/test_repos.rb", 
+   "(SvnReposTest#test_dump): New test.", 
+   "(SvnReposTest#test_load):", 
+   "- Move Svn::Repos#dump_fs related assertions to SvnReposTest#test_dump.", 
+   "- Add an assertion that Svn::Repos#load_fs doesn't accept nil for", 
+   "dumpstream."
+  ], 
+  "revision_id": "861474"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-09-10T14:46:05.018077Z", 
+  "msg": [
+   "Improve interface.", 
+   "* subversion/bindings/swig/include/svn_types.swg", 
+   "(%typemap(in) svn_stream_t *MAY_BE_NULL): New typemap.", 
+   "* subversion/bindings/swig/svn_repos.i", 
+   "(%apply svn_stream_t *MAY_BE_NULL): svn_stream_t *feedback_stream", 
+   "may be NULL.", 
+   "* subversion/bindings/swig/ruby/svn/repos.rb", 
+   "(Svn::Repos#load_fs): Make feedback_stream optional.", 
+   "* subversion/bindings/swig/ruby/test/test_repos.rb", 
+   "(SvnReposTest#test_load): Add optional parameters test."
+  ], 
+  "revision_id": "861473"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-09-10T10:36:09.557168Z", 
+  "msg": [
+   "Improve interface.", 
+   "* subversion/bindings/swig/ruby/svn/repos.rb", 
+   "(Svn::Repos#load_fs): Make some parameters, uuid_action and parent_dir,", 
+   "optional.", 
+   "* subversion/bindings/swig/ruby/test/test_repos.rb", 
+   "(SvnReposTest#test_load): Add optional paramters test."
+  ], 
+  "revision_id": "861472"
+ }, 
+ {
+  "author": "kou", 
+  "date": "2006-09-10T10:29:06.762757Z", 
+  "msg": [
+   "Use auto-generated invoke function.", 
+   "* subversion/bindings/swig/svn_delta.i", 
+   "(svn_txdelta_invoke_window_handler),", 
+   "subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.c", 
+   "(svn_swig_rb_invoke_txdelta_window_handler): Remove needless function.", 
+   "* subversion/bindings/swig/ruby/svn/delta.rb", 
+   "(Svn::Delta::TextDeltaWindowHandler#call): Adjust arguments."
+  ], 
+  "revision_id": "861471"
+ }
+]

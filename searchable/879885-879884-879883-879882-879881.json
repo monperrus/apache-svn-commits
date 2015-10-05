@@ -1,0 +1,94 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2009-10-06T23:43:08.815323Z", 
+  "msg": [
+   "Fix usage of 'grep' in the build system. '$GREP' was invoked for finding", 
+   "D-Bus and KWallet, but is not defined in autoconf-2.59. The build system uses", 
+   "plain 'grep' or '$EGREP' everywhere else so use '$EGREP' here too.", 
+   "* build/ac-macros/kwallet.m4", 
+   "(SVN_LIB_KWALLET): Use '$EGREP' instead of '$GREP', and adjust the regex", 
+   "syntax accordingly.", 
+   "* configure.ac", 
+   "(D-Bus section): Use '$EGREP' instead of '$GREP'."
+  ], 
+  "revision_id": "879885"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-06T21:29:17.197712Z", 
+  "msg": [
+   "Remove the last call to svn_wc_walk_entries3(), by making the lock", 
+   "extension code use svn_wc__internal_walk_children().", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(extend_lock_found_entry): Rename to ...", 
+   "(extend_lock_cb): ... this and implement svn_wc__node_found_func_t.", 
+   "(extend_lock_walker): Remove variable.", 
+   "(svn_wc__adm_extend_lock_to_tree):", 
+   "Take db and abspath. Walk children instead of entries.", 
+   "* subversion/libsvn_wc/lock.h", 
+   "(svn_wc__adm_extend_lock_to_tree): Take db and abspath.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(log_do_delete_entry): Update caller."
+  ], 
+  "revision_id": "879884"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-06T20:32:15.929351Z", 
+  "msg": [
+   "Replace a call to svn_wc_entry() with a svn_wc__get_entry().", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc_walk_entries3): Retrieve entry in a way that its pool can be", 
+   "cleared later and only when it is not hidden. Use the standard", 
+   "variable name local_abspath. Update errors to use absolute paths."
+  ], 
+  "revision_id": "879883"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-06T19:55:58.285985Z", 
+  "msg": [
+   "Replace a few more entry operations with their db counterparts.", 
+   "This time in the code that opens an access baton for an anchor", 
+   "of a specific path.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(child_is_disjoint): Read wc_db instead of entries.", 
+   "(open_anchor): Add svn_error_return() and check adm availability", 
+   "instead of entries."
+  ], 
+  "revision_id": "879882"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-10-06T18:21:45.388294Z", 
+  "msg": [
+   "Remove some more svn_wc_adm_access_t from libsvn_client/merge.c.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_diff_editor): Remove svn_wc_adm_access_t * argument and", 
+   "replace with a svn_wc_context_t *.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(drive_merge_report_editor): Remove adm_access arg and update call to", 
+   "svn_client__get_diff_editor.", 
+   "(do_mergeinfo_unaware_dir_merge): Remove adm_access arg and update call to", 
+   "drive_merge_report_editor.", 
+   "(do_directory_merge): Remove adm_access arg and replace it with the", 
+   "absolute WC merge target.  Update calls to", 
+   "do_mergeinfo_unaware_dir_merge() and drive_merge_report_editor().", 
+   "(do_merge): Remove adm_access arg and update call to", 
+   "do_directory_merge().", 
+   "(merge_cousins_and_supplement_mergeinfo): Remove adm_access arg and", 
+   "update call to do_merge().", 
+   "(svn_client_merge3): Update calls to do_merge() and", 
+   "merge_cousins_and_supplement_mergeinfo().", 
+   "(svn_client_merge_reintegrate): Update calls to do_merge() and", 
+   "merge_cousins_and_supplement_mergeinfo().", 
+   "(svn_client_merge_peg3): Update call to do_merge().", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(private/svn_wc_private.h): Add to #includes.", 
+   "(svn_client__get_diff_editor): Take a wc_ctx instead of an adm_access", 
+   "and use the former to get an adm_access for the edit baton."
+  ], 
+  "revision_id": "879881"
+ }
+]

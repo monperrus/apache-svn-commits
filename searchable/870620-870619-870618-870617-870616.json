@@ -1,0 +1,93 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2008-04-11T22:06:02.354835Z", 
+  "msg": [
+   "Follow-up to r30510, fix a segfault when a merge removes explicit mergeinfo.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_self_referential_mergeinfo): Incoming prop->value *can* be NULL", 
+   "if the property is being removed!  Expect this (and don't filter", 
+   "obviously).", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(reverse_merge_away_all_mergeinfo): New test that would provoke a segfault", 
+   "without the changes above.", 
+   "(test_list): Add reverse_merge_away_all_mergeinfo.", 
+   "Found by: Bert Huijben <b.huijben@competence.biz>"
+  ], 
+  "revision_id": "870620"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2008-04-11T21:55:29.321363Z", 
+  "msg": [
+   "* STATUS: Nominate r30544."
+  ], 
+  "revision_id": "870619"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2008-04-11T21:52:51.004857Z", 
+  "msg": [
+   "A follow-up to r28591 (a fix for issue #3054, 'svn cl foo README; svn", 
+   "cl foo README' has unexpected output), removing the now-unused", 
+   "svn_wc_notify_changelist_failed enum element, and changing libsvn_wc", 
+   "to clear the error it passes to its notification callback. This take", 
+   "the (undocumented) responsibility for this cleanup off of the library", 
+   "consumer (who would potentially otherwise leak errors).", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Drop svn_wc_notify_changelist_failed.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_set_changelist): Cleanup the svn_error_t we allocate for the", 
+   "svn_wc_notify_changelist_moved case. Rename local variable", 
+   "unversioned_err to reassign_err.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Drop handling for the svn_wc_notify_changelist_failed enum", 
+   "element, and remove error clearing in the handling for", 
+   "svn_wc_notify_changelist_moved (which is now handled by libsvn_wc).", 
+   "* subversion/bindings/javahl/native/EnumMapper.cpp", 
+   "(EnumMapper::mapNotifyAction): Drop handling for the", 
+   "svn_wc_notify_changelist_failed enum element.", 
+   "* subversion/bindings/javahl/src/org/tigris/subversion/javahl/NotifyAction.java", 
+   "(changelist_failed): Remove constant.", 
+   "(merge_begin): Renumber constant.", 
+   "Patch by: Bert Huijben <b.huijben@competence.biz>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "870618"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-04-11T16:22:16.665316Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(fast-distclean): Delete mkmf.log."
+  ], 
+  "revision_id": "870617"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-04-11T16:08:11.751406Z", 
+  "msg": [
+   "Start detecting some tree conflicts on directories: in particular, the cases", 
+   "of merging a delete with a delete, and an add with an add.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_reason_t): Add a new conflict reason for \"already added\".", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_dir_added): Detect add-onto-added and add-obstructed-by-file.", 
+   "(merge_dir_deleted): Detect delete-onto-sched-del and delete-onto-deleted.", 
+   "(merge_dir_opened): Comment out a currently unused variable.", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__write_tree_conflicts_to_entry): Handle the new conflict reason.", 
+   "* subversion/libsvn_wc/tree_conflicts.h", 
+   "(SVN_WC__CONFLICT_REASON_ADDED): New conflict reason for \"already added\".", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(set_up_tree_conflicts): Minor doc fixes.", 
+   "* subversion/tests/cmdline/tree_conflict_tests.py", 
+   "(verbose_printlines): Fix it so it works.", 
+   "(ensure_tree_conflict): Count the sub-test failures instead of just", 
+   "aborting on the first one, to enable us to measure progress when not", 
+   "many of the tests are passing."
+  ], 
+  "revision_id": "870616"
+ }
+]

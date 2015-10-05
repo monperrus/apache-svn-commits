@@ -1,0 +1,119 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-01-16T18:38:41.563300Z", 
+  "msg": [
+   "JavaHL: Followup to r28933.  Add support for changelists to diff().", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Ljava_lang_String_2I_3Ljava_lang_String_2ZZZ,", 
+   "Java_org_tigris_subversion_javahl_SVNClient_diff__Ljava_lang_String_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Lorg_tigris_subversion_javahl_Revision_2Ljava_lang_String_2Ljava_lang_String_2I_3Ljava_lang_String_2ZZZ):  Add changelist parameter.", 
+   "* native/SVNClient.h,", 
+   "native/SVNClient.cpp", 
+   "(diff, diff, diff): Add changelist parameter, use it for the C API.", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientSynchronized.java,", 
+   "src/org/tigris/subversion/javahl/SVNClientInterface.java", 
+   "(diff): Add parameter, update wrappers.", 
+   "* tests/org/tigris/subversion/javahl/BasicTests.java:", 
+   "Update tests."
+  ], 
+  "revision_id": "869010"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-16T18:29:44.293873Z", 
+  "msg": [
+   "In theory, \"restore\" changelist support to 'svn diff --summarize'.", 
+   "Though, since it seems that 'svn diff --summarize' only works when", 
+   "invoked on two URLs, a scenario in which changelists don't play", 
+   "anyway.  This completes the overhaul of 'svn diff' with respect to the", 
+   "new changelist paradigm.", 
+   "* subversion/include/svn_client.h,", 
+   "* subversion/libsvn_client/diff.c", 
+   "(svn_client_diff_summarize2, svn_client_diff_summarize_peg2): Add", 
+   "'changelists' parameter.", 
+   "(svn_client_diff_summarize, svn_client_diff_summarize_peg): Update", 
+   "calls to revved functions.", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff): Update calls to svn_client_diff_summarize2() and", 
+   "svn_client_diff_summarize_peg2().", 
+   "* subversion/notes/changelist-design.txt", 
+   "Note completed task."
+  ], 
+  "revision_id": "869009"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-16T18:01:00.623756Z", 
+  "msg": [
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "Remove some unnecessary custom logic."
+  ], 
+  "revision_id": "869008"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-01-16T18:00:25.192302Z", 
+  "msg": [
+   "Rework the way 'svn diff' deals with changelists, now treating them as", 
+   "operational filters and supporting multiple specified changelists at", 
+   "once.  As part of this change, rename and relocate the little", 
+   "changelist-testing macro into the WC public-private header file.", 
+   "NOTE: The test provided covers only codepaths thru svn_client_diff4(),", 
+   "not thru the svn_client_diff_peg4() interface.  But these two", 
+   "functions are just very thin wrappers around the same logic, so", 
+   "I think that's okay.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_diff4, svn_wc_get_diff_editor4): Add 'changelists' parameter.", 
+   "(svn_wc_diff3, svn_wc_get_diff_editor3): Update docstrings.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_diff4, svn_client_diff_peg4): Add 'changelists' parameter.", 
+   "(svn_client_diff3, svn_client_diff_peg3, svn_client_info2): Docstring tweaks.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(SVN_WC__CL_MATCH): Moved and renamed from client.h:SVN_CLIENT__CL_MATCH.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(struct edit_baton): Add 'changelist_hash' member.", 
+   "(make_editor_baton): Accept new 'changelists' parameter, used to", 
+   "populate the edit baton's 'changelist_hash'.  Now returns an", 
+   "svn_error_t * and populates a baton pointer passed by reference.", 
+   "(report_wc_file_as_added, report_wc_directory_as_added, file_diff,", 
+   "directory_elements_diff): Consult the edit baton's changelist_hash", 
+   "member when deciding what to report.", 
+   "(svn_wc_diff4, svn_wc_get_diff_editor4): Accept new 'changelists'", 
+   "parameter.  Update calls to make_editor_baton().", 
+   "(svn_wc_diff3, svn_wc_get_diff_editor3): Update calls to revved functions.", 
+   "* subversion/libsvn_client/client.h", 
+   "(SVN_CLIENT__CL_MATCH): Now is svn_wc_private.h:SVN_WC__CL_MATCH.", 
+   "* subversion/libsvn_client/info.c", 
+   "(info_found_entry_callback, crawl_entries): Track rename of SVN_WC__CL_MATCH.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(struct diff_parameters): Add 'changelist' member.", 
+   "(diff_wc_wc): Add 'changelists' parameter, passed to updated call", 
+   "to svn_wc_diff4().", 
+   "(diff_repos_wc): Add 'changelists' parameter, passed to updated call", 
+   "to svn_wc_get_diff_editor4().", 
+   "(do_diff): Update calls to diff_repos_wc() and diff_wc_wc().", 
+   "(svn_client_diff4, svn_client_diff_peg4): Add 'changelists' parameter,", 
+   "used to populate new similarly named diff parameter structure member.", 
+   "(svn_client_diff3, svn_client_diff_peg3): Update calls to revved functions.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(harvest_committables): Track rename of SVN_WC__CL_MATCH.", 
+   "* subversion/svn/diff-cmd.c", 
+   "(svn_cl__diff): Lose crawl for changelists.  Update calls to", 
+   "svn_client_diff4() and svn_client_diff_peg4().", 
+   "* subversion/tests/cmdline/changelist_tests.py", 
+   "(diff_with_changelists): New test.", 
+   "(test_list): Add reference to new test."
+  ], 
+  "revision_id": "869007"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-01-16T17:35:13.162144Z", 
+  "msg": [
+   "Resolve trivial merge conflicts introduced in r28931."
+  ], 
+  "revision_id": "869006"
+ }
+]

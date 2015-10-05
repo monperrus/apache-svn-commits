@@ -1,0 +1,90 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2002-01-14T04:17:52.449810Z", 
+  "msg": [
+   "Provide a more useful error message for the case when we're commiting", 
+   "something inside a directory that is scheduled for addition.  This", 
+   "fixes issue #554.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CL_COMMIT_IN_ADDED_DIR): new error for when we try to", 
+   "commit a file inside a directory scheduled for addition.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(send_to_repos): if the entry for our base_dir was copied, error out,", 
+   "because it means we're committing something inside a directory that", 
+   "was scheduled for addition.", 
+   "* subversion/tests/clients/cmdline/commit_tests.py", 
+   "(commit_in_dir_scheduled_for_addition): new test for the case where", 
+   "we're commiting a file inside a directory scheduled for addition.", 
+   "Approved By: gstein"
+  ], 
+  "revision_id": "840940"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-14T00:50:08.065378Z", 
+  "msg": [
+   "It is possible (due to error) for a txn not to be present. Watch out", 
+   "for it so that we don't segfault.", 
+   "* libsvn_repos/reporter.c (svn_repos_finish_report): if there is no", 
+   "txn, then issue SVN_ERR_REPOS_NO_DATA_FOR_REPORT.", 
+   "(svn_repos_abort_report): watch out for NULL txn values", 
+   "* include/svn_error_codes.h (SVN_ERR_REPOS_NO_DATA_FOR_REPORT): new", 
+   "error code"
+  ], 
+  "revision_id": "840939"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-01-13T21:17:51.685818Z", 
+  "msg": [
+   "* Makefile.in (check): output 'FAILURE' when a test fails, since we", 
+   "output 'SUCCESS' when it passes.", 
+   "Patch by: Garrett Rooney <rooneg@electricjellyfish.net>"
+  ], 
+  "revision_id": "840938"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-13T00:07:22.194516Z", 
+  "msg": [
+   "Initial work for fetching deltas. Still not enabled, but this lays some", 
+   "groundwork.", 
+   "* libsvn_ra_dav/fetch.c (file_read_ctx_t {}): add fields for handling the", 
+   "Content-Type of the response. we'll be examining that to determine", 
+   "whether a diff was returned or not", 
+   "(get_delta_base): new function to return the base (a URL for a", 
+   "version resource) for a delta", 
+   "(fetch_file_reader): rearrange some code and add a placeholder for", 
+   "processing the Content-Type header (which is picked up by the", 
+   "ne_content_type_handler that was installed on the GET request)", 
+   "(simple_fetch_file): add some parameters necessary for fetching the", 
+   "version URL for the copy of the file in the WC. manually construct", 
+   "and process the GET request, rather than using ne_read_file; this", 
+   "allows us to attach headers to the request, and to process headers", 
+   "in the response.", 
+   "(fetch_file): pass NULL for the new simple_fetch_file() params", 
+   "(start_element, end_element): pass add'l params to simple_fetch_file()"
+  ], 
+  "revision_id": "840937"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-01-12T22:31:33.981781Z", 
+  "msg": [
+   "Add tests for issues 439 and 440, which were fixed some time ago, but never", 
+   "had regression tests written for them.  This resolves issue 441.", 
+   "* build.conf", 
+   "add an entry for stat_tests.py", 
+   "* subversion/clients/cmdline/diff_tests.py", 
+   "(diff_non_version_controlled_file): new test that calls 'svn diff' on a file", 
+   "that is not under version control.  also add it to the list of tests to run.", 
+   "* subversion/clients/cmdline/stat_tests.py", 
+   "new file for tests related to 'svn stat'", 
+   "(stat_unversioned_file_in_current_dir): test that runs 'svn stat' on an", 
+   "unversioned file in the current directory.", 
+   "Approved By: gstein"
+  ], 
+  "revision_id": "840936"
+ }
+]

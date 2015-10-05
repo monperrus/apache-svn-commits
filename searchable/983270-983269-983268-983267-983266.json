@@ -1,0 +1,110 @@
+[
+ {
+  "author": "veithen", 
+  "date": "2010-08-07T17:53:12.226708Z", 
+  "msg": [
+   "Merged some filesets together and removed some include/exclude directives that have no effect."
+  ], 
+  "revision_id": "983270"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2010-08-07T17:45:38.168596Z", 
+  "msg": [
+   "On the 'atomic-revprop' branch:", 
+   "Implement the API over ra_dav.", 
+   "[", 
+   "Note:", 
+   "ra_serf portions were reverted in r995818.", 
+   "Parts were then revived in r995827.", 
+   "]", 
+   "First, some general infrastructure:", 
+   "* notes/http-and-webdav/webdav-protocol", 
+   "(PROPPATCH):  Document the protocol extension.", 
+   "* subversion/include/private/svn_dav_protocol.h", 
+   "(SVN_DAV__OLD_VALUE, SVN_DAV__OLD_VALUE__ABSENT):  New macros.", 
+   "(svn_dav__two_props_t):  New helper typedef.", 
+   "Then, mod_dav_svn support:", 
+   "* subversion/mod_dav_svn/deadprops.c", 
+   "(save_value):", 
+   "Grow and use an OLD_VALUE_P parameter, passing it", 
+   "to svn_repos_fs_change_rev_prop4().", 
+   "(decode_property_value):", 
+   "Grow an ABSENT out parameter, and parse the (new) 'V:absent' attribute.", 
+   "(db_store):", 
+   "Parse <V:old-value/> and 'V:absent' and pass OLD_VALUE_P to save_value().", 
+   "ra_serf support:", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__walk_all_props, svn_ra_serf__set_ver_prop):", 
+   "Remove \"not implemented\" markers from docstrings.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(svn_ra_serf__set_ver_prop):", 
+   "Store an svn_dav__two_props_t in the hash if an OLD_VALUE_P was provided.", 
+   "(svn_ra_serf__walk_all_props):", 
+   "Support the VALUES_ARE_PROPPAIRS parameter when calling the walker.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(proppatch_context_t):  Add 'atomic_props' member.", 
+   "(get_encoding_and_cdata):", 
+   "Refactor to return a string rather than a bucket,", 
+   "and to support a NULL value.", 
+   "(proppatch_walker):", 
+   "Track get_encoding_and_cdata() signature change.", 
+   "Set 'V:absent' and <V:old-value/> as appropriate.", 
+   "(create_proppatch_body):", 
+   "Walk/Iterate CTX->ATOMIC_PROPS too.", 
+   "(svn_ra_serf__change_rev_prop):", 
+   "Remove 'not implemented' sentinel.  Initialize CTX->ATOMIC_PROPS.", 
+   "Pass OLD_VALUE_P to svn_ra_serf__set_prop() (which passes it", 
+   "to svn_ra_serf__set_ver_prop()).", 
+   "ra_neon support:", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(svn_ra_neon__do_proppatch):", 
+   "Add PROP_OLD_VALUES parameter.", 
+   "* subversion/libsvn_ra_neon/fetch.c", 
+   "(svn_ra_neon__change_rev_prop):", 
+   "Remove 'not implemented' sentinel.", 
+   "Pass OLD_VALUE_P to svn_ra_neon__do_proppatch() via PROP_OLD_VALUES.", 
+   "* subversion/libsvn_ra_neon/props.c", 
+   "(append_setprop):", 
+   "Grow OLD_VALUE_P parameter.  Use it to", 
+   "generate 'V:absent' and <V:old-value/> as appropriate.", 
+   "(svn_ra_neon__do_proppatch):", 
+   "Grow PROP_OLD_VALUES parameter, and use it.", 
+   "* subversion/libsvn_ra_neon/commit.c", 
+   "(do_proppatch, apply_revprops):", 
+   "Track signature change of svn_ra_neon__do_proppatch().", 
+   "Finally:", 
+   "* BRANCH-README:  Mark this as done."
+  ], 
+  "revision_id": "983269"
+ }, 
+ {
+  "author": "ivaynberg", 
+  "date": "2010-08-07T17:40:26.397057Z", 
+  "msg": [
+   "java 5 compilation fixes"
+  ], 
+  "revision_id": "983268"
+ }, 
+ {
+  "author": "ivaynberg", 
+  "date": "2010-08-07T17:39:47.648638Z", 
+  "msg": [
+   "java 5 compilation fixes"
+  ], 
+  "revision_id": "983267"
+ }, 
+ {
+  "author": "artagnon", 
+  "date": "2010-08-07T17:38:01.927648Z", 
+  "msg": [
+   "* subversion/svnrdump/load_editor.c", 
+   "(new_node_record): For closing directories, use the lighter", 
+   "svn_path_component_count instead of svn_path_decompose, since we", 
+   "don't need the individual components to close directories. Also,", 
+   "don't tax the rb->pool unnecessarily- use the scratch pool for the", 
+   "local variables."
+  ], 
+  "revision_id": "983266"
+ }
+]

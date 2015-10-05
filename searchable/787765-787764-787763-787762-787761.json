@@ -1,0 +1,57 @@
+[
+ {
+  "author": "jbellis", 
+  "date": "2009-06-23T17:55:39.354423Z", 
+  "msg": [
+   "Under heavy load and large column values, we still saw lockups in tcp connection. Here is the problem. The", 
+   "following code that sets the interest ops seems innocent, but it's the source of the problem. The reason is", 
+   "that this operation is not atomic. Another thread could sneak in between the reading of the ops and the", 
+   "setting of it. As a result, some wrong bits could be set.", 
+   "key_.interestOps(key_.interestOps() | SelectionKey.OP_READ)", 
+   "This is a sequence that demonstrates how we can lose the OP_READ bit forever and thus jam the read channel:", 
+   "1. Thread 1: we want to write a message and in write(Message) we are about to turn on OP_WRITE because the message can't be written in one shot.", 
+   "2. Thread 2: a read comes in and in read(SelectionKey), we turn off OP_READ and submit the read request to ReadWorkItem in Thread 3.", 
+   "3. Thread 1: read interestOps and see OP_READ as off.", 
+   "4. Thread 3: finished processing the read request and turn OP_READ on", 
+   "5. Thread 1: resumes and turn on OP_WRITE. However, by doing that, we also turned off OP_READ. The read channel is thus blocked forever after this.", 
+   "patch by Jun Rao; reviewed by jbellis for CASSANDRA-220"
+  ], 
+  "revision_id": "787765"
+ }, 
+ {
+  "author": "rangadi", 
+  "date": "2009-06-23T17:54:24.592830Z", 
+  "msg": [
+   "HDFS-195. Handle expired tokens when write pipeline is restablished.", 
+   "(Kan Zhang via rangadi)"
+  ], 
+  "revision_id": "787764"
+ }, 
+ {
+  "author": "namit", 
+  "date": "2009-06-23T17:52:27.450244Z", 
+  "msg": [
+   "HIVE-567. jdbc: integrate hive with pentaho report designer", 
+   "(Raghotham Murthy via namit)"
+  ], 
+  "revision_id": "787763"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2009-06-23T17:48:18.525137Z", 
+  "msg": [
+   "make static methods of SSTable that take a filename and then use the cache to grab an sstable object, simple non-static methods instead", 
+   "patch by jbellis; reviewed by Eric Evans for CASSANDRA-224"
+  ], 
+  "revision_id": "787762"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2009-06-23T17:48:08.722588Z", 
+  "msg": [
+   "encapsulate sstable bloom filter", 
+   "patch by jbellis; reviewed by Eric Evans for CASSANDRA-224"
+  ], 
+  "revision_id": "787761"
+ }
+]

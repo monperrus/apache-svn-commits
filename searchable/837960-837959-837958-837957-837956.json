@@ -1,0 +1,87 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2000-11-10T21:40:44.000000Z", 
+  "msg": [
+   "(thing_path): new helper func.", 
+   "(svn_wc__text_base_path): reimplement using above.", 
+   "(svn_wc__prop_path): new func.", 
+   "(svn_wc__do_property_merge): doc fix.", 
+   "(SVN_WC__TEXT_REJ_EXT, SVN_WC__TEXT_REJ_EXT): new pair of #defines,", 
+   "replacing former SVN_WC__REJ_EXT.  Use everywhere instead of \".rej\"", 
+   "and \".prej\"."
+  ], 
+  "revision_id": "837960"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-10T21:25:03.000000Z", 
+  "msg": [
+   "(svn_io_open_unique_file): fix error message."
+  ], 
+  "revision_id": "837959"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-10T21:19:36.000000Z", 
+  "msg": [
+   "(close_file): use result of svn_wc_text_modified_p() correctly."
+  ], 
+  "revision_id": "837958"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-11-10T21:03:48.000000Z", 
+  "msg": [
+   ".", 
+   "Subversion Timestamps.  Now with Sophistication(tm) Technology. :)", 
+   "Track two independent timestamps in the WC \"entries\" file: one for", 
+   "text, one for properties.  See libsvn_wc/README for details.", 
+   "Obviously, this is a big change that affects many, many things.", 
+   "* README:  describe text-time and prop-time entry attributes.", 
+   "* svn_wc.h (SVN_WC_ENTRY_ATTR_TEXT_TIME, SVN_WC_ENTRY_ATTR_PROP_TIME):", 
+   "define new entry attributes for textual timestamps and property", 
+   "timestamps.", 
+   "(svn_wc_entry_t):  rename `timestamp' field to `text_time', add", 
+   "`prop_time' field as well.", 
+   "* get_editor.c (close_file): write log item to bump revision number,", 
+   "then write one (or both) log items to bump text_time and/or", 
+   "prop_time.  Also: only bump a timestamp if the file's text (or", 
+   "props) is *not* locally modified!", 
+   "(free_dir_baton, add_directory): change calls to", 
+   "svn_wc__entry_merge_sync()", 
+   "* entries.c (handle_start_tag):  fill in both timestamp fields when reading", 
+   "an entry from XML.", 
+   "(sync_entry):  sync both timestamp fields into the attribute hash.", 
+   "(svn_wc__entry_merge_sync):  take both text_time and prop_time as", 
+   "arguments.", 
+   "(stuff_entry):  same.", 
+   "(svn_wc__entry_dup):  use new text_time and prop_time fields in entry.", 
+   "* log.c (start_handler): when executing <modify-entry .../>, check for", 
+   "all three timestamps scenarios for BOTH text_time and prop_time.", 
+   "Change all calls to svn_wc__entry_merge_sync().", 
+   "* questions.c (timestamps_equal_p):  add svn_wc__timestamp_kind input,", 
+   "indicating if you want either text or property timestamps compared.", 
+   "(svn_wc_text_modified_p):  change calls to timestamps_equal_p().", 
+   "Also run svn_io_check_path to see if file exists... if not, return", 
+   "\"unmodified\".", 
+   "* wc.h:  (svn_wc__entry_merge_sync):  update prototype.", 
+   "* adm_ops.c: (svn_wc_delete_file, svn_wc_add_file):  change call to", 
+   "svn_wc__entry_merge_sync().", 
+   "* adm_crawler.c: (check_for_unresolved_file_conflict):  use new", 
+   "text_time entry field.  This whole function is Wrong anyway, will be", 
+   "fixed soonly.", 
+   "* local_changes.c: (svn_wc__file_affected_time):  doc fix."
+  ], 
+  "revision_id": "837957"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-11-10T18:27:10.000000Z", 
+  "msg": [
+   "(svn_wc__file_affected_time): don't do props, just do the requested", 
+   "file, as before.  This reverts change 1.18--1.19, at Ben's request."
+  ], 
+  "revision_id": "837956"
+ }
+]

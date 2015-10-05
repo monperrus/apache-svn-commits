@@ -1,0 +1,115 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-01-05T13:11:43.486329Z", 
+  "msg": [
+   "Various improvements and generation of SWIG linking rules (not quite", 
+   "there yet, tho).", 
+   "* gen_base.py:", 
+   "(ExternalLibrary): new dependency node subclass to represent an", 
+   "external library.", 
+   "(GeneratorBase.__init__): switch the ConfigParser to a local var", 
+   "rather than stashing it into the instance. rename the version", 
+   "parser's var to vsn_parser to avoid conflict. stash the link-flags", 
+   "and add-deps config values into the target object for later pickup", 
+   "in the writing phase. for unknown libraries in the 'libs' config", 
+   "option, just add those as ExternalLibrary dependencies.", 
+   "(SWIGLibrary.__init__): add some new values that the writing code", 
+   "expects. a good chunk of this is caused by a stupid discrepancy of", 
+   "Target vs DependencyNode (these will be unified \"soon\").", 
+   "(Target.add_dependencies): wrap plain objects in an ObjectFile", 
+   "class (and keep wrapping apache objects).", 
+   "(TargetSWIG.add_dependencies): make the library depend upon the", 
+   "ObjectFile instance rather than a string", 
+   "* gen_make.py:", 
+   "(MakefileGenerator.write): process SWIGLibrary targets now. use a", 
+   "different mechanism to look up the SWIGLibrary sources (for now).", 
+   "combine the two loops which set up the list of objects,", 
+   "dependents, and libraries by taking advantage of the class types", 
+   "stored in the graph to direct our behavior. fetch the link flags,", 
+   "additional dependencies, and \"custom\" flag from the target object", 
+   "rather than reading the values via the parser. generate shortcut", 
+   "rules for the SWIGLibrary now that it has a good .name value.", 
+   "(class UnknownDependency): new exception class to denote a", 
+   "dependency found in the graph that we don't know how to handle."
+  ], 
+  "revision_id": "844335"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-05T12:54:04.855627Z", 
+  "msg": [
+   "Get the correct compilation rule into the Makefile for compiling", 
+   "Python extension modules.", 
+   "* ac-helpers/get-py-info.py: respond to --compile and print out the", 
+   "command and options to compile an extension", 
+   "* ac-helpers/swig.m4: set up the SWIG_PY_COMPILE symbol to hold the", 
+   "compilation info", 
+   "* Makefile.in: use SWIG_PY_COMPILE in the COMPILE_PY_WRAPPER rule"
+  ], 
+  "revision_id": "844334"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2003-01-05T00:53:43.974254Z", 
+  "msg": [
+   "When I delete or move a file, why should I see a diff comparing the", 
+   "file to an empty file?  It gets in in the way of seeing the diffs I'm", 
+   "interested in.", 
+   "Add a new --no-diff-deleted flag to `svn diff' and rename the", 
+   "`--no-diff-on-delete' flag in svnlook to `--no-diff-deleted'.  Make", 
+   "the help output consistent between the two programs.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_diff): Add a new svn_boolean_t no_diff_deleted input", 
+   "argument.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(equal_string): New static char[] which holds the '========='", 
+   "string.  Used by diff_file_deleted_no_diff() and diff_file_changed().", 
+   "(diff_callbacks): Deleted.  Now declared in svn_client_diff.", 
+   "(diff_file_deleted_with_diff): Renamed from diff_file_deleted().", 
+   "(diff_file_deleted_no_diff): New function that just prints the", 
+   "\"Index: %s (deleted)\" with the path name and returns.", 
+   "(svn_client_diff): Add a new svn_boolean_t no_diff_deleted input", 
+   "argument.  Build diff_callbacks here and set the file_deleted", 
+   "callback to either diff_file_deleted_with_diff() or", 
+   "diff_file_deleted_no_diff() depending upon no_diff_deleted.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__longopt_t): Add svn_cl__no_diff_deleted.", 
+   "(svn_cl__opt_state_t): Add no_diff_deleted.", 
+   "* subversion/clients/cmdline/main.c:", 
+   "Add '--no-diff-deleted' flag to `svn diff'.", 
+   "* subversion/clients/cmdline/diff-cmd.c", 
+   "(svn_cl__diff): Pass opt_state.no_diff_deleted to all", 
+   "svn_client_diff() calls.", 
+   "* subversion/svnlook/main.c", 
+   "(svnlook__no_diff_deleted): Renamed from svnlook__no_diff_on_delete.", 
+   "Make the `svnlook help diff` output the same as `svn help diff',", 
+   "which is a little clearer.", 
+   "* tools/dev/bash_completion:", 
+   "Add --no-diff-deleted to `svn diff' command completion.", 
+   "* tools/hook-scripts/commit-email.pl:", 
+   "s/--no-diff-on-delete/--no-diff-deleted/g."
+  ], 
+  "revision_id": "844333"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-01-05T00:52:54.325014Z", 
+  "msg": [
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_open): fix indentation of some variable declarations."
+  ], 
+  "revision_id": "844332"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2003-01-05T00:24:00.099782Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/mod_dav_svn.c:", 
+   "Include <ap_provider.h> to fix a gcc 3.2.1 message \"in function", 
+   "`register_hooks': implicit declaration of function", 
+   "`ap_lookup_provider'\"."
+  ], 
+  "revision_id": "844331"
+ }
+]

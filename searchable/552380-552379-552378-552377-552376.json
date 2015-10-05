@@ -1,0 +1,78 @@
+[
+ {
+  "author": "bobharner", 
+  "date": "2007-07-02T01:39:29.060417Z", 
+  "msg": [
+   "Marked jcr module as experimental, not wanting to", 
+   "mislead readers."
+  ], 
+  "revision_id": "552380"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2007-07-02T01:24:57.957750Z", 
+  "msg": [
+   "don't create hashmap unless it's needed to actually store something"
+  ], 
+  "revision_id": "552379"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2007-07-02T01:06:07.249047Z", 
+  "msg": [
+   "LUCENE-848: make sure we use the right version (2.9.0) of XercesJ"
+  ], 
+  "revision_id": "552378"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2007-07-02T00:55:28.788547Z", 
+  "msg": [
+   "minimize string concat"
+  ], 
+  "revision_id": "552377"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2007-07-02T00:47:13.962976Z", 
+  "msg": [
+   "HADOOP-1523 'Hung region servers waiting on write locks'", 
+   "On shutdown, region servers and masters were just cancelling leases", 
+   "without letting 'lease expired' code run -- code to clean up", 
+   "outstanding locks in region server.  Outstanding read locks were", 
+   "getting in the way of region server getting necessary write locks", 
+   "needed for the shutdown process.  Also, cleaned up messaging around", 
+   "shutdown so its clean -- no timeout messages as region servers try", 
+   "to talk to a master that has already shutdown -- even when region", 
+   "servers take their time going down.", 
+   "M src/contrib/hbase/conf/hbase-default.xml", 
+   "Make region server timeout 30 seconds instead of 3 minutes.", 
+   "Clients retry anyways. Make so its likely region servers report", 
+   "in their shutdown message before their lease expires on master.", 
+   "M src/contrib/hbase/src/java/org/apache/hadoop/hbase/Leases.java", 
+   "(closeAfterLeasesExpire): Added.", 
+   "* src/contrib/hbase/src/java/org/apache/hadoop/hbase/HRegionServer.java", 
+   "Added comments.", 
+   "(stop): Converted from public to default access (master shuts", 
+   "down regionservers).", 
+   "(run): Use leases.closeAfterLeasesExpire instead of leases.close.", 
+   "Changed log of main thread exit from DEBUG to INFO.", 
+   "* src/contrib/hbase/src/java/org/apache/hadoop/hbase/HMaster.java", 
+   "(letRegionsServersShutdown): Add better explaination of shutdown", 
+   "process to method doc.  Changed timeout waits from", 
+   "hbase.regionserver.msginterval to threadWakeFrequency.", 
+   "(regionServerReport): If closing, we used to immediately respond", 
+   "to region server with a MSG_REGIONSERVER_STOP.  This meant that", 
+   "we avoided handling of the region servers MSG_REPORT_EXITING sent", 
+   "on shutdown so region servers had no chance to cancel their lease", 
+   "in the master.  Reordered.  Moved sending of MSG_REGIONSERVER_STOP", 
+   "to after handling of MSG_REPORT_EXITING.  Also, in handling of", 
+   "MSG_REGIONSERER_STOP removed cancelling of leases.  Let leases", 
+   "expire normally (or get cancelled when the region server comes in", 
+   "with MSG_RPORT_EXITING).", 
+   "* src/contrib/hbase/src/java/org/apache/hadoop/hbase/HMsg.java", 
+   "(MSG_REGIONSERVER_STOP_IN_ARRAY): Added."
+  ], 
+  "revision_id": "552376"
+ }
+]

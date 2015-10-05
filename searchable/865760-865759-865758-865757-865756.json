@@ -1,0 +1,116 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2007-07-08T21:53:03.121032Z", 
+  "msg": [
+   "Fix NTLM authentication of pipelined requests:", 
+   "- Set up and keep status of NTLM authentication for the first request, ignore", 
+   "failing authentication for all other requests in the pipeline.", 
+   "- Add a new callback mechanism that enables per authentication protocol", 
+   "setting of the authentication headers of a serf_request_t object.", 
+   "For basic authentication we copy the same authentication header for each", 
+   "request on one connection. For NTLM this is not possible, as the server does", 
+   "not accept multiple requests having a NTLM challenge header.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_serf__setup_request_func_t): new function typedef.", 
+   "(serf_auth_protocol_t): add setup_request_func callback function.", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(serf_auth_protocols): define callbacks for Basic and NTLM authentication.", 
+   "(setup_request_basic_auth): new function.", 
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.h", 
+   "(enum sspi_auth_state, serf_sspi_context_t): store the progress of NTLM", 
+   "authentication for this connection.", 
+   "(setup_request_sspi_auth): new function.", 
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.c", 
+   "(init_sspi_connection): initializes state of NTLM authentication.", 
+   "(handle_sspi_auth): ignore 401 when NTLM authentication has started. No", 
+   "need to store the Authentication header in the session here, we can't", 
+   "reuse it anyway.", 
+   "(setup_request_sspi_auth): new function. Add the authentication headers to", 
+   "only one request. Since they're stored in the connection object we need", 
+   "to delete them after we copied them in the request.", 
+   "(sspi_get_credentials): store progress of authentication.", 
+   "* subversion/libsvn_ra_serf/propfind_buckets.c", 
+   "(become_request): invoke the setup_request authentication callback when", 
+   "creating a new serf_request_t object.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__setup_serf_req): idem"
+  ], 
+  "revision_id": "865760"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-08T09:17:13.553277Z", 
+  "msg": [
+   "Extract the code to create the authentication header in a separate function.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(encode_auth_header): declare new function", 
+   "* subversion/libsvn_ra_serf/auth.c", 
+   "(encode_auth_header): new function, base64 encodes the authentication data", 
+   "and builds a new authentication header with it.", 
+   "(handle_basic_auth): use encode_auth_header.", 
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.c", 
+   "(handle_sspi_auth): use encode_auth_header."
+  ], 
+  "revision_id": "865759"
+ }, 
+ {
+  "author": "dustin", 
+  "date": "2007-07-08T01:30:13.670434Z", 
+  "msg": [
+   "Move the post-merge merge_props and blocked_props update to *before*", 
+   "the generation of the commit message. This allows a CTRL+C interrupt", 
+   "to break the generation of the commit message, without leaving the", 
+   "working copy in an inconsistent state. Requested by Giovanni Bajo.", 
+   "* contrib/client-side/svnmerge.py:", 
+   "(action_merge): Move the commit log generation to the end of the", 
+   "method.", 
+   "Patch by:  Raman Gupta <rocketraman@fastmail.fm>", 
+   "Review by: Giovanni Bajo <rasky@develer.com>"
+  ], 
+  "revision_id": "865758"
+ }, 
+ {
+  "author": "dustin", 
+  "date": "2007-07-08T01:19:36.874936Z", 
+  "msg": [
+   "Prevent spurious conflicts on the merge and blocked property", 
+   "when the source branch contains merge property information for", 
+   "other branches i.e. a transitive merge A -> B -> C is executed.", 
+   "Previously, this caused a property conflict because the initial", 
+   "value on the source branch did not match the initial value on", 
+   "the target branch.", 
+   "This patch also prevents extra merge property information from", 
+   "uninitialized branches being merged into the target. If merging", 
+   "to those other branches was never initialized on the target by", 
+   "the user, then the user probably does not expect to see that", 
+   "information. Note that if that information *was* initialized by", 
+   "the user, then the user is attempting to do graph-based merging", 
+   "i.e. A -> B -> C -> A which is currently unsupported.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(testTransitiveMerge): test a transitive merge", 
+   "* contrib/client-side/svnmerge.py:", 
+   "(action_merge): Before each merge, clear the integrated/blocked", 
+   "properties. Reset these properties to known values after the", 
+   "merge is complete.", 
+   "Patch by:  Raman Gupta <rocketraman@fastmail.fm>", 
+   "Dustin J. Mitchell <dustin@zmanda.com>", 
+   "Review by: Giovanni Bajo <rasky@develer.com>"
+  ], 
+  "revision_id": "865757"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-08T00:05:09.933163Z", 
+  "msg": [
+   "Small code improvement: calculate the length of the token (authentication", 
+   "header) for NTLM instead of using a fixed value.", 
+   "* subversion/libsvn_ra_serf/win32_auth_sspi.c", 
+   "(global): new static variable to hold the max. token size for NTLM", 
+   "(sspi_maxtokensize): use the SSPI functions to calculate the maximum", 
+   "token size", 
+   "(sspi_get_credentials): used the calculated size instead of fixed value."
+  ], 
+  "revision_id": "865756"
+ }
+]

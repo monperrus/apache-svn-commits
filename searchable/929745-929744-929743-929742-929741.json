@@ -1,0 +1,85 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2010-03-31T23:23:13.984392Z", 
+  "msg": [
+   "Remove the update editor's directory baton's log_accum field. It was only", 
+   "being used to queue up tree conflicts for children. There is no need to", 
+   "hold those until close_directory(), so the children place them into the", 
+   "directory's work queue directly.", 
+   "Relatedly, svn_wc__loggy_add_tree_conflict() now queues the work item", 
+   "directly, rather than returning it in a LOG_ACCUM parameter. The updated", 
+   "signature is moved from tree_conflicts.h(!!!) to log.h.", 
+   "Unrelatedly, some member name changes were made to the editor's batons for", 
+   "clarity of purpose.", 
+   "* subversion/libsvn_wc/log.h:", 
+   "(svn_wc__loggy_add_tree_conflict): moved here from tree_conflicts.h and", 
+   "updated to take a DB/ADM_ABSPATH pair instead of a LOG_ACCUM.", 
+   "(svn_wc__loggy_revert_props_create): moved here from props.h", 
+   "* subversion/libsvn_wc/tree_conflicts.h:", 
+   "(svn_wc__loggy_add_tree_conflict): moved to log.h", 
+   "* subversion/libsvn_wc/props.h:", 
+   "(svn_wc__loggy_revert_props_create): moved to log.h", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_add_tree_conflict): updated signature and queueing of the", 
+   "resulting work item.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(struct dir_baton): ADDED member removed (never used). EXISTED is", 
+   "renamed to OBSTRUCTION_FOUND. LOG_ACCUM removed.", 
+   "(flush_log): removed. no longer needed.", 
+   "(cleanup_dir_baton): just run the work queue; no flush needed", 
+   "(make_dir_baton): remove ADDED param (now obsolete). rename assignment", 
+   "to OBSTRUCTION_FOUND and remove init of LOG_ACCUM.", 
+   "(struct file_baton): rename ADDED to ADDING_FILE. rename EXISTED to", 
+   "OBSTRUCTION_FOUND.", 
+   "(make_file_baton, apply_textdelta, merge_file, close_file): track", 
+   "renames in the file_baton.", 
+   "(open_root): no need to pass an ADDED flag to make_dir_baton", 
+   "(do_entry_deletion): update the logging of a tree conflict", 
+   "(delete_entry): remove call to flush_log()", 
+   "(add_directory): no need to pass an ADDED flag to make_dir_baton. remove", 
+   "flush_log call. track renames in dir_baton. adjust params to", 
+   "loggy_add_tree_conflict.", 
+   "(open_directory): no need to pass an ADDED flag to make_dir_baton.", 
+   "remove a flush_log call. adjust params to loggy_add_tree_conflict", 
+   "(close_directory): remove assertion on LOG_ACCUM. remove a call to", 
+   "flush_log. track renames in dir_baton.", 
+   "(add_file): track renames in file_baton. adjust the queuing of a", 
+   "conflict work item.", 
+   "(open_file): adjust the queuing of a conflict work item."
+  ], 
+  "revision_id": "929745"
+ }, 
+ {
+  "author": "ppoddar", 
+  "date": "2010-03-31T23:13:45.412269Z", 
+  "msg": [
+   "data initializilation from data cache - use input fetch, not the conetxt configuration; reduce checks"
+  ], 
+  "revision_id": "929744"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2010-03-31T23:07:23.528776Z", 
+  "msg": [
+   "[subsystem] add some javadoc, add exception to start() and stop() method on Subsystem"
+  ], 
+  "revision_id": "929743"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2010-03-31T23:06:37.441255Z", 
+  "msg": [
+   "[subsystem] small api modifications (add an uninstallForced method and remove the parent class on SubsystemEvent"
+  ], 
+  "revision_id": "929742"
+ }, 
+ {
+  "author": "djencks", 
+  "date": "2010-03-31T23:01:38.135309Z", 
+  "msg": [
+   "GERONIMO-4360 glitch in merging annotations to ra.xml"
+  ], 
+  "revision_id": "929741"
+ }
+]

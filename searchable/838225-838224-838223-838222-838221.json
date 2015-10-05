@@ -1,0 +1,97 @@
+[
+ {
+  "author": "brane", 
+  "date": "2000-12-15T05:19:52.000000Z", 
+  "msg": [
+   "* structure (atom.imp-len): Allow '(' and ')' as terminators; trailing", 
+   "space isn't mandatory.", 
+   "* skel.c: (implicit_atom, use_implicit): Implement this change.", 
+   "* skel.h: Change comment to reflect the change.", 
+   "* test/skel_test.c (skel_is_paren, check_atom): New.", 
+   "(check_implicit_length_byte, check_implicit_length_all_chars,", 
+   "check_explicit_length): Call check_atom.", 
+   "(put_implicit_length_byte): Allow parens or nothing as terminators.", 
+   "(put_implicit_length_all_chars): Likewise.", 
+   "(parse_implicit_length): Try all kinds of terminators. Don't try", 
+   "invalid atoms.", 
+   "(parse_explicit_length): Don't try invalid atoms.", 
+   "(try_explicit_length): Add parameter check_len for atom checking,", 
+   "needed by parse_invalid_atoms. All callers changed.", 
+   "(parse_invalid_atoms): New test.", 
+   "(test_funcs): Add it.", 
+   "* skel.c, skel.h: Add local eval to load svn-dev.el."
+  ], 
+  "revision_id": "838225"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-12-14T20:04:06.000000Z", 
+  "msg": [
+   "* ra_loader.c, client.h (svn_client__ra_library_table): made static", 
+   "within this function, nobody else needs it.  Fixes linker bug too.", 
+   ":)"
+  ], 
+  "revision_id": "838224"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-12-14T19:18:28.000000Z", 
+  "msg": [
+   "To understand Political Power right, and derive it from its Original,", 
+   "we must consider what State all Men are naturally in, and that is a", 
+   "*State of Perfect Freedom* to order their Actions, and dispose of", 
+   "their Possessions, and Persons as they think fit, within the bounds of", 
+   "the Law of Nature, without asking leave, or depending upon the Will of", 
+   "any other Man."
+  ], 
+  "revision_id": "838223"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-12-14T18:48:15.000000Z", 
+  "msg": [
+   "Implement libsvn_client mechanism for loading RA libraries.", 
+   "* ra_loader.c:  simplify, rewrite.", 
+   "* svn_ra.h (svn_ra_init_func_t):  new type that describes the", 
+   "svn_ra_FOO_init() routine.", 
+   "* client.h:  add new client ra-loading declarations from ra_loader.c", 
+   "* Makefile.am:  compile ra_loader.c"
+  ], 
+  "revision_id": "838222"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2000-12-14T17:03:38.000000Z", 
+  "msg": [
+   "Clean up `const' usage.", 
+   "This is a matter of style, but I think `const' should be used when the", 
+   "additional static checking it enables accurately reflects functions'", 
+   "contracts and structures' invariants.  When using `const' would", 
+   "introduce casts which don't reflect genuine, deliberate type trickery", 
+   "(which, given the rest of the C language, is a fine thing in many", 
+   "cases) on the part of the code doing the cast, it's best to just avoid", 
+   "it.  (This should be in a comment somewhere, not a log message, but", 
+   "I'm not sure exactly where.)", 
+   "* libsvn_fs/dbt.c (svn_fs__skel_to_dbt): Remove `const' from SKEL", 
+   "argument.  This declares only the top skel of the tree to be constant,", 
+   "whereas what we want to say is that the entire tree will be unchanged.", 
+   "* libsvn_fs/dbt.h (svn_fs__skel_to_dbt): Same for declaration.", 
+   "* libsvn_fs/skel.c (estimate_unparsed_size, unparse, use_implicit,", 
+   "svn_fs__unparse_skel): Same.", 
+   "(parse, list, implicit_atom, explicit_atom, svn_fs_parse_skel,", 
+   "svn_fs__str_atom, svn_fs__mem_atom): Remove const from DATA and STR", 
+   "arguments, and locals that point into DATA; the `data' member of a", 
+   "skel isn't const, so this is misleading.", 
+   "* libsvn_fs/skel.h (struct skel_t): Make `data' member non-const;", 
+   "you're supposed to be able to munge the data a skel points to.", 
+   "(svn_fs__parse_skel, svn_fs__str_atom, svn_fs__mem_atom,", 
+   "svn_fs__unparse_skel): Fix declarations.", 
+   "* libsvn_fs/clones-table.c (svn_fs__record_rename): Copy entry_name,", 
+   "to keep the const promise.", 
+   "* libsvn_fs/tests/skel-test.c (parse_cstr): Remove `const' qualifier.", 
+   "Instead, cast the call sites; only the callers know that they will not", 
+   "change the text of the string."
+  ], 
+  "revision_id": "838221"
+ }
+]

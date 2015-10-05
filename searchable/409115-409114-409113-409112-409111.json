@@ -1,0 +1,62 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2006-05-24T10:28:38.028504Z", 
+  "msg": [
+   "add link to repository file"
+  ], 
+  "revision_id": "409115"
+ }, 
+ {
+  "author": "", 
+  "date": "2006-05-24T10:26:56.120528Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "409114"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2006-05-24T10:24:04.799333Z", 
+  "msg": [
+   "Latest export from confluence"
+  ], 
+  "revision_id": "409113"
+ }, 
+ {
+  "author": "hogstrom", 
+  "date": "2006-05-24T10:23:45.415348Z", 
+  "msg": [
+   "BUG: This fix addresses an issue in RMIClassLoaderSpiImpl where a codebase is optionally passed for certain copy operations.  When profiling DayTrader our performance for PingServlet2Session was extremely poor relative to JBoss and WebSphere.  Our throughput on a 2-way 3.0 Ghz system was roughly 500 tps compared to 5400 and 4500 repsepctively.  (It appears that JBoss is not honoring pass-by-value semantics properly; thus the significantly higher throughput).", 
+   "I chased the degraded performance to RMIClassLoaderSPIImpl where we were spending nearly 70% of the system's time in normalizeCodebase for less than 1/8 of the requests being processed.  Here is some profiling data to show the degredation:", 
+   "=======   =====   =====   =====      =======      ======= ==========", 
+   "Parent    4610    0.71   70.54   1157864861 115775210210   28) J:org/apache/geronimo/system/rmi/RMIClassLoaderSpiImpl.loadClass(Ljava/lang/", 
+   "Self    4610    0.71   70.54   1157864861 115775210210 [29]  J:org/apache/geronimo/system/rmi/RMIClassLoaderSpiImpl.normalizeCodebase(Lja", 
+   "Child   50550    0.34   61.97    555213244 101708338940   31) J:org/apache/geronimo/system/rmi/RMIClassLoaderSpiImpl.updateCodebase(Ljava/", 
+   "Child    4584    0.04    4.40     65515147   7224581400   30) J:org/apache/geronimo/system/rmi/RMIClassLoaderSpiImpl.normalizeURL(Ljava/ne", 
+   "Child   55136    0.46    2.71    758942891   4446465936   42) J:java/net/URL.<init>(Ljava/net/URL;Ljava/lang/String;Ljava/net/URLStreamHan", 
+   "Child  234350    0.39    0.59    631910516    970672051   36) J:java/lang/String.indexOf(I)I", 
+   "Note that of the 4610 requests were a subset of a total of 32000 transactions.", 
+   "Here is the  normalizeURL information:", 
+   "=======   =====   =====   =====      =======      ======= ==========", 
+   "Parent   50524    0.38   59.74    629510012  98041028811   30) J:org/apache/geronimo/system/rmi/RMIClassLoaderSpiImpl.normalizeURL(Ljava/ne", 
+   "Self   50524    0.38   59.74    629510012  98041028811 [32]  J:java/io/File.toURI()Ljava/net/URI;", 
+   "Child   50524    0.23   55.43    376226211  90981520312   33) J:java/net/URI.<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;", 
+   "Child   50524    0.12    3.14    189098774   5152641459   54) J:java/io/File.isDirectory()Z", 
+   "Child   50524    0.17    0.39    274629658    646476978  192) J:java/io/File.slashify(Ljava/lang/String;Z)Ljava/lang/String;", 
+   "Child   50524    0.14    0.29    224357024    473009995  210) J:java/io/File.<init>(Ljava/lang/String;)V", 
+   "Child   50524    0.05    0.05     88736649     88736649  386) J:java/lang/String.startsWith(Ljava/lang/String;I)Z", 
+   "Child   50524    0.04    0.04     69133406     69133406  408) J:java/io/Win32FileSystem.resolve(Ljava/io/File;)Ljava/lang/String;", 
+   "I added a new method to inercept and cache calls to normalizeCodebase where I simply return a cached result.  This has resulted in a 6x+ performance improvement where we have gone from 500 tps to 3200+."
+  ], 
+  "revision_id": "409112"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2006-05-24T10:23:18.580659Z", 
+  "msg": [
+   "add beginner error messages faq"
+  ], 
+  "revision_id": "409111"
+ }
+]

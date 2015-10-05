@@ -1,0 +1,82 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2009-04-20T12:06:39.359807Z", 
+  "msg": [
+   "* build/transform_libtool_scripts.sh: Don't perform any changes on Mac OS."
+  ], 
+  "revision_id": "877455"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-20T11:54:21.914939Z", 
+  "msg": [
+   "Get rid of some crazy baton usage in the tree conflict code.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(check_wc_root): take a DB rather than an access baton", 
+   "(already_in_a_tree_conflict): constify the return parameter. take a DB", 
+   "param. remove the cancel func/baton params. revamp this function to", 
+   "use svn_wc__get_entry instead of svn_wc_entry, and call check_wc_root", 
+   "directly. call the new svn_wc__get_tree_conflict2 instead of", 
+   "svn_wc_conflicted_p2. all these variants use a DB rather than access", 
+   "batons.", 
+   "(do_entry_deletion, add_directory, open_directory, add_file,", 
+   "open_file): constify VICTIM_PATH. update call to", 
+   "already_in_a_tree_conflict().", 
+   "(svn_wc_is_wc_root, svn_wc__strictly_is_wc_root): get the DB from the", 
+   "access baton and pass it to check_wc_root().", 
+   "(svn_wc_get_actual_target): rather than opening/closing an access", 
+   "baton, we can just open/close a DB, and call check_wc_root directly.", 
+   "* subversion/libsvn_wc/tree_conflicts.h:", 
+   "(): add some includes for types needed in this header", 
+   "(svn_wc__tree_conflict_exists): constify CONFLICTS parameter", 
+   "(svn_wc__get_tree_conflicts2): new variant of get_tree_conflicts which", 
+   "takes a DB parameter and dual-pools.", 
+   "* subversion/libsvn_wc/tree_conflicts.c:", 
+   "(svn_wc__read_tree_conflicts): leave grumpy note about putting paths", 
+   "into the conflict descriptions, rather than victim_basename", 
+   "(svn_wc__tree_conflict_exists): constify CONFLICTS param", 
+   "(svn_wc__get_tree_conflict): get the DB from the access baton and call", 
+   "svn_wc__get_tree_conflict2().", 
+   "(svn_wc__get_tree_conflict2): built from the old get_tree_conflict, but", 
+   "uses the DB param and svn_wc__get_entry instead. no access baton mgmt", 
+   "is required."
+  ], 
+  "revision_id": "877454"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-20T11:31:22.661390Z", 
+  "msg": [
+   "Following up on r37368, check ra libraries instead of the url. This", 
+   "resolves an incompatibility with the python versions on the buildbots.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(imports): Import is_ra_type_dav and is_ra_type_svn.", 
+   "(merge_fails_if_subtree_is_deleted_on_src): Check ra type instead of url."
+  ], 
+  "revision_id": "877453"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-20T10:40:40.641323Z", 
+  "msg": [
+   "Close the DB once we're done with it (rather than waiting for pool cleanup).", 
+   "* subversion/libsvn_wc/questions.c:", 
+   "(svn_wc_check_wc): close the DB after we get the format number"
+  ], 
+  "revision_id": "877452"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-20T10:39:28.168153Z", 
+  "msg": [
+   "Rather than allowing a wcroot to be stored for an unversioned subdir,", 
+   "clear it out. That will force future format checks to re-examine the", 
+   "directory (which might be constructed next time).", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_temp_get_format): for unversioned dirs, don't store a", 
+   "parent wcroot. the subdir might get constructed later."
+  ], 
+  "revision_id": "877451"
+ }
+]

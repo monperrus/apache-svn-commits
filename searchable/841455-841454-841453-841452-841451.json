@@ -1,0 +1,95 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2002-02-27T02:12:58.831737Z", 
+  "msg": [
+   "Fix some problems with the delta compatability wrapper.", 
+   "These bugs were actually found by Greg Stein.", 
+   "* subversion/libsvn_delta/default_editor.c", 
+   "(wrap_add_directory): don't dereference copyfrom_path if it's NULL.", 
+   "(wrap_change_dir_prop): don't dereference value if it's NULL.", 
+   "(wrap_add_file): don't dereference copyfrom_path if it's NULL.", 
+   "(wrap_change_file_prop): don't dereference value if it's NULL."
+  ], 
+  "revision_id": "841455"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-02-26T21:47:28.739150Z", 
+  "msg": [
+   "Allow the filesystem's write buffering to be tuned a little bit, given", 
+   "the apparent tradeoff between memory consumption and speed /", 
+   "disk-space-hording-by-log-files.", 
+   "* subversion/include/svn_fs.h", 
+   "(SVN_FS_WRITE_BUFFER_SIZE): New #define for controlling the way in", 
+   "which the filesystem buffers write operations.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(txdelta_baton_t): Add string_stream and target_string members.", 
+   "(write_to_string): New function.", 
+   "(window_consumer): Only write to dag layer if end-of-file or a boundary", 
+   "of SVN_FS_WRITE_BUFFER_SIZE is hit.", 
+   "(txn_body_apply_textdelta): Initialize tb->string_stream and", 
+   "tb->target_string here."
+  ], 
+  "revision_id": "841454"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2002-02-26T20:16:59.633282Z", 
+  "msg": [
+   "Allow propeties to be reverted by ensuring the things we are removing or", 
+   "replacing are writeable.", 
+   "* subversion/libsvn_wc/adm_ops.c (revert_admin_things) : Set property files", 
+   "writeable before trying to remove or replace them.", 
+   "Note that we need a regression test to test reverting properties."
+  ], 
+  "revision_id": "841453"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-02-26T13:16:40.748874Z", 
+  "msg": [
+   "Fix the commit part of issue #571.  Now when an item is both added and", 
+   "deleted, we will print 'Replacing' rather than 'Adding' and 'Deleting'", 
+   "during the commit.", 
+   "* subversion/clients/cmdline/trace-commit.c", 
+   "(svn_cl__item_added, svn_cl__item_added_binary, svn_cl__item_deleted,", 
+   "svn_cl__item_replaced, svn_cl__item_replaced_binary): singleton values", 
+   "used for entries in the added_or_deleted hash table.", 
+   "(ITEM_ADDED, ITEM_ADDED_BINARY, ITEM_DELETED, ITEM_REPLACED,", 
+   "ITEM_REPLACED_BINARY): accessor macros that get the address of the", 
+   "singleton values.", 
+   "(struct dir_baton): add an 'added_or_deleted' member, which is used to", 
+   "store the status of items we are adding or deleting, so we can correctly", 
+   "print them out upon exiting a directory.", 
+   "(decrement_dir_ref_count): when the dir's ref count hits zero, iterate", 
+   "over the added_or_deleted hash and print out the status of the items we", 
+   "have added/deleted/replaced.", 
+   "(open_root): initialize the added_or_deleted member.", 
+   "(delete_entry): instead of printing out that we are deleting an entry,", 
+   "either add it to the hash table or update it's status there.", 
+   "(add_directory): instead of printing out that we're adding a directory,", 
+   "either add it to the hash table or update it's status there.  initialize", 
+   "the added_or_deleted hash in the new dir_baton.", 
+   "(close_file): instead of printing out that we've added a file, either add", 
+   "it to the hash table or update it's status there."
+  ], 
+  "revision_id": "841452"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-02-26T01:20:39.034502Z", 
+  "msg": [
+   "Clean up the FreeBSD ports a bit.  Most of this was reported by Will", 
+   "Andrews <will@freebsd.org>", 
+   "* packages/freebsd/apr-snapshot/Makefile", 
+   "remove extra newline.  fix order of MASTER_SITES and DISTFILES.", 
+   "* packages/freebsd/apr-snapshot/pkg-comment", 
+   "be a little more verbose.", 
+   "* packages/freebsd/subversion/Makefile", 
+   "remove some whitespace at the end of a line to silence a warning from", 
+   "portlint(1)."
+  ], 
+  "revision_id": "841451"
+ }
+]

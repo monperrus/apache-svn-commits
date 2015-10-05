@@ -1,0 +1,105 @@
+[
+ {
+  "author": "trustin", 
+  "date": "2007-09-28T10:52:48.019816Z", 
+  "msg": [
+   "Resolved issue: DIRMINA-269 (Cancellation operation for ConnectFuture)", 
+   "* Added ConnectFuture.cancel()", 
+   "* Added cancellation feature to NioSocketConnector", 
+   "* Other connector implementations don't need for cancellation operation effectively, so no change has been made.", 
+   "* Added AbstractIoConnector.finishSessionInitialization() to remove code duplication"
+  ], 
+  "revision_id": "580295"
+ }, 
+ {
+  "author": "reinhard", 
+  "date": "2007-09-28T10:44:26.774004Z", 
+  "msg": [
+   "add missing configuration site docs"
+  ], 
+  "revision_id": "580294"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-09-28T10:41:49.359894Z", 
+  "msg": [
+   "Merged revisions 574555-574873,574875-574901,574903-575737,575739-575787,575789-575810,575812-577772,577774-577940,577942-578057,578059-578732,578734,578736-578744,578746-578827,578829-578844,578846-580022 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/incubator/qpid/branches/M2.1", 
+   "........", 
+   "r574555 | ritchiem | 2007-09-11 12:39:10 +0100 (Tue, 11 Sep 2007) | 1 line", 
+   "QPID-590 : Provide test case and resolution to prevent deadlock occurring on the client when two threads work on the AMQSession object.", 
+   "........", 
+   "r574585 | rgreig | 2007-09-11 14:02:19 +0100 (Tue, 11 Sep 2007) | 1 line", 
+   "QPID-591 Fixed to use dirname and avoid working directory issues.", 
+   "........", 
+   "r579115 | ritchiem | 2007-09-25 09:15:04 +0100 (Tue, 25 Sep 2007) | 1 line", 
+   "QPID-604 Commited patch provided by Aidan Skinner, to prevent NPE in FieldTable.", 
+   "........", 
+   "r579147 | ritchiem | 2007-09-25 10:27:22 +0100 (Tue, 25 Sep 2007) | 2 lines", 
+   "QPID-610 : Fix for Returned Messages leak. Augmented TestableMemoryMessageStore to allow it to query the MemoryMessageStore in use by the broker.", 
+   "New MessageReturnTest to verify no leak after messages have been returned.", 
+   "........", 
+   "r579198 | ritchiem | 2007-09-25 12:13:23 +0100 (Tue, 25 Sep 2007) | 1 line", 
+   "Update to start M2.1 python test broker on port 2100 (management 2101) and for the tests to use that broker.", 
+   "MODIFIED: to start on port 2000 and 2001 as this is M2", 
+   "........", 
+   "r579229 | ritchiem | 2007-09-25 13:51:09 +0100 (Tue, 25 Sep 2007) | 3 lines", 
+   "QPID-610 : Fix for Get NO_ACK leak. The Java Client doesn't use get so augmented the python test_get to send persistent messages and used debugger to verify that messages were correctly removed. Verified that prior to this commit they would remain in the store. We need a management exchange to fully validate this with a python tests.", 
+   "NOTE: The setting of \"delivery mode\" property on M2.1 is not the same as on trunk where _ is use such as \"delivery_mode\".", 
+   "There is also no error that you have sent an incorrect property.", 
+   "........", 
+   "r579574 | ritchiem | 2007-09-26 11:42:54 +0100 (Wed, 26 Sep 2007) | 4 lines", 
+   "QPID-610 : Fix for ManagementConcole NO_ACK & Msg Expire leaks. Updated AMQQueueMBeanTest to verify the contents of the MessageStore after clearing.", 
+   "All the MC features only dequeued the message and didn't correctly decrementReference.", 
+   "The MessageReturnTest was failing due to the TimeToLive test causing messages to be left on the store. The expired messages were not having the reference decremented.", 
+   "........", 
+   "r579577 | ritchiem | 2007-09-26 11:45:21 +0100 (Wed, 26 Sep 2007) | 5 lines", 
+   "Updated TransportConnection to synchronize around the creation/destruction of VM Brokers. I had observed a ConcurrentModificationException in the KillAllVMBrokers().", 
+   "This isn't good this suggests that the tests are overlapping. This fix won't address that problem but will stop any CModifications occuring. If there is test setup/teardown overlapping we should now see tests failing because the VM broker isn't there.", 
+   "Potentially addresses VM issues in QPID-596", 
+   "........", 
+   "r579578 | ritchiem | 2007-09-26 11:48:14 +0100 (Wed, 26 Sep 2007) | 1 line", 
+   "Updated the version of slf4j-simple to be one that would work. Changing the systests/pom.xml to depend on this rather than the slf4j-log4j will cause maven to provide more details in the tests. All info and above is logged.", 
+   "........", 
+   "r579602 | rupertlssmith | 2007-09-26 12:27:45 +0100 (Wed, 26 Sep 2007) | 1 line", 
+   "Added timeout to perftests, to fail tests if message loss causes test to jam.", 
+   "........", 
+   "r579614 | rupertlssmith | 2007-09-26 12:51:14 +0100 (Wed, 26 Sep 2007) | 1 line", 
+   "Added timeout to perftests, wait limit set to higher value to stop threads thashing.", 
+   "........", 
+   "r579709 | ritchiem | 2007-09-26 17:40:09 +0100 (Wed, 26 Sep 2007) | 1 line", 
+   "Update for three tests that don't remove their VMBroker", 
+   "........", 
+   "r580022 | ritchiem | 2007-09-27 15:27:22 +0100 (Thu, 27 Sep 2007) | 18 lines", 
+   "QPID-596 : ConnectionStartTest was broken. I've fixed it but here is the problem for those like me that like to know why:", 
+   "Previously:", 
+   "The setUp method created a producer connection and then sent a message", 
+   "- This will result in that message being bounced as there is no consumer.", 
+   "The first test should fail but the test was wrong, which caused it to pass.", 
+   "There was an assert that was expecting the receive a message yet the test was recieve() == null !!!!", 
+   "The second test worked because the broker was not killed between tests", 
+   "This left the queue created so on the second run the message was delivered causing the test to succeed.", 
+   "Now:", 
+   "Fixed the InVM broker setup/teardown so the client is created first and the broker removed at the end of the test.", 
+   "Also updated the asserts to be more explicit rather than having the == null or !=null put that as assertNull/NotNull.", 
+   "........"
+  ], 
+  "revision_id": "580293"
+ }, 
+ {
+  "author": "andyhot", 
+  "date": "2007-09-28T10:33:53.833504Z", 
+  "msg": [
+   "TAPESTRY-1772: Add on load to go"
+  ], 
+  "revision_id": "580292"
+ }, 
+ {
+  "author": "mckierna", 
+  "date": "2007-09-28T10:31:06.891194Z", 
+  "msg": [
+   "Better trace in WorkerLock"
+  ], 
+  "revision_id": "580291"
+ }
+]

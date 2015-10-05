@@ -1,0 +1,93 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-18T12:26:13.595594Z", 
+  "msg": [
+   "Don't print notification of an update having finished until all the", 
+   "working copy locks have been removed.  This completes issue #1556 --", 
+   "mysterious post-update/checkout delay on huge trees.", 
+   "This also has the cool side-effect of making svn:externals handling in", 
+   "update-ish operations now print as nested operations.  I actually", 
+   "kinda dig this behavior because it means that in a working copy with a", 
+   "bunch of externals that scroll off the screen, the last thing I see is", 
+   "the revision of my top-level update.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_get_update_editor, svn_wc_get_switch_editor): Make", 
+   "'target_revision' a pointer, so we can store the actual revision", 
+   "to which we updated.  Also, move it to the top of the parameter", 
+   "list, since it is now dual-purpose.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(complete_directory, set_target_revision, open_root, do_entry_deletion,", 
+   "change_file_prop): Track the fact that the edit baton's", 
+   "'target_revision' member is now a pointer.", 
+   "(add_directory, open_directory, add_or_open_file,", 
+   "absent_file_or_dir, close_file): Track the fact that the edit baton's", 
+   "'target_revision' member is now a pointer.  Also, use the same", 
+   "baton convenience variables used elsewhere ('eb', 'pb', et al).", 
+   "(apply_textdelta): Use the same baton convenience variables used", 
+   "elsewhere ('eb', 'pb', et al).", 
+   "(close_edit): No longer call the \"update complete\" notification.", 
+   "(make_editor): Make 'target_revision' a pointer, so we can store the", 
+   "actual revision to which we updated.  Also, move it to the top of", 
+   "the parameter list, since it is now dual-purpose.", 
+   "(svn_wc_get_update_editor, svn_wc_get_switch_editor): Make", 
+   "'target_revision' a pointer, so we can store the actual revision", 
+   "to which we updated.  Also, move it to the top of the parameter", 
+   "list, since it is now dual-purpose.  Update call to make_editor().", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Rework this function a bit with", 
+   "aesthetic goals in mind, and pass a pointer to a revision to", 
+   "svn_wc_get_update_editor().  Also, call the notification function", 
+   "to indicate completion of our task.", 
+   "(svn_client_update): Just making it fit in 79 columns.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client_switch): Pass a pointer to the revision to", 
+   "svn_wc_get_switch_editor().  Also, call the notification function", 
+   "to indicate completion of our task.", 
+   "* subversion/clients/cmdline/notify.c", 
+   "(struct notify_baton): New 'in_external' field.", 
+   "(notify): Print slightly different messages for externals.", 
+   "(svn_cl__get_notifier): Populate new 'in_external' baton field."
+  ], 
+  "revision_id": "847865"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-18T07:24:12.287878Z", 
+  "msg": [
+   "* subversion/libsvn_client/commit.c", 
+   "(remove_redundancies, svn_client_commit): Just some whitespace mods --", 
+   "there were some *really* long whitespace lines in here!"
+  ], 
+  "revision_id": "847864"
+ }, 
+ {
+  "author": "josander", 
+  "date": "2003-11-18T00:48:30.055588Z", 
+  "msg": [
+   "The './dist.sh' wants the export tree to be named 'release-0.33.1'"
+  ], 
+  "revision_id": "847863"
+ }, 
+ {
+  "author": "jszakmeister", 
+  "date": "2003-11-18T00:45:04.353847Z", 
+  "msg": [
+   "Added a MIME type and content header to identify commit messages as being", 
+   "UTF8 since the log will be UTF8 encoded.", 
+   "* tools/hook-scripts/mailer/mailer.py", 
+   "(MailedOutput.mail_headers):  Updated mail header to identify it as UTF8."
+  ], 
+  "revision_id": "847862"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-11-17T22:28:15.672358Z", 
+  "msg": [
+   "Fix a bug where pool memory was used after the pool was cleared.", 
+   "* subversion/tests/libsvn_repos/repos-test.c (dir_deltas): Get a new", 
+   "revision root for r4 rather than reusing the one obtained for r3."
+  ], 
+  "revision_id": "847861"
+ }
+]

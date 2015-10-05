@@ -1,0 +1,110 @@
+[
+ {
+  "author": "dberlin", 
+  "date": "2005-10-20T18:04:55.983398Z", 
+  "msg": [
+   "Add change r16855"
+  ], 
+  "revision_id": "856930"
+ }, 
+ {
+  "author": "dberlin", 
+  "date": "2005-10-20T17:56:11.989126Z", 
+  "msg": [
+   "Don't write empty hashes to the props file, it just wastes space.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__save_prop_file): Check hash count before writing to file.", 
+   "(empty_props_p): finfo.size == 0 is empty too."
+  ], 
+  "revision_id": "856929"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-10-20T17:53:10.778748Z", 
+  "msg": [
+   "Expose the svn_wc_get_adm_dir() API via the JavaHL bindings to support", 
+   "SVN_ASP_DOT_NET_HACK.  Modify JUnit tests to remove hard-coded", 
+   "assumption about .svn administrative directory name", 
+   "[in subversion/bindings/java/javahl/]", 
+   "* native/SVNClient.cpp", 
+   "(SVNClient::getAdminDirectoryName): Returns svn_wc_get_adm_dir() as", 
+   "a java.lang.String object.", 
+   "* native/SVNClient.h", 
+   "(SVNClient::getAdminDirectoryName): Declaration.", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_getAdminDirectoryName):", 
+   "Exposes SVNClient::getAdminDirectoryName() to Java.", 
+   "* src/org/tigris/subversion/javahl/SVNClientInterface.java", 
+   "* src/org/tigris/subversion/javahl/SVNClient.java", 
+   "* src/org/tigris/subversion/javahl/SVNClientSynchronized.java", 
+   "(getAdminDirectoryName): Add new method to interface, and expose its", 
+   "native definition to Java in interface implementations.", 
+   "* src/org/tigris/subversion/javahl/tests/SVNTests.java", 
+   "(getAdminDirectoryName): A new method intended to be called after", 
+   "setUp() (e.g. as part of test method execution), which returns the", 
+   "WC admin directory name, or calls fail() if the dir name cannot be", 
+   "determined.", 
+   "* src/org/tigris/subversion/javahl/tests/BasicTests.java", 
+   "(testBasicCleanup): Used SVNTests.getAdminDirectoryName() instead of", 
+   "hard-coding the string \".svn\".", 
+   "Patch by: me", 
+   "markphip"
+  ], 
+  "revision_id": "856928"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2005-10-20T15:34:03.261554Z", 
+  "msg": [
+   "Abstract common code from svn_wc__merge_props() and", 
+   "svn_wc__merge_prop_diffs()", 
+   "* subversion/libsvn_wc/props.c", 
+   "(open_reject_tmp_file): New helper for creating temporary reject file.", 
+   "Abstracted from svn_wc__merge_props().", 
+   "(svn_wc__merge_props, svn_wc__merge_prop_diffs): Eliminate slash variable.", 
+   "Use open_reject_tmp_file() helper."
+  ], 
+  "revision_id": "856927"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-10-20T14:53:23.433372Z", 
+  "msg": [
+   "Fix issue #2247: ra_dav leaks when reusing session.  In short, don't", 
+   "use the session pool for temporary stuff, which means most stuff, actually.", 
+   "* subversion/libsvn_ra_dav/log.c (svn_ra_dav__get_log):", 
+   "* subversion/libsvn_ra_dav/file_revs.c (svn_ra_dav__get_file_revs):", 
+   "Allocate from the pool provided by the caller.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__maybe_store_auth_info,", 
+   "svn_ra_dav__maybe_store_auth_info_after_result): Add pool argument.", 
+   "Callers updated.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(report_baton_t): Add pool and in_resource members, change", 
+   "current_wcprop_path to a stringbuf.", 
+   "(svn_ra_dav__get_locations): Use caller-provided pool for temporary stuff.", 
+   "(start_element): Use rb->pool instead of the session pool.", 
+   "When allocating file pools, don't use the session pool, but instead", 
+   "the parent directory pool.", 
+   "Set rb->in_resource to true when setting rb->current_wcprop_path (there", 
+   "is no NULL value any longer).", 
+   "(cdata_handler): Allocate in rb->pool instead of session pool.", 
+   "(end_element): Set rb->in_resource to FALSE at the end of a resource", 
+   "element.  Allocate in rb->pool instead of that poor session pool, who should", 
+   "really start feeling lonely at this point.", 
+   "Adjust check for if we are inside a resource element to use in_resource.", 
+   "(reporter_finish_report): Stop using session pool.", 
+   "(make_reporter): Remove ### comments about a subpool and cleaning", 
+   "up the temporary file.  Files are closed (and removed, in this case)", 
+   "when their pools are destroyed.", 
+   "Initialize pool and in_resource members of the report baton and", 
+   "change initialization of current_wcprop_patch, since it is now", 
+   "a stringbuf.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__maybe_store_auth_info,", 
+   "svn_ra_dav__maybe_store_auth_info_after_result): Add and use pool", 
+   "argument for temporary allocatons."
+  ], 
+  "revision_id": "856926"
+ }
+]

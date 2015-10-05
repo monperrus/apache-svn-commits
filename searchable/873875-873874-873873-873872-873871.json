@@ -1,0 +1,86 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2008-10-21T09:57:52.629530Z", 
+  "msg": [
+   "Some followup fixes to r33730.", 
+   "Suggested by: gstein", 
+   "* subversion/libsvn_fs_base/bdb/dbt.c", 
+   "(svn_fs_base__str_to_dbt): Simplify checksum size calculation.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_set_proplist): Fix comment.  Also, simplify error", 
+   "checking.", 
+   "(svn_fs_base__dag_finalize_edits): Simplify error checking.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_NO_SUCH_CHECKSUM_REP): Change category offset."
+  ], 
+  "revision_id": "873875"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T09:41:26.840149Z", 
+  "msg": [
+   "Delete http://svn.collab.net/repos/svn/branches/1.5.x-r32968"
+  ], 
+  "revision_id": "873874"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T09:39:47.116321Z", 
+  "msg": [
+   "Merge r32968, r32975 from backport branch 1.5.x-r32968.", 
+   "* r32968, r32975", 
+   "Fix bug which occurs when a merge adds explicit mergeinfo to a subtree that", 
+   "had no explicit mergeinfo prior to the merge.  This new mergeinfo could", 
+   "obstruct any mergeinfo the path previously inherited and the new path", 
+   "was not getting mergeinfo set that described the merge itself -- See", 
+   "http://subversion.tigris.org/servlets/ReadMsg?listName=dev&msgNo=142460.", 
+   "Notes:", 
+   "r32968 is a new test for this problem and r32975 is the fix.  When merging", 
+   "these changes there are some minor conflicts...Minor but sufficiently", 
+   "annoying to disuade review, hence the backport branch 1.5.x-r32968.", 
+   "Justification:", 
+   "Incorrect mergeinfo results when this bug is encountered and it has", 
+   "already been encountered in our own repository as described in the", 
+   "aforementioned thread.", 
+   "Votes:", 
+   "+1: pburba, rhuijben, kameshj", 
+   "+0: arfrever"
+  ], 
+  "revision_id": "873873"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-21T09:23:48.603928Z", 
+  "msg": [
+   "Revert r33796 as it causes compile failure due to missing 'SVN_ERR_ASSERT'", 
+   "in 1.5.x."
+  ], 
+  "revision_id": "873872"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-21T01:34:22.286576Z", 
+  "msg": [
+   "Remove some path-accessing functions in favor of stream-accessing", 
+   "functions in the add_file_with_history() function. A bunch of other stream", 
+   "copies were simplified by using the new copy3() variant.", 
+   "Note: a somewhat unrelated change is that the code longer bothers to copy", 
+   "permission flags onto things being placed into the temp area or text base.", 
+   "This code (rightly) assumes that the perms will be set properly when the", 
+   "file is installed into ACTUAL.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(add_file_with_history): use svn_stream_open_unique() to place a file", 
+   "that contains the text base of the file being copied (instead of", 
+   "svn_wc_create_tmp_file2). use get_revert_contents or", 
+   "get_pristine_contents to get a source stream, instead of their path-", 
+   "based equivalents, then use copy3() to copy their contents over.", 
+   "When fetching from the repository, simplify all of the logic -- we", 
+   "already have a target stream to write into.", 
+   "(close_file): simplify code by using svn_stream_copy3(). no longer copy", 
+   "permissions from the copied text base to the new text base.", 
+   "(svn_wc_add_repos_file3): simplify by using copy3()"
+  ], 
+  "revision_id": "873871"
+ }
+]

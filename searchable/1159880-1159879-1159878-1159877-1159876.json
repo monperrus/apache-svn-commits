@@ -1,0 +1,82 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2011-08-20T13:56:52.292144Z", 
+  "msg": [
+   "Change the implementation of 'svn diff --summarize' to use the standard", 
+   "'diff callbacks' mechanism, so that it may be more easily extended.  The", 
+   "summary mode currently supports only repos-repos diffs, and it was reporting", 
+   "the summary results directly from a delta editor drive.  Instead, write a", 
+   "set of diff callbacks that produce summary information, and drive them via", 
+   "the existing svn_client__get_diff_editor() for a repos-repos diff.  Later we", 
+   "can drive the same diff callbacks from WC-WC and WC-repos diff sources.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_diff_editor): Add a 'text_deltas' parameter to control", 
+   "whether text deltas are expected by this editor. This should also", 
+   "suppress the generation of text deltas (and full texts) when it is", 
+   "false, but at the moment it does not.", 
+   "(svn_client__get_diff_summarize_editor): Remove; replace with ...", 
+   "(svn_client__get_diff_summarize_callbacks): ... this new function.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_repos_repos): Update the call to svn_client__get_diff_editor().", 
+   "(diff_summarize_repos_repos): Use svn_client__get_diff_summarize_callbacks", 
+   "combined with svn_client__get_diff_editor, instead of", 
+   "svn_client__get_diff_summarize_editor.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(drive_merge_report_editor): Update the call to", 
+   "svn_client__get_diff_editor().", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(svn_client__get_diff_editor): Add a 'text_deltas' parameter, store it ...", 
+   "(edit_baton): ... in here, and ...", 
+   "(close_file): ... if it is false then don't check the received text", 
+   "checksum, because if text deltas are not being received by this editor", 
+   "then the checksum will not have been calculated correctly.", 
+   "(diff_deleted_dir): Call the dir_deleted() callback for each subdirectory", 
+   "in a deleted tree. This call had always been missing but the lack of it", 
+   "had not previously been noticed.", 
+   "* subversion/libsvn_client/repos_diff_summarize.c", 
+   "(edit_baton, create_item_baton, delete_entry, add_directory,", 
+   "open_directory, close_directory, add_file, open_file, apply_textdelta,", 
+   "close_file, change_prop): Remove.", 
+   "(summarize_baton_t, send_summary, props_changed, cb_dir_deleted,", 
+   "cb_file_deleted, cb_dir_added, cb_dir_opened, cb_dir_closed,", 
+   "cb_file_added, cb_file_opened, cb_file_changed, cb_dir_props_changed):", 
+   "New.", 
+   "(svn_client__get_diff_summarize_editor): Remove.", 
+   "(svn_client__get_diff_summarize_callbacks): New."
+  ], 
+  "revision_id": "1159880"
+ }, 
+ {
+  "author": "clement", 
+  "date": "2011-08-20T13:54:30.018901Z", 
+  "msg": [
+   "Removed superfluous groupId"
+  ], 
+  "revision_id": "1159879"
+ }, 
+ {
+  "author": "clement", 
+  "date": "2011-08-20T13:53:15.463346Z", 
+  "msg": [
+   "Removed superfluous groupId"
+  ], 
+  "revision_id": "1159878"
+ }, 
+ {
+  "author": "clement", 
+  "date": "2011-08-20T13:49:40.480138Z", 
+  "msg": [
+   "Small adaptation of the code to use Java 5 generics."
+  ], 
+  "revision_id": "1159877"
+ }, 
+ {
+  "author": "norman", 
+  "date": "2011-08-20T13:42:23.808567Z", 
+  "msg": [
+   "remove not needed synchronization"
+  ], 
+  "revision_id": "1159876"
+ }
+]

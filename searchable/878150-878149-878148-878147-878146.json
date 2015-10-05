@@ -1,0 +1,108 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-06-18T15:18:42.135825Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_patch): Fix indentation."
+  ], 
+  "revision_id": "878150"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-18T15:13:55.785754Z", 
+  "msg": [
+   "Add a new regression test for unidiff parsing.", 
+   "* subversion/tests/libsvn_diff/parse-diff-test.c: New file.", 
+   "(test_parse_unidiff): New test which attempts to verify that hunks", 
+   "are being parsed correctly into streams backed by a range of the", 
+   "patch file", 
+   "* build.conf", 
+   "(parse-diff-test): Add new file here so it gets built."
+  ], 
+  "revision_id": "878149"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-18T14:55:54.760772Z", 
+  "msg": [
+   "Rework the way unidiff hunks are handled in svn patch.", 
+   "Instead of storing, diffing, and merging hunk texts in memory,", 
+   "use ranged streams backed by the patch file, and some temporary", 
+   "files. The amount of memory used during unidiff application is", 
+   "now proportional to the length of individual lines in a patch file,", 
+   "rather than the size of the entire patch file.", 
+   "Neels kindly helped with getting the temporary file handling", 
+   "as efficient as possible.", 
+   "* subversion/include/private/svn_diff_private.h", 
+   "(svn_hunk_t): Convert all hunk data fields to streams.", 
+   "(svn_patch_t): Also store the patch file path in here. It is needed", 
+   "to create hunk streams.", 
+   "(svn_diff__destroy_hunk): Declare.", 
+   "* subversion/libsvn_diff/parse-diff.c", 
+   "(svn_diff__parse_next_patch): Initialise new 'path' field of svn_patch_t.", 
+   "(original_line_filter, modified_line_filter): New callback functions to", 
+   "filter lines when reading from hunk streams.", 
+   "(svn_diff__parse_next_hunk): Instead of creating strings which contain", 
+   "hunk texts, create ranged streams backed by the patch file.", 
+   "(svn_diff__destroy_hunk): New function, used to close streams created", 
+   "for a hunk.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(hunk_tempfiles_t): New structure to manage temporary files used", 
+   "for hunk diffing and merging.", 
+   "(patch_target_t): Add new tempfiles and patch fields. The patch_eol_str", 
+   "field is now no longer needed, since we can retrieve this information", 
+   "from the 'patch' field.", 
+   "(init_patch_target): Add tempfiles argument, open the target file for", 
+   "buffered writing and with default permissions, and initialise the", 
+   "new fields in patch_target_t.", 
+   "(determine_hunk_line): Drive-by bugfix: If the patch target didn't", 
+   "previously exist, the starting line of the original text is specified", 
+   "as zero. But we're counting lines starting from 1, and ignore hunks", 
+   "which want to be applied before the current line. This caused", 
+   "'svn patch' to skip newly added files. Fix this by returning a line", 
+   "offset of one if a hunk wants to be applied at line zero.", 
+   "(copy_lines_to_target): Add a ### comment.", 
+   "(read_lines_from_target): Instead of reading the latest text into", 
+   "a string, create a range-based stream backed by the target file.", 
+   "(copy_hunk_text): New helper function to copy a hunk's text from", 
+   "a stream into a temporary file. It expects each line to be prefixed", 
+   "with unidiff line information (' ' or '-' or '+') which is stripped off.", 
+   "(copy_latest_text): New helper function which copies the latest text", 
+   "of the hunk into a temporary file. The text is copied verbatim.", 
+   "(merge_hunk): New helper function to diff and merge hunks, using", 
+   "temporary files and the svn_diff_file_*() API instead of strings", 
+   "and the svn_diff_mem_*() API.", 
+   "(apply_one_hunk): The latest text is now a stream instead of a string.", 
+   "Also, use new merge_hunk() helper function for hunk diffing and merging.", 
+   "(apply_one_patch): Add tempfiles argument which we need to create the", 
+   "patch target structure. Also, destroy hunks after using them to make", 
+   "sure their streams are closed, and tweak a comment.", 
+   "(apply_textdiffs): Create temporary files for hunk diffing/merging,", 
+   "passes the tempfiles on to apply_on_patch(), and close the temporary", 
+   "files again when we're done applying the patch."
+  ], 
+  "revision_id": "878148"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-06-18T14:54:44.115257Z", 
+  "msg": [
+   "* notes/http-protocol-v2.txt", 
+   "Remove optional TODO item.  Don't think it makes sense any more."
+  ], 
+  "revision_id": "878147"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-18T14:37:10.829608Z", 
+  "msg": [
+   "Recommend sqlite 3.6.15.", 
+   "* configure.ac", 
+   "(SQLITE_RECOMMENDED_VER): Recommend SQLite 3.6.15.", 
+   "* tools/dist/construct-rolling-environment.sh", 
+   "(SQLITE_VERSION): Update SQLite version to 3.6.15."
+  ], 
+  "revision_id": "878146"
+ }
+]

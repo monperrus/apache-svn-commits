@@ -1,0 +1,74 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-05-23T21:14:37.000000Z", 
+  "msg": [
+   "(svn_wc_remove_from_revision_control) bugfix: when an update tries to", 
+   "remove a file or dir, *preserve* any files that are locally modified."
+  ], 
+  "revision_id": "839400"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-05-23T20:46:23.000000Z", 
+  "msg": [
+   "Bugfixes to make updates work --when the update involves removing", 
+   "files or dirs.", 
+   "* adm_ops.c (svn_wc_remove_from_revision_control):  bugfixes; remove", 
+   "file from entries file *after* looking for local mods, duh.  And", 
+   "append the filename to the path when removing it.", 
+   "* log.c (log_do_delete_entry):  decide if 'name' is a file or dir, and", 
+   "call svn_wc_remove_from_revision_control in the appropriate manner."
+  ], 
+  "revision_id": "839399"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-05-23T19:49:02.000000Z", 
+  "msg": [
+   "Directory deletions should now work on the client side.  If you do a", 
+   "'svn rm dir' and commit, all of the SVN/ dirs are recursively removed.", 
+   "(TODO:  add a -f (force) flag option to recursively nuke the dir itself.)", 
+   "Note: the way in which we call svn_wc_remove_from_revision_control()", 
+   "is still being discussed; it may change soon.", 
+   "* adm_ops.c, svn_wc.h (svn_wc_remove_from_revision_control): total", 
+   "rewrite.  The old didn't even correctly preserve local mods. :)", 
+   "* svn_error.h (SVN_ERR_WC_LEFT_LOCAL_MOD):  special value potentially", 
+   "returned by svn_wc_remove_from_revision_control(), indicating that", 
+   "locally modified files were left behind.", 
+   "* adm_files.c (svn_wc__adm_destroy):  make this function un-suck, by", 
+   "calling apr_dir_remove_recursively() on SVN/.", 
+   "(svn_wc__adm_path_exists):  new convenience routine.", 
+   "* log.c (remove_from_revision_control):  removed, promoted to public function.", 
+   "(recursive_rc_remove):  deleted, no longer needed.", 
+   "(log_do_delete_entry):  call svn_wc_remove_from_revision_control().", 
+   "(log_do_committed):  if a committed file is marked for deletion,", 
+   "call svn_wc_remove_from_revision_control.  if a committed dir is", 
+   "marked for deletion, drop a 'KILLME' file into the administrative", 
+   "area.", 
+   "(svn_wc__run_log):  at the very end, after removing the logfile,", 
+   "check for a 'KILLME' file and possibly run", 
+   "svn_wc_remove_from_revision_control().", 
+   "* wc.h (SVN_WC__ADM_KILLME):  new #define filename.", 
+   "(svn_wc__adm_path_exists):  declare."
+  ], 
+  "revision_id": "839398"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-05-22T21:47:32.000000Z", 
+  "msg": [
+   "Some stuff I've been thinking about.  Not immediately relevant, but", 
+   "will be when we start trying to do merges better than CVS."
+  ], 
+  "revision_id": "839397"
+ }, 
+ {
+  "author": "joe", 
+  "date": "2001-05-22T18:15:23.000000Z", 
+  "msg": [
+   "* svn_types.h: Don't use ## when concatenating string tokens."
+  ], 
+  "revision_id": "839396"
+ }
+]

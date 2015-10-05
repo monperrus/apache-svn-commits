@@ -1,0 +1,81 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2006-09-22T22:01:23.274835Z", 
+  "msg": [
+   "Resolve issue #2607: post-commit processing exhibits O(n^2) behavior.", 
+   "* subversion/include/svn_wc.h", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_committed_queue_t): New type for commit item queues.", 
+   "(svn_wc_committed_queue_create): New. Constructor for", 
+   "svn_wc_committed_queue_t.", 
+   "(svn_wc_queue_committed): New.  Adds a new item to the committed items", 
+   "queue. Optionally does required initialization.", 
+   "(svn_wc_process_committed_queue): New.  Processes (with O(n) behavior)", 
+   "the queue of committed items, running all log files (which causes", 
+   "the entries file to be rewritten) as a last step.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(process_committed_internal): New.  Abstracted out of", 
+   "svn_wc_process_committed4 to serve as a base for", 
+   "svn_wc_process_committed_queue too.  Changed to account for the fact", 
+   "that the base log number may not start at 0 anymore.", 
+   "(committed_queue_item_t): New.  Structure to store parameters for each", 
+   "committed item.", 
+   "(affected_adm_t): New.  Structure to do some book-keeping", 
+   "for the affected adm areas.", 
+   "(have_recursive_parent): New.  Used to determine whether a path", 
+   "will already have been processed, because one of its parents", 
+   "was processed recursively.", 
+   "(svn_wc_process_committed4): Rewrite in terms of", 
+   "process_committed_internal.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(have_processed_parent): Remove.  Now obsolete.", 
+   "(svn_client_commit4): Adapted to use the new queued post-commit", 
+   "processing functions.  Because we process all logs after queueing", 
+   "the items, there are fewer cases of SVN_ERR_WC_NOT_LOCKED to", 
+   "catch.  Same thing for deleted items: the entry-existance check", 
+   "is no longer relevant: when we check for existance it'll still exist.", 
+   "Renamed subpool to iterpool, because that's how it's used now."
+  ], 
+  "revision_id": "861690"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-09-22T21:59:46.424784Z", 
+  "msg": [
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc_adm_retrieve): Provide any well-known root cause (wrapped)", 
+   "when a generic SVN_ERR_WC_NOT_LOCKED error is returned."
+  ], 
+  "revision_id": "861689"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2006-09-22T21:42:11.146807Z", 
+  "msg": [
+   "* contrib/client-side/svn_export_empty_files.py", 
+   "(check_dir_for_export, synchronize_dir, main): Remove unnecessary", 
+   "\"svn_client_\" prefix from calls to svn.client.svn_client_* functions."
+  ], 
+  "revision_id": "861688"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2006-09-22T20:57:59.910957Z", 
+  "msg": [
+   "Merged revisions 21439-21611 via svnmerge from", 
+   "http://svn.collab.net/repos/svn/trunk to incomplete-directories branch."
+  ], 
+  "revision_id": "861687"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2006-09-22T20:54:16.475790Z", 
+  "msg": [
+   "Follow up to r21611: fix test description", 
+   "* subversion/tests/cmdline/basic_tests.py", 
+   "(ls_space_in_repo_name): fix test description."
+  ], 
+  "revision_id": "861686"
+ }
+]

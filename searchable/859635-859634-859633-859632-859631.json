@@ -1,0 +1,97 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-05-08T20:22:09.178154Z", 
+  "msg": [
+   "* STATUS: Tweak wording of justification for r19558."
+  ], 
+  "revision_id": "859635"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2006-05-08T20:21:37.926711Z", 
+  "msg": [
+   "'svn changelist' suggested fixes from Philip Martin.  Followup to r19500.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_changelist):  rename argument to just 'changelist'.", 
+   "(svn_info_t):  add @since to 'changelist' field.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_entry_t):  move 'changelist' field after 1.4 fields.", 
+   "(svn_wc_changelist): renmove 'tweak' from function name. fix", 
+   "docstring. rename arg to just 'changelist'.", 
+   "* subversion/libsvn_client/changelist.c", 
+   "(svn_client_changelist):  update caller to svn_wc_changelist().", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_changelist):  renamed from svn_wc_tweak_changelist().", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__atts_to_entry, svn_wc_entry_dup): fix a bunch of", 
+   "copy-and-paste-o's.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table):  add svn_cl__targets_opt to 'changelist'."
+  ], 
+  "revision_id": "859634"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-05-08T20:07:58.331966Z", 
+  "msg": [
+   "* STATUS: Nominate r19558."
+  ], 
+  "revision_id": "859633"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-05-08T19:59:51.683474Z", 
+  "msg": [
+   "Rather than silently converting 'blame' of a WORKING revision to that", 
+   "of BASE, return an error explicitly stating that 'blame' of WORKING is", 
+   "unsupported.", 
+   "In the future, 'blame' is likely to grow support for WORKING", 
+   "revisions, with the output style corresponding that of 'cat'.", 
+   "As this change can only be tested using the API, and the C testing", 
+   "framework currently lacks support for setting up a WC, something like", 
+   "the following patch can be used in conjunction with 'svn blame", 
+   "-rWORKING file' to test:", 
+   "--- subversion/svn/main.c\t(revision 19556)", 
+   "+++ subversion/svn/main.c\t(working copy)", 
+   "@@ -966,6 +966,10 @@", 
+   "&(opt_state.end_revision),", 
+   "opt_arg, pool) != 0)", 
+   "{", 
+   "+            opt_state.start_revision.kind = svn_opt_revision_working;", 
+   "+            opt_state.end_revision.kind = svn_opt_revision_working;", 
+   "+            break;", 
+   "+", 
+   "err = svn_utf_cstring_to_utf8(&utf8_opt_arg, opt_arg, pool);", 
+   "if (! err)", 
+   "err = svn_error_createf", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_blame3): Update doc string to reflect the new behavior.", 
+   "* subversion/libsvn_client/blame.c", 
+   "(svn_client_blame3): Return SVN_ERR_UNSUPPORTED_FEATURE for attempts", 
+   "to call 'blame' on the WORKING revision.", 
+   "Found by: Stefan K\u00fcng <tortoisesvn@gmail.com>", 
+   "Suggested by: julianfoad", 
+   "cmpilato", 
+   "Review by: lundblad"
+  ], 
+  "revision_id": "859632"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2006-05-08T19:11:20.714801Z", 
+  "msg": [
+   "Allow to run svn-status-blame from a svn controlled file", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-run): Set the new variable svn-status-pre-run-svn-buffer", 
+   "(svn-process-sentinel): When svn blame finished, go to the line", 
+   "from the source file, if svn blame was invoked from a source file", 
+   "(svn-status-get-file-information): New function. Either call", 
+   "svn-status-get-file-information or return the buffer-file-name for", 
+   "the current buffer", 
+   "(svn-status-blame): Allow it to run from a svn controlled source file", 
+   "Bind it to the svn-global-keymap (subkey b)."
+  ], 
+  "revision_id": "859631"
+ }
+]

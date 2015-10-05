@@ -1,0 +1,91 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-11T23:45:34.618342Z", 
+  "msg": [
+   "Slight tweaks to the recommendation of the deltify process.", 
+   "* libsvn_repos/repos.c:", 
+   "(create_hooks): for the 'svnadmin deltify', put it into the background,", 
+   "and drop its priority a little bit. we don't want it to compete with", 
+   "the primary operation of the server."
+  ], 
+  "revision_id": "847780"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-11-11T23:28:08.776056Z", 
+  "msg": [
+   "With Mike and Ben: Send property changes in inline report responses.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(ELEM_set_prop): New enum.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(struct report_baton_t): New field 'encoding'.  Also, add comment", 
+   "asking about stringbuf vs cstrings.", 
+   "(reporter_finish_report): Allocate the new encoding stringbuf.", 
+   "(validate_element): Validate ELEM_set_prop.", 
+   "(start_element, end_element): Handle ELEM_set_prop.  Adjust other", 
+   "code & comments to handle both old- and new-style responses.", 
+   "(add_node_props): Don't fetch props if this is new-style report.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(upd_change_xxx_prop): For new-style responses, send props right", 
+   "away and don't treat entry props specially.", 
+   "(close_helper): Do the right thing for both new- and old-style", 
+   "responses.", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(delta_proplists): If this is an add, then don't bother sending null", 
+   "values of committed_date, last_author, or uuid, because that looks", 
+   "like a prop removal to the editor.  There's no point removing the", 
+   "prop if it couldn't possibly have existed anyway, and doing so can", 
+   "cause validation errors."
+  ], 
+  "revision_id": "847779"
+ }, 
+ {
+  "author": "bdenny", 
+  "date": "2003-11-11T23:02:13.747914Z", 
+  "msg": [
+   "Resolve issue #1589 -- \"svn_io_temp_dir() inappropriate for some wc", 
+   "write ops\".  In the context of merge (a read/write operation), create", 
+   "the temp file in the working directory instead of the system's tempdir.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(create_empty_file): New parameter HAVE_WRITE_LOCK.  If TRUE, create the", 
+   "temp file in the working directory instead of the system's tempdir.", 
+   "(get_empty_file): Determine whether we have a write lock.", 
+   "(apply_textdelta): Determine whether we have a write lock."
+  ], 
+  "revision_id": "847778"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-11T20:55:15.889349Z", 
+  "msg": [
+   "For all that merging in my last commit, I missed revisions 7667 and", 
+   "7635.  I don't care about the latter, but the former is a must-have.", 
+   "So, merge revision 7667 from the /trunk into my branch."
+  ], 
+  "revision_id": "847777"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-11-11T20:08:16.290514Z", 
+  "msg": [
+   "Merge the filesystem changes that have occurred on the trunk since I", 
+   "branched, and the non-filesystem changes that are all about tracking", 
+   "the filesystem changes.  (Huh?).  In other words, this is quite", 
+   "literally the result of the following:", 
+   "#!/bin/sh", 
+   "export URL=http://svn.collab.net/repos/svn/trunk", 
+   "cd ~/projects/subversion", 
+   "svn merge -r 7631:7634 ${URL}/subversion/libsvn_fs ./subversion/libsvn_fs", 
+   "svn merge -r 7631:7634 ${URL}/subversion/include/svn_fs.h ./subversion/include/svn_fs.h", 
+   "svn merge -r 7634:7635 ${URL} .", 
+   "svn merge -r 7636:7665 ${URL}/subversion/libsvn_fs ./subversion/libsvn_fs", 
+   "svn merge -r 7636:7665 ${URL}/subversion/include/svn_fs.h ./subversion/include/svn_fs.h", 
+   "svn merge -r 7665:7666 ${URL} .", 
+   "svn merge -r 7667:7698 ${URL}/subversion/libsvn_fs ./subversion/libsvn_fs", 
+   "svn merge -r 7667:7698 ${URL}/subversion/include/svn_fs.h ./subversion/include/svn_fs.h", 
+   "Wow."
+  ], 
+  "revision_id": "847776"
+ }
+]

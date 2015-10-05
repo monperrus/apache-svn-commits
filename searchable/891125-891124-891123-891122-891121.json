@@ -1,0 +1,109 @@
+[
+ {
+  "author": "kayyagari", 
+  "date": "2009-12-16T04:34:49.919820Z", 
+  "msg": [
+   "updated the artifcat name and description"
+  ], 
+  "revision_id": "891125"
+ }, 
+ {
+  "author": "kayyagari", 
+  "date": "2009-12-16T04:32:29.910765Z", 
+  "msg": [
+   "preparing for refactoring the testing framework"
+  ], 
+  "revision_id": "891124"
+ }, 
+ {
+  "author": "hansbak", 
+  "date": "2009-12-16T04:25:07.990606Z", 
+  "msg": [
+   "close commevent did not return to the list, create custrequest should use form from projectmanager if component is available"
+  ], 
+  "revision_id": "891123"
+ }, 
+ {
+  "author": "spearce", 
+  "date": "2009-12-16T04:20:04.644454Z", 
+  "msg": [
+   "SSHD-54: Use OS default receive buffer to improve throughput", 
+   "MINA itself is actually forcing the receive buffer size to be 1024", 
+   "bytes, rather than the operating system default.  By default the", 
+   "NioAcceptor is created with a DefaultSocketSessionConfig [1] which", 
+   "sets both the send and receive buffer sizes to 1024 bytes.", 
+   "NioSocketAcceptor [2] then turns around and sets this receive", 
+   "buffer size into the accept socket, so all child sockets created", 
+   "for incoming connections inherit this low default value.", 
+   "However, in the case of the send buffer, because the configured", 
+   "value of 1024 matches the default of 1024 for the send buffer,", 
+   "doSetAll [3] never actually changes the send buffer size away from", 
+   "the operating system default.", 
+   "Unfortunately this means we have the following situation for our", 
+   "NIO based sockets:", 
+   "MINA  | OS Default", 
+   "+------+-----------", 
+   "RCV | 1024 | 43690", 
+   "SND | 8192 |  8192", 
+   "So the receive buffer size under MINA is 42x smaller than the OS", 
+   "default.  But the send buffer size is the OS default, as MINA does", 
+   "not directly set the send buffer size itself.  So send throughput", 
+   "is actually reasonable, but receive throughput is horrible.", 
+   "There is a good article [4] which explains how these settings impact", 
+   "connection throughput.  If we want any decent TCP/IP throughput we", 
+   "need reasonably large buffers to increase the amount of data one", 
+   "side can send before stopping and waiting for an ACK from the peer.", 
+   "If our receive window is only 1024 bytes, our peer can't even send", 
+   "a full TCP/IP packet on Ethernet without stopping and waiting for", 
+   "an ACK from us.", 
+   "Of course one could try to argue that the MINA default of 1024 bytes", 
+   "for the receive buffer is suitable, especially on a server with a", 
+   "very large number of idle connections, or connections where a human", 
+   "is typing all of the input data. But it is not suitable for a high", 
+   "traffic data receiver, like the scp command.", 
+   "Unfortunately asking applications to raise the receive buffer size", 
+   "on each individual connection through the SessionFactory doesn't", 
+   "work on all platforms.  On Linux with OpenJDK 6 the following", 
+   "application code appears to work:", 
+   "setSessionFactory(new SessionFactory() {", 
+   "@Override", 
+   "protected ServerSession createSession(final IoSession io)", 
+   "throws Exception {", 
+   "final SocketSessionConfig c = (SocketSessionConfig) io.getConfig();", 
+   "c.setKeepAlive(keepAlive);", 
+   "c.setReceiveBufferSize(43690);", 
+   "}", 
+   "}", 
+   "});", 
+   "but the aggregate throughput is still horrible (3 MB/s).  So the", 
+   "receive buffer didn't actually increase with the peer.", 
+   "Linux seems to be capping the connection at the upper bound when", 
+   "the connection starts.  If we set the receive buffer size of the", 
+   "NioSocketAcceptor to 43690, later drop the receive buffer size of", 
+   "the individual connection to 1024 in the session factory, we can", 
+   "later boost it when a specific command starts, and performance", 
+   "behaves as expected.", 
+   "To match developer expectations we now reset the receive buffer", 
+   "size to the operating system's default size before the server", 
+   "starts accepting connections.  This allows applications to get good", 
+   "throughput by default, or raise/lower the receive buffer within", 
+   "reasonable limits based on the command executed.", 
+   "References:", 
+   "[1] http://svn.apache.org/viewvc/mina/tags/2.0.0-RC1/core/src/main/java/org/apache/mina/transport/socket/DefaultSocketSessionConfig.java?view=markup#l44", 
+   "[2] http://svn.apache.org/viewvc/mina/tags/2.0.0-RC1/core/src/main/java/org/apache/mina/transport/socket/nio/NioSocketAcceptor.java?view=markup#l248", 
+   "[3] http://svn.apache.org/viewvc/mina/tags/2.0.0-RC1/core/src/main/java/org/apache/mina/transport/socket/AbstractSocketSessionConfig.java?view=markup#l58", 
+   "[4] http://www.ibm.com/developerworks/linux/library/l-hisock.html"
+  ], 
+  "revision_id": "891122"
+ }, 
+ {
+  "author": "mikedd", 
+  "date": "2009-12-16T04:17:47.440556Z", 
+  "msg": [
+   "OPENJPA-714:", 
+   "Check l1 cache when looking for managed instances when cascading.", 
+   "Submitted By: Jody Grassel"
+  ], 
+  "revision_id": "891121"
+ }
+]

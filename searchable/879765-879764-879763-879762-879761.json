@@ -1,0 +1,88 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T08:47:57.204512Z", 
+  "msg": [
+   "Use uri joining for in-repository paths, to avoid dirent specifics,", 
+   "like uppercasing drive letters on windows as in the \"c:hi\" examples.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(make_entry,", 
+   "svn_fs_fs__dag_clone_child,", 
+   "svn_fs_fs__dag_copy): Use uri joining for in-repository paths.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_check_path): Use uri joining for filesystem paths."
+  ], 
+  "revision_id": "879765"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T08:08:37.452756Z", 
+  "msg": [
+   "Make svn_dirent_is_absolute() only return true when", 
+   "svn_dirent_get_absolute() called on that same path returns the same value.", 
+   "This resolves an issue with lower cased drive letters in Windows, that", 
+   "where found.", 
+   "Found by: rdonch", 
+   "* subversion/libsvn_subr/dirent_uri.c", 
+   "(svn_dirent_is_absolute): Don't assume a lowercase drive letter is absolute.", 
+   "* subversion/tests/libsvn_subr/dirent_uri-test.c", 
+   "(test_dirent_is_absolute): Add two test values, verifying the new behavior and", 
+   "add verification on svn_dirent_get_absolute() value being the same for absolute", 
+   "paths.", 
+   "(test_dirent_get_absolute): Add three test values."
+  ], 
+  "revision_id": "879764"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-30T07:21:55.235901Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(open_root): Only check for tree conflicts of parents when there is a", 
+   "working copy instead of relying on the ancestor walk in", 
+   "alread_in_a_tree_conflict() to stop in the right place.", 
+   "This should fix hwright's local failures."
+  ], 
+  "revision_id": "879763"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-09-30T05:10:48.976449Z", 
+  "msg": [
+   "[On the issue-3242-dev branch]", 
+   "Tweak the mergeinfo-related libsvn_client utility functions to expect", 
+   "paths relative to the RA session (instead of to the root of the", 
+   "repository).", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo_catalog,", 
+   "svn_client__get_wc_or_repos_mergeinfo,", 
+   "svn_client__get_wc_or_repos_mergeinfo_catalog): Docstring tweaks.", 
+   "(svn_client__get_repos_mergeinfo, svn_client__get_repos_mergeinfo_catalog):", 
+   "Now require that incoming paths are relative to the RA session.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_repos_mergeinfo_catalog,", 
+   "svn_client__get_wc_or_repos_mergeinfo_catalog): Change these", 
+   "functions to expect their incoming paths to be relative to the", 
+   "provided RA session", 
+   "(get_mergeinfo): Reparent (as needed) the RA session before calling", 
+   "svn_client__get_repos_mergeinfo_catalog().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(get_full_mergeinfo): Pass NULL for the RA session in the", 
+   "call to svn_client__get_wc_or_repos_mergeinfo().  This might not be the", 
+   "most efficient thing in the world, but I'm aiming for correctness", 
+   "at the moment.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo): Calculate the path relative to the", 
+   "session and pass it off to svn_client__get_repos_mergeinfo()."
+  ], 
+  "revision_id": "879762"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-09-30T03:59:05.742281Z", 
+  "msg": [
+   "Merge from trunk r39605-39686."
+  ], 
+  "revision_id": "879761"
+ }
+]

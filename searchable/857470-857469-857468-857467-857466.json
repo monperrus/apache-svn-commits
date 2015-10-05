@@ -1,0 +1,99 @@
+[
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T14:19:09.344550Z", 
+  "msg": [
+   "Add a conditional workaround for the Perl bindings' usage of circular linkage.", 
+   "* configure.in: Check and #define SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK", 
+   "on Cygwin.", 
+   "* subversion/bindings/swig/perl/native/Makefile.PL.in: Add an -I option so that", 
+   "svn_private_config.h is includable.", 
+   "* subversion/bindings/swig/core.i [SWIGPERL]:", 
+   "Call svn_swig_pl_bind_current_pool_fns during module initialization,", 
+   "if SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK defined.", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.c:", 
+   "Include svn_private_config.h.", 
+   "(svn_swig_pl_bind_current_pool_fns): New definition, visible iff", 
+   "SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK defined.", 
+   "(svn_swig_pl_get_current_pool, svn_swig_pl_set_current_pool):", 
+   "Define differently if SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK defined.", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.h:", 
+   "Include svn_private_config.h.", 
+   "(svn_swig_pl_get_current_pool_t, svn_swig_pl_set_current_pool_t,", 
+   "svn_swig_pl_bind_current_pool_fns): Declare iff", 
+   "SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK defined"
+  ], 
+  "revision_id": "857470"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T14:02:09.062035Z", 
+  "msg": [
+   "Use the APR_BINARY flag on all calls to apr_file_open(). Subversion never wants", 
+   "the OS or CRT to do EOL munging behind its back.", 
+   "AFAIK, this only has any noticable effect on Cygwin.", 
+   "* subversion/libsvn_fs_base/fs.c (copy_db_file_safely):", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_open_unique_file2, get_default_file_perms, svn_io_file_open):", 
+   "Add APR_BINARY flag to apr_file_open()."
+  ], 
+  "revision_id": "857469"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-11-16T13:54:16.198074Z", 
+  "msg": [
+   "Followup to r16428. Change ra_local \"invalid host\" test to SKIP under Cygwin,", 
+   "as Cygwin has UNC paths too.", 
+   "Patch by: jlvarner", 
+   "* subversion/tests/libsvn_ra_local/ra-local-test.c", 
+   "(HAS_UNC_HOST): Enable under cygwin."
+  ], 
+  "revision_id": "857468"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-16T13:23:38.275380Z", 
+  "msg": [
+   "* /branches/wc-propcaching/TODO: Tweak entry and assign myself to it."
+  ], 
+  "revision_id": "857467"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-11-16T13:20:57.397907Z", 
+  "msg": [
+   "On wc-propcaching branch: Change the name of has-properties in entries file", 
+   "to cached-props for consistency with other attribute names and in preparation", 
+   "for another change.", 
+   "Make an empty cached-props list not be written to the entry.", 
+   "Some other small fixes related to this.  Follow-up to r17352.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_entry): Rename has_properties to cached_props.  Clarify docstring.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__build_cached_props): Rename from svn_wc__build_cached_properties.", 
+   "Strip trailing space at end of returned string.", 
+   "(svn_wc__install_props, svn_wc_prop_get, svn_wc__has_props): Update for", 
+   "name changes.", 
+   "(svn_wc__cached_props): Renmae from svn_wc__cached_properties.", 
+   "* subversion/libsvn_wc/props.h", 
+   "(svn_wc__cached_props): Rename from svn_wc__cached_properties.", 
+   "(svn_wc__build_cached_props): Rename from svn_wc__build_cached_properties.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__atts_to_entry): Update for name changes.", 
+   "(write_entry): Update for name changes.  Don't write cached-props if", 
+   "it is empty.", 
+   "(fold_entry, svn_wc_entry_dup): Update for name changes.", 
+   "* subversion/libsvn_wc/entries.h", 
+   "(SVN_WC__ENTRY_ATTR_CACHED_PROPS): Rename from", 
+   "SVN_WC__ENTRY_ATTR_CACHED_PROPS and change value to \"cached-props\".", 
+   "(SVN_WC__ENTRY_MODIFY_CACHED_PROPS): Rename from", 
+   "SVN_WC__ENTRY_MODIFY_HAS_PROPERTIES.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(svn_wc__loggy_entry_modify): Reflect name changes.", 
+   "* subversion/libsvn_wc/translate.c", 
+   "(svn_wc__get_special): Remove unused variable."
+  ], 
+  "revision_id": "857466"
+ }
+]

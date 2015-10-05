@@ -1,0 +1,118 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:20:48.158543Z", 
+  "msg": [
+   "Enhance region_status.rb to report status of a single table.", 
+   "Summary:", 
+   "For the purpose of Snapshot/Backup we would wish to wait for", 
+   "all regions of a table to come up before we verify the backed up table.", 
+   "For this purpose the region_status.rb script needs to be modified. This", 
+   "functionality should be of great use in other places as well.", 
+   "Test Plan:", 
+   "1) Test on dev cluster.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: nspiegelberg, madhuvaidya, aaiyer", 
+   "CC: hbase@lists, , nspiegelberg", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 268472"
+  ], 
+  "revision_id": "1181565"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:20:41.353433Z", 
+  "msg": [
+   "Fix major compaction bug for a table at a per column family level.", 
+   "Summary:", 
+   "Major compaction at a per column family level for a table was being", 
+   "incorrectly downgraded to a minor compaction. This is a longer term fix.", 
+   "Test Plan:", 
+   "1) Test in dev cluster.", 
+   "2) Run relevant tests in TestFromClientSide.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan", 
+   "CC: kannan, hbase@lists", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 267161"
+  ], 
+  "revision_id": "1181564"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:20:38.671643Z", 
+  "msg": [
+   "HBASE-3987: Fix a Bloom Filter NPE on a failure to load Bloom filter data", 
+   "Summary:", 
+   "This is a fix for an NPE that happens in passesBloomFilter. The meta block", 
+   "fails to load, and the catch block on lines 1066-1068 sets the Bloom filter to", 
+   "null. Then all other threads waiting on the Bloom filter to load get a chance to", 
+   "try to load the meta block, and one of them eventually succeeds and proceeds to", 
+   "query the Bloom filter in StoreFile.passesBloomFilter, but bloomFilter has been", 
+   "already set to null.", 
+   "The fix (Nicolas's idea) is to cache the bloomFilter variable as a local", 
+   "variable in passesBloomFilter.", 
+   "A similar fix for the \"earth\" branch is D266546.", 
+   "Test Plan:", 
+   "Unit test (TestStoreFile)", 
+   "Reviewed By: kannan", 
+   "Reviewers: nspiegelberg, kannan", 
+   "CC: hbase@lists, , kannan", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 266571"
+  ], 
+  "revision_id": "1181563"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:20:33.709031Z", 
+  "msg": [
+   "Adding limit / row / CF clause to Get (and Scan)", 
+   "Summary:", 
+   "Use setMaxResultsPerColumnFamily to limit the number of values returned by Get", 
+   "per CF.", 
+   "Test Plan:", 
+   "Added unit tests.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, gqchen, jfan", 
+   "Commenters: gqchen, jfan", 
+   "CC: madhuvaidya, kannan, gqchen, liyintang, jfan, hbase@lists, anirudht", 
+   "Differential Revision: 250900"
+  ], 
+  "revision_id": "1181562"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:20:28.555043Z", 
+  "msg": [
+   "Fix RegionServerDynamicMetrics to push NumOps metrics for every interval", 
+   "Summary:", 
+   "RegionServerDynamicMetrics uses the MBean", 
+   "RegionServerDynamicStatistics to push out metrics. This MBean did not", 
+   "have the functionality of dynamically updating the metrics list it uses.", 
+   "Test Plan:", 
+   "Verify metrics in dev cluster", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, nspiegelberg, dhruba, hkuang, dms", 
+   "Commenters: nspiegelberg, dhruba", 
+   "CC: lshepard, mattwkelly, brent, pritam, kannan, ,", 
+   "hbase@lists, nspiegelberg, dhruba", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 255866"
+  ], 
+  "revision_id": "1181561"
+ }
+]

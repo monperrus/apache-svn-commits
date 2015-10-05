@@ -1,0 +1,121 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-01-10T22:52:46.867309Z", 
+  "msg": [
+   "A follow-up to r22964.", 
+   "* subversion/include/svn_client.h", 
+   "(copy4): Clarify documentation for SRC_ITEMS."
+  ], 
+  "revision_id": "863040"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2007-01-10T21:03:19.963746Z", 
+  "msg": [
+   "Introduced svn-post-process-svn-output-hook", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-post-process-svn-output-hook): New hook, run svn-status-remove-control-M", 
+   "on windows platforms", 
+   "(svn-status-wash-control-M-in-process-buffers): Deleted variable.", 
+   "The svn-post-process-svn-output-hook is a more general solution", 
+   "(svn-run, svn-process-sentinel): Run svn-post-process-svn-output-hook after", 
+   "running a svn command"
+  ], 
+  "revision_id": "863039"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-01-10T20:41:02.520555Z", 
+  "msg": [
+   "Support peg revision syntax for 'svn copy'.", 
+   "This closes issue 2546.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_copy_item_t): New.  Contains copy information for a single source.", 
+   "(svn_client_copy4):  Take an array of svn_client_copy_item_t as input.  Adjust", 
+   "docs accordingly.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__copy_pair_t): Add additional fields to support operational and", 
+   "peg revisions.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(path_driver_info_t): Add a source revision number member.", 
+   "(path_driver_cb_baton): Remove the source revision number.", 
+   "(path_driver_cb_func): Use the src revnum specific to the path, instead of", 
+   "the one in the callback baton.", 
+   "(repos_to_repos_copy, repos_to_wc_copy): Use the per-pair revnum, instead of", 
+   "a revnum for the whole operation.  For each source, use", 
+   "svn_client__repos_locations() to get the correct repository URL for the", 
+   "source and peg revision combination.", 
+   "(setup_copy): Accept an array of svn_client_copy_item_t and add checks for", 
+   "peg revision sanity.  Adjust calls to individual copy functions.", 
+   "(svn_client_copy4): Accept an array of svn_client_copy_t and pass it to", 
+   "setup_copy().", 
+   "(svn_client_copy3): Create the correct array to pass to svn_client_copy3().", 
+   "(svn_client_move5, svn_client_move): Create the correct array to pass to", 
+   "setup_copy().", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(resurrect_deleted_dir, resurrect_deleted_file, repos_to_wc_1634,", 
+   "non_existent_url_to_url, old_dir_url_to_url, copy_deleted_dir_into_prefix):", 
+   "Update to use peg revision syntax.", 
+   "(copy_peg_rev_local_files, copy_peg_rev_url): New tests.", 
+   "(test_list): Run new tests.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_schedule_add_dir): Update to use peg revision syntax.", 
+   "* subversion/tests/cmdline/history_tests.py", 
+   "(cat_avoids_false_identities): Update to use peg revision syntax.", 
+   "* subversion/svn/copy-cmd.c", 
+   "(svn_cl__copy): Parse the peg revision for each source, and pass it to the", 
+   "client library as part of a svn_client_copy_item_t.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Tweak documenation for 'copy'."
+  ], 
+  "revision_id": "863038"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-01-10T20:16:40.391372Z", 
+  "msg": [
+   "Comment- and documentation-only followup to r22940.", 
+   "* subversion/libsvn_wc/README", 
+   "(The entries file): Describe the keep-local attribute.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_entry_t.keep_local): Clarify doc-comment and explain when this field", 
+   "can be used.", 
+   "(svn_wc_delete3): Clarify effect of the 'keep_local' argument.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_delete3): Expand description of the 'keep_local' argument, and", 
+   "correct a doc-comment typo.", 
+   "(svn_client_delete2): Correct minor typo.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__atts_to_entry): Clarify description of the keep-local attribute.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(SVN_WC__KILL_ADM_ONLY): Clarify that the 'killme' file may or may not", 
+   "contain this value.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(handle_killme): Expand doc-comment, correct an inline comment.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(mark_tree): Expand doc-comment, clarifying the allowed values of the", 
+   "'modify_flags' argument.", 
+   "* subversion/libsvn_wc/adm_files.h", 
+   "(svn_wc__make_killme): Expand doc-comment, clarifying effects.", 
+   "(svn_wc__check_killme): Clarify that *kill_adm_only is only defined if a", 
+   "file exists.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__make_killme): Undocument (already documented in adm_files.h).", 
+   "(svn_wc__check_killme): Clarify inline comment.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__wc_delete): Clarify slightly."
+  ], 
+  "revision_id": "863037"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-01-10T19:43:12.797994Z", 
+  "msg": [
+   "Followup to r22958.", 
+   "* subversion/libsvn_client/copy.c:", 
+   "(svn_client_move5, svn_client_copy4):  Use subpool for additional allocations."
+  ], 
+  "revision_id": "863036"
+ }
+]

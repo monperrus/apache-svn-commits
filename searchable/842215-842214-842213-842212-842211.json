@@ -1,0 +1,77 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-06-11T00:24:16.112074Z", 
+  "msg": [
+   "* www/project_status.html: Update after 0.13.0."
+  ], 
+  "revision_id": "842215"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-10T23:10:14.094007Z", 
+  "msg": [
+   "Time to make the donuts... and release the tarball.", 
+   "* svn_version.h (SVN_VER_MINOR): bump to release 0.13.0", 
+   "* CHANGES:  tweak a bit, move 'modules' to non-visible section.", 
+   "* repos_upgrade_HOWTO:  remove the patch from the file;  instruct", 
+   "people to checkout the 2092 branch in order to do repository dump."
+  ], 
+  "revision_id": "842214"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-10T22:59:58.760428Z", 
+  "msg": [
+   "Patch to improve speed of undeltification for r2092 branch.", 
+   "This is a HACK, only applied to this branch.  Should make repository", 
+   "conversion easier for people.", 
+   "* /branches/fs-convert-2092/subversion/svnadmin/main.c:", 
+   "(do_deltify_undeltify, deltify_undeltify, main):  new helper funcs", 
+   "do the recursion outside of the filesystem, thus not sucking up", 
+   "locks within the berkeley trail."
+  ], 
+  "revision_id": "842213"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-10T22:54:10.126580Z", 
+  "msg": [
+   "Create branch of r2092;  people can use this branch to convert old", 
+   "repositories."
+  ], 
+  "revision_id": "842212"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-10T22:40:03.981639Z", 
+  "msg": [
+   "Bugfix:  receiving a copied directory during an update over DAV was", 
+   "failing.  Patch by Ben and CMike.", 
+   "When mod_dav_svn constructs a vsn-rsc-url, it's not always safe to", 
+   "append the newest path to the created-rev -- for copied subtrees in", 
+   "particular.  It's not safe to return \"CR/old_path\" either.  Thus for", 
+   "now, we attempt to return \"CR/latest_path\" as long as the latest path", 
+   "actually exists in CR and is the same node.  Otherwise, we just return", 
+   "\"target-rev/latest-path\".  The only impact of this is that future HTTP", 
+   "caching will be a teeny bit less efficient.", 
+   "* util.c (dav_svn_build_uri):  remove useless rev_root arg;  use", 
+   "revision arg to build VERSION resource.", 
+   "(dav_svn_get_safe_cr): new function to determine if it's safe to", 
+   "return \"CR/latest_path\" instead of \"target-rev/latest-path\".", 
+   "* update.c (send_vsn_url): use new dav_svn_get_safe_cr.", 
+   "* dav_svn.h (dav_svn_build_uri):  no more rev_root arg, update", 
+   "docstring requirements for version-urls.", 
+   "(dav_svn_get_safe_cr):  new prototype.", 
+   "* repos.c (dav_svn_prep_version): update call to dav_svn_build_uri.", 
+   "* version.c (dav_svn_get_option): same.", 
+   "* liveprops.c (dav_svn_insert_prop): same.  for version-url, use new", 
+   "dav_svn_get_safe_cr func.", 
+   "* merge.c (send_response): same. for version-url, use new", 
+   "dav_svn_get_safe_cr func.", 
+   "(dav_svn__merge_response): same.", 
+   "* copy_tests.py (receive_copy_in_update):  new regression test."
+  ], 
+  "revision_id": "842211"
+ }
+]

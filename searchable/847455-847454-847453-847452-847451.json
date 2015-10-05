@@ -1,0 +1,84 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2003-10-11T06:05:22.871304Z", 
+  "msg": [
+   "Fix memory leak in ra_dav.  open_tmp_file was allocating temporary", 
+   "variables in the client's pool rather than the file's pool.", 
+   "Patch by: Josh Pieper <jpieper@andrew.cmu.edu>", 
+   "(who beat me to the diagnosis by mere minutes)", 
+   "* subversion/include/svn_ra.h", 
+   "* subversion/libsvn_client/ra.c", 
+   "(open_tmp_file): add a dedicated pool parameter", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_apply_txdelta): pass a local pool to open_tmp_file", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(make_reporter): ditto"
+  ], 
+  "revision_id": "847455"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-11T03:54:26.734441Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "(svn_ra_dav__merge_activity): Return the commit info in the", 
+   "passed-in pool, not the session pool."
+  ], 
+  "revision_id": "847454"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-11T00:55:29.650823Z", 
+  "msg": [
+   "Cleanup some potential leak locations on the line between Subversion", 
+   "and Neon.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(commit_close_file): Destroy request before returning an error.", 
+   "(checkout_resource): Free a variable that doesn't get used", 
+   "in an errorful case.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__parsed_request): Destroy request before returning an", 
+   "error.  Also, reorg the end of this function a little bit.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(custom_get_request): Stylistic mods only.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__search_for_starting_props): Ensure that a parsed URI is", 
+   "free'd before exiting the function."
+  ], 
+  "revision_id": "847453"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-10T21:24:53.084156Z", 
+  "msg": [
+   "Run the old svn_error_clear() on a bunch of errors that were getting", 
+   "lost in the mix.", 
+   "* subversion/libsvn_wc/adm_crawler.c (svn_wc_crawl_revisions)", 
+   "* subversion/libsvn_wc/diff.c (file_diff)", 
+   "* subversion/libsvn_wc/lock.c (svn_wc_adm_probe_open)", 
+   "* subversion/libsvn_wc/log.c (file_xfer_under_path)", 
+   "* subversion/libsvn_wc/questions.c (svn_wc__versioned_file_modcheck)", 
+   "* subversion/libsvn_wc/util.c (svn_wc__ensure_directory)", 
+   "* subversion/libsvn_ra_dav/merge.c (end_element)", 
+   "* subversion/libsvn_ra_dav/log.c (log_end_element)", 
+   "Also, there was some funky code that just needed to not be so funky.", 
+   "It also had error lifetime issues, so I'm including it in this", 
+   "changeset.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(leftmod_error_chain): New helper.", 
+   "(delete_entry): Call new helper (which now contains some of this", 
+   "function's suspect error-checking code, made non-suspect)."
+  ], 
+  "revision_id": "847452"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-10-10T20:55:00.372508Z", 
+  "msg": [
+   "* subversion/include/svn_client.h", 
+   "Fix typo in docstring comment."
+  ], 
+  "revision_id": "847451"
+ }
+]

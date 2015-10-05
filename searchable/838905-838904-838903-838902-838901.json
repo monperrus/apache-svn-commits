@@ -1,0 +1,106 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2001-03-13T01:18:28.000000Z", 
+  "msg": [
+   "Support a PUT to the repository. :-)", 
+   "This checkin also removes much of the stub code that was present in repos.c", 
+   "to deal with unavailable SVN FS functions. There is also a bunch of", 
+   "(untested) work for creating collections (directories), deleting items, and", 
+   "fetching resources.", 
+   "*) dav_svn.h (dav_svn_private_restype): new enumerated type to specify the", 
+   "different types of private resources.", 
+   "(dav_resource_private): repos_path now has a leading slash; update", 
+   "comments to match the new semantic. add restype field to discriminate", 
+   "among PRIVATE resource types.", 
+   "(dav_svn_create_activity): new declaration", 
+   "*) repos.c (dav_stream): expand to include a stream for reading, and a", 
+   "handler/baton for writing.", 
+   "(dav_svn_parse_version_uri, dav_svn_parse_working_uri,", 
+   "dav_svn_parse_uri): keep the leading slash in the repos_path field.", 
+   "(struct special_defn): add restype field for mapping from", 
+   "dav_svn_private_restype back to a URI component", 
+   "(special_subdirs[]): add restype values", 
+   "(dav_svn_prep_regular): remove stub code and fetch youngest revision.", 
+   "remove stub code and open the revision root. determine whether the", 
+   "resource is a directory and store in res.collection.", 
+   "(dav_svn_prep_working): toss stub and implement properly.", 
+   "(dav_svn_create_private_resource): new function", 
+   "(dav_svn_get_parent_resource): toss stub and implement parent retrieval", 
+   "for WORKING resources (the only thing that can be modified).", 
+   "(dav_svn_open_stream): don't allow seekable resources (for now). toss", 
+   "stub code and implement read/write dav_stream objects.", 
+   "(dav_svn_close_stream): toss stub and implement real closing.", 
+   "(dav_svn_read_stream): update to dav_stream.rstream field for reading.", 
+   "(dav_svn_write_stream): implement", 
+   "(dav_svn_seek_stream, dav_svn_copy_resource, dav_svn_move_resource):", 
+   "return an error to catch unintended calls", 
+   "(dav_svn_getetag): fix: use idstr->data rather than just idstr", 
+   "(dav_svn_set_headers): remove stub code and implement fetching of file", 
+   "length and storing in the response headers.", 
+   "(dav_svn_do_walk): do not skip the slash (for repository paths) when", 
+   "using values from the uri_data field. update call to svn_fs_is_file()", 
+   "for new prototype.", 
+   "(dav_svn_walk): do not skip the slash when setting up repos_path", 
+   "(dav_svn_create_working_resource): repos_path has a leading slash, so", 
+   "don't place it into PATH.", 
+   "*) version.c (dav_svn_make_activity): use the dav_svn_create_activity()", 
+   "utility function to create the activity and an FS transaction. also,", 
+   "make sure the resource gets updated (\"exists\" and the txn name)", 
+   "*) activity.c (dav_svn_create_activity): new function to create an activity", 
+   "and an FS transaction"
+  ], 
+  "revision_id": "838905"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-03-13T01:08:57.000000Z", 
+  "msg": [
+   "Commit the Greek Tree.", 
+   "Most of this code is based on Yoshiki Hayashi <yoshiki@xemacs.org>'s", 
+   "original patch posted to the dev list.", 
+   "* dag.c (make_node_immutable, stabilize_node): New functions.", 
+   "* dag.h, dag.c (svn_fs__dag_commit_txn): New function.", 
+   "* txn.c (commit_txn_args): Add char *conflict field.", 
+   "(txn_body_commit_txn): Rewrite.", 
+   "* svn_fs.h, txn.c (svn_fs_commit_txn): Finished.  Add conflict_p", 
+   "parameter, set it according to the new conflict record in", 
+   "commit_txn_args.", 
+   "* rev-table.h, rev-table.c (youngest_rev_args): Take rev by value, not", 
+   "reference, in accordance with Greg Stein's recent suggestions.  All", 
+   "callers changed.", 
+   "(txn_body_youngest_rev): Rewrite to use svn_fs__youngest_rev.", 
+   "(svn_fs__youngest_rev): New func.", 
+   "* editor.c (close_edit): Adjust call to svn_fs_commit_txn.", 
+   "* fs-test.c (fetch_youngest_rev): Adjust call to svn_fs_commit_txn."
+  ], 
+  "revision_id": "838904"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-13T00:51:25.000000Z", 
+  "msg": [
+   "More hacking to list out transactions."
+  ], 
+  "revision_id": "838903"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-03-12T21:43:01.000000Z", 
+  "msg": [
+   "Fixed gcc warnings in the following locations:", 
+   "* libsvn_subr/io.c (svn_io_open_unique_file)", 
+   "* libsvn_ra_dav/commit.c (create_activity)", 
+   "* libsvn_client/commit.c (svn_client_commit)"
+  ], 
+  "revision_id": "838902"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-12T18:43:43.000000Z", 
+  "msg": [
+   "The actual move of track_editor.c"
+  ], 
+  "revision_id": "838901"
+ }
+]

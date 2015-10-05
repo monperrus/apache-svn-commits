@@ -1,0 +1,77 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:53.421446Z", 
+  "msg": [
+   "THRIFT-926. cpp: remove auto-stringification in TLogging.h", 
+   "The T_DEBUG* and T_ERROR* macros used preprocessor stringification to", 
+   "stringify the format string argument.  This was weird and unintuitive.", 
+   "With the old behavior:", 
+   "- Quotes surrounding the format string were included in the message:", 
+   "T_DEBUG(\"this is a test\") --> expanded to  \"\\\"this is a test\\\"\"", 
+   "- Backslashes in the string are escaped so they print literally:", 
+   "T_DEBUG(\"foo\\nbar\")       --> expanded to  \"\\\"foo\\\\nbar\\\"\"", 
+   "- Standard fixed-width integer format macros don't work:", 
+   "T_DEBUG(\"x: %\" PRIi64, x) --> expanded to  \"\\\"x: %\\\" PRIi64\"", 
+   "The last item is particularly problematic, since it prevents 64-bit", 
+   "values from being logged portably.", 
+   "With the new code, the following will no longer compile:", 
+   "T_DEBUG(this is my log message: %d, 5)", 
+   "I don't think that is a bad thing, though."
+  ], 
+  "revision_id": "1005170"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:52.329616Z", 
+  "msg": [
+   "THRIFT-926. cpp: Better buffer management for TNonblockingServer", 
+   "Add two improvements to memory management in TNonblocking server:", 
+   "- Separate the receive code into two distinct states: one for receiving", 
+   "the frame header and one for the frame content.  This allows us to", 
+   "size the initial read buffer based on the initial frame size, rather", 
+   "than allocating an arbitrary amount of memory before reading the", 
+   "header.", 
+   "- Allow setting the initial write buffer size based on the application's", 
+   "expected response size."
+  ], 
+  "revision_id": "1005169"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:51.085844Z", 
+  "msg": [
+   "THRIFT-926. cpp: Let TMemoryBuffer::resetBuffer() set size of self-allocated buffer", 
+   "Although there is a constructor that allows a TMemoryBuffer to be", 
+   "created with an internally-allocated buffer of a desired size, there was", 
+   "no way for resetBuffer to obtain analogous behavior. This change causes", 
+   "the appropriate constructor to be used."
+  ], 
+  "revision_id": "1005168"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:49.703103Z", 
+  "msg": [
+   "THRIFT-926. cpp: Thrift: throw bad_alloc when malloc fails, not something else", 
+   "When malloc/realloc fail, we've typically just thrown a TException. This", 
+   "allows a server that should simply crash when out of memory to survive", 
+   "in a strage state, with various bad consequences. Instead, we should", 
+   "throw bad_alloc and just not catch it (or if we decide to, be very", 
+   "careful to respond properly)."
+  ], 
+  "revision_id": "1005167"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:47.848494Z", 
+  "msg": [
+   "THRIFT-926. cpp: TFramedTransport: Uphold the strong exception safety guarantee", 
+   "Previously, if we had a new[] failure when growing a TFramedTransport", 
+   "write buffer, we would leave the buffer in an invalid state (wBufSize_", 
+   "would reflect the desired size, rather than the actual size).  Now, we", 
+   "make no change to any member variables if new[] fails."
+  ], 
+  "revision_id": "1005166"
+ }
+]

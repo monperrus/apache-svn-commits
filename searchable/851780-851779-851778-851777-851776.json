@@ -1,0 +1,92 @@
+[
+ {
+  "author": "epg", 
+  "date": "2004-11-02T01:11:43.504413Z", 
+  "msg": [
+   "When committing 89482 files, the server process shoots from 20 MB to", 
+   "69 MB in write_final_changed_path_info.  The first 39 MB of that comes", 
+   "from fetch_all_changes, the last 10 from", 
+   "write_final_changed_path_info's own loop.  By fixing these functions'", 
+   "pool usage, the 39 MB is reduced to 15, the 10 MB to nearly 0.  Thanks", 
+   "to kfogel and ghudson for review.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(fetch_all_changes): Allocate change in iterpool, and clear iterpool", 
+   "before allocating another change at the end of the loop.", 
+   "(write_final_changed_path_info): Use an iterpool for the loop."
+  ], 
+  "revision_id": "851780"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2004-11-01T23:30:51.760867Z", 
+  "msg": [
+   "* STATUS: Vote for issue 1905 fix."
+  ], 
+  "revision_id": "851779"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2004-11-01T21:04:20.415605Z", 
+  "msg": [
+   "Reduce the number of times the wc format and entries files are", 
+   "read.  In particular, avoid reading entries files more than once", 
+   "when running svn_client_status.  I have a report that this makes", 
+   "a noticeable difference to the speed of TSVN overlays.", 
+   "* subversion/include/svn_wc.h (svn_wc_adm_open_anchor): New function.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc_adm_open_anchor, join_batons): New functions.", 
+   "* subversion/libsvn_client/status.c (svn_client_status): Use the new", 
+   "svn_wc_adm_open_anchor.", 
+   "* subversion/libsvn_wc/status.c (svn_wc_status): Get parent baton from", 
+   "the access baton set rather than by opening a new baton.", 
+   "* subversion/libsvn_wc/update_editor.c (check_wc_root): Look for parent", 
+   "baton in the access baton set before opening a new baton.", 
+   "* subversion/libsvn_client/update.c (svn_client__update_internal): Use", 
+   "the new svn_wc_adm_open_anchor.", 
+   "* subversion/libsvn_client/switch.c (svn_client_switch): Use the new", 
+   "svn_wc_adm_open_anchor.", 
+   "* subversion/libsvn_client/revert.c (revert): Use the new", 
+   "svn_wc_adm_open_anchor, get context before opening and so eliminate", 
+   "gotos and error handling.", 
+   "* subversion/libsvn_client/diff.c (diff_wc_wc, diff_repos_wc): Use the", 
+   "new svn_wc_adm_open_anchor."
+  ], 
+  "revision_id": "851778"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2004-11-01T19:30:12.701002Z", 
+  "msg": [
+   "* STATUS: Add and vote for r11701"
+  ], 
+  "revision_id": "851777"
+ }, 
+ {
+  "author": "jaa", 
+  "date": "2004-11-01T18:57:58.121660Z", 
+  "msg": [
+   "This patch implements fixed size keywords for Subversion,", 
+   "see issue #2095 for more details.", 
+   "Patch provided by Tom Molesworth <tom at molesworth name>, regression", 
+   "tests by me. Thanks Greg Hudson for comments.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(translate_keyword_subst): Added fixed length keyword handling", 
+   "* subversion/tests/clients/cmdline/diff_tests.py", 
+   "(verify_exluded_output): New helper function", 
+   "(diff_keywords): New test, check that keywords won't show up on", 
+   "diff, and that they show when they should.", 
+   "* subversion/tests/clients/cmdline/trans_tests.py", 
+   "(keywords_from_birth): Added testing of fixed length keywords.", 
+   "(setup_working_copy): Signature changed, it now takes second", 
+   "argument: length of the value field (value_len). This is used", 
+   "by fixed keyword tests.", 
+   "(check_keywords): New helper function", 
+   "(fixed_length_keywords_path): New test path", 
+   "* subversion/tests/clients/cmdline/svntest/main.py", 
+   "(canonize_url): New helper function", 
+   "* doc/book/TODO", 
+   "Added entry for fixed length keywords."
+  ], 
+  "revision_id": "851776"
+ }
+]

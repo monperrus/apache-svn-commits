@@ -1,0 +1,116 @@
+[
+ {
+  "author": "sunny256", 
+  "date": "2005-09-09T19:01:53.019224Z", 
+  "msg": [
+   "* subversion/po/nb.po: make locale-gnu-po-update at r16100."
+  ], 
+  "revision_id": "856175"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-09-09T17:55:40.128692Z", 
+  "msg": [
+   "Follow up to r16094. Rename function svn_wc__is_magic_props_changed to", 
+   "svn_wc__has_magic_property and clarify its comment.", 
+   "Patch by: Ivan Zhakov <chemodax@gmail.com>", 
+   "Suggested by: philip", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(revert_admin_things): Use new function name svn_wc__has_magic_property.", 
+   "* subversion/libsvn_wc/props.h,", 
+   "subversion/libsvn_wc/props.c:", 
+   "(svn_wc__has_magic_property): Renamed from svn_wc__is_magic_props_changed().", 
+   "Also, rename function argument from propchanges to properties.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(install_file): Use new function name svn_wc__has_magic_property."
+  ], 
+  "revision_id": "856174"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2005-09-09T16:03:59.923172Z", 
+  "msg": [
+   "* README: \"BerkeleyDB\" --> \"Berkeley DB\"."
+  ], 
+  "revision_id": "856173"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2005-09-09T11:33:40.176486Z", 
+  "msg": [
+   "Partial fix for Issue #443: post-commit hook script (error) output lost", 
+   "This is step 4 : Replace all usage of svn_client_commit_info2_t with", 
+   "svn_commit_info_t.", 
+   "Remove svn_client_commit_info2_t and svn_client_create_commit_info.", 
+   "Patch by: Madan U Sreenivasan <madan@collab.net>", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_commit_info2_t, svn_client_create_commit_info): Removed.", 
+   "(svn_client_mkdir2, svn_client_delete2, svn_client_import2,", 
+   "svn_client_commit3, svn_client_copy2, svn_client_move3):", 
+   "Use svn_commit_info_t instead of svn_client_commit_info2_t.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(delete_urls, svn_client_delete2),", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__commit_get_baton),", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_repos_copy, wc_to_repos_copy, setup_copy,", 
+   "svn_client_copy2, svn_client_copy, svn_client_move3,", 
+   "svn_client_move2),", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(commit_baton, svn_client__commit_get_baton,", 
+   "svn_client__commit_callback),", 
+   "* subversion/libsvn_client/add.c", 
+   "(mkdir_urls, svn_client_mkdir2, svn_client_mkdir),", 
+   "* subversion/libsvn_client/commit.c", 
+   "(get_ra_editor, svn_client_import2, svn_client_import,", 
+   "svn_client_commit3, svn_client_commit2),", 
+   "* subversion/clients/cmdline/cl.h (svn_cl__print_commit_info),", 
+   "* subversion/clients/cmdline/move-cmd.c (svn_cl__move),", 
+   "* subversion/clients/cmdline/mkdir-cmd.c (svn_cl__mkdir),", 
+   "* subversion/clients/cmdline/copy-cmd.c (svn_cl__copy),", 
+   "* subversion/clients/cmdline/util.c (svn_cl__print_commit_info),", 
+   "* subversion/clients/cmdline/commit-cmd.c (svn_cl__commit),", 
+   "* subversion/clients/cmdline/delete-cmd.c (svn_cl__delete),", 
+   "* subversion/clients/cmdline/import-cmd.c (svn_cl__import),", 
+   "Use svn_commit_info_t instead of svn_client_commit_info2_t."
+  ], 
+  "revision_id": "856172"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-09-09T09:30:51.782875Z", 
+  "msg": [
+   "Finish issue #1970 (\"History-following algorithm incomplete\").", 
+   "Implement svn_fs_closest_copy(), and use it to fix a correctness bug", 
+   "in the history-following.", 
+   "Patch by: ghudson", 
+   "cmpilato", 
+   "clkao", 
+   "kfogel", 
+   "* subversion/include/svn_fs.h,", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_closest_copy): New function.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t): Add closest_copy entry.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_closest_copy): New function to implement the new API.", 
+   "(root_vtable): Insert fs_closest_copy.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(closest_copy_args, txn_body_closest_copy, base_closest_copy): New", 
+   "functions and batons to implement the new API.", 
+   "(root_vtable): Insert base_closest_copy.", 
+   "* subversion/libsvn_repos/rev_hunt.c: Include svn_path.h.", 
+   "(svn_repos_trace_node_locations): Rewrite copy-tracing logic to skip", 
+   "unrelated interloper node revisions, by using svn_fs_closest_copy.", 
+   "* subversion/tests/clients/cmdline/history_tests.py", 
+   "(test_list): No longer expect cat_avoids_false_identities() to fail.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(test_closest_copy_pair): New helper.", 
+   "(closest_copy_test): New test.", 
+   "(test_funcs): Add reference to closest_copy_test().", 
+   "* subversion/bindings/swig/perl/native/Fs.pm", 
+   "Make closest_copy() a method of svn_fs_root."
+  ], 
+  "revision_id": "856171"
+ }
+]

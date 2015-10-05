@@ -1,0 +1,91 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-07-22T19:02:16.252313Z", 
+  "msg": [
+   "Fix issue #804:  \"svn co -r assumes dir exists in HEAD\".", 
+   "This was pretty simple (unless gstein has theoretical objections!)", 
+   "* fetch.c (begin_checkout):  call __get_baseline_info *before* calling", 
+   "__get_activity_collection, and make sure we run the OPTIONS request", 
+   "on bc_url, which is guaranteed to exist.  (ras->root.path might not", 
+   "exist in HEAD.)   Add a comment about how we're violating deltaV by", 
+   "assuming that the activity url is global to the repository.  :-)", 
+   "* basic_tests.py (basic_checkout_deleted):  new regression test.", 
+   "* actions.py (run_and_verify_commit, run_and_verify_status): dump", 
+   "trees to screen when they don't match, for easier debugging."
+  ], 
+  "revision_id": "842700"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2002-07-22T18:56:17.522930Z", 
+  "msg": [
+   "Continuing issue #749.  Make locks associate together in groups", 
+   "instead of in parent-child hierarchies.  Parent-child is still used", 
+   "when closing.  Directory locking is now separate from committable", 
+   "harvesting.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_adm_open, svn_wc_adm_retrieve, svn_wc_adm_close): Document", 
+   "new behavior.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(struct svn_wc_adm_access_t): Remove parent member. Rename children", 
+   "member to set.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc__adm_access_child): Deleted.", 
+   "(svn_wc__adm_access_alloc): Remove parent parameter and change all", 
+   "callers.", 
+   "(svn_wc_adm_open): Add the associated access baton to the hash after", 
+   "creating the hash. Use temporary hash for opening children.", 
+   "(svn_wc_adm_retrieve): Don't call svn_wc__adm_access_child.", 
+   "(svn_wc__do_adm_close): Copy children to array before closing them.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__harvest_committables, svn_client__get_copy_committables):", 
+   "Remove locked_dirs parameter.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(lock_dir): Deleted.", 
+   "(harvest_committables): Revert 2554 for this file. Also remove locked_dirs", 
+   "parameter, and remove all directory locking.", 
+   "(svn_client__harvest_committables, svn_client__get_copy_committables):", 
+   "Remove locked_dirs parameter and directory locking.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(unlock_dirs): Deleted.", 
+   "(svn_client_commit): Remove locked_dirs.  Open an access baton.", 
+   "Close the baton intead of calling unlock_dirs.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(unlock_dirs): Deleted.", 
+   "(wc_to_repos_copy): Remove locked_dirs.  Open an access baton.", 
+   "Close the baton intead of calling unlock_dirs."
+  ], 
+  "revision_id": "842699"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-07-22T18:11:23.242257Z", 
+  "msg": [
+   "* svn-config.in", 
+   "(show_usage): Label unimplemented options more prominently."
+  ], 
+  "revision_id": "842698"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-07-22T15:45:08.593438Z", 
+  "msg": [
+   "Fix some URI-encoding/decoding buglets.", 
+   "Patch by: Marcus Comstedt <marcus@mc.pp.se>", 
+   "* subversion/libsvn_subr/path.c", 
+   "(char_is_uri_safe): Make 'c' an int instead of a char.", 
+   "(svn_path_uri_encode, svn_path_uri_decode): Fix use of char_is_uri_safe."
+  ], 
+  "revision_id": "842697"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-22T15:27:15.935557Z", 
+  "msg": [
+   "* build.conf (infopages): remove reference to svn_for_cvs_users.", 
+   "Patch by: Eric Gillespie <epg@pretzelnet.org>"
+  ], 
+  "revision_id": "842696"
+ }
+]

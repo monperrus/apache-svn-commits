@@ -1,0 +1,118 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2004-05-21T16:39:38.233914Z", 
+  "msg": [
+   "Finish issue #1858 - 'svnlook diff' fails when $TMPDIR contains", 
+   "symlinks.", 
+   "Patch by: Ian P. Cardenas <srand@tigris.org>", 
+   "* subversion/svnlook/main.c", 
+   "(open_writable_binary_file): Use svn_io_check_resolved_path()", 
+   "instead of svn_io_check_path()."
+  ], 
+  "revision_id": "849890"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-05-21T07:06:13.605570Z", 
+  "msg": [
+   "* STATUS: Add and vote for r9814"
+  ], 
+  "revision_id": "849889"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2004-05-21T06:44:19.560950Z", 
+  "msg": [
+   "Fix an off by one error in the wc code that breaks the ability to checkout", 
+   "in the root path.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc__merge_prop_diffs): Paths ending in a slash don't need an extra", 
+   "slash removed, it's already accounted for in access_len."
+  ], 
+  "revision_id": "849888"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-21T02:28:22.386815Z", 
+  "msg": [
+   "Remove a redundant check in FSFS.", 
+   "(make_entry): Do not perform the expensive check for an", 
+   "already-existing entry in the parent directory; the callers in tree.c", 
+   "have already done so."
+  ], 
+  "revision_id": "849887"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-21T02:00:10.244895Z", 
+  "msg": [
+   "Implement \"directory-plus-changes\" in FSFS transactions.  A", 
+   "transaction's \"children\" file for a node now consists of the old", 
+   "directory, plus incremental hash entries for the changes made.  This", 
+   "reduces the work necessary for N directory operations to O(N), instead", 
+   "of O(N^2), although we will have to add some caching before we achieve", 
+   "that O(N) target, and even then the working copy has its own O(N^2)", 
+   "issues.  But big imports will be much faster.", 
+   "On a related note, a transactions \"props\" file for a node no longer", 
+   "contains a representation header or trailer.  Also, per the structure", 
+   "document, we now marshal mutable props and dir-contents reps as just", 
+   "\"-1\".", 
+   "* libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__delete_rep_if_mutable): Remove declaration.", 
+   "(svn_fs_fs__delete_node_revision): Document that this removes any", 
+   "mutable reps associated with the node-rev.", 
+   "* libsvn_fs_fs/fs_fs.c", 
+   "(hash_read, hash_write): Remove; superceded by svn_hash_read2 and", 
+   "svn_hash_write2.", 
+   "(get_txn_representation_filename,", 
+   "open_and_seek_representation_write): Remove; we handle props and", 
+   "dir contents at a higher level now.", 
+   "(open_and_seek_transaction): Document as only appropriate for file", 
+   "contents.  Open the proto rev file directly.  Remove id parameter.", 
+   "(open_and_seek_representation): Remove id parameter.", 
+   "(read_rep_offsets, representation_string): Add mutable_rep_truncated", 
+   "flag for reps which marshal as \"-1\" when mutable.", 
+   "(svn_fs_fs__get_node_revision): Pass appropriate value for", 
+   "mutable_rep_truncated to read_rep_offsets.  Don't set defunct", 
+   "fields in reps.  (Compress a little code while we're here.)", 
+   "(write_noderev_txn): Pass appropriate value for", 
+   "mutable_rep_truncated to representation_string.", 
+   "(build_rep_list, rep_read_get_baton, read_representation): Remove", 
+   "the id parameter and don't pass it up the chain.  Document as", 
+   "inappropriate for mutable props and dir contents reps.", 
+   "(get_dir_contents): New function to read dir contents.  Handle", 
+   "mutable directory contents reps specially.", 
+   "(svn_fs_fs__rep_contents_dir): Use get_dir_contents.", 
+   "(svn_fs_fs__get_proplist): Handle mutable prop reps specially.", 
+   "(unparse_dir_entry): Factor this out so we can use it in", 
+   "(unparse_dir_entries): Use unparse_dir_entry.", 
+   "(svn_fs_fs__set_entry): Implement by dumping the old directory hash", 
+   "to the children file, if it's still immutable, and then appending a", 
+   "change to the end.", 
+   "(struct rep_write_baton): Remove is_data_rep field", 
+   "(rep_write_get_baton): Document as only appropriate for file", 
+   "contents.  Remove the is_data_rep field.  Open the prototype rev", 
+   "file directly.", 
+   "(rep_write_contents_close): Assume we're using the data rep.", 
+   "(set_representation): Remove the is_data_rep parameter and don't", 
+   "pass it up the chain.  Document as only appropriate for file", 
+   "contents.", 
+   "(svn_fs_fs__set_contents): Verify that we're operating on a file.", 
+   "(svn_fs_fs__set_proplist): Write directly to the mutable props file,", 
+   "instead of going through set_representation.", 
+   "(write_hash_rep): Use svn_hash_write2.", 
+   "(svn_fs_fs__delete_rep_if_mutable): Remove; handle this in", 
+   "svn_fs_fs__delete_node_revision.", 
+   "(svn_fs_fs__delete_node_revision): Delete the mutable props and", 
+   "children reps if they exist.", 
+   "* libsvn_fs_fs/fs.h", 
+   "(representation_t): Remove is_directory_contents and is_data_rep", 
+   "fields.", 
+   "* libsvn_fs_fs/dag.c", 
+   "(svn_fs_fs__dag_remove_node): Only call", 
+   "svn_fs_fs__delete_node_revision."
+  ], 
+  "revision_id": "849886"
+ }
+]

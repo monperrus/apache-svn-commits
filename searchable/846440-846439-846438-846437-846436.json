@@ -1,0 +1,101 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-06-28T22:42:04.231164Z", 
+  "msg": [
+   "* packages/rpm/redhat-8.x/subversion.spec : Changes to compile on RedHat 9.", 
+   "The problem turned out to be the includes/libs built into apr/apr-util.", 
+   "With the new httpd-2.0.46-0.2 and requisite apr-0.9.4-0.1 and", 
+   "apr-util-0.9.4-0.1 packages it now compiles and builds on both RedHat 8.0", 
+   "and RedHat 9.0."
+  ], 
+  "revision_id": "846440"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-27T17:57:49.230773Z", 
+  "msg": [
+   "Fix the copied subtree problem referred to in revision 6358:", 
+   "Storing symbolic name roots in the skeleton repository mirror was", 
+   "problematic because of -- surprise -- copied subtrees.  The paths", 
+   "underneath the copied directory would wrongly claim to be origins of", 
+   "the same tags and branches that their copy sources were origins of.", 
+   "But we don't need the symbolic name root records to be versioned", 
+   "anyway.  For a given path, we only need to know when we hit the", 
+   "Subversion revision that opens a set of names, and when we hit the", 
+   "next change (which closes that set).  Therefore, move the symbolic", 
+   "name records out to a flat db mapping paths->namesets.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(SYMBOLIC_NAME_ROOTS_DB):", 
+   "(SymbolicNameTracker.fill_branch.copy_descend): Fix typo.", 
+   "(RepositoryMirror.__init__): Initialize new variables", 
+   "symroots_db_file and symroots_db; remove variable symbolic_names.", 
+   "Also, rearrange and redocument everything here.", 
+   "(RepositoryMirror.probe_path): Return both key and value.", 
+   "(RepositoryMirror.change_path): Copy nodes by value, not reference,", 
+   "and record symbolic name roots in the new symroots_db instead of", 
+   "in the repository mirror.", 
+   "(RepositoryMirror.delete_path.is_prunable): Likewise return and", 
+   "delete symbolic name roots from the new symroots_db, instead of", 
+   "from the repository mirror.", 
+   "(everywhere): Remove some old commented-out debugging prints.", 
+   "* tools/cvs2svn/design-notes.txt: Change example to match the code.", 
+   "With this change, branch creation, using a minimal number of copies,", 
+   "happens for all branches on which there was at least one commit.  The", 
+   "following problems remain:", 
+   "1. Tags are still not created, nor are branches on which no commit", 
+   "happens (i.e., the \"cleanup stage\" referred to in", 
+   "design-notes.txt is not yet implemented).", 
+   "2. Paths not on the branch are not correctly removed at branch", 
+   "creation time.  For example, in revision 27 of the repository", 
+   "created from test-data/main-cvsrepos, sub1/subsubB/default", 
+   "should be taken out of the newly-created branch, but it is not.", 
+   "3. There's clearly still some weirdness w.r.t. initial imports and", 
+   "vendor branches, for example, see revisions 13 and 12 (if the", 
+   "file \"space fname\" was correctly added in revision 12, why was", 
+   "it necessary to modify it again in the copy made in revision", 
+   "13?) or revision 17 and 16 (if all those paths were added in", 
+   "revision 16, why are they modified in revision 17, which", 
+   "according to the history [I think] should just be a straight", 
+   "copy of the trunk with no further changes?).", 
+   "Because of this, I've left the continue|pass switch in pass4() in the", 
+   "'continue' position.  We won't turn on branch and tag creation at all", 
+   "until it's fully correct."
+  ], 
+  "revision_id": "846439"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-27T16:07:49.412915Z", 
+  "msg": [
+   "Give link to RCS home page (thanks to Russell Yanofsky)."
+  ], 
+  "revision_id": "846438"
+ }, 
+ {
+  "author": "mbk", 
+  "date": "2003-06-27T16:01:38.572154Z", 
+  "msg": [
+   "Reformat long lines to within 80-columns.", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "Wrap long lines.", 
+   "* subversion/libsvn_ra_dav/session.c", 
+   "Wrap long lines.", 
+   "* subversion/libsvn_ra_dav/options.c", 
+   "Wrap long lines.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "Wrap long lines."
+  ], 
+  "revision_id": "846437"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-27T00:18:56.526464Z", 
+  "msg": [
+   "Greg Stein spotted this:", 
+   "* tools/cvs2svn/cvs2svn.py: Restore the trailing commas that were", 
+   "accidentally removed from some print statements in revision 6359."
+  ], 
+  "revision_id": "846436"
+ }
+]

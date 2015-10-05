@@ -1,0 +1,74 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-06-03T02:30:25.236821Z", 
+  "msg": [
+   "More pool cleanup after the error interface cleanup of rev 3719, and", 
+   "another round of cleanup in 5523. Since we removed the need for a", 
+   "pool, we no longer need a special handler_baton, nor do we need to", 
+   "stuff the pool into the item_baton.", 
+   "* bindings/swig/swigutil_py.c:", 
+   "(struct item_baton): remove the pool member.", 
+   "(struct handler_baton): removed.", 
+   "(make_baton): no need to initialize the pool member.", 
+   "(thunk_window_handler): the baton will just be the handler callable,", 
+   "rather than a baton structure.", 
+   "(thunk_apply_textdelta): don't bother with a handler_baton", 
+   "structure, just pass the callable directly as the window", 
+   "handler's baton."
+  ], 
+  "revision_id": "846200"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-06-03T02:12:06.574361Z", 
+  "msg": [
+   "Make some minor mods to svnlook.py to get a basic test of the Editor", 
+   "bindings code to run. This script needs more work to bring it back in", 
+   "line with the current svnlook code.", 
+   "* tools/examples/svnlook.py:", 
+   "(SVNLook.__init__): use 'repos_ptr' as the variable name for holding", 
+   "a pointer to the repos object, rather than 'repos' since the", 
+   "latter conflicts with the imported module.", 
+   "(ChangedEditor.change_dir_prop): fix typo -- use dir_baton, not baton", 
+   "(ChangedEditor.close_file): fix order of parameters"
+  ], 
+  "revision_id": "846199"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-06-03T02:05:16.632710Z", 
+  "msg": [
+   "Fix up the apply_textdelta handling for Python-based editors. We want", 
+   "to allow them to return None, so they can easily refer to the new", 
+   "svn_delta_noop_window_handler function.", 
+   "This also reverts the changes made to this file in revs 6120 and 6123.", 
+   "* bindings/swig/swigutil_py.c (thunk_apply_textdelta): revert the", 
+   "changes made in 6120 and 6123. Instead, map the None response to", 
+   "the new svn_delta_noop_window_handler function introduced in 6120", 
+   "(and renamed in 6122)."
+  ], 
+  "revision_id": "846198"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-03T00:15:33.320154Z", 
+  "msg": [
+   "* subversion/bindings/swig/swigutil_py.c", 
+   "(thunk_apply_textdelta): Er.  Declarations must precede code."
+  ], 
+  "revision_id": "846197"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-06-02T22:57:12.976036Z", 
+  "msg": [
+   "Rename svn_delta_null_window_handler to svn_delta_noop_window_handler", 
+   "to avoid confusion.", 
+   "* include/svn_delta.h, libsvn_delta/default_editor.c", 
+   "(svn_delta_null_window_handler): Rename to svn_delta_noop_window_handler.", 
+   "All references changed."
+  ], 
+  "revision_id": "846196"
+ }
+]

@@ -1,0 +1,94 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-07-05T14:14:56.558811Z", 
+  "msg": [
+   "More Subversion Handbook tweaks.", 
+   "* handbook/outline.txt:   refine the outline a bit more.", 
+   "* handbook/repos-admin.texi:   new file, begin the third chapter.", 
+   "[Btw, notice that every new .texi file that I add has 'svn:eol-style", 
+   "native' set on it.  I'm testing this feature indirectly.]", 
+   "* handbook/svn-handbook.texi:  link the third chapter in."
+  ], 
+  "revision_id": "842485"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-07-05T01:20:58.696504Z", 
+  "msg": [
+   "Sync with version in FreeBSD cvs.", 
+   "* packages/freebsd/subversion/Makefile", 
+   "Note which milestone this version of the port refers to (since r1868 isn't", 
+   "all that informative to your average user).  This will go away around 1.0", 
+   "when i'm planning on changing the PORTVERSION to 1.0 and bumping PORTEPOCH,", 
+   "but for now it'll do."
+  ], 
+  "revision_id": "842484"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-07-04T06:20:05.809468Z", 
+  "msg": [
+   "Fix issue #748:  \"svn merge only happens in '.' \"", 
+   "Man, this bug was getting really annoying... it actually turned out", 
+   "not to be so hard to fix.  (This patch also reverts the temporary", 
+   "r2285 fix for this problem.)", 
+   "'svn merge' now actually pays attention to the third argument:", 
+   "svn merge source1@X source2@Y [wc-target]", 
+   "or svn merge -rX:Y source [wc-target]", 
+   "A word of warning: for now, it's probably good that you *force*", 
+   "yourself to enter that wc-target; bad things can happen if you lazily", 
+   "allow it to default to '.', because that's probably not where you want", 
+   "the diffs to be applied most of the time.", 
+   "* cmdline/merge-cmd.c (svn_cl__merge): tighten our counting of path", 
+   "arguments for normal and alternate syntaces.  Don't bother to split", 
+   "the 3rd target argument anymore.  Revert r2285: pass the wc target", 
+   "arg into svn_client_merge again.", 
+   "* cmdline/main.c (svn_cl__cmd_table):  show a wc arg in the help string.", 
+   "* libsvn_client/diff.c, svn_client.h (svn_client_merge): revert r2285:", 
+   "take the wc target argument again.", 
+   "(do_diff): if diffing two URLs, we don't want to anchor the", 
+   "diff_editor on a URL;  use \"\" instead, so we don't see URLs in the", 
+   "headers of the diff output.  (when redirected, the output would no", 
+   "longer be a vaild patchfile!)", 
+   "* libsvn_client/repos_diff.c (struct file_baton, struct dir_baton):", 
+   "add 'wcpath' fields to these batons.", 
+   "(open_root, make_dir_baton, make_file_baton): when the editor-driver", 
+   "sends a complete path to the repos-diff-editor, always prepend the", 
+   "edit_baton's 'target' path to create the 'wcpath' fields.  Don't", 
+   "ignore this prefix by letting in rot in the edit_baton, as were doing.", 
+   "(delete_entry, add_directory, close_file, close_directory): pass", 
+   "'wcpath' to the diff/merge callbacks and the notification callbacks,", 
+   "instead of the plain old 'path'.  The plain 'path' is *only* used as", 
+   "something to fetch from the RA session.", 
+   "* svntest/actions.py (run_and_verify_merge): this function no longer", 
+   "needs to change into the working copy to run; the working-copy is", 
+   "now passed as the 3rd argument to 'svn merge', just like all our", 
+   "other invocations of run_and_verify_*.", 
+   "* merge_tests.py (textual_merges_galore):  update this routine to put", 
+   "wc-names into the expected output state objects.  (they no longer", 
+   "need to be rooted on \"\")"
+  ], 
+  "revision_id": "842483"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-07-03T17:23:12.224486Z", 
+  "msg": [
+   "* branches/issue-531-dev: Removed. Wrong branch point; the delta combiner", 
+   "doesn't work here."
+  ], 
+  "revision_id": "842482"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-07-03T17:01:42.341882Z", 
+  "msg": [
+   "Merging the r2389 change from branches/issue-531-dev to trunk.", 
+   "Original log message:", 
+   "Fixing issue #642.", 
+   "* strings-table.c (string_read): Removed; code merged into svn_fs__string_read."
+  ], 
+  "revision_id": "842481"
+ }
+]

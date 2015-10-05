@@ -1,0 +1,100 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-08-26T10:56:22.161174Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(TestRunner::list, TestRunner::_print_name, TestRunner::run): Flush stdout", 
+   "after calls to 'print()', so that monitoring test progress in real-time", 
+   "is still possible while output is being redirected to a file (followed", 
+   "with tail -f logfile) or pipe (e.g. | tee logfile).", 
+   "Redirection seems to cause stdout data to linger in the buffer for some", 
+   "time, at least on OpenBSD, which makes it look as if the tests weren't", 
+   "making any progress."
+  ], 
+  "revision_id": "879015"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-08-26T10:00:59.546551Z", 
+  "msg": [
+   "Make a function static which is never called outside this file.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__set_revision_proplist): Rename to...", 
+   "(set_revision_proplist): ...this.", 
+   "(write_revision_zero, change_revprop_body): Update callers.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__set_revision_proplist): Remove."
+  ], 
+  "revision_id": "879014"
+ }, 
+ {
+  "author": "pynoos", 
+  "date": "2009-08-26T08:34:16.329561Z", 
+  "msg": [
+   "* subversion/po/ko.po:", 
+   "Korean translation updated. (untranslated 83)"
+  ], 
+  "revision_id": "879013"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-08-26T01:25:29.566118Z", 
+  "msg": [
+   "* subversion/include/svn_editor.h: Kick off editor-v2's documentation.", 
+   "Copy-paste the intro from svn_delta_editor.h. Add comment groups and", 
+   "start individual comments for structs and functions.", 
+   "### Note, this is yet incomplete and unreviewed. More to follow."
+  ], 
+  "revision_id": "879012"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-08-26T00:43:39.968636Z", 
+  "msg": [
+   "Move the auto-upgrade code from wc_db.c to upgrade.c.", 
+   "This code is not ideal, and needs additional work, but that will happen in", 
+   "the next few revisions.", 
+   "Note: this work has also exposed a problem in tree conflict recording. The", 
+   "UUIDs for the left/right repository sources are NOT recorded. Yet we need", 
+   "those values when creating rows in the REPOSITORY metadata table. If", 
+   "pre-1.7 tree conflicts allow merges from *other* repositories or other", 
+   "repository root URLs, then we're in trouble. (we won't be able to port", 
+   "those sources into wc-ng)", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_upgrade_get_repos_id): new API (possibly temp?) to grab a", 
+   "repository ID for a given repos URL.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(conflict_kind_to_word, conflict_action_to_word,", 
+   "conflict_reason_to_word, wc_operation_to_word,", 
+   "db_kind_from_node_kind, migrate_single_tree_conflict_data): moved", 
+   "into upgrade.c", 
+   "(svn_wc__db_upgrade_func): gutted", 
+   "(create_repos_id): remove unused GET_STMT and INSERT_STMT params. just", 
+   "always get the statements from the SDB.", 
+   "(create_db, svn_wc__db_base_add_directory, svn_wc__db_base_add_file,", 
+   "svn_wc__db_base_add_symlink, svn_wc__db_add_absent_node,", 
+   "svn_wc__db_temp_base_add_subdir, svn_wc__db_repos_ensure,", 
+   "relocate_txn): remove params from the create_repos_id calls.", 
+   "(svn_wc__db_upgrade_get_repos_id): new function", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(kind_to_word, conflict_kind_to_word, conflict_action_to_word,", 
+   "conflict_reason_to_word, wc_operation_to_word,", 
+   "db_kind_from_node_kind): moved from wc_db.c", 
+   "(migrate_single_tree_conflict_data): removed REPOS_SELECT_STMT and", 
+   "REPOS_INSERT_STMT parameters. switch from create_repos_id() over to", 
+   "svn_wc__db_upgrade_get_repos_id().", 
+   "(migrate_tree_conflicts): new function ripped from", 
+   "svn_wc__db_upgrade_func. repos statments were removed, and params", 
+   "adjusted to migrate_single_tree_conflict_data.", 
+   "(bump13_baton): new baton structure for use within the transaction", 
+   "(bump_database_to_13): new function to bump the database portions of a", 
+   "working copy up to format 13. it does the bump after all its other", 
+   "work, which is performed transactionally.", 
+   "(bump_to_13): bump a working copy to format 13.", 
+   "(svn_wc__upgrade_sdb): add code to auto-upgrade from f12 to f13.", 
+   "(svn_wc_upgrade): #if away an unused local variable."
+  ], 
+  "revision_id": "879011"
+ }
+]

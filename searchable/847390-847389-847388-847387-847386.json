@@ -1,0 +1,87 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-06T14:01:35.267052Z", 
+  "msg": [
+   "(Mostly) fix issue #1534: Callers of svn_time_to_human_cstring should", 
+   "expect a UTF8 encoded string.  This does not handle the need to", 
+   "localize the date when substituting keywords into working copy files.", 
+   "Patch by: Josh Pieper <jpieper@andrew.cmu.edu>", 
+   "What's not finished: the case where the date is substituted into a", 
+   "translation stream (generally, a working copy file) via the", 
+   "svn:keywords mechanism.  It doesn't appear that other substitutions", 
+   "are translated from UTF8 before getting stuck into working copy files,", 
+   "and because the encoding of those WC files is not tracked, this", 
+   "problem may be too difficult to handle right away.", 
+   "* subversion/include/svn_time.h (svn_time_to_human_cstring)", 
+   "* subversion/libsvn_subr/subst.c (date_prop_to_human)", 
+   "Note that these return a UTF8 encoded string.", 
+   "* subversion/svnlook/main.c (do_date)", 
+   "* subversion/clients/cmdline/log-cmd.c (log_message_receiver)", 
+   "* subversion/clients/cmdline/info-cmd.c (svn_cl__info_print_time)", 
+   "Add call to svn_utf_cstring_from_utf8 after every invocation of", 
+   "svn_time_to_human_cstring, and before printing to the stdout."
+  ], 
+  "revision_id": "847390"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-10-06T11:39:02.217338Z", 
+  "msg": [
+   "Follow the svn_repos_history api changes for perl bindings.", 
+   "* swig/swigutil_pl.[ch]: (svn_swig_pl_thunk_history_func): New.", 
+   "* swig/perl/t/1repos.t", 
+   "* swig/perl/t/2fs.t: update test suite.", 
+   "* swig/svn_repos.i: Add perl5 typemap for svn_repos_history_func_t."
+  ], 
+  "revision_id": "847389"
+ }, 
+ {
+  "author": "dimentiy", 
+  "date": "2003-10-06T10:31:52.641278Z", 
+  "msg": [
+   "Russian Svnbook translation. Appendix B."
+  ], 
+  "revision_id": "847388"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2003-10-05T22:45:20.607765Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x/doc.patch,", 
+   "packages/rpm/redhat-8+/doc.patch : Fix the inclusion of the subversion", 
+   "revision number when building the book."
+  ], 
+  "revision_id": "847387"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-10-05T22:30:06.357920Z", 
+  "msg": [
+   "(Mostly) finish issue #1448 - svn:externals keeps connections open", 
+   "until end.  Since the demise of RA->close(), the only way to forcably", 
+   "shut down an RA session is to free the pool in which that session is", 
+   "allocated.  So, for all the sessions used by the externals code, we", 
+   "put those puppies in their own subpools and clear/destroy them when", 
+   "we're done with the session.", 
+   "What's not been fixed is the fact that the \"main\" RA sessions for", 
+   "checkout, update, and status (others?) aren't closed down until all", 
+   "the externals handling is finished.", 
+   "Oh, and I feel like I should credit Josh Pieper <jpieper@andrew.cmu.edu>", 
+   "for this change, even though I wrote every line of it.  He submitted a", 
+   "patch as I was wrapping up this work which looked *almost identical*", 
+   "to my own.  So, thanks to Josh for his effort, and for inadvertently", 
+   "affirming the sense of my changes. :-)", 
+   "* subversion/libsvn_client/externals.c", 
+   "(struct handle_external_item_change_baton): Declare the 'pool'", 
+   "member to be for short-lived scratchwork only.", 
+   "(handle_external_item_change): Clear the baton's pool before using", 
+   "it.  This will close previous RA sessions!", 
+   "(handle_externals_desc_change): Allocate and destroy a subpool for", 
+   "the hash diff mechanism.", 
+   "(svn_client__do_external_status): There are two nested loops here,", 
+   "so use two nested subpools."
+  ], 
+  "revision_id": "847386"
+ }
+]

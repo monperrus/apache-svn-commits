@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dws", 
+  "date": "2003-01-19T18:51:52.409618Z", 
+  "msg": [
+   "* packages/rpm/redhat-7.x/subversion.spec,", 
+   "packages/rpm/redhat-8.x/subversion.spec: Separated out the tools directory", 
+   "into /usr/lib/subversion/tools in the new subversion-tools package so that", 
+   "the main subversion package does not pick up the (bogus?) PERL", 
+   "package/module dependencies."
+  ], 
+  "revision_id": "844515"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-19T13:44:30.343117Z", 
+  "msg": [
+   "Check in the first cut at the template(s) for setting up a repository.", 
+   "At the moment, this is just the \"default\" on-disk template. It mirrors", 
+   "what the code would put into the repository, minus the \"conf\"", 
+   "directory (which was also removed from the code) and the sentinel", 
+   "hooks (which are not defined/used)."
+  ], 
+  "revision_id": "844514"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-19T13:33:07.528522Z", 
+  "msg": [
+   "Oops. Fetching the \"is_empty\" value, but accidentally dropped the", 
+   "testing of it.", 
+   "* libsvn_repos/repos.c (create_repos_dir): if is_empty is true, then", 
+   "everything is fine (return no error). however, if something is in", 
+   "there, then return an error about it."
+  ], 
+  "revision_id": "844513"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-19T13:14:57.900357Z", 
+  "msg": [
+   "Clean up the FS error handling: fix a stack smasher, and simplify a", 
+   "lot of the error reporting.", 
+   "* include/svn_fs.h (svn_fs_warning_callback_t): simplify the arguments", 
+   "to what the FS actually cares about passing -- just a baton and", 
+   "the error.", 
+   "* include/svn_error.h (svn_handle_warning): simplify the arguments to", 
+   "what callers are typically doing -- print an error to a stream.", 
+   "* libsvn_fs/fs.h (struct svn_fs_t): toss the cleanup_error member. it", 
+   "made some sense originally, but is way past time to go.", 
+   "* libsvn_fs/fs.c", 
+   "(default_warning_func): adjust args to match the new type", 
+   "(print_fs_stats): new function to dump stats; factored out of", 
+   "svn_fs_close_fs().", 
+   "(cleanup_fs_apr): lose an unneeded cast. call the stat printer.", 
+   "invoke the warning function if an error is generated. don't worry", 
+   "about the cleanup_error stuff. clear the error when done.", 
+   "(svn_fs_new): don't use the C++ keyword \"new\" as a variable name.", 
+   "lose some needless casts.", 
+   "(svn_fs_close_fs): shift the stat printing to print_fs_stats. get", 
+   "rid of the cleanup_error stack smasher. it was poining to &svn_err", 
+   "on the stack, then the function simply returned. oops. (it used", 
+   "to immediately clean up the pool, but no more...)", 
+   "* libsvn_subr/error.c (svn_handle_warning): update to new args", 
+   "* mod_dav_svn/repos.c (log_warning): update to the new FS warning", 
+   "function signature.", 
+   "* clients/cmdline/add-cmd.c (svn_cl__add): update call to", 
+   "svn_handle_warning.", 
+   "* clients/cmdline/resolve-cmd (svn_cl__resolve): ditto", 
+   "* tests/libsvn_ra_local/ra-local-test.c", 
+   "(berkeley_error_handler): removed", 
+   "(fs_new): removed", 
+   "(create_fs_and_repos): use svn_test__fs_new from the test library,", 
+   "rather than the local fs_new().", 
+   "* tests/fs-helpers.c", 
+   "(fs_warning_handler): new function", 
+   "(svn_test__fs_new): use the new fs_warning_handler function rather", 
+   "than svn_handle_warning."
+  ], 
+  "revision_id": "844512"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2003-01-19T13:11:38.359944Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/fetch.c (svn_ra_dav__get_file): Tweak", 
+   "arguments to match format in svn_error_createf."
+  ], 
+  "revision_id": "844511"
+ }
+]

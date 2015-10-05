@@ -1,0 +1,48 @@
+[
+ {
+  "author": "robbie", 
+  "date": "2009-07-02T19:55:03.951675Z", 
+  "msg": [
+   "QPID-1944: expose Connection tabular/composite data key values through management interface"
+  ], 
+  "revision_id": "790725"
+ }, 
+ {
+  "author": "robbie", 
+  "date": "2009-07-02T19:54:06.951818Z", 
+  "msg": [
+   "QPID-1943: initial exchanges view, to be redone in light of Headers exchange return type differences and moving attribtues out to a tab to match Queue and Connection views"
+  ], 
+  "revision_id": "790724"
+ }, 
+ {
+  "author": "robbie", 
+  "date": "2009-07-02T19:51:33.121940Z", 
+  "msg": [
+   "QPID-1943: expose exchange mbeans tabular/composite key values through the management interface"
+  ], 
+  "revision_id": "790723"
+ }, 
+ {
+  "author": "dwoods", 
+  "date": "2009-07-02T19:44:18.312689Z", 
+  "msg": [
+   "OPENJPA-1106 Add tests for DecimalMin/Max constraints.  Upgrade to agimatec 0.9.1-SNAPSHOT which has been updated to the 1.0.CR1 API level and now includes support for DecimalMin/Max constraints."
+  ], 
+  "revision_id": "790722"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2009-07-02T19:41:19.712389Z", 
+  "msg": [
+   "Hopefully a real fix for AXIS2-935, 3883, 2391, etc...", 
+   "A lot of these problems were caused by not really enabling reuse of the HTPP connection due to unnecessary recreations of HTTPClients and MultithreadedHttpConnectionManagers.  So the first major change here is in AbstractHTTPSender.getHttpClient(), which now *always* creates and shares a single MultithreadedHttpConnectionManager, and indeed a single HTTPClient, across each ConfigurationContext (i.e. one for the server side replying to dual-channel messages, one for the client side).  This seems to actually allow keep-alive connections, where I wasn't easily able to produce them previously.", 
+   "Also, there is now NO NEED for the REUSE_HTTP_CLIENT option, since it's done automatically.", 
+   "Then in HTTPSender.sendViaPost(), we now check to see if we're using a separate listener (i.e. dual-channel).  If so, we always switch on connection auto-release.  This prevents pool starvation.  If we're single-channel, the connection gets cleaned up later as a result of ServiceClient.transportCleanup().", 
+   "In CommonsHTTPTransportSender.writeMessageWithCommons(), we now switch on AUTO_RELEASE_CONNECTION if the operation is InOut - in other words, if we're here because we're sending a response on a separate channel, we'll auto-release the connection when we're done.", 
+   "Need to test these changes with Sandesha, and I'll check in a test harness that I built which fails very quickly before these changes, but happily sends over 100,000 requests after them.", 
+   "Note that this is sort of a patch solution which we can roll out with 1.5.1 - we should do some more thinking about the \"real\" solution, which I think involves holding on to the HTTPMethod until Axiom lets us know (via a callback mechanism) that it has finished reading the stream."
+  ], 
+  "revision_id": "790721"
+ }
+]

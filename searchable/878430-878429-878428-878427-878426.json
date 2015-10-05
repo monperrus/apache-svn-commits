@@ -1,0 +1,80 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2009-07-06T20:58:30.142752Z", 
+  "msg": [
+   "All the way back since r1, the documentation of pool usage for", 
+   "svn_fs_revision_root, svn_fs_txn_root, and svn_fs_close_root has been incorrect:", 
+   "they claim that roots are allocated in the pool given to the constructor and", 
+   "that svn_fs_close_root is equivalent to destroying that pool, but in fact the", 
+   "root is allocated in a private subpool.  The reporter relies on this behavior", 
+   "(because it passes the same pool to multiple calls to svn_fs_revision_root and", 
+   "closes them independently with svn_fs_close_root).", 
+   "This change:", 
+   "- Fixes the documentation of these functions.", 
+   "- Moves the subpool creation from the individual backends to the FS loader.", 
+   "- Fixes a leak in BDB: the node cache is allocated in the enclosing pool, not", 
+   "the root-specific pool, so during (eg) a reporter run, the caches are not", 
+   "released until the end of the entire report rather than when their root is", 
+   "destroyed.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_revision_root, svn_fs_txn_root): Document how to destroy the root.", 
+   "(svn_fs_close_root): Document when to use this function, without lies.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_revision_root, svn_fs_txn_root): Create subpool and pass it to vtable", 
+   "call.", 
+   "* subversion/libsvn_fs_base/tree.c, subversion/libsvn_fs_fs/tree.c", 
+   "(make_root): Just use the pool passed in for everything.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(svn_fs_root_t): Document that pool is root-specific."
+  ], 
+  "revision_id": "878430"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-06T20:34:06.980551Z", 
+  "msg": [
+   "Deprecate svn_wc_props_modified_p(), and remove its only call.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_props_modified_p): Deprecate and update docs.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(check_prop_mods): Remove the shortcut to check props mods.  In wc-ng, the", 
+   "diff will be \"fast enough\".", 
+   "(harvest_committables): Update calls to check_prop_mods()."
+  ], 
+  "revision_id": "878429"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-07-06T18:58:21.370755Z", 
+  "msg": [
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_get_prop_diffs2): Update a docstring to better reflect what is", 
+   "actually happening."
+  ], 
+  "revision_id": "878428"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-07-06T18:47:22.484468Z", 
+  "msg": [
+   "Recommend Neon 0.28.5.", 
+   "* configure.ac", 
+   "(NEON_RECOMMENDED_VER): Recommend Neon 0.28.5.", 
+   "* tools/dist/construct-rolling-environment.sh", 
+   "(NEON): Use Neon 0.28.5."
+  ], 
+  "revision_id": "878427"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-07-06T18:30:30.304545Z", 
+  "msg": [
+   "Another follow-up to r38325, the fix for issue #3432.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(find_gaps_in_merge_source_history): Remove YAUV (Yet Another Unnecessary", 
+   "Variable)."
+  ], 
+  "revision_id": "878426"
+ }
+]

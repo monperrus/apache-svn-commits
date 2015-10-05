@@ -1,0 +1,99 @@
+[
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-06-04T21:33:15.287436Z", 
+  "msg": [
+   "Make depth upgrades work.", 
+   "Patch by: me", 
+   "kfogel", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Don't read the on-disk entry to determine the", 
+   "depth for the update.  Handle externals if depth is svn_depth_unknown.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Pass the requested depth to", 
+   "svn_client__update_internal().", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc_crawl_revisions3): Use the entry depth instead of the requested depth", 
+   "for the top-level set-path, but use the requested depth if there is no", 
+   "versioned path.  Don't call report_revisions_and_depths() if the", 
+   "requested depth is svn_depth_empty.", 
+   "(report_revisions_and_depths): Report files when they are present in a", 
+   "depth-empty wc, and directories when they are present in a depth-empty or", 
+   "depth-files wc.  Report subdirectories in a depth-immediates dir.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(tweak_entries): Convert svn_depth_unknown to svn_depth_infinity, and handle", 
+   "depth correctly.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(is_depth_upgrade): New function.", 
+   "(DEPTH_BELOW_HERE): New macro.", 
+   "(update_entry): Take both a wc_depth and a requested_depth instead of a", 
+   "single depth, use them when calling delta_dirs().", 
+   "(delta_dirs): Take both a wc_depth and a requested_depth instead of a single", 
+   "depth, use them when iterating over the directory entries to determine", 
+   "whether to send the whole entry or just deltas.", 
+   "(drive): Update calls to update_entry() and delta_dirs().", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(test_list): Remove XFail from depth_immediates_fill_in_dir,", 
+   "depth_update_to_more_depth and depth_immediates_subdir_propset_1."
+  ], 
+  "revision_id": "865360"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-06-04T21:28:11.508005Z", 
+  "msg": [
+   "JavaHL: Add merge_begin to NotifyAction.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* src/org/tigris/subversion/javahl/NotifyAction.java", 
+   "(merge_begin): New constant.", 
+   "* native/EnumMapper.cpp", 
+   "(mapNotifyAction): Map the new Java constant to the C constant."
+  ], 
+  "revision_id": "865359"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-06-04T18:27:44.823607Z", 
+  "msg": [
+   "When referencing a specific path in a WC state descriptor, throw a", 
+   "more meaningful exception if that path doesn't exist in the", 
+   "descriptor.", 
+   "* subversion/tests/cmdline/svntest/wc.py", 
+   "(State.tweak): Add some text to the error raised when a path in ARGS", 
+   "doesn't exist."
+  ], 
+  "revision_id": "865358"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-06-04T18:00:17.398731Z", 
+  "msg": [
+   "* subversion/libsvn_repos/log.c", 
+   "(svn_repos_get_logs4): Break a long line."
+  ], 
+  "revision_id": "865357"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-06-04T17:38:26.976242Z", 
+  "msg": [
+   "For merge-sensitive logging: Instead of tracking only rangelists when", 
+   "calculating mergeinfo changes between revisions, keep track of the full", 
+   "mergeinfo.  This information is going to be needed in order to pull child log", 
+   "information from the merged paths.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(get_combined_rangelist): Rename from this...", 
+   "(get_combined_mergeinfo): ...to this.  Return full mergeinfo instead of just", 
+   "rangelists.", 
+   "(combine_mergeinfo_rangelists): New helper function.", 
+   "(get_merged_rev_rangelist): Rename from this...", 
+   "(get_merged_rev_mergeinfo): ...to this.  Return mergeinfo instead of", 
+   "rangelists.", 
+   "(send_change_rev): Capture the mergeinfo changes for the given revision, and", 
+   "strip out the combined rangelists from that mergeinfo.", 
+   "* subversion/tests/cmdline/log_tests.py", 
+   "(simple_merge_sensitive_log): Update test to reflect the above changes."
+  ], 
+  "revision_id": "865356"
+ }
+]

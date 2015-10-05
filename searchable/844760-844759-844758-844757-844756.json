@@ -1,0 +1,119 @@
+[
+ {
+  "author": "mbk", 
+  "date": "2003-01-31T15:14:18.226604Z", 
+  "msg": [
+   "create branch for issue 1037 (Repository UUIDs)"
+  ], 
+  "revision_id": "844760"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-31T08:12:13.104340Z", 
+  "msg": [
+   "More issue #724 - Some fixes, and now only try to save using the", 
+   "provider that supplied the creds.", 
+   "Note: I really dislike the fact that svn_auth_save_credentials returns", 
+   "an error if the save didn't work.  Were it not for that, the providers", 
+   "could go back to being static const things, and their save functions", 
+   "would just return SVN_NO_ERROR and *saved=FALSE.  Right now,", 
+   "*saved=FALSE is a deathly error, which seems wrong to me.", 
+   "Also note: I noticed tonight that Ben seems to have forgotten all", 
+   "about the --no-auth-cache and run-time config \"store-password\"", 
+   "options.  We have regressed a bit in that those things are ignored so", 
+   "far in the new auth system.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_AUTH_CREDS_UNAVAILABLE): Use a unique error slot.  Eek!", 
+   "(SVN_ERR_AUTH_CREDS_NOT_SAVED): New error code.", 
+   "* subversion/libsvn_auth/auth.c", 
+   "(svn_auth_save_credentials): No longer loop over providers.  Just", 
+   "save using the provided that gave you the goodz.  Oh, and return", 
+   "the new SVN_ERR_AUTH_CREDS_NOT_SAVED error if that's the truth.", 
+   "* subversion/libsvn_client/auth.c", 
+   "(simple_prompt_save_creds): Remove segfault opportunity.", 
+   "(simple_prompt_provider): Buh-bye.", 
+   "(svn_client__get_simple_prompt_provider): Alloc a non-static provider so we", 
+   "can toggle the save_credentials member.", 
+   "* subversion/libsvn_wc/simple_wc_provider.c", 
+   "(simple_wc_save_creds): Remove segfault opportunity.", 
+   "(simple_wc_provider): Buh-bye.", 
+   "(svn_wc_get_simple_wc_provider): Alloc a non-static provider so we", 
+   "can toggle the save_credentials member."
+  ], 
+  "revision_id": "844759"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-31T03:31:27.626339Z", 
+  "msg": [
+   "More work on issue #724.  Move the prompt provider to the client", 
+   "library, and use the working copy's save routine in the prompt", 
+   "provider, too.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_save_simple_creds): New.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_prompt_t): Was svn_auth_prompt_t (in libsvn_auth).", 
+   "(svn_client_auth_baton_t): Track move of svn_auth_prompt_t type.", 
+   "(svn_client_ctx_set_prompt_func, svn_client_ctx_get_prompt_func): New.", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_prompt_t): Moved to libsvn_client as svn_client_prompt_t.", 
+   "(svn_auth_get_simple_prompt_provider): Moved to libsvn_client as", 
+   "svn_client__get_simple_prompt_provider().", 
+   "* subversion/libsvn_wc/simple_wc_provider.c", 
+   "(simple_wc_first_creds): Remove unneeded cast.", 
+   "(svn_wc_save_simple_creds): New.  Contains guts of simple_wc_save_creds().", 
+   "(simple_wc_save_creds): Use new svn_wc_save_simple_creds() function.", 
+   "* subversion/libsvn_client/auth.c", 
+   "(simple_prompt_provider_baton_t): Move from libsvn_auth.  Added", 
+   "'base_dir' and 'base_access' members.", 
+   "(simple_prompt_iter_baton_t, simple_prompt_first_creds,", 
+   "simple_prompt_next_creds, simple_prompt_provider): Moved from libsvn_auth.", 
+   "(simple_prompt_save_creds): New.", 
+   "(simple_prompt_provider): Initialize 'save_credentials' vtable function.", 
+   "(svn_client__get_simple_prompt_provider): Was", 
+   "svn_auth_get_simple_prompt_provider().  Add 'base_dir' and", 
+   "'base_access' arguments, and stuff them into the baton.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__open_ra_session): Register the prompt provider after", 
+   "the WC provider.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_simple_prompt_provider): Was", 
+   "svn_auth_get_simple_prompt_provider().", 
+   "* subversion/libsvn_client/context.c", 
+   "(svn_client_ctx_create): Add 'prompt_func' and 'prompt_baton' members.", 
+   "(svn_client_ctx_set_prompt_func, svn_client_ctx_get_prompt_func): New.", 
+   "* subversion/clients/cmdline/cl.h", 
+   "(svn_cl__prompt_user): Update docstring.", 
+   "(svn_cl__create_auth_baton): Remove.", 
+   "* subversion/clients/cmdline/prompt.c", 
+   "(svn_cl__prompt_user): Update docstring.", 
+   "(svn_cl__create_auth_baton): Remove.", 
+   "* subversion/clients/cmdline/main.c", 
+   "(main): Call svn_auth_open directly (svn_cl__create_auth_baton() is", 
+   "no more) and set the prompt function on the context object.", 
+   "* subversion/libsvn_auth/simple_prompt_provider.c", 
+   "Removed."
+  ], 
+  "revision_id": "844758"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2003-01-31T02:16:39.199208Z", 
+  "msg": [
+   "* subversion/libsvn_client/diff.c", 
+   "(do_single_file_merge): detect the text state before we call the notify", 
+   "function."
+  ], 
+  "revision_id": "844757"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-30T23:34:17.322348Z", 
+  "msg": [
+   "Fix issue #1120: Copied files should get entry checksums too.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_process_committed): Search harder for a text base."
+  ], 
+  "revision_id": "844756"
+ }
+]

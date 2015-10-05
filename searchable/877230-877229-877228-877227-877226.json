@@ -1,0 +1,88 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2009-04-10T13:18:20.134308Z", 
+  "msg": [
+   "Make default depth of merge infinity rather than the depth of target.", 
+   "See http://svn.haxx.se/dev/archive-2009-04/0328.shtml for discussion.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_merge): Change default depth.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_to_sparse_directories): Tweak expectations to account for new", 
+   "behavior.  Explicitly test that a merge to a shallow target with infinite", 
+   "depth children works."
+  ], 
+  "revision_id": "877230"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2009-04-10T11:42:49.332954Z", 
+  "msg": [
+   "* subversion/libsvn_client/merge.c (ENSURE_VALID_REVISION_KINDS): Remove.", 
+   "Was cruft left over from who knows when.", 
+   "Found by: Edmund Wong <ed{_at_}kdtc.net>"
+  ], 
+  "revision_id": "877229"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-10T10:21:09.956876Z", 
+  "msg": [
+   "Be more careful when creating PDH structures (via the temp interfaces).", 
+   "There are cases when a directory is NOT passed in, and we don't want to", 
+   "remember that as a key.", 
+   "This fixes some wc-ng failures that were occurring after r37148.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(get_or_create_pdh): take a CREATE_ALLOWED flag to determine whether the", 
+   "function is allowed to create a PDH.", 
+   "(svn_wc__db_pristine_get_handle): update call to get_or_create_pdh to", 
+   "allow it to create a PDH", 
+   "(svn_wc__db_temp_get_format): allow a PDH to be constructed to hold the", 
+   "version information", 
+   "(svn_wc__db_temp_reset_format): do not allow a PDH to be constructed.", 
+   "we're trying to reset the cached format. if there's no PDH, then there", 
+   "is no cached format.", 
+   "(svn_wc__db_temp_get_access): do not allow a PDH to be constructed. if", 
+   "one is not present, then it certainly doesn't have an access baton", 
+   "(svn_wc__db_temp_close_access, svn_wc__db_temp_clear_access): do not", 
+   "allow a PDH to be constructed. if it isn't there, then it definitely", 
+   "doesn't have a PDH to be cleared out."
+  ], 
+  "revision_id": "877228"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-10T02:22:07.129748Z", 
+  "msg": [
+   "Record a flag on whether the DB was given to the access baton system, or", 
+   "that it was created internally. We don't want to attempt to close DBs that", 
+   "are provided to the batons.", 
+   "* subverison/libsvn_wc/lock.c:", 
+   "(svn_wc_adm_access_t): add the DB_PROVIDED flag", 
+   "(adm_access_alloc): accept DB_PROVIDED param and record it", 
+   "(svn_wc__adm_steal_write_lock): adjust call to adm_access_alloc, noting", 
+   "that the DB was provided in this case.", 
+   "(open_single, do_open, open_all): accept and pass along a DB_PROVIDED", 
+   "flag.", 
+   "(close_single): only perform the DB closing logic if we're allowed.", 
+   "(svn_wc_adm_open3): figure out if the DB was provided or not, and pass", 
+   "that down to open_all()", 
+   "(svn_wc__adm_pre_open): the DB was not provided, so pass FALSE to the", 
+   "adm_access_alloc function", 
+   "(svn_wc_adm_open_anchor): the DB was not provided, so pass FALSE to", 
+   "open_all and open_single, as appropriate."
+  ], 
+  "revision_id": "877227"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-10T02:13:33.391606Z", 
+  "msg": [
+   "Simplify the upgrade function, by just doing an early out if we can't", 
+   "do the upgrade.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(svn_wc__upgrade_format): Reverse a conditional to take an early out."
+  ], 
+  "revision_id": "877226"
+ }
+]

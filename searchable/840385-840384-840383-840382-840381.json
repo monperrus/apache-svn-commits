@@ -1,0 +1,113 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-10-25T20:13:46.165832Z", 
+  "msg": [
+   "Complete the \"scheduling\" part of 'svn cp/mv'.", 
+   "Next (small) task is to modify the commit-crawler to send copyfrom args.", 
+   "* adm_ops.c", 
+   "(add_to_revision_control): manually set ancestor att in a copied directory.", 
+   "(mark_tree): remove warning; use apr_ssize_t for apr_hash_this().", 
+   "(svn_wc__ensure_uniform_revision): same.", 
+   "(svn_wc_revert): same.", 
+   "(svn_wc_remove_from_revision_control): same.", 
+   "(svn_wc_set_auth_file): same.", 
+   "* wc.h (SVN_WC__ENTRY_MODIFY_ANCESTOR): new editable field macro", 
+   "(svn_wc__entry_modify):  take an ancestor arg, for changing url.", 
+   "* entries.c (svn_wc__entry_modify):  take ancestor arg.", 
+   "(fold_entry): same.", 
+   "* get_editor.c (free_dir_baton): change callers of svn_wc__entry_modify", 
+   "* adm_ops.c (svn_wc_set_revision, mark_tree, add_to_revision_control,", 
+   "svn_wc_revert, ): same.", 
+   "* log.c (log_do_detect_conflict, log_do_modify_entry,", 
+   "conflict_if_rejfile, log_do_committed): same."
+  ], 
+  "revision_id": "840385"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-10-25T20:08:43.686850Z", 
+  "msg": [
+   "Initial support for URI-unsafe paths.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(escape_url): New helper function.", 
+   "(simple_request, checkout_resource, do_proppatch,", 
+   "commit_stream_close): URI-encode URLs before dispatching.", 
+   "* subversion/libsvn_ra_dav/props.c", 
+   "(svn_ra_dav__get_props): URI-encode URLs before dispatching.", 
+   "(create_private): URI-decode URLs.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(simple_fetch_file): URI-encode URLs before dispatching."
+  ], 
+  "revision_id": "840384"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-10-25T19:19:38.238808Z", 
+  "msg": [
+   "Fix signed/unsigned mismatch warnings.", 
+   "* libsvn_subr/path.c (svn_path_is_uri_safe, svn_path_uri_encode,", 
+   "svn_path_uri_decode): Use apr_size_t instead of int for loop variable."
+  ], 
+  "revision_id": "840383"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2001-10-25T18:15:57.901741Z", 
+  "msg": [
+   "Fix for issue #539.", 
+   "* libsvn_client/libsvn_client.dsp: Added log.c and prop_commands.c.", 
+   "* clients/cmdline/subversion_client.dsp: Added log-cmd.c."
+  ], 
+  "revision_id": "840382"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2001-10-25T17:42:20.270178Z", 
+  "msg": [
+   "Allow for locally installed neon and apr.", 
+   "Patch by: David Kimdon <David_Kimdon@alumni.hmc.edu>", 
+   "(Tweaked by me, especially ac-helpers/apr.m4, to find APR.)", 
+   "Note that these have only been tested in the following four scenarios.", 
+   "1) Both APR and neon in source tree.  Subversion uses the version in the source", 
+   "tree.", 
+   "2) Neither apr nor neon anywhere.  configure fails asking for apr.", 
+   "3) APR in /usr/local, no neon.  configure finds apr, fails asking for neon.", 
+   "4) APR and neon both in /usr/local.  Subversion uses the versions in /usr/local", 
+   "and passes all tests, locally and over dav.", 
+   "(All builds were shared).  I realize that this isn't the most extensive testing", 
+   "ever, but thought it would be easier to find and fix bugs if this made it into", 
+   "the source tree.", 
+   "Issues: apr.m4 just looks for APRVARS and apr.h in a few places, doesn't test", 
+   "version, or check compilation.  neon.m4 doesn't check to make sure that neon", 
+   "has webdav support, which it should. Others?", 
+   "* Makefile.in : Only build neon/ and apr subdirs if necessary.  New", 
+   "variable contains path to libneon.la.  Added NEON_LIBS variable.", 
+   "* autogen.sh : Remove neon and apr checks that are now in", 
+   "ac-helpers/neon.m4 and ac-helpers/apr.m4 Use install-sh instead", 
+   "of install.sh.  Also use which and head instead of PrintPath from apr.", 
+   "* build.conf : [libsvn_ra_dav] libs is now equal to", 
+   "NEON_LIBS variable.", 
+   "* configure.in : Remove neon configuration that is now in", 
+   "ac-helpers/neon.m4. Don't use apr's mkdir.sh, use install-sh instead.", 
+   "Check for APR using new ac-helpers/apr.m4 file.  Also remove", 
+   "$enable_subdir_config check from around db configuration as it is done by", 
+   "SVN_SUBDIR_CONFIG.", 
+   "* ac-helpers/neon.m4 : New file.  Handle version checking,", 
+   "configuration and variable assignments for neon.", 
+   "* ac-helpers/apr.m4 : New file.  Handle finding APR, setting appropriate", 
+   "variables. Note that if no --with-apr (or --with-apr-includes, etc) is", 
+   "specified, this merely looks for apr.h in standard includes, and APRVARS in", 
+   "one of /lib, /usr/lib, /usr/local/lib, and /opt/apr/lib.", 
+   "* ac-helpers/install-sh : New file to replace install.sh.  This one can", 
+   "create directories.", 
+   "* ac-helpers/install.sh : Removed in favour of install-sh.", 
+   "[Removal was accidentally not committed. Noticed and corrected in r17778.]", 
+   "* ac-helpers/svn-macros.m4 : Copied APR_SUBDIR_CONFIG from", 
+   "apr/build/apr_common.m4, renamed it SVN_SUBDIR_CONFIG and added a check", 
+   "for $enable_subdir_config.", 
+   "* buildcheck.sh : Use which and head instead of apr's PrintPath."
+  ], 
+  "revision_id": "840381"
+ }
+]

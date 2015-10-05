@@ -1,0 +1,93 @@
+[
+ {
+  "author": "blair", 
+  "date": "2006-03-01T05:38:13.819185Z", 
+  "msg": [
+   "Improved merge command performance by eliminating svn log operations", 
+   "on phantom revisions.", 
+   "Patch by: Raman Gupta <rocketraman@fastmail.fm>", 
+   "* contrib/client-side/svnmerge.py", 
+   "(action_merge):", 
+   "Remove phantom_revs from the revs list used for getting the merge", 
+   "intervals, and obtaining logs for writing the commit log", 
+   "message.  For the first use, this change has no detrimental", 
+   "effect, because the minimal_merge_intervals() function accounts", 
+   "for the phantom revisions. For the second use, this improves", 
+   "performance because now svnmerge does not execute an \"svn log\"", 
+   "for every phantom revision.", 
+   "Modified the range printing for the commit log message to re-add", 
+   "the phantom revs, so the range prints with the phantom revs, as", 
+   "is the current functionality."
+  ], 
+  "revision_id": "858725"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2006-02-28T20:02:28.435127Z", 
+  "msg": [
+   "Use simple and safe temporary file names for svnlook diff, rather than", 
+   "building out the tree as it exists in the repository -- this avoids", 
+   "problems with paths that can't be used in the temporary directory.", 
+   "Patch by:     Edmund Horner <ejrh00@gmail.com>", 
+   "Suggested by: maxb", 
+   "Review by:    lundblad", 
+   "* subversion/svnlook/main.c", 
+   "(prepare_tmpfiles): Create a normal unique file in the temporary", 
+   "directory.", 
+   "(print_diff_tree): Update comments to omit mention of the built-out", 
+   "temporary directories, which don't get created any more.", 
+   "(create_unique_tmpdir): Remove function.", 
+   "(do_diff): Use the system temporary directory instead of creating", 
+   "a special svnlook one; so don't try to delete it after use."
+  ], 
+  "revision_id": "858724"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2006-02-28T19:25:28.820460Z", 
+  "msg": [
+   "Repair 'block' and 'unblock' in svnmerge.py, which was broken when we added", 
+   "support for bidirectional merges in r18614. Add test cases for 'block' and", 
+   "'unblock' to svnmerge_test.py, so as to ensure that these features don't", 
+   "break again.", 
+   "* contrib/client-side/svnmerge.py", 
+   "(analyze_revs): If the current command does not allow usage of the", 
+   "\"bidirectional\" parameter, assume that it is not set. Don't throw a", 
+   "KeyError exception.", 
+   "* contrib/client-side/svnmerge_test.py", 
+   "(testBlocked): New test case. Tests the \"blocked\" and \"unblocked\"", 
+   "subcommands."
+  ], 
+  "revision_id": "858723"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2006-02-28T19:07:28.538281Z", 
+  "msg": [
+   "* contrib/client-side/svnmerge.py", 
+   "(main):", 
+   "Don't reuse the same options for multiple runs of svnmerge.main()", 
+   "within the test suite.  Instead, re-initialize our options from a", 
+   "clean copy of the options dictionary every time svnmerge.main() is", 
+   "called."
+  ], 
+  "revision_id": "858722"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-02-28T10:04:56.751930Z", 
+  "msg": [
+   "Fix diff_tests test 20 (diff a property change plus a local edit).", 
+   "During a repos->WORKING diff, don't allow BASE->repos property changes", 
+   "to mask BASE->WORKING content changes.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(close_file): For diffs against WORKING, also check whether there are", 
+   "local modifications before declaring the file content unmodified.", 
+   "Also remove an (originally redundant, now incorrect) assignment to", 
+   "local variable 'temp_file_path'.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(test_list): Unmark test diff_prop_change_local_edit as XFail."
+  ], 
+  "revision_id": "858721"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2008-07-03T18:25:35.378411Z", 
+  "msg": [
+   "Resolve issue #2597: Add --trust-server-cert option to svn and svnsync,", 
+   "so that non-interactive operations can work with (e.g.) self-signed", 
+   "certificates not backed by a known trust authority.", 
+   "Set up some shared infrastructure:", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_setup_auth_baton): Deprecate, replace with...", 
+   "(svn_cmdline_set_up_auth_baton): ...this, which takes a new boolean", 
+   "parameter trust_server_cert.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(ssl_trust_unknown_server_cert): New function.", 
+   "(svn_cmdline_setup_auth_baton): Just wrap below.", 
+   "(svn_cmdline_set_up_auth_baton): New function, based on above.  If", 
+   "both non_interactive and the new parameter trust_server_cert are", 
+   "true, then register ssl_trust_unknown_server_cert as a provider.", 
+   "Add the new option to 'svn':", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): New boolean trust_server_cert.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__options): Add new \"trust-server-cert\" option.", 
+   "(svn_cl__longopt_t): New opt_trust_server_cert enum.", 
+   "(svn_cl__global_options): Add opt_trust_server_cert to this list.", 
+   "(main): Parse the new option, do the expect things with the result.", 
+   "Add the new option to 'svnsync':", 
+   "* subversion/svnsync/main.c", 
+   "(svnsync_opt_trust_server_cert): New opt enum.", 
+   "(SVNSYNC_OPTS_DEFAULT, svnsync_options): List the new option.", 
+   "(struct opt_baton_t): New field trust_server_cert.", 
+   "(main): Parse the new option, do the expect things with the result.", 
+   "Update the expected help output for the tests:", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Adjust for above."
+  ], 
+  "revision_id": "872065"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2008-07-03T16:55:39.394906Z", 
+  "msg": [
+   "Bugfix for svn-status-update-cmd", 
+   "* trunk/contrib/client-side/emacs/psvn.el:", 
+   "(svn-status-update-cmd): Perform user expansion when providing the", 
+   "default directory for svn, otherwise the svn client does not", 
+   "handle file names like ~/work as intended"
+  ], 
+  "revision_id": "872064"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-07-03T15:42:09.352797Z", 
+  "msg": [
+   "Fix compilation failure with -DNDEBUG.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_run_diff3_2): Don't assert 'i == nargs' when NDEBUG is defined."
+  ], 
+  "revision_id": "872063"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-07-03T15:40:01.968220Z", 
+  "msg": [
+   "Improve documentation.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(prepare_subtree_ranges): Document why we take the last item from the", 
+   "segments given by 'svn_client__repos_location_segments'.", 
+   "Suggested by: kfogel"
+  ], 
+  "revision_id": "872062"
+ }, 
+ {
+  "author": "firemeteor", 
+  "date": "2008-07-03T14:28:08.720330Z", 
+  "msg": [
+   "On the issue-2843-dev branch.", 
+   "Fix copying excluded items.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(post_copy_cleanup): Skip excluded entry.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(excluded_path_operation): Add copy test."
+  ], 
+  "revision_id": "872061"
+ }
+]

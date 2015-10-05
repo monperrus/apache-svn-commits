@@ -1,0 +1,89 @@
+[
+ {
+  "author": "mcslee", 
+  "date": "2007-08-21T01:54:36.000000Z", 
+  "msg": [
+   "Use reinterpret_cast instead of static_cast for pthread_t => Thread::id_t", 
+   "Summary: On FreeBSD pthread_t is a pthread*, not uint64_t, so static_cast gest upset", 
+   "Reviewed By: dreiss", 
+   "Test Plan: Compile on FreeBSD"
+  ], 
+  "revision_id": "665210"
+ }, 
+ {
+  "author": "yunfang", 
+  "date": "2007-08-19T22:18:38.000000Z", 
+  "msg": [
+   "[adding TStringBuffer for serialization/deserialization from a string]", 
+   "Summary:", 
+   "/**", 
+   "* A string buffer is a tranpsort that simply reads from and writes to a", 
+   "* string. Anytime you call write on it, the data is serialized", 
+   "* into the underlying buffer, you can call getString() to get the serialized", 
+   "* string.  Before you call read, you should call resetString(data) to set the", 
+   "* underlying buffer, you can then call read to get the", 
+   "* de-serialized data structure.", 
+   "*", 
+   "* The string buffer is inherited from the memory buffer", 
+   "* Thus, buffers are allocated using C constructs malloc,realloc, and the size", 
+   "* doubles as necessary.", 
+   "*/", 
+   "Reviewed by: aditya", 
+   "Test Plan:", 
+   "int main(int argc, char** argv) {", 
+   "shared_ptr<TStringBuffer> strBuffer(new TStringBuffer());", 
+   "shared_ptr<TBinaryProtocol> binaryProtcol(new TBinaryProtocol(strBuffer));", 
+   "testStruct a;", 
+   "a.i1 = 10;", 
+   "a.i2 = 30;", 
+   "a.s1 = string(\"holla back a\");", 
+   "a.write(binaryProtcol.get());", 
+   "string serialized = strBuffer->getString();", 
+   "shared_ptr<TStringBuffer> strBuffer2(new TStringBuffer());", 
+   "shared_ptr<TBinaryProtocol> binaryProtcol2(new TBinaryProtocol(strBuffer2));", 
+   "strBuffer2->resetString(serialized);", 
+   "testStruct a2;", 
+   "a2.read(binaryProtcol2.get());", 
+   "if (a == a2) {", 
+   "printf(\"serialization working\\n\");", 
+   "} else {", 
+   "printf(\"serialization not working\\n\");", 
+   "}", 
+   "}"
+  ], 
+  "revision_id": "665209"
+ }, 
+ {
+  "author": "iproctor", 
+  "date": "2007-08-17T21:34:15.000000Z", 
+  "msg": [
+   "Thrift: OCaml TSocket more helpful exceptions", 
+   "Summary: On unix error it tells you the cause.", 
+   "Reviewed by: mcslee", 
+   "Test plan: Had some unix errors, read the messages.", 
+   "Revert plan: yes"
+  ], 
+  "revision_id": "665208"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-08-17T03:53:13.000000Z", 
+  "msg": [
+   "Perl pass by reference versioning fix", 
+   "Summary: I hate Perl the most. Submitted by Jake Luciani.", 
+   "Reviewed By: mcslee", 
+   "Test Plan: We don't even use the Perl bindings for Thrift, but we could use Jake's test scripts on this."
+  ], 
+  "revision_id": "665207"
+ }, 
+ {
+  "author": "mcslee", 
+  "date": "2007-08-16T01:26:31.000000Z", 
+  "msg": [
+   "Merging Jake Luciani's latest perl code gen fixes", 
+   "Reviewed By: dreiss", 
+   "Test Plan: Watch for any weirdness on Thrift code gen, perl specific"
+  ], 
+  "revision_id": "665206"
+ }
+]

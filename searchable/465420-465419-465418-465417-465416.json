@@ -1,0 +1,52 @@
+[
+ {
+  "author": "gnodet", 
+  "date": "2006-10-18T23:34:00.940161Z", 
+  "msg": [
+   "SM-714: component.properties in conf directory"
+  ], 
+  "revision_id": "465420"
+ }, 
+ {
+  "author": "gnodet", 
+  "date": "2006-10-18T23:32:52.974694Z", 
+  "msg": [
+   "SM-695: Dynamic HTTP provider endpoint"
+  ], 
+  "revision_id": "465419"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2006-10-18T23:32:37.519488Z", 
+  "msg": [
+   "Fix bug 38048. memory leak with EL in JSPs. Patch provided by Taras Tielkes."
+  ], 
+  "revision_id": "465418"
+ }, 
+ {
+  "author": "fhanik", 
+  "date": "2006-10-18T23:24:52.848057Z", 
+  "msg": [
+   "Implement non blocking read on HTTP requests.", 
+   "A common scalability problem when it comes to HTTP is the fact that there are slow clients, that will block a server resources while sending a HTTP request. Especially when you have larger request headers.", 
+   "On FreeBSD the kernel has a built in http filter to not wake up the application socket handle until the entire request has been received, however on other platforms this is not available.", 
+   "With the Tomcat connectors, there is an obvious problem when it comes to slow clients, if the client sends up a partial request, Tomcat will block the thread until the client has finished sending the request. For example, if the client has 10 headers it sends up the first 5 headers, then the next 5 in a sequential batch, the tomcat thread is locked in a blocking read", 
+   "I've tried to fix that problem by making the NIO connector be non blocking. The only time the NIO connector will block now is when the servlet asks for data, usually the request body, as we don't have a way to suspend a thread, like continuations.", 
+   "Once we have continuations(that can truly remember thread stack data), we can have a truly non blocking server, but we are not there yet.", 
+   "I believe this code could be easily ported to APR connector with very little effort.", 
+   "When you review this code, please note that I have not attemtped to rewrite the header parse logic, I might do that in a later stage as this got a little messy, but I wanted the proof of concept done first and reuse as much code as possible.", 
+   "Please feel free to review and even flame me if needed, at least that means this got some attention :)"
+  ], 
+  "revision_id": "465417"
+ }, 
+ {
+  "author": "fuzzylogic", 
+  "date": "2006-10-18T23:24:29.104749Z", 
+  "msg": [
+   "DERBY-1968: Fix long line in doc for ij.dataSource. Merge of 465415 from", 
+   "doc trunk.", 
+   "Committed for Kim Haase <camilla.haase@sun.com>"
+  ], 
+  "revision_id": "465416"
+ }
+]

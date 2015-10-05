@@ -1,0 +1,80 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2009-10-10T13:38:56.425876Z", 
+  "msg": [
+   "Fix the Windows build.", 
+   "* build.conf (libsvn_subr):  Export svn_debug.h."
+  ], 
+  "revision_id": "880000"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-10T12:38:16.028165Z", 
+  "msg": [
+   "* www/links.html", 
+   "(misc-utils): Fix a copy-pasto."
+  ], 
+  "revision_id": "879999"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-10T11:26:17.707282Z", 
+  "msg": [
+   "* www/links.html", 
+   "(misc-utils): Link to rsvndump."
+  ], 
+  "revision_id": "879998"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T08:36:36.940926Z", 
+  "msg": [
+   "Whack a lot of code in the log processing to remove the use of access", 
+   "batons.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(SVN_WC__LOG_ADD_TREE_CONFLICT): change this operation tag becuase we're", 
+   "storing different info on it. if a developer has a stale log, we don't", 
+   "want to misinterpret it.", 
+   "(struct log_runner): remove the 'adm_access' member. no longer used.", 
+   "(log_do_committed): fold the svn_wc__make_killme() function into this", 
+   "code, since we're the only caller. this also allows for the removal of", 
+   "the access baton for this logic. switch to loggy->db in one place,", 
+   "rather than using the access baton to fetch the DB.", 
+   "(log_do_add_tree_conflicts): take the VICTIM_BASENAME as a parameter,", 
+   "and deserialize the single conflict using the newly visible function", 
+   "for this.", 
+   "(start_handler): pass the name (ie. VICTIM_BASENAME) to", 
+   "log_do_add_tree_conflict().", 
+   "(run_log): verify that we have the write lock on this directory. this", 
+   "check was emboded in the make_killme() functionality, but it is proper", 
+   "for the entire log-running process. no longer store the access baton", 
+   "into the loggy baton.", 
+   "(svn_wc__loggy_add_tree_conflict): switch to storing just a single", 
+   "conflict into the log record.", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__make_killme); removed. no longer used."
+  ], 
+  "revision_id": "879997"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-10-10T07:55:46.423858Z", 
+  "msg": [
+   "Expose the functions to (de)serialize a single conflict.", 
+   "* subversion/libsvn_wc/tree_conflicts.h:", 
+   "(svn_wc__serialize_conflict, svn_wc__deserialize_conflict): new", 
+   "declarations for converting conflicts to/from skels.", 
+   "* subversion/libsvn_wc/tree_conflicts.c:", 
+   "(read_one_tree_conflict): rename into ...", 
+   "(svn_wc__deserialize_conflict): ... this. constify the CONFLICT param.", 
+   "(svn_wc__read_tree_conflicts): track the above rename and constify", 
+   "(svn_wc__serialize_conflict): new function, based on the primary guts of", 
+   "svn_wc__write_tree_conflicts.", 
+   "(svn_wc__write_tree_conflicts): shove the core loop code out into the", 
+   "new svn_wc__serialize_conflict function. then call it."
+  ], 
+  "revision_id": "879996"
+ }
+]

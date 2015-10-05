@@ -1,0 +1,75 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T12:52:45.392903Z", 
+  "msg": [
+   "Add a MISSING_OK parameter to svn_io_remove_file(). A lot of our calls", 
+   "actually are okay with the file not being present. We have many places", 
+   "that catch this error, and ignore it.", 
+   "This revision introduces the new function, and deprecates the old. Future", 
+   "revisions will start updating invocations.", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_io_remove_file): deprecate, in favor of ...", 
+   "(svn_io_remove_file2): ... this new function, which adds MISSING_OK", 
+   "* subversion/libsvn_subr/io.c:", 
+   "(svn_io_remove_file): renamed to ...", 
+   "(svn_io_remove_file2): ... this, and a MISSING_OK param added. the POOL", 
+   "parameter was renamed. internal logic switched around to check the new", 
+   "flag, and also to early-out.", 
+   "(reown_file, svn_io_remove_dir2, svn_io_file_move): switch to use the", 
+   "new svn_io_remove_file2 call, all passing MISSING_OK=FALSE.", 
+   "* subversion/libsvn_subr/deprecated.c:", 
+   "(svn_io_remove_file): new function, invokes svn_io_remove_file2."
+  ], 
+  "revision_id": "877775"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T12:35:30.746448Z", 
+  "msg": [
+   "During the format 13 upgrade, we're going to simply forget anything stored", 
+   "in the 'dav_cache' column. During format 12, the wcprops might be in", 
+   "files, or maybe in that column... it's unknown.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(format 13): clear 'dav_cache' when upgrading."
+  ], 
+  "revision_id": "877774"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T11:23:09.381060Z", 
+  "msg": [
+   "Add definition and comments for format 13, but do not activate it yet.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(): update comments about the different format versions", 
+   "(SVN_WC__HAS_WORK_QUEUE, SVN_WC__USES_DAV_CACHE): new symbols to", 
+   "describe a couple different capabilities."
+  ], 
+  "revision_id": "877773"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T11:14:23.221658Z", 
+  "msg": [
+   "Fix an incorrect symbol name. No functional effect since the two symbols", 
+   "actually happened to have the same value.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_set_entry_working_size_from_wc): use SVN_WC__WORKING_SIZE_WC"
+  ], 
+  "revision_id": "877772"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-12T10:30:02.830011Z", 
+  "msg": [
+   "Follow up to r37520 -- we probably shouldn't convert an error return into", 
+   "a crash dump.", 
+   "[ oop: actually, prior to 37520, it returned \"no diffs\" for unversioned or", 
+   "non-existent nodes ]", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_get_prop_diffs): return an error if the specified node does not", 
+   "exist, rather than asserting it does."
+  ], 
+  "revision_id": "877771"
+ }
+]

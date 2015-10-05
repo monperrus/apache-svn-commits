@@ -1,0 +1,100 @@
+[
+ {
+  "author": "faridz", 
+  "date": "2007-04-06T18:11:38.841524Z", 
+  "msg": [
+   "2007-04-06 Farid Zaripov <Farid_Zaripov@epam.com>", 
+   "* build.wsf: Rename stdlib to stdcxx.", 
+   "* generate.wsf: Ditto.", 
+   "* makelog.wsf: Ditto.", 
+   "* projects.js: Ditto. Rename out library name from", 
+   "stdlib.[lib|dll] to libstd.[lib|dll] to consistency", 
+   "with unix names", 
+   "* runall.wsf: The same."
+  ], 
+  "revision_id": "526240"
+ }, 
+ {
+  "author": "amassari", 
+  "date": "2007-04-06T17:54:08.884371Z", 
+  "msg": [
+   "- Each SchemaInfo should have its own NamespaceScope (pre-populated with the content of the including grammar) instead of pointing to a stack of the NamespaceScope of the topmost grammar (otherwise, if A includes B and then C, C sees the namespace prefixes declared by B)", 
+   "- SchemaGrammar should not be used to store the transient NamespaceScope objects", 
+   "- The stack of NamespaceScope is updated by each DOMElement that has attributes declaring new namespace prefixes (XERCESC-1592)"
+  ], 
+  "revision_id": "526239"
+ }, 
+ {
+  "author": "tcurdt", 
+  "date": "2007-04-06T17:44:25.244122Z", 
+  "msg": [
+   "http://issues.apache.org/bugzilla/show_bug.cgi?id=42015"
+  ], 
+  "revision_id": "526238"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2007-04-06T17:43:38.314002Z", 
+  "msg": [
+   "This commit is for DERBY- 2528 Set the correct collation type in SchemaDescriptor. The collation type will be UCS_BASIC for system schemas but it can be", 
+   "TERRITORY_BASED/UCS_BASIC for user schemas.", 
+   "The patch implements the correct default collation type for schemas with following design", 
+   "DataDictionary(DD) now has two additional fields and two additional apis. The field names are", 
+   "int collationTypeOfSystemSchemas", 
+   "int collationTypeOfUserSchemas", 
+   "The apis associated with them are", 
+   "public int getCollationTypeOfSystemSchemas()", 
+   "public int getCollationTypeOfUserSchemas()", 
+   "DD in it's boot method initializes the collationTypeOfSystemSchemas to StringDataValue.COLLATION_TYPE_UCS_BASIC In the same boot method, it checks the", 
+   "collation property supplied through optional JDBC attribute COLLATION and set collationTypeOfUserSchemas to StringDataValue.COLLATION_TYPE_UCS_BASIC or", 
+   "StringDataValue.COLLATION_TYPE_TERRITORY_BASED. This covers the changes made in DD.", 
+   "Now coming to SD. SD has a new field", 
+   "int collationType", 
+   "It also has a new api called", 
+   "public int getCollationType()", 
+   "This new field gets initialized in SD's constructor. SD's constructor already gets DD and isSystem passed to it. SD can use these 2 parameters to", 
+   "initialize collationType. The additional code in SD's constructor looks like this", 
+   "if (isSystem) //check if I am a system schema", 
+   "collationType = DD.getCollationTypeOfSystemSchemas();", 
+   "else", 
+   "collationType = DD.getCollationTypeOfUserSchemas();", 
+   "The reason I am having SD's constructor call DD to get the collation type rather than collationType simply getting passed to SD's constructor is that the", 
+   "later approach would require us to change all the places where a SD object is created and have them pass the additional collationType parameter to it's", 
+   "constructor. I searched through the code and there are several places where we create a SD.", 
+   "With the approach of this patch , we have to change code in only one place and that would be in SD's constructor (and ofcourse we need changes in DD as", 
+   "explained in my mail earlier. But the changes in DD are required no matter how SD gets the right value in it's collationType field).", 
+   "svn stat -q", 
+   "M java\\engine\\org\\apache\\derby\\impl\\sql\\catalog\\DataDictionaryImpl.java", 
+   "M java\\engine\\org\\apache\\derby\\iapi\\sql\\dictionary\\SchemaDescriptor.java", 
+   "M java\\engine\\org\\apache\\derby\\iapi\\sql\\dictionary\\DataDictionary.java", 
+   "Following describes individual file changes", 
+   "1)The changes in DataDictionary(DD) involves adding 2 new apis. These apis is how a SchemaDescriptor in it's constructor will get the correct collation type", 
+   "from DD. The 2 apis are as follows", 
+   "public int getCollationTypeOfSystemSchemas();", 
+   "public int getCollationTypeOfUserSchemas();", 
+   "2)The changes in DataDictionaryImpl(DDimpl) involves adding 2 new fields and implementation of the apis added in DD. The 2 new fields are", 
+   "private int collationTypeOfUserSchemas;", 
+   "private int collationTypeOfSystemSchemas;", 
+   "These 2 fields get initialized in DDimpl's boot method. Since the primary purpose of these 2 fields is to have correct collation type for user and system", 
+   "schema so a SchemaDescriptor(SD)'s constructor can call the apis on these 2 fields, these 2 fields should get initialized before SDs start loading into the", 
+   "system.", 
+   "It is easy to set collationTypeOfUserSchemas because in Derby 10.3, it is always UCS_BASIC. I do this initalization before DDimpl's boot method calls", 
+   "getBuiltinSchemas. This method was used to load SYS SDs along with SESSION SD(which is used for global temporary tables. But global temporary tables are", 
+   "user defined temporary tables and hence SESSION schema should be considered a user schema rather than system schema. But the collation type of user schemas", 
+   "can't be determined at this point in the boot method and hence for this reason,", 
+   "I have taken out SESSION SD creation out of getBuiltinSchemas. Later, in DDimpl's boot method, I go through the code of looking at COLLATION property(for", 
+   "existing database)/attribute (for database that is getting created) to determine the user schema collation. Once that is determined, we are safe to load", 
+   "a SD for SESSION schema.", 
+   "3)The change in SD is to have a field called collationType and this field gets initialized in SD's constructor using the 2 new apis on DD."
+  ], 
+  "revision_id": "526237"
+ }, 
+ {
+  "author": "rfeng", 
+  "date": "2007-04-06T17:42:23.115338Z", 
+  "msg": [
+   "Change the package name and add IntrospectionRegistryImpl"
+  ], 
+  "revision_id": "526236"
+ }
+]

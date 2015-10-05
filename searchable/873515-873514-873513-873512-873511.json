@@ -1,0 +1,100 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T05:42:14.082752Z", 
+  "msg": [
+   "Remove read-only uses of the svn_wc__open_text_base() function. These can", 
+   "all be replaced by the public svn_wc_get_pristine_contents() function.", 
+   "Note: optimized away one reference to get_empty_file() in diff.c. We", 
+   "should keep an empty file sitting around somewhere, rather than create", 
+   "one on demand.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(struct handler_baton): no need to keep file references to the source", 
+   "and target. they will be closed when the streams are closed.", 
+   "(window_handler): no need to manually close the files", 
+   "(apply_textdelta): arrange logic to open a (source) stream rather than a", 
+   "file, then pass that straight into the svn_txdelta_apply() call. for", 
+   "the target, open a file, but don't bother to store in the baton --", 
+   "pass ownership into the stream we'll wrap around it.", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(struct file_baton): no need to keep file references; let the streams", 
+   "close them as appropriate.", 
+   "(window_handler): don't worry about closing the files. the", 
+   "stream-closure will take care of them.", 
+   "(apply_textdelta): arrange to open streams for svn_txdelta_apply() and", 
+   "for any file handles: let the stream take ownership rather than", 
+   "stashing them into a baton.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(svn_wc_transmit_text_deltas2): arrange to open streams instead of", 
+   "file handles."
+  ], 
+  "revision_id": "873515"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T05:33:15.951599Z", 
+  "msg": [
+   "Fix a const warning.", 
+   "Note: APR or our function may need to change signatures to clean this up", 
+   "\"properly\" so we don't have to cast it.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_parse_externals_descriptions): cast a const into the array to", 
+   "avoid a compiler warning."
+  ], 
+  "revision_id": "873514"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2008-10-04T04:37:05.749578Z", 
+  "msg": [
+   "All callers of svn_wc__close_text_base() passed FALSE for the sync flag,", 
+   "which meant that it devolved to a simple file close. Throw out all the", 
+   "crap, and just close the file.", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "(svn_wc__close_text_base): remove declaration", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__close_text_base): remove function", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(svn_wc_transmit_text_deltas2): replace call with svn_io_file_close.", 
+   "* subversion/libsvn_wc/diff.c:", 
+   "(window_handler): replace call with svn_io_file_close.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(window_handler): replace calls with svn_io_file_close."
+  ], 
+  "revision_id": "873513"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-10-04T02:02:28.251407Z", 
+  "msg": [
+   "Python 3 compatibility:", 
+   "Use str.split() instead of string.split().", 
+   "* build/generator/ezt.py:", 
+   "* build/generator/gen_base.py:", 
+   "* build/generator/gen_win.py:", 
+   "* build/generator/swig/header_wrappers.py:", 
+   "* build/generator/util/executable.py:", 
+   "* tools/dev/iz/find-fix.py:", 
+   "* tools/examples/svnshell.py:", 
+   "* tools/hook-scripts/mailer/mailer.py:", 
+   "* win-tests.py: Use str.split() instead of string.split()."
+  ], 
+  "revision_id": "873512"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-10-04T01:46:20.973374Z", 
+  "msg": [
+   "Python 3 compatibility:", 
+   "Use str.lower() and str.upper() instead of string.lower() and string.upper().", 
+   "* build/generator/ezt.py:", 
+   "* build/generator/gen_base.py:", 
+   "* build/generator/gen_make.py:", 
+   "* build/generator/gen_vcnet_vcproj.py:", 
+   "* build/generator/gen_win.py:", 
+   "* win-tests.py: Use str.lower() and str.upper() instead of string.lower() and", 
+   "string.upper()."
+  ], 
+  "revision_id": "873511"
+ }
+]

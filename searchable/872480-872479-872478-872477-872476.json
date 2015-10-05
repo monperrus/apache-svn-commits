@@ -1,0 +1,97 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2008-08-08T16:12:26.723437Z", 
+  "msg": [
+   "Fix the build. A follow-up to r32405.", 
+   "* subversion/libsvn_client/merge.c", 
+   "Don't try to #include my private debugging file... :-("
+  ], 
+  "revision_id": "872480"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2008-08-08T15:51:33.094319Z", 
+  "msg": [
+   "When a merge deletes a file, check whether the file content is the same,", 
+   "delete it if so, and skip it if not. This improves the decision whether", 
+   "to skip, which was previously based only on whether the file had uncommitted", 
+   "modifications. The comparison is not yet implemented for directories.", 
+   "n.b. This makes a semantic change to released APIs: svn_client_merge3() and", 
+   "those that are documented and implemented in terms of it.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(properties_same_p, files_same_p): New functions.", 
+   "(merge_file_deleted): Delete the file if it's identical, otherwise skip it.", 
+   "(do_file_merge): Fix the call to merge_file_deleted() so it can see the", 
+   "file being deleted. This is required by its API although it didn't", 
+   "previously care.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(svn_mkdir, svn_mkfile, svn_copy, svn_delete, svn_commit, svn_move): New", 
+   "helper functions.", 
+   "(del_identical_file, del_sched_add_hist_file, del_differing_file): New", 
+   "test functions.", 
+   "(test_list): Add the new tests. Mark 'new_subtrees_should_not_break_merge'", 
+   "to be skipped as this change reveals a bug that this (test 77) triggers.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_merge3): Update documentation for the \"force\" parameter", 
+   "accordingly.", 
+   "* subversion/libsvn_wc/questions.h", 
+   "(svn_wc__versioned_file_modcheck): Moved from here...", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__versioned_file_modcheck): ... to here, in order to use it in", 
+   "libsvn_client.", 
+   "* subversion/libsvn_wc/log.c", 
+   "Include 'svn_wc_private.h' so it can still see", 
+   "'svn_wc__versioned_file_modcheck()'."
+  ], 
+  "revision_id": "872479"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-08-08T07:41:18.926529Z", 
+  "msg": [
+   "Make javahl to call 'svn_dso_initialize2' before creating any pool.", 
+   "* subversion/bindings/javahl/native/JNIUtil.cpp", 
+   "(): include \"svn_dso.h\"", 
+   "(JNIUtil::JNIGlobalInit): Call 'svn_dso_initialize2' before creating any", 
+   "pool."
+  ], 
+  "revision_id": "872478"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2008-08-08T05:00:24.703488Z", 
+  "msg": [
+   "Fix issue #2324:  Disable username assumption.", 
+   "Rather than disabling the username assumption, this takes the", 
+   "different approach of consulting the runtime configuration for a", 
+   "default username before falling back to other methods (which include", 
+   "using the current user id's name).", 
+   "The order in which default username is determined is as follows:", 
+   "1. username supplied in command line", 
+   "2. username in the auth cache", 
+   "3. username given in servers file", 
+   "4. current user id's name", 
+   "* subversion/include/svn_config.h", 
+   "(SVN_CONFIG_OPTION_USERNAME): New config option.", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(svn_config_ensure): Add text about the new config file parameter 'username'.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(svn_auth__simple_first_creds_helper, prompt_for_simple_creds): Try to find", 
+   "a username in the 'servers' file.", 
+   "Suggested by: glasser", 
+   "cmpilato", 
+   "Review by: cmpilato", 
+   "Approved by: cmpilato"
+  ], 
+  "revision_id": "872477"
+ }, 
+ {
+  "author": "pynoos", 
+  "date": "2008-08-08T04:32:19.242324Z", 
+  "msg": [
+   "*  Korean traslation updated."
+  ], 
+  "revision_id": "872476"
+ }
+]

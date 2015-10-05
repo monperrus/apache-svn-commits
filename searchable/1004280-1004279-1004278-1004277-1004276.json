@@ -1,0 +1,90 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2010-10-04T15:11:45.615571Z", 
+  "msg": [
+   "Vastly simplify the WC-DB function 'gather_children()', removing the row-", 
+   "counting DB queries and several subroutines.", 
+   "Indicative timing measurements showed an improvement in typical queries and", 
+   "a slight penalty in some queries when the number of children is huge.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(count_children, union_children, single_table_children): Delete.", 
+   "(gather_children): Don't count the children first and make special cases", 
+   "depending on the counts, just add the children directly into a hash and", 
+   "return an array of the hash's keys, like union_children() did.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_COUNT_BASE_NODE_CHILDREN, STMT_COUNT_BASE_NODE_CHILDREN_1,", 
+   "STMT_COUNT_WORKING_NODE_CHILDREN, STMT_COUNT_WORKING_NODE_CHILDREN_1):", 
+   "Delete.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_repos_wc_add_with_props): Tweak to ignore output ordering."
+  ], 
+  "revision_id": "1004280"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2010-10-04T15:10:54.216465Z", 
+  "msg": [
+   "Fix typo"
+  ], 
+  "revision_id": "1004279"
+ }, 
+ {
+  "author": "torsten", 
+  "date": "2010-10-04T15:10:50.106492Z", 
+  "msg": [
+   "\"t/TEST -start-httpd\" can be used to start the httpd. Later on one can use", 
+   "\"t/TEST -run-tests t/*.t\" to perform the actual test run. Unfortunately, this", 
+   "2nd call overwrites the configuration. Normally, this should not be a problem", 
+   "because the same configuration should be generated. But it the server already", 
+   "runs and has port-based VHosts enabled those ports are already in use. So, the", 
+   "new config contains other ports. In my case '-start-httpd' has created a", 
+   "config that used ports 8529, 8530 and 8531. Then the '-run-tests' recreates", 
+   "the config but now it contains the ports 8529, 8532 and 8533. In my tests I", 
+   "then use for example", 
+   "Apache::TestRequest::module 'ssl';", 
+   "$sslhostport=Apache::TestRequest::hostport;", 
+   "That reads the new/wrong config and the tests fail.", 
+   "The patch mainly shifts the time when the config is saved a few steps further", 
+   "in the program. split_test_args and die_on_invalid_args finish processing of", 
+   "the command line and die if something is wrong. This is a good thing to do", 
+   "before anything is saved (IMO).", 
+   "default_run_opts then makes sure that at least one of -start-httpd,", 
+   "-stop-httpd or -run-tests is specified. If nothing is given all 3 are set.", 
+   "After that the new code checks if either -start-httpd or -configure is given.", 
+   "Only in these cases the config is written. Strictly speaking, the -configure", 
+   "check is not necessary because if only -configure is set -start-httpd is set", 
+   "by default_run_opts."
+  ], 
+  "revision_id": "1004278"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2010-10-04T15:10:20.520331Z", 
+  "msg": [
+   "Change the names of jars and webapps.  Part of the name change from acf to manifoldcf."
+  ], 
+  "revision_id": "1004277"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2010-10-04T15:09:39.338690Z", 
+  "msg": [
+   "JavaHL: Const-ify several methods.", 
+   "Found by: Philipp Kloke <philipp.kloke@web.de>", 
+   "* subversion/bindings/javahl/native/JNIByteArray.h,", 
+   "subversion/bindings/javahl/native/JNIByteArray.cpp", 
+   "(isNull, getBytes): Make const.", 
+   "* subversion/bindings/javahl/native/SVNBase.h,", 
+   "subversion/bindings/javahl/native/SVNBase.cpp", 
+   "(getCppAddr): Same.", 
+   "* subversion/bindings/javahl/native/File.h,", 
+   "subversion/bindings/javahl/native/File.cpp", 
+   "(isNull): Same.", 
+   "* subversion/bindings/javahl/native/ClientContext.h,", 
+   "subversion/bindings/javahl/native/ClientContext.cpp", 
+   "(getConfigDirectory): Same."
+  ], 
+  "revision_id": "1004276"
+ }
+]

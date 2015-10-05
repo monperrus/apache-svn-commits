@@ -1,0 +1,88 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-07T18:19:21.000000Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "(do_date): Stop using 'time' as a variable name.  FreeBSD doesn't", 
+   "really like that."
+  ], 
+  "revision_id": "839845"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-08-07T15:56:27.000000Z", 
+  "msg": [
+   "New repos wrapper for creating temporary 'update' transactions.", 
+   "[ Note to gstein: this is the third wrapper that mod_dav_svn should be", 
+   "using (see the bottom of svn_repos.h for all three.)  However, if", 
+   "mod_dav_svn is already using the 'reporter' within libsvn_repos, then", 
+   "you don't need to do a thing here -- the reporter has been upgraded. ]", 
+   "* hooks.c (svn_repos_fs_begin_txn_for_update): new wrapper, stores", 
+   "username property on transaction.  This is a Good Thing, since", 
+   "updates often take longer, and are more likely to be orphaned from a", 
+   "dropped connection.  A sysadmin 'svnadmin rmtxn' will want to know", 
+   "the txn's creator when cleaning it up.", 
+   "* reporter.c, svn_repos.h (svn_repos_begin_report): add username arg.", 
+   "(svn_repos_report_baton_t): add username field.", 
+   "(svn_repos_set_path):  call new wrapper when creating update txn.", 
+   "* ra_plugin.c (do_update): pass session_baton->username into reporter."
+  ], 
+  "revision_id": "839844"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-07T15:43:38.000000Z", 
+  "msg": [
+   "* subversion/svnlook/main.c", 
+   "(print_changed_tree): Only print the node if it has text or property", 
+   "modifications.  Docstring edit.", 
+   "(print_tree): Docstring edit."
+  ], 
+  "revision_id": "839843"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-08-07T14:57:41.000000Z", 
+  "msg": [
+   "* entries.c", 
+   "(svn_wc__entries_write): If there is no \"this dir\" entry in our", 
+   "entries hash, assume this directory is no longer under revision", 
+   "control, and simply destroy the administrative area.", 
+   "* adm_ops.c", 
+   "(mark_tree): Pay attention to the order in which state changes need", 
+   "to happen during recursion."
+  ], 
+  "revision_id": "839842"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-08-07T14:55:43.000000Z", 
+  "msg": [
+   "Expand authentication design: allow top-level applications to", 
+   "(optionally) provide authentication data to libsvn_client.  (e.g. via", 
+   "command-line arguments.)", 
+   "* svn_client.h (svn_client_auth_t): new class^H^H^H^H^H struct to hold", 
+   "authentication data and callback methods.  :-)", 
+   "(svn_client_authenticate): new prototype, greatly simplified by", 
+   "using svn_client_auth_t.", 
+   "* auth.c (authorize_username, authorize_simple_password): rewrite to", 
+   "use new struct.", 
+   "* checkout.c (svn_client_checkout):  tweak to use new struct.", 
+   "* update.c (svn_client_update): same.", 
+   "* commit.c (send_to_repos):  same.", 
+   "* status.c (svn_client_status): same.", 
+   "* cl.h (enum svn_cl__longopt_t, svn_cl_opt_state_t):  create", 
+   "username/password fields for commandline args.", 
+   "* main.c (main):  add auth args to options[], and to switch statement.", 
+   "* prompt.c, cl.h (svn_cl__make_auth_obj): new helper routine.", 
+   "* checkout-cmd.c (svn_cl__checkout):  call the helper.", 
+   "* update-cmd.c (svn_cl__update): same.", 
+   "* import-cmd.c (svn_cl__import): same.", 
+   "* commit-cmd.c (svn_cl__commit): same.", 
+   "* status-cmd.c (svn_cl__status): same.", 
+   "* adm_ops.c (svn_wc_set_auth_file):  bugfixes."
+  ], 
+  "revision_id": "839841"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "bodewig", 
+  "date": "2009-09-18T08:52:06.955396Z", 
+  "msg": [
+   "castor-xml uses commons-cli"
+  ], 
+  "revision_id": "816540"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2009-09-18T08:50:52.997542Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "816539"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2009-09-18T08:50:02.228382Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "816538"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2009-09-18T08:46:49.914804Z", 
+  "msg": [
+   "fix groupId for commons-cli"
+  ], 
+  "revision_id": "816537"
+ }, 
+ {
+  "author": "kahatlen", 
+  "date": "2009-09-18T08:46:29.577507Z", 
+  "msg": [
+   "DERBY-4376: Simple select runs forever", 
+   "A MultiProbeTableScanResultSet performes one index scan per distinct", 
+   "element in the IN list. Changing the start and stop positions of the", 
+   "underlying index scan, and moving to the next element in the IN list,", 
+   "happens when the scan controller is reopened. However, the reopening", 
+   "of the scan controller is controlled by TableScanResultSet, which", 
+   "skips the reopening if the current start and stop positions are", 
+   "guaranteed to make the scan return zero rows. Basically, if the", 
+   "start/stop positions are initialized with NULLs, the scan is not", 
+   "reopened, and we do not move to the next element of the IN list. We", 
+   "therefore just keep on retrying at the same position in the IN list,", 
+   "and the query execution is stuck forever.", 
+   "This patch moves all the multi-probe logic out of TableScanResultSet", 
+   "and into MultiProbeTableScanResultSet, and instead adds methods that", 
+   "MPTSRS can override where different logic is needed. In short:", 
+   "1) Initialization of the start/stop keys has been factored out of", 
+   "TSRS.openCore()/TSRS.reopenCore() into a helper method", 
+   "initStartAndStopKey().", 
+   "2) MPTSRS overrides initStartAndStopKey() and updates the keys with", 
+   "the actual probe value. This ensures that the keys now have the", 
+   "correct values when TSRS.reopenCore() calls skipScan().", 
+   "3) Methods in TSRS that take a probeValue argument have been removed,", 
+   "since MPTSRS.initStartAndStopKey() now does all the work with", 
+   "retrieving the probe value and updating the keys.", 
+   "4) Since the next probe value is fetched earlier now", 
+   "MPTSRS.reopenScanController() can no longer use the return value from", 
+   "getNextProbeValue() to decide whether or not it should be a no-op (it", 
+   "should be a no-op if the next probe value was null, which means that", 
+   "the probe list has been exhausted). To ensure that we don't open scans", 
+   "in those cases, set a flag in initStartAndStopKey() to indicate", 
+   "whether or not the probe list was exhausted, and override skipScan()", 
+   "to check that flag and return true if no new probe value was found."
+  ], 
+  "revision_id": "816536"
+ }
+]

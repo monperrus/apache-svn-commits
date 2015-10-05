@@ -1,0 +1,109 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-04-25T21:17:22.096639Z", 
+  "msg": [
+   "Re-implement the API for retrieving a path's copyfrom source, and", 
+   "increase its scope from private to libsvn_client to exposed to all of", 
+   "Subversion's internals.", 
+   "Hook the C API into JavaHL, and add a corresponding regression test.", 
+   "* build.conf", 
+   "(libsvn_client): Include svn_client_private.h in \"msvc-export\".", 
+   "* subversion/include/private/svn_client_private.h", 
+   "Add new header file to expose svn_client__get_copy_source() to", 
+   "Subversion's internals.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__get_copy_source): Remove (moved to svn_client_private.h).", 
+   "* subversion/libsvn_client/merge.c", 
+   "Add #include of svn_client_private.h.", 
+   "* subversion/libsvn_client/log.c", 
+   "Add #include of svn_client_private.h.", 
+   "(copyfrom_info_t): Rename from copy_source_baton, and make a", 
+   "typedef.  Replace copy_source field with target_path, path, rev,", 
+   "and pool fields.", 
+   "(copyfrom_info_receiver): Rename from copy_source_receiver().", 
+   "Re-implement to use copyfrom_info_t, and to consider only the", 
+   "target path.", 
+   "(svn_client__get_copy_source): Adjust parameters, removing", 
+   "ra_session from the API.  Re-implement in terms of copyfrom_info_t.", 
+   "[ in subversion/bindings/javahl/ ]", 
+   "* native/org_tigris_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_tigris_subversion_javahl_SVNClient_getCopySource):", 
+   "Delegate to SVNClient::getCopySource().", 
+   "* native/SVNClient.h", 
+   "* native/SVNClient.cpp", 
+   "(getCopySource): Add method.", 
+   "* src/org/tigris/subversion/javahl/tests/BasicTests.java", 
+   "(testMove): Call assertExpectedCopySource().", 
+   "(assertExpectedCopySource): Assert that the copy source is as expected."
+  ], 
+  "revision_id": "864855"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-25T21:06:21.080725Z", 
+  "msg": [
+   "Adjust variable naming per Subversion's coding conventions.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(svn_repos_get_logs3): Rename local variable \"subpool\" to", 
+   "\"iterpool\", since it's always used in disposable loop allocations."
+  ], 
+  "revision_id": "864854"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-04-25T17:29:25.448668Z", 
+  "msg": [
+   "Support implied merge source and revisions.", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Update help text for merge subcommand.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Determine implied merge source and/or revision.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__oldest_rev_at_path): New function.", 
+   "(svn_client__get_copy_source): New function.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(revnum_receiver): Moved to subversion/libsvn_client/log.c.", 
+   "(get_implied_merge_info): Implementation to find the rev at which a", 
+   "given path is created has been moved to 'svn_client__oldest_rev_at_path'.", 
+   "This function calls 'svn_client__oldest_rev_at_path'.", 
+   "* subversion/libsvn_client/log.c", 
+   "(revnum_receiver): Moved from subversion/libsvn_client/copy.c.", 
+   "(svn_client__oldest_rev_at_path): New function.", 
+   "(struct copy_source_baton): New baton to hold the copy_source_path.", 
+   "(copy_source_receiver): New function.", 
+   "(svn_client__get_copy_source): New function.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(assume_default_rev_range): New function.", 
+   "(do_merge, do_single_file_merge): Deduce the revison range to merge if", 
+   "not provided.", 
+   "(svn_client_merge_peg3): Deduce source if not given. Fix the error message", 
+   "for 'undeterminable source URL'", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_with_implicit_target_helper): Allow implicit merge URL and revisions.", 
+   "(merge_with_implicit_target_and_revs): New test.", 
+   "(test_list): add new 'merge_with_implicit_target_and_revs' test.", 
+   "Patch by: kameshj", 
+   "dlr"
+  ], 
+  "revision_id": "864853"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-25T17:11:40.737523Z", 
+  "msg": [
+   "Merge r23910 from trunk to the 1.4.x branch, fixing issue #1789,", 
+   "failure of a large 'svn diff' on Win32.", 
+   "Approved by: +1: dionisos, dlr, lgo, +0: malcolm"
+  ], 
+  "revision_id": "864852"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-04-25T17:09:45.852128Z", 
+  "msg": [
+   "* STATUS: Add vote for r24764, approving."
+  ], 
+  "revision_id": "864851"
+ }
+]

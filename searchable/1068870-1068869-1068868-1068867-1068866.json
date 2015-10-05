@@ -1,0 +1,70 @@
+[
+ {
+  "author": "fuankg", 
+  "date": "2011-02-09T12:50:53.749745Z", 
+  "msg": [
+   "Axed C++ comments."
+  ], 
+  "revision_id": "1068870"
+ }, 
+ {
+  "author": "rwesten", 
+  "date": "2011-02-09T12:47:27.585217Z", 
+  "msg": [
+   "Stanbol-63,Stanbol-62: Added Support for using EmbeddedSolrServer and enabled UnitTests for SolrYard", 
+   "Details:", 
+   "To support EmbeddedSolrServer one needs to add all the Solr and Lucene dependencies. Adding them all the the existing SolrYard Bundle seams not to be something one might want to do. Because of that the decision was to do some refactoring.", 
+   "yard/solrProvider (new module)", 
+   "This Module defines the SolrProvider service and the SolrProviderManager service/component. In addition it provides the default implementation of the SolrProvider service that supports all SolerServer implementations defined by SolrJ (Solr clients that use the RESTful API)", 
+   "This Module mainly represents the functionality provided previously by the SolrYard. This Bundle also exports everything needed to use the SolrJ client.", 
+   "yard/embeddedSolrProvider (new module)", 
+   "This Module creates a bundle that provide an implementation of the SolrProvider interface for EmbeddedSolrServer (see http://wiki.apache.org/solr/Solrj#EmbeddedSolrServer). This Bundle also contains all the libs necessary to run the SolrServer within the OSGI environment, but does not export anything.", 
+   "yard/SolrYard", 
+   "- is now depended on yard/solrProvider because it uses now the SolrProviderManager service to instantiate a SolrServer.", 
+   "- the yard/embeddedSolrProvider is an optional dependency and only required if you actually use an EmbeddedSolrServer", 
+   "- The SolrYardConfig was modified that the accessUri is no longer an URL because now it is also possible to use an absolute path to the Solr home or an Solr core (in case a multi core configuration is used). THis also includes some changes in other modules that used the SolrYardConfig.", 
+   "- The type of the SolrServer is automatically detected based on the parsed accessURL. In case it starts with \"http\" a Server using the RESTful interface is used. Otherwise an EmbeddedServer is requested by using the SolrProviderManager.", 
+   "- Added support for the unit test of the Yard interface (SolrYardTest). This uses the new EmbeddedSolrServer and therefore does not require a running and configured SolrServer as the old \"TestInitOutsideofOSGI\".", 
+   "- Removed the now obsolete \"TestInitOutsideofOSGI\" unit test class", 
+   "generic/Test", 
+   "- removed the default implementation of the clearUpRepresentation implementation, because it was unintentionally called after every single unit test. Using AfterClass was not possible because JUnit requires this method to be static. Therefore actual UnitTest classes for specific Yard implementation need now to take care that data created within the yard during the tests are removed afterwards. Note that the static member variable \"representationIDs\" still contains all the IDs of the representations created by the unit tests defined within YardTest.", 
+   "yard/clerezza", 
+   "- adapted the ClerezzaTest to delete all representations created during the tests", 
+   "entityhub launchers/sling", 
+   "- added the bundles for the new yard/solrProvider and yard/embeddedSolrProvider to the list", 
+   "enhancer launchers/full", 
+   "- added the bundles for the new yard/solrProvider and yard/embeddedSolrProvider to the list", 
+   "- removed \"stax-api\" and \"wstx-asl\". Both used jar packaging so they where not loaded. Previously they where contained in the SolrYard bundle and now they are part of the embeddedSolrProvider bundle."
+  ], 
+  "revision_id": "1068869"
+ }, 
+ {
+  "author": "sergeyb", 
+  "date": "2011-02-09T12:44:46.367765Z", 
+  "msg": [
+   "Merged revisions 1068867 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r1068867 | sergeyb | 2011-02-09 12:42:13 +0000 (Wed, 09 Feb 2011) | 1 line", 
+   "[CXF-3124] Unifying the NoConduitInitiator exception handling", 
+   "........"
+  ], 
+  "revision_id": "1068868"
+ }, 
+ {
+  "author": "sergeyb", 
+  "date": "2011-02-09T12:42:13.624315Z", 
+  "msg": [
+   "[CXF-3124] Unifying the NoConduitInitiator exception handling"
+  ], 
+  "revision_id": "1068867"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2011-02-09T12:42:09.500512Z", 
+  "msg": [
+   "CAMEL-3645: Made it possible to set remoteInterfaces in XML DSL."
+  ], 
+  "revision_id": "1068866"
+ }
+]

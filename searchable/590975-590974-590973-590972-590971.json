@@ -1,0 +1,70 @@
+[
+ {
+  "author": "woonsan", 
+  "date": "2007-11-01T12:25:51.199552Z", 
+  "msg": [
+   "Fixed the following problem:", 
+   "Problem: Sometimes, a page request does not get response in parallel rendering mode. Thread dump shows that a thread is hanging on portletContent.wait() in AsyncPageAggregatorImpl. Also, this happens only when a portlet fragment gets time-out.", 
+   "Thread dump is like the following:", 
+   "\"http-8080-Processor24\" daemon prio=6 tid=0x171e5c00 nid=0x4e0 in Object.wait() [0x1894e000..0x1894fd94]", 
+   "java.lang.Thread.State: WAITING (on object monitor)", 
+   "at java.lang.Object.wait(Native Method)", 
+   "- waiting on <0x02e60b40> (a org.apache.jetspeed.aggregator.impl.PortletContentImpl)", 
+   "at java.lang.Object.wait(Object.java:485)", 
+   "at org.apache.jetspeed.aggregator.impl.AsyncPageAggregatorImpl.aggregateAndRender(AsyncPageAggregatorImpl.java:236)", 
+   "- locked <0x02e60b40> (a org.apache.jetspeed.aggregator.impl.PortletContentImpl)", 
+   "<snip>", 
+   "The old WorkerMonitorImpl has a while loop to interrupt worker and wait portlet content. But this loop with ten times was meaningless. Because if it is notified at wait(), then the portlet content is already completed.", 
+   "By the way, the while loop in the old WorkerMonitorImpl caused this problem; sometimes this can intercept all notifications from RenderingJobImpl's portletContent.notifyAll(); sometimes AsyncPageAggregatorImpl cannot get notification when there's a timeout portlet fragment.", 
+   "So, WorkerMonitorImpl was fixed to get notification once.", 
+   "The old implementation's while loop seems designed to confirm interruption of a rendering job, but the confirmation was not properly implemented. This kind of confirmation could be revisited later. (What if a portlet catches InterruptedException and tries to proceed a long job?)"
+  ], 
+  "revision_id": "590975"
+ }, 
+ {
+  "author": "woonsan", 
+  "date": "2007-11-01T12:24:35.216662Z", 
+  "msg": [
+   "Fixed the following problem:", 
+   "Problem: Sometimes, a page request does not get response in parallel rendering mode. Thread dump shows that a thread is hanging on portletContent.wait() in AsyncPageAggregatorImpl. Also, this happens only when a portlet fragment gets time-out.", 
+   "Thread dump is like the following:", 
+   "\"http-8080-Processor24\" daemon prio=6 tid=0x171e5c00 nid=0x4e0 in Object.wait() [0x1894e000..0x1894fd94]", 
+   "java.lang.Thread.State: WAITING (on object monitor)", 
+   "at java.lang.Object.wait(Native Method)", 
+   "- waiting on <0x02e60b40> (a org.apache.jetspeed.aggregator.impl.PortletContentImpl)", 
+   "at java.lang.Object.wait(Object.java:485)", 
+   "at org.apache.jetspeed.aggregator.impl.AsyncPageAggregatorImpl.aggregateAndRender(AsyncPageAggregatorImpl.java:236)", 
+   "- locked <0x02e60b40> (a org.apache.jetspeed.aggregator.impl.PortletContentImpl)", 
+   "<snip>", 
+   "The old WorkerMonitorImpl has a while loop to interrupt worker and wait portlet content. But this loop with ten times was meaningless. Because if it is notified at wait(), then the portlet content is already completed.", 
+   "By the way, the while loop in the old WorkerMonitorImpl caused this problem; sometimes this can intercept all notifications from RenderingJobImpl's portletContent.notifyAll(); sometimes AsyncPageAggregatorImpl cannot get notification when there's a timeout portlet fragment.", 
+   "So, WorkerMonitorImpl was fixed to get notification once.", 
+   "The old implementation's while loop seems designed to confirm interruption of a rendering job, but the confirmation was not properly implemented. This kind of confirmation could be revisited later. (What if a portlet catches InterruptedException and tries to proceed a long job?)"
+  ], 
+  "revision_id": "590974"
+ }, 
+ {
+  "author": "vsiveton", 
+  "date": "2007-11-01T12:14:51.207382Z", 
+  "msg": [
+   "o make DEFAULT_OUTPUT_FORMAT protected for tests"
+  ], 
+  "revision_id": "590973"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2007-11-01T12:11:14.585896Z", 
+  "msg": [
+   "Mention included software in notice."
+  ], 
+  "revision_id": "590972"
+ }, 
+ {
+  "author": "nettings", 
+  "date": "2007-11-01T12:09:56.997859Z", 
+  "msg": [
+   "use proxy input module to determine correct path to profiling page"
+  ], 
+  "revision_id": "590971"
+ }
+]

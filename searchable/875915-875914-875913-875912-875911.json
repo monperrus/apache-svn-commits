@@ -1,0 +1,97 @@
+[
+ {
+  "author": "fabien", 
+  "date": "2009-02-13T12:27:21.544246Z", 
+  "msg": [
+   "Add \"Header\" keyword completion (available since r35386).", 
+   "* tools/client-side/bash_completion", 
+   "(_svn) \"Header\" keyword added to completion."
+  ], 
+  "revision_id": "875915"
+ }, 
+ {
+  "author": "sbutler", 
+  "date": "2009-02-13T12:00:57.293649Z", 
+  "msg": [
+   "For issue 3209, fix the \"local add, incoming add\" and \"local", 
+   "obstruction, incoming add\" use cases for update/switch/checkout.", 
+   "Adjust the tests to cover my tracks. ;-)", 
+   "Here's what add_{directory,file}() now check (in order):", 
+   "1. True obstruction: \"non-{dir,file} object of the same name\" error.", 
+   "2. Unversioned obstruction: \"unversioned {dir,file} of the same name\"", 
+   "error (unless the operation has the --force option).", 
+   "3. UUID mismatch: \"checked out from a different repo\" error.", 
+   "4. URL mismatch: \"does not match expected URL\" error.", 
+   "5. Local dir is a working copy but is missing from parent entry:", 
+   "\"independent working copy\" error.  I invented this one to avoid a", 
+   "strange \"unversioned working copy\" situation:", 
+   "$ svn st svn-test-work/working_copies/switch_tests-21/A/D/G", 
+   "?     C svn-test-work/working_copies/switch_tests-21/A/D/G/I", 
+   ">   local add, incoming add upon switch", 
+   "### If I understood our working copy locking better, I'd hack", 
+   "add_directory() to incorporate the pre-existing working copy into", 
+   "its new parent.", 
+   "6. Added with history: tree conflict.  The victim tree is skipped.", 
+   "Currently, a local add *without* history is *not* a tree conflict.", 
+   "The update/sw/co continues, possibly raising text or prop conflicts.", 
+   "Is this OK?", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_directory): Add a test for the \"independent working copy\"", 
+   "error.  Simplify the condition for a tree conflict.  Update the", 
+   "summary comment.", 
+   "(add_file): Simplify the condition for a tree conflict.  Update the", 
+   "summary comment.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(forced_switch_failures): Expect \"independent wc\" error instead of a", 
+   "tree conflict on an \"unversioned working copy\".", 
+   "(test_list): Remove XFail from forced_switch_failures.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(forced_update_failures): Expect \"independent wc\" error instead of an", 
+   "\"already exists\" error on an \"unversioned working copy\".  We had", 
+   "raised a tree conflict here.", 
+   "(update_with_obstructing_additions): Expect an add-add tree conflict", 
+   "instead of an error.  Resolve and expect the same conflict when", 
+   "updating with --force.  Repeat with a file victim.", 
+   "(test_list): Remove XFail from forced_update_failures and", 
+   "update_with_obstructing_additions.", 
+   "* subversion/tests/cmdline/checkout_tests.py", 
+   "(forced_checkout_with_versioned_obstruction): Expect \"independent", 
+   "wc\" error instead of a tree conflict in \"unversioned working copy\".", 
+   "(co_with_obstructing_local_adds): Expect add-add tree conflicts", 
+   "instead of errors for local adds-with-history.  Skip the victims.", 
+   "(test_list): Remove XFail from co_with_obstructing_local_adds."
+  ], 
+  "revision_id": "875914"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2009-02-13T11:01:54.391308Z", 
+  "msg": [
+   "French translation update for r35832.", 
+   "* subversion/po/fr.po: po-update & 11 fuzzy fixed."
+  ], 
+  "revision_id": "875913"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-02-13T10:06:48.192256Z", 
+  "msg": [
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_file_rename): On Win32, only remove a possible readonly flag", 
+   "when the file rename operation failed for the first time to avoid", 
+   "io in the common case."
+  ], 
+  "revision_id": "875912"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-13T07:18:38.503533Z", 
+  "msg": [
+   "Deprecate a couple fields of svn_wc_entry_t -- they're disappearing in", 
+   "1.7, so we may as well signal the change to developers.", 
+   "* subversion/include/svn_wc.h:", 
+   "(svn_wc_entry_t): deprecate cachable_props and present_props"
+  ], 
+  "revision_id": "875911"
+ }
+]

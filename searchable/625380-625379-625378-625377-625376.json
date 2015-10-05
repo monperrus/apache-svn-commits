@@ -1,0 +1,44 @@
+[
+ {
+  "author": "arj", 
+  "date": "2006-06-17T23:12:18.000000Z", 
+  "msg": [
+   "Minor signature change to GroupManager: commit() now throws WikiException."
+  ], 
+  "revision_id": "625380"
+ }, 
+ {
+  "author": "arj", 
+  "date": "2006-06-17T23:11:24.000000Z", 
+  "msg": [
+   "Enhancement: Group interface receives a long-awaited members() method that returns the wiki group's current members as an array of Principals."
+  ], 
+  "revision_id": "625379"
+ }, 
+ {
+  "author": "arj", 
+  "date": "2006-06-17T23:09:56.000000Z", 
+  "msg": [
+   "Bug fix: to support multi-wiki webapps, WikiSession.getWikiSession's  method signature now includes a parameter for the current WikiEngine.  Check your custom JSPs to see if this affects you (it shouldn't; none of  the default JSPs currently use this method)."
+  ], 
+  "revision_id": "625378"
+ }, 
+ {
+  "author": "arj", 
+  "date": "2006-06-17T23:09:03.000000Z", 
+  "msg": [
+   "Enhancement: Major refactoring of WikiSession to include a background 'monitor' thread that removes expired wiki sessions. This means that session-count information should be accurate to within a minute of when your web container expires its sessions. The background thread is an inner class called SessionMonitor that subclasses WikiBackgroundThread. WikiSession also gains a method called getUserPrincipals(WikiEngine) that returns an array of Principals that represents the current users currently using the wiki.", 
+   "Enhancement: all background threads now subclass a new class called WikiBackgroundThread which will gracefully shut themselves down when they hear a 'wiki shutdown' event. These threads are, at present: WikiSession.SessionMonitor, PageManager.LockReaper, RSSThread, and LuceneSearchProvider.LuceneUpdater. These threads are NO LONGER daemon threads, which means they won't stay in memory when the wiki webapp is removed.", 
+   "Bug fix: to support multi-wiki webapps, WikiSession.getWikiSession's  method signature now includes a parameter for the current WikiEngine.  Check your custom JSPs to see if this affects you (it shouldn't; none of  the default JSPs currently use this method)."
+  ], 
+  "revision_id": "625377"
+ }, 
+ {
+  "author": "arj", 
+  "date": "2006-06-17T23:05:51.000000Z", 
+  "msg": [
+   "Enhancement: Added protected method shutdown() to WikiEngine that is triggered by WikiServlet catching webapp destroy() events. Shutdown()  fires a WikiEngineEvent called 'shutdown' to all listeners, which at  present includes all WikiBackgroundThreads. New class added:  WikiEngineEvent. To catch container events, WikiServlet was changed in web.xml to load at startup. This is a dirty hack, but not too dirty."
+  ], 
+  "revision_id": "625376"
+ }
+]

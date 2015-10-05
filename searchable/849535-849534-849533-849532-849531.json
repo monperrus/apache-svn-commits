@@ -1,0 +1,100 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-04-22T21:35:15.194363Z", 
+  "msg": [
+   "Adjust the fsfs definitions of copy history and copy roots.", 
+   "Specifically:", 
+   "- Identify copy roots by rev and created-path, because a child whose", 
+   "copy root is a newly-created parent directory doesn't know what", 
+   "offset the parent directory will have in the rev file.", 
+   "- The copyroot field should identify the root of the true copy most", 
+   "proximal to the node-rev; soft copies don't cut it.  This reflects", 
+   "a change made by jpieper in r9548; the crucial distinction is that", 
+   "a soft copy still existed (with the same identity) before the soft", 
+   "copy operation, but a true copy did not exist before the copy", 
+   "operation, so it is a historical event.", 
+   "- We don't really need to know the copy history of a soft copy, so", 
+   "don't put a copyfrom field in soft copy node-revs, and eliminate", 
+   "the \"soft/hard\" part of the copyfrom field.", 
+   "* libsvn_fs_fs/structure: Note that we are not a placeholder any more.", 
+   "Add a section on copy-ID assignment and the meaning of copy roots.", 
+   "Soft copies are no longer their own copy roots.  Eliminate the", 
+   "\"soft/hard\" field of copyfrom data and note that it only exists in a", 
+   "node-rev which is a true copy.  Identify the copy root by rev and", 
+   "created-path, and explain why.", 
+   "* libsvn_fs_fs/make-revs.c", 
+   "(struct entry): Remove the soft_copy field.", 
+   "(new_entry): Don't initialize the soft_copy field.", 
+   "(copy_entry): Adjust comment.", 
+   "(get_child): Adjust comment; don't set copy history or copyroot", 
+   "field for soft copies.", 
+   "(write_node_rev, dump_txn_node_rev): Eliminate \"soft/hard\"", 
+   "distinction in copyfrom field; write out copyroot data by node-rev", 
+   "and created-path.", 
+   "(txn_revstr): New convenience function to return \"this\" for the", 
+   "current rev or a revnum for a previous rev.", 
+   "(txn_repstr): Use txn_revstr.", 
+   "(new_node_record): Don't set the soft_copy field."
+  ], 
+  "revision_id": "849535"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-04-22T18:47:43.420246Z", 
+  "msg": [
+   "* www/project_faq.html:  add FAQ about frequent need to run db recovery."
+  ], 
+  "revision_id": "849534"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-22T15:31:13.703667Z", 
+  "msg": [
+   "Fix some control flow errors in svn_fs__add_keys for libsvn_fs_fs.", 
+   "* subversion/libsvn_fs_fs/key-gen.c", 
+   "(svn_fs__add_keys): Start finding new digits from the last digit", 
+   "in the original ids, instead of the NULL at the end.  Also", 
+   "calculate the carry every time."
+  ], 
+  "revision_id": "849533"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-22T14:37:42.370747Z", 
+  "msg": [
+   "When assigning copyroots in libsvn_fs_fs for soft-copies, re-use the", 
+   "copyroot from the parent instead of pointing the copy root at the new", 
+   "node-rev.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(txn_body_history_prev): Check for a non-child path and for a", 
+   "soft-copy in the copy history traversing code.  This now almost", 
+   "exactly parallels the structure from the original libsvn_fs.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs__dag_get_copy_kind): New.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs__dag_get_copy_kind): New, returns the copy_kind field", 
+   "from a node.", 
+   "(svn_fs__dag_clone_child): Always assign the copyroot from the", 
+   "parent node-rev even during soft-copies."
+  ], 
+  "revision_id": "849532"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-22T13:08:27.306138Z", 
+  "msg": [
+   "Fix an accidental removal of canonicalize_abspath when adding", 
+   "changes. Implement svn_fs_change_rev_prop, which allows many of the", 
+   "tests in 'make check' to succeed.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(add_change): Pass the canonicalized path.", 
+   "* subversion/libsvn_fs_fs/revs-txns.c", 
+   "(txn_body_change_rev_prop): Removed.", 
+   "(svn_fs_change_rev_prop): Implemented.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs__dag_copy): Fix typo in comment."
+  ], 
+  "revision_id": "849531"
+ }
+]

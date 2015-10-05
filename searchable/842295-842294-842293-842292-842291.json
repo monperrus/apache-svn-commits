@@ -1,0 +1,79 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-06-14T19:57:11.538841Z", 
+  "msg": [
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client_update): Reactivate externals handling.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client_switch): Gather traversal info, then handle any", 
+   "externals changes."
+  ], 
+  "revision_id": "842295"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-06-14T19:42:29.181682Z", 
+  "msg": [
+   "let's try this one more time...", 
+   "* subversion/libsvn_client/export.c", 
+   "(remove_admin_dirs, copy_versioned_files): make val non-const to avoid a", 
+   "compiler warning."
+  ], 
+  "revision_id": "842294"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-14T19:40:07.399377Z", 
+  "msg": [
+   "Fix bug #712, a big fat P1 issue.", 
+   "(\"svn_wc_merge fails on files with eol/keyword translation\").", 
+   "This bug was discovered & diagnosed by Josef Wolf <jw@raven.inka.de>.", 
+   "* merge.c (svn_wc_merge): the tmp_left & tmp_right copies of left &", 
+   "right must be created as unique-files that are clones of", 
+   "*tmp_target*, not merge_target.  Normally merge_target ==", 
+   "tmp_target, so we'd never seen this bug till attempting to merge a", 
+   "translated file.  When merge_target is de-translated into some", 
+   "tmp_target in.svn/tmp/, the other inputs are now created in the same", 
+   "administrative area.  At that point, there's no need to pass", 
+   "basenames of these 3 files to svn_io_run_diff3 anymore; they're all", 
+   "relative paths below merge_target's parent, which is all that", 
+   "svn_io_run_diff3 requires in the first place.  We can run", 
+   "svn_io_run_diff3 in \".\" from now on, since all input paths should", 
+   "now be relative to \".\" as well.", 
+   "Everyone follow that?  :-)"
+  ], 
+  "revision_id": "842293"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2002-06-14T19:15:22.282776Z", 
+  "msg": [
+   "* subversion/libsvn_client/export.c", 
+   "(remove_admin_dirs, copy_versioned_files): declare key and val as const", 
+   "void *'s rather than just void *'s.  key has to be const for apr_hash_this,", 
+   "and there's no reason for val not to be const, since we never need to", 
+   "modify it anyway, so why bother putting it on it's own line ;-)", 
+   "Should Silence Warnings Reported By:  Philip Martin <philip@codematters.co.uk>"
+  ], 
+  "revision_id": "842292"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-14T18:57:36.966086Z", 
+  "msg": [
+   "Define the RA_*_DEPS variables before they get used (indirectly) in", 
+   "dependency lines. 'make' evaluates dep lines when it finds them, so", 
+   "the values must be defined by then.", 
+   "Problem identified by Philip Martin <philip@codematters.co.uk>", 
+   "* build/gen_base.py:", 
+   "(MakefileGenerator.write): no longer collect the RA modules into the", 
+   "ra_modules list, nor write out the DEPS and LINK variables.", 
+   "Instead, call self.write_ra_modules() to do the work, and to do it", 
+   "\"early\" in the file.", 
+   "(MakefileGenerator.write_ra_modules): new method to write out the RA", 
+   "modules."
+  ], 
+  "revision_id": "842291"
+ }
+]

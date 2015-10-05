@@ -1,0 +1,113 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-11-29T13:23:46.871372Z", 
+  "msg": [
+   "* notes/diff-encodings.txt: Fix spelling."
+  ], 
+  "revision_id": "857625"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2005-11-29T13:13:45.663087Z", 
+  "msg": [
+   "When running the command-line tests, check the output of stderr before", 
+   "checking stdout, since a difference in the former is likely to be a", 
+   "better immediate indicator of what the problem is than the latter.", 
+   "* subversion/tests/clients/cmdline/svntest/actions.py", 
+   "(run_and_verify_svn): Exchange order of stdout and stderr checks so", 
+   "that stderr is checked first."
+  ], 
+  "revision_id": "857624"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-11-29T06:08:02.848349Z", 
+  "msg": [
+   "Add the Last-Modified HTTP header to the response as encouraged by", 
+   "section 13.3.4 of RFC 2616.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(RESOURCE_LACKS_ETAG_POTENTIAL): A new macro which returns whether", 
+   "the DAV resource lacks potential for generation of an ETag.", 
+   "(get_last_modified): A new function used when setting HTTP headers", 
+   "in preparation for generating the response which includes the last", 
+   "modification time of the requested resource.", 
+   "(dav_svn_getetag): Factored complex conditional out into the", 
+   "RESOURCE_LACKS_ETAG_POTENTIAL() macro, which is also used by the", 
+   "new get_last_modified() function as the heuristic in determining", 
+   "whether the Last-Modified header is generated.", 
+   "(dav_svn_set_headers): Use httpd's API for setting the modification", 
+   "time for request_rec, and its corresponding Last-Modified header.", 
+   "Suggested by: Sergey Proskurnya <alaley@gmail.com>", 
+   "kon", 
+   "gstein", 
+   "Michael Sinz <Michael.Sinz@sinz.org>"
+  ], 
+  "revision_id": "857623"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2005-11-29T01:04:59.750968Z", 
+  "msg": [
+   "Refactor.  Split multi-purpose function get_local_mimetypes() into", 
+   "separate (and simpler) functions that just return the BASE and WORKING", 
+   "mimetype.", 
+   "Each of the two functions accepts an optional (output) property hash so", 
+   "that the 'caching' behaviour that get_local_mimetypes() provided can", 
+   "also be used by callers that don't have access to a file baton (which", 
+   "is most of them).", 
+   "For the specific case where get_local_mimetypes() was used to fetch the", 
+   "repository mimetype, build up the repository property hash manually from", 
+   "the BASE properties and BASE->repos propchanges, and query that directly,", 
+   "rather than using the (ugly, messy, non-local) special-cased handling", 
+   "that was used before.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(struct file_baton): Remove members 'has_repos_changed_mime_type'", 
+   "and 'repos_changed_mime_type', in favour of more general handling", 
+   "of repository properties (in close_file(), below).", 
+   "(load_base_props): Remove, as the only caller has been removed.", 
+   "(get_prop_mimetype): New.  Simple helper function to fetch the value", 
+   "of the svn:mime-type property from a property hash.", 
+   "(get_local_mimetypes): Remove.  The bulk of this function's", 
+   "functionality is now provided by the two following functions.", 
+   "(get_base_mimetype, get_working_mimetype): New.  Helper functions", 
+   "to retrieve the value of the svn:mime-type property for the BASE", 
+   "and WORKING versions of a file, respectively.", 
+   "(file_diff): Update calls to get_local_mimetypes() to use", 
+   "get_base_mimetype() and get_working_mimetype(), as appropriate.", 
+   "In the former case, pass in the existing (but not always initialised)", 
+   "BASE properties hash so that we have a chance of avoiding a re-read", 
+   "of the BASE properties file.", 
+   "(delete_entry): Move 'working_mimetype' and 'base_mimetype'", 
+   "into the scopes where they're needed, and replace the call", 
+   "to get_local_mimetypes() (to retrieve both mimetypes) with", 
+   "separate (and mutually exclusive) calls to get_base_mimetype()", 
+   "and get_working_mimetype().  In the former case, use the output", 
+   "property hash from reading the mimetype in lieu of reading the BASE", 
+   "properties file again.", 
+   "(close_file): Replace a call to get_local_mimetypes() with unconditional", 
+   "reads of the BASE and WORKING properties.  Determine the repository", 
+   "properties (including the mimetype) by combining the BASE properties", 
+   "with the propchanges (in all cases, not just for added files).", 
+   "Also move 'temp_file_path' into the 'if (!added)' scope, replacing", 
+   "the uses in the earlier scope with b->temp_file_path.  Finally,", 
+   "remove the redundant initialisation of 'localfile' to NULL.", 
+   "(change_file_prop): Don't bother reading the WORKING properties, because", 
+   "we now read them during close_file() (they aren't needed anywhere", 
+   "else).  Remove the code used to cache the repository svn:mime-type", 
+   "property in the file baton."
+  ], 
+  "revision_id": "857622"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-11-29T00:16:25.623666Z", 
+  "msg": [
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_getetag): As DAV_RESOURCE_TYPE_REGULAR is also indicative", 
+   "of a DAV collection, remove text from inline comment saying that we", 
+   "need an ETag for collections."
+  ], 
+  "revision_id": "857621"
+ }
+]

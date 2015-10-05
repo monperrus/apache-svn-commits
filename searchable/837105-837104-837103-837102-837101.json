@@ -1,0 +1,82 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2000-08-31T21:04:06.000000Z", 
+  "msg": [
+   "Working out bugs in new libsvn_delta organization.  Still a couple of", 
+   "buglets to go, but we're no longer crashing.  (knock, knock).", 
+   "* deltaparse_test.c:", 
+   "(test_add_directory, test_replace_directory):  set *child_baton to", 
+   "new directory's name.", 
+   "(test_change_file_prop, test_change_dir_prop,", 
+   "test_change_dirent_prop):  added new test functions.", 
+   "(general):  add nicer indentation in my own callbacks.", 
+   "* delta.h:", 
+   "(svn_propdelta_t): add new entry_name field to hold name of object", 
+   "being patched -- (needed by walker's change_dirent_prop).", 
+   "* delta_parse.c:", 
+   "(do_begin_prop delta): copy parent stackframe's 'name' field into", 
+   "current_propdelta->entity_name.", 
+   "(do_prop_delta_callback):  pass this entity_name to change_dirent_prop.", 
+   "(do_finish_file):  drop batons *after* calling walker callback.", 
+   "(do_finish_directory): drop batons *after* calling walker callback.", 
+   "(do_stack_remove):  only validates the stackframe removal now,", 
+   "renamed to do_stack_check_remove.", 
+   "(xml_handle_end): do the stackframe removal at the *end* of this routine."
+  ], 
+  "revision_id": "837105"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-08-31T20:47:57.000000Z", 
+  "msg": [
+   "(add_component_internal): fix braino."
+  ], 
+  "revision_id": "837104"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-08-31T20:29:45.000000Z", 
+  "msg": [
+   "Change path library to always return non-shared results, instead of", 
+   "side-effecting its arguments (part of making libsvn_wc insensitive to", 
+   "whether delta traversal happens depth-first vs breadth-first):", 
+   "* path.c (add_component_internal): make and return a new string,", 
+   "canonicalizing it before returning.", 
+   "(svn_path_add_component_nts, svn_path_add_component): return a new", 
+   "string.", 
+   "(svn_path_remove_component): return a new string, and take a new pool", 
+   "arg therefore.", 
+   "* delta_parse.c (maybe_derive_ancestry): use new svn_path semantics;", 
+   "tighten up code and comments.", 
+   "* adm_files.c (make_adm_path): replaces extend_with_adm_name(), no", 
+   "longer requires the caller to \"unmake\" the name later.", 
+   "Callers changed accordingly.", 
+   "(chop_admin_name): removed, no longer necessary.", 
+   "* util.c (svn_wc__ensure_directory): use new svn_path semantics,", 
+   "improve comments.", 
+   "* apply_delta.c (maybe_prepend_dest, add_directory, add_file,", 
+   "finish_file): use new svn_path semantics.", 
+   "Also, changes to accommodate new names:", 
+   "* apply_delta.c (window_handler): it's \"txdelta\", not \"delta\"."
+  ], 
+  "revision_id": "837103"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-08-31T17:40:16.000000Z", 
+  "msg": [
+   "(svn_delta_parse): make walker argument `const'.", 
+   "(svn_delta__digger_t): make walker field `const'."
+  ], 
+  "revision_id": "837102"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-08-31T17:23:14.000000Z", 
+  "msg": [
+   "Test for presence of neon/ subdir, exit with error message if none."
+  ], 
+  "revision_id": "837101"
+ }
+]

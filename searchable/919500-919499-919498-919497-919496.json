@@ -1,0 +1,46 @@
+[
+ {
+  "author": "rickmcguire", 
+  "date": "2010-03-05T17:05:39.931906Z", 
+  "msg": [
+   "some reorganization cleanup"
+  ], 
+  "revision_id": "919500"
+ }, 
+ {
+  "author": "bsullivan", 
+  "date": "2010-03-05T17:04:43.356436Z", 
+  "msg": [
+   "TRINIDAD-1739 ComponentReference doesn't work with bindings and should be more thread-safe", 
+   "The solution to 1) is to internally use two different implementations--one for the case where the component meets the current requirements, the second to handle the case where the component has no id or isn't in the component tree yet. In this case, we defer calculating the scoped id until all call that requires a scoped id--getComponent(), hashCode() and equals(). At this point, presumably the component is in the tree and if it isn't we throw an IllegalStateException (instead of the previous IllegalArgumentException). There are two more parts to this problem--there is no guarantee that the deferred ComponentReference will actually be called at all, but the deferred instance is holding onto a Component and we don't want to do so across requests, so we maintain a list of all of the deferred ComponentRefererences and call a new method--ensureInstantiation() on all of them at the end of the request from the GlobalConfiguratorImpl. The other trick is that we only want to deserialize stable component references, so we now use a serialization proxy instead of default serialization.", 
+   "The thread-safety solution is to make judicious use of thread-safe references to mutable data internally and guarantee that getComponent() can be called on an instantiated ComponentReference as long as the call is made from a Thread with a FacesContext."
+  ], 
+  "revision_id": "919499"
+ }, 
+ {
+  "author": "bdaniel", 
+  "date": "2010-03-05T17:04:42.691436Z", 
+  "msg": [
+   "TuscanyImplementationPolicyProvider should be creating an inbound interceptor"
+  ], 
+  "revision_id": "919498"
+ }, 
+ {
+  "author": "norman", 
+  "date": "2010-03-05T17:03:22.380016Z", 
+  "msg": [
+   "cleanup"
+  ], 
+  "revision_id": "919497"
+ }, 
+ {
+  "author": "bsullivan", 
+  "date": "2010-03-05T17:02:16.307591Z", 
+  "msg": [
+   "TRINIDAD-1739 ComponentReference doesn't work with bindings and should be more thread-safe", 
+   "The solution to 1) is to internally use two different implementations--one for the case where the component meets the current requirements, the second to handle the case where the component has no id or isn't in the component tree yet. In this case, we defer calculating the scoped id until all call that requires a scoped id--getComponent(), hashCode() and equals(). At this point, presumably the component is in the tree and if it isn't we throw an IllegalStateException (instead of the previous IllegalArgumentException). There are two more parts to this problem--there is no guarantee that the deferred ComponentReference will actually be called at all, but the deferred instance is holding onto a Component and we don't want to do so across requests, so we maintain a list of all of the deferred ComponentRefererences and call a new method--ensureInstantiation() on all of them at the end of the request from the GlobalConfiguratorImpl. The other trick is that we only want to deserialize stable component references, so we now use a serialization proxy instead of default serialization.", 
+   "The thread-safety solution is to make judicious use of thread-safe references to mutable data internally and guarantee that getComponent() can be called on an instantiated ComponentReference as long as the call is made from a Thread with a FacesContext."
+  ], 
+  "revision_id": "919496"
+ }
+]

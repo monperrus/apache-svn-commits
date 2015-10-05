@@ -1,0 +1,99 @@
+[
+ {
+  "author": "nori", 
+  "date": "2007-10-25T19:28:30.314587Z", 
+  "msg": [
+   "Japanese translation updates.", 
+   "* subversion/po/ja.po: Carry proofreading of r27239 forward, making", 
+   "corrections and improvements and unifying terms.  This \"Take 4\" is", 
+   "for messages in subversion/libsvn_wc.", 
+   "Now ja.po has 1670 translated messages and 1 fuzzy entry against r27227", 
+   "(Emacs PO-mode status: \"1670t+1f+350o\")."
+  ], 
+  "revision_id": "867460"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-25T19:22:32.178529Z", 
+  "msg": [
+   "Merge entirety of normalize-merge-sources branch to trunk.  This bring", 
+   "merge source normalization logic to the trunk, though currently unused", 
+   "(and yes, produces a build warning as a result).  I'll be working to", 
+   "go \"live\" with this code now.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__repos_location_segments): New function.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(struct gls_receiver_baton_t): New structure.", 
+   "(gls_receiver, compare_segments): New helper functions.", 
+   "(svn_client__repos_location_segments): New function.", 
+   "* subversion/libsvn_ra/compat.c", 
+   "(maybe_crop_and_send_segment): Actually do the \"cropping\" and", 
+   "\"maybe\" bits of this function's intent.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(struct merge_cmd_baton): Lose unused 'path' member.", 
+   "(compact_merge_ranges): Rework a bit to allow callers to safely", 
+   "clobber their own input array.", 
+   "(merge_source_link_t, struct nls_receiver_baton_t,", 
+   "merge_source_ranges_t): New structures.", 
+   "(merge_source_link_split, merge_source_links_to_array,", 
+   "nls_receiver, normalize_merge_sources): New functions.", 
+   "(svn_client_merge3): Lose reference to merge_cmd_baton.path.", 
+   "(svn_client_merge_peg3): Add alternative version of this function,", 
+   "reworked around the new merge source normalization logic, but", 
+   "if-def'd out for now."
+  ], 
+  "revision_id": "867459"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-10-25T19:18:01.697312Z", 
+  "msg": [
+   "Make sure that we do update files that have been explicitly pulled in", 
+   "even if the parent is at depth empty.  (Against trunk *or* 1.4.x", 
+   "servers.)  We were using the wc APIs incorrectly, by passing a file", 
+   "name to svn_wc_adm_retrieve which expects a directory name, and by", 
+   "expecting svn_wc_entry to throw an error if the entry doesn't exist", 
+   "instead of just returning NULL.  Happily, the correct code is much", 
+   "simpler too.  Extend a test to test this fix.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(make_file_baton): Instead of calling svn_wc_adm_retrieve with the", 
+   "wrong argument and improperly excluding any file, just use", 
+   "svn_wc_entry.", 
+   "* subversion/tests/cmdline/depth_tests.py", 
+   "(depth_empty_with_file): Make sure we can receive deltas to an", 
+   "explicitly-pulled-in file in addition to its deletion."
+  ], 
+  "revision_id": "867458"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2007-10-25T19:09:27.892633Z", 
+  "msg": [
+   "As in r26016, isolate each test here with a new repository.  I'm about", 
+   "to add another test that commits, which would affect subsequent tests", 
+   "without this change...", 
+   "* subversion/bindings/swig/python/tests/wc.py", 
+   "(SubversionWorkingCopyTestCase.setUp): Use", 
+   "SubversionRepositoryTestSetup().setUp() to get a fresh repository", 
+   "for each test.", 
+   "(suite): Don't need to pass suiteClass=SubversionRepositoryTestSetup", 
+   "to unittest.makeSuite anymore."
+  ], 
+  "revision_id": "867457"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-10-25T18:57:19.841580Z", 
+  "msg": [
+   "Add a new private convenience wrapper around svn_ra_get_location_segments().", 
+   "Branch: normalize-merge-sources", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__repos_location_segments): New function.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(struct gls_receiver_baton_t): New structure.", 
+   "(gls_receiver, compare_segments): New helper functions.", 
+   "(svn_client__repos_location_segments): New function."
+  ], 
+  "revision_id": "867456"
+ }
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2010-05-20T15:58:56.043119Z", 
+  "msg": [
+   "Tweak svn_wc__sync_text_base(), mainly to ensure it uses", 
+   "svn_wc__text_base_path() so that all references to the text base path go", 
+   "through that one function.  No functional change.", 
+   "* subversion/libsvn_wc/adm_files.h,", 
+   "subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__sync_text_base): Take a 'db' argument, as functions like this", 
+   "usually do.  Rename 'pool' to 'scratch_pool'.  In the implementation,", 
+   "use svn_wc__text_base_path() instead of in-line equivalent code.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(install_committed_file): Pass a 'db' argument to svn_wc__sync_text_base()."
+  ], 
+  "revision_id": "946680"
+ }, 
+ {
+  "author": "lindner", 
+  "date": "2010-05-20T15:56:13.220793Z", 
+  "msg": [
+   "fix mailing list"
+  ], 
+  "revision_id": "946679"
+ }, 
+ {
+  "author": "dwoods", 
+  "date": "2010-05-20T15:55:44.471988Z", 
+  "msg": [
+   "BVAL-52 ValidationParser.getInputStream() should call getResourceAsStream() for TCK suite to work.  Contributed by Carlos Vara."
+  ], 
+  "revision_id": "946678"
+ }, 
+ {
+  "author": "jfclere", 
+  "date": "2010-05-20T15:50:51.674531Z", 
+  "msg": [
+   "Oops... Minor errors."
+  ], 
+  "revision_id": "946677"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2010-05-20T15:47:19.281275Z", 
+  "msg": [
+   "Replace read-only uses of svn_wc__text_base_path() with calls to its", 
+   "recently introduced alias svn_wc__text_base_path_to_read(), and make and", 
+   "use similar read-only aliases for two other \"get a base text path\"", 
+   "variants.  The read-only aliases simply forward the call to the original", 
+   "functions, for now, but separating the read-only uses from the writes should", 
+   "make it easier to migrate them to use the WC-NG Pristine Store; at least it", 
+   "helps me to comprehend that process.", 
+   "Also rename the previously local function get_pristine_base_path() to", 
+   "svn_wc__ultimate_text_base_path() where it will lie alongside", 
+   "svn_wc__get_ultimate_base_contents() from r946689 and", 
+   "svn_wc__get_ultimate_base_md5_checksum() from 946713.  The name \"ultimate", 
+   "base\" is introduced here to mean \"base as in WC-NG BASE_NODE table\", as a", 
+   "hopefully clearer replacement for the term \"pristine base\" which was used", 
+   "recently in one or two function names but was not very good.  \"Ultimate", 
+   "base\" is not very good either.  We need to replace it with something better.", 
+   "* subversion/libsvn_wc/adm_files.h,", 
+   "subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc__text_revert_path_to_read, svn_wc__ultimate_text_base_path,", 
+   "svn_wc__ultimate_text_base_path_to_read): New functions.", 
+   "(svn_wc__get_pristine_base_contents, svn_wc__get_pristine_contents): Use", 
+   "the read-only aliases where the usage is definitely read-only.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(process_committed_leaf, svn_wc_get_pristine_copy_path): Use the read-only", 
+   "aliases where the usage is definitely read-only.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(get_nearest_pristine_text_as_file, report_wc_file_as_added): Same.", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(verify_pristine_present, log_do_committed): Same.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(get_pristine_base_path): Move+rename to svn_wc__ultimate_text_base_path().", 
+   "(merge_file, close_file): Update the call to get_pristine_base_path().", 
+   "Use the read-only aliases where the usage is definitely read-only."
+  ], 
+  "revision_id": "946676"
+ }
+]

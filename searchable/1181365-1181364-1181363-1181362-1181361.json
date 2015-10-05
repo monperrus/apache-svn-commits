@@ -1,0 +1,94 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:02:17.655721Z", 
+  "msg": [
+   "Fix location of gc-hbase.log in clusters; rotate the log on process restart", 
+   "Summary:", 
+   "#1. gc-hbase.log is set up to  go to $HBASE_HOME/logs.", 
+   "This is ok for local HBase setup, but this dir doesn't exist in our cluster", 
+   "setup.", 
+   "As a result, the gc output was ending up in the *.out (stdout) file, instead of", 
+   "gc-hbase.log.", 
+   "In the cluster setup, the logs live in /usr/local/hadoop/logs/<CELLNAME>-HBASE.", 
+   "So fixed the config to use the above location.", 
+   "#2. Also added *.out file like log rotation for the gc-hbase.log. Without this,", 
+   "every time the master or region server is restarted, we lose the old contents of", 
+   "gc-hbase.log as java does not append to existing file but creates a new one.", 
+   "With the change, the old file will get moved to gc-hbase.log.1, .2, etc.", 
+   "Test Plan:", 
+   "Pushed to cluster, and made sure gc-hbase.log ended up in", 
+   "/usr/local/hadoop/HBASE.", 
+   "And that on on a restart, the old log got rotated out to a .1 file.", 
+   "DiffCamp Revision: 152433", 
+   "Reviewed By: pkhaitan", 
+   "CC: pkhaitan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181365"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:02:09.458246Z", 
+  "msg": [
+   "add presplit logic to HBaseTest", 
+   "Summary:", 
+   "add presplit logic to HBaseTest", 
+   "Test Plan:", 
+   "ran HBaseTest on my test cluster and made sure the regions were growing at a", 
+   "pretty uniform rate.", 
+   "DiffCamp Revision: 151433", 
+   "Reviewed By: pkhaitan", 
+   "CC: pkhaitan, hbase@lists", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181364"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:02:06.269751Z", 
+  "msg": [
+   "HBASE-2936: Differentiate between daemon & restart sleep periods (for rolling restarts)"
+  ], 
+  "revision_id": "1181363"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:02:01.545847Z", 
+  "msg": [
+   "HBASE-2643: Properly Handle Truncated HLogs", 
+   "Summary:", 
+   "If a regionserver dies during reasonable write load, it's HLog is most likely", 
+   "truncated.  Currently, we throw an Exception as refuse to open the region.", 
+   "However, we should now consider this expected behavior and continue.", 
+   "Test Plan:", 
+   "mvn test -Dtest=TestHLogSplit", 
+   "DiffCamp Revision: 150181", 
+   "Reviewed By: kranganathan", 
+   "CC: nspiegelberg, kranganathan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181362"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:01:55.255885Z", 
+  "msg": [
+   "HBase FSCK: Correction. Ignore Non-Hex Directories", 
+   "Summary:", 
+   "Original patch ignored non-numeric directories.  Directories are actually a raw", 
+   "hash, so we need to include all hex directories.", 
+   "Test Plan:", 
+   "bin/hbase hbck 2>&1 | grep -v healthy", 
+   "DiffCamp Revision: 149034", 
+   "Reviewed By: kannan", 
+   "CC: nspiegelberg, kannan, kranganathan", 
+   "Revert Plan:", 
+   "OK"
+  ], 
+  "revision_id": "1181361"
+ }
+]

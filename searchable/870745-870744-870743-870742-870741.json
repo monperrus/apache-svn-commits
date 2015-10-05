@@ -1,0 +1,81 @@
+[
+ {
+  "author": "epg", 
+  "date": "2008-04-18T01:28:02.299766Z", 
+  "msg": [
+   "* subversion/svnserve/serve.c", 
+   "(log_fs_warning): Oops, declare len apr_size_t, as that's what", 
+   "svn_io_file_write wants."
+  ], 
+  "revision_id": "870745"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-18T01:06:03.803793Z", 
+  "msg": [
+   "Separate svn_log__checkout from svn_log__update and log", 
+   "checkout/update separately in svnserve.", 
+   "UNTESTED", 
+   "* subversion/include/private/svn_log.h", 
+   "* subversion/libsvn_subr/log.c", 
+   "Add svn_log__checkout, split out from svn_log__update.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): Move the checkout detection back in here", 
+   "from svn_log__update, where it made no sense to be.", 
+   "* subversion/svnserve/serve.c", 
+   "(report_driver_baton_t): Add new entry_counter and only_empty_entries", 
+   "fields so update() can distinguish checkout from update.", 
+   "(set_path): Increment b->entry_counter and set b->only_empty_entries", 
+   "FALSE if !start_empty.", 
+   "(link_path): Increment b->entry_counter.", 
+   "(accept_report): Take new only_empty_entry argument to indicate to", 
+   "callers who ask (just update()) that only one entry was sent,", 
+   "which is empty.  Initialize entry_counter and only_empty_entries", 
+   "in the baton and use them to determine only_empty_entry.", 
+   "(update): Use accept_report only_empty_entry to log checkout and", 
+   "update separately.", 
+   "(switch_cmd, status, diff): Pass NULL for only_empty_entry; don't care.", 
+   "* TODO.branch", 
+   "Once again, need to test that the mod_dav_svn log is still right."
+  ], 
+  "revision_id": "870744"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-04-17T23:37:58.976052Z", 
+  "msg": [
+   "* STATUS: Add r30668 to r30644 group.  Change vote to +1 on the latter."
+  ], 
+  "revision_id": "870743"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-04-17T23:36:30.475760Z", 
+  "msg": [
+   "Follow-up to r30644, fix single file merge bug that can segfault and/or lead", 
+   "to corrupt mergeinfo.", 
+   "Note: This should fix the merge_tests.py 17 and 22 failures on the debian", 
+   "[fsfs] x [svn] buildbot.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(do_file_merge): Reorder code a bit to ensure that --record-only merges", 
+   "actually calculate mergeinfo_path.  This is passed to", 
+   "update_wc_mergeinfo() at the end of the function when we finally record", 
+   "mergeinfo.  Previously we passed an uninitialized value."
+  ], 
+  "revision_id": "870742"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2008-04-17T23:35:26.099796Z", 
+  "msg": [
+   "* subversion/svnserve/log-escape.c", 
+   "Add file for log escaping functions copied from Apache httpd.", 
+   "* subversion/svnserve/serve.c", 
+   "Remove functions moved to log-escape.c", 
+   "(log_fs_warning): Hard-code 8192 but say where it came from.", 
+   "* subversion/svnserve/server.h", 
+   "(escape_errorlog_item): Add prototype."
+  ], 
+  "revision_id": "870741"
+ }
+]

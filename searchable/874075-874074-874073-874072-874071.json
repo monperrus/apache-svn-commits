@@ -1,0 +1,119 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2008-11-02T14:39:55.858523Z", 
+  "msg": [
+   "Pass parameters instead of configuration to implementations of", 
+   "svn_auth__password_get_t / svn_auth__password_set_t.", 
+   "* subversion/include/private/svn_auth_private.h", 
+   "(svn_auth__password_get_t, svn_auth__password_set_t,", 
+   "svn_auth__simple_password_get, svn_auth__simple_password_set): Replace", 
+   "'config' argument with 'parameters'.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(svn_auth__simple_password_get, svn_auth__simple_password_set): Replace", 
+   "'config' argument with 'parameters'.", 
+   "(svn_auth__simple_first_creds_helper): Update call to password_get().", 
+   "(svn_auth__simple_save_creds_helper): Delete 'cfg' and update call to", 
+   "password_set().", 
+   "* subversion/libsvn_subr/ssl_client_cert_pw_providers.c", 
+   "(simple_passphrase_get, simple_passphrase_set): Replace 'config' argument", 
+   "with 'parameters'.", 
+   "(svn_auth__ssl_client_cert_pw_file_first_creds_helper): Update call to", 
+   "passphrase_get().", 
+   "(svn_auth__ssl_client_cert_pw_file_save_creds_helper): Delete 'cfg' and", 
+   "update call to passphrase_set().", 
+   "* subversion/libsvn_auth_gnome_keyring/gnome_keyring.c", 
+   "(gnome_keyring_password_get, gnome_keyring_password_set):", 
+   "* subversion/libsvn_auth_kwallet/kwallet.cpp", 
+   "(kwallet_password_get, kwallet_password_set):", 
+   "* subversion/libsvn_subr/macos_keychain.c", 
+   "(keychain_password_set, keychain_password_get): Replace 'config' argument", 
+   "with 'parameters'.", 
+   "* subversion/libsvn_subr/win32_crypto.c", 
+   "(windows_password_encrypter): Replace 'config' argument with 'parameters'", 
+   "and update call to svn_auth__simple_password_set().", 
+   "(windows_password_decrypter): Replace 'config' argument with 'parameters'", 
+   "and update call to svn_auth__simple_password_get()."
+  ], 
+  "revision_id": "874075"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2008-11-02T13:53:44.709754Z", 
+  "msg": [
+   "French translation update for r33999", 
+   "* subversion/po/fr.po: po-update & 1 fuzzy fixed"
+  ], 
+  "revision_id": "874074"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-11-02T01:42:38.616773Z", 
+  "msg": [
+   "Implement a seemingly better way of notifying about a tree-conflict.", 
+   "Instead of using a TREE_CONFLICTED flag in svn_wc_notify_t, rather use", 
+   "a new, separate svn_wc_notify_action_t enum value. This also removes all", 
+   "other letters ('A', 'D'...) from tree-conflict notifications (\"by force\").", 
+   "## TODO: This doesn't mean that the actions are actually skipped, though.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(tree_conflicts_on_switch_1_2, tree_conflicts_on_switch_2_1,", 
+   "tree_conflicts_on_switch_2_2, tree_conflicts_on_switch_3):", 
+   "Fix up these tests (omitting 'D' notification on tree-conflicts).", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(tree_conflicts_on_update_1_2, tree_conflicts_on_update_2_1,", 
+   "tree_conflicts_on_update_2_2, tree_conflicts_on_update_3):", 
+   "Fix up these tests (omitting 'D' notification on tree-conflicts).", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(del_differing_file, tree_conflicts_on_merge_local_ci_5_1,", 
+   "tree_conflicts_on_merge_local_ci_5_2,", 
+   "tree_conflicts_on_merge_no_local_ci_5_2):", 
+   "Fix up these tests (add '--- Merging rN...' output lines).", 
+   "* subversion/svn/notify.c (notify): Introduce a separate switch case for", 
+   "tree-conflicts notification. Remove all inline notification of", 
+   "tree-conflicts from the other notification cases. Use the new way of", 
+   "sending a tree-conflicts notification.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Add enum value SVN_WC_NOTIFY_TREE_CONFLICT.", 
+   "(svn_wc_notify_t): Remove TREE_CONFLICTED flag.", 
+   "* subversion/libsvn_wc/util.c (svn_wc_create_notify):", 
+   "Do not initialize the removed field TREE_CONFLICTED.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(do_entry_deletion, add_directory, open_directory, close_directory,", 
+   "open_file, close_file): Use the new way of tree-conflict notification.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(delete_entry, add_directory, close_file, close_directory):", 
+   "Use the new way of tree-conflict notification.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(IS_OPERATIVE_MERGE): Add tree-conflicted cases to this condition macro.", 
+   "(single_file_merge_notify, do_file_merge):", 
+   "Use the new way of tree-conflict notification."
+  ], 
+  "revision_id": "874073"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-11-02T01:41:20.642937Z", 
+  "msg": [
+   "* tools/dist/dist.sh:", 
+   "Accept the '-pre X' suffix for releases.  A pre-release isn't an alpha or", 
+   "a beta, but rather a nebulous term meaning either!"
+  ], 
+  "revision_id": "874072"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2008-11-02T00:45:48.509199Z", 
+  "msg": [
+   "Fix some typos.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_commit_item3_t, svn_client_commit_item_create2,", 
+   "svn_client_ctx_t, svn_client_create_context):", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_external_item2_t, svn_wc_external_item_create):", 
+   "* subversion/libsvn_client/ctx.c:", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(adm_access_alloc): Fix typos in doc strings."
+  ], 
+  "revision_id": "874071"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2006-12-02T02:51:35.949983Z", 
+  "msg": [
+   "On the merge-tracking branch: Provide compatibility between ra_dav", 
+   "clients which speak the \"get-merge-info\" REPORT and mod_dav_svn", 
+   "servers which do not understand it.  A follow-up to r22540's prep.", 
+   "Ideally, we'd avoid issuing a \"get-merge-info\" REPORT at all when the", 
+   "server doesn't understand it.  However, this capabilities discovery", 
+   "would have to happen in a previous request (e.g. one of the many", 
+   "PROPFINDs we issue during a 'merge').  Any ideas on how to implement", 
+   "that are most welcome...", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "(svn_ra_dav__get_merge_info): Remove extraneous inline comments.", 
+   "Provide status_code to svn_ra_dav__parsed_request(), and catch its", 
+   "return value in a local svn_error_t * rather than returning", 
+   "immediately.  If status_code is 501, set *MERGEINFO to NULL and eat", 
+   "the error (if any).  Otherwise, return the error."
+  ], 
+  "revision_id": "862615"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-02T01:43:18.779767Z", 
+  "msg": [
+   "On the merge-tracking branch: Prepare to provide compatibility between", 
+   "ra_dav clients and mod_dav_svn servers which do or do not understand", 
+   "the \"get-merge-info\" REPORT.", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "(svn_ra_dav__get_merge_info): Add inline comments and dummy code", 
+   "outlining what we need to do."
+  ], 
+  "revision_id": "862614"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-02T00:19:39.811063Z", 
+  "msg": [
+   "On the merge-tracking branch: Adjust code in response to inline", 
+   "comment.", 
+   "* subversion/libsvn_ra_dav/mergeinfo.c", 
+   "(svn_ra_dav__get_merge_info): Remove large comment.  Rename local", 
+   "\"request_\" variables to \"report_\", respectively, as they denote", 
+   "portions of the report which is the body of our HTTP request."
+  ], 
+  "revision_id": "862613"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-01T23:42:42.061060Z", 
+  "msg": [
+   "On the merge-tracking branch: Provide compatibility between ra_svn", 
+   "clients and svnserve servers which do or do not understand the", 
+   "\"get-merge-info\" command by way of a new capability announcement.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_CAP_MERGE_INFO): Constant for new \"merge-info\"", 
+   "capability.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(svn_ra_svn__auth_response, open_session): Include", 
+   "SVN_RA_SVN_CAP_MERGE_INFO in the list of announced capabilities.", 
+   "(ra_svn_get_merge_info): If SVN_RA_SVN_CAP_MERGE_INFO isn't", 
+   "supported by SESS_BATON->conn, set merge info to NULL and return.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_merge_info): Document that we respond to this command", 
+   "regardless of whether the client indicates that they offer the", 
+   "\"merge-info\" capability.", 
+   "(serve): Include SVN_RA_SVN_CAP_MERGE_INFO in the list of announced", 
+   "capabilities."
+  ], 
+  "revision_id": "862612"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-12-01T21:29:26.256240Z", 
+  "msg": [
+   "On the merge-tracking branch: Fix svnserve's handling of the", 
+   "'get-merge-info' command.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_merge_info): Properly handle the incoming 'paths' tuple (an", 
+   "array of 'svn_ra_svn_item_t', with each of kind", 
+   "'SVN_RA_SVN_STRING'), validating the data type of and", 
+   "canonicalizing each path, adding them to a new list where each", 
+   "element is of type 'char *'.  Write the result as a list of (path", 
+   "mergeinfo) tuple.", 
+   "Patch by: Kamesh Jayachandran <kamesh@collab.net>", 
+   "(Tweaked by me.)"
+  ], 
+  "revision_id": "862611"
+ }
+]

@@ -1,0 +1,110 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-10-12T14:23:49.403404Z", 
+  "msg": [
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(bump_to_15): #if out this function, since we're not currently using it, and", 
+   "I don't like compiler warnings."
+  ], 
+  "revision_id": "880035"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-10-12T13:58:00.661061Z", 
+  "msg": [
+   "Remove svn_wc_entry_t * argument from svn_client__get_wc_mergeinfo() and let", 
+   "the entry-free goodness flow to it its many callers.", 
+   "This wc-ng conversion is fairly straightforward except for one thing: Can an", 
+   "added node (no base revision) inherit mergeinfo from its nearest parent with", 
+   "a base revision and explicit mergeinfo?  For now we are saying yes, because", 
+   "that is what all the callers of svn_client__get_wc_mergeinfo() expect and", 
+   "that is what they were getting prior to this change.", 
+   "* subversion/libsvn_client/mergeinfo.h", 
+   "(svn_client__get_wc_mergeinfo): Clarify long-standing behavior for added", 
+   "node's inheritance in doc string, take an absolute WC path instead of an", 
+   "entry, make output path argument absolute, and use the two pool paradigm.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo): Use svn_wc__node_get_* interim APIs instead", 
+   "of an svn_wc_entry_t.", 
+   "(svn_client__get_wc_mergeinfo_catalog,", 
+   "svn_client__elide_mergeinfo):", 
+   "Update calls to svn_client__get_wc_mergeinfo().", 
+   "* subversion/libsvn_client/copy.c", 
+   "(calculate_target_mergeinfo): Update call to", 
+   "svn_client__get_wc_mergeinfo().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(update_wc_mergeinfo): Remove svn_wc_entry_t * argument and update", 
+   "call to svn_client__get_wc_mergeinfo().", 
+   "(record_skips): Remove svn_wc_entry_t * argument and update call to", 
+   "update_wc_mergeinfo().", 
+   "(get_mergeinfo_paths): Remove svn_wc_entry_t * argument and update", 
+   "call to svn_client__get_wc_mergeinfo().", 
+   "(do_file_merge): Update call to update_wc_mergeinfo().", 
+   "(process_children_with_new_mergeinfo): Update call to", 
+   "svn_client__get_wc_mergeinfo().", 
+   "(record_mergeinfo_for_dir_merge): Remove svn_wc_entry_t * argument and", 
+   "update calls to record_skips() and update_wc_mergeinfo().", 
+   "(record_mergeinfo_for_added_subtrees): Update call to", 
+   "svn_client__get_wc_mergeinfo().", 
+   "(do_directory_merge): Update call to record_mergeinfo_for_dir_merge()."
+  ], 
+  "revision_id": "880034"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-12T13:54:21.001389Z", 
+  "msg": [
+   "Following up on r39958, move 2 deprecated path functions to deprecated.c and", 
+   "update test results for a small change in results on Windows.", 
+   "The change in result on Windows allows old code using svn_path_canonicalize()/", 
+   "svn_path_internal_style() to produce canonical dirents after the drive letter", 
+   "casing restrictions were updated.", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_path_canonicalize): New function; wrapper around uri/dirent support.", 
+   "(svn_path_is_canonical): New function wrapper around uri/dirent support.", 
+   "* subversion/libsvn_subr/path.c", 
+   "(svn_path_internal_style,", 
+   "svn_path_local_style): Remove functions. These functions were", 
+   "added to deprecated.c in r39958.", 
+   "(svn_path_canonicalize,", 
+   "svn_path_is_canonical): Remove functions.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_path_local_style,", 
+   "test_path_internal_style): Expect upper case driveletters on Windows."
+  ], 
+  "revision_id": "880033"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-12T13:46:26.486083Z", 
+  "msg": [
+   "Mark two deprecated functions as SVN_DEPRECATED and move their", 
+   "implementations to deprecated.c", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_mergeinfo_log_merged,", 
+   "svn_client_mergeinfo_log_eligible): Move here from mergeinfo.c", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client_mergeinfo_log_merged,", 
+   "svn_client_mergeinfo_log_eligible): Move to deprecated.c", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_mergeinfo_log_merged,", 
+   "svn_client_mergeinfo_log_eligible): Add missing SVN_DEPRECATED markings.", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_path_internal_style,", 
+   "svn_path_local_style): New functions, replacing their versions in path.c", 
+   "[Note from the future: this needs the removement of these functions", 
+   "in path.c, which was committed in r39959.]"
+  ], 
+  "revision_id": "880032"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-12T13:40:09.542989Z", 
+  "msg": [
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(logs_for_mergeinfo_rangelist): Fix typo in argument name."
+  ], 
+  "revision_id": "880031"
+ }
+]

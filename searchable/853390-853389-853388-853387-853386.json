@@ -1,0 +1,103 @@
+[
+ {
+  "author": "sunny256", 
+  "date": "2005-03-08T23:13:30.868885Z", 
+  "msg": [
+   "Follow-up from r13310: Update messages in the Norwegian nb.po file.", 
+   "* subversion/po/nb.po", 
+   "Updated 8 fuzzy and 2 new messages which changed between r13288:13310.", 
+   "Added another definition to the dictionary."
+  ], 
+  "revision_id": "853390"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-03-08T22:32:33.648074Z", 
+  "msg": [
+   "* notes/locking/TODO.txt:  tweak."
+  ], 
+  "revision_id": "853389"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2005-03-08T22:17:49.534151Z", 
+  "msg": [
+   "Locking branch:  fix lock scalability problem in ra_dav commits.", 
+   "Work around apache's limitations on long-headers; for a final commit", 
+   "MERGE request, send all lock-tokens in the request body instead of a", 
+   "header.  Have mod_dav_svn capture the MERGE body with an input filter.", 
+   "This is a short-term solution to work with existing httpd-2.0.x.  The", 
+   "longer-term solution is to change mod_dav's API in future httpd releases.", 
+   "Input-filter writ by jerenkrantz.  Thanks, justin!", 
+   "* subversion/libsvn_ra_dav/merge.c", 
+   "(svn_ra_dav__merge_activity):  marshal the whole path->token hash", 
+   "to the server in the MERGE request body instead of 'If:' header.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "(merge_xml_filter_insert):  new filter insertion helper.", 
+   "(merge_cxt_t):  new context structure.", 
+   "(register_hooks):  register and insert the new input filter.", 
+   "(merge_xml_in_filter): new input filter to capture MERGE request", 
+   "body and stash it away for later use.", 
+   "* subversion/mod_dav_svn/version.c", 
+   "(dav_svn_process_if_header, dav_svn_fetch_next_token,", 
+   "dav_svn_add_if_state, dav_svn_add_if_resource): remove these hacky", 
+   "duplicated funcs.", 
+   "(build_lock_hash):  reimplement to fetch locks from the MERGE", 
+   "request body, rather than the 'If:' header.", 
+   "(dav_svn_merge): grab incoming locks and push them into the fs", 
+   "before committing.  After the commit is done, possibly release them."
+  ], 
+  "revision_id": "853388"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2005-03-08T21:10:18.312036Z", 
+  "msg": [
+   "* TODO", 
+   "Add a file outlining the goals of the branch and what needs to be done."
+  ], 
+  "revision_id": "853387"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2005-03-08T21:03:29.569961Z", 
+  "msg": [
+   "First crack at permitting files to be replaced.  This doesn't handle properties", 
+   "yet which makes it incomplete.", 
+   "The main problem is that when we add a node with history we set the base copies", 
+   "(properties and text) as they are from the copy.  This allows diff to show the", 
+   "changes from the copy and allows us only to transmit the delta of any changes", 
+   "from the copy (if any at commit time).", 
+   "This runs into problems when adding a node with history which is replacing an", 
+   "existing versioned node that has been deleted.  We need the text base in order", 
+   "to revert the delete/replace from the original file that is our BASE.  But", 
+   "we want the text base of the copy for the reasons given above.", 
+   "The solution is to copy the base files to another location before replacing", 
+   "them with the new base files.  If the change is committed we remove this", 
+   "extra file.  If the change is reverted we use it instead of the normal", 
+   "base files to revert it.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_file_administratively): Detect when we're replacing a versioned file", 
+   "and copy the text base to another file.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(SVN_WC__REVERT_EXT): New constant for the file name extension for the", 
+   "replaced files base.", 
+   "(SVN_WC__VERSION): Bump because this changes our on disk wc format.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_process_committed): Clean up the replaced files base file.", 
+   "(svn_wc_add): Copies have no checksum, neither do replaced files.", 
+   "(revert_admin_things): Remove copy flags when reverting a replacement.", 
+   "When actually doing the revert prefer the replaced base over the copied", 
+   "base.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "* subversion/lbisvn_wc/adm_files.h", 
+   "(svn_wc__text_revert_path): New function to get the path to the replaced", 
+   "base.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(install_file): Look for replaced files and treat them as changed even if", 
+   "there is no change from their text base.  Also don't write the checksum", 
+   "on replaced files."
+  ], 
+  "revision_id": "853386"
+ }
+]

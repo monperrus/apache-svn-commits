@@ -1,0 +1,96 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-02-17T07:13:58.287990Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Fix some problems related to the propcaching removal.", 
+   "Note that r35796 was partially-reverted. We want to keep the old", 
+   "propcaching introduction stuff in lock.c.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(load_props): if we're loading WORKING props, then indicate when the", 
+   "props are not present by returning NULL for the hash.", 
+   "(svn_wc__load_props): load the base props if somebody asks for the", 
+   "working props (if there are no mods, then WORKING is copied from BASE", 
+   "props).", 
+   "(svn_wc_prop_list): restore previous call to svn_wc__load_props(),", 
+   "ignoring the overlay stuff. that was an attempt to compensate for the", 
+   "original bug in svn_wc__load_props.", 
+   "(svn_wc__has_props): also examine the BASE props. really old working", 
+   "copies always had WORKING, but newer ones may not.", 
+   "(svn_wc_props_modified_p): if there are no WORKING props, then there are", 
+   "definitely no mods. if there are some, then load 'em up and do a full", 
+   "examination.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(introduce_propcaching): restore from r35796. add note that we need this", 
+   "dance in order to toss out WORKING props if they're unchanged.", 
+   "[ strictly speaking, we may not need to; safer for now tho ]", 
+   "(maybe_upgrade_format): call introduce_propcaching when needed.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(read_entry): ignore all the propcaching fields that may be saved.", 
+   "(write_entry): write bupkis for the propcaching fields", 
+   "(write_entry_xml): don't write attributes for propcaching fields", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__atts_to_entry): add comment about the deprecated fields", 
+   "(svn_wc_entry_dup): fill in empty strings for the old propcach fields", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(svn_wc__loggy_entry_modify): add comment about the deprecated fields"
+  ], 
+  "revision_id": "875990"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-17T06:40:00.756124Z", 
+  "msg": [
+   "When we delete a newly-added file (and possibly in other situations), we", 
+   "leave behind the WORKING props. Bogus, yes. There is code in svn_wc_add3", 
+   "to compensate for this, but it needs to axe the files in more situations.", 
+   "When propcaching is enabled, we have a boolean indicating whether any", 
+   "properties exist. If that flag disappears, then we have to rely on the", 
+   "*presence* of the props file. Thus, we cannot have turds laying around.", 
+   "If we disable propcaching, then prop_tests 17 fails (add, set prop,", 
+   "delete, add again; prop should not be present).", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(svn_wc_add3): delete the WORKING props whether this is a replacement or", 
+   "not. generally, they won't be there, but they might..."
+  ], 
+  "revision_id": "875989"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2009-02-17T05:20:52.443059Z", 
+  "msg": [
+   "Simplified chinese translation update on the '1.6.x' branch:", 
+   "* subversion/po/zh_CN.po: Backport from trunk."
+  ], 
+  "revision_id": "875988"
+ }, 
+ {
+  "author": "dongsheng", 
+  "date": "2009-02-17T05:08:29.273449Z", 
+  "msg": [
+   "Simplified chinese translation update.", 
+   "* subversion/po/zh_CN.po: Update to r35906, translate new strings."
+  ], 
+  "revision_id": "875987"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-17T03:25:14.737128Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Derive the anticipated URL for added items.", 
+   "Added items are stored in the WORKING tree, without any corresponding entry in", 
+   "the BASE tree.  As such, they don't have a URL, and have no place to go to get", 
+   "it.  In the centralized paradigm, this should be relatively simple because", 
+   "we can always get the proper row from the REPOSITORY table.  However, for now,", 
+   "we have to derive it by crawling up the tree.", 
+   "Current number of failing tests: 407.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(statement_keys, statements): New statement.", 
+   "(find_working_add_entry_url_stuffs): New.", 
+   "(read_entries): Call the new function for added nodes."
+  ], 
+  "revision_id": "875986"
+ }
+]

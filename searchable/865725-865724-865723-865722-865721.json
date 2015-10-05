@@ -1,0 +1,114 @@
+[
+ {
+  "author": "vgeorgescu", 
+  "date": "2007-07-05T09:04:20.014509Z", 
+  "msg": [
+   "Follow-up to r25648: Make the new --server-minor-version option work on", 
+   "Windows.", 
+   "* win-tests.py", 
+   "(): Add a new server_minor_version variable, set it to the value of the", 
+   "'--server-minor-version' option, and use it when creating the TestHarness", 
+   "instance.", 
+   "(_usage_exit): Document the '--server-minor-version' option."
+  ], 
+  "revision_id": "865725"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2007-07-05T09:02:11.200566Z", 
+  "msg": [
+   "Remove APR ICONV dependency on Windows and use native Windows", 
+   "character conversion API (MultiByteToWideChar/WideCharToMultiByte).", 
+   "* subversion/tests/libsvn_subr/utf-test.c", 
+   "(test_utf_cstring_to_utf8_ex2): New test for conversion from", 
+   "different codepages to utf8.", 
+   "(test_utf_cstring_from_utf8_ex2): New test for conversion to", 
+   "different codepages from utf8.", 
+   "(test_funcs): Add two tests.", 
+   "* subversion/libsvn_subr/utf8.c", 
+   "(get_xlate_handle_node): Use svn_subr__win32_xlate_open() on Windows.", 
+   "(convert_to_stringbuf): Use svn_subr__win32_xlate_to_stringbuf() on Windows.", 
+   "* subversion/libsvn_subr/win32_xlate.c", 
+   "* subversion/libsvn_subr/win32_xlate.h", 
+   "(win32_xlate_t): Structure for holding Windows xlate data.", 
+   "(get_page_id_from_name): Helper for converting page name to page identifier.", 
+   "(svn_subr__win32_xlate_open): Opens Windows xlate to convert one codepage to", 
+   "another.", 
+   "(svn_subr__win32_convert_to_string_buf): Converts string from one codepage to", 
+   "another using Windows API."
+  ], 
+  "revision_id": "865724"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2007-07-05T08:13:12.066568Z", 
+  "msg": [
+   "ra_serf: Replace bunch of abort() calls with errors.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(start_report): Generate error when mandatory XML attribute not found in", 
+   "update-report response.", 
+   "(end_report): Generate error on unknown prop encoding instead of abort()."
+  ], 
+  "revision_id": "865723"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-07-05T02:58:29.350951Z", 
+  "msg": [
+   "Add an option to the test harness allowing you to tell it what the", 
+   "minor version of the server you are running it against is.  This", 
+   "will eventually allow us to run the test suite against older servers", 
+   "to verify that old behavior continues to work, while skipping tests", 
+   "that require more current servers.  Additionally, it will allow us to", 
+   "be sure that attempts to use features not supported by older servers", 
+   "fail in the way that we want them to.", 
+   "As of this revision, you can specify --server-minor-version 5 (the", 
+   "default) or --server-minor-version 4.  While some tests have marked to", 
+   "be skipped for 1.4.x servers (such as the commit-with-revprops tests)", 
+   "and others have been adjusted to work under both versions, quite a few", 
+   "tests still fail against 1.4.x, whether because there are actual bugs", 
+   "in the client backwards-compatibility code, or because the tests need", 
+   "to be fixed or skipped.", 
+   "To try out the suite (with svnserve), do:", 
+   "$ cd trunk", 
+   "$ svnserve1.4.x -d -r `pwd`/subversion/tests/cmdline", 
+   "$ make svncheck SERVER_MINOR_VERSION=4", 
+   "* Makefile.in", 
+   "(check): Convert SERVER_MINOR_VERSION variable into flag for", 
+   "run-tests.py.", 
+   "* build/run-tests.py", 
+   "(__doc__): Advertise server-minor-version argument.", 
+   "(TestHarnes.__init__): Add server_minor_version argument and field.", 
+   "(_run_test): Send --server-minor-version argument to test script.", 
+   "(main): Parse --server-minor-version argument.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(server_minor_version): New global variable.", 
+   "(create_repos): If the server_minor_version is less than 4, use", 
+   "--pre-1.5-compatible when creating repositories (shardless).", 
+   "(server_has_mergeinfo, server_has_revprop_commit): New Skip", 
+   "predicates.", 
+   "(run_tests): Parse --server-minor-version flag.", 
+   "* subversion/tests/cmdline/commit_tests.py", 
+   "(server_has_revprop_commit): Import from svntest.main.", 
+   "(hook_failure_message): New helper routine which returns the", 
+   "expected hook failure message, depending on the server version (the", 
+   "wording changed between 1.4 and 1.5).", 
+   "(post_commit_hook_test, start_commit_hook_test,", 
+   "pre_commit_hook_test): use hook_failure_message().", 
+   "(test_list): Skip revprop-commit tests unless the server supports", 
+   "revprop-commit."
+  ], 
+  "revision_id": "865722"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-07-04T21:24:00.916260Z", 
+  "msg": [
+   "Fix use of UnorderedOutput which isn't backported to 1.4.x.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(status_of_missing_dir_after_revert_replaced_with_history_dir):", 
+   "replace UnorderedOutput with a similar test."
+  ], 
+  "revision_id": "865721"
+ }
+]

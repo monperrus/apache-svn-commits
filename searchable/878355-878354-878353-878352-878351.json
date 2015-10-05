@@ -1,0 +1,67 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-07-01T06:58:32.905506Z", 
+  "msg": [
+   "Follow up r38275.", 
+   "* subversion/include/private/svn_fs_util.h", 
+   "(): Include svn_dirent_uri.h"
+  ], 
+  "revision_id": "878355"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2009-07-01T00:34:48.966666Z", 
+  "msg": [
+   "* STATUS: Nominate r38279."
+  ], 
+  "revision_id": "878354"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2009-07-01T00:28:24.648302Z", 
+  "msg": [
+   "Fix issue #3442, fsfs revprop files are not fsync()ed to disk before", 
+   "being rename()d, which can result in a 0 byte revprops file on ext4", 
+   "and GPFS filesystems if the system crashes between the time the", 
+   "directory metadata was flushed to disk and the file's blocks were", 
+   "flushed.", 
+   "This fix also prevents writing on top of the existing existing", 
+   "revprops file which could also lead to a loss of data.  It now writes", 
+   "the new revprops to a new unique filename and then atomically renames", 
+   "it into place.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__change_txn_props):", 
+   "Replace svn_io_file_open() with svn_io_write_unique() and write", 
+   "the revprops in there, then rename the file.", 
+   "Use svn_io_file_rename() instead of move_into_place() as", 
+   "move_into_place() only seems to be used when moving in the", 
+   "committed repository, not transactions."
+  ], 
+  "revision_id": "878353"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2009-07-01T00:27:00.910708Z", 
+  "msg": [
+   "Remove an unnecessary test for a non-NULL pointer.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(commit_body):", 
+   "svn_fs_fs__txn_proplist() should never return a NULL apr_hash_t *,", 
+   "if it does it means it ran out of memory and should have already", 
+   "failed earlier in get_txn_proplist()."
+  ], 
+  "revision_id": "878352"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2009-06-30T23:50:04.460153Z", 
+  "msg": [
+   "* subversion/include/svn_io.h", 
+   "(svn_io_file_write_full):", 
+   "Document that this function flushes the file to disk before", 
+   "closing it."
+  ], 
+  "revision_id": "878351"
+ }
+]

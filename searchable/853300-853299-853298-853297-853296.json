@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jszakmeister", 
+  "date": "2005-03-02T03:10:48.632948Z", 
+  "msg": [
+   "Error out when the target of 'svn export' is either nonexistant or is not", 
+   "versioned.  Added a couple of tests for these edge cases.", 
+   "* subversion/libsvn_client/export.c", 
+   "(copy_one_versioned_file): Throw an error if there isn't a wc entry for the", 
+   "file.", 
+   "(copy_versioned_files): Stop letting unversion files slide by.  Throw an", 
+   "error if they're unversioned or don't exist.", 
+   "* subversion/tests/clients/cmdline/export_tests.py", 
+   "(export_nonexistant_file, export_unversioned_files): New.", 
+   "(tests_list): Updated with the 2 new tests."
+  ], 
+  "revision_id": "853300"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2005-03-02T01:04:24.115309Z", 
+  "msg": [
+   "Undo r13224, committed by accident."
+  ], 
+  "revision_id": "853299"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2005-03-02T01:00:35.935073Z", 
+  "msg": [
+   "Port auto-merge fix to bdb."
+  ], 
+  "revision_id": "853298"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2005-03-02T00:48:28.908652Z", 
+  "msg": [
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(merge): Use SVN_ERR for svn_fs_fs__dag_set_entry and", 
+   "svn_fs_fs__dag_delete calls."
+  ], 
+  "revision_id": "853297"
+ }, 
+ {
+  "author": "epg", 
+  "date": "2005-03-02T00:36:45.242556Z", 
+  "msg": [
+   "Rewrite the FSFS auto-merge to use a much simpler algorithm, avoiding", 
+   "expensive predecessor walks.  The old code was written for the old", 
+   "(pre-r624) commit system, which could supply an earlier ancestor to", 
+   "merge() than the head revision at the time the target transaction was", 
+   "started.  This meant the code had to deal with commonality between the", 
+   "changes in source and the changes in target.  In particular, the old", 
+   "code allowed:", 
+   "- source and target to modify the same file entry, if the target", 
+   "entry was a descendent of the source entry,", 
+   "- source and target to replace the same entry (file or directory),", 
+   "if the target was a descendent of source,", 
+   "- source and target to delete the same entry,", 
+   "- source and target to add identical entries, or", 
+   "- target to replace (but not modify) an entry which source had", 
+   "deleted", 
+   "The new code does not allow any of these things, because the new", 
+   "commit system does not have artifacts of that nature.", 
+   "This change will need to be ported to BDB; that will be done in a", 
+   "future commit.", 
+   "Log message and algorithm by ghudson; code by epg.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(merge): Rewrite with new algorithm.", 
+   "(merge_changes): Updating the ancestry on the top-level directories", 
+   "is no longer necessary; merge() takes care of it now."
+  ], 
+  "revision_id": "853296"
+ }
+]

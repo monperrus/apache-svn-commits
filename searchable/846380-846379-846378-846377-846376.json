@@ -1,0 +1,111 @@
+[
+ {
+  "author": "", 
+  "date": "2003-06-20T08:32:07.817179Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "846380"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-20T02:24:54.277878Z", 
+  "msg": [
+   "Finish the subtask begun in revision 6241:", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(SymbolicNameTracker.close_names): New function", 
+   "(Commit.commit): Call it on closed symbolic names after a change."
+  ], 
+  "revision_id": "846379"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-06-20T02:08:12.581794Z", 
+  "msg": [
+   "Make the generated SWIG bindings for Win32 more beautiful.", 
+   "Patch by: Russell Yanofsky <rey4@columbia.edu>", 
+   "me", 
+   "* build.conf: Added description strings for SWIG libraries and two new", 
+   "utility targets, __SWIG_PYTHON__ and __SWIG_JAVA__.", 
+   "* build/generator/msvc_dsp.ezt: For generated targets with the", 
+   "shared_dir flag set, append the target name to the Intermediate_Dir", 
+   "parameter. This lets each SWIG DLL use its own version resource.", 
+   "* build/generator/gen_base.py (GeneratorBase.__init__): Added new parser", 
+   "option \"language\" which is needed for the new __SWIG_*__ targets.", 
+   "(TargetSWIG.add_dependencies): Changed to set the description attribute", 
+   "on each newly created SWIGLibrary.", 
+   "(SWIGLibrary.__init__): Takes new parameter 'desc', which is used to", 
+   "initialize the 'desc' member. Init 'shared_dir' to 1.", 
+   "(lang_full_name): New; a map of language tags to pretty names for", 
+   "tweaking the SWIGLibrary descriptions.", 
+   "(Target): Added new member 'shared_dir', defaults to None.", 
+   "(TargetSWIG.add_dependencies): Pass 'self.desc' to the SWIGLibrary", 
+   "constructor.", 
+   "(TargetSWIGUtility): New class; inherits from TargetUtility for SWIG", 
+   "utility targets.", 
+   "(unique): Moved from gen_msvc_dsp.py and added a docstring.", 
+   "* build/generator/gen_win.py (WinGeneratorBase.get_unique_win_depends):", 
+   "Aow adds SWIGLibraries as dependencies of TargetSWIGUtility targets.", 
+   "* build/generator/gen_msvc_dsp.py (unique): moved to gen_base.py.", 
+   "(Generator.write_project): no longer assigns None to the SWIGLibraries'", 
+   "\"desc\" attributes. Usee gen_base.unique to uniquify the install targets."
+  ], 
+  "revision_id": "846378"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-20T01:37:00.807409Z", 
+  "msg": [
+   "Christian should never be in Daudt again:", 
+   "* subversion/include/svn_string.h: Document that null", 
+   "input is not allowed."
+  ], 
+  "revision_id": "846377"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-20T00:11:07.260104Z", 
+  "msg": [
+   "Fix some sloppy pool usage in various places around Subversion.", 
+   "This allows me to run the recipe in issue #1363 without my kernel", 
+   "OOMing all over the place.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(struct file_mod_t): Lose the 'subpool'.", 
+   "(do_item_commit): Instead of paying the 8K-per-file cost of using a", 
+   "subpool for each file, just pay attention to which files we'll", 
+   "need to keep around, allocating those in a single pool, and the", 
+   "rest in the regular passed-in pool (aka, someone else's", 
+   "responsibility!)", 
+   "(svn_client__do_commit): Use a single iteration subpool, not a", 
+   "per-file subpool, to handle postfix textdeltas.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_commit): Use the iteration subpool for all aspects of", 
+   "the iteration (sheesh...) and clear it at the top of the loop", 
+   "because of 'continue' jump statements.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(apply_textdelta): Use the passed-in 'pool' instead of the file", 
+   "baton's pool.", 
+   "(add_file, open_file): Note that the file baton's pool might be", 
+   "unused now, but don't remove it.  Also, use temporary subpools to", 
+   "minimize memory costs of having postfix textdeltas hanging onto file", 
+   "batons for long periods of time.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_remove_from_revision_control): Fixup the subpool usage in", 
+   "this function.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__entries_write): Use an iteration subpool.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(start_handler): Clear the per-command pool (loggy->pool).", 
+   "(svn_wc__run_log): Make loggy->pool a subpool of pool, to be cleared", 
+   "between the handling of each log command.", 
+   "(log_do_merge): Lose the subpool since loggy->pool is now cleared", 
+   "per log item.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(report_revisions): Clear the iteration subpool at the top of the", 
+   "loop because the loop has 'continue' jump statements.", 
+   "* subversion/libsvn_delta/path_driver.c", 
+   "(svn_delta_path_driver): Use an iterative worker subpool."
+  ], 
+  "revision_id": "846376"
+ }
+]

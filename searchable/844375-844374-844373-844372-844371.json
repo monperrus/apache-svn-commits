@@ -1,0 +1,105 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T10:10:13.693661Z", 
+  "msg": [
+   "Get the mailer.py script to generate diffs. Except for displaying", 
+   "property changes, the output is comparable to commit-email.pl.", 
+   "mailer.py is a little smarter about the labels it displays during a", 
+   "diff (e.g. \"(empty file\") during add/delete, and the actual commit", 
+   "date for the new/changed file).", 
+   "Next up is the mail generation, removing os.popen() (insecure), and", 
+   "loading in the configuration options.", 
+   "* hook-scripts/mailer.py:", 
+   "(main): pass the config to generate_content()", 
+   "(generate_content): take a config. parse the svn date into a", 
+   "standard ctime() representation. pass cfg to generate_diff.", 
+   "(generate_diff): take a config. remove some obsolete code. generate", 
+   "the appropriate FileDiff object and labels. run the diff.", 
+   "* hook-scripts/mailer.conf.example: update the example 'diff' config"
+  ], 
+  "revision_id": "844375"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T10:01:48.834462Z", 
+  "msg": [
+   "Fix up some of the SWIG bindings, apply a tweak from Jon Middleton,", 
+   "add some helpers to the python bindings, and extend fs.FileDiff to", 
+   "return the temp files it opened rather than running diff.", 
+   "* swig/svn_ra.i: include swigutil_*.h for any necessary helpers (for", 
+   "example, the python bindings need the thread lock funcs)", 
+   "* swig/svn_types.i: inclue svn_types.h in the C wrapper and make sure", 
+   "the Java utilities are included.", 
+   "Patch by: Jon Middleton <jjm@ixtab.org.uk>", 
+   "(Only the svn_wc.i change below.)", 
+   "* swig/svn_wc.i: svn_wc_status_t ** is an out parameter. handle the", 
+   "output typemap application differently for svn_boolean_t (to", 
+   "correct a ptr vs int mapping problem). make sure the utility", 
+   "headers are included.", 
+   "* swig/apr.i: revamp the 'apr_off_t *' typemap so we get the correct", 
+   "types in the wrapping code (it was declaring the temp var as a", 
+   "'long' but that threw off some assignments against apr_off_t). to", 
+   "generate a bit more trim code, remove some braces and use double", 
+   "quotes to denote the inserted code.", 
+   "* swig/python/fs.py", 
+   "(FileDiff.__init__): change the default for diffoptions to '' so", 
+   "that we don't have to have a manual check in the code. simplify", 
+   "the assert code. create a subpool for operation.", 
+   "(FileDiff.get_files): refactored out of get_pipe to just create the", 
+   "tmp files. simplify the writing of the files. clear the subpool.", 
+   "(FileDiff.get_pipe): refactored to use self.get_files()", 
+   "* swig/python/util.py", 
+   "(secs_from_timestr): convert an SVN ISO8601 time string into a", 
+   "number of seconds from the Unix epoch (Python time seconds)."
+  ], 
+  "revision_id": "844374"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-01-09T07:18:09.980907Z", 
+  "msg": [
+   "Some simple mods to bring the code up to the current codebase.", 
+   "* mailer.py:", 
+   "- change imports to be full-qualfied (e.g. svn.fs.FOO). all users", 
+   "changed.", 
+   "main(): wrap_editor isn't needed any more."
+  ], 
+  "revision_id": "844373"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2003-01-08T23:37:52.584222Z", 
+  "msg": [
+   "*  subversion/libsvn_delta/diff.c", 
+   "(svn_diff__position_t): Add a prev field.", 
+   "(svn_diff__get_tokens): Create a double linked list instead", 
+   "of a single one.", 
+   "(svn_diff__snake_forward): Renamed from svn_diff__snake.", 
+   "(svn_diff__snake_reverse): Mirrors the behaviour of svn_diff__snake_forward.", 
+   "(svn_diff__recover_lcs): Given the diagonal the overlapping forward", 
+   "and reverse longest common subsequences were found, construct the", 
+   "complete lcs and return it.", 
+   "(svn_diff__lcs): Partly implement Variation 4b from Meyers paper:", 
+   "\"An O(ND) Difference Algorithm and Its Variations\".  Don't do linear", 
+   "space LCS recovery, instead only take advantage of scanning of both", 
+   "ends of the sequences being compared."
+  ], 
+  "revision_id": "844372"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-01-08T22:29:33.062877Z", 
+  "msg": [
+   "Fix problem introduced in revision 4282:", 
+   "* subversion/libsvn_fs/reps-strings.c", 
+   "(empty_digest): For now, initialize to all zeros; before, we were", 
+   "storing the checksum for the empty string initially, but then", 
+   "not updating it, which is bad.", 
+   "(svn_fs__rep_undeltify): Return the error if checksums don't match.", 
+   "Previously, we created an error, but forgot to return it.", 
+   "(checksums_match): Keep a #if'd out debugging printf here."
+  ], 
+  "revision_id": "844371"
+ }
+]

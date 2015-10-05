@@ -1,0 +1,99 @@
+[
+ {
+  "author": "ehu", 
+  "date": "2006-11-22T21:11:42.067964Z", 
+  "msg": [
+   "Fix r22400 breakage. For some reason, locally it *did* compile.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__set_neon_body_provider): Change signature to use the", 
+   "ra_dav request structure.", 
+   "(ra_dav_body_provider): Safety check for validity of dereferencing", 
+   "'callbacks'.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "Adapt callers."
+  ], 
+  "revision_id": "862475"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-22T21:00:17.612471Z", 
+  "msg": [
+   "ra_dav support for cancellation of file-backed (potentially large)", 
+   "request bodies.", 
+   "Note: While at it, catch svn errors and marshall them through the", 
+   "neon layer with earlier established mechanisms.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(body_provider_baton_t): New.", 
+   "(ra_dav_body_provider): Now calls the cancellation function and", 
+   "catches *and stores* any svn_error_t's.", 
+   "(svn_ra_dav__set_neon_body_provider): Create the new baton."
+  ], 
+  "revision_id": "862474"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2006-11-22T20:53:51.886147Z", 
+  "msg": [
+   "JavaHL: Refactor the test suite for the SVNAdmin API.  Add a test for", 
+   "the new SVNAdmin.setRevProp() API.", 
+   "[ in subversion/bindings/java/javahl/ ]", 
+   "* src/org/tigris/subversion/javahl/tests/SVNAdminTests.java", 
+   "Sub-class SVNTests instead of TestCase.", 
+   "(testee, setUp, tearDown): Remove members, which are now inherited.", 
+   "(testCreate): Re-implement using OneTest.", 
+   "(createRepository, removeRepository): Remove, obviated by OneTest.", 
+   "(testSetRevProp): Add a new test for SVNAdmin.setRevProp()."
+  ], 
+  "revision_id": "862473"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-22T20:34:31.335899Z", 
+  "msg": [
+   "Eliminate unnecessary subpool creation.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "(parsed_request): We already have a subpool, which is blown to pieces", 
+   "as soon as the request completes. Use that."
+  ], 
+  "revision_id": "862472"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2006-11-22T20:30:29.831325Z", 
+  "msg": [
+   "Reduce the number of error sources (and thus the complexity in handling them;", 
+   "preventing error leakage).", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__request_t): Differentiate - using the 'marshalled_error' field -", 
+   "between internal and server errors.", 
+   "(SVN_RA_DAV__REQ_ERR): SVN_ERR-like statement macro which either stores", 
+   "or destroys errors from its second argument; prevent leakage.", 
+   "* subversion/libsvn_ra_dav/util.c", 
+   "Store errors from the error parser, spool_reader, cancellation callback and", 
+   "success parser in the request structure. Instead of sifting through all", 
+   "these errors at the time of handling them: make sure we report just one.", 
+   "(error_parser_baton): New. Store intermediate error here.", 
+   "(start_err_element): Adjust for new baton type.", 
+   "(end_err_element): Move final error into the request structure.", 
+   "(error_parser_baton_cleanup): New. Delete the intermediate error left in this", 
+   "structure if we never completed copying it to the request.", 
+   "(error_parser_create): New. Error parser constructor, attaching it to a", 
+   "request.", 
+   "(spool_reader_baton_t): Keep reference to a request instead of having", 
+   "its own error and pool.", 
+   "(spool_reader): Use request structure fields. And *clear* the iterpool.", 
+   "(parser_wrapper_baton_t): Keep reference to request.", 
+   "(wrapper_startelm_cb,", 
+   "wrapper_cdata_cb,", 
+   "wrapper_endelm_cb): Store errors in the request baton.", 
+   "(cancellation_baton_t): Keep reference to a request.", 
+   "(cancellation_callback): Store errors in the request structure.", 
+   "(get_cancellation_baton): Adjust to cancellation_baton_t structure changes.", 
+   "(parsed_request,", 
+   "svn_ra_dav__request_dispatch): Clean up error handling."
+  ], 
+  "revision_id": "862471"
+ }
+]

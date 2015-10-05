@@ -1,0 +1,102 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-10T07:33:04.843107Z", 
+  "msg": [
+   "Simplify some code in the testing framework.", 
+   "* subversion/tests/cmdline/svntest/main.py:", 
+   "(TestRunner._print_name): take a prefix and print that along with the", 
+   "test name and description.", 
+   "(TestRunner.run): don't flush so much; it'll happen. move prefix writing", 
+   "into _print_name() args. change result codes to symbolic names from", 
+   "the testcase module. use pred.results() to compute the exit_code,", 
+   "result_text, and result_benignity in one shot.", 
+   "* subversion/tests/cmdline/svntest/testcase.py:", 
+   "(RESULT_OK, RESULT_FAIL, RESULT_SKIP): new symbol constants", 
+   "(TestCase._result_map): new dict to map result codes into the result", 
+   "information.", 
+   "(TestCase.__init__): take and store a delegate test case and a", 
+   "conditional for use by subclasses.", 
+   "(TestCase.get_description, TestCase.need_sandbox,", 
+   "TestCase.get_sandbox_name, TestCase.run): defer to the delegate.", 
+   "(TestCase.list_mode): just return the empty string; subclasses can", 
+   "override the method rather than storing different instance values.", 
+   "(TestCase.run_text, TestCase.convert_result): removed", 
+   "(TestCase.results): new method", 
+   "(FunctionTestCase.__init__): tweak the assert expression", 
+   "(FunctionTestCase.run): don't bother to call need_sandbox(). if the", 
+   "caller gave us one, then pass it along.", 
+   "(XFail._result_map): map results a bit differently.", 
+   "(XFail.__init__): tweak default cond_func. gut this method, and just", 
+   "pass our info to the superclass to handle.", 
+   "(XFail.convert_result, XFail.run_text): removed. the superclass can", 
+   "manage this just fine.", 
+   "(XFail.list_mode): new method to handle list mode reporting properly,", 
+   "rather than overriding the instance variable.", 
+   "(Skip.__init__): tweak default cond_func. gut this, and just pass the", 
+   "info to the superclass.", 
+   "(Skip.list_mode): new method. override the default handling to determine", 
+   "if we skipped the test or not.", 
+   "(Skip.need_sandbox): call the condition function directly, rather than", 
+   "via .conditional(). use ._delegate rather than .test_case, and False", 
+   "rather than plain 0.", 
+   "(Skip.run): call the condition directly. use _delegate.", 
+   "(Skip.conditional): removed. not needed.", 
+   "(SkipUnless.__init__): wrap the incoming condition with a lambda that", 
+   "negates the result value.", 
+   "(SkipUnless.conditional): not needed since we wrapped the cond_func."
+  ], 
+  "revision_id": "876520"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-10T01:31:25.235422Z", 
+  "msg": [
+   "A little cleanup of leftmod_error_chain() and its single caller.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(leftmod_error_chain): remove unused params. simplify code: rather than", 
+   "break from the loop and then detect that, just do the work inside the", 
+   "loop and return from there.", 
+   "(do_entry_deletion): stop passing unused params to leftmod_error_chain,", 
+   "which means we don't have to compute a logfile_path, too. reindent a", 
+   "little (one-space indent is not obvious and two is standard)."
+  ], 
+  "revision_id": "876519"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-03-10T01:30:31.618603Z", 
+  "msg": [
+   "Optimize merge performance when dealing with subtree mergeinfo.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(calculate_remaining_ranges): Don't call adjust_deleted_subtree_ranges()", 
+   "for subtrees with the exact same remaining ranges as the subtree's", 
+   "nearest parent, because in that case the subtree will never be described", 
+   "separately so this call is pointless.  Pointless, but potentially very", 
+   "expensive as each subtree with explicit mergeinfo requires a network", 
+   "round trip (i.e. a call to svn_client__repos_location_segments)."
+  ], 
+  "revision_id": "876518"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-10T01:01:49.842926Z", 
+  "msg": [
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_open_uniquely_named): Following up on r36442, fix comment that", 
+   "was invalidated."
+  ], 
+  "revision_id": "876517"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-10T01:00:18.232177Z", 
+  "msg": [
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_open_uniquely_named): On Win32 retry creating tempfiles", 
+   "on more kinds of access violations. This should make the can't open", 
+   "'M:\\temp\\tempfile.tmp' errors our buildbot gives less frequent."
+  ], 
+  "revision_id": "876516"
+ }
+]

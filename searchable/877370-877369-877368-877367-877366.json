@@ -1,0 +1,108 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-16T02:12:30.765176Z", 
+  "msg": [
+   "Revamp how wc_db locates wcroot directories and detects the version number", 
+   "of that directory. In this new model, we do not fill in the pdh->wcroot", 
+   "member until we've figured out we're looking at a root and what version", 
+   "number it happens to be.", 
+   "As a bonus, we no longer misdetect symlinks as versioned directories,", 
+   "which fixes issue 2716.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(UNKNOWN_FORMAT): removed. we always know the format", 
+   "(FORMAT_FROM_SDB): self-doc'ing constant to say where the format will", 
+   "come from when the wcroot is constructed.", 
+   "(create_wcroot): switch to returning an error (since we really might, on", 
+   "the schema reading). take a FORMAT parameter and store it. return the", 
+   "new wcroot as an OUT param", 
+   "(get_or_create_pdh): don't try and create a wcroot for this PDH. we have", 
+   "no idea what it may be.", 
+   "(ensure_sdb_opened): forget this. we'll open the SDB when we locate the", 
+   "wcroot. iow, the lazy shifts to wcroot detection rather than at", 
+   "arbitrary points when the PDH might be used.", 
+   "(parse_local_abspath): if the requested node is NOT present, then we", 
+   "could be missing any number of ancestor directories. so we want to", 
+   "keep looking for wc-1 directories forever, rather than just on the", 
+   "first directory tested. whenever we yank a PDH from the DIR_DATA hash,", 
+   "then only return it if there is a wcroot in it. otherwise, we need to", 
+   "keep going and locate the root and extend the found PDH. adjust the", 
+   "create_wcroot() calls, and stop worrying about ensure_sdb_opened.", 
+   "(navigate_to_parent): only return a PDH if it has a wcroot", 
+   "(db_version): removed. we detect the format as we scan directories in", 
+   "parse_local_abspath.", 
+   "(ensure_format_avail): removed. if we have a wcroot, then we have a", 
+   "format number.", 
+   "(svn_wc__db_close): skip PDH structures with no wcroot", 
+   "(svn_wc__db_temp_get_format): use parse_local_abspath() to locate a", 
+   "versioned directory/ancestor and to detect its format. remap the error", 
+   "code (or if the target dir is missing) into SVN_ERR_WC_MISSING.", 
+   "(svn_wc__db_temp_reset_format): make sure the caller passed a valid", 
+   "format value.", 
+   "* tests/cmdlind/special_tests.py:", 
+   "(test_list): remove the XFail on diff_symlink_to_dir. this now works in", 
+   "both wc-ng and wc-1."
+  ], 
+  "revision_id": "877370"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-16T01:28:50.688665Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_patch): Remove duplicate description of CTX parameter from", 
+   "docstring."
+  ], 
+  "revision_id": "877369"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-16T01:25:31.125061Z", 
+  "msg": [
+   "Remove dependency on GNU patch, and use the new work-in-progress internal", 
+   "implementation instead.", 
+   "This commit was first saved with svn diff, reverted, re-applied", 
+   "with the internal svn patch, and diffed again, and the 2 diffs", 
+   "were compared with an external diff, and there was no difference.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(has_patch): Remove.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(gnupatch_garbage_re): Remove.", 
+   "(patch_basic): Track removal of above.", 
+   "(patch_unidiff, patch_copy_and_move): Expect output of internal patch only.", 
+   "(test_list): Always run patch tests.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_apply_unidiff): Undeclare.", 
+   "* subversion/libsvn_wc/patch.c", 
+   "(svn_wc_apply_unidiff): Remove.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(svn_client_patch): Track removal of svn_wc_apply_unidiff, and lose the", 
+   "env var runtime check.", 
+   "Suggested by: rhuijben", 
+   "(and gstein said \"rip out the spawn? yes\")"
+  ], 
+  "revision_id": "877368"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-16T01:00:28.182906Z", 
+  "msg": [
+   "Make patch test 3 pass with internal patch.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_copy_and_move): If SVN_INTERNAL_PATCH is set, expect output", 
+   "of internal patch. Else, expect output of GNU patch."
+  ], 
+  "revision_id": "877367"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-04-16T00:54:38.260365Z", 
+  "msg": [
+   "Make patch test 2 pass with internal patch.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff): If SVN_INTERNAL_PATCH is set, expect output of", 
+   "internal patch. Else expect output of GNU patch."
+  ], 
+  "revision_id": "877366"
+ }
+]

@@ -1,0 +1,71 @@
+[
+ {
+  "author": "rfeng", 
+  "date": "2009-06-10T01:10:10.437040Z", 
+  "msg": [
+   "Disable SAX entity processing to avoid IOException"
+  ], 
+  "revision_id": "783170"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2009-06-10T01:09:29.602102Z", 
+  "msg": [
+   "TOMAHAWK-596 Duplicate id exception for HtmlDataScrollerRenderer (duplicate by TOMAHAWK-1249 and TOMAHAWK-775)"
+  ], 
+  "revision_id": "783169"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2009-06-10T01:07:34.008769Z", 
+  "msg": [
+   "DERBY-3926", 
+   "Following is the patch description for DERBY-3926.", 
+   "The problem with the trunk codeline is that when optimizer goes through optimizables in a join order, it only looks at those optimizables individually to decide whether sorting can be avoided on them or not. That approach leaves out few queries which require sorting but do not get sorted. The decision for avoiding sorting should also include relationship between the optimizables in a given join order. Following query demonstrates the trunk problem", 
+   "SELECT table1.id, table2.value, table3.value FROM --DERBY-PROPERTIES joinOrder=FIXED", 
+   "table3 -- DERBY-PROPERTIES index=nonUniqueOnValue_Table3", 
+   ", table2 -- DERBY-PROPERTIES index=nonUniqueOnValue_Table2", 
+   ", table1", 
+   "WHERE table1.id=table2.id AND table2.name='PageSequenceId'", 
+   "AND table1.id=table3.id", 
+   "AND table3.name='PostComponentId'", 
+   "AND table3.value='21857' ORDER BY table2.value;", 
+   "In the query above, when optimizer is considering [table3, table2, -1] join order, it determines that sorting can be avoided on this join order because the order by column table2.value is already covered by the index nonUniqueOnValue_Table2. It does not see that the outermost optimizable table3 will qualify more than one row and hence it will be a multi-row resulset and for each one of those rows, we will be doing a scan into table2. In other words, there will be multiple scans into table2(and the rows returned by each one of those scans will be ordered on table2.value) but the collective rows from those multiple scans are not necessarily going to be ordered on table2.value. This patch is attempting to fix that problem.", 
+   "Currently, in trunk, a column is marked always ordered during a query processing when the optimizer finds that there is constant comparison predicate on the order by column. If the column does not have a constant predicate (as in our example above), we next see if we are using an index which will provide the required ordering on column (which is true in our case. The required ordering on table2.value is provided by the index nonUniqueOnValue_Table2). But as we can see in the query above, this index coverage is not enough to say that sorting is not needed. We need to add 2 more conditions before we can decide to avoid the sorting. One of those cases is 1)if the order by column does not belong to the outermost optimizable, then check if the order by column's optimizable is a one-row resultset. If yes, then it will be safe for the optimizer to avoid the sorting. The second case to consider is 2)if the order by column does not belong to the outermost optimizable, then check if the order by column's optimizable is multi-row resultset BUT all the outer optimizables are one-row resulsets. If either of these 2 additional conditions are satisfied then optimizer can choose to avoid the sorting. Otherwise", 
+   "sorting should be added to the query plan. The example query above does not satisfy the 2 additional checks and hence sorting should be done as part of the query plan.", 
+   "The changes for the 1)check above has gone into OrderbyByList.sortRequired(RowOrdering, JBitSet, OptimizableList). The implementation of this change just required us to check the outer optimizables to be one row since the order by column's optimizable is not one row. If outer optimizables are all one-row, then we say that sorting can be avoided. Otherwise sorting is required.", 
+   "The changes for the 2)check above has gone into FromBaseTable.nextAccessPath(Optimizer optimizer, OptimizablePredicateList predList, RowOrdering rowOrdering) The implementation of this change requires us to see if the order by column is involved in equijoin with outer optimizable's indexed column. If yes, then we know that since outer optimizable is ordered, the rows qualified via the equijoin will also be ordered and hence sorting can be avoided. But if this is not true, then we can't rely on outer optimizables' rows to be ordered on the order by column. To avoid sorting, we need to identify this case 2) as another case when the column can be marked as always ordered and that is when there is an equijoin predicate on the order by column with some other column", 
+   "which is already known to be always ordered. Taking the query from wisconsin as an example will explain this behavior", 
+   "select * from --DERBY-PROPERTIES joinOrder=FIXED", 
+   "TENKTUP1 -- DERBY-PROPERTIES index=TK1UNIQUE1", 
+   ", TENKTUP2 -- DERBY-PROPERTIES index=TK2UNIQUE1", 
+   "where TENKTUP1.unique1 = TENKTUP2.unique1", 
+   "order by TENKTUP1.unique1, TENKTUP2.unique1;", 
+   "For the above query, as per the current trunk codeline, none of the order by columns are marked as always ordered because there is no constant comparison predicate on them. But, for the given join order, with TENKTUP1 as the outermost resultset and with the index TK1UNIQUE1, we know that the current row ordering at this point is going to ensure that rows from TENKTUP1 are ordered on UNIQUE1. Next, when we process TEKTUP2 in the 2nd join order position, we find that there is no constant predicate on TENKTUP2.unique1 and hence we conculde that the rows from TENKTUP2 are not going to be ordered and we decide to force a sort node on the top of the query. But in reality, even though the outer optimizable is not a single row resultset, it is ordered on TENKTUP1.unique1 and hence all those rows from outer optimizable are going to be ordered on TENKTUP1.unique1 and the inner optimizable has an equality join on", 
+   "TENKTUP1.unique1 using the order by column TENKTUP2.unique1 What that translates to is that even if there will be multiple scans into TENKTUP2, the rows qualified are going to be all ordered because of the equijoin between the outer and inner optimizables on the order by columns. So, with my latest patch, I have expanded the notion of always ordered columns to include both constant comparison predicates AND ordered column that has equijoin with an outer optimizable's ordered column.", 
+   "I think this patch is also improving the existing queries to include a better path than what it was picking up before. Following is an example of one such query from wisconsin.", 
+   "select * from TENKTUP1, TENKTUP2", 
+   "where TENKTUP1.unique1 = TENKTUP2.unique1", 
+   "and TENKTUP2.unique1 < 100", 
+   "order by TENKTUP1.unique1;", 
+   "For this query, the trunk currently decides to use TENKTUP1 as the outermost optimizable using the TK1UNIQUE1 index and then those rows are filtered using TENKTUP2.unique1 < 100. Each of the 2 tables involved in the query have 10000 rows each. So we are going through 10000 qualified indexed rows from TENKTUP1 and then applying TENKTUP2.unique1 < 100 on them. With the attached patch, we use TENKTUP2 as the outermost optimizable with the index TK2UNIQUE1 and only gets the indexed rows which satisfy TENKTUP2.unique1 < 100 and then on them, we use the equlity join to fetch qualified rows from TENKTUP1."
+  ], 
+  "revision_id": "783168"
+ }, 
+ {
+  "author": "funkman", 
+  "date": "2009-06-10T01:07:19.572941Z", 
+  "msg": [
+   "more votes"
+  ], 
+  "revision_id": "783167"
+ }, 
+ {
+  "author": "ppoddar", 
+  "date": "2009-06-10T00:41:35.847523Z", 
+  "msg": [
+   "OPENJPA-1013: Aliasing for query nodes, single attribute join support, reorganization of test harness"
+  ], 
+  "revision_id": "783166"
+ }
+]

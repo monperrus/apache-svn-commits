@@ -1,0 +1,65 @@
+[
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-17T04:15:14.152831Z", 
+  "msg": [
+   "WHIRR-141. Create a logo. Contributed by Alison Wong."
+  ], 
+  "revision_id": "1103995"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2011-05-17T04:05:01.326663Z", 
+  "msg": [
+   "npanday has a release.", 
+   "rave updated status page.", 
+   "Other status pages get older."
+  ], 
+  "revision_id": "1103994"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-17T03:50:39.913568Z", 
+  "msg": [
+   "MAPREDUCE-461. Enable ServicePlugins for the JobTracker. Contributed by Fredrik Hedberg."
+  ], 
+  "revision_id": "1103993"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2011-05-17T03:45:49.477666Z", 
+  "msg": [
+   "DERBY-1482 Update triggers on tables with blob columns stream blobs into memory even when the blobs are not referenced/accessed.", 
+   "This commit ensures that we read only the necessary columns during triggering sql's execution rather than read all the columns", 
+   "from the trigger table just be cause there is a trigger defined on the table. The triggering sql might need more columns", 
+   "in it's resultset than what a firing trigger might need during it's execution. So, in addition to reading only the columns", 
+   "reuired by the triggering sql(which also includes all the columns required by it's triggers which will get fired), the", 
+   "other thing commit does is to carve out a temporary resulset for every firing trigger with just the columns that the", 
+   "trigger needs. This temporary resultset can be exactly same as the resulset created by the triggering sql or a subset of", 
+   "the resulset created by the triggering sql, it all depends on what columns the firing trigger needs during it's", 
+   "execution. Once the right resulset set is constructed for the firing trigger, the trigger will be able to find the columns", 
+   "referenced in it's trigger action through the REFERENCING clause in the correct positions in the resulset.", 
+   "With this commit, when the trigger action SPSes needs to be regenerated(or for a new trigger, when it is getting generated the", 
+   "first time). the generated trigger action SPSes will look for the columns getting used through the REFERENCING", 
+   "clause through their relative position in the temporary resultset which will be generated for each of the firing triggers.", 
+   "In the prior releases, since we were reading all the columns from the triggering table, the columns were looked in their", 
+   "actual physical position in the trigger table.", 
+   "The commit also ensures that all the above mentioned code changes to be selective about columns getting read from the trigger", 
+   "table should only happen with a database marked as 10.9 release. In prior release databases(in other words, we are in", 
+   "soft-upgrade mode), we do not want to be selective about what columns get read because when soft-upgrade database is taken", 
+   "back to it's original release, that release will not be able to work correctly since it doesn't recognize the column", 
+   "read optimization.", 
+   "The commit also enables the trigger test cases which test that unnecessary LOB columns are not getting read during trigger", 
+   "execution when they are not really needed by the triggering sql and the firing triggers."
+  ], 
+  "revision_id": "1103992"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2011-05-17T03:39:31.589930Z", 
+  "msg": [
+   "Merge -r 1103989:1103990 from trunk to branch-0.22. Fixes: MAPREDUCE-2327"
+  ], 
+  "revision_id": "1103991"
+ }
+]

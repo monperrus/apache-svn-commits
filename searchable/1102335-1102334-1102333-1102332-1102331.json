@@ -1,0 +1,67 @@
+[
+ {
+  "author": "dcreager", 
+  "date": "2011-05-12T15:06:02.719290Z", 
+  "msg": [
+   "AVRO-819. C: Fix file reader EOF detection", 
+   "This patch fixes a bug that Miki Tebeka discovered in the file reader", 
+   "code.  Errors weren't getting propagated correctly through the call", 
+   "stack.  This caused the file reader to not correctly detect EOF, and so", 
+   "you'd loop through the final block in a file twice.  (The second time", 
+   "through, we wouldn't fill in the datum instance.)"
+  ], 
+  "revision_id": "1102335"
+ }, 
+ {
+  "author": "dcreager", 
+  "date": "2011-05-12T15:02:32.113104Z", 
+  "msg": [
+   "Merge change 1102332 from trunk into 1.5 branch"
+  ], 
+  "revision_id": "1102334"
+ }, 
+ {
+  "author": "axb", 
+  "date": "2011-05-12T14:58:22.649257Z", 
+  "msg": [
+   "changed yandex.ru to yandex.*", 
+   "(yandex.ua , yandex.ru)"
+  ], 
+  "revision_id": "1102333"
+ }, 
+ {
+  "author": "dcreager", 
+  "date": "2011-05-12T14:57:27.571636Z", 
+  "msg": [
+   "AVRO-818. C: Fix data file corruption bug", 
+   "This patch fixes the C library's data file writer to produce correct", 
+   "files when there are enough records to produce multiple blocks in the", 
+   "file.  The logic in datafile.c is that we have a fixed-buffer in-memory", 
+   "avro_writer_t instance.  When you append records to the data file, they", 
+   "go into this memory buffer.  If we get an error serializing into the", 
+   "memory buffer, it's presumably because we've filled it, so we write out", 
+   "the memory buffer's contents as a new block in the file, clear the", 
+   "buffer, and try again.", 
+   "The problem is that the failed serialization into the memory buffer", 
+   "isn't atomic; some of the serialization will have made it into the", 
+   "buffer before we discover that there's not enough room.  Before, this", 
+   "incomplete record would then make it into the file.  To fix this, we", 
+   "keep track of the size of the in-memory buffer after the most recent", 
+   "successfully serialized record, and use this as the block size when we", 
+   "write a block to disk.  This ensures that even if there's any incomplete", 
+   "records at the end of the memory buffer, we don't include them in the", 
+   "block."
+  ], 
+  "revision_id": "1102332"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-05-12T14:55:50.366507Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_NODE_PROPS_OF_CHILDREN,", 
+   "STMT_SELECT_ACTUAL_PROPS_OF_CHILDREN): Remove unused queries."
+  ], 
+  "revision_id": "1102331"
+ }
+]

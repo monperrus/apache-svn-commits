@@ -1,0 +1,102 @@
+[
+ {
+  "author": "djames", 
+  "date": "2005-07-20T02:20:28.422808Z", 
+  "msg": [
+   "Convert poolAttribute, assertValid, and emptyTuple from casted", 
+   "\"char *\" variables into \"char[]\" variables so as to avoid", 
+   "unsafe casts.", 
+   "Thread: http://svn.haxx.se/dev/archive-2005-07/0796.shtml", 
+   "Suggested By: Philip Martin <philip@codematters.co.uk>", 
+   "(Thanks Philip! Good catch!)", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(Automatic Pool Management Functions): Convert poolAttribute,", 
+   "assertValid, and emptyTuple from (char *) variables into char[]", 
+   "variables."
+  ], 
+  "revision_id": "855445"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-07-19T20:54:49.916366Z", 
+  "msg": [
+   "Implement Pythonic pool management for the Python bindings.", 
+   "Assisted by: Mark Rowe <code@bdash.net.nz>", 
+   "(Mark donated his automatic pool management code as a starting point", 
+   "for my patch. Thanks Mark!)", 
+   "* subversion/bindings/swig/core.i", 
+   "(svn_swig_py_set_application_pool, svn_swig_py_clear_application_pool,", 
+   "svn_swig_py_get_application_pool): New wrappers for new functions.", 
+   "* subversion/bindings/swig/python/svn/core.py", 
+   "(run_app, svn_pool_destroy, svn_pool_create, svn_pool_clear):", 
+   "Deprecate. Reimplemented interface using Pythonic pools.", 
+   "(apr_pool_clear, apr_pool_destroy): Remove functions. These functions", 
+   "can be accessed by directly including libsvn.core. I did not create a", 
+   "compatibility layer for these functions because svn_pool_clear and", 
+   "svn_pool_destroy are favored over apr_pool_clear and apr_pool_destroy.", 
+   "(apr_initialize, apr_terminate): Deprecate. APR initialization and", 
+   "termination is now handled automatically. Old functions are now no-ops.", 
+   "(application_pool): New variable. Global application pool.", 
+   "(Pool): New object. A Pythonic pool object, managed by Python.", 
+   "(Pool.init): New method. Create a new memory pool.", 
+   "(Pool.valid): New method. Check whether this memory pool is still valid.", 
+   "(Pool.assert_valid): New method. Assert that this memory_pool is still", 
+   "valid.", 
+   "(Pool.clear): New method. Clear embedded memory pool.", 
+   "(Pool.destroy): New method. Destroy embedded memory pool.", 
+   "(Pool.__del__): New method. Automatically destroys memory pools, if", 
+   "necessary.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(_global_pool): New variable. Contains application pool.", 
+   "Intentionally uses same variable name as function-level global pool", 
+   "so that the SWIG/C code will fall-back to the application-level pool", 
+   "if no function-level global pool is available.", 
+   "(svn_swig_py_set_application_pool): New function. Sets the", 
+   "application-level global pool.", 
+   "(svn_swig_py_clear_application_pool): New function. Clears the", 
+   "application-level global pool.", 
+   "(svn_swig_py_get_application_pool): New function. Gets the", 
+   "application-level global pool.", 
+   "(svn_swig_py_convert_pool): New function. Converts a Python pool", 
+   "object into a SWIG Pool object. Raises a Python AssertionError or", 
+   "TypeError if the Python pool object is invalid.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.h", 
+   "(_global_pool): Add declaration for new global variable.", 
+   "(svn_swig_py_set_application_pool, svn_swig_py_clear_application_pool,", 
+   "svn_swig_py_get_application_pool, svn_swig_py_convert_pool): Add", 
+   "declarations for new functions.", 
+   "* subversion/bindings/swig/svn_types.i", 
+   "(apr_pool_t): Update typemap for apr_pool_t to convert Python pools", 
+   "into APR pools, and to use the application-level pool if no local", 
+   "pool is available."
+  ], 
+  "revision_id": "855444"
+ }, 
+ {
+  "author": "djames", 
+  "date": "2005-07-19T20:29:50.712671Z", 
+  "msg": [
+   "Renamed python branch to python-bindings-improvements.", 
+   "Suggested by: C. Michael Pilato <cmpilato@collab.net>"
+  ], 
+  "revision_id": "855443"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-07-19T19:33:37.308196Z", 
+  "msg": [
+   "* HACKING", 
+   "(TABLE OF CONTENTS): Add \"Crediting\", following up to r15366."
+  ], 
+  "revision_id": "855442"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2005-07-19T19:30:50.618997Z", 
+  "msg": [
+   "* HACKING", 
+   "(Crediting): Add a note explaining why \"Approved by: \" is different."
+  ], 
+  "revision_id": "855441"
+ }
+]

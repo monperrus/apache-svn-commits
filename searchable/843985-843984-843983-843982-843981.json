@@ -1,0 +1,85 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-11-26T19:35:20.781147Z", 
+  "msg": [
+   "Continue issue #896.  Move the three \"helper\" functions for doing", 
+   "UTF8/eol translations on props and logs into libsvn_subr, so that all", 
+   "users of libsvn_client and libsvn_fs have easy access to them.", 
+   "* cl.h (svn_cl__translate_string, svn_cl__detranslate_string,", 
+   "svn_cl__prop_needs_translation): move these declarations from", 
+   "here...", 
+   "* svn_subst.h (svn_subst_translate_string,", 
+   "svn_subst_detranslate_string): ...to here, renamed.", 
+   "* svn_props.h (svn_prop_needs_translation):  ...and here, renamed.", 
+   "Also add some pointers to the three utility functions in a comment.", 
+   "* sorts.c, subst.c, util.c (svn_subst_translate_string,", 
+   "svn_subst_destranslate_string, svn_prop_needs_translation): move the", 
+   "code from cmdline to libsvn_subr.", 
+   "* log-cmd.c, propedit-cmd.c, propget-cmd.c, props.c, propset-cmd.c:", 
+   "update all callers of these renamed routines.", 
+   "* svn_client.h:  add more commentary about callers' translation burden."
+  ], 
+  "revision_id": "843985"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-11-26T19:23:22.942099Z", 
+  "msg": [
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_file): Remove the early exit option introduced in", 
+   "revision 3902.  It wasn't strictly correct, as some callers might", 
+   "still depend on fetched_rev getting set.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_file): Same."
+  ], 
+  "revision_id": "843984"
+ }, 
+ {
+  "author": "mmacek", 
+  "date": "2002-11-26T19:13:38.647663Z", 
+  "msg": [
+   "Rename svn_time_to_nts -> svn_time_to_cstring"
+  ], 
+  "revision_id": "843983"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-11-26T18:21:48.094080Z", 
+  "msg": [
+   "Continue issue #896.  Change the commandline client's", 
+   "\"--message-encoding\" option to just \"--encoding\".  It no longer", 
+   "affects log messages, but the values of 'svn:' properties as well", 
+   "(i.e. 'svn propset' and 'svn propedit').", 
+   "* cl.h (svn_cl__enocding_opt):  renamed from svn_cl__msg_encoding_opt.", 
+   "(svn_cl__opt_state_t):  rename field to 'encoding'.", 
+   "(svn_cl__translate_string):  document new 'encoding' argument.", 
+   "* cmdline/main.c (svn_cl__options):  rename --message-encoding to", 
+   "--encoding, since it can affect propvals too.", 
+   "(svn_cl__cmd_table): update subcommands with new encoding flag name.", 
+   "Add the --encoding option to propset and propedit commands too.", 
+   "(main):  update to reference opt_state.encoding.", 
+   "* util.c (svn_cl__make_log_msg_baton): update to reference", 
+   "opt_state.encoding.", 
+   "(svn_cl__translate_string): take an optional 'encoding' argument.", 
+   "(svn_cl__get_log_message): pass NULL (default) encoding to", 
+   "svn_cl__translate_string.", 
+   "* propedit-cmd.c (svn_cl__propedit): pass opt_state->encoding value", 
+   "through to svn_cl__translate_string.", 
+   "* propset-cmd.c (svn_cl__propset): pass opt_state->encoding value", 
+   "through to svn_cl__translate_string."
+  ], 
+  "revision_id": "843982"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-11-26T16:49:55.581263Z", 
+  "msg": [
+   "* subversion/include/svn_path.h", 
+   "(svn_path_is_url): Fix the docstring.", 
+   "* subversion/tests/libsvn_subr/path-test.c", 
+   "(test_is_url): Print values in the right order."
+  ], 
+  "revision_id": "843981"
+ }
+]

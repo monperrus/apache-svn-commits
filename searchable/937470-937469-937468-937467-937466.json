@@ -1,0 +1,94 @@
+[
+ {
+  "author": "tross", 
+  "date": "2010-04-23T19:02:31.637176Z", 
+  "msg": [
+   "QPID-2517 - Broker schema changes to support cluster management."
+  ], 
+  "revision_id": "937470"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2010-04-23T19:00:43.823258Z", 
+  "msg": [
+   "Add POOL-166 to changes list"
+  ], 
+  "revision_id": "937469"
+ }, 
+ {
+  "author": "dannas", 
+  "date": "2010-04-23T18:58:01.770938Z", 
+  "msg": [
+   "As part of WC-NG, replace entry calls for revisions from", 
+   "svn_wc_status3_t related code. While doing that, we define a strict", 
+   "idea of what a revision in svn_wc_status3_t means. The revision returned", 
+   "from libsvn_wc is:", 
+   "\"The revision of the unmodified (BASE) node, or SVN_INVALID_REVNUM if", 
+   "any (structural) changes have been made to that node.\"", 
+   "We have three compability concerns to address:", 
+   "1) svn_wc_status3_t only gives us the revision information for BASE.", 
+   "svn_wc__node_get_working_rev_info() is used for returning the WORKING", 
+   "state as the entries code would have done it.", 
+   "2) The entries code set the revision of newly added nodes to 0 but the", 
+   "db sets them to -1. Since too many tests needs to be changed and 'svn", 
+   "info' also uses 0, I'll change those values in a follow-up patch", 
+   "instead.", 
+   "3) Despite the attempt to mimic the semantics of the entries code, we", 
+   "have two changes in behaviour. An entry_rev field has been added to", 
+   "StateItem to allow the testsuite to handle those differences.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(repos_to_wc): Change revision to 0 since the node is added. Don't", 
+   "check against entries since the behavior differs.", 
+   "* subversion/tests/cmdline/svntest/wc.py", 
+   "(tweak_for_entries_compare): Set wc_rev to entry_rev when the later", 
+   "exists. Clear entry_rev afterwards to avoid it interfering when", 
+   "doing the compare between the output from entries-dump and our", 
+   "state.", 
+   "(StateItem): Add new member entry_rev for tracking differences in", 
+   "behaviour between WC-1 code and WC-NG.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_into_missing): Add revision to status output for missing dir.", 
+   "Previously, missing dirs did not have a revision, only files had.", 
+   "Don't check entries since the behavior differs.", 
+   "* subversion/svn/status.c", 
+   "(print_status): Replace checks for revisions using entries with the", 
+   "direct fields in svn_wc_status3_t. Set the revision for added and", 
+   "replaced nodes to 0. WC-NG sets those revisions to -1, but changing", 
+   "all the involved tests is for a follow-up.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_status3_t): Add fields revision, changed_rev, changed_date and", 
+   "changed_author.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__node_get_working_rev_info): Declare. New.", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node__get_working_rev_info): New.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(assemble_status): Fill in the new fields with data from the wc db.", 
+   "(svn_wc_dup_status3): Copy the changed_author field.", 
+   "* subversion/svn/status-cmd.c", 
+   "(status_baton): Add svn_client_ctx member.", 
+   "(print_status): Fetch revision information about WORKING nodes with", 
+   "svn_wc__node_get_working_rev(). It's a temporary thing until we've", 
+   "decided what behaviour we prefer and the means for detecting what", 
+   "state the wc is in.", 
+   "(svn_cl__status): Set ctx member of status_baton."
+  ], 
+  "revision_id": "937468"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2010-04-23T18:57:40.204080Z", 
+  "msg": [
+   "POOL-166 GenericKeyedObjectPool.destroy could use entrySet() rather than keySet() followed by get()"
+  ], 
+  "revision_id": "937467"
+ }, 
+ {
+  "author": "dwoods", 
+  "date": "2010-04-23T18:57:16.215717Z", 
+  "msg": [
+   "upgrade to released openjpa-2.0.0"
+  ], 
+  "revision_id": "937466"
+ }
+]

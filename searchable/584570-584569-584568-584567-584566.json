@@ -1,0 +1,53 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2007-10-14T18:00:37.765062Z", 
+  "msg": [
+   "Here's my recommendation; upon opening the pipes, always set the parent-end", 
+   "of the pipe to uninherited.  Let it be closed upon cleanup_for_exec.", 
+   "The later dup2() for the parent pipe does not automagically become inherited", 
+   "again, and later dup()'s are never inherited by default.", 
+   "There's no longer an explicit need to close the parent-end in proc_create"
+  ], 
+  "revision_id": "584570"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2007-10-14T17:35:48.324290Z", 
+  "msg": [
+   "apr_file_dup() varies from dup2 by not setting the child handle as", 
+   "inherited.  Solve this by setting the duplicated handle to inherit.", 
+   "once finished with the fork(), now that we don't waste pipe creation", 
+   "resources on a single handle, watch out for closing the parent handle", 
+   "inside the child.", 
+   "in fact I believe that toggling parent_* handles apr_file_inherit_unset", 
+   "way back in apr_procattr_io_set / apr_procattr_child_*_set would be", 
+   "more efficient; comments?"
+  ], 
+  "revision_id": "584569"
+ }, 
+ {
+  "author": "dinesh", 
+  "date": "2007-10-14T17:22:49.202826Z", 
+  "msg": [
+   "fixed, server value not checked while in shutdown process"
+  ], 
+  "revision_id": "584568"
+ }, 
+ {
+  "author": "dinesh", 
+  "date": "2007-10-14T17:14:35.138588Z", 
+  "msg": [
+   "fixed, server value not checked while in shutdown process"
+  ], 
+  "revision_id": "584567"
+ }, 
+ {
+  "author": "jliu", 
+  "date": "2007-10-14T17:06:17.461741Z", 
+  "msg": [
+   "update demo"
+  ], 
+  "revision_id": "584566"
+ }
+]

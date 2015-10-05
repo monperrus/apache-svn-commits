@@ -1,0 +1,93 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T16:18:06.411598Z", 
+  "msg": [
+   "Oop. I guess the obstructed entries weren't getting into", 
+   "resolve_to_defaults after all, so I don't need to set the revision to 0", 
+   "for obstructed subdirs.", 
+   "Also, loosen up an assertion.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): obstructed subdirs should have their revision set to", 
+   "SVN_INVALID_REVNUM. obstructed subdirs have to repos_relpath, so don't", 
+   "try to assert that."
+  ], 
+  "revision_id": "876320"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T15:49:14.198241Z", 
+  "msg": [
+   "Detect when a subdirectory has been obstructed by a non-directory. Return", 
+   "a new status code to indicate this situation.", 
+   "Also removed the \"changed\" status code. Callers can simply use text_mod", 
+   "and prop_mod to detect that situation.", 
+   "Introduced a new presence value of \"subdir\" to indicate that the actual", 
+   "information on this (sub)directory is located elsewhere. This will be", 
+   "needed as long as we have per-dir .svn subdirs since the real info for a", 
+   "directory is in the subdirectory rather than the parent's wc.db.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(*.presence): allow the \"subdir\" value (noted in comments)", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_status_t): add/remove new status values", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(word_to_presence): test for new 'subdir' presence value", 
+   "(presence_to_word): return new 'subdir' presence text", 
+   "(svn_wc__db_base_get_info, svn_wc_db_read_info): detect when a subdir", 
+   "has been obstructed and return the new status code.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(read_entries): detect new 'obstructed' status code. we fill in a fake", 
+   "revision number to satisfy resolve_to_defaults."
+  ], 
+  "revision_id": "876319"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-03-02T14:05:53.872568Z", 
+  "msg": [
+   "Deal with versioned files obstructed by versioned directories.", 
+   "When we ask for the sqlite database for \"/some/file\", and it turns out", 
+   "that somebody has moved a versioned directory onto \"file\", then our search", 
+   "turns up \"/some/file/.svn/wc.db\" erroneously. Information on \"file\" is in", 
+   "the \"/some/.svn/wc.db\" database.", 
+   "To correct the problem, if it looks like the above situation is possible,", 
+   "then we look in the parent database (if present) for information on", 
+   "\"file\". If the entry *is* supposed to be a file rather than a subdir, then", 
+   "we return that parent database instead.", 
+   "Note that this can only occur when we have per-dir .svn subdirs. When", 
+   "wc-ng is complete, this scenario will not be possible.", 
+   "This fixes (at least) stat_tests.py 5.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(struct svn_wc__db_pdh_t): record if the directory actually represents", 
+   "an obstructed file.", 
+   "(enum statement_keys, statements): add two new statements to assist with", 
+   "looking for obstructed 'file' nodes.", 
+   "(parse_local_abspath): if the situation makes it possible for an", 
+   "obstructed file, then check it out and return the appropriate PDH.", 
+   "make a slight fix to how we store PDH->wcroot_abspath."
+  ], 
+  "revision_id": "876318"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-02T12:54:09.321530Z", 
+  "msg": [
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(get_entry_url): Following up on r36241, make sure the right name is", 
+   "passed when name is NULL.", 
+   "Found by: stsp", 
+   "gstein"
+  ], 
+  "revision_id": "876317"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-03-02T11:16:14.661776Z", 
+  "msg": [
+   "* subversion/include/svn_dirent_uri.h", 
+   "(svn_uri_join): Remove misleading phrase from doxygen documentation.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "876316"
+ }
+]

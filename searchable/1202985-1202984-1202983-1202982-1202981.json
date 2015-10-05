@@ -1,0 +1,105 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:45:25.851752Z", 
+  "msg": [
+   "Fix TestMultiClusters when a non-default ZK client port is used", 
+   "Summary: MiniZooKeeperCluster tries to use port 21810 as the client port but", 
+   "keeps incrementing the port number if it fails to bind. However, the non-default", 
+   "port is not communicated correctly to the second cluster's configuration in", 
+   "TestMultiCluster.", 
+   "Test Plan: Run all unit tests on titanmigrate002-snc4 using mrunit. Look for", 
+   "log message \"Faild [sic] binding ZK Server to client port: 21810\" that confirms", 
+   "that the port was likely taken by another concurrent test, so the mini ZK", 
+   "cluster had to use another port.", 
+   "Reviewers: liyintang, kannan, kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan", 
+   "Differential Revision: 355266", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1202985"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:45:15.811225Z", 
+  "msg": [
+   "Ported RegionSplitter and TestRegionSplitter from open source", 
+   "Summary:", 
+   "The RegionSplitter is useful for creating a table pre-split", 
+   "into many regions, including two different algorithms for splitting", 
+   "keys. This also includes the patch for HBASE-4627.", 
+   "Test Plan: The unit test suite from open source.", 
+   "Reviewers: nspiegelberg", 
+   "Reviewed By: nspiegelberg", 
+   "CC: hbase-eng@lists, cgist, nspiegelberg", 
+   "Differential Revision: 353767", 
+   "Task ID: 743529"
+  ], 
+  "revision_id": "1202984"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:45:03.910031Z", 
+  "msg": [
+   "Detect master failover when backup master becomes active", 
+   "Summary: When the backup master becomes primary, it currently uses the cluster", 
+   "startup vs. master failover flag that was set in the constructor, potentially a", 
+   "long time before it becomes primary. This makes the newly active master", 
+   "re-evaluate that flag.", 
+   "Test Plan: Run unit tests. Do master failover on a dev cluster and ensure that", 
+   "the new active master correctly identifies it as a failover and not a cluster", 
+   "startup.", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan", 
+   "Differential Revision: 355126", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1202983"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:44:56.238104Z", 
+  "msg": [
+   "Fixed HBaseAdmin ambiguous varargs invocations", 
+   "Summary:", 
+   "HBaseAdmin had ambiguous uses of varargs parameters which relied on the", 
+   "compiler to implicitly cast arguments to Object[] for correct operation.", 
+   "Certain java compilers (1.6.0_26 on OSX) were found to instead wrap the", 
+   "argument inside a new Object[], breaking HBaseAdmin and the HBase shell.", 
+   "This change avoids the ambiguous invocations by explicitly casting the", 
+   "arguments to Object[].", 
+   "Test Plan:", 
+   "compiled HBaseAdmin on dev server and OSX and tested the", 
+   "HBase shell with commands which take a variable number of arguments.", 
+   "Reviewers: kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan", 
+   "Differential Revision: 354288"
+  ], 
+  "revision_id": "1202982"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-11-17T01:44:47.879463Z", 
+  "msg": [
+   "Unit test for duplicate region assignment on master failover with region in transition", 
+   "Summary:", 
+   "This is a unit test that reproduces a problem we currently have with master", 
+   "failover. If master failover happens when a region is in transition, and the", 
+   "region location is not written to META, the new master will assign the region to", 
+   "another regionserver, resulting in duplicate assignment.", 
+   "This is not the final version of the diff -- I expect to make refinements, but", 
+   "sending it for review anyway for early feedback.", 
+   "Test Plan: Unit tests, dev cluster, dark launch", 
+   "Reviewers: kranganathan, kannan, pkhemani", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase@lists, mbautin, kranganathan", 
+   "Differential Revision: 347511", 
+   "Revert Plan: OK", 
+   "Task ID: 558162"
+  ], 
+  "revision_id": "1202981"
+ }
+]

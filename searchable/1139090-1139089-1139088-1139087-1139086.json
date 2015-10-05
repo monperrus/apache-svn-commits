@@ -1,0 +1,118 @@
+[
+ {
+  "author": "tanping", 
+  "date": "2011-06-23T22:13:58.079867Z", 
+  "msg": [
+   "HDFS-2086. If the include hosts list contains host names, after restarting namenode, data nodes registration is denied.  Contributed by Tanping Wang."
+  ], 
+  "revision_id": "1139090"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2011-06-23T22:12:06.651520Z", 
+  "msg": [
+   "DERBY-5284 A derby crash at exactly right time during a btree split can cause a corrupt db which can not be booted.", 
+   "backport fix #1139085 from 10.4 branch to 10.3 branch. clean merge by doing", 
+   "merge of the 10.4 conflict resolved change.", 
+   "Fixed a problem during BTREE split.  The first phase of btree split sees", 
+   "if it can reclaim space from committed deleted rows.  If it finds any", 
+   "it purges these rows in a nested internal transaction.  It needs to hold", 
+   "the latch on the page until end of transaction, but did not.  This allowed", 
+   "a very small window of a few instructions where another insert could use", 
+   "the space on the page and then a system crash could cause the purges to undo", 
+   "but fail due to the insert.", 
+   "The fix was to hold the latch and let commit release it."
+  ], 
+  "revision_id": "1139089"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-06-23T22:07:36.433932Z", 
+  "msg": [
+   "As a follow-up to r1138871, rename status_unauthz again (formerly", 
+   "status_absent), this time to status_server_excluded.", 
+   "See for related discussion this post and follow-ups:", 
+   "From: C. Michael Pilato", 
+   "To: dev@", 
+   "Subject: Re: svn commit: r1138871 - in /subversion/trunk/subversion:", 
+   "include/private/ libsvn_client/ libsvn_wc/ tests/libsvn_wc/", 
+   "Message-ID: <4E0346D4.4040400@collab.net>", 
+   "http://svn.haxx.se/dev/archive-2011-06/0727.shtml", 
+   "Suggested by: julianfoad", 
+   "(the new name 'server-excluded')", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__node_is_status_unauthz): Rename to...", 
+   "(svn_wc__node_is_status_server_excluded): ... this, and rename the", 
+   "'is_unauthz' output parameter to 'is_server_excluded'.", 
+   "* subversion/tests/libsvn_wc/db-test.c,", 
+   "subversion/libsvn_wc/props.c,", 
+   "subversion/libsvn_wc/adm_ops.c,", 
+   "subversion/libsvn_wc/adm_crawler.c,", 
+   "subversion/libsvn_wc/conflicts.c,", 
+   "subversion/libsvn_wc/crop.c,", 
+   "subversion/libsvn_wc/diff_editor.c", 
+   "subversion/libsvn_wc/adm_files.c,", 
+   "subversion/libsvn_wc/update_editor.c,", 
+   "subversion/libsvn_wc/info.c,", 
+   "subversion/libsvn_wc/copy.c,", 
+   "subversion/libsvn_wc/ambient_depth_filter_editor.c,", 
+   "subversion/libsvn_wc/status.c,", 
+   "subversion/libsvn_wc/lock.c,", 
+   "subversion/libsvn_wc/entries.c,", 
+   "subversion/libsvn_wc/wc_db.c,", 
+   "subversion/libsvn_wc/wc_db.h,", 
+   "subversion/libsvn_wc/node.c,", 
+   "subversion/libsvn_wc/cleanup.c,", 
+   "subversion/libsvn_wc/workqueue.c,", 
+   "subversion/libsvn_client/copy.c,", 
+   "(test_getting_info, validate_node, test_inserting_nodes, test_pdh,", 
+   "svn_wc__perform_props_merge, svn_wc__get_pristine_props, svn_wc_delete4,", 
+   "check_can_add_to_parent, revert_restore, report_revisions_and_depths,", 
+   "recursive_resolve_conflict, crop_children, svn_wc_exclude, svn_wc_crop_tree2,", 
+   "walk_local_nodes_diff, report_wc_directory_as_added,", 
+   "svn_wc__text_base_path_to_read, svn_wc__get_pristine_contents,", 
+   "IS_NODE_PRESENT, check_tree_conflict, delete_entry, absent_node,", 
+   "svn_wc__check_wc_root, build_info_for_entry, copy_versioned_dir,", 
+   "svn_wc_copy3, make_file_baton, open_root, delete_entry, open_directory,", 
+   "get_dir_status, internal_status, svn_wc__internal_check_wc, adm_available,", 
+   "read_one_entry, write_entry, kind_map, insert_base_node,", 
+   "add_absent_excluded_not_present_node, svn_wc__db_base_add_absent_node,", 
+   "db_op_copy, db_op_copy_shadowed_layer, check_replace_txn,", 
+   "bump_node_revision, bump_revisions_post_update, svn_wc__db_node_hidden,", 
+   "svn_wc__db_status_t,  svn_wc__db_base_add_symlink,", 
+   "svn_wc__db_op_set_tree_conflict, convert_db_kind_to_node_kind,", 
+   "walker_helper, svn_wc__internal_walk_children,", 
+   "svn_wc__node_is_status_absent, svn_wc__internal_node_get_schedule,", 
+   "svn_wc__check_for_obstructions, repair_timestamps, remove_base_node,", 
+   "repos_to_wc_copy_locked): Rename things as follows:", 
+   "status_unauthz -> status_server_excluded; is_unauthz -> is_server_excluded"
+  ], 
+  "revision_id": "1139088"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2011-06-23T22:01:41.647640Z", 
+  "msg": [
+   "Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=40510", 
+   "Provide an option to install shortcuts for the current user or all users. Also ensure registry is correctly cleaned on uninstall for 64-bit platforms."
+  ], 
+  "revision_id": "1139087"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-06-23T21:55:43.201360Z", 
+  "msg": [
+   "Following up on r1139082, rename 'forbidden' to 'forbidden_by_server'", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CLIENT_FORBIDDEN): Rename to...", 
+   "(SVN_ERR_CLIENT_FORBIDDEN_BY_SERVER): ... this.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Rename svn_wc_notify_failed_forbidden to", 
+   "svn_wc_notify_failed_forbidden_by_server.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(fixup_out_of_date_error): Update user.", 
+   "Suggested by: stsp"
+  ], 
+  "revision_id": "1139086"
+ }
+]

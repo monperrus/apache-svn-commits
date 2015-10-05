@@ -1,0 +1,83 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2008-10-19T15:26:02.743727Z", 
+  "msg": [
+   "On the issue-2382 branch:", 
+   "Factor address parsing out into a separate function.", 
+   "This makes it easier to handle the case where only a port was", 
+   "specified to --listen and we have multiple address families.", 
+   "* subversion/svnserve/listen.c", 
+   "(struct parsed_address): New struct.", 
+   "(parse_addresses): New function.", 
+   "(init_listeners): Call parse_addresses() rather than parsing", 
+   "addresses within the loop which sets up listeners.", 
+   "(wait_for_client): Pass the right pointer to apr_socket_accept().", 
+   "Also, improve a comment."
+  ], 
+  "revision_id": "873830"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-10-19T14:29:37.163863Z", 
+  "msg": [
+   "On the issue-2382 branch:", 
+   "Correctly accept multiple client connections.", 
+   "* subversion/svnserve/listen.c", 
+   "(wait_for_client): Accept connections as well as listening.", 
+   "Return a socket for communication with the client rather than", 
+   "the socket the request was originally made on.", 
+   "Also, don't forget to check the return value from apr_socket_listen().", 
+   "* subversion/svnserve/main.c", 
+   "(main): Call wait_for_client() in main loop, not before the loop", 
+   "is entered. Do not run apr_socket_accept() on the returned socket", 
+   "anymore, since wait_for_client() will now do that for us.", 
+   "* subversion/svnserve/server.h", 
+   "(wait_for_client): Adjust doc string and signature accordingly."
+  ], 
+  "revision_id": "873829"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-19T14:28:36.947561Z", 
+  "msg": [
+   "* subversion/libsvn_wc/lock.c", 
+   "(do_open): Following up on r33750, make sure items are added to the", 
+   "shared set, even if their access entry is missing. Removing them", 
+   "broke some update/switch tests."
+  ], 
+  "revision_id": "873828"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2008-10-19T13:51:34.608846Z", 
+  "msg": [
+   "On the issue-2382 branch:", 
+   "Nice fact about life: You learn something new every day!", 
+   "* subversion/svnserve/listen.c: Fix a comment -- it's not", 
+   "APR managing the listen backlog, it's the kernel."
+  ], 
+  "revision_id": "873827"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2008-10-19T13:41:09.542366Z", 
+  "msg": [
+   "Following up on r33616 and r33631, use svn_io_sleep_for_timestamps in revert,", 
+   "copy and move.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(do_wc_to_wc_copies): Sleep on a new timestamp of the ancestor of the copy", 
+   "targets.", 
+   "(do_wc_to_wc_moves): Add dst_parameter, containing the path copied to. Use", 
+   "this path for svn_io_sleep_for_timestamps.", 
+   "(wc_to_wc_copy): Pass destination path to do_wc_to_wc_moves.", 
+   "(repos_to_wc_copy_single): Sleep on the destination file.", 
+   "(try_copy): Pass destination path to wc_to_wc_copy.", 
+   "* subversion/libsvn_client/revert.c", 
+   "(svn_client_revert2): Sleep on the reverted file if only one file is", 
+   "reverted, otherwise pass a NULL path to svn_io_sleep_for_timestamps.", 
+   "Skip sleeping if using commit times."
+  ], 
+  "revision_id": "873826"
+ }
+]

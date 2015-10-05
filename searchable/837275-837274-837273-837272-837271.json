@@ -1,0 +1,100 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2000-09-18T19:47:46.000000Z", 
+  "msg": [
+   "* Makefile.am : too many \"..\" in link line??"
+  ], 
+  "revision_id": "837275"
+ }, 
+ {
+  "author": "jimb", 
+  "date": "2000-09-18T17:50:50.000000Z", 
+  "msg": [
+   "Doc fixes."
+  ], 
+  "revision_id": "837274"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-09-18T17:30:45.000000Z", 
+  "msg": [
+   "Abstractions to make building XML parsers more convenient:", 
+   "* xml.c (svn_xml_make_parser): new func.", 
+   "* log.c: #include \"svn_xml.h\".", 
+   "(start_handler, end_handler): new funcs.", 
+   "(svn_wc__run_log): make and free a parser, using above.", 
+   "* libsvn_subr/Makefile.am (INCLUDES): include expat-lite.", 
+   "* libsvn_wc/Makefile.am (libsvn_wc_la_LIBADD): new dependency, include", 
+   "expat-lite and others.", 
+   "Namespace changes to old XML delta parsing code, to avoid interference", 
+   "with above new abstractions:", 
+   "* svn_delta.h, etc: (svn_delta_xml_parser_t,", 
+   "svn_delta_make_xml_parser, svn_delta_free_xml_parser,", 
+   "svn_delta_xml_parsebytes, svn_delta_xml_auto_parse): more accurate", 
+   "names for `svn_xml_parser_t', `svn_delta_make_xml_parser',", 
+   "`svn_delta_free_xml_parser', `svn_xml_parsebytes', and", 
+   "`svn_delta_xml_auto_parse', respectively.  All callers changed."
+  ], 
+  "revision_id": "837273"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2000-09-15T22:57:31.000000Z", 
+  "msg": [
+   "MAJOR changes to the xml parser, so that it can handle postfix", 
+   "text-deltas!  After all, we need to test libsvn_wc's ability to handle", 
+   "these, and this is currently our only driver.  :)", 
+   "* simple.delta: new file, example of \"in-line\" text-deltas.", 
+   "* postfix.delta:  new file, example of \"postfix\" text-deltas.", 
+   "* delta.h (svn_delta__xml_t):  add two new tags, <delta-pkg> and", 
+   "<text-delta-ref>", 
+   "(svn_xml__digger_t):  add hashtable for looking up postfix text references", 
+   "(svn_xml__stackframe_t):  add `ref_id' field for postfix text-delta", 
+   "frames; add `hashed' to note if file_baton is stored in postfix hash.", 
+   "* xml_parse.c (svn_delta__tagmap): add two tags to match svn_delta__xml_t", 
+   "(xml_handle_start):  set `ref_id' field in frame if attribute exists;", 
+   "new condition to handle <text-delta-ref> tag.", 
+   "(do_begin_textdelta): depending on whether its a in-line or postfix", 
+   "text-delta, 1) error-check for (non)existence of ref_id, 2) fetch", 
+   "appropriate file_baton (either from hashtable or parent file-frame)", 
+   "Also, check for error when calling apply_textdelta (duh).", 
+   "(lookup_file_baton):  new function to retrieve file_baton from hash", 
+   "(xml_handle_end):  when parsing </text-delta>, if postfix then close", 
+   "file_baton manually.", 
+   "(svn_xml_make_parser): initialize digger's postfix hashtable", 
+   "(do_begin_textdeltaref):  new function -- stores id/file_baton in hash.", 
+   "(do_close_file):  call editor->close_file ONLY IF file_baton isn't", 
+   "stored in a hash somewhere.", 
+   "(do_stack_append):  add new validation rules for <delta-pkg> tag", 
+   "* deltaparse-test.c:  cleaned up some printing."
+  ], 
+  "revision_id": "837272"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2000-09-15T21:29:22.000000Z", 
+  "msg": [
+   "Changes to write out log files and process them.  The processing is", 
+   "still skeletal.", 
+   "(file_baton): new fields `name' and `pool', and remove const from `path'.", 
+   "(make_file_baton): set name, pool, which is a new subpool.", 
+   "Change all users to use file baton's own pool, not parent's.", 
+   "(svn_wc__write_adm_entry): new func, variadic.", 
+   "(v_write_adm_entry): guts for above, taking va_list.", 
+   "(close_file): write log entries according to baton.", 
+   "* log.c (svn_wc__run_log): new file, new func.", 
+   "* wc.h: adjust for above new funcs.  Also:", 
+   "(SVN_WC__ADM_LOG, SVN_WC__LOG_MERGE_TEXT,", 
+   "SVN_WC__LOG_REPLACE_TEXT_BASE, SVN_WC__LOG_MERGE_PROPS,", 
+   "SVN_WC__LOG_REPLACE_PROP_BASE, SVN_WC__LOG_SET_VERSION,", 
+   "SVN_WC__LOG_ATTR_NAME, SVN_WC__LOG_ATTR_VERSION,", 
+   "SVN_WC__LOG_ATTR_SAVED_MODS): new #defines.", 
+   "(SVN_WC__ADM_DOING, SVN_WC__ADM_DOING_ACTION, SVN_WC__ADM_DOING_FILES,", 
+   "SVN_WC__ADM_DOING_STARTED, SVN_WC__ADM_DOING_FINISHED): removed these", 
+   "obsolete #defines.", 
+   "* local_changes.c: minor fix -- load svn-dev.el."
+  ], 
+  "revision_id": "837271"
+ }
+]

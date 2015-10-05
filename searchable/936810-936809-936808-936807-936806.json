@@ -1,0 +1,69 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2010-04-22T12:22:48.009799Z", 
+  "msg": [
+   "Remove some uses of svn_iter_apr_array() and use simple C loops instead,", 
+   "because that method caused too much obfuscation.  This restores the", 
+   "iteration to roughly how it was before the new method was introduced in", 
+   "r866607, but keeping the larger loop bodies factored out into separate", 
+   "functions while the smaller ones now go back to in-line code.", 
+   "No functional change.", 
+   "Note:  As well as introducing and using the iteration functions, r866607", 
+   "made some changes to pool usage.  One such change was in the code involved", 
+   "in this commit.  In the loop where svn_client_commit4() calls", 
+   "post_process_commit_item(), it previously allocated the queue in a sub-pool", 
+   "(for want of a scratch pool), but subsequently has been allocating it in the", 
+   "function's main pool, and continues to do so after this commit.  We should", 
+   "consider whether that was an accidental regression and, if so, restore the", 
+   "use of a sub-pool (or scratch pool).", 
+   "* subversion/libsvn_client/commit.c", 
+   "(post_commit_baton, check_dir_delete_baton): Delete.", 
+   "(post_process_commit_item, check_nonrecursive_dir_delete): Take arguments", 
+   "through function parameters rather than through a 'baton' structure.", 
+   "(commit_item_is_changed): Delete, moving the body into svn_client_commit4().", 
+   "(svn_client_commit4): Iterate over arrays directly rather than through", 
+   "svn_iter_apr_array()."
+  ], 
+  "revision_id": "936810"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2010-04-22T12:18:36.811806Z", 
+  "msg": [
+   "Irradicate the last remaining svn_wc_entry_t instance in the", 
+   "libsvn_client diff logic.", 
+   "* subversion/include/private/svn_wc_private.h,", 
+   "* subversion/libsvn_wc/node.c", 
+   "(svn_wc__node_get_copyfrom_info): New.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(convert_to_url): Trade use of svn_wc_entry_t for some WC-NG node", 
+   "functions."
+  ], 
+  "revision_id": "936809"
+ }, 
+ {
+  "author": "torsten", 
+  "date": "2010-04-22T12:11:14.175737Z", 
+  "msg": [
+   "change \"sock_get\" to \"fileno\" in synopsis"
+  ], 
+  "revision_id": "936808"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2010-04-22T12:10:40.791715Z", 
+  "msg": [
+   "CAMEL-2668 Fixed more warning messages"
+  ], 
+  "revision_id": "936807"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2010-04-22T12:07:53.602563Z", 
+  "msg": [
+   "Document thread-safety of static fields"
+  ], 
+  "revision_id": "936806"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-10-31T14:41:48.123581Z", 
+  "msg": [
+   "Automatically reset sqlite statements on retrieving when we 'forgot' to", 
+   "reset them on the previous usage.", 
+   "While we should always reset sqlite statements directly after using them,", 
+   "many error conditions don't do this. But when a sqlite statement is used", 
+   "again without resetting it, you get an unrecoverable \"operation out of", 
+   "order\" error from sqlite.", 
+   "This change resolves a class of errors most common in error handling,", 
+   "but it can also hides errors on reusing statements within an inner function.", 
+   "Our test suite should always run ok with and without this patch. (Maybe", 
+   "we should only enable this on release mode?)", 
+   "Not applying this fix, can bring a svn_wc_context_t in a state where it is", 
+   "no longer usable without destroying and recreating it, because specific", 
+   "sqlite statements get stuck. This could break existing clients that reuse", 
+   "a single svn_client_ctx_t for all their operations (Like javahl, sharpsvn,", 
+   "TortoiseSVN and several other bindings do in their current implementation).", 
+   "(Before introducing svn_wc_context_t all svn_client_*() functions", 
+   "automatically brought the context back in a stable state after exiting).", 
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(svn_sqlite__stmt_t): Adds needs_reset boolean.", 
+   "(svn_sqlite__get_statement): If needs_reset is set, reset the statement", 
+   "before returning it.", 
+   "(svn_sqlite__prepare): Initialize needs_reset to false.", 
+   "(svn_sqlite__step): Set needs_reset to true, when not resetting directly.", 
+   "(svn_sqlite__reset): Set needs_reset to false."
+  ], 
+  "revision_id": "880400"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2009-10-31T13:19:40.427526Z", 
+  "msg": [
+   "Follow-up to r40309: use semantically correct path mangling functions.", 
+   "* subversion/svndumpfilter/main.c (main):", 
+   "-- Use svn_relpath_internal_style instead of svn_dirent_internal_style.", 
+   "-- Use svn_uri_join instead of svn_dirent_join."
+  ], 
+  "revision_id": "880399"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2009-10-31T12:32:51.829927Z", 
+  "msg": [
+   "* subversion/include/svn_dirent_uri.h (svn_uri_join): Fix typo in docstring."
+  ], 
+  "revision_id": "880398"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-31T12:22:44.520813Z", 
+  "msg": [
+   "* subversion/libsvn_wc/copy.c", 
+   "(determine_copyfrom_info): Put REPOS_RELPATH and ROOT_URL into SCRATCH_POOL,", 
+   "since they are dupped into the RESULT_POOL later if necessary."
+  ], 
+  "revision_id": "880397"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-10-31T12:14:48.575324Z", 
+  "msg": [
+   "Follow-up to r40321:", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(determine_copyfrom_info): Make sure URL and REV are always initialised.", 
+   "Since r40321 URL could be used uninitialised in case the node was added", 
+   "rather than copied or moved here."
+  ], 
+  "revision_id": "880396"
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-08-08T21:01:16.945786Z", 
+  "msg": [
+   "Add \"Best Practices\" chapter to handbook.", 
+   "Patch by: Scott Lamb <slamb@slamb.org>", 
+   "* doc/handbook/best_practices.texi: New file.", 
+   "* doc/handbook/svn-handbook.texi: Link to new chapter."
+  ], 
+  "revision_id": "842990"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-08T20:52:07.877890Z", 
+  "msg": [
+   "There's some brokenness in our Python test suite's output-matching,", 
+   "discovered thanks to issue #838 and revision 2910.  This commit is", 
+   "just to clean up that brokenness, or some of it anyway, without fixing", 
+   "any of the newly-exposed bugs in Subversion itself.", 
+   "I'm commenting out the now-failing tests, because developers depend on", 
+   "'make check' to tell whether or not their changes have introduced new", 
+   "bugs, and we don't want to interfere with that.  The way to deal with", 
+   "the bugs revealed below is to file them in the issue tracker or fix", 
+   "them, and reactive the regression tests when they pass again -- just", 
+   "as we would never commit a live failing test without committing the", 
+   "fix at the same time.", 
+   "* subversion/tests/clients/cmdline/svntest/tree.py", 
+   "(build_tree_from_checkout): Match the exact number of spaces", 
+   "expected, not just any random amount of whitespace.  Note that this", 
+   "causes merge_tests.py:add_with_history to fail, so...", 
+   "* subversion/tests/clients/cmdline/merge_tests.py", 
+   "(test_list): Temporarily comment out add_with_history.", 
+   "* subversion/tests/clients/cmdline/module_tests.py", 
+   "(test_list): Temporarily comment out update_lose_external.  This", 
+   "test has been broken since at least revision 2849.", 
+   "* build.conf", 
+   "(fs-test-scripts): Run module_tests.py too.  It wasn't run before", 
+   "because at the time I mistakenly thought tests listed here would be", 
+   "run over dav, and this test is known not to work over dav right", 
+   "now.  But we test over dav by hand anyway."
+  ], 
+  "revision_id": "842989"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-08T19:28:18.255682Z", 
+  "msg": [
+   "Finish(?) Issue #842.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(copy_id_inherit_t): New enum.", 
+   "(parent_path_t): Remove 'copy_id' member.", 
+   "(make_parent_path): Remove 'copy_id' argument.  Update use of parent_path_t.", 
+   "(open_path): Remove all copy-Id-related code.  Gonna do this logic", 
+   "in make_path_mutable.", 
+   "(parent_path_path, get_id_path, choose_copy_id): New helpers.", 
+   "(make_path_mutable): Do copy-Id choosing stuff now.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(branch_test): Flesh out this test to cover much more complexity,", 
+   "and remove the #if-0 around it.", 
+   "(test_funcs): Un-comment the reference to branch_test()."
+  ], 
+  "revision_id": "842988"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-08T14:28:25.775332Z", 
+  "msg": [
+   "Port a recent change made on /trunk to my branch.  Original log", 
+   "message follows:", 
+   "--", 
+   "Author: cmpilato", 
+   "Date: 2002-08-08 09:24:58 -0500 (Thu, 08 Aug 2002)", 
+   "New Revision: 2912", 
+   "Fix a bug in svnlook that prevented the display of copied subtree", 
+   "items in the \"tree\" and \"ids\" subcommands.", 
+   "* subversion/svnlook/main.c", 
+   "(generate_delta_tree): Add 'use_copy_history' argument, and pass", 
+   "this to svn_repos_dir_deltas.", 
+   "(do_dirs_changed, do_changed, do_diff): Pass TRUE for the new", 
+   "'use_copy_history' argument.", 
+   "(do_tree): Pass FALSE for the new 'use_copy_history' argument."
+  ], 
+  "revision_id": "842987"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-08-08T14:24:58.184977Z", 
+  "msg": [
+   "Fix a bug in svnlook that prevented the display of copied subtree", 
+   "items in the \"tree\" and \"ids\" subcommands.", 
+   "* subversion/svnlook/main.c", 
+   "(generate_delta_tree): Add 'use_copy_history' argument, and pass", 
+   "this to svn_repos_dir_deltas.", 
+   "(do_dirs_changed, do_changed, do_diff): Pass TRUE for the new", 
+   "'use_copy_history' argument.", 
+   "(do_tree): Pass FALSE for the new 'use_copy_history' argument."
+  ], 
+  "revision_id": "842986"
+ }
+]

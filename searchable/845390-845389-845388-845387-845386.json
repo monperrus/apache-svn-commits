@@ -1,0 +1,115 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2003-03-14T03:14:39.045358Z", 
+  "msg": [
+   "* gen-make.py", 
+   "(__main__): be a little more user friendly when we're given arguments", 
+   "we don't expect.  a usage message is a bit more useful than a backtrace", 
+   "in such situations."
+  ], 
+  "revision_id": "845390"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-03-14T03:05:41.513123Z", 
+  "msg": [
+   "Performed some archeology...", 
+   "* CHANGES", 
+   "- detail the branch that each release was made from, and the", 
+   "revision on that branch", 
+   "- bring format of 0.17.0 in line with above", 
+   "- corrected revisions for 0.19.1, 0.19.0, and 0.18.0", 
+   "- corrected revision and branch for 0.11.1", 
+   "- noted that 0.11.0 was never released"
+  ], 
+  "revision_id": "845389"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-03-14T01:35:03.717211Z", 
+  "msg": [
+   "Partially fix issue #1169:", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_plugin_t): Add pool argument to do_status.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__do_status): Add pool argument.", 
+   "* subversion/libsvn_ra_dav/commit.c", 
+   "(svn_ra_dav__do_status): Likewise.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_status): Likewise.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_status): Likewise.", 
+   "* subversion/libsvn_client/status.c", 
+   "(add_update_info_to_status_hash): Pass pool to ra->do_status."
+  ], 
+  "revision_id": "845388"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-03-14T01:16:46.205945Z", 
+  "msg": [
+   "More work on issue #1004: Stop reading the config file in", 
+   "log_do_merge().  Just receive the necessary bits of config data from", 
+   "callers, and pass those bits along to callees, instead of passing an", 
+   "entire config hash.", 
+   "* subversion/include/svn_io.h, subversion/libsvn_subr/io.c", 
+   "(svn_io_run_diff, svn_io_run_diff3): Convert config parameter to", 
+   "diff_cmd / diff3_cmd.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_merge): Take diff3_cmd instead of config parameter.", 
+   "(svn_wc_get_update_editor, svn_wc_get_switch_editor):  Take new", 
+   "diff3_cmd parameter.", 
+   "(svn_wc_install_file): Take new diff3_cmd parameter.  Also, fix an", 
+   "unrelated formatting inconsistency in the doc string.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_file_changed): Pass diff_cmd to svn_io_run_diff.", 
+   "(struct merge_cmd_baton): New field diff3_cmd.", 
+   "(svn_client_merge): Initialize diff3_cmd in the merge baton.", 
+   "(merge_file_changed, merge_file_added): Take diff3_cmd from the", 
+   "merge baton, pass it along to svn_wc_merge.", 
+   "* subversion/libsvn_wc/merge.c", 
+   "(svn_wc_merge): Pass new diff3_cmd to svn_io_run_diff3.", 
+   "* subversion/svnlook/main.c", 
+   "(print_diff_tree): Extract a diff_cmd from the config, pass it to", 
+   "svn_io_run_diff.", 
+   "* subversion/libsvn_wc/log.h", 
+   "(svn_wc__run_log): Take new diff3_cmd parameter.", 
+   "* subversion/libsvn_wc/log.c", 
+   "(struct log_runner): New diff3_cmd field.", 
+   "(svn_wc__run_log): Store diff3_cmd in the log_runner.", 
+   "(log_do_merge): Pass the log_runner's diff3_cmd to svn_wc_merge.", 
+   "(svn_wc_cleanup): Pass null diff3_cmd to svn_wc__run_log.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_process_committed): Pass null diff3_cmd to svn_wc__run_log.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(svn_wc_merge_prop_diffs): Pass null diff3_cmd to svn_wc__run_log.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct edit_baton): New diff3_cmd field.", 
+   "(make_editor): Take new diff3_cmd arg, store it in the edit baton.", 
+   "(close_file): Pass edit_baton's diff3_cmd to svn_wc_install_file.", 
+   "(svn_wc_get_update_editor, svn_wc_get_switch_editor): Take new", 
+   "diff3_cmd arg, pass it along to make_editor.", 
+   "(delete_entry, close_directory): Pass null diff3_cmd to", 
+   "svn_wc__run_log.", 
+   "(svn_wc_install_file): Take new diff3_cmd parameter, pass it to", 
+   "svn_wc__run_log.", 
+   "* subversion/libsvn_client/switch.c: Include svn_config.h.", 
+   "(svn_client_switch): Extract diff3_cmd from ctx->config, pass it to", 
+   "svn_wc_get_switch_editor and svn_wc_install_file.", 
+   "* subversion/libsvn_client/update.c: Include svn_config.h.", 
+   "(svn_client__update_internal): Extract diff3_cmd from ctx->config,", 
+   "pass it to svn_wc_get_update_editor."
+  ], 
+  "revision_id": "845387"
+ }, 
+ {
+  "author": "kraai", 
+  "date": "2003-03-14T00:12:56.576827Z", 
+  "msg": [
+   "Patch from Larry Shatzer.  Fix issue #1189:", 
+   "* doc/book/book/ch08.xml: Add <command> tags around svn commands."
+  ], 
+  "revision_id": "845386"
+ }
+]

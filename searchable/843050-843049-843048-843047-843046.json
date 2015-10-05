@@ -1,0 +1,105 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2002-08-15T15:47:54.004701Z", 
+  "msg": [
+   "Follow up to revision 2973:", 
+   "Simplify the error declaration interface, and force developers to", 
+   "specify an offset when adding a new error.  This makes it harder to", 
+   "accidentally insert a new error into the middle of a range:", 
+   "presumably, while renumbering the subsequent errors, one would think", 
+   "to oneself \"There's got to be a better way, hmmm... perhaps I'll go", 
+   "read the comments in this file to see if I'm missing something.\"", 
+   "That's the idea, anyway.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CATEGORY_FIRST): Removed, all callers changed.", 
+   "(SVN_ERRDEF): Take an offset argument; all callers changed."
+  ], 
+  "revision_id": "843050"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-08-15T05:06:32.041400Z", 
+  "msg": [
+   "* subversion/clients/cmdline/main.c:", 
+   "Follow up to revision 2958.  In the `svn help status' output,", 
+   "document the new status key `~', which is printed when a file is", 
+   "versioned but a directory exists instead with the same filename, or", 
+   "vice versa."
+  ], 
+  "revision_id": "843049"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-08-15T04:50:02.017207Z", 
+  "msg": [
+   "Add Daniel Berlin's draft of a 'blame' script."
+  ], 
+  "revision_id": "843048"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-08-14T22:56:08.973019Z", 
+  "msg": [
+   "Resolve issue #702, fragment the error code space.", 
+   "Note that this change will make more sense after an upcoming commit to", 
+   "APR, to expand the available space for user errors.  But it works with", 
+   "the current APR too, because the first category offset leaps right", 
+   "past the highest APR error anyway.  You may credit or blame Greg Stein", 
+   "for that bit of cleverness, as you please :-).", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_CATEGORY_FIRST): New macro, conditional expansion just as", 
+   "with SVN_ERRDEF.", 
+   "(SVN_ERR_CATEGORY_SIZE): New constant for the category increment.", 
+   "(SVN_ERR_BAD_CATEGORY_START, SVN_ERR_XML_CATEGORY_START,", 
+   "SVN_ERR_IO_CATEGORY_START, SVN_ERR_STREAM_CATEGORY_START,", 
+   "SVN_ERR_NODE_CATEGORY_START, SVN_ERR_ENTRY_CATEGORY_START,", 
+   "SVN_ERR_WC_CATEGORY_START, SVN_ERR_FS_CATEGORY_START,", 
+   "SVN_ERR_REPOS_CATEGORY_START, SVN_ERR_RA_CATEGORY_START,", 
+   "SVN_ERR_RA_DAV_CATEGORY_START, SVN_ERR_RA_LOCAL_CATEGORY_START,", 
+   "SVN_ERR_SVNDIFF_CATEGORY_START, SVN_ERR_APMOD_CATEGORY_START,", 
+   "SVN_ERR_CLIENT_CATEGORY_START, SVN_ERR_MISC_CATEGORY_START,", 
+   "SVN_ERR_CL_CATEGORY_START): New categories, use them to start off", 
+   "the first error in each catgory.", 
+   "Also, reorganize errors and remove unused ones:", 
+   "(SVN_ERR_UNKNOWN_FS_ACTION): Removed.", 
+   "(SVN_ERR_UNFRUITFUL_DESCENT): Removed.", 
+   "(SVN_ERR_MISSING_ENV_VARIABLE): Removed.", 
+   "(SVN_ERR_RA_DAV_HOSTNAME_LOOKUP): Removed.", 
+   "(SVN_ERR_CANCELED): Removed.", 
+   "(SVN_ERR_BASE): Was SVN_ERR_GENERAL.", 
+   "(SVN_ERR_STREAM_UNEXPECTED_EOF): Was SVN_ERR_UNEXPECTED_EOF.", 
+   "(SVN_ERR_STREAM_UNRECOGNIZED_DATA): Was SVN_ERR_UNRECOGNIZED_STREAM_DATA.", 
+   "(SVN_ERR_STREAM_MALFORMED_DATA): Was SVN_ERR_STREAM_MALFORMED_DATA.", 
+   "(SVN_ERR_XML_MALFORMED): Was SVN_ERR_MALFORMED_XML.", 
+   "(SVN_ERR_NODE_UNKNOWN_KIND): Was SVN_ERR_UNKNOWN_NODE_KIND.", 
+   "(SVN_ERR_NODE_UNEXPECTED_KIND): Was SVN_ERR_UNEXPECTED_NODE_KIND.", 
+   "(SVN_ERR_RA_DAV_SOCK_INIT): Was SVN_ERR_RA_SOCK_INIT.", 
+   "(SVN_ERR_RA_DAV_CREATING_REQUEST): Was SVN_ERR_RA_CREATING_REQUEST.", 
+   "(SVN_ERR_RA_DAV_REQUEST_FAILED): Was SVN_ERR_RA_REQUEST_FAILED.", 
+   "(SVN_ERR_RA_DAV_OPTIONS_REQ_FAILED): Was SVN_ERR_RA_OPTIONS_REQUEST_FAILED.", 
+   "(SVN_ERR_RA_DAV_PROPS_NOT_FOUND): Was SVN_ERR_RA_DAV_PROPS_NOT_FOUND.", 
+   "(SVN_ERR_RA_DAV_ALREADY_EXISTS): Was SVN_ERR_RA_DAV_ALREADY_EXISTS.", 
+   "(SVN_ERR_RA_LOCAL_REPOS_NOT_FOUND): Was SVN_ERR_RA_REPOSITORY_NOT_FOUND.", 
+   "(SVN_ERR_FS_TXN_OUT_OF_DATE): Was SVN_ERR_TXN_OUT_OF_DATE.", 
+   "(SVN_ERR_FS_BERKELEY_DB): Was SVN_ERR_BERKELEY_DB.", 
+   "All callers changed.", 
+   "And finally, fallout from the removal of SVN_ERR_CANCELED:", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_cancellation_func_t, svn_client_get_cancellation_editor):", 
+   "Removed, no one uses this now.  When we make cancellation available", 
+   "again, it will be done through svn_wc_notify_func_t, which will", 
+   "change to non-void return so it can signal cancellations.", 
+   "* subversion/libsvn_client/cancellation_editor.c: Removed this file."
+  ], 
+  "revision_id": "843047"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-08-14T20:15:07.083271Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "843046"
+ }
+]

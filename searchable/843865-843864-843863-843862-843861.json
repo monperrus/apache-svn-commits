@@ -1,0 +1,122 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-11-14T23:31:46.867957Z", 
+  "msg": [
+   "Work on issue #896 (\"perform EOL translation on log messages and propvals\").", 
+   "This change abstracts the eol/keyword translation logic to operate on", 
+   "svn_stream_t objects instead of apr_file_t objects.", 
+   "svn_wc_copy_and_translate() now becomes a wrapper around the", 
+   "abstraction, and we open the way to performing translation on", 
+   "string-streams.", 
+   "* libsvn_wc/translate.c", 
+   "(svn_wc_translate_stream): new function.  this is the main EOL and", 
+   "keyword translation logic that used to be the main body of", 
+   "svn_wc_copy_and_translate, now generalized to operate on streams", 
+   "instead of files.", 
+   "(translate_err): deleted.", 
+   "(translate_write): lose the path and pool args.  take a stream", 
+   "instead of an apr_file_t.", 
+   "(translate_newline): lose the 2 path and pool args.  take a stream", 
+   "instead of an apr_file_t.", 
+   "* svn_wc.h", 
+   "(svn_wc_translate_stream): new declaration, which now takes", 
+   "over the massive docstring that once belonged to", 
+   "svn_wc_copy_and_translate.", 
+   "(svn_wc_copy_and_translate):  new docstring, now described as a", 
+   "convenient variant of svn_wc_translate_stream."
+  ], 
+  "revision_id": "843865"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-11-14T21:29:55.612656Z", 
+  "msg": [
+   "More work on #896.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_from_stringbuf): Was svn_stream_from_string.  Ben needed", 
+   "a writable version, too.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(struct stream_string_baton): Remove 'data', 'len'.  Add 'str'.", 
+   "(read_handler_string): Update use of baton members.", 
+   "(write_handler_string): New.", 
+   "(svn_stream_from_stringbuf): Was svn_stream_from_string.  Ben needed", 
+   "a writable version, too.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(test_stream_from_string): Expand this to test the writable version", 
+   "of the stream, too."
+  ], 
+  "revision_id": "843864"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-11-14T19:10:40.171903Z", 
+  "msg": [
+   "Helping sussman with issue #896 by providing a stream-from-string", 
+   "interface.  He's abstracting out some code that currently reads from a", 
+   "file.  That code now needs to operate on data from a file or from a", 
+   "string.  So, of course, it will now read from an svn_stream_t.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_from_string): New.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(struct string_stream_baton, read_handler_string,", 
+   "svn_stream_from_string): New.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "New test suite file (with a single test, for now).", 
+   "* subversion/build.conf", 
+   "(stream-test): New section for new test."
+  ], 
+  "revision_id": "843863"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-11-14T18:44:29.724663Z", 
+  "msg": [
+   "* tools/client-side/svn_load_dirs_property_table.example:", 
+   "Sample configuration file for svn_load_dirs.pl -p command line", 
+   "option, which automatically applies properties to files matching", 
+   "regular expressions."
+  ], 
+  "revision_id": "843862"
+ }, 
+ {
+  "author": "blair", 
+  "date": "2002-11-14T18:40:26.943738Z", 
+  "msg": [
+   "New options and features to svn_load_dirs.pl:", 
+   "* tools/client-side/svn_load_dirs.pl:", 
+   "New command line options:", 
+   "-no_user_input   don't ask yes/no questions and assume yes answer", 
+   "-svn_username    username to perform commits as", 
+   "-svn_password    password to supply to svn commit", 
+   "-verbose         increase program verbosity", 
+   "If no directories are listed on the command line, then read them", 
+   "from standard input.", 
+   "Make the regular expressions from the property configuration table", 
+   "case insensitive.", 
+   "Hardwire the location of `svn' and use that when calling svn, so it", 
+   "can be more safely called from a CGI script.", 
+   "Instead of quiting when a non-file or non-directory is encountered", 
+   "in the directory being imported, print a message and move on.", 
+   "Add a signal handler to catch HUP, INT, TERM and PIPE and clean up", 
+   "the temporary directory.", 
+   "Determine the native eol style by writing to a file in the script's", 
+   "temporary directory, not in the current directory, which may not", 
+   "be writable.", 
+   "Skip importing paths that are not files or directories.", 
+   "(get_tag_dir): New subroutine to return a tag given the directory", 
+   "name being loaded.", 
+   "(get_next_load_dir): New subroutine to get the next directory to", 
+   "load either from the command line or from standard input.  Also", 
+   "set the username to perform the commit as from standard input if", 
+   "supplied.", 
+   "(set_commit_options): New subroutine to set the --username and", 
+   "--password command line options for svn commit.", 
+   "* tools/client-side/svn_load_dirs.README:", 
+   "Mention that to see the command line options, run svn_load_dirs.pl with", 
+   "no command line arguments.", 
+   "Add section headers and make the file easier to read."
+  ], 
+  "revision_id": "843861"
+ }
+]

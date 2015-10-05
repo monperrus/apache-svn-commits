@@ -1,0 +1,86 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2011-05-17T15:02:45.357238Z", 
+  "msg": [
+   "Merge r939000, r939002, r1102803 from trunk:", 
+   "* r939000, r939002, r1102803", 
+   "Provide clueful error when editor drive refers revision > HEAD.", 
+   "This situation would normally occur in master-slave setup.", 
+   "Justification:", 
+   "This backport fixes the following vague error:", 
+   "svn: REPORT of '/svn/repo1/!svn/vcc/default': Could not read", 
+   "chunk size: connection was closed by server (http://127.0.0.1)", 
+   "to:", 
+   "svn: A reported revision is higher than the current repository", 
+   "HEAD revision.  Perhaps the repository is out of date with", 
+   "respect to the master repository?", 
+   "if WebDAV proxying is enabled for the server.", 
+   "Votes:", 
+   "+1: kameshj, cmpilato, stsp"
+  ], 
+  "revision_id": "1104310"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2011-05-17T15:02:05.365283Z", 
+  "msg": [
+   "With rhuijben, avoid transmitting entry props for unmodified, locked", 
+   "files when the client-provided lock token matches what is stored in", 
+   "the repository.  This fixes issue #3525 (\"Locked file which is", 
+   "scheduled for delete causes tree conflict\") and issue #3471 (\"svn up", 
+   "touches file w/ lock & svn:keywords property\").", 
+   "NOTE:  There is a remaining 3525-related test that is still failing", 
+   "(update_tests.py 53), but that's because of out-of-date expectations", 
+   "in the WC-NG world.  (That will be fixed in a subsequent revision.)", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(update_entry): Return early not only when there's not a provided", 
+   "lock token, but also when there's a provided lock token that matches", 
+   "what's in the repository.", 
+   "* subversion/tests/cmdline/lock_tests.py", 
+   "(update_locked_deleted): Remove @XFail decorator.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_with_file_lock_and_keywords_property_set): Remove @XFail decorator."
+  ], 
+  "revision_id": "1104309"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-05-17T14:59:21.830041Z", 
+  "msg": [
+   "[ reverted in r1104387]", 
+   "Fix issue #3859 by rearranging the order of database operations, so that", 
+   "the triggers fire in a different order. This allows us to ensure that", 
+   "changes to NODES has precedence over changes to ACTUAL_NODE.", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(op_revert_txn, op_revert_recursive_txn): move the ACTUAL_NODE changes", 
+   "further up in the function and leave a comment about why.", 
+   "* subversion/tests/cmdline/revert_tests.py:", 
+   "(revert_empty_actual): remove XFail marker"
+  ], 
+  "revision_id": "1104308"
+ }, 
+ {
+  "author": "iocanel", 
+  "date": "2011-05-17T14:57:53.614594Z", 
+  "msg": [
+   "[SMX4-833] Added java-xmlbuilder 0.4 OSGi bundle"
+  ], 
+  "revision_id": "1104307"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2011-05-17T14:57:11.168580Z", 
+  "msg": [
+   "Various improvements to the \"clean checkout\" optimization applicability check.", 
+   "See http://svn.haxx.se/dev/archive-2011-05/0479.shtml for details", 
+   "* subversion/libsvn_client/update.c", 
+   "(is_empty_wc): make return parameter the first in the list;", 
+   "improve commentary; return \"optimization not applicable\"", 
+   "upon any unexpected problem", 
+   "(update_internal): adapt caller", 
+   "Suggested by: danielsh"
+  ], 
+  "revision_id": "1104306"
+ }
+]

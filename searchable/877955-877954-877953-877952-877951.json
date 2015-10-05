@@ -1,0 +1,69 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-05-28T16:43:13.013506Z", 
+  "msg": [
+   "Remove a call to svn_wc_entries_read(), by using the wc_db APIs directly.", 
+   "This still leaves some access baton cruft lying around, but it's much less", 
+   "prevalent than it was.", 
+   "* subversion/libsvn_wc/crop.c", 
+   "(crop_children): Don't fetch entries, but only get the info we are", 
+   "interested in, along with the children.  Do all this using wc_db APIs."
+  ], 
+  "revision_id": "877955"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-28T16:42:42.945123Z", 
+  "msg": [
+   "We've started using absolute paths in wc-ng.  This makes things a bit easier", 
+   "from an API perspective, but it also means we're handing absolute paths back", 
+   "to the notification funtions.", 
+   "The commandline client historically has used relative paths in notification", 
+   "messages, for good reason.  So, this patch recomposes those relative paths", 
+   "based upon the current working directory (if no other path prefix is", 
+   "specified).", 
+   "This now changes the output for more complex relative paths, such as", 
+   "'../../foo'.  But that output will be changed anyway, as we move toward", 
+   "absolute paths in the notification structs.  Further improvements to this", 
+   "code could improve this situation, but I'm not focused on that just yet.", 
+   "* subversion/svn/notify.c", 
+   "(notify_baton): Add the default path prefix.", 
+   "(notify): If we haven't been supplied a prefix by the caller, use the", 
+   "one stashed in our baton.", 
+   "(svn_cl__get_notifier): Fetch the default path prefix."
+  ], 
+  "revision_id": "877954"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-05-28T16:24:14.875575Z", 
+  "msg": [
+   "* subversion/cmdline/svnsync_tests.py", 
+   "(run_test): Open the dump file as binary stream to allow testing", 
+   "for eol-style issues on Windows, which would otherwise normalize the", 
+   "'\\r' away. This fixes the dump file parsing of svnsync_tests.py 26 on", 
+   "Windows."
+  ], 
+  "revision_id": "877953"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-05-28T15:41:13.616917Z", 
+  "msg": [
+   "* subversion/libsvn_repos/load.c", 
+   "(read_key_or_val): Add a few svn_error_return calls to help tracing", 
+   "errors like the svnsync_tests.py 26 failure on the Windows Buildbot."
+  ], 
+  "revision_id": "877952"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-28T15:10:48.514181Z", 
+  "msg": [
+   "r37876 was far too easy...and incorrect.  Revert it, since we don't want", 
+   "uris turned into dirents."
+  ], 
+  "revision_id": "877951"
+ }
+]

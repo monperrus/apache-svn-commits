@@ -1,0 +1,114 @@
+[
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T03:39:12.815853Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Rename mergeinfo-storing commands to contain \"_legacy\".", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(index_path_mergeinfo_legacy, index_txn_mergeinfo_legacy): Rename", 
+   "from sans-_legacy.", 
+   "(svn_fs_mergeinfo__update_index): Adjust."
+  ], 
+  "revision_id": "868205"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T03:35:54.399177Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "In FSFS, start reading and writing a \"new\" format of txn mergeinfo:", 
+   "instead of actually storing the entirety of the mergeinfo property,", 
+   "just store its presence or absence.", 
+   "This patch keeps BDB compiling but almost certainly break it.", 
+   "I haven't removed the \"legacy\" format of mergeinfo yet; I pass both", 
+   "types through to the sqlite layer, which currently only pays attention", 
+   "to the legacy version.", 
+   "* subversion/include/private/svn_fs_mergeinfo.h", 
+   "(SVN_FS_MERGEINFO__EXISTS, SVN_FS_MERGEINFO__DELETED): New values", 
+   "for hash.", 
+   "(svn_fs_mergeinfo__update_index): Take argument of \"new\"-style", 
+   "mergeinfo changes.  Not yet documented.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_commit_txn): Adjust call to", 
+   "svn_fs_mergeinfo__update_index, in a way that almost certainly", 
+   "doesn't work at all.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_txn_mergeinfo): Read legacy and new files.", 
+   "(svn_fs_fs__change_txn_mergeinfo): Writes legacy and new files.", 
+   "(commit_body): Pass both legacy and new hashes through to", 
+   "svn_fs_mergeinfo__update_index.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(svn_fs_mergeinfo__update_index): Take new argument; ignore it for", 
+   "now."
+  ], 
+  "revision_id": "868204"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T02:42:20.647228Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "In preparation for changing the format of FSFS's temporary transaction", 
+   "mergeinfo file, rename the current file to mergeinfo-legacy.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_MERGEINFO_LEGACY): New.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_txn_mergeinfo_legacy): New.", 
+   "(get_txn_mergeinfo, svn_fs_fs__change_txn_mergeinfo): Use legacy", 
+   "mergeinfo file."
+  ], 
+  "revision_id": "868203"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-29T02:19:06.797445Z", 
+  "msg": [
+   "On the sqlite-mergeinfo-without-mergeinfo branch:", 
+   "Start eliminating use of mergeinfo DB for mergeinfo data (as opposed", 
+   "to just its presence or absence).", 
+   "When doing this change, I discovered that", 
+   "svn_fs_mergeinfo__get_mergeinfo[_for_tree] don't error if paths given", 
+   "don't exist!  I think this is wrong, but the log -g code kind of", 
+   "relies on it.  I added a long XXXdsg comment about that.", 
+   "The essential effect of this change is that", 
+   "svn_fs_mergeinfo__get_mergeinfo no longer uses the Sqlite DB.", 
+   "svn_fs_mergeinfo__get_mergeinfo_for_tree still does, though, and it is", 
+   "still updated in the same way.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(get_mergeinfo_for_path): Change to take an FS root instead of a", 
+   "Sqlite db and revnum.  Completely reimplement to not use Sqlite at", 
+   "all, but rather use the FS itself.  Use svn_path_dirname instead of", 
+   "some stringbuf games to achieve the same result.", 
+   "(index_path_mergeinfo): Fix a bug (that's on trunk too) where", 
+   "mergeinfo has to be compared against NEGATIVE_CACHE_RESULT. Adjust", 
+   "call to get_mergeinfo_for_path.  This requires adding an argument", 
+   "of the FS root for NEW_REV-1, which is just created once in...", 
+   "(index_txn_mergeinfo): ... this function.  Which thus needs to take", 
+   "an FS, provided by...", 
+   "(svn_fs_mergeinfo__update_index): ... this function.", 
+   "(get_mergeinfo): This one also takes an FS root instead of Sqlite db", 
+   "and revnum, and adjust its call to get_mergeinfo_for_path.", 
+   "(svn_fs_mergeinfo__get_mergeinfo): Don't open the db; adjust call.", 
+   "(svn_fs_mergeinfo__get_mergeinfo_for_tree): Adjust."
+  ], 
+  "revision_id": "868202"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-28T22:53:49.218274Z", 
+  "msg": [
+   "Experimental branch to try minimizing the data stored in the sqlite", 
+   "database so that it is just", 
+   "CREATE TABLE mergeinfo", 
+   "( path TEXT NOT NULL,", 
+   "revision INTEGER NOT NULL,", 
+   "action INTEGER NOT NULL );", 
+   "where action is an enum representing 'added', 'modified', or", 
+   "'deleted'.", 
+   "See:", 
+   "http://svn.haxx.se/dev/archive-2007-11/1181.shtml"
+  ], 
+  "revision_id": "868201"
+ }
+]

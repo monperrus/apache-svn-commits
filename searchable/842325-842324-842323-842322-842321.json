@@ -1,0 +1,122 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2002-06-17T21:26:21.240828Z", 
+  "msg": [
+   "Fix issue #683:  'bug in repos_to_repos_copy() logic'.", 
+   "In particular, we were failing when trying to resurrect deleted items", 
+   "like this: 'svn cp -rN src_url dst_url', where src_url == dst_url.  In", 
+   "this case, get_longest_ancestor(src_url, dst_url) was returning the", 
+   "*very* same url as the hypothetical \"parent\" of the two; and then we'd", 
+   "open the ra_sesson to that same url, and poof, we couldn't do the", 
+   "copy.  The trick is to look for this edge case and make sure we open", 
+   "an ra_session directly *above* the identical urls.", 
+   "* libsvn_client/copy.c (repos_to_repos_copy): fix possible segfault", 
+   "from dereferencing NULL.  Also, look for special edge-case where", 
+   "src_url == dst_url, and set common parent of the urls to the actual", 
+   "*parent* of them.", 
+   "* copy_tests.py", 
+   "(resurrect_deleted_dir): new regression test for issue #683... using", 
+   "the new python test API!"
+  ], 
+  "revision_id": "842325"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-06-17T21:07:20.690964Z", 
+  "msg": [
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_add): Pass the known kind of the added thing to the", 
+   "notification routine.", 
+   "* subversion/clients/cmdline/feedback.c", 
+   "(notify_added): notify_removed (notify_added);", 
+   "(notify): Print the \"(bin)\" notation for adds of non-textual items.", 
+   "Make the commit verbs line up properly."
+  ], 
+  "revision_id": "842324"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-06-17T20:59:26.116205Z", 
+  "msg": [
+   "Make the Handbook docs compile.  Plus some tweaks.", 
+   "* handbook/:  set svn:ignore property for all the turds left by tex.", 
+   "* getting_started.texi, svn-handbook.texi:  tweaks.", 
+   "* license.texi:  include the Collabnet open-source license."
+  ], 
+  "revision_id": "842323"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2002-06-17T20:33:47.651288Z", 
+  "msg": [
+   "More work on issue #517.  This is for making updates update external", 
+   "subdirs too, but is untested (YMMV).", 
+   "The basic strategy is to gather all externals properties from the", 
+   "working tree -- that is, to gather traversal info earlier, when a", 
+   "wider traversal is done, and then use the update editor to gather", 
+   "changes to that info.  Where the externals differ, handle as we used", 
+   "to; where they are the same, handle by updating.", 
+   "* subversion/include/svn_wc.h: Move all traversal info stuff to its", 
+   "own section, document it better.", 
+   "(svn_wc_init_traversal_info): New prototype.", 
+   "(svn_wc_get_update_editor, svn_wc_get_checkout_editor,", 
+   "svn_wc_get_switch_editor): Document new traversal info semantics.", 
+   "(svn_wc_crawl_revisions): Take traversal_info argument.", 
+   "(svn_wc_edited_externals): Document new behavior.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client_update): Handle traversal info the new way, pass it to", 
+   "both the crawl and the update.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client_checkout): Handle traversal info the new way.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(svn_client_switch): Handle traversal info the new way.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(svn_wc_init_traversal_info): New func.", 
+   "(svn_wc_get_update_editor, svn_wc_get_checkout_editor,", 
+   "svn_wc_get_switch_editor, make_editor): Take traversal info", 
+   "directly.", 
+   "(close_directory): Handle traversal info the new way.", 
+   "(struct svn_wc_traversal_info_t): Moved from here...", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(struct svn_wc_traversal_info_t): ... to here.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(svn_wc_crawl_revisions): Take traversal_info argument, pass it", 
+   "along to report_revisions.", 
+   "(report_revisions): Take traversal_info argument, use it.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(do_diff): Pass null for traversal info to svn_wc_crawl_revisions.", 
+   "* subversion/libsvn_client/status.c", 
+   "(add_update_info_to_status_hash): Same.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__handle_externals): Was svn_client__handle_externals_change.", 
+   "Take new update_unchanged arg.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(svn_client__handle_externals): Same as header change.", 
+   "(struct handle_externals_desc_change_baton,", 
+   "struct handle_external_item_change_baton): New update_unchanged field."
+  ], 
+  "revision_id": "842322"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-06-17T10:47:55.024192Z", 
+  "msg": [
+   "Convert to the new State mechanism for representing trees.", 
+   "* commit_tests.py:", 
+   "(get_standard_state): renamed from get_standard_list().", 
+   "reimplemented to build a State object instead of an old-style", 
+   "status list.", 
+   "(make_standard_slew_of_changes): use a State rather than a list and", 
+   "a tree.", 
+   "(all test functions): build the expected output, disk, and status as", 
+   "State objects rather than as lists (converted to trees).", 
+   "generally, calls to build_generic_tree() were switched to", 
+   "construction of a State by instantiating a bunch of StateItem", 
+   "objects. The get_virginal_state() function was used instead of", 
+   "get_virginal_status_list(). We also use main.greek_state.copy()", 
+   "rather than calling main.copy_greek_tree()."
+  ], 
+  "revision_id": "842321"
+ }
+]

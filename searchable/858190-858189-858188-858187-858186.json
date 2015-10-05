@@ -1,0 +1,77 @@
+[
+ {
+  "author": "malcolm", 
+  "date": "2006-01-16T23:41:44.957153Z", 
+  "msg": [
+   "Fix diff_tests 32 (repos-wc diff showing added entries with props).", 
+   "When performing a wc->repos diff on an added file, include the BASE->repos", 
+   "propchanges in the file_added() callback.", 
+   "(WORKING->repos diffs should obviously report the WORKING->repos", 
+   "propchanges instead).", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(close_file): Pass the BASE->repos propchanges (which will be the", 
+   "propchanges from an empty hash, since the file does not exist", 
+   "in BASE), together with an empty hash to represent the original", 
+   "properties, to the svn_wc_diff_callbacks2_t file_added() callback.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(test_list): Unmark test diff_repos_wc_add_with_props as XFail."
+  ], 
+  "revision_id": "858190"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-01-16T23:11:49.509048Z", 
+  "msg": [
+   "* STATUS: Nominate r18114."
+  ], 
+  "revision_id": "858189"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2006-01-16T22:57:52.077755Z", 
+  "msg": [
+   "* tools/hook-scripts/mailer/mailer.py (Config._prep_groups):", 
+   "Fix bug: named substitutions gathered from defaults.for_repos were being", 
+   "ignored for sections which contained a specific for_repos option."
+  ], 
+  "revision_id": "858188"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2006-01-16T21:34:44.035531Z", 
+  "msg": [
+   "Continue work on fixing diff_tests 32 (repos-wc diff showing added", 
+   "entries with props).", 
+   "When performing a repos->wc diff, if the BASE->repos diff reported by the", 
+   "server indicates that a directory has been deleted (and so therefore we", 
+   "must report the addition of a directory currently in the wc), reconstruct", 
+   "the propchanges necessary to create the current WORKING properties,", 
+   "and pass them to the dir_props_changed() callback.", 
+   "Like r18098, this is incorrect for repos->BASE diffs, but the whole", 
+   "handling of directories reported as deleted during repos->BASE diffs is", 
+   "currently disabled due to an earlier check in directory_elements_diff()", 
+   "(the function responsible for reporting both local BASE->WORKING diffs", 
+   "and for faking added directories for repos->WORKING diffs).", 
+   "[The diff is easier to follow with 'diff -w'; we're just adding a new", 
+   "case before the 'if (modified)' condition, not changing it.]", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(directory_elements_diff): Before checking whether a directory has local", 
+   "property modifications, first check whether we are faking the addition", 
+   "of the directory (true only if we're doing a repos->WORKING diff,", 
+   "and the directory doesn't exist in the repos).  If so, fetch the", 
+   "current WORKING properties and determine the changes necessary to", 
+   "create them from scratch.  Report the changes (together with an empty", 
+   "property hash) during the svn_wc_diff_callbacks2_t dir_props_changed()", 
+   "callback."
+  ], 
+  "revision_id": "858187"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2006-01-16T21:04:50.302250Z", 
+  "msg": [
+   "Merge r17717:18091 from svn/trunk to svn/branches/ebcdic/trunk."
+  ], 
+  "revision_id": "858186"
+ }
+]

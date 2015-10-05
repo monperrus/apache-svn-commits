@@ -1,0 +1,76 @@
+[
+ {
+  "author": "cutting", 
+  "date": "2010-02-19T01:19:35.019966Z", 
+  "msg": [
+   "AVRO-349. Ignore some generated C++ files."
+  ], 
+  "revision_id": "911670"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2010-02-19T01:16:53.963234Z", 
+  "msg": [
+   "AVRO-416.  Add missing note to CHANGES.txt."
+  ], 
+  "revision_id": "911669"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-02-19T01:12:24.959690Z", 
+  "msg": [
+   "Rebuild the upgrading logic.", 
+   "We (now) manually execute statements to bring the schema up to current.", 
+   "Those statements, any data ported over, and the schema format update, are", 
+   "now transacted. Once the transaction completes, *then* we remove the old", 
+   "files, thus allowing for restarts of the upgrade process.", 
+   "* subversion/libsvn_wc/upgrade.c:", 
+   "(build_lockfile_path): handy utility function to build a path to the", 
+   "classic on-disk lock", 
+   "(create_physical_lock): use build_lockfile_path()", 
+   "(wipe_wcprops): new function to wipe out all the old wcprops files", 
+   "(upgrade_to_wcng): call wipe_wcprops, instead of manually wiping the", 
+   "files here. rejigger the bit around deleting other obsolete files from", 
+   "the .svn subdir. when removing the on-disk lock, use the new", 
+   "build_lockfile_path function.", 
+   "(bump_to_13): new function to bump from f12 to f13. this is just a", 
+   "simple schema upgrade, and the caller will follow it with the removal", 
+   "of any wcprops files.", 
+   "(migrate_locks): use the new build_lockfile_path function, and do not", 
+   "remove the on-disk lock within this function. if the transaction", 
+   "fails, then we want to ensure that file remains for the retry.", 
+   "(bump_to_14): new function to migrate from f13 to f14, by constructing", 
+   "the new WCLOCKS table, and migrating any on-disk lock. the caller will", 
+   "remove that lock file.", 
+   "(bump_to_15): new function to migrate from f14 to f15, which is a simple", 
+   "SQL-based change.", 
+   "(bump_to_16): similar to bump_to_15, but migrating to f16.", 
+   "(migrate_props): this function is no #if'd out of the compilation since", 
+   "it is not (yet) used.", 
+   "(bump_database_to_17): removed", 
+   "(bump_to_17): renamed to bump_to_XXX, and the parameters adjusted to the", 
+   "standard pattern of: update schema, perform migration to database.", 
+   "(bump_to_17): new function (#if'd out, however) to migrate to f17, where", 
+   "the properties will be stored within the database.", 
+   "(svn_wc__upgrade_sdb): removed the MALFUNCTION, and revamped the logic", 
+   "for performing each step-wise upgrade."
+  ], 
+  "revision_id": "911668"
+ }, 
+ {
+  "author": "justin", 
+  "date": "2010-02-19T01:03:51.429667Z", 
+  "msg": [
+   "SLING-1333 - removing dependency from servlets.post to jcr 2; hardcoding int value for WEAKREFERENCE"
+  ], 
+  "revision_id": "911667"
+ }, 
+ {
+  "author": "djencks", 
+  "date": "2010-02-19T01:00:48.886652Z", 
+  "msg": [
+   "GERONIMO-5150 use fixed snapshot tx manager component.  Pool doesn't expand when releasing idle connections"
+  ], 
+  "revision_id": "911666"
+ }
+]

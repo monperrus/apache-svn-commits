@@ -1,0 +1,70 @@
+[
+ {
+  "author": "boisvert", 
+  "date": "2007-03-14T20:58:51.460377Z", 
+  "msg": [
+   "Fix SM-877 Bottleneck in SoapReader.readSoapUsingDom()"
+  ], 
+  "revision_id": "518325"
+ }, 
+ {
+  "author": "nthaker", 
+  "date": "2007-03-14T20:58:43.764601Z", 
+  "msg": [
+   "AXIS2-2324", 
+   "This fix will allow use of relative path to create wsdl definition in a thin client environment."
+  ], 
+  "revision_id": "518324"
+ }, 
+ {
+  "author": "wglass", 
+  "date": "2007-03-14T20:57:02.770172Z", 
+  "msg": [
+   "make Group/Role/Permission serializable (paralleling User).  Fix problem where TorqueUser only partially serializes by making superclass TorqueObject serializable.  The result: if a user is logged in when a server restarts, he can stay logged in.  (session is serialized).  Fixes TRB-41."
+  ], 
+  "revision_id": "518323"
+ }, 
+ {
+  "author": "abrown", 
+  "date": "2007-03-14T20:53:16.175374Z", 
+  "msg": [
+   "DERBY-47 (partial): Patch that adds logic to create IN-list \"probe predicates\"", 
+   "during preprocessing, thus allowing the code changes in all previous patches", 
+   "for this issue to take effect. With this patch Derby will now re-write IN", 
+   "lists as probe predicates and, if the optimizer thinks it is best to do so,", 
+   "will do index \"multi-probing\" at execution time to avoid excessive scanning.", 
+   "The changes in this patch affect \"preprocessing\" logic as follow:", 
+   "1. Replaces \"A\" with \"B\", where \"A\" is existing logic that creates a BETWEEN", 
+   "node for IN-lists containing all constants, and \"B\" is new logic that", 
+   "creates a \"probe predicate\" for IN-lists containing all constants *and/or*", 
+   "parameter nodes. The probe predicates are then used throughout optimization,", 
+   "modification of access paths, code generation, and execution time (as", 
+   "appropriate) in the manner described by previous patches for this issue.", 
+   "2. Adds some additional logic to OrNode preprocessing to allow the conversion", 
+   "of queries like:", 
+   "select ... from T1 where i in (2, 3) or i in (7, 10)", 
+   "into queries that look like:", 
+   "select ... from T1 where i in (2, 3, 7, 10)", 
+   "This is really just an extension of the existing logic to transform a", 
+   "chain of OR nodes into an IN-list.", 
+   "3. Adds logic to PredicateList.pushExpressionsIntoSelect() to correctly", 
+   "copy \"probe predicates\" so that the left operand (column reference)", 
+   "is pointing to the correct place when we do static pushing of one-", 
+   "sided predicates (which is what a \"probe predicate\" is).", 
+   "4. Adds a new method to ValueNodeList that is used for checking to see if", 
+   "a list of IN values consists solely of constant and/or parameter nodes", 
+   "(there are no other expressions or column references).", 
+   "This patch also incorporates all of the test master updates required as a", 
+   "result of the new multi-probing functionality."
+  ], 
+  "revision_id": "518322"
+ }, 
+ {
+  "author": "sichen", 
+  "date": "2007-03-14T20:53:14.444868Z", 
+  "msg": [
+   "Set purchase shipment status to PURCH_SHIP_SHIPPED in the updatePurchaseShipmentFromReceipt service, so that the shipment can be marked received if necessary, since the existence of a shipment receipt logically indicates that the shipment was shipped."
+  ], 
+  "revision_id": "518321"
+ }
+]

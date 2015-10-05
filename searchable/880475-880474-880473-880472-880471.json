@@ -1,0 +1,75 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2009-11-06T11:48:55.456880Z", 
+  "msg": [
+   "* STATUS: Nominate r40400."
+  ], 
+  "revision_id": "880475"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-06T11:40:32.009147Z", 
+  "msg": [
+   "Correctly fix issue #2580 on Win32: Don't kill the tunnel agent.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(make_tunnel): On Win32, APR translates APR_KILL_ONLY_ONCE to", 
+   "APR_KILL_ALWAYS, terminating the tunnel agent prematurely and", 
+   "breaking the SSH and SVN protocol shutdown sequences.", 
+   "It is actually not necessary to kill the tunnel agent on Windows,", 
+   "since it will reliably die on its own once svn closes the pipe.", 
+   "Patch by: Bob Denny <rdenny@dc3.com>", 
+   "(log message tweaked by me)"
+  ], 
+  "revision_id": "880474"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-11-06T11:20:25.646156Z", 
+  "msg": [
+   "Fix application of patches with \\ path separators.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(resolve_target_path): Instead of running the target path as read from", 
+   "the patch file through svn_dirent_canonicalize(), run it through", 
+   "svn_dirent_internal_style(), which should correctly normalise path", 
+   "separators on Windows. On UNIX, however, svn_dirent_internal_style()", 
+   "does not change backslashes, so manually normalize paths containing", 
+   "only \\ separators.."
+  ], 
+  "revision_id": "880473"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-11-06T01:23:10.502579Z", 
+  "msg": [
+   "On the issue-3242-dev branch, rework the way that URL-based copy,", 
+   "move, and delete operations drive the RA layer to avoid requiring read", 
+   "access at unnecessarily high directory locations.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_repos_copy): Rework this function to avoid trying to", 
+   "access repository paths higher in the repository tree than required.", 
+   "(wc_to_repos_copy): Lose unnecessary comments and dead code.", 
+   "Simplify RA connectivity and make more direct queries of paths.", 
+   "(repos_to_wc_copy_single): Update handling around", 
+   "calculate_target_mergeinfo().", 
+   "(try_copy): Comment tweaks only.", 
+   "* subversion/libsvn_client/delete.c", 
+   "(delete_urls): Avoid opening the RA session at the common parents of", 
+   "to-be-deleted URLs.  Instead, open it at one of the targets and", 
+   "reparent as necessary."
+  ], 
+  "revision_id": "880472"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-11-06T01:13:54.234685Z", 
+  "msg": [
+   "* subversion/tests/cmdline/authz_tests.py", 
+   "(authz_access_required_at_repo_root): Correct and expand this test.", 
+   "(Turns out that it's beneficial when writing multi-stage test", 
+   "logic to actually compensate in a given stage for state changes", 
+   "made in previous stages, ya know?)"
+  ], 
+  "revision_id": "880471"
+ }
+]

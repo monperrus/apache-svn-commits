@@ -1,0 +1,109 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T16:26:59.461054Z", 
+  "msg": [
+   "Finish shifting all the format storage into wc_db.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_temp_reset_format): need to take a format value to store", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_temp_reset_format): take a new format value. leave behind a", 
+   "comment on why this isn't ideal, but maybe required.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_wc_format, svn_wc__adm_set_wc_format): revamp signature. we", 
+   "may need to modify the baton, which could throw errors, and we need a", 
+   "pool.", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc_adm_access_t): remove WC_FORMAT member", 
+   "(svn_wc__upgrade_format, check_format_upgrade): adjust call to", 
+   "svn_wc__adm_wc_format.", 
+   "(adm_access_alloc, do_open): no need to initialize WC_FORMAT", 
+   "(svn_wc__adm_steal_write_lock): drop the format into a localvar. we", 
+   "don't actually need it.", 
+   "(svn_wc_adm_probe_open3): don't worry about the format value", 
+   "(svn_wc__adm_wc_format, svn_wc__adm_set_wc_format): revamp functions as", 
+   "covers over their wc_db equivalents.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(read_wcprops, wcprops_modify_allowed): adjust call to", 
+   "svn_wc__adm_wc_format. remove const from the ADM_ACCESS parameter", 
+   "since these might get updated", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_upgrade_format): adjust call to svn_wc__adm_set_wc_format"
+  ], 
+  "revision_id": "877180"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-08T16:22:10.614429Z", 
+  "msg": [
+   "More deprecated function replacing.", 
+   "* subversion/libsvn_client/mergeinfo.c", 
+   "(svn_client__get_wc_mergeinfo, svn_client__elide_children):", 
+   "Use svn_dirent_* functions in place of svn_path_* functions."
+  ], 
+  "revision_id": "877179"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-04-08T15:18:58.066027Z", 
+  "msg": [
+   "* STATUS: Note the need for a backport branch on r36851 and friends; add a -0", 
+   "vote until it happens."
+  ], 
+  "revision_id": "877178"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-08T14:43:05.947934Z", 
+  "msg": [
+   "Get the wcprops out of the access baton.", 
+   "Note: this could slow checkout since we rewrite all_wcprops each time a", 
+   "modification is made (it used to aggregate writes).", 
+   "Note: working copies from svn 1.3 and earlier, that contain stale logs", 
+   "with wcprop modifications can no longer be cleaned up by this release.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_access_set_wcprops, svn_wc__adm_access_wcprops): removed", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc_adm_access_t): WCPROPS member removed", 
+   "(adm_access_alloc): initialization of WCPROPS member removed", 
+   "(svn_wc__adm_access_set_wcprops, svn_wc__adm_access_wcprops): removed", 
+   "* subversion/libsvn_wc/adm_files.h:", 
+   "* subversion/libsvn_wc/adm_files.c:", 
+   "(svn_wc__write_old_wcprops): removed", 
+   "* subversion/libsvn_wc/props.h:", 
+   "(svn_wc__wcprop_set): remove FORCE_WRITE parameter. update docstring.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(read_wcprops): always read the wcprops off the disk and return them,", 
+   "rather than caching them in the baton. switch to two-pool style.", 
+   "(write_wcprops): take the all_wcprops to write, rather than grabbing", 
+   "them out of the baton. slight clarification to any_props code.", 
+   "(svn_wc__wcprops_flush): removed. no further callers (last was in log.c)", 
+   "(wcprops_modify_allowed): new helper function to bail out if we attempt", 
+   "to write wcprops for an old working copy format.", 
+   "(svn_wc__props_delete): only allow wcprops deletion in new-style working", 
+   "copies. get the wcprops using read_wcprops rather than the cache.", 
+   "revamp the prophash handling before write.", 
+   "(svn_wc__wcprop_list): ignore the cache, and always read the props into", 
+   "the provided pool.", 
+   "(svn_wc__wcprop_set): remove FORCE_WRITE parameter. bail if the wc", 
+   "format is too old. revamp the read/write logic.", 
+   "(svn_wc_prop_set3): drop FORCE_WRITE parameter on wcprop_set call.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(struct log_runner): remove WCPROPS_MODIFIED member", 
+   "(log_do_modify_wcprop): drop FORCE_WRITE parameter on the", 
+   "svn_wc__wcprop_set call. no need to set WCPROPS_MODIFIED.", 
+   "(run_log_from_memory): no need to initialize old WCPROPS_MODIFIED", 
+   "(run_log): no need to initialize old WCPROPS_MODIFIED member. no need to", 
+   "flush out wcprops changes."
+  ], 
+  "revision_id": "877177"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-04-08T12:58:53.921474Z", 
+  "msg": [
+   "* STATUS: Cast another vote and whitespace normalization"
+  ], 
+  "revision_id": "877176"
+ }
+]

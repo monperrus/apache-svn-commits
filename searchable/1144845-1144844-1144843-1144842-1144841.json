@@ -1,0 +1,70 @@
+[
+ {
+  "author": "fdmanana", 
+  "date": "2011-07-10T12:15:18.810789Z", 
+  "msg": [
+   "Add NIF version for the less_json function", 
+   "This is a NIF implementation of the existing less_json", 
+   "function used for view collation. It speeds up the view", 
+   "collation process. It fallbacks to the pure Erlang", 
+   "implementation when running on OTP R13B04 or older.", 
+   "This is part of COUCHDB-1186 and closes it."
+  ], 
+  "revision_id": "1144845"
+ }, 
+ {
+  "author": "fdmanana", 
+  "date": "2011-07-10T12:11:15.559663Z", 
+  "msg": [
+   "Some view indexer optimizations", 
+   "Changes:", 
+   "- Decoding of the JSON received from the external OS process", 
+   "(couchjs) is now done in the indexer's process which does the", 
+   "writes to disk. This avoids several phases of EJSON term", 
+   "copying: couch_os_process -> do_maps process -> work queue ->", 
+   "do_writes process;", 
+   "- The indexer's do_maps process no longer needs to find out", 
+   "which seq number is the highest from the input list via", 
+   "a list comprehension + lists:max/1 call. The highest is", 
+   "always the last one on the queue (this is enforced when", 
+   "folding the database's byseq btree);", 
+   "- Don't update the task status everytime we read a single doc", 
+   "from the database. Instead update it only after writing", 
+   "a view KV batch to disk;", 
+   "- Avoid several linear passages over the same lists multiple", 
+   "times.", 
+   "This is part of COUCHDB-1186."
+  ], 
+  "revision_id": "1144844"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2011-07-10T12:08:19.657545Z", 
+  "msg": [
+   "Eliminated some duplicate code."
+  ], 
+  "revision_id": "1144843"
+ }, 
+ {
+  "author": "fdmanana", 
+  "date": "2011-07-10T12:07:02.799563Z", 
+  "msg": [
+   "Fix replication task status text", 
+   "Revision 1144419 added internal timestamps to source", 
+   "database update sequences. These timestamps are being", 
+   "displayed in the replication task status (/_active_tasks/,", 
+   "Futon's Status page) and they shouldn't be because they", 
+   "are an internal detail one, not useful to users and", 
+   "applications."
+  ], 
+  "revision_id": "1144842"
+ }, 
+ {
+  "author": "simonw", 
+  "date": "2011-07-10T12:02:38.331652Z", 
+  "msg": [
+   "init CFS output on writer init and release output lock if stream creation fails."
+  ], 
+  "revision_id": "1144841"
+ }
+]

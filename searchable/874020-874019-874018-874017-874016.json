@@ -1,0 +1,99 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2008-10-29T07:51:05.230176Z", 
+  "msg": [
+   "Follow up to r33833.", 
+   "Fix compiler warning of 'basename' is shadowed in string.h", 
+   "* subversion/libsvn_wc/status.c", 
+   "(get_dir_status): s/basename/tree_basename/"
+  ], 
+  "revision_id": "874020"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2008-10-29T07:42:38.679082Z", 
+  "msg": [
+   "Fix compiler warning of \"no previous prototype for", 
+   "'svn_opt__print_version_info'\".", 
+   "* subversion/libsvn_subr/opt.c", 
+   "(): include 'opt.h'."
+  ], 
+  "revision_id": "874019"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-10-29T06:02:46.141884Z", 
+  "msg": [
+   "On lightweight branch tc-merge-notify:", 
+   "Start off implementing per-victim notification of tree-conflicts during merge.", 
+   "There are still a lot of lines saying \"Skipped\" although it's inside a newly", 
+   "raised tree-conflict (should be omitted).", 
+   "The cmdline tests are not adapted yet. This stuff is not fully tested yet.", 
+   "* subversion/include/svn_wc.h (svn_wc_diff_callbacks3_t): Add a svn_boolean_t", 
+   "*TREE_CONFLICTED argument to all of the callbacks functions, which", 
+   "returns whether the callback wants this node to be notified as", 
+   "tree-conflicted.", 
+   "* subversion/libsvn_wc/diff.c", 
+   "(file_diff, directory_elements_diff, report_wc_file_as_added,", 
+   "report_wc_directory_as_added, delete_entry, close_directory,", 
+   "close_file): Pass NULL for new *TREE_CONFLICTED parameter upon calling", 
+   "the svn_wc_diff_callbacks3_t callback functions.", 
+   "### This needs mending as in repos_diff.c in order to get", 
+   "### tree-conflicts through to the notifier.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(kind_action_state_t): Add a boolean TREE_CONFLICTED field, obsoleting the", 
+   "name kind_action_state_t which says \"it has a kind, and action and a", 
+   "state\".", 
+   "(dir_baton, file_baton): Add a boolean TREE_CONFLICTED.", 
+   "(make_dir_baton, make_file_baton): Default TREE_CONFLICTED to FALSE.", 
+   "(delete_entry, add_directory, open_directory, close_file, close_directory):", 
+   "Pass through the tree-conflict state to the notify_func, and change some", 
+   "of the logic around the notify action to not show tree-conflicts as", 
+   "skipped paths.", 
+   "(absent_directory, absent_file): Comment.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_props_changed, merge_file_changed, merge_file_added,", 
+   "merge_file_deleted, merge_dir_added, merge_dir_deleted, merge_dir_opened,", 
+   "merge_dir_closed): Apply addition of new callbacks argument called", 
+   "*TREE_CONFLICTED and use it.", 
+   "(single_file_merge_notify, do_file_merge): Use the new callbacks argument", 
+   "called *TREE_CONFLICTED.", 
+   "(merge_cmd_baton_t): Remove obsoleted field TREE_CONFLICTED_DIRS which", 
+   "used to list all dirs that contain tree-conflicts.", 
+   "(tree_conflict): Remove use of TREE_CONFLICTED_DIRS.", 
+   "(add_parent_to_tree_conflicted_dirs, is_tree_conflicted_dir_p): Remove", 
+   "obsoleted functions related to TREE_CONFLICTED_DIRS.", 
+   "(do_merge): Remove use of TREE_CONFLICTED_DIRS.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(diff_props_changed, diff_file_changed, diff_file_added,", 
+   "diff_file_deleted_with_diff, diff_file_deleted_no_diff,", 
+   "diff_dir_added, diff_dir_deleted, diff_dir_opened, diff_dir_closed):", 
+   "Apply addition of callbacks parameter *TREE_CONFLICTED and ignore it.", 
+   "These are the callbacks for a plain diff, they don't need to report", 
+   "tree-conflicts."
+  ], 
+  "revision_id": "874018"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2008-10-29T05:17:24.558981Z", 
+  "msg": [
+   "Creating this *lightweight* branch to share progress with the tree-conflicts", 
+   "folks.", 
+   "Aim: implement per-victim tree-conflicts notification for merge, trying to", 
+   "notify exactly as update/switch does upon tree-conflicts."
+  ], 
+  "revision_id": "874017"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2008-10-28T20:08:24.169569Z", 
+  "msg": [
+   "* subversion/libsvn_subr/subst.c", 
+   "(svn_subst_create_translated): Rewrite an error message lost in r33929.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "874016"
+ }
+]

@@ -1,0 +1,106 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-02T22:28:45.967051Z", 
+  "msg": [
+   "Take a few small steps towards removing access batons and entries", 
+   "from the status walker.", 
+   "This patch removes several arguments that can be recalculated now and", 
+   "are not necessary any more after the refactoring. It also prepares", 
+   "svn_client_status5() for receiving absolute paths from libsvn_wc without", 
+   "breaking its public api.", 
+   "* subversion/libsvn_client/status.c", 
+   "(status_baton): Add 2 variables.", 
+   "(tweak_status): Make the status return relative paths if the user", 
+   "asked for relative paths.", 
+   "(svn_client_status5): If the passed path is relative store it in the", 
+   "status baton to allow making returned paths relative.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(edit_baton, dir_baton, file_baton): Add absolute path variables.", 
+   "(send_status_structure):", 
+   "Update arguments to receive the edit baton and absolute path instead of", 
+   "an access baton and several separate values. Temporarily recalculate the", 
+   "relative path.", 
+   "(is_external_path): Receive edit_baton and ensure passed paths are absolute.", 
+   "(send_unversioned_item): Receive edit baton and absolute path instead of 4", 
+   "separate arguments. Temporarily recalculate the relative path.", 
+   "(handle_dir_entry): Update calls.", 
+   "(get_dir_status): Store absolute paths to externals and update calls.", 
+   "(make_dir_baton): Store local_abspath in baton and don't duplicate values", 
+   "that live longer than this editor", 
+   "(make_file_baton): Store local_abspath.", 
+   "(svn_wc_get_status_editor5): Store abspath for target and anchor."
+  ], 
+  "revision_id": "879165"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-02T18:36:51.113111Z", 
+  "msg": [
+   "Following up on r39080, fix the obvious deprecated svn_path_*()", 
+   "calls in libsvn_fs, libsvn_fs_base and libsvn_fs_fs.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_type, write_fs_type):", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(bdb_write_config, base_create, base_open, base_upgrade,", 
+   "svn_fs_base__clean_logs, copy_db_file_safely, base_hotcopy):", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_*, write_config, svn_fs_fs__open, upgrade_body,", 
+   "get_youngest, svn_fs_fs__hotcopy, create_txn_dir,", 
+   "create_txn_dir_pre_1_5, commit_body, svn_fs_fs__create,", 
+   "set_node_origins_for_file, svn_fs_fs__list_transactions,", 
+   "pack_shard, pack_body,):", 
+   "* subversion/libsvn_fs_fs/lock.c", 
+   "(digest_path_from_digest, digest_path_from_path, write_digest_file):", 
+   "* subversion/libsvn_fs_fs/rep-cache.c", 
+   "(svn_fs_fs__open_rep_cache):", 
+   "Use svn_dirent_*() for local paths, and svn_uri_*() for repository", 
+   "paths."
+  ], 
+  "revision_id": "879164"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-09-02T17:41:27.322402Z", 
+  "msg": [
+   "Use the new node-walking function to replace a couple of calls to", 
+   "svn_wc_walk_entries3() when setting changelists.  Also, add a helper", 
+   "function to determine if a path is in a changelist.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__changelist_match): New.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc__changelist_match): New.", 
+   "* subversion/libsvn_client/changelist.c", 
+   "(set_cl_fe_baton): Rename to...", 
+   "(set_cl_fn_baton): ...this.", 
+   "(set_entry_changelist): Remove.", 
+   "(set_node_changelist): New, with wc-ng semantics.", 
+   "(svn_cl_entry_callbacks): Remove.", 
+   "(svn_cl_node_callbacks): New.", 
+   "(svn_client_add_to_changelist, svn_client_remove_from_changelists):", 
+   "Rename several variables, remove the access baton, and use the new node", 
+   "walker."
+  ], 
+  "revision_id": "879163"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-09-02T17:32:50.823196Z", 
+  "msg": [
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(merge_replace_causes_tree_conflict2, merge_replace_causes_tree_conflict3):", 
+   "Add two tests, related to tree-conflicts during replace,", 
+   "both marked XFail."
+  ], 
+  "revision_id": "879162"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2009-09-02T17:30:11.290366Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/factory.py", 
+   "(TestFactory.optimize_tweaks): Fix some logic."
+  ], 
+  "revision_id": "879161"
+ }
+]

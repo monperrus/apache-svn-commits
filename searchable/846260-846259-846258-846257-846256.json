@@ -1,0 +1,99 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2003-06-10T22:29:08.116216Z", 
+  "msg": [
+   "Start mirroring the entire revision history, not just the head tree.", 
+   "This is so later when we copy whole trees for branches and tags, we'll", 
+   "be able to pick out the items in the source that don't belong in the", 
+   "dest.", 
+   "Note that although the tests still pass after this, there is a bug in", 
+   "deletion handling, which will be revealed by an upcoming addition to", 
+   "the test data.", 
+   "All of this is in branches/cvs2svn-kfogel/:", 
+   "* tools/cvs2svn/cvs2svn.py: Add some debugging prints.", 
+   "(SVN_REVISIONS_DB): New constant.", 
+   "(NODES_DB): Replaces HEAD_MIRROR_DB.", 
+   "(class RepositoryMirror): Replaces TreeMirror class, completely", 
+   "rewritten.", 
+   "(Dump.__init__): Use above new class to init repos_mirror instead of", 
+   "head_mirror.", 
+   "(Dump.start_revision): Call repos_mirror.new_revision.", 
+   "(Dump.add_or_change_path): Call repos_mirror.change_path instead of", 
+   "head_mirror.ensure_path.", 
+   "(Dump.delete_path): Call repos_mirror.delete_path instead of", 
+   "head_mirror.delete_path.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(full_prune): Replaces prune_with_care.", 
+   "(test_list): Adjust for above.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/prune-with-care: Renamed to", 
+   "full-prune, see below.", 
+   "* tools/cvs2svn/test-data/main-cvsrepos/full-prune: Replaces", 
+   "prune-with-care.  We'll have two separate pruning tests soon."
+  ], 
+  "revision_id": "846260"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-06-10T22:14:57.508067Z", 
+  "msg": [
+   "Branch (again) so putting cvs2svn in a broken state won't hurt anyone."
+  ], 
+  "revision_id": "846259"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2003-06-10T21:26:51.207395Z", 
+  "msg": [
+   "* build.conf", 
+   "(mod_authz_svn): new section.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "New Apache module to allow path based access control to the repository.", 
+   "* subversion/include/mod_dav_svn.h", 
+   "Moved from subversion/mod_dav_svn/mod_dav_svn.h, so that mod_authz_svn and", 
+   "possibly other modules can use it."
+  ], 
+  "revision_id": "846258"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-06-10T21:21:33.983633Z", 
+  "msg": [
+   "Fix the naive, brute-force relavent copy hunt algorithm so that it", 
+   "works in light of the lack of sorting in the copies table.", 
+   "* subversion/libsvn_fs/key-gen.h", 
+   "* subversion/libsvn_fs/key-gen.c", 
+   "(svn_fs__prev_key): New.", 
+   "* subversion/tests/libsvn_fs/key-test.c", 
+   "(key_test): Was next_key().  Now tests svn_fs__prev_key(), too.", 
+   "(test_funcs): Update reference to key_test().", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(struct copies_cb_baton, copies_cb_func): Remove (as defunct).", 
+   "(find_relevant_copies): Rework this incorporate what was in", 
+   "copies_cb_func(), and to use the new svn_fs__prev_key() so we can", 
+   "guarantee that we are traversing the copies table in the right", 
+   "order.", 
+   "(revisions_changed_callback, txn_body_revisions_changed): Remove", 
+   "calls to find_relevant_copies(), since that route didn't pan out", 
+   "too well.  Leave TODOs for what needs to happen here.", 
+   "* subversion/libsvn_fs/bdb/copies-table.h", 
+   "(svn_fs__bdb_copy_cb_func_t, svn_fs__bdb_walk_copies_reverse): Removed.", 
+   "(svn_fs__bdb_next_copy_id): New.", 
+   "* subversion/libsvn_fs/bdb/copies-table.c", 
+   "(svn_fs__bdb_next_copy_id): New (factorized from", 
+   "svn_fs__bdb_reserve_copy_id()).", 
+   "(svn_fs__bdb_reserve_copy_id): Use new svn_fs__bdb_next_copy_id().", 
+   "(svn_fs__bdb_copy_cb_func_t, svn_fs__bdb_walk_copies_reverse): Removed."
+  ], 
+  "revision_id": "846257"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2003-06-10T19:42:57.812463Z", 
+  "msg": [
+   "* Added function svn-status-remove-control-M", 
+   "- Use it in svn-status-property-edit to fix a coding system problem on win32"
+  ], 
+  "revision_id": "846256"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "lundblad", 
+  "date": "2005-04-04T18:51:56.951736Z", 
+  "msg": [
+   "Make FSFS release the write lock early, even on error.  This should fix", 
+   "deadlock problems on Windows.  Also, fix a race in svn_fs_fs__lock.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__get_write_lock): Rename to...", 
+   "(get_write_lock): Make static.", 
+   "(svn_fs_fs__with_write_lock): New function.", 
+   "(commit_baton): New struct.", 
+   "(commit_body): New function. Copied from svn_fs_fs__commit, adjusted to use", 
+   "args from baton. Remove subpool.", 
+   "(verify_locks): Call new commit_body function inside write lock.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__with_write_lock): Declare.", 
+   "(svn_fs_fs__get_write_lock): Remove.", 
+   "* subversion/libsvn_fs_fs/lock.c", 
+   "(expire_lock_baton, lock_baton, unlock_baton): New structs.", 
+   "(expire_lock): New. Moved from get_lock. Adjust to take arguments from", 
+   "the baton and remove subpool. Simplify.", 
+   "(get_lock): Call expire_lock inside write lock.", 
+   "(lock_body): New function. Copied most of svn_fs_fs__lock here, adjusting", 
+   "to use args from baton. Use the passed in pool for everything but the", 
+   "allocation of the returned lock. Mark three messages for translation.", 
+   "(unlock_body): New function.  Copy most of svn_fs_fs__unlock here, adjusting", 
+   "it to use arguments from baton. Remove subpool; do everything in passed in", 
+   "pool.", 
+   "(svn_fs_fs__lock): Call lock_body inside write lock.  This also", 
+   "eliminates a race where the youngest revision was fetched before the write", 
+   "lock was acquired.", 
+   "(svn_fs_fs__unlock): Call unlock_body inside a write lock."
+  ], 
+  "revision_id": "853980"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2005-04-04T18:16:07.956590Z", 
+  "msg": [
+   "API documentation fixes.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_export2): Add a missing description.", 
+   "* subversion/include/svn_fs.h", 
+   "Create a Doxygen group for Access Context documentation.", 
+   "(svn_fs_begin_txn2, svn_fs_commit_txn): Use \"@note\" to tidy up ugly notes.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(svn_ra_svn_handle_commands): Fix a typo.", 
+   "* subversion/include/svn_props.h", 
+   "Fix a typo."
+  ], 
+  "revision_id": "853979"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2005-04-04T17:27:28.420923Z", 
+  "msg": [
+   "* dist.sh: Add the -n option (do not store name and timestamp) to gzip command."
+  ], 
+  "revision_id": "853978"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2005-04-04T17:25:26.751610Z", 
+  "msg": [
+   "In Doxygen comments, don't refer to other documentation as \"above\" or \"below\",", 
+   "because it is not necessarily laid out like that.", 
+   "* subversion/include/svn_auth.h (svn_auth_ssl_server_trust_prompt_func_t)", 
+   "* subversion/include/svn_client.h (svn_client_ctx_t)", 
+   "* subversion/include/svn_diff.h (svn_diff_t)", 
+   "* subversion/include/svn_fs.h (svn_fs_begin_txn2, svn_fs_path_change_t)", 
+   "* subversion/include/svn_props.h (svn_prop_t)", 
+   "* subversion/include/svn_ra.h (svn_ra_reporter2_t, svn_ra_open,", 
+   "svn_ra_plugin_t)", 
+   "* subversion/include/svn_ra_svn.h (svn_ra_svn_handle_commands)", 
+   "* subversion/include/svn_repos.h (svn_repos_parser_fns2_t)", 
+   "* subversion/include/svn_string.h", 
+   "* subversion/include/svn_types.h (SVN_KEYWORD_ID, svn_log_message_receiver_t)", 
+   "* subversion/include/svn_wc.h (svn_wc_status2)"
+  ], 
+  "revision_id": "853977"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-04-04T17:01:50.706415Z", 
+  "msg": [
+   "* notes/TODO-1.2.txt: Update."
+  ], 
+  "revision_id": "853976"
+ }
+]

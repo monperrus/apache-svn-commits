@@ -1,0 +1,123 @@
+[
+ {
+  "author": "dhruba", 
+  "date": "2008-03-05T06:51:33.408542Z", 
+  "msg": [
+   "HADOOP-2883. Write failures and data corruptions on HDFS files.", 
+   "The write timeout is back to what it was on 0.15 release. Also, the", 
+   "datnodes flushes the block file buffered output stream before", 
+   "sending a positive ack for the packet back to the client. (dhruba)"
+  ], 
+  "revision_id": "633780"
+ }, 
+ {
+  "author": "dhruba", 
+  "date": "2008-03-05T06:49:35.878392Z", 
+  "msg": [
+   "HADOOP-2883. Write failures and data corruptions on HDFS files.", 
+   "The write timeout is back to what it was on 0.15 release. Also, the", 
+   "datnodes flushes the block file buffered output stream before", 
+   "sending a positive ack for the packet back to the client. (dhruba)"
+  ], 
+  "revision_id": "633779"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2008-03-05T06:03:22.002971Z", 
+  "msg": [
+   "I am backporting quite a few checkins from trunk into 10.3 codeline for DERBY-3304 and", 
+   "DERBY-3404.", 
+   "The main functionality that is getting ported is when a user initiates a rollback through", 
+   "JDBC Connection object, the rollback should not close the resultsets that do not return", 
+   "rows.", 
+   "This functionality was checked in into trunk through multiple checkins for DERBY-3304 and", 
+   "those checkins are 628130, 629926, 631481. In addition, there was a supporting checkin into", 
+   "trunk by Knut for DERBY-3404 (revision 629712) on which the 3 checkins listed earlier rely.", 
+   "I am backporting all of these 4 checkins from trunk into 10.3 codeline.", 
+   "The tests have run fine with no new regression.", 
+   "I am including checkin comments for all these revisions for easy reference here.", 
+   "**********checkin comments for 628130)**************", 
+   "DERBY-3304", 
+   "DERBY-3037", 
+   "DERBY-1585", 
+   "I am adding a test case to check for the resultset from the java procedure call when the", 
+   "java procedure has done a rollback inside it. This test shows that in trunk, after checkin", 
+   "602991 for DERBY-1585, a procedure does not return a resultset if there was a rollbck", 
+   "inside the procedure with resultset creation before rollback. This behavior is different", 
+   "than what happens in 10.2 codeline. In 10.2, a procedure will return a *closed* resultset", 
+   "if there was a rollback inside the procedure. But a procedure should not return closed", 
+   "result sets, so it appears that trunk is behaving correctly and 10.2's behavior was", 
+   "incorrect.", 
+   "**********end of checkin comments for 628130)*******", 
+   "**********checkin comments for 629712)**************", 
+   "DERBY-3404: EmbedResultSet.getString() returns wrong value after auto-commit with", 
+   "CLOSE_CURSORS_AT_COMMIT", 
+   "**********end of checkin comments for 629712)*******", 
+   "**********checkin comments for 629926)**************", 
+   "DERBY-3304", 
+   "The main purpose of this patch is to fix the rollback handling for resultsets that do not", 
+   "return rows. An example case for this is a java procedure which has a Connection.rollback", 
+   "inside it. When the user calls the java procedure, and Connection.rollback is made inside", 
+   "of it, Derby should not be closing the resultset assoicated with the java procedure call", 
+   "(that resultset is a CallStatementResultSet). In other words, a user initiated rollback", 
+   "through JDBC Connection object should leave the resultsets that do not return rows open. In", 
+   "order to implement this, I had to make changes to ignore resultsets that do not return rows", 
+   "in", 
+   "GenericLanguageConnectionContext.endTransactionActivationHandling. As a result of this", 
+   "change, for the eg case given above, the activation assoicated with the java procedure", 
+   "will not be reset (which also means that, CallStatementResultSet.close will not be called)", 
+   "inside GenericLanguageConnectionContext.endTransactionActivationHandling.", 
+   "But the code inside CallStatementResultset.close() took care of the closed dynamic resultset", 
+   "and it took out the closed dynamic resultset from the list of resultsets that would be", 
+   "available to user through the Statement.getResultSet api. With my changes through this", 
+   "patch, we are going to skip the CallStatementResultset.close during", 
+   "GenericLanguageConnectionContext.endTransactionActivationHandling which means that we have", 
+   "to deal with those closed dynamic resultsets on our own. I did that part of logic", 
+   "changes in EmbedStatement.processDynamicResults", 
+   "EmbedStatement.processDynamicResults used to check if the JDBC Resultset is closed by", 
+   "directly checking the field isClosed in the EmbedResultSet. But it is not sufficient to", 
+   "check only JDBC Resultset. We need to check the underlying language Resultset too to", 
+   "determine if the dynamic resultset is closed. There is no direct api on EmbedResultset", 
+   "which will return a boolean after checking the JDBC Resultset and language Resulset. Instead,", 
+   "there is a method called EmbedResultSet.checkIfClosed. This method will throw an exception", 
+   "if it finds the JDBC ResultSet or language ResultSet closed. So, my changes in", 
+   "EmbedStatement.processDynamicResults make a call to EmbedResultSet.checkIfClosed and if", 
+   "there is an exception thrown, then we know that the resultset is closed and hence we should", 
+   "move to the next resultset.", 
+   "In addition to these code changes, I have added a new test to LangProcedureTest. The new", 
+   "java procedure is defined to return 2 dynamic resultsets. One of these resultsets is", 
+   "created before Connection.rollback inside the java procedure. The other dynamic resultset", 
+   "is created after Connection.rollback. As as result of Connection.rollback, the first", 
+   "dynamic resultset will be closed but the second one will remain open. The test makes sure", 
+   "that only one dynamic resultset is returned by the java procedure.", 
+   "Also, made one minor change in LangProcedureTest for an existing test. The test at line 804", 
+   "was getting a resultset from the Statement object without asserting that there are no more", 
+   "resultsets. The resultset object would have been null anyways in this test because there", 
+   "are no open resulsets from the Java procedure. Because of this, I took out the redundant", 
+   "code of getting null resultset object from Statement using getResultset,", 
+   "**********end of checkin comments for 629926)*******", 
+   "**********checkin comments for 631481)**************", 
+   "Checking in code cleanup for DERBY-3304. This code cleanup is based on Knut's review of my", 
+   "earlier commit 629926. No functionality has changed, but code will be now much easier to", 
+   "read.", 
+   "**********end of checkin comments for 631481)*******"
+  ], 
+  "revision_id": "633778"
+ }, 
+ {
+  "author": "lresende", 
+  "date": "2008-03-05T05:37:47.000961Z", 
+  "msg": [
+   "Removing local store.html and importing shared one from assets contribution module"
+  ], 
+  "revision_id": "633777"
+ }, 
+ {
+  "author": "lresende", 
+  "date": "2008-03-05T05:35:04.898085Z", 
+  "msg": [
+   "Adding store.html to shared assets projet"
+  ], 
+  "revision_id": "633776"
+ }
+]

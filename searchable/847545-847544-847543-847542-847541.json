@@ -1,0 +1,86 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-10-22T02:54:32.118647Z", 
+  "msg": [
+   "* CHANGES:  summarize for 0.32 release."
+  ], 
+  "revision_id": "847545"
+ }, 
+ {
+  "author": "maxb", 
+  "date": "2003-10-22T00:06:16.910925Z", 
+  "msg": [
+   "Partial Windows compatibility for cvs2svn.", 
+   "This is a re-commit of part of the reverted revision 7246.", 
+   "* tools/cvs2svn/cvs2svn.py", 
+   "(relative_name):", 
+   "Changed this function to expect os.sep in the file path passed to", 
+   "it instead of forward slashes. Make it always output forward slashes.", 
+   "(escape_shell_arg):", 
+   "New function to escape shell arguments, works differently on unix", 
+   "and windows.", 
+   "(Dumper.add_or_change_path):", 
+   "Changed to use the escape_shell_arg function.", 
+   "* tools/cvs2svn/run-tests.py", 
+   "(repos_to_url):", 
+   "Added missing slash detection. Needed because absolute paths on", 
+   "windows begin with a drive letter instead of a slash."
+  ], 
+  "revision_id": "847544"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-10-21T21:21:52.055352Z", 
+  "msg": [
+   "* CHANGES (0.32.0): Initiate this change list, by noting the", 
+   "client/server incompatibility gap caused by r7466 and r7468."
+  ], 
+  "revision_id": "847543"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2003-10-21T21:05:28.476806Z", 
+  "msg": [
+   "With Mike Pilato, do the other compatibility cleanup from issue #1275:", 
+   "The solution to issue #891 (\"REPORT fails if item missing in HEAD\")", 
+   "was to create a new style of <update-report> that is always run", 
+   "against the VCC, with both paths/revs meant for svn_repos_dir_delta", 
+   "included in the request body.", 
+   "This change makes the client stop falling back to old-style reports", 
+   "(for old servers), and the server stop supporting them (for old", 
+   "clients).", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(reporter_finish_report): If running an update report on the VCC", 
+   "failed, then just error, instead of falling back to old-style", 
+   "report.  Also, rearrange the code to get the VCC before doing", 
+   "anything else, just for clarity.", 
+   "* subversion/mod_dav_svn/update.c", 
+   "(dav_svn__update_report): Only accept REPORTs against VCCs now."
+  ], 
+  "revision_id": "847542"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2003-10-21T20:48:40.148044Z", 
+  "msg": [
+   "Add partial tuple support in the ra_svn marshalling routines.", 
+   "I was getting annoyed that whenever we have to transmit an array,", 
+   "we have to write out many lines of code by hand which we could", 
+   "otherwise use write_tuple() for.", 
+   "* include/svn_ra_svn.h, libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_write_tuple, vwrite_tuple): Add support for new '!'", 
+   "directive.", 
+   "(svn_ra_svn_write_cmd_reponse): Document that this doesn't work", 
+   "with partial tuples.", 
+   "* libsvn_ra_svn/client.c (ra_svn_log): Use partial tuple support", 
+   "instead of writing out the log request by hand.", 
+   "* svnserve/serve.c", 
+   "(write_proplist): Don't begin and end the list; we can do that", 
+   "trivially with partial tuple support now.", 
+   "(rev_proplist, get_file, get_dir, log_receiver, serve): Use", 
+   "partial tuple support instead of writing out tuples by hand."
+  ], 
+  "revision_id": "847541"
+ }
+]

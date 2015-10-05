@@ -1,0 +1,105 @@
+[
+ {
+  "author": "kameshj", 
+  "date": "2007-11-26T14:57:13.124822Z", 
+  "msg": [
+   "Fix compilation error with old serf.", 
+   "* subversion/libsvn_ra_serf/propfind_buckets.c", 
+   "(): Include private/svn_dep_compat.h"
+  ], 
+  "revision_id": "868100"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2007-11-26T13:25:36.173001Z", 
+  "msg": [
+   "Test case for issue #2983.", 
+   "svnadmin load --parent-dir needs to also reparent mergeinfo source locations", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(): import sys", 
+   "(load_and_verify_dumpstream): Add varargs to this function signature in", 
+   "order to pass optional arguments to svnadmin load", 
+   "(extra_headers, extra_blockcontent, inconsistent_headers, empty_date):", 
+   "Reflect above change in load_and_verify_dumpstream signature", 
+   "(load_with_parent_dir): New function", 
+   "(test_list): Add load_with_parent_dir to test_list", 
+   "* subversion/tests/cmdline/svndumpfilter_tests.py", 
+   "(reflect_dropped_renumbered_revs): Reflect above change in", 
+   "load_and_verify_dumpstream signature", 
+   "* subversion/tests/cmdline/svnadmin_tests_data/mergeinfo_included.dump", 
+   "(): Dump file for issue #2983."
+  ], 
+  "revision_id": "868099"
+ }, 
+ {
+  "author": "kameshj", 
+  "date": "2007-11-26T12:59:33.755331Z", 
+  "msg": [
+   "Follow-up to r27982.", 
+   "* subversion/libsvn_fs_util/mergeinfo-sqlite-index.c", 
+   "(get_parent_target_path_having_mergeinfo): If 'sqlite3_step' returns", 
+   "anything other than 'SQLITE_ROW' or 'SQLITE_DONE' raise the svn_error_t*", 
+   "via 'svn_fs__sqlite_stmt_error'. While searching for elided mergeinfo,", 
+   "use 'subpool' for 'parent_path', upon finding a parent with mergeinfo", 
+   "Duplicate the parent_path from 'subpool' to 'pool'. Destroy the 'subpool'", 
+   "upon exit from the function. Quote the path in the error message with", 
+   "single quote.", 
+   "(get_commit_revs_for_merge_ranges): If 'sqlite3_step' returns", 
+   "anything other than 'SQLITE_ROW' or 'SQLITE_DONE' raise the svn_error_t*", 
+   "via 'svn_fs__sqlite_stmt_error'. If the query returns no data i.e when", 
+   "sqlite_result == SQLITE_DONE, error out.", 
+   "Suggested by: glasser"
+  ], 
+  "revision_id": "868098"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-26T07:47:00.990239Z", 
+  "msg": [
+   "Forbid svn_depth_exclude for all depth arguments in libsvn_repos", 
+   "except for svn_repos_set_path3.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(svn_repos_link_path3, svn_repos_begin_report2):", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(svn_repos_dir_delta2):", 
+   "Raise an error if svn_depth_exclude is passed in."
+  ], 
+  "revision_id": "868097"
+ }, 
+ {
+  "author": "glasser", 
+  "date": "2007-11-26T07:46:56.818160Z", 
+  "msg": [
+   "Reinstate svn_depth_exclude (removed in r27958), but only in the", 
+   "\"server\" side.  Specifically, completely disable it at the", 
+   "command-line (which should have been done before r27958), and document", 
+   "it as not being supported in the wc or client libs in 1.5, but make", 
+   "the (relatively straightforward) changes to the repos reporter to", 
+   "enable 1.5 servers to support svn_depth_exclude arguments to", 
+   "\"set_path\".", 
+   "Because this can't be tested by the \"svn\" client, add a libsvn_repos", 
+   "unit test to test it.", 
+   "* subversion/include/svn_types.h", 
+   "(svn_depth_t): Add svn_depth_exclude as -1 again; document (in a", 
+   "private comment) that it is only supported on the server in 1.5.", 
+   "* subversion/libsvn_subr/kitchensink.c", 
+   "(svn_depth_to_word, svn_depth_from_word): Support \"exclude\" again", 
+   "(as before r27958).", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(Theory of operation, read_path_info, write_path_info): Let", 
+   "svn_depth_exclude be serialized in the reporter file (shifting each", 
+   "depth value up one value).", 
+   "(delta_dirs): Don't do the \"delete\" logic for excluded paths.  Don't", 
+   "call update_entry for excluded paths.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_set_path3): Document that the revision argument may be", 
+   "SVN_INVALID_REVNUM when depth=exclude.", 
+   "* subversion/svn/main.c", 
+   "(main): Don't allow --depth=exclude on the command line.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(reporter_depth_exclude): New test.", 
+   "(test_funcs): It passes."
+  ], 
+  "revision_id": "868096"
+ }
+]

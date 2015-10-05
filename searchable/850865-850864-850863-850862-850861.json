@@ -1,0 +1,107 @@
+[
+ {
+  "author": "djh", 
+  "date": "2004-09-01T02:45:39.621628Z", 
+  "msg": [
+   "Assorted build documentation cleanups, and documenting the VC.NET build.", 
+   "* build/win32/vc6-build.bat.in", 
+   "(AWKDIR, NASMDIR): New variables", 
+   "(PATH): Add AWKDIR and NASMDIR, remove hardcoded NASM path", 
+   "(Copy the binaries into a tree suitable for zipping): Reorder so", 
+   "the two apr-iconv copy commands are together", 
+   "* INSTALL", 
+   "(E.1 Prerequisites): Give the marketing names for Microsoft", 
+   "Visual Studio 7.  Add Awk as it is needed for (at least) Apache", 
+   "and VS.NET APR-util builds.  Add APR as a prerequisite for", 
+   "non-Apache builds.", 
+   "(E.3 Preparation): Add Awk, APR.  Mention Perl must be on path.", 
+   "(E.4 Building the Binaries): Add AWK to path.  Introduce NASMDIR", 
+   "rather than using hard-coded NASM path.  Add basic VC.NET build", 
+   "instructions.", 
+   "Patch by Jon Foster."
+  ], 
+  "revision_id": "850865"
+ }, 
+ {
+  "author": "sunny256", 
+  "date": "2004-09-01T01:25:39.771846Z", 
+  "msg": [
+   "Translation updates, corrections and tweaks in the Norwegian nb.po file.", 
+   "* subversion/po/nb.po", 
+   "Updated against newest trunk. Also corrected and tweaked many", 
+   "messages."
+  ], 
+  "revision_id": "850864"
+ }, 
+ {
+  "author": "ringstrom", 
+  "date": "2004-08-31T20:42:37.906139Z", 
+  "msg": [
+   "Make the following changes to 'svnadmin recover' to make it more user", 
+   "friendly:", 
+   "- Exit if the repository is in use by another process with a helpful", 
+   "error message.", 
+   "- Add a new option --wait to make recover wait until it gains", 
+   "exclusive repository access.", 
+   "- Make the wait interruptible by standard signals (SIGINT, SIGTERM).", 
+   "* svnadmin/main.c", 
+   "(setup_cancellation_signals): New helper function.", 
+   "(svnadmin__wait, options_table, svnadmin_opt_state): Add --wait option.", 
+   "(cmd_table): Remove the scary warning from 'help recover'.  There is", 
+   "no need to scare the users since the lock protects the repository,", 
+   "and we do present an error message if the repository is in use.", 
+   "(recovery_started): New function to inform the user that the recovery", 
+   "has started.", 
+   "(subcommand_recover): Restore default signal handling before calling", 
+   "svn_repos_recover2.  Call the updated svn_repos_recover2 with", 
+   "recovery_started as argument.  Improve the error message if the", 
+   "repository is busy.", 
+   "(main): Use the new setup_cancellation_signals.", 
+   "* include/svn_repos.h", 
+   "(svn_repos_recover2): Add a callback to be called when the recovery", 
+   "starts and a baton to be supplied to the callback.", 
+   "* libsvn_repos/repos.c", 
+   "(svn_repos_recover2): Call the callback after acquiring the lock.", 
+   "* bindings/java/javahl/native/SVNAdmin.cpp", 
+   "(SVNAdmin::recover): Update to match updated svn_repos_recover2."
+  ], 
+  "revision_id": "850863"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-08-31T19:20:47.904698Z", 
+  "msg": [
+   "Fix issue #2016.  Cache UTF8 translation handles in a global hash table", 
+   "instead of in the current pool, which improves performance, especially on", 
+   "Windows.", 
+   "* include/svn_utf.h (svn_utf_initialize): New function.", 
+   "* libsvn_subr/utf.c (xlate_handle_mutex, xlate_handle_hash): New variables.", 
+   "(xlate_handle_node_t): New struct.", 
+   "(xlate_cleanup, svn_utf_initialize, put_xlate_handle_node): New functions.", 
+   "(get_xlate_handle_node): Renamed from get_xlate_handle and rewritten using", 
+   "a global hash table and locking in MT environments.", 
+   "(get_ntou_xlate_handle_node, get_uton_xlate_handle_node,", 
+   "svn_utf_stringbuf_to_utf8, svn_utf_string_to_utf8, svn_utf_cstring_to_utf8,", 
+   "svn_utf_cstring_to_utf8_ex, svn_utf_stringbuf_from_utf8,", 
+   "svn_utf_string_from_utf8, svn_utf_cstring_from_utf8,", 
+   "svn_utf_cstring_from_utf8_ex, svn_utf_cstring_from_utf8_string): Use", 
+   "{get,put}_xlate_handle_node for the", 
+   "xlate handle.", 
+   "* libsvn_subr/cmdline.c (svn_cmdline_initialize): Initialize UTF-8 routines."
+  ], 
+  "revision_id": "850862"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2004-08-31T15:46:11.957643Z", 
+  "msg": [
+   "Fix the regexp matching code to match against full directories, not", 
+   "the munged ones used only for presentation compactness.", 
+   "Patch by: Philipp Reisner <philipp.reisner@linbit.com>", 
+   "* tools/hook-scripts/commit-email.pl.in", 
+   "Backup the original \"dirschanged\" list so the regexp matching code", 
+   "can refer to it (instead of the compacted list) later."
+  ], 
+  "revision_id": "850861"
+ }
+]

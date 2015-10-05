@@ -1,0 +1,109 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2004-11-30T19:49:38.788597Z", 
+  "msg": [
+   "Fix a couple of typoes.", 
+   "* libsvn_fs_fs/structure: Typo Fixo."
+  ], 
+  "revision_id": "852170"
+ }, 
+ {
+  "author": "ruben", 
+  "date": "2004-11-30T12:45:41.555057Z", 
+  "msg": [
+   "Book Spanish. Translated some paragraphs."
+  ], 
+  "revision_id": "852169"
+ }, 
+ {
+  "author": "gradha", 
+  "date": "2004-11-30T09:20:57.136170Z", 
+  "msg": [
+   "Book Spanish. Translated paragraph."
+  ], 
+  "revision_id": "852168"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-11-30T04:03:52.080542Z", 
+  "msg": [
+   "Locking branch:  continue filling out mod_dav locking vtable.", 
+   "* mod_dav_svn/lock.c", 
+   "(dav_svn_create_lock):   implement.", 
+   "(dav_svn_append_locks):  implement.", 
+   "(dav_svn_remove_lock):   implement."
+  ], 
+  "revision_id": "852167"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-11-30T03:17:35.076528Z", 
+  "msg": [
+   "Locking branch:  tweak the public svn_fs.h lock func signatures & promises.", 
+   "It turns out that mod_dav machinery wants to generate the lock", 
+   "structure on its own, and then lock a file by 'attaching' the", 
+   "structure.  This doesn't mesh with the existing svn_fs_lock() API,", 
+   "which internalizes the work of generating and returning the lock", 
+   "structure.  So:  create a new svn_fs_attach_lock() API -- probably only", 
+   "to be used by mod_dav_svn.", 
+   "And while we're at it, move the whole concept of \"refresh\" from", 
+   "svn_fs_lock() to this new function.  We already decided that lock", 
+   "expiration (and the derivative concept of refreshment) is something", 
+   "we're only making available to DAV clients anyway, not svn clients.", 
+   "Now all the DAV concepts are isolated into one svn_fs.h function.", 
+   "* include/svn_fs.h", 
+   "(svn_fs_lock):         remove 'current_token' parameter.  remove all", 
+   "mention of \"refresh\" from the docstring.", 
+   "(svn_fs_attach_lock):  new declaration.", 
+   "* include/svn_repos.h", 
+   "(svn_repos_fs_attach_lock):  new wrapper declaration.", 
+   "(svn_repos_fs_lock):         remove 'current_token' parameter.", 
+   "* include/svn_ra.h", 
+   "(svn_ra_plugin_t):  remove 'current lock' param from RA->lock().", 
+   "no more 'refresh' concept.", 
+   "* libsvn_repos/fs-wrap.c", 
+   "(svn_repos_fs_attach_lock):  new wrapper.", 
+   "(svn_repos_fs_lock):         adjust for one less parameter.", 
+   "* libsvn_fs/fs-loader.c", 
+   "(svn_fs_lock):  adjust for one less parameter.", 
+   "(svn_fs_attach_lock):  new dispatch func.", 
+   "* libsvn_fs/fs-loader.h", 
+   "(fs_vtable_t):  adjust svn_fs_lock for one less parameter.  add new func.", 
+   "* libsvn_fs_fs/lock.h", 
+   "(svn_fs_fs__lock):  adjust declaration.", 
+   "(svn_fs_fs__attach_lock):  declare.", 
+   "* libsvn_fs_fs/lock.c", 
+   "(svn_fs_fs__lock):  adjust declaration.", 
+   "(svn_fs_fs__attach_lock):  new stub.", 
+   "* libsvn_fs_fs/fs.c", 
+   "(fs_vtable):  add new func pointer.", 
+   "* libsvn_fs_base/fs.c", 
+   "(fs_vtable):  add new func pointer.", 
+   "* libsvn_fs_base/lock.h", 
+   "(svn_fs_fs__lock):  adjust declaration.", 
+   "(svn_fs_fs__attach_lock):  declare.", 
+   "* libsvn_fs_base/lock.c", 
+   "(svn_fs_base__attach_lock, txn_body_attach_lock):  new funcs.", 
+   "(svn_fs_base__lock, txn_body_lock, struct lock_args):  simplify.", 
+   "no need to deal with refreshing locks anymore.", 
+   "* libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__lock):   adjust for one less parameter.", 
+   "* libsvn_ra_svn/client.c", 
+   "(ra_svn_lock):   update signature.", 
+   "* libsvn_ra_dav/session.c", 
+   "(svn_ra_dav__lock):   update signature.", 
+   "* svnadmin/main.c", 
+   "(subcommand_lock):   adjust svn_fs_lock() call.", 
+   "* tests/fs-test.c", 
+   "(basic_lock):                adjust svn_fs_lock() call.", 
+   "(lock_credentials):          same.", 
+   "(final_lock_check):          same.", 
+   "(lock_dir_propchange):       same.", 
+   "(lock_name_reservation):     same.", 
+   "(lock_expiration):           same.", 
+   "(lock_break_steal_refresh):  same.  also call new svn_fs_attach_lock()."
+  ], 
+  "revision_id": "852166"
+ }
+]

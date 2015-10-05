@@ -1,0 +1,98 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-03-15T07:06:52.000000Z", 
+  "msg": [
+   "(open):  remove stupid printf."
+  ], 
+  "revision_id": "838935"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-15T06:37:16.000000Z", 
+  "msg": [
+   "Make checkouts from local repositories work.", 
+   "The bugfix here was forcing the editor driver to always supply", 
+   "`copyfrom' args to add_directory(), even though this shouldn't be", 
+   "necessary according to add_directory's docstring.", 
+   "During a checkout, the wc editor *assumes* that they are supplied, so", 
+   "that it can immediately create a new SVN/ area in the new dir.  If", 
+   "they're not supplied, it ends up creating a new dir whose own entry in", 
+   "`entries' has no ancestry attributes... which is bad, bad, bad.", 
+   "So for now, the driver is telescoping a URL arg as it recurses and", 
+   "is constantly supplying it to add_*().  However, I don't think things", 
+   "should remain this way;  the wc editor should -infer- the new dir's", 
+   "ancestor URL if not supplied, and use that value when writing the new", 
+   "`entries' file.  Nowhere in the docs for editor->add_dir() does it say", 
+   "that the ancestry args are always required!", 
+   "* checkout.c (walk_tree):  take a URL arg, and telescope it properly", 
+   "as we recurse.", 
+   "(svn_ra_local__checkout):  take a URL arg.", 
+   "* ra_local.h (svn_ra_local__checkout):  take a URL arg.", 
+   "* ra_plugin.c (do_checkout):  supply session baton's URL to", 
+   "svn_ra__local_checkout."
+  ], 
+  "revision_id": "838934"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-15T05:18:50.000000Z", 
+  "msg": [
+   "Doh.  Add the checkout driver.  :)"
+  ], 
+  "revision_id": "838933"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-15T05:17:45.000000Z", 
+  "msg": [
+   "The meat of ra_local checkouts:  a bridge between libsvn_fs and", 
+   "libsvn_wc's checkout editor.", 
+   "* checkout.c, ra_local.h (svn_ra_local__checkout):  declare and define", 
+   "new editor driver which reads an fs directly.", 
+   "(send_file_contents):  new helper func.", 
+   "(set_any_props):  new helper func.", 
+   "(walk_tree):  the main recursive func.", 
+   "* ra_plugin.c (do_checkout):  call svn_ra_local__checkout.", 
+   "* Makefile.am: compile checkout.c."
+  ], 
+  "revision_id": "838932"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-14T23:02:18.000000Z", 
+  "msg": [
+   "Reorganize code paths in preparation for M2 checkouts.   The goal here", 
+   "is to make sure that `make check` still works with xml files.  Then we", 
+   "write the RA editor-driver later.", 
+   "* svn_client.h, checkout.c (svn_client_checkout): New docstring with", 
+   "new promises; change input args.  Rename `ancestor_revision' to", 
+   "plain old `revision', and rename `ancestor_path' to `URL'.", 
+   "* checkout.c (svn_client_checkout): total rewrite.  one routine to", 
+   "find all funcs, and in the client bind them.", 
+   "Also: cosmetic changes to func layers below, although most of these", 
+   "routines will probably be removed later when we rewrite updates.  The", 
+   "file in SVN/ need no longer exist, since URLs are stored in the", 
+   "`entries' file now.", 
+   "* adm_files.c (init_adm): remove repos arg.", 
+   "(svn_wc__ensure_adm):  remove repos arg.", 
+   "* adm_ops.c (svn_wc__ensure_wc):  remove repos arg.  (why does this", 
+   "routine even exist? :))", 
+   "* get_editor.c (prep_directory): remove repos arg.", 
+   "(replace_root):  no longer use repos arg.", 
+   "(make_editor): remove repos arg.", 
+   "(struct edit_baton):  remove repos_arg.", 
+   "(svn_wc_get_checkout_editor):  remove repos_arg.", 
+   "* apply_edits.c (apply_delta): remove repos arg.", 
+   "(do_edits):  stop creating repos arg.", 
+   "(svn_client__checkout_internal):  rename ancestry args as above.", 
+   "* wc.h (SVN_WC__ADM_REPOSITORY):  remove repos #define.", 
+   "(svn_wc__ensure_adm, svn_wc__ensure_wc): update prototype.", 
+   "* svn_wc.h (svn_wc_get_checkout_editor): update prototype.", 
+   "* checkout-test.c (apply_delta): call svn_wc_get_checkout_editor correctly.", 
+   "* ra-dav-test.c (main):  ditto.", 
+   "* checkout-cmd.c (svn_cl__checkout): call svn_client_checkout correctly."
+  ], 
+  "revision_id": "838931"
+ }
+]

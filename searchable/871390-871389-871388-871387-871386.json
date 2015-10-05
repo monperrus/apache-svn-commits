@@ -1,0 +1,120 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2008-05-20T19:19:12.322051Z", 
+  "msg": [
+   "* STATUS: Vote for r30629, approving. Add r31313."
+  ], 
+  "revision_id": "871390"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-05-20T19:13:34.068384Z", 
+  "msg": [
+   "Votey votey."
+  ], 
+  "revision_id": "871389"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-05-20T18:08:11.159967Z", 
+  "msg": [
+   "Fix bug whereby 'svn cp --parents URL/TO/EXISTING/FILE URL/TO/EXISTING/DIR'", 
+   "would seg fault.  This follows up to the regression test added in r31311.", 
+   "Found by: Alexander Kitaev <alex@tmate.org>", 
+   "* subversion/libsvn_client/copy.c", 
+   "(repos_to_repos_copy): Specially handle the case where dir is an", 
+   "immediate child of top_url.", 
+   "* subversion/tests/cmdline/copy_tests.py", 
+   "(test_list): Expect 'unneeded_parents' to pass now."
+  ], 
+  "revision_id": "871388"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-05-20T17:16:38.414823Z", 
+  "msg": [
+   "Fix issue #3137: use a consistent error code when a path is not found in the", 
+   "repository. DAV uses a 404 status code to indicate missing paths, so we now", 
+   "convert that code to SVN_ERR_FS_NOT_FOUND, as we do for ra_local and ra_svn.", 
+   "As this is client side only, this patch also removes all instances were we", 
+   "test for the now deprecated error code SVN_ERR_RA_DAV_PATH_NOT_FOUND.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RA_DAV_PATH_NOT_FOUND): Deprecate error code.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__error_on_status): New function declaration.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__error_on_status): New function definition.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__has_capability,", 
+   "svn_ra_serf__check_path,", 
+   "svn_ra_serf__stat): Use SVN_ERR_FS_NOT_FOUND error code here ..", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__discover_root): .. and here.", 
+   "* subversion/libsvn_ra_serf/mergeinfo.c", 
+   "(svn_ra_serf__get_mergeinfo): Use svn_ra_serf__error_on_status here ..", 
+   "* subversion/libsvn_ra_serf/getlocationsegments.c", 
+   "(svn_ra_serf__get_location_segments): ..", 
+   "* subversion/libsvn_ra_serf/blame.c", 
+   "(svn_ra_serf__get_file_revs): ..", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(handle_stream): ..", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(svn_ra_serf__wait_for_props): ..", 
+   "* subversion/libsvn_ra_serf/getlocations.c", 
+   "(svn_ra_serf__get_locations): ..", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(checkout_dir): .. and here.", 
+   "(checkout_dir, get_version_url): Use better error code.", 
+   "(checkout_file): Use svn_ra_serf__error_on_status and better error code.", 
+   "* subversion/libsvn_ra_neon/props.c", 
+   "(svn_ra_neon__get_one_prop,", 
+   "svn_ra_neon__search_for_starting_props,", 
+   "svn_ra_neon__do_check_path,", 
+   "svn_ra_neon__do_stat): Use SVN_ERR_FS_NOT_FOUND error code here ..", 
+   "* subversion/libsvn_ra_neon/get_locks.c", 
+   "(svn_ra_neon__get_locks): ..", 
+   "* subversion/libsvn_ra_neon/util.c", 
+   "(generate_error): ..", 
+   "* subversion/libsvn_ra_neon/commit.c", 
+   "(commit_add_file): .. and here.", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(svn_ra_neon__has_capability): Don't check for SVN_ERR_RA_DAV_PATH_NOT_FOUND.", 
+   "* subversion/svn/mkdir-cmd.c", 
+   "(svn_cl__mkdir): Don't check for SVN_ERR_RA_DAV_PATH_NOT_FOUND.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(filter_self_referential_mergeinfo,", 
+   "calculate_remaining_ranges,", 
+   "get_mergeinfo_walk_cb): Don't check for SVN_ERR_RA_DAV_PATH_NOT_FOUND."
+  ], 
+  "revision_id": "871387"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2008-05-20T16:53:35.034692Z", 
+  "msg": [
+   "Fix broken notification portion of issue #3199, 'subtree merges broken when", 
+   "required ranges don't intersect with merge target'.", 
+   "Really this is a follow-up to r30746, as that was the cause of the problems", 
+   "described in http://subversion.tigris.org/issues/show_bug.cgi?id=3199#desc3.", 
+   "r30746 fixed a merge notification bug when a path with explicit mergeinfo", 
+   "was deleted by a merge.  But in fixing that bug it introduced a new one", 
+   "not found till issue #3199.  Likely r30746 caused other notification bugs", 
+   "that have gone unnoticed, since the test suite is a *bit* lax in checking", 
+   "the merge notification headers.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(find_nearest_ancestor): Add a flag dictating whether a path can be", 
+   "considered its own ancestor or not.", 
+   "(notification_receiver): Update call to find_nearest_ancestor() returning", 
+   "the default behavior to pre-r30746, i.e. a path can be its own ancestor.", 
+   "Only when deleting a path do we want the notification path to be a proper", 
+   "WC ancestor of the deleted path (this is what r30746 should have done all", 
+   "along).", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(subtree_merges_dont_intersect_with_targets): Rerun the final two merges,", 
+   "a.k.a. the ones that matter for this test, checking the merge notification", 
+   "headers."
+  ], 
+  "revision_id": "871386"
+ }
+]

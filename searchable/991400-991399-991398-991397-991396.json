@@ -1,0 +1,78 @@
+[
+ {
+  "author": "hlship", 
+  "date": "2010-09-01T00:01:35.570111Z", 
+  "msg": [
+   "TAP5-1188: Refactor to use Javassist class loading objects"
+  ], 
+  "revision_id": "991400"
+ }, 
+ {
+  "author": "tomwhite", 
+  "date": "2010-08-31T23:57:11.521647Z", 
+  "msg": [
+   "WHIRR-77. Document and implement release process."
+  ], 
+  "revision_id": "991399"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2010-08-31T23:52:39.151591Z", 
+  "msg": [
+   "whirr has a KEYS file."
+  ], 
+  "revision_id": "991398"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2010-08-31T23:51:44.685593Z", 
+  "msg": [
+   "HBASE-2692 Master rewrite and cleanup for 0.90", 
+   "Patch brought over from 0.90_master_rewrite branch.", 
+   "Replication test is broke as are some of the rest tests.", 
+   "Others should be passing.", 
+   "Some of the changes made in this fat patch:", 
+   "+ In HLogKey, we now use encoded region name instead of full region name.", 
+   "+ On split, daughters are opened on the parent's regionserver; let the new balancer", 
+   "sort them out later when it cuts in.", 
+   "+ Added move region from one server to another as well as enable/disable balancer.", 
+   "+ All .META. and -ROOT- edits go via new *Editor and *Reader classes -- no more", 
+   "do we have 5 different ways of reading and editing .META.", 
+   "+ Rather than 3 different listeners to hlog each w/ own way of listening, instead", 
+   "we only have WALObserver now.", 
+   "+ New Server Interface that has whats common to HMaster and RegionServer. Also", 
+   "new Services Interface.  This should make test writing cleaner making it so", 
+   "less need of full cluster context testing anything -- e.g. the new", 
+   "Interfaces are good w/ Mockito.", 
+   "+ New balacner that runs on a period and takes into consideration all load", 
+   "across cluster.", 
+   "+ Table online/offline is now a flag in ZK; the offline flag on a region is", 
+   "just used splitting from here on out.", 
+   "+ Moved fixup of failed add of daughter edits to .META. into shutdown server", 
+   "recover code (It used to be in basescanner).", 
+   "+ The heartbeat now sends master the regionserver load and is used sending", 
+   "shutdown message from master to regionserver ONLY; all other messages are", 
+   "via zk (HMsg is pretty bare now).", 
+   "+ No more Worker in RS and ToDoQueue in master.  Both in master and regionserver", 
+   "we use handlers instead run out of Executors.", 
+   "+ Client can not send split, flush, compact direct to RS; no longer does", 
+   "it go via master.", 
+   "+ Server shutdown runs differently now. All are watching a flag in zk.", 
+   "When RS notices its gone, it closes all user-space regions. If thats all", 
+   "it was carrying, then it goes down.  Otherwise, waits on master to send", 
+   "the shutdown msg via heartbeat."
+  ], 
+  "revision_id": "991397"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2010-08-31T23:40:02.116237Z", 
+  "msg": [
+   "Follow-up to r991384.", 
+   "* subversion/tests/cmdline/input_validation_tests.py", 
+   "(invalid_merge_args): The dangers of multiple WCs: Tested the change in", 
+   "one, committed from another, forget something along the way."
+  ], 
+  "revision_id": "991396"
+ }
+]

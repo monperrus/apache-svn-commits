@@ -1,0 +1,92 @@
+[
+ {
+  "author": "kfogel", 
+  "date": "2001-10-15T23:24:17.363405Z", 
+  "msg": [
+   "* reps-strings.c (svn_fs__rep_deltify): Use \"%lu\" and cast to avoid", 
+   "compiler warnings.", 
+   "Suggested by: Greg Hudson <ghudson@mit.edu>"
+  ], 
+  "revision_id": "840315"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-10-15T23:11:26.058980Z", 
+  "msg": [
+   "Resolve issue #414:", 
+   "* subversion/tests/libsvn_fs/fs-test.c (file_integrity_helper): New", 
+   "helper func, based on old `large_file_integrity', same code but with", 
+   "filesize parameterized.  Do 30 automated commits instead of 10.  In", 
+   "that random commit loop, increment j by setting it to the newest", 
+   "youngest_rev every time, instead of assuming that youngest_rev", 
+   "incremented by exactly 1 and faithfully bumping j by 1 as well.", 
+   "(medium_file_integrity, large_file_integrity): Former is a new test,", 
+   "latter replaces an old one.  Both just invoke above new helper.", 
+   "(test_funcs): Run them.", 
+   "* subversion/libsvn_fs/reps-strings.c: Deconditionalize deltification", 
+   "code by removing the \"DELTIFYING\" #define.", 
+   "(svn_fs__rep_deltify): Only deltify files below a certain size; see", 
+   "issue #531 for more.", 
+   "* subversion/libsvn_delta/delta.h (svn_txdelta__window_size): Removed", 
+   "from here, new variable now exported from public header, see below.", 
+   "* subversion/include/svn_delta.h (svn_txdelta_window_size): Export", 
+   "formerly private variable, see above.  All references changed in:", 
+   "* subversion/libsvn_delta/text_delta.c: See above.", 
+   "* subversion/libsvn_delta/vdelta.c: See above.", 
+   "* subversion/tests/libsvn_delta/vdelta-test.c: See above."
+  ], 
+  "revision_id": "840314"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-10-15T21:04:25.785108Z", 
+  "msg": [
+   "Cleanups, part of work on issue #414:", 
+   "* reps-strings.c (rep_read_range): Removed unused var `base_rep'.", 
+   "Remove obsolete comment.", 
+   "(svn_fs__rep_deltify): Print numbers with \"%u\", not \"%ul\", which", 
+   "should be \"%lu\" in any case.  The \"%ul\" meant we were printing the", 
+   "number followed by a lower-case `l'!  The only reason this was not a", 
+   "problem is that atoi() knows how to handle a trailing `l'.  We got", 
+   "lucky.  But note that our repository now has a bunch of reps with l's", 
+   "at the end of their size fields.  They're not doing any harm there,", 
+   "except to remind me daily of my folly."
+  ], 
+  "revision_id": "840313"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-10-15T19:15:16.254177Z", 
+  "msg": [
+   "Bugfix for revision 232:  make sure 'svn status' is properly", 
+   "understanding properties' existence.", 
+   "* README:  redefine 'prop-time' attribute to mean the same as", 
+   "'text-time'.  That is, the last known time when the working file was", 
+   "known to be equal to the pristine (set at update-time).", 
+   "* questions.c (empty_props_p): look for a propfile size of -exactly- 4", 
+   "bytes to signify emptiness (\"END\\n\").", 
+   "(svn_wc__has_props):  wrapper around previous.", 
+   "* wc.h (svn_wc__has_props):  declare.", 
+   "* svn_wc.h (svn_wc_status_kind): add new status kind, 'normal', to", 
+   "distinguish from 'none'.", 
+   "* libsvn_wc/status.c (assemble_status):  while text_kind defaults to", 
+   "'normal', prop_kind now defaults to 'none' unless", 
+   "svn_wc__has_props() tells us otherwise.", 
+   "* cmdline/status.c (generate_status_codes): don't look for prop-time's", 
+   "existence; instead, use the actual value of the prop_status field.", 
+   "* props.c (svn_wc__save_prop_file):  docfix.", 
+   "* propset-cmd.c (svn_cl__propset): remove trailing period.  When I set", 
+   "a property on '.', the printf told me that it had been set on '..',", 
+   "which looked like a bug at first.  :-)"
+  ], 
+  "revision_id": "840312"
+ }, 
+ {
+  "author": "xela", 
+  "date": "2001-10-14T18:01:35.533668Z", 
+  "msg": [
+   "removed methods (unAdd), (unDelete) which were removed from the official svn_client interface within the last milestone"
+  ], 
+  "revision_id": "840311"
+ }
+]

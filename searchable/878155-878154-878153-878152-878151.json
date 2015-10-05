@@ -1,0 +1,101 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-06-18T20:57:59.151905Z", 
+  "msg": [
+   "As part of the serf error handling overhaul (issue #3375) temporarily", 
+   "pass the session instance to all response handlers to allow access to", 
+   "the per session pending error.", 
+   "This will allow updating the handlers to return errors via the session", 
+   "instead of via their own batons. (The session argument allows", 
+   "updating the handlers one by one instead of via a big-bang. A final", 
+   "cleanup will later remove the session argument and make", 
+   "svn_ra_serf__response_handler_t return a svn_error_t*.)", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(handle_checkout, post_response_handler):", 
+   "* subversion/libsvn_ra_serf/locks.c", 
+   "(handle_lock):", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(options_response_handler):", 
+   "Accept and pass session instance to all response handlers.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__response_handler_t): Add session argument.", 
+   "(svn_ra_serf__handle_status_only, svn_ra_serf__handle_discard_body):", 
+   "Update prototypes implementing svn_ra_serf__response_handler_t.", 
+   "svn_ra_serf__handle_server_error, svn_ra_serf__handle_multistatus_only):", 
+   "(svn_ra_serf__response_discard_handler): New function.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_fetch_t): Add discard variable.", 
+   "(error_fetch, handle_fetch):", 
+   "Set discard variable instead of changing the request handler.", 
+   "(Which doesn't work after changing prototypes)", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__context_run_wait): Never drop the sessions pending error,", 
+   "and don't try to translate subversion errors to text via apr.", 
+   "(svn_ra_serf__handle_discard_body): Partially refactor to ..", 
+   "(svn_ra_serf__response_discard_handler): .. this new function", 
+   "(svn_ra_serf__handle_status_only, svn_ra_serf__handle_multistatus_only,", 
+   "svn_ra_serf__handle_xml_parser, svn_ra_serf__handle_server_error):", 
+   "Accept and pass session instance to all response handlers.", 
+   "(handle_response): Pass session to handlers and don't assume there is no", 
+   "pending error in the session as that won't be true after this", 
+   "refactoring is complete.", 
+   "* subversion/libsvn_subr/error.c", 
+   "(err_abort): Accidental commit of disabling the abort on error leaks.", 
+   "[Note from the future: The change in error.c is reverted in r38084]"
+  ], 
+  "revision_id": "878155"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-18T17:50:35.303614Z", 
+  "msg": [
+   "Do some refactoring in the libsvn_wc relocate API.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "(relocate_dir): New, mostly copied from svn_wc_relocate3().", 
+   "(svn_wc_relocate3): Mostly struck.  Do some validation before calling", 
+   "relocate_dir()."
+  ], 
+  "revision_id": "878154"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-18T16:31:23.584714Z", 
+  "msg": [
+   "* build.conf", 
+   "(__ALL_TESTS__): Include the parse-diff-test for our Windows testers."
+  ], 
+  "revision_id": "878153"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-06-18T16:10:51.496238Z", 
+  "msg": [
+   "Make 'svn patch' automatically add new files to version control.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(apply_one_patch): Add previously non-existent files to version control,", 
+   "and send an appropriate notification. Note that if the file already", 
+   "exists but is unversioned, we do not add it.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff): Test the new behaviour as part of this existing unidiff", 
+   "application test."
+  ], 
+  "revision_id": "878152"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-06-18T16:00:36.262507Z", 
+  "msg": [
+   "Add a check and test to ensure we don't attempt to relocate a single file.", 
+   "The working copy code doesn't allow it, and up to this point we've just been", 
+   "silently doing nothing.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(single_file_relocate): New test.", 
+   "(test_list): Run it.", 
+   "* subversion/libsvn_client/relocate.c", 
+   "(svn_client_relocate): Error out if the target of the relocate operation is", 
+   "a file."
+  ], 
+  "revision_id": "878151"
+ }
+]

@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jeremias", 
+  "date": "2007-03-02T16:56:15.033100Z", 
+  "msg": [
+   "renderer may be null when called from the PDFTranscoder."
+  ], 
+  "revision_id": "513840"
+ }, 
+ {
+  "author": "abrown", 
+  "date": "2007-03-02T16:54:05.297874Z", 
+  "msg": [
+   "DERBY-47 (partial): Update the logic for cost-based optimization (CBO) and", 
+   "modification of access paths (MoAP) to recognize IN-list \"probe predicates\"", 
+   "and to handle them appropriately. More specifically this patch adds code to", 
+   "do the following:", 
+   "- During costing, recognize when we're using a probe predicate as a", 
+   "start/stop key and adjust the cost accordingly. This means multiplying", 
+   "the estimated cost and row count for \"column = ?\" by the number of values", 
+   "in the IN-list (because we are effectively going to evaluate \"column = ?\"", 
+   "N times, where N is the size of the IN-list, and we could return one or", 
+   "more rows for each of the N evaluations).  We also want to make sure that", 
+   "the resultant row count estimate is not greater than the total number of", 
+   "rows in the table.", 
+   "- When determining which predicates can be used as start/stop keys for the", 
+   "current conglomerate, only consider a probe predicate to be a start/stop", 
+   "key if it applies to the _first_ column in the conglomerate. Otherwise the", 
+   "probe predicate would end up being generated as a store qualifier, which", 
+   "means we would only get rows for which \"column = ?\" was true when the", 
+   "parameter was set to the _first_ value in the IN-list. That means we would", 
+   "end up with incorrect results (missing rows).", 
+   "- If cost-based optimization is complete and we are modifying access paths", 
+   "in preparation for code generation, then take any probe predicates that are", 
+   "*not* going to be used as start/stop keys for the chosen conglomerate and", 
+   "\"revert\" them back to the InListOperatorNodes from which they were built.", 
+   "Those InListOpNodes will then be generated as normal IN-list restrictions", 
+   "on the rows returned from store. If we did not do this reverting then the", 
+   "predicates would ultimately be ignored (since they are not valid qualifiers)", 
+   "and we would therefore end up with incorrect results (extra rows).", 
+   "- If we're modifying access paths and we have chosen to do multi-probing of", 
+   "an index then we disable bulk fetching for the target base table. Logically", 
+   "this is not a requirement. However, it turns out that bulk fetch can lead", 
+   "to poor performance when multi-probing an index if the number of probe", 
+   "values is high (several hundred or more) BUT that number is still just a", 
+   "small fraction of the total number of rows in the table.  By disabling", 
+   "bulk fetch for multi-probing we avoid this performance slowdown."
+  ], 
+  "revision_id": "513839"
+ }, 
+ {
+  "author": "jbq", 
+  "date": "2007-03-02T16:52:24.874736Z", 
+  "msg": [
+   "Improve Javadoc for isOnlyProcessIfPathActive()", 
+   "See http://www.nabble.com/Ajax-request-when-session-timed-out-leads-to-empty-response-tf3333681.html#a9272772"
+  ], 
+  "revision_id": "513838"
+ }, 
+ {
+  "author": "jbq", 
+  "date": "2007-03-02T16:50:24.769220Z", 
+  "msg": [
+   "Adding constructor File(java.io.File, String)"
+  ], 
+  "revision_id": "513837"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2007-03-02T16:49:11.456922Z", 
+  "msg": [
+   "Fix not running the common/common tests"
+  ], 
+  "revision_id": "513836"
+ }
+]

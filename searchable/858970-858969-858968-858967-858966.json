@@ -1,0 +1,110 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-15T03:58:49.589480Z", 
+  "msg": [
+   "ra_serf: Pass regression test basic_tests.py #17 (basic ls).", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__get_dir): Move to a lower place in the file and actually", 
+   "fully implement the function.", 
+   "(path_dirent_visitor_t): Structure to help path_dirent_walker.", 
+   "(path_dirent_walker): Walker that takes in a path to build the get_dir's", 
+   "returned dirent; (it defers the population of the svn_dirent_t to", 
+   "dirent_walker.)", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(svn_path.h): Include.", 
+   "(propfind_context_t): Fix line-length; Add flag to know that we're", 
+   "dealing with the response tag; add in a the ability to use multiple paths", 
+   "in a response (for Depth: 1 responses).", 
+   "(start_propfind): Detect response and href tags.", 
+   "(end_propfind): Close response and href tags; fill in our canonicalized", 
+   "path if we are in the response's href tag - otherwise, continue as before.", 
+   "(svn_ra_serf__walk_all_paths): New walker function that will walk over all", 
+   "path's properties in a given revisions (useful with Depth: 1 propfinds).", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__path_rev_walker_t): Helper like svn_ra_serf__walker_visitor_t.", 
+   "(svn_ra_serf__walk_all_paths): Declare; see above."
+  ], 
+  "revision_id": "858970"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-15T01:41:33.891742Z", 
+  "msg": [
+   "ra_serf: Pass regression test basic_tests.py #28 (info on file not existing in", 
+   "HEAD) and #29 (ls a path no longer in HEAD).", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__get_latest_revnum): Discover our root.", 
+   "(fetch_path_props): Abstract out check_path logic to deal with the stat", 
+   "case too.", 
+   "(svn_ra_serf__check_path): Just call fetch_path_props to do the heavy", 
+   "lifting and then process the returned props.", 
+   "(dirent_walker): Helper for stat that sets the dirent structure based on", 
+   "the properties in the allprop response.", 
+   "(svn_ra_serf__stat): Implement and call fetch_path_props and dirent_walker.", 
+   "* subversion/libsvn_ra_serf/getloc.c", 
+   "(loc_context_t): Add in status code field so we can detect 404s.", 
+   "(svn_ra_serf__get_locations): Discover our root so we handle non-HEAD files;", 
+   "get the status code from the parser; if we get a 404, create the", 
+   "SVN_ERR_FS_NOT_FOUND manually for now instead of parsing the response."
+  ], 
+  "revision_id": "858969"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-14T23:43:33.519797Z", 
+  "msg": [
+   "ra_serf: Pass regression test basic_tests.py #11 (basic switch command) by", 
+   "implementing 'switch' command.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__do_switch): Remove.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__do_switch): Declare.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(end_report): Handle the case where we don't want the PROPFIND anyway and", 
+   "the server didn't give it to us (as in a switch-driven update-report).", 
+   "(link_path): Implement.", 
+   "(make_update_reporter): Remove the relative path for dst-path.", 
+   "(svn_ra_serf__do_status): Relativize the dst-path target just for status.", 
+   "(svn_ra_serf__do_switch): Implement by calling our update-reporter."
+  ], 
+  "revision_id": "858968"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2006-03-14T22:37:45.462574Z", 
+  "msg": [
+   "* subversion/libsvn_wc/lock.c (do_open): Explicitly close the baton when", 
+   "cancelled otherwise a lock gets left behind."
+  ], 
+  "revision_id": "858967"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-14T21:59:28.591839Z", 
+  "msg": [
+   "ra_serf: Pass regression test basic_tests.py #13 (checkout a path not in HEAD).", 
+   "(This starts to lead us down the twisty passages caused by peg-rev confusion.)", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__check_path): If we got a 404 on our PROPFIND and we have", 
+   "specific revision, fall back to peg revving.", 
+   "(svn_ra_serf__get_uuid): Move to after svn_ra_serf__get_repos_root and", 
+   "call it to do the heavy lifting to get us the repos root.", 
+   "(svn_ra_serf__get_repos_root): Discover our root - in case we're passed a", 
+   "non-HEADable path.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(finish_report): Discover our root - in case we're passed a non-HEADable path.", 
+   "(make_update_reporter): Add relative path to our status commands.", 
+   "(svn_ra_serf__get_file): Style police.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_path.h): Include.", 
+   "(svn_ra_serf__discover_root): Implement discovery of VCC URL when the path", 
+   "that we're given doesn't actually exist in HEAD.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__session_t): Cache our VCC url and note that it and our repos", 
+   "root string may be NULL until it is discovered.", 
+   "(svn_ra_serf__discover_root): Declare."
+  ], 
+  "revision_id": "858966"
+ }
+]

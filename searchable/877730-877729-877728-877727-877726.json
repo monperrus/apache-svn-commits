@@ -1,0 +1,86 @@
+[
+ {
+  "author": "stylesen", 
+  "date": "2009-05-09T15:02:02.656894Z", 
+  "msg": [
+   "Follow up r37646.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(wc_to_repos_copy): Clear iterpool inside the loop.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "877730"
+ }, 
+ {
+  "author": "fabien", 
+  "date": "2009-05-09T06:02:57.737600Z", 
+  "msg": [
+   "French translation update for r37654:", 
+   "* subversion/po/fr.po: po-update & 2 new"
+  ], 
+  "revision_id": "877729"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-05-09T04:26:22.147993Z", 
+  "msg": [
+   "Rename the '--disable-local-use' option to '--disable-local-library-preloading'.", 
+   "* configure.ac", 
+   "(local-use): Rename to ...", 
+   "(local-library-preloading): ... this."
+  ], 
+  "revision_id": "877728"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-05-09T02:23:12.540884Z", 
+  "msg": [
+   "Fix upgrade tests 1 and 2.  It turns out that run_and_verify_update()", 
+   "eventually invokes run_and_verify_status(), which is what we were after in", 
+   "the first place.  That function, eventually runs 'svn st -v -u -q', which", 
+   "requires server access.  Since the dummy working copies used in these tests", 
+   "don't have corresponding repositories, those calls fail.", 
+   "However, since the working copies were originally created on my dev box, and", 
+   "the repositories still exist there, the tests passed for me locally before", 
+   "committing r37648.  This should fix the buildbots *and* my local tests.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(run_and_verify_status_no_server): New.", 
+   "(basic_upgrade, upgrade_1_5): Don't hit the server when checking the status", 
+   "of the working copy."
+  ], 
+  "revision_id": "877727"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-09T01:38:09.160872Z", 
+  "msg": [
+   "Introduce versioning into our SQL schemas. This is controlled through the", 
+   "use of a SQL comment such as:", 
+   "-- format: 12", 
+   "The format versions are folded into the #define name.", 
+   "This revision has preparation for the format 13 changes to the schema, but", 
+   "these are not activated since we're still at 12. The changes for 13 will", 
+   "evolve until we are ready to pull the switch.", 
+   "* build/transform_sql.py:", 
+   "(main): uppercase the var_name right off the bat. don't write it out", 
+   "unconditionally, but wait until it is first needed (we may run into a", 
+   "format specifier first). add a new regex to detect the format", 
+   "specified, and look for it as we're processing the lines. add some", 
+   "commentary to the processing code, and clarify things a bit.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(format 12): declare the section for format 12. update a related comment", 
+   "in 'incomplete_children' since we won't be able to delete the column.", 
+   "(format 13): new section.", 
+   "(WORK_QUEUE): new table for holding work queue items (see a future rev", 
+   "of wc-ng-design for more info)", 
+   "(BASE_NODE.incomplete_children): erase all values in format 13.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(statements[]): switch to WC_METADATA_SQL_12 and add another slot for", 
+   "the eventual format 13.", 
+   "* subversion/tests/libsvn_wc/db-test.c:", 
+   "(data_loading_sql[]): switch to WC_METADATA_SQL_12 and add another slot", 
+   "for the eventual format 13."
+  ], 
+  "revision_id": "877726"
+ }
+]

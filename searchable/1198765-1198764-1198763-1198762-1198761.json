@@ -1,0 +1,99 @@
+[
+ {
+  "author": "neels", 
+  "date": "2011-11-07T15:03:59.645351Z", 
+  "msg": [
+   "Introduce the commit argument --include-externals.", 
+   "Most prominent changes:", 
+   "- File externals are no longer committed by default.", 
+   "- When option --include-externals is passed to 'svn commit', *all* externals", 
+   "reached by recursion are included in the commit (dir & file alike).", 
+   "- Dir externals nested \"behind\" unversioned dirs or \"foreign\" WCs are", 
+   "now reached by recursion.", 
+   "Previous default was to include all file externals, not dirs. On the API", 
+   "level, separate dir/file arguments allow for this previous behavior, mainly", 
+   "for keeping svn_client_commit5()'s behavior unchanged.", 
+   "See also http://svn.haxx.se/dev/archive-2011-08/0620.shtml", 
+   "### The commit API can't handle file externals inside unversioned dirs", 
+   "properly yet. Additional SQL currently deliberately excludes them (see", 
+   "STMT_SELECT_COMMITTABLE_EXTERNALS_BELOW).", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__committable_external_info_t): New struct for:", 
+   "(svn_wc__committable_externals_below): New function.", 
+   "* subversion/include/svn_client.h,", 
+   "(svn_client_commit6):", 
+   "New function, adding INCLUDE_FILE_EXTERNALS and INCLUDE_DIR_EXTERNALS", 
+   "arguments over svn_client_commit5().", 
+   "* subversion/libsvn_client/commit.c", 
+   "(append_externals_as_explicit_targets): New static function.", 
+   "(svn_client_commit6): New function, see svn_client.h ^.", 
+   "(svn_client_commit5):", 
+   "Call svn_client_commit6() with INCLUDE_FILE_EXTERNALS = TRUE and", 
+   "INCLUDE_DIR_EXTERNALS = FALSE.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(harvest_committables):", 
+   "New argument IS_EXPLICIT_TARGET; pass as FALSE upon recursion. Skip file", 
+   "externals that are not explicit targets, so this function now skips all", 
+   "externals during recursion (see docstring).", 
+   "(svn_client__harvest_committables):", 
+   "Pass IS_EXPLICIT_TARGET as TRUE: initial harvest_committables() call.", 
+   "(harvest_copy_committables):", 
+   "Pass IS_EXPLICIT_TARGET as TRUE, but has no effect since, inside", 
+   "harvest_committables(), COPY_MODE will be TRUE and all file externals will", 
+   "be excluded anyway.", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(is_external_rolled_out): New static function.", 
+   "(svn_wc__committable_externals_below): New function, see svn_wc_private.h ^.", 
+   "* subversion/libsvn_wc/wc_db.h,", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_committable_externals_below):", 
+   "New function for STMT_SELECT_COMMITTABLE_EXTERNALS_BELOW.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_COMMITTABLE_EXTERNALS_BELOW): New SQL.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add INCLUDE_EXTERNALS for --include-externals.", 
+   "* subversion/svn/commit-cmd.c", 
+   "(svn_cl__commit): Call svn_client_commit6() instead of &5().", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__longopt_t, svn_cl__options, svn_cl__cmd_table, main):", 
+   "Add OPT_INCLUDE_EXTERNALS, enable --include-externals for 'commit'.", 
+   "* subversion/tests/cmdline/externals_tests.py", 
+   "(include_externals): New test, PASS.", 
+   "(include_immediate_dir_externals): New test, XFAIL.", 
+   "(test_list): Append above two tests."
+  ], 
+  "revision_id": "1198765"
+ }, 
+ {
+  "author": "slebresne", 
+  "date": "2011-11-07T15:03:24.101679Z", 
+  "msg": [
+   "Create 1.0.2 tag"
+  ], 
+  "revision_id": "1198764"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2011-11-07T15:01:15.556008Z", 
+  "msg": [
+   "Added a blueprint test of camel-xslt component"
+  ], 
+  "revision_id": "1198763"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2011-11-07T14:58:46.693570Z", 
+  "msg": [
+   "Last codebase which contains the RDB code (Apache License)"
+  ], 
+  "revision_id": "1198762"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2011-11-07T14:58:16.599270Z", 
+  "msg": [
+   "use new tld uri from redback"
+  ], 
+  "revision_id": "1198761"
+ }
+]

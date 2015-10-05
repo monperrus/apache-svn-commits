@@ -1,0 +1,115 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:25:13.265622Z", 
+  "msg": [
+   "Fix test which sets invalid timestamp for KeyValues.", 
+   "Summary:", 
+   "A few unit tests in TestFromClientSide.java used to generated", 
+   "the timestamp for a KV using random.nextLong(), this can return negative", 
+   "values as well. Hence, this would create a scenario where there would be", 
+   "expired KV's in the StoreFiles.", 
+   "Test Plan: 1) Rerun tests", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan", 
+   "Commenters: nspiegelberg", 
+   "CC: , hbase@lists, kannan, nspiegelberg, pritam", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 282163"
+  ], 
+  "revision_id": "1181605"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:25:07.367995Z", 
+  "msg": [
+   "Fix RegionServer to correctly retry the failure of closing a region.", 
+   "Summary:", 
+   "The region server had a bug where when a region close failed, the", 
+   "zookeeper was stuck in the state \"REGION_CLOSING\" for the specified region.", 
+   "All subsequent retries of closing the region failed since the state in the", 
+   "zookeeper suggested the region was already being closed by someone.", 
+   "This needs to be fixed so that, if the re-try is by the same RS, the zookeeper", 
+   "state can be ignored and a retry of the close region should be performed.", 
+   "Test Plan:", 
+   "1) Unit test.", 
+   "2) Run all tests under hbase.regionserver.", 
+   "Reviewed By: nspiegelberg", 
+   "Reviewers: kranganathan, kannan, nspiegelberg", 
+   "Commenters: liyintang", 
+   "CC: , hbase@lists, liyintang, nspiegelberg", 
+   "Revert Plan:", 
+   "Tags:", 
+   "- begin *PUBLIC* platform impact section -", 
+   "Bugzilla: #", 
+   "- end platform impact -", 
+   "Differential Revision: 281691", 
+   "Task ID: 619745"
+  ], 
+  "revision_id": "1181604"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:55.417631Z", 
+  "msg": [
+   "Initialize the preferred region assignment after the master joins the cluster", 
+   "Summary:", 
+   "1) Initialize the preferred region assignment after the master joins the", 
+   "cluster", 
+   "2) optimize the assignment code", 
+   "Test Plan:", 
+   "run all the unit tests", 
+   "tested in the Dev-Cluster to confirm that scanning dfs locality after the log", 
+   "splitting.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, kranganathan, nspiegelberg, mbautin", 
+   "CC: hbase@lists, , kannan", 
+   "Differential Revision: 281282"
+  ], 
+  "revision_id": "1181603"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:52.704032Z", 
+  "msg": [
+   "Fixed a bug that caused the createTable(splitKeys) to open regions asynchronously.", 
+   "Summary: The code in createTable(splitKeys) should now make sure that all regions are opened before returning.", 
+   "Task ID: #611387", 
+   "Reviewers: kannan, nspiegelberg", 
+   "Test Plan:", 
+   "To reproduce the bug in unit test:", 
+   "1. Add a delay (~1s) in the worker runnable that opens a region in HRegionServer.java if the region to open is not the first region.", 
+   "2. Run the unit test that creates a table with 1000 regions.", 
+   "3. A NoServerForRegionException should be thrown to indicate the bug (which was originally never caught in the \"retry\" block).", 
+   "The unit test should pass after applying the fix."
+  ], 
+  "revision_id": "1181602"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:24:44.155976Z", 
+  "msg": [
+   "Optimize multi-column scans using Bloom filters", 
+   "Summary: Previously we only used row-column Bloom filters for scans that only", 
+   "requested one column. We have seen production queries that request up to 200", 
+   "columns, and with say ~6 store files per store (region / column family", 
+   "combination) this might have resulted in 1200 block read operations in the worst", 
+   "case. With this diff we will be avoiding seeks on store files that we know don't", 
+   "contain the row/column of interest when using an ExplicitColumnTracker. The", 
+   "performance should remain the same for column range queries.", 
+   "Test Plan: Existing unit tests. A new unit test (TestMultiColumnScanner). Load", 
+   "testing using HBaseTest.", 
+   "Reviewed By: kannan", 
+   "Reviewers: kannan, liyintang", 
+   "Commenters: liyintang", 
+   "CC: hbase@lists, , liyintang, mbautin, kannan", 
+   "Revert Plan: OK", 
+   "Differential Revision: 276188"
+  ], 
+  "revision_id": "1181601"
+ }
+]

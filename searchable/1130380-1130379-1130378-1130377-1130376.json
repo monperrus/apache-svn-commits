@@ -1,0 +1,83 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2011-06-02T02:19:17.532494Z", 
+  "msg": [
+   "Clarify pool usage in svn_ra_serf__walk_all_props(). The passed param will", 
+   "be interpreted as a scratch_pool. If the callback wants a pool with a", 
+   "different lifetime, then it must be passed as part of the baton (for", 
+   "example, see walker_baton_t in commit.c).", 
+   "* subversion/libsvn_ra_serf/serf.c:", 
+   "(struct dirent_walker_baton_t): baton for direct_walker() to include a", 
+   "pool for any allocations that must reside in ENTRY.", 
+   "(dirent_walker): rename param to SCRATCH_POOL, and switch the baton to", 
+   "the new 'struct dirent_walker_baton_t'. grab the entry and pool from", 
+   "the baton.", 
+   "(path_dirent_walker): set up a dirent_walker_baton_t and pass that in", 
+   "the call to dirent_walker().", 
+   "(svn_ra_serf__stat): set up and pass a dirent_walker_baton_t through the", 
+   "walk_all_props() call.", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(open_dir, handle_fetch, handle_propchange_only): create a SCRATCH_POOL", 
+   "localvar for clarity, and pass it to walk_all_props().", 
+   "* subversion/libsvn_ra_serf/property.c:", 
+   "(svn_ra_serf__walk_all_props): rename param to SCRATCH_POOL and", 
+   "introduce an ITERPOOL into this function. pass the ITERPOOL to the", 
+   "callback for its pool argument (since longer-lived pools are now", 
+   "passed through the baton).", 
+   "(svn_ra_serf__flatten_props): pass SCRATCH_POOL into the walker", 
+   "(svn_ra_serf__set_bare_props): rename param for clarity", 
+   "* subversion/libsvn_ra_serf/commit.c:", 
+   "(get_encoding_and_cdata): switch to a two-pool paradigm for clarity and", 
+   "so that we can toss the results from XML-escaping.", 
+   "(struct walker_baton_t): add BODY_POOL member to clarify that certain", 
+   "allocations need to live longer (the lifetime of the request).", 
+   "(derive_old_val): remove POOL argument. unused.", 
+   "(proppatch_walker): rename param to SCRATCH_POOL for clarity. this", 
+   "function will now use WB->BODY_POOL for certain strings that need to", 
+   "live longer. moved the PROP_NAME initializaton until after the", 
+   "filtering, and place these values into BODY_POOL. update the calls to", 
+   "get_encoding_and_cdata() for the two-pools.", 
+   "(struct proppatch_body_baton_t): quick new baton to bring a BODY_POOL", 
+   "into the create_proppatch_body() callback.", 
+   "(create_proppatch_body): switch the bucket from a simple", 
+   "proppatch_context_t to the larger proppatch_body_baton_t. pass the", 
+   "BODY_POOL down into the proppatch_walker walks.", 
+   "(proppatch_resource): switch the baton to the body delegate (ie. the", 
+   "create_proppatch_body callback)."
+  ], 
+  "revision_id": "1130380"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2011-06-02T02:05:35.389591Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "1130379"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2011-06-02T02:05:29.490364Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag apollo-project-1.0-beta3"
+  ], 
+  "revision_id": "1130378"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2011-06-02T02:05:24.251690Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release apollo-project-1.0-beta3"
+  ], 
+  "revision_id": "1130377"
+ }, 
+ {
+  "author": "mbenson", 
+  "date": "2011-06-02T02:01:20.457719Z", 
+  "msg": [
+   "imports"
+  ], 
+  "revision_id": "1130376"
+ }
+]

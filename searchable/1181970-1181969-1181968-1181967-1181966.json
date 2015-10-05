@@ -1,0 +1,119 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:52.353078Z", 
+  "msg": [
+   "Optimize the htable thread pool", 
+   "Summary:", 
+   "The current setting is corepool=0 and using linkedblockingqueue.", 
+   "This setting is equal to singleThreadPool, only 1 thread is active at all", 
+   "times.", 
+   "Here is how open source trunk works:", 
+   "It uses SynchronousQueue and Integer.MAX_VALUE as maximum thread number. It", 
+   "will have better performance than our current setting. But the only problem is", 
+   "it didn't bound the max thread size.", 
+   "=======================================", 
+   "int maxThreads = conf.getInt(\"hbase.htable.threads.max\", Integer.MAX_VALUE);", 
+   "if (maxThreads == 0) {", 
+   "maxThreads = 1; // is there a better default?", 
+   "}", 
+   "// Using the \"direct handoff\" approach, new threads will only be created", 
+   "// if it is necessary and will grow unbounded. This could be bad but in HCM", 
+   "// we only create as many Runnables as there are region servers. It means", 
+   "// it also scales when new region servers are added.", 
+   "this.pool = new ThreadPoolExecutor(1, maxThreads,", 
+   "60, TimeUnit.SECONDS,", 
+   "new SynchronousQueue<Runnable>(),", 
+   "new DaemonThreadFactory());", 
+   "((ThreadPoolExecutor)this.pool).allowCoreThreadTimeOut(true);", 
+   "Test Plan: will run all the unit tests and test on dev cluster", 
+   "Reviewers: kannan, cgthayer, vinodv, mbautin, nspiegelberg, dhruba, jgray,", 
+   "srash, pkhemani", 
+   "Reviewed By: kannan", 
+   "CC: dist-storage@lists, hbase@lists, dhruba, liyintang, kannan", 
+   "Differential Revision: 320506"
+  ], 
+  "revision_id": "1181970"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:49.940869Z", 
+  "msg": [
+   "Fix TestCloseRegionRetry unit test.", 
+   "Summary:", 
+   "This unit test used HBaseTestingUtility.createMultiRegions which used to cause", 
+   "issues since it would create regions in .meta without the regions", 
+   "actually being served by any region server. Also, added a configuration", 
+   "option which speeds the execution of this unit test. Now it takes just", 
+   "over 1 min.", 
+   "Test Plan: 1) Run the unit test 100 times.", 
+   "Reviewers: kannan, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: hbase@lists, , pritam, kannan", 
+   "Differential Revision: 313072", 
+   "Task ID: 677331"
+  ], 
+  "revision_id": "1181969"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:47.545705Z", 
+  "msg": [
+   "Build Show Processlist for HBase", 
+   "Summary:", 
+   "This is an improved version of D291214, but diffed against trunk now that the", 
+   "open source port has been committed.", 
+   "Each RPC handler claims a single MonitoredRPCHandler, keeping it updated with", 
+   "whether it's in a waiting state or actively servicing an RPC, and if so, serves", 
+   "details about the RPC method being called.", 
+   "Test Plan: Ran all unit tests, have been doing a lot of load testing on", 
+   "Nicolas's dev cluster, about to start dark launch tests.", 
+   "Reviewers: nspiegelberg", 
+   "Reviewed By: nspiegelberg", 
+   "CC: hbase@lists, nspiegelberg, riley, bhiller", 
+   "Differential Revision: 300129", 
+   "Task ID: 620988"
+  ], 
+  "revision_id": "1181968"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:43.066208Z", 
+  "msg": [
+   "Porting detailed block cache metrics to hbase-89 from hbase-90", 
+   "Summary:", 
+   "Porting the following diffs to hbase-89:", 
+   "D316730 Add more block cache per-CF and per-BlockType metrics (number evicted,", 
+   "number hits and misses)", 
+   "D316912 Reconcile differences in metric naming for block cache / per-CF metrics", 
+   "before porting to 89", 
+   "Test Plan:", 
+   "- Unit tests", 
+   "- Deploy to a 5-node cluster and see if stats are being collected correctly", 
+   "Reviewers: jgray, kannan", 
+   "Reviewed By: kannan", 
+   "CC: , hbase@lists, kannan, mbautin", 
+   "Differential Revision: 319078", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1181967"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T17:44:38.559401Z", 
+  "msg": [
+   "Make corePool as a configurable parameter in HTable", 
+   "Summary: As discussed with Charles, we tried to make the corePool as a", 
+   "configurable parameter in HTable. So we can tune this parameter in the config", 
+   "file.", 
+   "Test Plan:", 
+   "run all the unit tests.", 
+   "will test in the ods client side.", 
+   "Reviewers: kannan, kranganathan, vinodv, cgthayer, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: , hbase@lists, kannan", 
+   "Differential Revision: 317796"
+  ], 
+  "revision_id": "1181966"
+ }
+]

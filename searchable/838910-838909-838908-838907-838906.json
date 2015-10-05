@@ -1,0 +1,87 @@
+[
+ {
+  "author": "fitz", 
+  "date": "2001-03-13T01:48:21.000000Z", 
+  "msg": [
+   "Stylistic tweak"
+  ], 
+  "revision_id": "838910"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-03-13T01:45:34.000000Z", 
+  "msg": [
+   "Changed push_implicit_dot_target(targets, pool) to", 
+   "svn_cl__push_implicit_dot_target(targets, pool) throughout for", 
+   "namespace protection as suggested by gstein"
+  ], 
+  "revision_id": "838909"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2001-03-13T01:44:41.000000Z", 
+  "msg": [
+   "Doc change."
+  ], 
+  "revision_id": "838908"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-03-13T01:28:08.000000Z", 
+  "msg": [
+   "Fix the GET response for WORKING resources. We can't fetch regular resources", 
+   "yet (since we cannot create revision roots), but we can fetch resources from", 
+   "transactions (i.e. from activities and working resources).", 
+   "* (dav_svn_prep_working): refactor the error handling to ensure we don't", 
+   "deref serr when it is NULL, and to clarify what is happening."
+  ], 
+  "revision_id": "838907"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-03-13T01:18:36.000000Z", 
+  "msg": [
+   "New commit architecture!!", 
+   "I can't believe it's not butter.  I can't believe that `make check`", 
+   "still works.  I'm not going to pay a lot for this muffler.", 
+   "Boy, how many files can I touch?  :)", 
+   "* svn_client.h (svn_client_commit):  add log_msg argument.", 
+   "* commit.c (svn_client_commit):  rework logic of this routine,", 
+   "according to option #2 (gstein's proposal).  No more calling", 
+   "close_commit;  our commit editors bump revisions for us now.", 
+   "* svn_fs.h (svn_fs_get_editor):  change declaration.  We don't need to", 
+   "specify the base revision at editor-fetch time;  rather, the editor", 
+   "driver passes it in when calling replace_root().", 
+   "* editor.c (struct edit_baton):  per above, remove base_rev.", 
+   "(replace_root): use base_rev supplied by caller.", 
+   "(svn_fs_get_editor):  remove base_revision argument.", 
+   "* svn_ra.h (get_commit_editor):  change declaration, no longer need", 
+   "base_path and base_rev.  Instead, base_path is built into the ra", 
+   "session baton's URL, and base_rev is given to replace_root().", 
+   "* ra_plugin.c (get_commit_editor): call svn_fs_get_editor correctly.", 
+   "Don't take base_revision arg anymore.  Change declaration to match", 
+   "svn_ra.h too.  Call the track editor correctly (see below).", 
+   "* commit-cmd.c (svn_cl__commit):  change call to svn_client_commit.", 
+   "* Makefile.am:  link RA_LIBS into the client app.", 
+   "* ra-commit.c (main):  in ra-dav-test, call ra->get_commit_editor", 
+   "correctly.", 
+   "* fs-test.c (call_functions_with_unopened_fs):  test must call", 
+   "svn_fs_get_editor correctly.", 
+   "* adm_crawler.c (svn_wc_crawl_local_mods):  don't return locks, just", 
+   "unlock them before quitting.  After all, we know that after we call", 
+   "close_edit() that revisions have been bumped!", 
+   "* svn_wc.h (svn_wc_crawl_local_mods):  don't return locks.", 
+   "* track_editor.c (struct edit_baton,", 
+   "svn_delta_get_commit_track_editor): take 3 new args for optional", 
+   "revision bumping.", 
+   "(close_edit):  add, optionally bumps revisions.", 
+   "(apply_textdelta, window_handler):  return a no-op handler for", 
+   "proper delta composition.", 
+   "* svn_delta.h (svn_delta_get_commit_track_editor):  change declaration", 
+   "and docstring.", 
+   "* commit-test.c (main): call svn_wc_crawl_local_mods correctly.", 
+   "* ra-commit.c (main): call svn_wc_crawl_local_mods correctly."
+  ], 
+  "revision_id": "838906"
+ }
+]

@@ -1,0 +1,112 @@
+[
+ {
+  "author": "bentmann", 
+  "date": "2008-09-20T13:06:24.405260Z", 
+  "msg": [
+   "o Updated to maven-enforcer-plugin:1.0-alpha-4"
+  ], 
+  "revision_id": "697360"
+ }, 
+ {
+  "author": "bentmann", 
+  "date": "2008-09-20T12:55:48.328250Z", 
+  "msg": [
+   "o Fixed Enforcer version"
+  ], 
+  "revision_id": "697359"
+ }, 
+ {
+  "author": "rdonkin", 
+  "date": "2008-09-20T12:05:34.026983Z", 
+  "msg": [
+   "Audit"
+  ], 
+  "revision_id": "697358"
+ }, 
+ {
+  "author": "pquerna", 
+  "date": "2008-09-20T11:58:08.614723Z", 
+  "msg": [
+   "Introduce Suspendable Requests to the Event MPM.", 
+   "Using this basic framework, you can return SUSPENDED from an HTTP Handler,", 
+   "and then register a callback that is invoked by the MPM at a later time.", 
+   "This initial version only supports _timers_ as callbacks, but in the future I", 
+   "would like to add things like wait for socket activity, on a socket specified by", 
+   "the handler.", 
+   "Once in a callback, It is then the responsibility of the callback fucntion", 
+   "to finish the HTTP Request handling, but this alows you to do cool things like", 
+   "a fully async proxy, COMET support, or even rate limiting.", 
+   "To prove I'm not insane, I've inlcuded an example module, mod_dialup.", 
+   "You can configure it like this:", 
+   "<Location \"/docs\">", 
+   "ModemStandard \"V.32\"", 
+   "</Location>", 
+   "And for static files inside that path, you will be rate limited to V.32 speeds,", 
+   "aka 9.6 kilobits/second.", 
+   "Does anyone besides R\u00c3\u00bcdiger read commit emails :-) ?", 
+   "I know there are likely huge problems with this, but I would like to see how far", 
+   "we can push the Event MPM, figure out what to do better, if there is anything,", 
+   "and then really dive into the 3.0 development before ApacheCon.", 
+   "* server/mpm/experimental/event/fdqueue.h:", 
+   "(timer_event_t): New structure to hold timer events and callback functions.", 
+   "* server/mpm/experimental/event/fdqueue.c", 
+   "(ap_queue_empty): Modify to also look at Timer Ring.", 
+   "(ap_queue_init): Initialize Timer Ring.", 
+   "(ap_queue_push_timer): New function, pushes a timer event into the queue.", 
+   "(ap_queue_pop_something): Renamed function, returns a timer event or", 
+   "a socket/pool for a worker thread to run.", 
+   "* server/mpm/experimental/event/event.c", 
+   "(process_socket): If the connection is in SUSPENDED state, don't force it", 
+   "into linger mode yet, the callback will have to take care of that.", 
+   "(push_timer2worker): New shortcut function, pushes timer event into queue", 
+   "for a worker to run.", 
+   "(timer_free_ring): New global data structure to recycle memory used by", 
+   "timer events.", 
+   "(timer_ring): New global data structure to hold active timer events.", 
+   "(g_timer_ring_mtx): Thread mutex to protect timer event data structures.", 
+   "(ap_mpm_register_timed_callback): New Function, registers a callback to be", 
+   "invoked by the MPM at a later time.", 
+   "(listener_thread): Calculate our wakeup time based on the upcoming Event", 
+   "Queue, and after pollset_poll runs, push any Timers that have passed", 
+   "onto worker threads to run.", 
+   "(worker_thread): Call new queue pop method, and if the Timer Event is", 
+   "non-null, invoke the callback.  Once the callback is done, push the", 
+   "structure onto the timer_free_ring, to be recycled.", 
+   "(child_main): Initialize new mutex and ring structures.", 
+   "* server/config.c", 
+   "(ap_invoke_handler): Allow SUSPENDED aa valid return code from handlers.", 
+   "* modules/http/http_core.c", 
+   "(ap_process_http_async_connection): Don't close the connection when in", 
+   "SUSPENDED state.", 
+   "* modules/http/http_request.c", 
+   "(ap_process_request_after_handler): New function, body pulled from the old,", 
+   "ap_process_async_request.  Split to let handlers invoke this so they", 
+   "don't need to know all of the details of finishing a request.", 
+   "(ap_process_async_request): If the handler returns SUSPENDED, don't do", 
+   "anything but return.", 
+   "* include/ap_mmn.h: Bump MMN.", 
+   "* include/ap_mpm.h", 
+   "(ap_mpm_register_timed_callback): New function.", 
+   "* include/httpd.h:", 
+   "(SUSPENDED): New return code for handlers.", 
+   "(request_rec::invoke_mtx): New mutex to protect callback invokcations", 
+   "from being run before the original handler finishes running.", 
+   "(conn_state_e): Add a suspended state.", 
+   "* include/http_request.h", 
+   "(ap_process_request_after_handler): New function to make it easier for", 
+   "handlers to finish the HTTP Request.", 
+   "* modules/test/config.m4: Add mod_dialup to build.", 
+   "* modules/test/mod_dialup.c: New rate limiting module, requires the Event MPM", 
+   "to work."
+  ], 
+  "revision_id": "697357"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2008-09-20T11:52:02.359808Z", 
+  "msg": [
+   "HTTPCORE-172: SharedOutputBuffer#close() to behave exactly like SharedOutputBuffer#shutdown()"
+  ], 
+  "revision_id": "697356"
+ }
+]

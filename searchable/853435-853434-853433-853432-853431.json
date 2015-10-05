@@ -1,0 +1,79 @@
+[
+ {
+  "author": "breser", 
+  "date": "2005-03-10T22:04:18.141457Z", 
+  "msg": [
+   "* STATUS: Add r13358 as 1.1.4 candidate."
+  ], 
+  "revision_id": "853435"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2005-03-10T21:59:34.455859Z", 
+  "msg": [
+   "Create temporary branch for r13358 backport to 1.1.x since the test changes", 
+   "create conflicts."
+  ], 
+  "revision_id": "853434"
+ }, 
+ {
+  "author": "fitz", 
+  "date": "2005-03-10T21:52:46.382749Z", 
+  "msg": [
+   "Part 2 of a two-step commit for making lock/unlock operations continue", 
+   "after encountering non-fatal locking errors.  This commit passes", 
+   "locking-related errors from the ra layer back to the callback(s),", 
+   "which can notify the user as well as manage the lock state in the", 
+   "working copy much better (a failed unlock attempt will remove any", 
+   "defunct tokens from the working copy).", 
+   "* subversion/libsvn_ra_local/ra_plugin.c(svn_ra_local__unlock,", 
+   "svn_ra_local__unlock),", 
+   "* subversion/libsvn_ra_svn/client.c(svn_ra_local__lock,", 
+   "svn_ra_local__unlock),", 
+   "* subversion/libsvn_ra_dav/session.c(svn_ra_dav__lock,", 
+   "svn_ra_dav__unlock):Pass locking/unlocking errors to the", 
+   "lock_func callback.", 
+   "* subversion/libsvn_client/locking_commands.c(store_locks_callback):", 
+   "If we got an error, don't attempt to store a lock (which would be", 
+   "NULL anyway).  Remove a lock token in all cases except where we got", 
+   "a lock owner mismatch error.", 
+   "* subversion/clients/cmdline/lock-cmd.c(print_lock_info): Print out", 
+   "ra_err message if we receive an error from our caller.", 
+   "* subversion/clients/cmdline/unlock-cmd.c(print_unlock_info): Print", 
+   "out ra_err message if we receive an error from our caller.", 
+   "* subversion/libsvn_subr/error.c (svn_error_is_lock_error,", 
+   "svn_error_is_unlock_error): New functions.", 
+   "* subversion/include/svn_error.h (svn_error_is_lock_error,", 
+   "svn_error_is_unlock_error): New function declarations."
+  ], 
+  "revision_id": "853433"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2005-03-10T21:29:47.258819Z", 
+  "msg": [
+   "Fix Issue #2222", 
+   "* subversion/libsvn_client/diff.c", 
+   "(merge_dir_added): Don't use the svn_opt_revision_t in the merge_cmd_baton", 
+   "to determine the copyfrom_rev because a symbolic revision (e.g. HEAD) or", 
+   "no revision may have been specified on the command line.  Instead we", 
+   "should use the revision the driver of the editor passes us.", 
+   "* subversion/tests/clients/cmdline/merge_tests.py", 
+   "(merge_dir_branches): New test that tests for this bug.", 
+   "(test_list): Add merge_dir_branches to the tests to run."
+  ], 
+  "revision_id": "853432"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2005-03-10T21:05:12.471556Z", 
+  "msg": [
+   "Do more checks on preconditions for utf8_tests.py being met.", 
+   "* subversion/tests/clients/cmdline/utf8_tests.py (): On Windows, we want", 
+   "to run these tests. On all other platforms, we want to run the tests", 
+   "if the environment holds the correct locale settings *and* we were able", 
+   "to switch our own locale to iso-8859-1."
+  ], 
+  "revision_id": "853431"
+ }
+]

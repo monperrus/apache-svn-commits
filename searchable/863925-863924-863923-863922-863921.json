@@ -1,0 +1,102 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2007-03-15T20:53:29.522913Z", 
+  "msg": [
+   "On the merge-tracking branch: Fix merge_test-1 failure.", 
+   "Fix a problem where we missed explicit merge info on a merge target's", 
+   "children and erroneously inherited merge info from the target or one of its", 
+   "ancestors (or not at all).  Also fix problem where we created temporary", 
+   "files for merging of a target's children in the wrong place, resulting in", 
+   "merges that never happen but should.", 
+   "* subversion/libsvn_client/diff.c", 
+   "(find_wc_merge_info): Don't use absolute path when looking for merge", 
+   "info in the svn_wc_entry passed in, we can miss explicit merge info", 
+   "if we do.", 
+   "(single_file_merge_get_file): Replace merge_cmd_baton struct with a", 
+   "simple path since the former may actually point to the parent of the", 
+   "file we want to merge.", 
+   "(do_single_file_merge): Update calls to single_file_merge_get_file().", 
+   "Use actual path to target when creating notifications, rather than", 
+   "merge_b->target which might point to the actual target's parent.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(textual_merges_galore): Create correct status rather than creating", 
+   "the wrong one and tweaking it.  Don't check svn:mergeinfo props of", 
+   "final merge with run_and_verify_merge() since that chokes on conflict", 
+   "files, check the props separately instead.", 
+   "(obey_reporter_api_semantics_while_doing_subtree_merges): We *really*", 
+   "do expect some clean merges to occur in the final merge.", 
+   "(test_list): Remove XFail from textual_merges_galore."
+  ], 
+  "revision_id": "863925"
+ }, 
+ {
+  "author": "xsteve", 
+  "date": "2007-03-15T19:40:08.480220Z", 
+  "msg": [
+   "Improved performance of svn-status-base-dir, svn-revert-some-buffers", 
+   "* trunk/contrib/client-side/psvn/psvn.el:", 
+   "(svn-process-sentinel): After an update command revert buffers first, then", 
+   "call svn status. This is now necessary because svn-status-base-dir", 
+   "also calls svn-run. psvn.el allows only one svn process at a time.", 
+   "(svn-revert-some-buffers): Only revert the buffer, when the file has changed", 
+   "on disk", 
+   "(svn-status-base-dir): Cache the calculated base-dir values in", 
+   "svn-status-base-dir-cache"
+  ], 
+  "revision_id": "863924"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2007-03-15T17:32:05.550516Z", 
+  "msg": [
+   "Propose a low-risk backport and vote for some other backports."
+  ], 
+  "revision_id": "863923"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2007-03-15T17:20:34.032093Z", 
+  "msg": [
+   "Allow switch --relocate to work against directly unreadable repos roots.", 
+   "Instead we need to call svn_ra_get_repos_root with the base URL as that is", 
+   "expected to be readable.", 
+   "Reported by: Scott Hendrickson", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_relocation_validator3_t): New prototype.", 
+   "(svn_wc_relocation_validator2_t): Deprecate.", 
+   "(svn_wc_relocate3): New prototype.", 
+   "(svn_wc_relocate2): Deprecate.", 
+   "* subversion/libsvn_wc/relocate.c", 
+   "(relocate_entry): Take in svn_wc_relocation_validator3_t and send in new", 
+   "args; only do the repos root change if our URL changed too.", 
+   "(svn_wc_relocate3): Take in new prototype.", 
+   "(compat2_validator, compat_validator): Wrap around validator3_t.", 
+   "(svn_wc_relocate2, svn_wc_relocate1): Wrap around relocate3().", 
+   "* subversion/libsvn_client/relocate.c", 
+   "(validator_func): Adjust for prototype change.", 
+   "(svn_client_relocate): Call new wc function."
+  ], 
+  "revision_id": "863922"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-03-15T17:18:18.589387Z", 
+  "msg": [
+   "On the merge-tracking branch: Add a new merge_test.", 
+   "A follow-up to r23785: The intial fix for Issues #2733 and #2734 doesn't", 
+   "work when a merge target has no explicit mergeinfo and is subject", 
+   "to multiple merges, only the inherited info and the last merge range applied", 
+   "are recorded.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(setup_branch): New helper for local_mergeinfo_elision_and_inheritance and", 
+   "mergeinfo_inheritence_and_discontinuous_ranges.", 
+   "(local_mergeinfo_elision_and_inheritance): Remove setup duties now handled", 
+   "in setup_branch.  Removed some unused variables.", 
+   "(mergeinfo_inheritence_and_discontinuous_ranges): New test.", 
+   "(test_list):Add mergeinfo_inheritence_and_discontinuous_ranges and set", 
+   "to XFail."
+  ], 
+  "revision_id": "863921"
+ }
+]

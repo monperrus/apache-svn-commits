@@ -1,0 +1,83 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2010-04-10T11:48:20.686013Z", 
+  "msg": [
+   "Remove a bunch of log accumulator management that was being performed", 
+   "around close_file, in order to ensure that we didn't have a partial state", 
+   "change when somebody aborted an interactive conflict resolve during the", 
+   "update process. This is no longer needed, since we're making the state", 
+   "changes (more) atomically now.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(merge_file): remove the LOG_ACCUM param, since we no longer have", 
+   "delayed/incoming changes to queue up (nor any to return). all queuing", 
+   "can happen internally. remove verious assertions/flush calls around", 
+   "the obsolete accumulator. and we no longer need to pass this into", 
+   "svn_wc__internal_merge since it is empty, and the merge was defined to", 
+   "never return operations (thus, it can do everything internally).", 
+   "create a tightly-scoped accumulator for some of the file timestamp and", 
+   "size tweaking bits, and directly queue the operations.", 
+   "(close_file): remove DELAYED_LOG_ACCUM since we no longer put anything", 
+   "into it beyond what was happening in merge_file, and that function can", 
+   "just do its own queuing.", 
+   "* subversion/libsvn_wc/merge.c:", 
+   "(svn_wc__internal_merge): remove the LOG_ACCUM parameter. it no longer", 
+   "arrives with operations, and we defined it to never return any. thus,", 
+   "all ops are queued internally. simiarly, remove LOG_ACCUM from the", 
+   "merge_binary_file and merge_text_file calls, and let them queue any", 
+   "operations internally.", 
+   "(merge_text_file): remove LOG_ACCUM param in favor of internal queuing.", 
+   "the only use was maybe_resolve_conflicts, so we remove its LOG_ACCUM", 
+   "param and let it internally-queue. remove the assert/flush around the", 
+   "now-obsolete LOG_ACCUM param.", 
+   "(maybe_resolve_conflicts): remove the LOG_ACCUM parameter and all of the", 
+   "flushing calls. operations are no longer held pending the result of", 
+   "the CONFLICT_FUNC invocation.", 
+   "(merge_binary_file): remove the LOG_ACCUM param in favor of internal", 
+   "queueing. there are no incoming ops (no param!), so remove the flush", 
+   "calls. for one accum operation, use a tightly-scoped accumulator to", 
+   "record the work item and immediately queue it up.", 
+   "* subversion/libsvn_wc/wc.h:", 
+   "(svn_wc__internal_merge): adjust params"
+  ], 
+  "revision_id": "932700"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2010-04-10T11:45:56.153381Z", 
+  "msg": [
+   "CAMEL-2608: camel-jetty, camel-gae, camel-servlet is changed to use camel-http which is based on Http Client 3.1"
+  ], 
+  "revision_id": "932699"
+ }, 
+ {
+  "author": "uschindler", 
+  "date": "2010-04-10T11:42:53.835331Z", 
+  "msg": [
+   "Fix javacc and jflex builds, speed up contrib build by removing un related checks. Also updated wikipedia tokenizer to jeflex 1.5 and hardcoded unicode 3.0 (which is java 1.4 for backwards compatibility). Also rebuilt all javacc and jflex parsers."
+  ], 
+  "revision_id": "932698"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-04-10T11:39:03.640919Z", 
+  "msg": [
+   "* notes/wc-ng/conflict-storage: Key conflicts on OPERATION. We're not", 
+   "going to allow further operations on conflicted items in the near", 
+   "future, so we don't need one OPERATION field per conflict item.", 
+   "The skel format is easily extendible in case we want to allow", 
+   "further operations on conflicted items in some time in the future.", 
+   "Discussed with rhuijben, gstein, and hwright.", 
+   "Also add a few questions and make other small tweaks while here."
+  ], 
+  "revision_id": "932697"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2010-04-10T11:34:18.279589Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "932696"
+ }
+]

@@ -1,0 +1,120 @@
+[
+ {
+  "author": "rooneg", 
+  "date": "2005-10-28T00:09:10.178569Z", 
+  "msg": [
+   "Finish deprecation of svn_ra_get_dir in favor of svn_ra_get_dir2.", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(get_dirprops_from_ra): use svn_ra_get_dir2.", 
+   "* subversion/libsvn_client/info.c", 
+   "(DIRENT_FIELDS): new constant, holds the dirent fields we care about", 
+   "for info.", 
+   "(push_dir_info, svn_client_info): use svn_ra_get_dir2.", 
+   "* subversion/libsvn_client/prop_commands.c", 
+   "(remote_propget, remote_proplist): use svn_ra_get_dir2.", 
+   "* subversion/libsvn_client/ls.c", 
+   "(svn_client_ls4): use svn_ra_get_dir2 for the file case, just like", 
+   "we did for the directory case."
+  ], 
+  "revision_id": "857145"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-10-27T23:59:27.568270Z", 
+  "msg": [
+   "* subversion/bindings/java/javahl/native/SVNClient.cpp", 
+   "(SVNClient::add): Switch from use of the deprecated", 
+   "svn_client_add2() function to the modern svn_client_add3()", 
+   "incarnation."
+  ], 
+  "revision_id": "857144"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-10-27T23:37:47.260216Z", 
+  "msg": [
+   "* subversion/include/svn_io.h", 
+   "(svn_io_dir_read): Corrected doc string."
+  ], 
+  "revision_id": "857143"
+ }, 
+ {
+  "author": "dberlin", 
+  "date": "2005-10-27T22:38:44.962997Z", 
+  "msg": [
+   "Make '-c' reject a negative argument, and make minor improvements", 
+   "to help and error messages, as a follow-up to r17054."
+  ], 
+  "revision_id": "857142"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-10-27T22:22:52.645783Z", 
+  "msg": [
+   "Speed up non-verbose 'svn list' commands by a scary amount by allowing", 
+   "the server to avoid calculating parts of the svn_dirent_t objects that", 
+   "are never used.", 
+   "* subversion/libsvn_ra/wrapper_template.h", 
+   "(compat_get_dir): Update for new version of get_dir, pass SVN_DIRENT_ALL", 
+   "for the dirent_flags parameter.", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_get_dir): Ditto.", 
+   "(svn_ra_get_dir2): New wrapper function.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__vtable_t): Add a dirent_fields parameter to the get_dir function.", 
+   "* subversion/include/svn_ra_svn.h", 
+   "(SVN_RA_SVN_DIRENT_KIND,", 
+   "SVN_RA_SVN_DIRENT_SIZE,", 
+   "SVN_RA_SVN_DIRENT_HAS_PROPS,", 
+   "SVN_RA_SVN_DIRENT_CREATED_REV,", 
+   "SVN_RA_SVN_DIRENT_TIME,", 
+   "SVN_RA_SVN_DIRENT_LAST_AUTHOR): Constants to represent dirent bitfield", 
+   "values on the wire.", 
+   "* subversion/include/svn_types.h", 
+   "(SVN_DIRENT_KIND,", 
+   "SVN_DIRENT_SIZE,", 
+   "SVN_DIRENT_HAS_PROPS,", 
+   "SVN_DIRENT_CREATED_REV,", 
+   "SVN_DIRENT_TIME,", 
+   "SVN_DIRENT_LAST_AUTHOR): New bitfield values for each field in a dirent.", 
+   "(SVN_DIRENT_ALL): Combination of all the other bitfield values.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_ls4): New function, like svn_client_ls3, but with a dirent", 
+   "fields parameter.", 
+   "(svn_client_ls3): Deprecated in favor of svn_client_ls4.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_dir2): New version of svn_ra_get_dir, takes a dirent fields", 
+   "parameter.", 
+   "(svn_ra_get_dir): Deprecate in favor of svn_ra_get_dir2.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_dir): Add dirent_fields parameter and use it to", 
+   "determine which parts of the dirents we need to fill in.", 
+   "* subversion/libsvn_client/ls.c", 
+   "(get_dir_contents): Add a dirent_fields parameter, use svn_ra_get_dir2,", 
+   "update recursive call.", 
+   "(svn_client_ls4): New list function, adds a dirent_fields parameter which", 
+   "is passed to get_dir_contents.", 
+   "(svn_client_ls3): Backwards compat wrapper, calls svn_client_ls4 with the", 
+   "dirent_fields set to SVN_DIRENT_ALL.", 
+   "* subversion/clients/cmdline/ls-cmd.c", 
+   "(svn_cl__ls): Use svn_client_ls4, only asking for the dirent fields we", 
+   "actually need.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_get_dir): Take a dirent_fields parameter and pass it along via an", 
+   "optional new parameter to the get-dir command that holds a list of", 
+   "strings representing each field.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(get-dir): Update for new dirent fields list.", 
+   "* subversion/libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_dav__get_dir): Add dirent_fields parameter.", 
+   "* subversion/libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_dir): Add dirent_fields parameter and try to limit the", 
+   "number of properties we ask the server to send back based on it.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_dir): Parse new dirent_fields list from the get-dir command and", 
+   "only fill in the portions of the dirents that the user actually asked", 
+   "for."
+  ], 
+  "revision_id": "857141"
+ }
+]

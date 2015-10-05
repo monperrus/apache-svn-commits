@@ -1,0 +1,87 @@
+[
+ {
+  "author": "heshan", 
+  "date": "2011-06-17T06:03:13.195394Z", 
+  "msg": [
+   "SYNAPSE-765", 
+   "Adding the documentation for the sample 157."
+  ], 
+  "revision_id": "1136780"
+ }, 
+ {
+  "author": "heshan", 
+  "date": "2011-06-17T06:01:34.696145Z", 
+  "msg": [
+   "SYNAPSE-765", 
+   "Adding the sample synapse configuration for the conditional router mediator."
+  ], 
+  "revision_id": "1136779"
+ }, 
+ {
+  "author": "khopesh", 
+  "date": "2011-06-17T05:57:28.917886Z", 
+  "msg": [
+   "auto-generated rules"
+  ], 
+  "revision_id": "1136778"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-06-17T05:44:02.175523Z", 
+  "msg": [
+   "Continued work on the pausing mechanic in the XML parser of ra_serf.", 
+   "The in-memory blocks no longer use a bucket allocator, since that is", 
+   "generally internal to serf's bucket types. Not a big deal, as we can just", 
+   "use a simple linked-list of reusable blocks.", 
+   "This adds code for writing content to the \"pending\" content, and begins", 
+   "the code for injecting that content into the XML parser when ready.", 
+   "The update editor now contains logic for pausing and un-pausing the parser", 
+   "as certain conditions are met. It also makes the appropriate call to", 
+   "process the pending content.", 
+   "However: no logic is changed in the network reading portion, or the normal", 
+   "parser injection. In essence, the \"pause\" state is ignored and the", 
+   "\"pending\" content is never accumulated. Further development and testing is", 
+   "needed. This revision is a continued preview of the direction, for", 
+   "feedback and code review.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h:", 
+   "(svn_ra_serf__xml_parser_t): remove PAUSE_ALLOC. extend the", 
+   "documentation for the PAUSED flag, and how the surrounding system", 
+   "should interact with that, and the PENDING content.", 
+   "(svn_ra_serf__process_pending): new declaration", 
+   "* subversion/libsvn_ra_serf/util.c:", 
+   "(struct pending_buffer_t): fix type of NEXT link", 
+   "(svn_ra_serf__pending_t): add AVAIL member for tracking free blocks of", 
+   "buffers for in-memory content", 
+   "(write_to_pending): when the network needs to save content (that cannot", 
+   "go into the XML parser), this function will be used to write it into", 
+   "the parser context's PENDING structure.", 
+   "(inject_to_parser): allow NULL for the SL param, and adjust the returned", 
+   "error string appropriately.", 
+   "(svn_ra_serf__process_pending): new function to process the PENDING", 
+   "structure of a parser context. it currently handles in-memory content,", 
+   "but not (yet) files.", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(REQUEST_COUNT_TO_PAUSE, REQUEST_COUNT_TO_RESUME): new symbols (and", 
+   "docco) that provide bounds for pausing and un-pausing the XML parsing", 
+   "process from the network.", 
+   "(report_context_t): add PARSER_CTX to enable the callbacks to pause the", 
+   "parsing", 
+   "(fetch_file, end_report): if the outstanding requests are too high, then", 
+   "pause the XML parsing.", 
+   "(finish_report): store the PARSER_CTX into the report context. within", 
+   "the report (and network) processing loop, possibly re-enable XML", 
+   "parsing if the request count gets low enough. call over to the", 
+   "XML parsing code to process any pending content, as appropriate.", 
+   "(): remove two strange #undef's (MAX_NR_OF_CONNS, EXP_REQS_PER_CONN)"
+  ], 
+  "revision_id": "1136777"
+ }, 
+ {
+  "author": "lindner", 
+  "date": "2011-06-17T05:43:56.985656Z", 
+  "msg": [
+   "bump boilerplate"
+  ], 
+  "revision_id": "1136776"
+ }
+]

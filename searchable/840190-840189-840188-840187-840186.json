@@ -1,0 +1,114 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2001-09-18T16:29:20.786826Z", 
+  "msg": [
+   "Stop storing auth info in the working copy *every* single time ra_dav is", 
+   "challenged.  This is annoying.", 
+   "* svn_client.h (svn_client_auth_baton_t):  add overwrite flag.", 
+   "* auth.c (get_username, get_password):  if the auth info was passed in", 
+   "from the application (cmdline arg) or if it was retrieved by", 
+   "prompting the user, *THEN* it's okay to overwrite cached info.", 
+   "(store_username, store_password):  check this flag before writing."
+  ], 
+  "revision_id": "840190"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-09-18T15:58:17.002989Z", 
+  "msg": [
+   "Second edition of client-side authentication; switch from \"client", 
+   "push\" to \"RA pull\" model.  Big, big changes.  (Code gets smaller and", 
+   "simpler -- this must be a Good Thing.)", 
+   "More importantly:  this is a strictly client-side change.  No server", 
+   "needs to be upgraded, and existing working copies should go on", 
+   "working normally.", 
+   "* svn_client.h", 
+   "(svn_client_auth_storage_callback_t):       removed.", 
+   "(svn_client_auth_info_callback_t):          removed.", 
+   "(svn_client_auth_t):                        removed.", 
+   "(svn_client_authenticate): removed, replaced by RA->open().", 
+   "(svn_client_auth_baton_t): new main baton created by app, tweaked by", 
+   "libsvn_client, and sent to RA layer as a", 
+   "(void *) callback baton.", 
+   "* svn_ra.h", 
+   "(svn_ra_plugin_t):  no more 'get_authenticator';  replaced by 'open'.", 
+   "(svn_ra_callbacks_t): new vtable constructed by libsvn_client, and", 
+   "passed to RA->open.", 
+   "(svn_ra_username_authenticator_t): 'set_username' replaced with", 
+   "'get_username'.  Also added", 
+   "'store_username'.  No more 'authenticate'.", 
+   "(svn_ra_simple_password_authenticator_t): 'set_username',", 
+   "'set_password' replaced with 'get_user_and_pass'.  Also", 
+   "added 'set_user_and_pass'.  No more 'authenticate'.", 
+   "* libsvn_client/auth.c", 
+   "(auth_info_baton_t, authorize_username, authorize_simple_password): removed", 
+   "(get_username, get_password, get_user_and_pass):  new funcs.", 
+   "(store_username, store_password, store_user_and_pass):  new funcs.", 
+   "(store_auth_info):  rewritten as helper func.", 
+   "(svn_client_authenticate):  removed.", 
+   "(get_authenticator):  new func.", 
+   "(svn_client__get_ra_callbacks):  new func, called by most libsvn_client", 
+   "routines before calling RA->open().", 
+   "* libsvn_client/update.c (svn_client_update): call", 
+   "svn_client__get_ra_callbacks and RA->open(), instead of", 
+   "calling svn_client_authenticate.  Also, no need to look for", 
+   "storage_callback.", 
+   "* libsvn_client/checkout.c (svn_client_checkout):  same.", 
+   "* libsvn_client/commit.c (send_to_repos):  same.", 
+   "* libsvn_client/status.c (get_youngest_from_ra):  same.", 
+   "* libsvn_client/client.h (svn_client__get_ra_callbacks):  declare.", 
+   "* cl.h (svn_cl__make_auth_baton):  renamed from make_auth_obj.", 
+   "* checkout-cmd.c, import-cmd.c, prompt.c, update-cmd.c, status-cmd.c,", 
+   "commit-cmd.c:  change all callers to previous.", 
+   "* libsvn_ra_local/ra_plugin.c", 
+   "(set_username, authenticate, get_authenticator):  removed.", 
+   "(open):  new func, code moved here.", 
+   "* libsvn_ra_dav/ra_dav.h", 
+   "(svn_ra_session_t):  add callbacks, callback_baton fields.", 
+   "(svn_ra_dav__maybe_store_auth_info):  declare.", 
+   "* libsvn_ra_dav/util.c", 
+   "(svn_ra_dav__maybe_store_auth_info):  implement.", 
+   "* libsvn_ra_dav/session.c", 
+   "(svn_ra_get_authenticator, username_authenticator, userpass_authenticator,", 
+   "auth_set_username, auth_set_password, auth_authenticate):  removed.", 
+   "(svn_ra_dav__open):  code moved here!  store callbacks in ras now.", 
+   "(request_auth):  rewritten to pull auth info from callbacks.", 
+   "(svn_ra_dav__close):  renamed from svn_ra_dav_close, for consistency.", 
+   "* libsvn_ra_dav/commit.c", 
+   "(commit_close_edit):  call svn_ra_dav__maybe_store_auth_info()", 
+   "* libsvn_ra_dav/fetch.c", 
+   "(svn_ra_dav__get_latest_revnum):  same", 
+   "(reporter_finish_report):         same"
+  ], 
+  "revision_id": "840189"
+ }, 
+ {
+  "author": "kevin", 
+  "date": "2001-09-18T10:57:48.724559Z", 
+  "msg": [
+   "Replace call to canonicalize with a simple dirsep remove, since", 
+   "svn_path_canonicalize will be doing more RSN.", 
+   "* path.c:svn_path_remove_component - remove the trailing slash, if there", 
+   "is one.", 
+   "As per gstein's suggestion."
+  ], 
+  "revision_id": "840188"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-09-17T23:17:56.454562Z", 
+  "msg": [
+   "Add new STACK-like file, for keeping track of submitted patches."
+  ], 
+  "revision_id": "840187"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2001-09-17T16:47:24.305896Z", 
+  "msg": [
+   "* get_editor.c   (svn_wc_get_actual_target): Fixed docstring oopses."
+  ], 
+  "revision_id": "840186"
+ }
+]

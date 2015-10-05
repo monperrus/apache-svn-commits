@@ -1,0 +1,67 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2006-09-04T00:30:55.014857Z", 
+  "msg": [
+   "Improve parsing of dialog-config.xml files to include any specified in", 
+   "the META-INF directory of a JAR file included in the application.  For", 
+   "consistency with the way JSF implementations handle faces-config.xml", 
+   "files, these resources are parsed first, followed by any explicitly", 
+   "configured resources in web.xml, followed by the default", 
+   "(/WEB-INF/dialog-config.xml) resource, if it exists and has not been", 
+   "parsed yet."
+  ], 
+  "revision_id": "439885"
+ }, 
+ {
+  "author": "jdillon", 
+  "date": "2006-09-04T00:28:23.677466Z", 
+  "msg": [
+   "Moved assembly config and helpers to InstallerMojoSupport"
+  ], 
+  "revision_id": "439884"
+ }, 
+ {
+  "author": "jdillon", 
+  "date": "2006-09-04T00:23:12.073994Z", 
+  "msg": [
+   "Added ServerProxy.shutdown() and using this for geronimo:stop"
+  ], 
+  "revision_id": "439883"
+ }, 
+ {
+  "author": "jdillon", 
+  "date": "2006-09-04T00:10:04.857373Z", 
+  "msg": [
+   "Add intermediate abstract class for installer logic"
+  ], 
+  "revision_id": "439882"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2006-09-04T00:07:14.585912Z", 
+  "msg": [
+   "After a quick chat with Sean about our dueling commits, we agreed that", 
+   "*not* warning is the appropriate behavior, so I commented that out.", 
+   "Not having any config parameter, but providing an instance of the", 
+   "default resource (/WEB-INF/dialog-config.xml) is a nice standard", 
+   "behavior, and mirrors how JSF handles faces-config.xml resources.", 
+   "I left in the Log variable (because we're likely to want it later), but", 
+   "adjusted the implementation to reflect recent \"best practices\" advice", 
+   "from the Commons Logging docs:", 
+   "* Static Log instances can cause webapp unload problems", 
+   "on some containers, so make it an instance variable.", 
+   "* Because we are inside a Serializable object, we need to", 
+   "declare the Log instance transient since there is no", 
+   "guarantee that such instances are themselves Serializable.", 
+   "* The previous change means we need to be able to re-create", 
+   "the instance on demand if needed.  That is done by a new", 
+   "private Log log() method implementation, which should be", 
+   "called by any code that actually wants to log something.", 
+   "We need to review this kind of thing all the way throughout Shale at", 
+   "some point.", 
+   "SHALE-271"
+  ], 
+  "revision_id": "439881"
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-05-03T22:49:53.549520Z", 
+  "msg": [
+   "Move some deprecated functions.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(svn_wc_merge_props, svn_wc_merge_prop_diffs): moved to ...", 
+   "* subversion/libsvn_wc/deprecated.c:", 
+   "(svn_wc_merge_props, svn_wc_merge_prop_diffs): ... here"
+  ], 
+  "revision_id": "877625"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-03T21:49:32.115017Z", 
+  "msg": [
+   "Clean out some old modification flags. Simplify some reading of old XML", 
+   "entries files and loggy records.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(): remove a couple unused includes", 
+   "(SVN_WC__ENTRY_ATTR_*, SVN_WC__ENTRY_MODIFY_*): remove these unused", 
+   "defines.", 
+   "(extract_string): utility function to extract a string from a hash of", 
+   "xml attributes. handles modification flags, normalizing to a NULL", 
+   "value, and putting the result into a specific pool.", 
+   "(svn_wc__atts_to_entry): use extract_string liberally. note some special", 
+   "handling for the LOCK attributes.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(SVN_WC__ENTRY_MODIFY_LOCK_*): remove some unused defines"
+  ], 
+  "revision_id": "877624"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-05-03T17:43:20.986258Z", 
+  "msg": [
+   "* STATUS: Add a note for r37491 group."
+  ], 
+  "revision_id": "877623"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-05-03T16:00:57.523678Z", 
+  "msg": [
+   "Revamp the lock handling. Use the svn_wc__db_add_lock() and a new function", 
+   "to remove them, rather than relying on changes to entries.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_lock_remove): new declaration", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(enum statement_keys, statements[]): add a new statement to delete a", 
+   "single lock.", 
+   "(scan_upwards_for_repos): this function started at the *parent*. revamp", 
+   "it to start at the specified path, and *then* move upwards. improve", 
+   "the error return if the original node does not exist.", 
+   "(flush_entries): a little helper function to toss out any cached entries", 
+   "from the access baton.", 
+   "(svn_wc__db_lock_add): use scan_upwards_for_repos to get the repos_id,", 
+   "rather than base_get_info. make sure to flush any entries.", 
+   "(svn_wc__db_lock_remove): new function", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(struct log_runner): add 'db' and 'dir_abspath' members for use by the", 
+   "various log functions.", 
+   "(LOG_START, LOG_END): new macros for the XML wrappers around the entries", 
+   "(log_do_delete_lock): use the new svn_wc__db_lock_remove function", 
+   "(run_log_from_memory, run_log): adjust the wrapping and creation bits to", 
+   "consistency and a bit of clarity. initialize the new 'db' and", 
+   "'dir_abspath' members.", 
+   "(svn_wc__loggy_entry_modify): remove the lock stuff since this function", 
+   "is no longer called to manage lock data.", 
+   "* subversion/libsvn_wc/copy.c:", 
+   "(post_copy_cleanup): remove the access baton handling, and switch to", 
+   "db/abspath params and coding. directly clear the dav_cache, rather", 
+   "than via the props interface. simplify the call to entry_modify for", 
+   "only when needed. start using db_lock_remove(). simplify the recursion", 
+   "code since an access baton is not needed.", 
+   "(copy_dir_administratively): tweak call to post_copy_cleanup", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(fold_entry): remove setting of LOCK data. no longer needed.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(svn_wc_add_lock): rewrite to use svn_wc__db_lock_add(). switch to use", 
+   "svn_wc__internal_propget.", 
+   "(svn_wc_remove_lock): rewrite to use svn_wc__db_lock_remove(). switch to", 
+   "use svn_wc__internal_propget.", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(svn_wc__atts_to_entry): leave a comment about being overzealous of", 
+   "removing sections of code."
+  ], 
+  "revision_id": "877622"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-05-03T14:25:06.411780Z", 
+  "msg": [
+   "Follow-up to r37544:", 
+   "* subversion/svnversion/main.c", 
+   "(main): Replace tabs with spaces. Move comments to better places."
+  ], 
+  "revision_id": "877621"
+ }
+]

@@ -1,0 +1,93 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-04-13T10:57:45.058693Z", 
+  "msg": [
+   "Followup to r37188: remove a TODO.", 
+   "* subversion/include/svn_io.h:", 
+   "(svn_stream_copy3): the streams are always closed now. remove a TODO."
+  ], 
+  "revision_id": "877270"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-04-13T03:24:27.965343Z", 
+  "msg": [
+   "Follow-up to r37194:", 
+   "* subversion/libsvn_client/patch.c", 
+   "(extract_svnpatch): Delete needless call to svn_stringbuf_create_ensure()."
+  ], 
+  "revision_id": "877269"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-04-13T03:18:08.063284Z", 
+  "msg": [
+   "Support svnpatches with \"\\r\\n\" line endings.", 
+   "* subversion/libsvn_client/patch.c", 
+   "(extract_svnpatch): If svnpatch header wasn't found when reading lines", 
+   "with eol=\"\\n\", then read lines again with eol=\"\\r\\n\".", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(has_patch): Return False, when non-GNU patch was found.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(test_list): Update."
+  ], 
+  "revision_id": "877268"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-13T02:32:26.862723Z", 
+  "msg": [
+   "Revamp some of the version handling inside wc_db and start on a system", 
+   "where svn_wc__db_read_info() can be called for wc-1 *or* wc-ng", 
+   "directories. Under the covers, it will dispatch to the appropriate code.", 
+   "* subversion/include/svn_error_codes.h:", 
+   "(SVN_ERR_WC_UPGRADE_REQUIRED): new error code indicating that an upgrade", 
+   "of the working copy is required.", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__read_info_old): new analogue to svn_wc__db_read_info, but this", 
+   "reads the old entries structure, returning values in parameters", 
+   "* subversion/libsvn_wc/old-and-busted.c:", 
+   "(svn_wc__read_info_old): new function which sets up some basic framework", 
+   "for returning data from the old entries file. For now, it can only", 
+   "return values for the CHECKSUM parameter.", 
+   "* subversion/libsvn_wc/adm_crawler.c:", 
+   "(svn_wc_transmit_text_deltas2): use db_read_info() to get the expected", 
+   "checksum, rather than calling svn_wc_entry().", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(create_wcroot): take a SCRATCH_POOL and if an SDB is given, then", 
+   "initialize the FORMAT member with the schema version found in the SDB", 
+   "(get_old_version): new function with much of the guts from db_version()", 
+   "(get_or_create_pdh): pass scratch_pool to create_wcroot()", 
+   "(ensure_sdb_opened): pass scratch_pool to create_wcroot. don't try and", 
+   "open an SDB in a wc-1 directory. if there is a problem opening the", 
+   "SDB, then it may be that we're looking at a wc-1 directory. detect the", 
+   "format and return.", 
+   "(parse_local_abspath): add various logic to detect the format version.", 
+   "fix a check for hitting the root directory (the old algorithm wasn't", 
+   "very clear, but was written that way since we had a basename value; we", 
+   "no longer need the basename value, so fix the algorithm)", 
+   "(db_version): replace a big chunk with a call to get_old_version()", 
+   "(ensure_format_avail): make sure we have a format value in the wcroot", 
+   "(svn_wc__db_read_info): if the returned PDH specifies an old-style", 
+   "directory, then call svn_wc__read_info_old to satisfy the request", 
+   "(svn_wc__db_temp_get_format): replace code with call to", 
+   "ensure_format_avail."
+  ], 
+  "revision_id": "877267"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-04-13T02:05:25.184693Z", 
+  "msg": [
+   "Add a new mechanism for retrieving access batons directly from a DB.", 
+   "* subversion/libsvn_wc/lock.h:", 
+   "(svn_wc__adm_retrieve_internal2): new declaration", 
+   "* subversion/libsvn_wc/lock.c:", 
+   "(svn_wc__adm_retrieve_internal2): new function, which is basically a", 
+   "wrapper around get_from_shared().", 
+   "(svn_wc__adm_retrieve_internal): use the above function for some work"
+  ], 
+  "revision_id": "877266"
+ }
+]

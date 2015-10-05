@@ -1,0 +1,108 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2008-10-17T03:11:40.393474Z", 
+  "msg": [
+   "On the 'fs-rep-sharing' branch, teach the Berkeley DB backend to", 
+   "answer the \"Did the contents change?\" question the same way it did", 
+   "prior to the introduction of shared representations.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__things_different): Take the node revisions' data", 
+   "representation key uniquifiers into account."
+  ], 
+  "revision_id": "873785"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-10-17T02:28:29.531411Z", 
+  "msg": [
+   "On the 'fs-rep-sharing' branch, merge outstanding changes (r33684", 
+   "through r33709) from trunk.  Also:", 
+   "* subversion/libsvn_fs_base/fsguid.c", 
+   "(txn_body_reserve_fsguid): Track merged-in changes to calling", 
+   "discipline of svn_fs_bdb__miscellaneous_get()."
+  ], 
+  "revision_id": "873784"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-10-17T01:31:47.849072Z", 
+  "msg": [
+   "On the 'fs-rep-sharing' branch:", 
+   "Provide two new constructs to the Berkeley DB backend:", 
+   "1.  The idea of an FS-global unique identifier.  We don't need to", 
+   "have every table managing its own \"next-key\" thing -- a", 
+   "globally unique (within the FS, anyway) ID would be just fine.", 
+   "2.  The use these FSGUIDs to annotate modified node revision data", 
+   "representations which ultimately employed shared rep storage.", 
+   "Next step:  actually look for this uniquifier in code that previously", 
+   "counted on representation keys changing any time a node revision's", 
+   "data was touched.", 
+   "* subversion/libsvn_fs_base/fs.h", 
+   "(SVN_FS_BASE__MISC_FORWARD_DELTA_UPGRADE): Was", 
+   "SVN_FS_BASE__MISCELLANEOUS_FORWARD_DELTA_UPGRADE.", 
+   "(SVN_FS_BASE__MISC_NEXT_FSGUID): New #define.", 
+   "(struct node_revision_t): Add 'data_key_uniquifier' member.", 
+   "* subversion/libsvn_fs_base/fsguid.h,", 
+   "* subversion/libsvn_fs_base/fsguid.c", 
+   "New files with interfaces related to filesystem-global unique IDs.", 
+   "* subversion/libsvn_fs_base/tree.c,", 
+   "* subversion/libsvn_fs_base/fs.c,", 
+   "* subversion/libsvn_fs_base/bdb/miscellaneous-table.c", 
+   "Track #define renames.", 
+   "* subversion/libsvn_fs_base/notes/structure", 
+   "(Node revisions): Update BNF to include new rep key uniquifier bits.", 
+   "* subversion/libsvn_fs_base/util/fs_skels.c", 
+   "(is_valid_node_revision_skel): Rewrite this for easier", 
+   "expandability, and now allow the DATA-KEY slot for files to be a", 
+   "2-tuple.", 
+   "(svn_fs_base__parse_node_revision_skel): Parse new node revision", 
+   "skel structure.", 
+   "(svn_fs_base__unparse_node_revision_skel): Handle storage of the new", 
+   "node revision skel structure.", 
+   "* subversion/libsvn_fs_base/bdb/checksum-reps-table.c", 
+   "(svn_fs_bdb__set_checksum_rep): Disallow checksum-rep overwriting", 
+   "and return a distinct, catchable error in such scenarios.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(svn_fs_base__dag_finalize_edits): If we reuse a rep-key, generate", 
+   "an FS-global unique ID and stuff it into the node-revision.", 
+   "(maybe_store_checksum_rep): Was store_checksum_reps().  Now catch", 
+   "the SVN_ERR_FS_ALREADY_EXISTS error thrown which trying to overwrite", 
+   "an existing checksum-rep record.", 
+   "(svn_fs_base__dag_index_checksums): Track renamed function."
+  ], 
+  "revision_id": "873783"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2008-10-17T00:41:25.288100Z", 
+  "msg": [
+   "Tweak the svn_fs_bdb__miscellaneous_get() interface to match the feel", 
+   "of our property handling stuffs (and purge unnecessary bits that", 
+   "result from this change).", 
+   "* subversion/libsvn_fs_base/bdb/miscellaneous-table.h,", 
+   "* subversion/libsvn_fs_base/bdb/miscellaneous-table.c", 
+   "(svn_fs_bdb__miscellaneous_get): Return NULL for missing items", 
+   "instead of a custom error.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_NO_SUCH_MISCELLANY): Remove as unused.", 
+   "* subversion/libsvn_fs_base/err.h,", 
+   "* subversion/libsvn_fs_base/err.c", 
+   "(svn_fs_base__err_no_such_miscellany): Remove as unused.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(txn_body_miscellaneous_get): Track changes to the", 
+   "svn_fs_bdb__miscellaneous_get() interface."
+  ], 
+  "revision_id": "873782"
+ }, 
+ {
+  "author": "jwhitlock", 
+  "date": "2008-10-16T21:58:43.069326Z", 
+  "msg": [
+   "* subversion/bindings/swig/core.i,", 
+   "subversion/bindings/swig/svn_client.i: Changed WIN32 to SWIGWIN for the auth", 
+   "provider macro checks."
+  ], 
+  "revision_id": "873781"
+ }
+]

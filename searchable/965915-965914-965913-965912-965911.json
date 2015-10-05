@@ -1,0 +1,88 @@
+[
+ {
+  "author": "doogie", 
+  "date": "2010-07-20T17:14:11.894849Z", 
+  "msg": [
+   "Fix NPE in thrown exception reporting an invalid orderHeader when", 
+   "orderHeader is null in the constructor."
+  ], 
+  "revision_id": "965915"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2010-07-20T17:14:06.101511Z", 
+  "msg": [
+   "Fix coverage reports; the coverage for base was reporting 100%, which is", 
+   "not correct.  With real numbers on base, it shows a lot of missing", 
+   "lines."
+  ], 
+  "revision_id": "965914"
+ }, 
+ {
+  "author": "gdusbabek", 
+  "date": "2010-07-20T17:11:46.748481Z", 
+  "msg": [
+   "failure detection wasn't closing sockets. patch by gdusbabek, reviewed by jbellis. CASSANDRA-1221"
+  ], 
+  "revision_id": "965913"
+ }, 
+ {
+  "author": "neels", 
+  "date": "2010-07-20T17:08:14.041447Z", 
+  "msg": [
+   "Don't interrupt the update/switch/checkout with an error on incoming dir add", 
+   "vs. local unversioned. Instead, flag a conflict (so far a tree conflict) and", 
+   "pull in all the other unrelated nodes.", 
+   "Where r959735 dealt with add_file(), this deals with add_directory(). Until", 
+   "single-db, incoming dir can only improve vs. local unversioned. ...Also", 
+   "because add_directory() doesn't get copy_from info like add_file().", 
+   "Note, there is bound to be some discussion on whether to flag a conflict on", 
+   "local unversioned. Obviously, I'm +1 for flagging a conflict to make the path", 
+   "more visible, but instead we could also just notify. At least don't bail.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(add_directory):", 
+   "Don't bail on local unversioned, instead flag a tree conflict. Also remove", 
+   "some obsolete logic and streamline. Change the flow of dirs with local", 
+   "status == _obstructed: set add_existed = TRUE, but explicitly notify with", 
+   "'A' like the old client would (also see comment in this patch starting", 
+   "\"Pre-single-db, ...\" and schedule_tests:delete_redelete_fudgery).", 
+   "* subversion/tests/cmdline/checkout_tests.py", 
+   "(checkout_with_obstructions,", 
+   "forced_checkout_of_dir_with_file_obstructions),", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(bad_intermediate_urls,", 
+   "forced_switch_failures,", 
+   "switch_with_obstructing_local_adds):", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(obstructed_update_alters_wc_props,", 
+   "forced_update_failures):", 
+   "Change these tests to match the new tree conflicts behavior. Some of the", 
+   "tests are partly rewritten from scratch (using svntest.factory).", 
+   "* subversion/tests/cmdline/schedule_tests.py", 
+   "(test_list):", 
+   "Remove XFail from delete_redelete_fudgery(), as the way 'obstructed' dirs", 
+   "are treated now fixes that error (see also above).", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(run_and_verify_checkout2): New function to have an explicit argument saying", 
+   "whether the checkout target WC should be removed or not, instead of", 
+   "determining that by presence of a --force argument, which is horrible.", 
+   "(run_and_verify_checkout): Move guts to run_and_verify_checkout2() and call", 
+   "that so that this function behaves as it always did.", 
+   "* notes/tree-conflicts/all-add-vs-add-tree-conflicts.txt: Update."
+  ], 
+  "revision_id": "965912"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2010-07-20T17:06:29.562885Z", 
+  "msg": [
+   "Make 'svn cleanup' complain instead of crash if asked to clean up a URL.", 
+   "* subversion/libsvn_client/cleanup.c,", 
+   "subversion/svn/cleanup-cmd.c:", 
+   "(svn_client_cleanup, svn_cl__cleanup): Raise an error if a URL was passed.", 
+   "* subversion/tests/cmdline/input_validation_tests.py", 
+   "(invalid_wcpath_cleanup, test_list): New test."
+  ], 
+  "revision_id": "965911"
+ }
+]

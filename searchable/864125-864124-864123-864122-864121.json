@@ -1,0 +1,99 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-03-23T17:52:48.936462Z", 
+  "msg": [
+   "Rename the svn_range_dup() API to svn_merge_range_dup(), for", 
+   "consistency with our existing method naming conventions (which", 
+   "benefits SWIG).", 
+   "* subversion/include/svn_types.h", 
+   "(svn_merge_range_dup): Rename from svn_range_dup().", 
+   "* subversion/libsvn_client/merge.c", 
+   "(calculate_merge_ranges): Adjust for API rename.", 
+   "* subversion/libsvn_subr/mergeinfo.c", 
+   "(combine_with_lastrange, rangelist_intersect_or_remove): Adjust for", 
+   "API rename.", 
+   "(svn_merge_range_dup): Rename from svn_range_dup().", 
+   "Suggested by: kou"
+  ], 
+  "revision_id": "864125"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-03-23T17:12:54.879038Z", 
+  "msg": [
+   "A follow-up to r24049.", 
+   "* INSTALL: Fix dependency declaration for SQLite."
+  ], 
+  "revision_id": "864124"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2007-03-23T17:00:35.785824Z", 
+  "msg": [
+   "* INSTALL: Minor copy-editing."
+  ], 
+  "revision_id": "864123"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-03-23T16:37:38.261281Z", 
+  "msg": [
+   "* INSTALL:  remove cobwebs and give this file a major update.", 
+   "- new \"Audience\" section to encourage average users to", 
+   "use binary packages instead.", 
+   "- new \"Dependency Overview\" section now includes zlib,", 
+   "sqlite, serf, openssl, sasl, and explains whether", 
+   "they're required or optional.", 
+   "- add new sections for sqlite and zlib.", 
+   "- warn about APR 0.9.x and 1.x binary-incompatibility issue", 
+   "- warn about how this affects HTTP 2.0 vs. 2.2 as well.", 
+   "- stop recommending people checkout the latest apr or", 
+   "httpd source;  if they're apr or httpd devs, they'll", 
+   "already know how to do this.", 
+   "- list neon and serf options next to each other, rather", 
+   "than putting serf as a footnote at the bottom.", 
+   "- change 'Building a Server' section to not be so", 
+   "blatantly HTTPD specific;  mention svnserve at the", 
+   "beginning, with pointer to svnserve setup."
+  ], 
+  "revision_id": "864122"
+ }, 
+ {
+  "author": "malcolm", 
+  "date": "2007-03-23T14:20:25.819097Z", 
+  "msg": [
+   "Fix the circular-dependency breakage caused by the introduction of", 
+   "FSFS recovery in r23595.", 
+   "Rather than allowing FSFS recovery to synthesize an fs pointer by calling", 
+   "svn_fs_open() (the circular dependency), provide an explicit vtable hook for", 
+   "this pseudo-open operation, and call it for all filesystems before calling", 
+   "recovery with that new fs pointer.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(fs_library_vtable_t): Add open_for_recovery(), and change recover() to", 
+   "accept an fs pointer.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_recover): Create a new fs pointer, open it with open_for_recovery(),", 
+   "then delegate to the recover method.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_open_for_recovery): Implement, based on code removed from", 
+   "svn_fs_fs__recover().", 
+   "(library_vtable): Add fs_open_for_recovery().", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__path_current): Rename from path_current(), and make non-static.", 
+   "(get_next_revision_ids, write_current, svn_fs_fs__create,", 
+   "svn_fs_fs__set_uuid): Adjust callers of path_current().", 
+   "(svn_fs_fs__recover): Accept an fs pointer rather than a path.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__recover): Accept an fs pointer rather than a path.", 
+   "(svn_fs_fs__path_current): Declare.", 
+   "* subversion/libsvn_fs_base/fs.c", 
+   "(base_open_for_recovery): Record the path in the partially-filled", 
+   "fs pointer, for use ...", 
+   "(base_bdb_recover): ... here.  Also change this to accept an fs pointer", 
+   "rather than a path, to match the vtable change.", 
+   "(library_vtable): Add the new open_for_recovery() vtable method."
+  ], 
+  "revision_id": "864121"
+ }
+]

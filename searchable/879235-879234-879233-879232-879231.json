@@ -1,0 +1,122 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-07T10:44:15.340634Z", 
+  "msg": [
+   "Revert r39153 to allow debugging an early close access baton issue"
+  ], 
+  "revision_id": "879235"
+ }, 
+ {
+  "author": "stylesen", 
+  "date": "2009-09-07T08:11:07.377548Z", 
+  "msg": [
+   "Fix typos.", 
+   "* subversion/libsvn_wc/README", 
+   "(): s/is/it/", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__checkout_internal): In the comment s/of/on/", 
+   "* notes/wc-ng-design", 
+   "(): s/working/working copy/", 
+   "Patch by: Kannan R <kannanr@collab.net>"
+  ], 
+  "revision_id": "879234"
+ }, 
+ {
+  "author": "pynoos", 
+  "date": "2009-09-06T22:55:07.622870Z", 
+  "msg": [
+   "* subversion/po/ko.po", 
+   "- Korean translation updated (Remaining untranslated 42 strings)"
+  ], 
+  "revision_id": "879233"
+ }, 
+ {
+  "author": "joeswatosh", 
+  "date": "2009-09-06T22:54:29.331679Z", 
+  "msg": [
+   "Restore support for Svn::Core.add_windows_simple_provider.  This fulfills", 
+   "a promise I made to Jeremy long ago.  Thanks Roman!", 
+   "* subversion/bindings/swig/ruby/test/test_client.rb", 
+   "(SvnClientTest): Use a better condition to decide whether or not to", 
+   "define the", 
+   "SvnClientTest#test_windows_simple_provider method.", 
+   "* subversion/bindings/swig/ruby/svn/core.rb", 
+   "(Svn::Core::Authenticatable): Provide an alternate definition of", 
+   "Svn::Core::Authenticatable#add_windows_simple_provider when", 
+   "Svn::Core.auth_get_platform_specific_provider is defined.", 
+   "Patch by: Roman Zawada <roman.zawada@2kczech.com>", 
+   "Tweaked by: me"
+  ], 
+  "revision_id": "879232"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-06T17:37:01.178761Z", 
+  "msg": [
+   "Deprecate svn_wc_traversal_info_t and its handling and replace this with a", 
+   "callback receiving the absolute path and externals changes.", 
+   "The primary reason for this is that it allows fully deprecating relative", 
+   "paths, but still allows the deprecated api to calculate the relative paths", 
+   "users of our 1.6 compatible api expect.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_external_update_t): New typedef.", 
+   "(svn_wc_traversal_info_t, svn_wc_init_traversal_info,", 
+   "svn_wc_edited_externals, svn_wc_traversed_depths): Deprecate these.", 
+   "(svn_wc_get_status_editor5,", 
+   "svn_wc_crawl_revisions5): Update arguments to use externals callback.", 
+   "(svn_wc_get_update_editor4): New function.", 
+   "(svn_wc_get_update_editor3): Deprecate function.", 
+   "(svn_wc_get_switch_editor4): New function, adding externals and fetch", 
+   "functions.", 
+   "(svn_wc_get_switch_editor3): Deprecate function.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_cl__externals_store): New structure.", 
+   "(svn_cl__store_externals): New function.", 
+   "(svn_client__do_external_status): Accept a hash instead of a", 
+   "svn_wc_traversal_info_t.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(svn_client__do_external_status): Accept a hash instead of a", 
+   "svn_wc_traversal_info_t.", 
+   "(svn_cl__store_externals): New function.", 
+   "* subversion/libsvn_client/status.c", 
+   "(svn_client_status5): Updated for api changes. Capture absolute", 
+   "external paths. Calculate absolute target correctly.", 
+   "* subversion/libsvn_wc/adm_crawler.c", 
+   "(read_traversal_info): Replace local calculation of relative paths", 
+   "with call to callback.", 
+   "(report_revisions_and_depths): Update arguments to pass callback.", 
+   "(svn_wc_crawl_revisions5): Update arguments to pass callback.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(traversal_info_update_baton): New struct.", 
+   "(traversal_info_update): New function.", 
+   "(svn_wc_crawl_revisions4): Hook traversal_info callback if the user", 
+   "needs traversal_info.", 
+   "(svn_wc_get_status_editor4): Hook traversal_info updates and don't destroy", 
+   "an context that is used later.", 
+   "(svn_wc_get_update_editor3): New function.", 
+   "(svn_wc_get_update_editor2, svn_wc_get_update_editor):", 
+   "Moved here from update_editor.c", 
+   "(svn_wc_get_switch_editor3): New function.", 
+   "(svn_wc_get_switch_editor2, svn_wc_get_switch_editor):", 
+   "Moved here from update_editor.c", 
+   "* subversion/libsvn_wc/revision_status.c", 
+   "(svn_wc_revision_status2): Update caller.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(edit_baton): Store callback instead of traversal info.", 
+   "(handle_externals): Call callback instead of updating traversal info.", 
+   "(svn_wc_get_status_editor5): Update argument list and store data in baton.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(edit_baton, make_editor): Store callback instead of traversal info.", 
+   "(svn_wc_get_update_editor3): Renamed to ...", 
+   "(svn_wc_get_update_editor4): .. this and pass new arguments.", 
+   "(svn_wc_get_update_editor2, svn_wc_get_update_editor):", 
+   "Move to deprecated.c.", 
+   "(svn_wc_get_switch_editor3): Renamed to ...", 
+   "(svn_wc_get_switch_editor4): .. this and pass new arguments.", 
+   "(svn_wc_get_switch_editor2, svn_wc_get_switch_editor):", 
+   "Move to deprecated.c."
+  ], 
+  "revision_id": "879231"
+ }
+]

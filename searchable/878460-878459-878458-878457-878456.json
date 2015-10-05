@@ -1,0 +1,105 @@
+[
+ {
+  "author": "arfrever", 
+  "date": "2009-07-09T16:59:57.420234Z", 
+  "msg": [
+   "Follow-up to r38377:", 
+   "Rename SVN_REMOVE_REDUNDANT_LIB_DIRS to SVN_REMOVE_STANDARD_LIB_DIRS.", 
+   "* build/ac-macros/svn-macros.m4", 
+   "(SVN_REMOVE_REDUNDANT_LIB_DIRS): Rename to ...", 
+   "(SVN_REMOVE_STANDARD_LIB_DIRS): ... this. Improve doc string. Filter -L", 
+   "options with standard library search directories followed by '/'.", 
+   "* build/ac-macros/apr.m4", 
+   "(SVN_LIB_APR):", 
+   "* build/ac-macros/aprutil.m4", 
+   "(SVN_LIB_APRUTIL):", 
+   "* build/ac-macros/gssapi.m4", 
+   "(SVN_LIB_RA_SERF_GSSAPI):", 
+   "* build/ac-macros/kwallet.m4", 
+   "(SVN_LIB_KWALLET):", 
+   "* build/ac-macros/sasl.m4", 
+   "(SVN_LIB_SASL):", 
+   "* build/ac-macros/sqlite.m4", 
+   "(SVN_SQLITE_DIR_CONFIG):", 
+   "* build/ac-macros/zlib.m4", 
+   "(SVN_LIB_Z): Update.", 
+   "Suggested by: julianfoad", 
+   "stsp"
+  ], 
+  "revision_id": "878460"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-07-09T15:38:08.466140Z", 
+  "msg": [
+   "Tweak the source code formatting of r38381.", 
+   "Suggested by: arfrever", 
+   "* subversion/include/svn_types.h", 
+   "(svn_apr_hash_index_key, svn_apr_hash_index_key, svn_apr_hash_index_klen):", 
+   "Move the function prototype's return type onto a separate line, as that's", 
+   "the project's style."
+  ], 
+  "revision_id": "878459"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-09T14:42:08.636471Z", 
+  "msg": [
+   "* subversion/libsvn_client/patch.c", 
+   "(maybe_send_patch_target_notification): Fix wrong wording in docstring."
+  ], 
+  "revision_id": "878458"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2009-07-09T14:37:30.138208Z", 
+  "msg": [
+   "Fix totally broken handling of paths in 'svn patch' in many places.", 
+   "* subversion/tests/cmdline/patch_tests.py", 
+   "(patch_unidiff): Switch this test to applying patches in a situation", 
+   "where the target working copy is not the current directory (which", 
+   "didn't work at all before this commit).", 
+   "* subversion/libsvn_client/patch.c", 
+   "(svn_client_patch): Make the target path absolute before doing anything", 
+   "else, and use the absolute form throughout.", 
+   "(patch_target_t): Rename PATH field to WC_PATH to reflect its meaning.", 
+   "Add new PATCH_PATH member which contains the target's path as it", 
+   "appeared in the patch file.", 
+   "(resolve_target_path): Take care to correctly resolve all the possible", 
+   "forms of the target path. Also, canonicalise the path before using it.", 
+   "(init_patch_target): Use the absolute target path throughout.", 
+   "(maybe_send_patch_target_notification): New parameter WC_DIR, which is", 
+   "prepended to TARGET->WC_PATH when sending notifications.", 
+   "If TARGET->WC_PATH is not known, fall back to other paths we know.", 
+   "Also change the return type to we can use SVN_ERR_ASSERT() here.", 
+   "(apply_one_patch): Use absolute paths of the target instead of what", 
+   "we read from the patch. Also, remove the adm_access dance when adding", 
+   "files to version control, it is not needed now that we open the", 
+   "adm_access with an absolute path in the first place. Also, pass the", 
+   "new WC_PATH parameter to maybe_send_patch_target_notification() and", 
+   "pass on any errors returned by it."
+  ], 
+  "revision_id": "878457"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2009-07-09T12:27:41.993639Z", 
+  "msg": [
+   "Simplify some uses of apr_hash_this() by using our new svn_apr_hash_index_*()", 
+   "functions.", 
+   "* subversion/svn/log-cmd.c", 
+   "* subversion/svn/propget-cmd.c", 
+   "* subversion/svn/props.c", 
+   "* subversion/svn/status-cmd.c", 
+   "* subversion/svnadmin/main.c", 
+   "* subversion/svndumpfilter/main.c", 
+   "* subversion/svnlook/main.c", 
+   "* subversion/svnserve/serve.c", 
+   "* subversion/svnsync/main.c", 
+   "Replace each use of apr_hash_this() in these files with one or more calls", 
+   "to our new svn_apr_hash_index_*() functions, and remove the associated", 
+   "temporary variables or type casts."
+  ], 
+  "revision_id": "878456"
+ }
+]

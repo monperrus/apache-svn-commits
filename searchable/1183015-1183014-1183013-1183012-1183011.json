@@ -1,0 +1,65 @@
+[
+ {
+  "author": "lehmi", 
+  "date": "2011-10-13T18:01:31.677557Z", 
+  "msg": [
+   "PDFBOX-1137: changed the logical order within determineEncoding as proposed by Antoni Mylka"
+  ], 
+  "revision_id": "1183015"
+ }, 
+ {
+  "author": "rwesten", 
+  "date": "2011-10-13T17:57:25.644811Z", 
+  "msg": [
+   "Fixed STANBOL-331; Several improvements to Loggings; Refactoring of the TextAnalyzer and some Bug fixes for the KeywordLinkingEngine", 
+   "### TextAnalyzer (commons.opennlp)", 
+   "Before a TextAnalyzer instance was intended to be used to analyze multiple texts with even different instances. e.g. the KeywordLinkingEngine created an instance during activation and used in for all enhancement requests.", 
+   "This is now changed. Now the intension is to create one TextAnalyzer instance per text you need to analyze. However it is still supported to analyze multiple texts with the same instance however changes in available NLP models will be only affect new instances. It is also no longer possible to use the same TextAnalyzer instance for tests with multiple languages.", 
+   "In the short time this resolves issues with extensive calls to the DataFileProvider. In the longer term this allows the definition of language specific configurations for the TextAnalyzers. over several TextAnalyzer - TextAnalyzerConfig now holds the configuration and this can be reused/shared between several TextAnalyzer instances. This makes it e.g. possible to implement a OSGI component that provides NLP configurations as an OSGI service - so that several engines could use the same configuration for a given language and users could configure NLP processing in a central place (e.g. the Apache Felix Web Console)", 
+   "### SolrYard improvements (STANBOL-331)", 
+   "The default Solr Schema used by the SolrYard is updated:", 
+   "* Added support for German (\"@de\" language prefixes)", 
+   "* Improved indexing for generic text (languages without dedicated support by", 
+   "* using the ICU Tokenizer (tokenizes also languages that do not use spaces)", 
+   "* ASCIIFoldingFilterFactory to convert e.g. \u00e9 to e", 
+   "* All natural language fields now also support removal of Hyphens", 
+   "Also the default SolrSchema for the dbpedia indexer was changed accordingly.", 
+   "Note that for the ICU Tokenizer I had to add the sold-analyzes-extras. However currently all imports other that the ICU stuff are ignored (this saves about 6MByte of additional dependencies).", 
+   "### KeywordLinkingEngine", 
+   "* several changes related to the change in the TextAnalyzer", 
+   "* corrected a bug that caused wrong positions of start/end of TextAnnotations and in some rare cases also could cause IndexArrayOutOfBoundExceptions.", 
+   "* converted a IllegalStateException - i mainly used for debugging - to a log.warn message.  In such cases the only thing what happens is that the confidence values are not correctly calculated relative to the best rank. This should be rather treaded as warning than as an Exception causing the whole Enhancement workflow to fail.", 
+   "* Entities that do match all Tokens are now suggested even if they are no exact match (e.g. \"Italien\" will be suggested for \"Italiens\").", 
+   "### Logging improvements", 
+   "* Added a configuration to the stable/full launcher that sets the Log level for Apache Solr from INFO to WARN.", 
+   "* Changed log level for several messages from INFO to DEBUG to remove the noise in INGO log level.", 
+   "* Added some additional debug level loggings"
+  ], 
+  "revision_id": "1183014"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2011-10-13T17:54:10.971401Z", 
+  "msg": [
+   "Microkernel based Jackrabbit prototype (WIP)", 
+   "query: use revision from session to for executing queries instead of head revision"
+  ], 
+  "revision_id": "1183013"
+ }, 
+ {
+  "author": "rvs", 
+  "date": "2011-10-13T17:53:46.089577Z", 
+  "msg": [
+   "Updating testHDFSCLI"
+  ], 
+  "revision_id": "1183012"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2011-10-13T17:53:15.868584Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "1183011"
+ }
+]

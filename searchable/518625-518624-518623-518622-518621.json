@@ -1,0 +1,48 @@
+[
+ {
+  "author": "gshimansky", 
+  "date": "2007-03-15T13:37:35.253505Z", 
+  "msg": [
+   "Apply the fix for HARMONY-3376 [drlvm][winx64] debug drlvm returns 128 when running from any shell", 
+   "The problem appears to be in recursive exception handler invocation. When VM shutdowns it frees and zeroes a pointer to vm_methods table which contains all compiled java methods information. This table is used by exception handler to determine whether an exception has occurred in java code or in any other code.", 
+   "So after VM zeroed a pointer to vm_methods, when exception handler tried to determine where an exception has occurred, it got another exception because it used an incorrect pointer. This lead to an infinite recursion of exception handler and eventual process termination with an error code 128.", 
+   "The reason why exception handler was called after VM shutdown seems to be the MSVC runtime. Somewhere after main function of the java.exe launcher has finished, MSVC runtime generated an exception with code 0x406D1388. This exception happens both on windows x86 and x86_64 if the program is compiled with MSVC 2005 and linked with msvcr80.dll.", 
+   "The fix to this problem is that if the pointer to vm_method table is zero, no lookup should be performed in it. If this pointer is zero, then it means that exception didn't occur in java because java cannot be executed in such condition."
+  ], 
+  "revision_id": "518625"
+ }, 
+ {
+  "author": "mturk", 
+  "date": "2007-03-15T13:28:39.867412Z", 
+  "msg": [
+   "Make shared memory lock reopenable by compile time define.", 
+   "It is used anyhow for the kernels that have bug in flock.", 
+   "Defaults to old behavior."
+  ], 
+  "revision_id": "518624"
+ }, 
+ {
+  "author": "samisa", 
+  "date": "2007-03-15T13:16:07.970013Z", 
+  "msg": [
+   "Dropped ops; fixed formatting; removed unused functions and commented blocks of code;"
+  ], 
+  "revision_id": "518623"
+ }, 
+ {
+  "author": "kelvingoodson", 
+  "date": "2007-03-15T13:13:34.309768Z", 
+  "msg": [
+   "TUSCANY-1171 update sample project files"
+  ], 
+  "revision_id": "518622"
+ }, 
+ {
+  "author": "robbinspg", 
+  "date": "2007-03-15T13:10:03.034505Z", 
+  "msg": [
+   "distribute new build script"
+  ], 
+  "revision_id": "518621"
+ }
+]

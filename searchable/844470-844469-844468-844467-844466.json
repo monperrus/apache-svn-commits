@@ -1,0 +1,79 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2003-01-15T20:25:18.222779Z", 
+  "msg": [
+   "Fix two small annoyances with 'svnadmin recover'.", 
+   "* repos.c (svn_repos_recover):  if the db lockfile is already", 
+   "unlocked, don't freak out.  move on to the recovery step.", 
+   "* main.c (subcommand_recover):  change phrasing, so people no longer", 
+   "think they're waiting to get a lock.  make it clear they're waiting", 
+   "for recovery, not locking."
+  ], 
+  "revision_id": "844470"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2003-01-15T18:43:36.475365Z", 
+  "msg": [
+   "Fix the critical part of issue #1017.  Our DAV layer now refuses to", 
+   "delete out-of-date files or directories, assuming both ra_dav and", 
+   "mod_dav_svn have been upgraded to this change.", 
+   "* svn_dav.h (SVN_DAV_VERSION_NAME_HEADER): new custom HTTP header.", 
+   "* commit.c (simple_request):  take optional 'extra_headers' hash arg.", 
+   "attach them to the neon request.", 
+   "(create_activity, commit_add_dir): update callers of simple_request.", 
+   "(commit_delete_entry): send a \"X-SVN-Version-Name: [revnum]\" header", 
+   "with the DELETE request.  In other words, make *use* of the revnum", 
+   "being passed into the editor->delete_entry() call.", 
+   "* svn_error_codes.h (SVN_ERR_RA_OUT_OF_DATE): new error code.", 
+   "* dav_svn.h (dav_resource_private):  add new 'version_name' revnum field.", 
+   "* repos.c (dav_svn_get_resource): if the new header is present, place", 
+   "the revnum value into resource->info.", 
+   "(dav_svn_remove_resource): if the version_name rev exists in the", 
+   "resource, then do an out-of-dateness check by comparing it to the", 
+   "created-rev of the path in the txn.", 
+   "* commit_tests.py (test_list):  uncomment the #1017 regression test,", 
+   "which now passes over ra_dav."
+  ], 
+  "revision_id": "844469"
+ }, 
+ {
+  "author": "josander", 
+  "date": "2003-01-15T16:21:57.467715Z", 
+  "msg": [
+   "You can now make automatic setups (non interactive) by running", 
+   "packages/win32-innosetup/tools/mk_distro.bat -a", 
+   "Version and release info are detected and set from the svn.exe to", 
+   "incude in the setup.", 
+   "* packages/win32-innosetup/Readme.txt", 
+   "packages/win32-innosetup/svn.iss", 
+   "packages/win32-innosetup/templates/paths_inno_src.iss:", 
+   "-Corrected for automatic setups", 
+   "* packages/win32-innosetup/tools/mk_distro.bat", 
+   "packages/win32-innosetup/tools/tools/mk_distro.pl:", 
+   "-Interface for making manual and automatic setups.", 
+   "* packages/win32-innosetup/tools/set_version.pl", 
+   "-Updated for automatic setups (non interactive with -a switch)"
+  ], 
+  "revision_id": "844468"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-01-15T15:37:37.121270Z", 
+  "msg": [
+   "* subversion/libsvn_subr/config.c", 
+   "(read_all): Fix config area processing order (thanks for the note, Brane)."
+  ], 
+  "revision_id": "844467"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-15T06:12:12.542977Z", 
+  "msg": [
+   "* ac-helpers/install-sh: Turn on svn:executable.  (Was this turned off in", 
+   "r4371?)"
+  ], 
+  "revision_id": "844466"
+ }
+]

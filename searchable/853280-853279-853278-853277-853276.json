@@ -1,0 +1,110 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-01T06:39:02.790071Z", 
+  "msg": [
+   "Lose the unused trail_t 'scratchpool' member.", 
+   "* subversion/libsvn_fs_base/trail.h", 
+   "(struct trail_t): Lose the 'scratchpool'.  Nobody is using it.", 
+   "* subversion/libsvn_fs_base/trail.c", 
+   "(begin_trail, commit_trail): Stop messing with the now-absent", 
+   "'scratchpool' trail_t member."
+  ], 
+  "revision_id": "853280"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-01T05:26:22.224719Z", 
+  "msg": [
+   "Make all the libsvn_fs_base/dag.[ch] functions which currently accept", 
+   "only trail_t's also accept (and use, instead of trail->pool) explicit", 
+   "'pool' parameters.  Generally speaking, callers of these functions", 
+   "which themselves live in libsvn_fs_base/dag.c area now provide *their*", 
+   "new pool as the value for this new parameter; callers outside that", 
+   "area pass trail->pool as that parameter.", 
+   "Also, re-work the predecessor walking code to be more pool conscious.", 
+   "(This should allow for a BDB-backend port of Eric Gillespie's r13193", 
+   "FSFS memory usage bugfix.)", 
+   "* subversion/libsvn_fs_base/dag.h", 
+   "(dag_pred_func_t, svn_fs_base__dag_walk_predecessors): Remove (these", 
+   "are now private to the dag.c file).", 
+   "(svn_fs_base__dag_get_node, svn_fs_base__dag_get_revision,", 
+   "svn_fs_base__dag_get_predecessor_id, svn_fs_base__dag_make_file,", 
+   "svn_fs_base__dag_get_predecessor_count, svn_fs_base__dag_copy,", 
+   "svn_fs_base__dag_get_proplist, svn_fs_base__dag_set_proplist,", 
+   "svn_fs_base__dag_revision_root, svn_fs_base__dag_txn_root,", 
+   "svn_fs_base__dag_txn_base_root, svn_fs_base__dag_clone_root,", 
+   "svn_fs_base__dag_commit_txn, svn_fs_base__dag_open,", 
+   "svn_fs_base__dag_dir_entries, svn_fs_base__dag_set_entry,", 
+   "svn_fs_base__dag_clone_child, svn_fs_base__dag_delete,", 
+   "svn_fs_base__dag_remove_node, svn_fs_base__dag_delete_if_mutable,", 
+   "svn_fs_base__dag_make_dir, svn_fs_base__dag_finalize_edits,", 
+   "svn_fs_base__dag_file_length, svn_fs_base__dag_file_checksum,", 
+   "svn_fs_base__dag_deltify, svn_fs_base__things_different,", 
+   "svn_fs_base__dag_is_ancestor, svn_fs_base__dag_is_parent): Add and", 
+   "use 'pool' parameter.", 
+   "(svn_fs_base__dag_get_contents, svn_fs_base__dag_get_edit_stream):", 
+   "Re-order parameters so 'pool' is last.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(dag_pred_func_t): Move here from dag.h.  Now takes a node_rev and", 
+   "node_rev_id instead of a node.  Also, lose the 'trail'.", 
+   "(dag_walk_predecessors): Was svn_fs_base__dag_walk_predecessors().", 
+   "Now uses the some subpools (doing the nifty pool-swapping", 
+   "technique).  Callers changed.", 
+   "(svn_fs_base__dag_get_node, svn_fs_base__dag_get_revision,", 
+   "svn_fs_base__dag_get_predecessor_id, dir_entry_id_from_node, set_entry,", 
+   "svn_fs_base__dag_get_predecessor_count, get_dir_entries, make_entry,", 
+   "svn_fs_base__dag_dir_entries, svn_fs_base__dag_set_entry,", 
+   "svn_fs_base__dag_get_proplist, svn_fs_base__dag_set_proplist,", 
+   "svn_fs_base__dag_revision_root, svn_fs_base__dag_txn_root,", 
+   "svn_fs_base__dag_txn_base_root, svn_fs_base__dag_clone_child,", 
+   "svn_fs_base__dag_clone_root, svn_fs_base__dag_delete,", 
+   "svn_fs_base__dag_remove_node, svn_fs_base__dag_delete_if_mutable,", 
+   "svn_fs_base__dag_make_file, svn_fs_base__dag_make_dir,", 
+   "svn_fs_base__dag_file_length, svn_fs_base__dag_file_checksum,", 
+   "svn_fs_base__dag_finalize_edits, svn_fs_base__dag_open,", 
+   "svn_fs_base__dag_copy, svn_fs_base__dag_deltify,", 
+   "svn_fs_base__dag_commit_txn, svn_fs_base__things_different,", 
+   "svn_fs_base__dag_is_ancestor, svn_fs_base__dag_is_parent): Add and", 
+   "use 'pool' parameter.", 
+   "(svn_fs_base__dag_get_contents, svn_fs_base__dag_get_edit_stream):", 
+   "Re-order parameters so 'pool' is last."
+  ], 
+  "revision_id": "853279"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-01T05:21:49.646212Z", 
+  "msg": [
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos_history2): Comment relocation for clarity."
+  ], 
+  "revision_id": "853278"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2005-03-01T05:04:12.614027Z", 
+  "msg": [
+   "* rpm/redhat-7.x/subversion.spec,", 
+   "rpm/redhat-8+/subversion.spec,", 
+   "rpm/wbel-3/subversion.spec : The book is dead (in the subversion repository).", 
+   "LONG LIVE THE BOOK!  Make the RPMs build again after the book was removed.", 
+   "*** Note: A new set of RPMs for the book are in the works."
+  ], 
+  "revision_id": "853277"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2005-03-01T03:30:48.867172Z", 
+  "msg": [
+   "Minor cleanups to the libsvn_fs_base DAG code.", 
+   "* subversion/libsvn_fs_base/dag.c", 
+   "(dag_node_t): Lose the 'pool' member (as unnecessary).", 
+   "(cache_node_revision): Lose some #if-0'd code, and dup the cached", 
+   "node_revision structure into trail->pool.", 
+   "(svn_fs_base__dag_get_node, svn_fs_base__dag_dup): Stop populating", 
+   "the now-absent 'pool' member."
+  ], 
+  "revision_id": "853276"
+ }
+]

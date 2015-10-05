@@ -1,0 +1,93 @@
+[
+ {
+  "author": "epg", 
+  "date": "2007-08-08T18:10:32.500155Z", 
+  "msg": [
+   "ra-dav (neon) hasn't shown error output from pre-revprop-change since", 
+   "before 1.4.0, and has since r22712 always claimed a revprop change", 
+   "succeeds, giving no indication at all that the hook denied it.", 
+   "* subversion/tests/cmdline/prop_tests.py", 
+   "(revprop_change): Test that we get an error upon trying to set a", 
+   "revprop when pre-revprop-change is *not* enabled, or enabled but", 
+   "returning an error.", 
+   "* subversion/tests/cmdline/svntest/actions.py", 
+   "(disable_revprop_changes): New function, like enable_revprop_changes", 
+   "except creating a hook that prints a message to stderr and then", 
+   "exits non-zero.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(create_python_hook_script): Use file_write instead of file_append", 
+   "for the initial writes to the hook script, so callers can replace", 
+   "its contents without having to unlink it first."
+  ], 
+  "revision_id": "866065"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-08-08T17:18:19.143326Z", 
+  "msg": [
+   "Teach mod_dav_svn to always report the actual depth of its update", 
+   "REPORT response.  This then becomes the mechanism which ra_neon and", 
+   "ra_serf use to decide that the server is depth-aware.  If the depth", 
+   "notation is missing from the REPORT response, the two RA modules will", 
+   "assume a depth-ignorant server and compose the depth-filtering editor", 
+   "with the editor they are supposed to be driving.", 
+   "This is all about compatibility with pre-1.5 servers under the", 
+   "umbrella of \"sparse directories\" work, specification that portion", 
+   "tracked in issue #2842.", 
+   "With this change, I get the expected collection of items during", 
+   "checkout against a Subversion 1.4.x server for depths of \"empty\",", 
+   "\"files\", \"immediates\", and \"infinity\" using ra_neon, and for \"empty\",", 
+   "\"files\", and \"infinity\" over ra_serf.  Something odd is happening for", 
+   "depth \"immediates\" over ra_serf.", 
+   "* subversion/mod_dav_svn/reports/update.c", 
+   "(update_ctx_t): Add 'depth' member.", 
+   "(maybe_start_update_report): Transmit the calculated requested depth", 
+   "back to the client.", 
+   "(dav_svn__update_report): Populate the new context baton 'depth'", 
+   "member with the calculated requested depth.", 
+   "* subversion/libsvn_ra_neon/fetch.c", 
+   "(report_baton_t): Add 'depth' member.", 
+   "(make_reporter): Squirrel away the requested depth in the", 
+   "report_baton_t's new 'depth' member.", 
+   "(start_element): Check the REPORT response for an actual depth.  If", 
+   "we don't get one, apply the depth-filtering editor.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_context_t): Add 'depth' member.", 
+   "(start_report): Check the REPORT response for an actual depth.  If", 
+   "we don't get one, apply the depth-filtering editor.", 
+   "(make_update_reporter): Populate report baton 'depth' member."
+  ], 
+  "revision_id": "866064"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2007-08-08T16:22:20.957389Z", 
+  "msg": [
+   "Default the number of log message children to zero if the value isn't provided", 
+   "over ra_svn.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_log): Check for an unspecified number, and default nbr_children to", 
+   "zero if so."
+  ], 
+  "revision_id": "866063"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2007-08-08T16:16:19.648724Z", 
+  "msg": [
+   "* www/faq.html:  expand our faq on password-caching a bit."
+  ], 
+  "revision_id": "866062"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2007-08-08T14:36:46.382783Z", 
+  "msg": [
+   "* mod_dav_svn/reports/update.c", 
+   "(dav_svn__update_report): On second thought (that is, by way of followup", 
+   "to r25986), just rename 'depth' to 'requested_depth', and", 
+   "'itemdepth' back to depth."
+  ], 
+  "revision_id": "866061"
+ }
+]

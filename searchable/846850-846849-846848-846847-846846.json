@@ -1,0 +1,105 @@
+[
+ {
+  "author": "", 
+  "date": "2003-08-18T13:12:08.425970Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "846850"
+ }, 
+ {
+  "author": "striker", 
+  "date": "2003-08-18T11:01:03.023875Z", 
+  "msg": [
+   "Temporary revert of rev 6708.  See issue #1477: 'Failure to correctly", 
+   "locate db4' for details.", 
+   "* Makefile.in [reverted]", 
+   "Remove SVN_DB_INCLUDES from INCLUDES, we don't use it anymore.", 
+   "Stop giving SVN_DB_LIBS a value.", 
+   "* configure.in [reverted]", 
+   "Stop substituting SVN_DB_LIBS and SVN_DB_INCLUDES.  Update the help", 
+   "text.", 
+   "* build/ac-macros/berkeley-db.m4 [reverted]", 
+   "(SVN_LIB_BERKELEY_DB): Rewrite to make use of apu-config to find", 
+   "Berkeley DB.  Update helptext for --with-berkeley-db.", 
+   "(SVN_LIB_BERKELEY_DB_TRY): Loose an argument.  The name of the", 
+   "lib is now extracted from 'apu-config --libs'.  Set CPPFLAGS", 
+   "as provided by apr-util aswell."
+  ], 
+  "revision_id": "846849"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2003-08-18T09:31:40.188889Z", 
+  "msg": [
+   "Add a node 'kind' member to the svn_fs_dirent_t structure, and pay the", 
+   "cost of populating this member up-front.  Almost all callers of", 
+   "svn_fs_dir_entries() immediately query for the node kind of every", 
+   "entry anyway, and the cost should be cheaper inside the API than if we", 
+   "are constantly re-entering the API.", 
+   "Perhaps the purest test of this cost trade-off is the 'svnlook tree'", 
+   "command, which is essentially just a recursive listing based on", 
+   "svn_fs_dir_entries() (which used to also query the entry kind to know", 
+   "whether or not the entry was recurse-able).  This change cut run-times", 
+   "of 'svnlook tree' on a copy of the Subversion repository for me to", 
+   "between 1/4 and 1/2 of the original time.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_dirent_t): Add 'kind' member.", 
+   "* subversion/libsvn_fs/dag.c", 
+   "(get_dir_entries): Init a dirent's 'kind' member to svn_node_unknown.", 
+   "* subversion/libsvn_fs/dag.h", 
+   "(svn_fs__dag_dir_entries): Add comment about the dirent's not having", 
+   "their 'kind' fields filled in.", 
+   "* subversion/libsvn_fs/tree.c", 
+   "(struct node_kind_args): Lose 'root' and 'path', add 'fs' and 'id'.", 
+   "(txn_body_node_kind): Now call svn_fs__dag_get_node() instead of get_dag().", 
+   "(node_kind): New.", 
+   "(svn_fs_check_path, svn_fs_is_dir, svn_fs_is_file): Now use node_kind().", 
+   "(svn_fs_dir_entries): Populate the 'kind' field of the dirents", 
+   "retrieved from the DAG layer.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_dir): Lose unnecessary svn_fs_is_dir() call.", 
+   "* subversion/svnlook/main.c", 
+   "(print_tree): Add 'is_dir' flag.  Lose unnecessary kind-check calls.", 
+   "(do_tree): Update call to print_tree().", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(dav_svn_deliver, dav_svn_do_walk): Lose unnecessary kind-check calls.", 
+   "* subversion/tests/fs-helpers.c", 
+   "(get_dir_entries): Lose unnecessary call to svn_fs_is_dir().", 
+   "* subversion/libsvn_repos/delta.c", 
+   "(delta_dirs): Remove unnecessary svn_fs_is_dir() and", 
+   "svn_fs_check_path() calls.", 
+   "(add_file_or_dir, replace_file_or_dir): Add 'tgt_kind', and lose", 
+   "calls to svn_fs_is_dir().", 
+   "(svn_repos_dir_delta): Update calls to add_file_or_dir() and", 
+   "replace_file_or_dir().", 
+   "* subversion/svnserve/serve.c", 
+   "(get_dir): Lose unnecessary kind-check calls."
+  ], 
+  "revision_id": "846848"
+ }, 
+ {
+  "author": "dws", 
+  "date": "2003-08-18T04:28:44.911971Z", 
+  "msg": [
+   "* packages/rpm/redhat-8+/subversion.spec : The subversion-server depends on", 
+   "the httpd package at install/run-time.", 
+   "Suggested by: Ian Burrell <ian@znark.com>"
+  ], 
+  "revision_id": "846847"
+ }, 
+ {
+  "author": "clkao", 
+  "date": "2003-08-17T19:49:23.528759Z", 
+  "msg": [
+   "Fix compiling swigutil_pl.c for threaded Perl.", 
+   "* swigutil_pl.c", 
+   "(perl_callback_thunk): Stop using call_{method,sv} as symbols, as", 
+   "they might be defined. Use an enum flag instead. All callers", 
+   "changed.", 
+   "(convert_array): rename parameter `convert' to", 
+   "`converter_func'. Avoid symbol collisions."
+  ], 
+  "revision_id": "846846"
+ }
+]

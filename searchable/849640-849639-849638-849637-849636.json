@@ -1,0 +1,105 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-04-29T20:29:21.598588Z", 
+  "msg": [
+   "In the fs-abstraction branch, try using a rename instead of a file", 
+   "copy to move the rev and rev-props files into their file locations.", 
+   "Also, on Unix, match the permissions of the new files to those of the", 
+   "old rev file, so that FSFS repositories don't experience umask", 
+   "problems.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(fold_change): Reflow a long line, while we're here.", 
+   "(move_into_place): Implement the logic of permission-setting and", 
+   "rename-with-fallback-to-copy.", 
+   "(svn_fs_fs__commit): Construct the old rev filename in addition to", 
+   "the new one; use move_into_place instead of copying files."
+  ], 
+  "revision_id": "849640"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-04-29T19:59:37.621791Z", 
+  "msg": [
+   "Issue #1093:  for clarity, rename some symbols in path-tracing code.", 
+   "* libsvn_client/ra.c", 
+   "(struct log_receiver_baton): renamed from log_message_baton.", 
+   "(svn_client__repos_locations, svn_client__repos_locations): lmb->lrb."
+  ], 
+  "revision_id": "849639"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2004-04-29T17:59:28.328374Z", 
+  "msg": [
+   "Follow up to r9560:", 
+   "* www/project_links.html: Mention that the PushOk SCC plugin is not", 
+   "Open Source software."
+  ], 
+  "revision_id": "849638"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-29T16:41:31.369308Z", 
+  "msg": [
+   "In the fs-abstraction branch, store the copied from path and revision", 
+   "in the changed-path information.  Cache this when svn_fs_paths_changed", 
+   "is called, and then use the cache in svn_fs_copied_from.  For a fresh", 
+   "mozilla import, this improves 'log -v' times by a factor of 20x.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(change_t): Add fields to the internal change structure that record", 
+   "the copyfrom path and revision of a change.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_root_data_t): Add an apr_hash_t to remember the copied_from", 
+   "information found during paths_changed.", 
+   "(add_change): Accept a path and revision to store as the copied_from", 
+   "information for this change.", 
+   "(fs_change_node_prop, undelete_change, fs_make_dir, fs_delete_node,", 
+   "fs_make_file, apply_textdelta, apply_text): Call add_change with no", 
+   "copy source.", 
+   "(copy_helper): Call add_change with the copy's source information.", 
+   "(fs_copied_from): Attempt to look up the path in the cache before", 
+   "defaulting to the DAG layer.", 
+   "(fs_paths_changed): Pass the copyfrom cache to", 
+   "svn_fs_fs__paths_changed.", 
+   "(make_root): Allocate space for the copyfrom cache when making a new", 
+   "root.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__paths_changed): Accept a hash to store cached copy", 
+   "source information.", 
+   "(svn_fs_fs__add_change): Accept a copy source to write into the", 
+   "changed path information.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(fold_change): Accept a hash of cached copy source information and", 
+   "keep it up to date when folding in new change entries.", 
+   "(read_change): Read in the copy source information as part of the", 
+   "change entry.", 
+   "(fetch_all_changes, svn_fs_fs__paths_changed): Accept an optional", 
+   "hash to store copy source information.", 
+   "(svn_fs_fs__add_change): Write the copy source information as part", 
+   "of a change entry.", 
+   "(write_final_changed_path_info): Copy the copy source information", 
+   "from the temporary changes file into the permanent rev file."
+  ], 
+  "revision_id": "849637"
+ }, 
+ {
+  "author": "jpieper", 
+  "date": "2004-04-29T04:49:30.026544Z", 
+  "msg": [
+   "In the fs-abstraction branch, use the APR_BUFFERED flag for all", 
+   "opening of readable files in libsvn_fs_fs.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__open, get_youngest, open_and_seek_revision,", 
+   "open_and_seek_transaction, open_txn_node_rev,", 
+   "svn_fs_fs__rev_get_root, svn_fs_fs__txn_changes_fetch,", 
+   "svn_fs_fs__paths_changed, read_next_ids, get_next_revision_ids,", 
+   "write_final_changed_path_info, svn_fs_fs__get_uuid): Use", 
+   "APR_BUFFERED when opening files.", 
+   "(get_root_changes_offset): svn_io_file_seek does not seem to work", 
+   "correctly with negative relative offsets when APR_BUFFERED is", 
+   "used, so instead seek to the end, then move back absolutely."
+  ], 
+  "revision_id": "849636"
+ }
+]

@@ -1,0 +1,108 @@
+[
+ {
+  "author": "elemings", 
+  "date": "2008-06-27T21:10:30.057016Z", 
+  "msg": [
+   "2008-06-27  Eric Lemings <eric.lemings@roguewave.com>", 
+   "STDCXX-958", 
+   "* include/rw/_ref_wrap.h: Convert internal namespace members to", 
+   "standard namespace members (at least until such a time when", 
+   "internal namespace members are actually needed).", 
+   "(reference_wrapper): Implemented basic constructors, operators,", 
+   "and accessors.  (No specializations, function inheritance,", 
+   "result_of, or invocation operators yet.)", 
+   "(ref, cref): Also implemented.", 
+   "* include/functional: Include <rw/_ref_wrap.h> header.", 
+   "(Internal header contains C++0x guards so it only gets compiled", 
+   "for C++0X code.)"
+  ], 
+  "revision_id": "672395"
+ }, 
+ {
+  "author": "mcconne", 
+  "date": "2008-06-27T21:04:19.674501Z", 
+  "msg": [
+   "GERONIMODEVTOOLS-404 Clean up appclient dependency sections in the deployment plan editors -- Thanks to BJ Reed for this patch !!"
+  ], 
+  "revision_id": "672394"
+ }, 
+ {
+  "author": "johnh", 
+  "date": "2008-06-27T21:01:20.315358Z", 
+  "msg": [
+   "Cleaned up gadgets.rpc library implementation, and implemented fast IE transport layer.", 
+   "Credit:", 
+   "Joseph Schorr (jschorr@google.com) and I implemented this together, but he", 
+   "really did all the hard work, as well as developing the NIX technique's", 
+   "fundamentals. Huge thanks to Joseph!", 
+   "Details:", 
+   "* Created a new relayChannel for Firefox frameElement technique,", 
+   "making its implementation more linear to read.", 
+   "* Consolidated all transport-specific code in setupChannel(), setupFrame(),", 
+   "and callX(), where X = relay type. This refactoring makes setup and use", 
+   "of each transport more clear, and makes it possible in later revisions", 
+   "to separate out each method as its own class. In theory, if we can trust", 
+   "things like User-Agent headers, we can use this to reduce rpc.js code", 
+   "size significantly by only including the needed transport(s).", 
+   "* Implemented \"NIX\" - Native IE XDC. This method exploits the fact", 
+   "that in IE6 and IE7 the window.opener property can be both set and", 
+   "read across domain boundaries for an IFRAME, and that any object", 
+   "can be passed through it. In particular, functions implementing", 
+   "message passing can be passed. These can't be JS functions, however,", 
+   "since those can leak sender context. So, VBScript (COM) objects", 
+   "wrapping these are passed to maintain context isolation.", 
+   "- Requires for IE6/7 that rpc.js be included in the container", 
+   "at load time, not dynamically. TODO added to consider detecting", 
+   "whether dynamic loading is happening (at which point we should", 
+   "fall back to IFPC).", 
+   "- Message channel handshake *and* message passing validated", 
+   "using authToken, as with other channels.", 
+   "- Impl requires that gadget call container first - else IFPC", 
+   "is used. This is the same as the frameElement technique. We", 
+   "could add a setInterval()-based initialization routine later", 
+   "if needed. To date, the only gadgets.rpc calls made from", 
+   "container to gadget without gadget to container first are", 
+   "in theory pubsub messages.", 
+   "- Extensive documentation on this technique and the others", 
+   "added to the comments, since they're stripped out in the", 
+   "majority case.", 
+   "* Implemented quick-and-dirty performance testing page verifying", 
+   "the library works and giving basic performance metrics.", 
+   "This needs to be improved! But does the trick for now...", 
+   "Testing/Data:", 
+   "Library verified on the following browsers with the RPC test page. For each,", 
+   "a \"bandwidth\" measure was taken by averaging the results of 6 G2C and C2G runs", 
+   "with 100 messages being passed of 1K apiece. Units are 1K messages/sec.", 
+   "The \"latency\" value is the average amount of time taken, over 6 G2C and C2G runs,", 
+   "to send 1 1K message. Happily, for all browsers save Safari (soon due to get", 
+   "window.postMessage), latency is around or below time required to achieve", 
+   "a cross-domain call without user-perceived delay.", 
+   "* Firefox 3 (WPM) - bandwidth: 88 kB/sec; latency: 18ms.", 
+   "* Firefox 2 (FE)  - bandwidth: 80 kB/sec; latency: 15ms.", 
+   "* Opera 9   (WPM) - bandwidth: 85 kB/sec; latency: 7ms.", 
+   "* IE6       (NIX) - bandwidth: 64 kB/sec; latency: 18ms.", 
+   "* IE7       (NIX) - bandwidth: 64 kB/sec; latency: 22ms.", 
+   "* Safari 3 (IFPC) - bandwidth: ?6-8kB/sec; latency: ?100-200ms.", 
+   "- Safari is somewhat flaky with the RPC test page, before", 
+   "and after the rpc.js change. Multiple messages seem to", 
+   "confuse it from time to time."
+  ], 
+  "revision_id": "672393"
+ }, 
+ {
+  "author": "hindessm", 
+  "date": "2008-06-27T21:00:35.466437Z", 
+  "msg": [
+   "Fix more 32-bit pointer to/from 64-bit integer casting warnings."
+  ], 
+  "revision_id": "672392"
+ }, 
+ {
+  "author": "hindessm", 
+  "date": "2008-06-27T20:54:30.443593Z", 
+  "msg": [
+   "Compiler warning - function prototype should match the required signature."
+  ], 
+  "revision_id": "672391"
+ }
+]

@@ -1,0 +1,80 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2007-03-20T00:05:40.995339Z", 
+  "msg": [
+   "On the sparse-directories branch: Bring up to date with trunk at", 
+   "r23905.  This fixes diff and depth tests, and 1 of 7 stat test", 
+   "failures."
+  ], 
+  "revision_id": "863985"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-03-19T23:53:34.601133Z", 
+  "msg": [
+   "Fix for issue #1789: when writing large diffs to the console on Windows its", 
+   "buffer may run out of space and writing will fail. This change will now split", 
+   "the hunks in parts of 30Kb if the hunk is to large to fit in the console buffer.", 
+   "Patch by: ehu", 
+   "me", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io_file_write_full): when writing to a file (or the console) fails with", 
+   "an 'out of memory' error, split the hunks in smaller parts and try again."
+  ], 
+  "revision_id": "863984"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-03-19T23:32:55.546895Z", 
+  "msg": [
+   "Revert r23908. I misunderstood vgeorgescu."
+  ], 
+  "revision_id": "863983"
+ }, 
+ {
+  "author": "ehu", 
+  "date": "2007-03-19T23:13:02.815427Z", 
+  "msg": [
+   "Now that we have a private header area, move a private function there.", 
+   "* subversion/include/private/svn_error_private.h", 
+   "(svn_error__locate): Move to this new file from the public svn_error.h.", 
+   "* subversion/include/svn_error.h", 
+   "(svn_error__locate): Remove definition.", 
+   "(includes): Include new private file at the bottom. This imports", 
+   "a function used in the macro-definitions.", 
+   "Suggested by: dlr", 
+   "vgeorgescu"
+  ], 
+  "revision_id": "863982"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-03-19T23:11:04.575542Z", 
+  "msg": [
+   "Reverted the windows path handling code added to fix issue #1711 and #2556.", 
+   "It seems that most path functions are used to handle both uri's and local", 
+   "directories. While that's no problem on posix platforms, on windows an uri", 
+   "'c:hi/test' should be handled different than the directory 'c:hi/test'.", 
+   "More info on the dev mailing list archive:", 
+   "http://svn.haxx.se/dev/archive-2007-03/0385.shtml", 
+   "Reverted revs: r23761, r23757, r22553, r22544, r22542, r22458, r22381,", 
+   "r22349, r21621, r21591 and r21369.", 
+   "* subversion/libsvn_subr/path.c: remove all windows-path handling specific", 
+   "modifications to the existing path functions.", 
+   "(svn_path_is_root): kept this function for now, as it's already used to", 
+   "fix issue elsewhere.", 
+   "* subversion/include/svn_path.h:", 
+   "(svn_path_is_absolute): removed function", 
+   "* subversion/tests/libsvn_subr/path-test.c: remove all windows-path handling", 
+   "specific tests for the path functions.", 
+   "* subversion/tests/cmdline/update_tests.py:", 
+   "(update_wc_on_windows_drive): test is now failing, mark as XFail", 
+   "* subversion/tests/cmdline/svnadmin_tests.py:", 
+   "(verify_windows_paths_in_repos): test is now passing", 
+   "* subversion/tests/cmdline/basic_tests.py:", 
+   "(windows_paths_in_repos): test is now passing"
+  ], 
+  "revision_id": "863981"
+ }
+]

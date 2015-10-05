@@ -1,0 +1,54 @@
+[
+ {
+  "author": "werner", 
+  "date": "2007-08-16T13:40:42.207197Z", 
+  "msg": [
+   "Add an additional test case to check the enhancement", 
+   "to use digest password type for UsernameToken signature."
+  ], 
+  "revision_id": "566710"
+ }, 
+ {
+  "author": "hansbak", 
+  "date": "2007-08-16T13:40:08.097046Z", 
+  "msg": [
+   "correction on Revision: 566696 as spotted by Jacopo, thanks."
+  ], 
+  "revision_id": "566709"
+ }, 
+ {
+  "author": "werner", 
+  "date": "2007-08-16T13:39:29.098368Z", 
+  "msg": [
+   "Enhance to use digest password type for UsernameToken signature, add", 
+   "functions and enhancements to handle it on the server side as well."
+  ], 
+  "revision_id": "566708"
+ }, 
+ {
+  "author": "jkf", 
+  "date": "2007-08-16T13:33:00.785228Z", 
+  "msg": [
+   "Pr 43016 improved error reporting on nothing to compress."
+  ], 
+  "revision_id": "566707"
+ }, 
+ {
+  "author": "woonsan", 
+  "date": "2007-08-16T13:24:51.463281Z", 
+  "msg": [
+   "I did some performance testings today on parallel rendering and fixed some bugs.", 
+   "With JMeter, I tested sequential mode, mixed mode and parallel mode by 50, 100, 200, 300, 400 concurrent threads.", 
+   "Some errors were detected during the testings and they were reasoned as follows:", 
+   "- It is problematic for worker monitor to pop two items to set one job. So, items of a job must be popped out in a thread-safe way.", 
+   "- The java.util.ConcurrentModificationException was thrown because the shared request object was not synchronized. ServletPortletInvoker should synchronize the servletRequest object during setting necessary attributes in its invoke() method.", 
+   "- The FIFOQueue may return null. Even if the size of the queue is greater than zero, the queue can return null because the item can be popped by other thread. Therefore, WorkerMonitorImpl should check if the popped job is null or not.", 
+   "- RenderingJobImpl should also synchronize the servlet request object before setting an attribute in parallel mode.", 
+   "- The #235 line of ServletPortletInvoker is like the following:", 
+   "servletRequest.setAttribute(ContainerConstants.PORTAL_CONTEXT, requestContext.getRequest().getContextPath());", 
+   "In the above code, requestContext.getRequest() can be null in parallel mode. So the line can be replaced with the following line:", 
+   "servletRequest.setAttribute(ContainerConstants.PORTAL_CONTEXT, ((HttpServletRequest) servletRequest).getRequest().getContextPath());"
+  ], 
+  "revision_id": "566706"
+ }
+]

@@ -1,0 +1,99 @@
+[
+ {
+  "author": "vines", 
+  "date": "2011-10-14T13:42:35.415459Z", 
+  "msg": [
+   "Resolves Accumulo-26 - we neglected org/apache for a portion of the directory names."
+  ], 
+  "revision_id": "1183360"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2011-10-14T13:40:49.248061Z", 
+  "msg": [
+   "fix for: https://issues.apache.org/jira/browse/AMQ-1132", 
+   "Remove the dependency on the ActiveIO test.jar."
+  ], 
+  "revision_id": "1183359"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-10-14T13:40:29.561054Z", 
+  "msg": [
+   "Auto-merge incoming deletions into locally moved directories on update.", 
+   "Nodes which weren't modified post-move, and which are deleted at their", 
+   "pre-move location during an update, are now automatically scheduled for", 
+   "deletion at their post-move location, instead of becoming tree-conflict", 
+   "victims. However, incoming deletions still cause a tree conflict at the", 
+   "pre-move location if they want to delete nodes which were modified post-move.", 
+   "Moved-here directories within which the only post-move modifications are", 
+   "deleted children are not considered modified and will be deleted.", 
+   "(This exposes a bug where deleting a moved-here node doesn't transform", 
+   "the move into a normal delete at the pre-move location. This problem", 
+   "will be fixed separately.)", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_reason_t): Add svn_wc_conflict_reason_moved_away_and_edited.", 
+   "This new reason is needed so we can later differentiate the TC case handled", 
+   "by this commit from pure move vs. move conflicts (i.e. where incoming and", 
+   "local moves do not agree).", 
+   "* subversion/tests/cmdline/tree_conflict_tests.py", 
+   "(d_dels): Seperate out moves into ...", 
+   "(d_moves): .. this, so tests can adjust their expectations for moves", 
+   "and deletions differently.", 
+   "(up_sw_dir_mod_onto_del, up_sw_dir_del_onto_del): As a result of the above", 
+   "change, these two tests no longer expect a tree conflict for incoming", 
+   "deletions into locally moved directories.", 
+   "(up_sw_dir_del_onto_mod, up_sw_dir_del_onto_del,", 
+   "(merge_dir_mod_onto_not_dir): Make sure test expectations do not change", 
+   "yet in these test cases by adding d_moves to d_dels.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_moved_dir_leaf_del, update_moved_dir_edited_leaf_del): New tests.", 
+   "These verify the new behaviour for files which were modified post-move.", 
+   "Tests involving directories modifed post-move still need to be added,", 
+   "but some manual testing has confirmed that they work, too.", 
+   "* subversion/svn/tree-conflicts.c", 
+   "(map_conflict_reason_h, map_conflict_reason_x): Add entries for", 
+   "svn_wc_conflict_reason_moved_away_and_edited.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(dir_baton, make_dir_baton): Add MOVED_TO_PATH, for tree-conflict detection.", 
+   "(open_root, open_directory): Check if the directory was moved away, and", 
+   "if so store the moved-to path in the dir baton. Also let", 
+   "check_tree_conflict() know that the node was moved-away, so it can", 
+   "make an informed decision about whether a conflict should be flagged.", 
+   "(modcheck_baton): Add IS_COPY.", 
+   "(modcheck_callback): If IS_COPY is TRUE, only take post-copy modifications", 
+   "into account, but not the fact that the node was copied/moved here.", 
+   "(node_has_local_mods): Add IS_COPY parameter, same purpose as above.", 
+   "(create_tree_conflict, open_directory, open_file): Make assertions", 
+   "recognize svn_wc_conflict_reason_moved_away_and_edited.", 
+   "(check_tree_conflict): Do not flag a tree conflict if an incoming delete", 
+   "maps onto a moved node which was not modified post-move.", 
+   "Update an assertion to include svn_wc_conflict_reason_moved_away_and_edited.", 
+   "(delete_entry): Handle moved-away nodes such that check_tree_conflict()", 
+   "doesn't flag them as a tree-conflict victim if applicable. If an", 
+   "incoming delete of a moved-away node does not cause a tree-conflict,", 
+   "schedule the node for deletion at its post-move location, and use", 
+   "the node's post-move path in notifications.", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__conflict_reason_map): Add map entry for", 
+   "svn_wc_conflict_reason_moved_away_and_edited."
+  ], 
+  "revision_id": "1183358"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2011-10-14T13:39:11.701996Z", 
+  "msg": [
+   "empty shell for maven project holding archives for inteagrtion tests"
+  ], 
+  "revision_id": "1183357"
+ }, 
+ {
+  "author": "rwesten", 
+  "date": "2011-10-14T13:38:26.342236Z", 
+  "msg": [
+   "fixes STANBOL-328: ResourceLoader has now an option to fail on the first Error. The RDFIndexingSource activates this feature when loading RDF files"
+  ], 
+  "revision_id": "1183356"
+ }
+]

@@ -1,0 +1,104 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:36.249693Z", 
+  "msg": [
+   "Multithreaded Compactions", 
+   "Summary:", 
+   "we're seeing that when processing any major", 
+   "compactions takes much longer than flushes, our StoreFile", 
+   "size gets very large while processing any majors. The immediate fix is to", 
+   "rolling split the regions, however a long-term fix is to", 
+   "have multiple compaction threads to keep storefiles low when one thread", 
+   "needs to process a major.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestCompactSelection", 
+   "Reviewed By: kannan", 
+   "Reviewers: jgray, dhruba, aaiyer, kannan", 
+   "Commenters: jgray", 
+   "CC: hbase@lists, jgray, nspiegelberg, kannan", 
+   "Differential Revision: 225879"
+  ], 
+  "revision_id": "1181535"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:27.322829Z", 
+  "msg": [
+   "StoreFile Level Compaction Locking", 
+   "Summary:", 
+   "Multithreaded compactions (HBASE-1476) will solve the problem", 
+   "of major compactions clogging high-priority minor compactions. However,", 
+   "there is still a problem here. Since compactions are store-level, the", 
+   "store undergoing major compaction will have it's storefile count", 
+   "increase during the major. We really need a way to allow multiple", 
+   "outstanding compactions per store. compactSelection() should", 
+   "lock/reserve the files being used for compaction. This will also allow", 
+   "us to know what we're going to compact when inserting into the", 
+   "CompactSplitThread and make more informed priority queueing", 
+   "decisions.", 
+   "Test Plan:", 
+   "- mvn test -Dtest=TestCompaction", 
+   "- mvn test (ongoing)", 
+   "Reviewed By: kranganathan", 
+   "Reviewers: kannan, kranganathan, liyintang, jgray", 
+   "Commenters: kannan", 
+   "CC: hbase@lists, nspiegelberg, kranganathan, kannan", 
+   "Differential Revision: 238799"
+  ], 
+  "revision_id": "1181534"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:18.808351Z", 
+  "msg": [
+   "Comparing the current data in a ZooKeeper node with what was attempted to be written instead of the JVM id in RecoverableZooKeeper", 
+   "Summary:", 
+   "A one-line fix for a bug in D242017, where the data read from a zk node was", 
+   "compared to the JVM id instead of the data that was attempted to be written in", 
+   "RecoverableZooKeeper.", 
+   "Test Plan:", 
+   "Run on a dev cluster with HBaseTest. Start two masters, restart one master,", 
+   "make sure that exactly one master is active.", 
+   "Reviewed By: liyintang", 
+   "Reviewers: liyintang, kannan", 
+   "CC: liyintang", 
+   "Differential Revision: 242102"
+  ], 
+  "revision_id": "1181533"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:14.678153Z", 
+  "msg": [
+   "Better handling of \"node exists\" and \"no node\" exceptions in the recoverable ZooKeeper", 
+   "Summary:", 
+   "In Task#536980 we noticed a race condition where a master got restarted, the", 
+   "backup master came up, and the original master came up as well, resulting in two", 
+   "active masters. We traced this back to the RecoverableZooKeeper wrapper, which", 
+   "assumes that if a node creation operation results in a \"node exists\" exception,", 
+   "the operation is successful, while in fact the other client grabbed the", 
+   "ephemeral node. This fix adds a verification of the node contents and re-throws", 
+   "the NODEEXISTS KeeperException if the data does not match.", 
+   "Test Plan:", 
+   "Start a test cluster. Start two masters. Kill the active master and restart", 
+   "immediately. Verify that both masters compete for the ZK node, but only one", 
+   "master becomes active.", 
+   "Reviewed By: liyintang", 
+   "Reviewers: liyintang, kannan, kranganathan", 
+   "CC: hbase@lists, , liyintang", 
+   "Revert Plan:", 
+   "OK", 
+   "Differential Revision: 242017"
+  ], 
+  "revision_id": "1181532"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-10-11T02:17:08.437108Z", 
+  "msg": [
+   "reduce default logging level"
+  ], 
+  "revision_id": "1181531"
+ }
+]

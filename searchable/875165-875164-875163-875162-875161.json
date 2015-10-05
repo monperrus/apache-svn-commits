@@ -1,0 +1,94 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-01-08T23:04:16.660950Z", 
+  "msg": [
+   "Final tweaks (for now).", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(LOCKS): new table to hold info about locks in the repository", 
+   "(I_LOCKS): removed", 
+   "(CHANGELIST): allow wc_id to be NULL", 
+   "(LOCKS): new table to cache repository locks"
+  ], 
+  "revision_id": "875165"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-08T22:39:45.177939Z", 
+  "msg": [
+   "Continued changes to the schema.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(NODE): renamed to ...", 
+   "(BASE_NODE): ... this to indicate this table contains *only* nodes in", 
+   "the BASE tree. remove the working_size field (now in ACTUAL_NODE).", 
+   "(I_PATH, I_PARENT, I_LOCKS): update table name", 
+   "(NODE_CHANGES): renamed to ...", 
+   "(WORKING_NODE): ... this to indicate nodes in the WORKING tree. add a", 
+   "wc_id/local_relpath pair to locate nodes. remove the status field, as", 
+   "we can always derive the status (add doc for that). rename original_*", 
+   "to copyfrom_*. add moved_from/to to indicate the node is the target of", 
+   "a move operation. remove working_size, and rename new_properties to", 
+   "properties. move conflict_* and prop_reject to ACTUAL.", 
+   "(I_PATH_CHANGES): renamed to ...", 
+   "(I_PATH_WORKING): ... this, and columns updated.", 
+   "(I_NODELIST_CHANGES): removed", 
+   "(ACTUAL_NODE): new table to represent nodes in the ACTUAL tree."
+  ], 
+  "revision_id": "875164"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-01-08T22:25:30.569715Z", 
+  "msg": [
+   "Follow-up to r35088, mark an XFAIL as something that should now pass.", 
+   "* subversion/tests/cmdline/log_tests.py: log_changes_list should now work."
+  ], 
+  "revision_id": "875163"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-01-08T22:00:00.651583Z", 
+  "msg": [
+   "Have 'svn log' take multiple revs options to optimize session usage.", 
+   "Incorporates suggestions from Hyrum and C-Mike.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_log5): New log variant that takes a set of ranges.", 
+   "(svn_client_log4): Deprecate.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_log4): Wrap log5.", 
+   "* subversion/libsvn_client/log.c", 
+   "(limit_receiver_baton_t): Struct for limit receiver.", 
+   "(limit_receiver): Simple receiver to intercept limits when using multiple rev", 
+   "args.", 
+   "(svn_client_log4): Rename to...", 
+   "(svn_client_log5): this; take array of revisions and loop logs; moves some", 
+   "of the checking that the client did into here; optimize session-opening.", 
+   "* subversion/svn/log-cmd.c", 
+   "(svn_cl__log): Prevent -c combined with -r; use svn_client_log5;", 
+   "move manipulation of unspecified ranges into svn_client_log5.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add used_revision_arg.", 
+   "* subversion/svn/main.c", 
+   "(main): Permit log to have multiple revs; set used_revision_arg if 'r' passed.", 
+   "(svn_cl__cmd_table): Update help description for log."
+  ], 
+  "revision_id": "875162"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-01-08T21:29:16.275217Z", 
+  "msg": [
+   "More tweaks to the schema.", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(WCROOT): local_abspath is NOT NULL. we simply will not insert a row if", 
+   "the metadata is stored within the root.", 
+   "(NODE): allow NULL for the wc_id, implying the metadata is at the", 
+   "wcroot. add a parent_id so that we can easily fetch all child nodes of", 
+   "a given node.", 
+   "(I_PATH): update columns for the path-based lookup index", 
+   "(I_NODELIST): renamed to ...", 
+   "(I_PARENT): ... this, and the column fixed."
+  ], 
+  "revision_id": "875161"
+ }
+]

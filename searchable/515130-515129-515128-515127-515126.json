@@ -1,0 +1,105 @@
+[
+ {
+  "author": "gnodet", 
+  "date": "2007-03-06T14:19:31.804251Z", 
+  "msg": [
+   "SM-866: wsn-http-binding fails to start"
+  ], 
+  "revision_id": "515130"
+ }, 
+ {
+  "author": "sppatel", 
+  "date": "2007-03-06T14:17:25.767731Z", 
+  "msg": [
+   "update packaging for additional features"
+  ], 
+  "revision_id": "515129"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-03-06T14:15:21.022577Z", 
+  "msg": [
+   "QPID-405 Reduce excess output during tests"
+  ], 
+  "revision_id": "515128"
+ }, 
+ {
+  "author": "ritchiem", 
+  "date": "2007-03-06T14:12:47.079850Z", 
+  "msg": [
+   "QPID-403 QPID-346 QPID-355 QPID-386 QPID-389 Updates to fix Transactional Rollback.", 
+   "QPID-346  Message loss after rollback\\recover", 
+   "QPID-355  Closing a consumer does not ensure messages delivery will stop for that subscription", 
+   "QPID-386  Updated Transactional Tests to cover underlying AMQP/Qpid state.", 
+   "QPID-389  Prefetched message are not correctly returned to the queue", 
+   "QPID-403  Implement Basic.Reject", 
+   "Broker", 
+   "UnacknowledgedMessage - Added toString for debug", 
+   "UnacknowledgedMessageMapImpl - Removed resendMessages method as all sending should go via DeliveryManager and Subscription.", 
+   "AMQChannel - Updated resend and requeue methods so they do not directly write messages to a subscriber. This was violating the suspension state.", 
+   "- Used a local non-transactional context to requeue messages as the internal requeuing of messages on the broker should not be part of any client transaction.", 
+   "- Maked messages as resent.", 
+   "- Removed warnings from IDE about missing JavaDoc text etc.", 
+   "BasicAckMethodHandler - Added debugging", 
+   "BasicRecoverMethodHandler - Removed session from the resend call.", 
+   "BasicRejectMethodHandler - Initial implementation. Hooks left for possible 'resend' bit.", 
+   "ChannelCloseHandler - Fixed bug where channel wasn't marked as fully closed on reception of a close from the client.", 
+   "TxRollbackHandler - Removed session from resend call.", 
+   "AMQMinaProtocolSession - Fixed bug where channel was marked as awaiting closure before it had actually been closed. This causes problems as the close looks up the channel by id again which will return null after it has been marked as awaiting closure.", 
+   "AMQMessage - Initial implementation of Rejection. Currently inactive in hasInterest() as we are miss-using reject to requeue prefetched messages from the client.", 
+   "AMQQueue - Removed debug method as it made reading the log very difficult as all the logs had the same line number", 
+   "ConcurrentSelectorDeliveryManager - Fixed clearAllMessages() as it didn't actually remove the messages.", 
+   "- Fixed bad logic in getNextMessage when using null subscriber. (as done by clearAllMessages)", 
+   "- Added more logging messages. Made more frequent logging a trace value.", 
+   "- Added debugIdentity() method to reduce over head in calculating standard log prefix.", 
+   "- Allowed messages to be added to the front of the queue.", 
+   "- Added currentStatus() to an overview of the queue's current state.", 
+   "SubscriptionImpl - Updated to handle closure correctly (QPID-355)", 
+   "-Updated the deliver method so it doesn't use a try->finally to do msg.setDeliveredToConsumer() as this would be done even in the event of an error.", 
+   "- Created an additional logger to log suspension calls rather than through the SI logger which logs a lot of detail.", 
+   "Client", 
+   "pom.xml - Excluded older version of log4j that commons-collections exposes.", 
+   "AMQSession - Added ability for dispatcher to start in stopped state.", 
+   "- Added dispatcher logger", 
+   "- Added checks around logging", 
+   "- Added message rejection if the dispatcher receives a message that it doesn't have a consumer for.", 
+   "- Updated message rejection to allow the dispatcher to perform the rejection if running this ensures that all queued messages are processed correctly and rejection occurs in order.", 
+   "- rollback() before calling rollback all pending queued messages must be rejected as rollback will clear unacked map which the rejects caused by rollback() will need.", 
+   "- fixed closedProducersAndConsumers so that it will rethrow any JMS Exception", 
+   "- recover() as for rollback() the rejects need to be done before the Recover Call to the broker.", 
+   "- Allowed delclareExchange to be done synchronously programatically", 
+   "- Updated confirmConsumerCancelled to use the dispatcher to perform the clean up. This required the creation of the dispatcher in stopped mode so that it does not start and message attempted to be delivered while the subscriber is being cancelled.", 
+   "BasicMessageConsumer - Updated close not to perform the deregistration. This is done in via BasicCancelOkMethodHandler", 
+   "- Added guards on logging", 
+   "- Record all messages that have been received so they can be rejected if rollback occurs. so had to change impl of acknowledgeLastDelivered.", 
+   "- Updated Rollback to initially reject all received messages that are still unAcked.", 
+   "- Added a recursive call should the queue not be empty at the end of the rollback.. with a warning.", 
+   "BasicCancelOkMethodHandler - White space changes to meet style guide. Added guard on logging.", 
+   "UnprocessedMessage - White space changes to meet style guide.", 
+   "StateWaiter - Added comment about timeout bug.", 
+   "FlowControllingBlockingQueue - Tidied imports", 
+   "RecoverTest - Updated as declareExchange is now Synchronous", 
+   "ChannelCloseTest - added guard on logging", 
+   "MessageRequeueTest - Added to better test underlying AMQP/Qpid state QPID-386", 
+   "StreamMessageTest - Updated as declareExchange is now Synchronous", 
+   "CommitRollbackTest - added Additional test case to ensure prefetch queue is correctly purged.", 
+   "TransactedTest - Added logging and additional tests.", 
+   "Cluster", 
+   "SimpleClusterTest - updated in line with AMQSession.delcareExchange changes", 
+   "Common", 
+   "AMQConstant - Fixed error code 'not allowed' should be 530 not 507.", 
+   "ConcurrentLinkedMessageQueueAtomicSize -  Updated to beable to get the size of messages on the 'head' queue along with additional debug", 
+   "Systests", 
+   "ReturnUnroutableMandatoryMessageTest - Updated as declareExchange is now Synchronous"
+  ], 
+  "revision_id": "515127"
+ }, 
+ {
+  "author": "jbq", 
+  "date": "2007-03-06T14:09:45.069051Z", 
+  "msg": [
+   "WICKET-193 IndexedParamUrlCodingStrategy does not decode PageParameters"
+  ], 
+  "revision_id": "515126"
+ }
+]

@@ -1,0 +1,68 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2002-12-03T18:46:01.113058Z", 
+  "msg": [
+   "APR-ize the socket and process-forking code.", 
+   "* include/svn_error_codes.h (SVN_ERR_RA_SVN_CONNECTION_FAILURE): No", 
+   "longer needed.  Renumber the other error codes since there's no real", 
+   "usage yet; ordinarily that wouldn't be kosher.", 
+   "* include/svn_ra_svn.h, libsvn_ra_svn/marshal.c, libsvn_ra_svn/ra_svn.h", 
+   "(svn_ra_svn_conn_st): Change sock to an apr_socket_t *.", 
+   "(svn_ra_svn_create_conn): Accept an apr_socket_t * instead of an int.", 
+   "* libsvn_ra_svn/client.c", 
+   "(parse_url): No need to htons the port any more.", 
+   "(make_connection): APR-ize, and take an apr_socket_t **.", 
+   "(cleanup_conn): No longer needed; apr_socket_t has its own cleanup.", 
+   "(ra_svn_open): Adjust socket type and punt cleanup.", 
+   "(ra_svn_close): APR-ize.", 
+   "* libsvn_ra_svn/marshal.c", 
+   "(writebuf_flush, writebuf_write, readbuf_fill, readbuf_read): APR-ize.", 
+   "* svnserve/main.c", 
+   "(main): APR-ize socket stuff.  Don't detach until just before the", 
+   "main loop, so that the user can see errors from binding the server", 
+   "socket.  Also APR-ize process forking.  If APR_HAS_FORK isn't", 
+   "defined, serve one connection at a time; it's better than nothing."
+  ], 
+  "revision_id": "844045"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-12-03T18:17:49.502805Z", 
+  "msg": [
+   "First step in Issue 830 -- disallow the bogosity that results in", 
+   "missing data.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(harvest_committables): Error out if we can't get a copyfrom URL for", 
+   "an item that is intended to be copied.", 
+   "(do_item_commit): Validate commit items that are earmarked for copying.", 
+   "(svn_client__condense_commit_items): Enhance the debugging output here."
+  ], 
+  "revision_id": "844044"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2002-12-03T17:16:22.037555Z", 
+  "msg": [
+   "Revert last change, since ra_svn isn't part of the default build."
+  ], 
+  "revision_id": "844043"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-12-03T17:07:10.294371Z", 
+  "msg": [
+   "set some svn:ignore properties"
+  ], 
+  "revision_id": "844042"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-12-03T10:08:54.783421Z", 
+  "msg": [
+   "Disable the ra_svn stuff from the default build, pending the", 
+   "resolution of some issues."
+  ], 
+  "revision_id": "844041"
+ }
+]

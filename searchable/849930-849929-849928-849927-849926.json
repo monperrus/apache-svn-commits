@@ -1,0 +1,119 @@
+[
+ {
+  "author": "ghudson", 
+  "date": "2004-05-22T17:50:54.993275Z", 
+  "msg": [
+   "Add directory caching code to FSFS, so that many operations on the", 
+   "same directory do not have to keep re-reading the directory.  This", 
+   "almost gets us to O(n) behavior for large imports; the non-LRU nature", 
+   "of the path cache means the parent directories expire every 32", 
+   "operations or so, causing us to reread the directory chain.  It's very", 
+   "zippy regardless.", 
+   "* libsvn_fs_fs/fs.h (fs_fs_data_t): This structure wasn't used.", 
+   "Replace its contents with a directory cache.", 
+   "* libsvn_fs_fs/fs.c (fs_create, fs_open): Create a zeroed fsap_data", 
+   "structure.", 
+   "* libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__rep_contents_dir): Document that the returned hash", 
+   "becomes invalid on the next call.", 
+   "(svn_fs_fs__copy_dir_entries): Document new function.", 
+   "* libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_dir_entries): Document that the returned hash", 
+   "becomes invalid on the next call.  Don't falsely document that the", 
+   "kind fields aren't set.", 
+   "(svn_fs_fs__dag_set_entry): Add a kind parameter and document it.", 
+   "* libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__rep_contents_dir): Cache the directory in the fs private", 
+   "data along with the directory ID.", 
+   "(svn_fs_fs__copy_dir_entries): New function for use when the caller", 
+   "needs a dir hash to survive past the next directory retrieval.", 
+   "(svn_fs_fs__set_entry): When dumping the directory for the first", 
+   "time, use svn_fs_fs__rep_contents_dir so that we take advantage of", 
+   "the cache, even if that means parsing and unparsing it", 
+   "unnecessarily in some cases.  When modifying the directory entry,", 
+   "update the cached copy if we have it.", 
+   "(write_final_rev): Copy the result of svn_fs_fs__rep_contents_dir.", 
+   "* libsvn_fs_fs/dag.c", 
+   "(get_dir_entries): Remove; inline into svn_fs_fs__dag_dir_entries.", 
+   "(svn_fs_fs__dag_dir_entries): Inline get_dir_entries here.", 
+   "(svn_fs_fs__dag_set_entry): Add kind parameter.  Don't erroneously", 
+   "use parent directory's kind to add the entry.", 
+   "(svn_fs_fs__dag_delete_if_mutable): Copy the result of", 
+   "svn_fs_fs__dag_dir_entries.", 
+   "(svn_fs_fs__dag_copy): Pass kind to svn_fs_fs__dag_set_entry.", 
+   "* libsvn_fs_fs/tree.c", 
+   "(merge): Copy the results of svn_fs_fs__dag_dir_entries.  And no", 
+   "need to check if they're NULL.  Pass node kinds to", 
+   "svn_fs_fs__dag_set_entry.", 
+   "(get_dir_entries): Remove; inline into fs_dir_entries.", 
+   "(fs_dir_entries): Copy the result of svn_fs_fs__dag_dir_entries.", 
+   "But no need to set the kind data, since FSFS stores that in the", 
+   "dirents."
+  ], 
+  "revision_id": "849930"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-22T16:15:14.871378Z", 
+  "msg": [
+   "Fix two bugs in the handling of incomplete subdirectories.  (There is", 
+   "arguably a third bug in the update editor, in that it doesn't clear", 
+   "the incomplete flag on a subdir if the driver doesn't open it.  But", 
+   "that bug is hard to fix, and it is currently masked because the driver", 
+   "will open an incomplete subdir even if there are no edits to make to", 
+   "it because it is empty.)", 
+   "* libsvn_wc/adm_crawler.c (report_revisions): If we're not reporting", 
+   "everything, be sure to report incomplete subdirs even if they're at", 
+   "the same rev as the current subdir.", 
+   "* libsvn_repos/reporter.c (update_entry): Don't prune a directory if", 
+   "the report has set the start_empty flag on the source."
+  ], 
+  "revision_id": "849929"
+ }, 
+ {
+  "author": "kon", 
+  "date": "2004-05-22T15:14:30.846390Z", 
+  "msg": [
+   "Fix docstring of svn-status-mode in psvn.el.", 
+   "* contrib/client-side/psvn/psvn.el", 
+   "(svn-status-mode): Double the backslash in \\\\{svn-status-mode-map},", 
+   "so it survives the reader, and the bindings are actually displayed."
+  ], 
+  "revision_id": "849928"
+ }, 
+ {
+  "author": "lundblad", 
+  "date": "2004-05-22T14:43:46.731212Z", 
+  "msg": [
+   "Fix error handling in cmdline stdio function.s.", 
+   "* libsvn_subr/cmdline.c (svn_cmdline_fputs, svn_cmdline_fflush): Use errno", 
+   "instead of apr_{set,get}_os_error(), which hopefully works on Win32."
+  ], 
+  "revision_id": "849927"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-05-22T02:51:53.770219Z", 
+  "msg": [
+   "In FSFS, make the dag node cache work for transactions.  A step", 
+   "towards O(n) FS performance for directories with many files.", 
+   "* libsvn_fs_fs/tree.c", 
+   "(fs_root_data_t): Remove the \"only for revision roots\" comment.", 
+   "(dag_node_cache_get): Allow transaction roots.  Check for", 
+   "cache_item->node being NULL, which means the entry has been", 
+   "invalidated.", 
+   "(dag_node_cache_set): Remove puzzling comment text which amounts to", 
+   "\"callers should not call this unless they have some reason to do", 
+   "so.\"  Allow transaction roots.  Provide working code for reusing a", 
+   "cache item.", 
+   "(dag_node_cache_invalidate): New function, invalidates the cache", 
+   "entries for a path and its children.  (Might be nice to restructure", 
+   "the cache so that this operation doesn't require a full scan, some", 
+   "day.)", 
+   "(make_path_mutable): Update the cache with the new entry.", 
+   "(fs_make_dir, fs_make_file): Add the new entry to the cache.", 
+   "(fs_delete_file): Invalidate the path and its children in the cache."
+  ], 
+  "revision_id": "849926"
+ }
+]

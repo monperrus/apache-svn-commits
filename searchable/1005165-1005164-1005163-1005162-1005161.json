@@ -1,0 +1,81 @@
+[
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:46.552141Z", 
+  "msg": [
+   "THRIFT-926. cpp: TMemoryBuffer: Uphold the strong exception safety guarantee", 
+   "Previously, if we had a realloc failure when growing a TMemoryBuffer, we", 
+   "would leave the buffer in an invalid state (bufferSize_ would reflect", 
+   "the desired size, rather than the actual size).  Now, we make no change", 
+   "to any member variables if realloc fails."
+  ], 
+  "revision_id": "1005165"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:45.198645Z", 
+  "msg": [
+   "THRIFT-926. cpp: Add configurable buffer recycling for TNonblockingServer", 
+   "Add methods to TNonblockingServer to set the maximum size of idle read", 
+   "and write buffers and the check interval (in calls).  When checked, if", 
+   "the buffers are larger than the configured maximum, they will be resized", 
+   "down the to maximum size."
+  ], 
+  "revision_id": "1005164"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:43.854638Z", 
+  "msg": [
+   "THRIFT-926. cpp: Revert r750153 to make way for more flexible version", 
+   "r750153 caused TNonblockingServer to reset its buffers every 512 calls.", 
+   "A more configurable version was developed internally, so I'm reverting", 
+   "this rev first to avoid conflicts."
+  ], 
+  "revision_id": "1005163"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:42.293086Z", 
+  "msg": [
+   "THRIFT-929. cpp: Convert tests to use boost 1.37", 
+   "The boost test framework has changed significantly from boost 1.34 to", 
+   "1.37.  Quite a few new features have been added, and some annoying bugs", 
+   "have been fixed.", 
+   "This change now builds the thrift tests against boost 1.37, and updates", 
+   "them to use some of the newer features."
+  ], 
+  "revision_id": "1005162"
+ }, 
+ {
+  "author": "dreiss", 
+  "date": "2010-10-06T17:10:40.726833Z", 
+  "msg": [
+   "THRIFT-926. cpp: Fix inconsistencies in transport read() behavior", 
+   "- TBufferedTransport::borrow() could block if not enough data was", 
+   "available.  Now it returns NULL immediately in this case, like all", 
+   "other transports.", 
+   "- TBufferedTransport::read() could block some data was available in the", 
+   "readahead buffer, but not enough to satisfy the request.  It would", 
+   "attempt to call read() on the underlying transport, but this might", 
+   "block.  Now it just returns the remaining data in the readahead", 
+   "buffer.  The caller is responsible for calling read() again to get the", 
+   "rest of the data they want.", 
+   "- TFrameTransport::read() threw an exception if read() on the underlying", 
+   "transport returned 0 when looking for a frame header.  Now", 
+   "TFrameTransport::read() returns 0, too.  (It still throws an exception", 
+   "if the underlying transport returns 0 after a partial frame or frame", 
+   "header has been read.)", 
+   "- TFDTransport::read() threw an exception on EINTR.  Now it retries up", 
+   "to 5 times, similarly to the way TSocket::read() behaves.", 
+   "- TZlibTransport::read() could block when less data than was requested", 
+   "is available.  Now it only calls read() on the underlying transport", 
+   "when it would otherwise have nothing to return.", 
+   "This does mean that TZlibTransport::read() now often returns less data", 
+   "than is actually available at the time.  This required updating", 
+   "several of the ZlibTest tests to use readAll() instead of read(),", 
+   "since they previously assumed read() would return all available data."
+  ], 
+  "revision_id": "1005161"
+ }
+]

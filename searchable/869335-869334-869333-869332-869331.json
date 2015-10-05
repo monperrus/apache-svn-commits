@@ -1,0 +1,104 @@
+[
+ {
+  "author": "joeswatosh", 
+  "date": "2008-02-10T16:37:05.219914Z", 
+  "msg": [
+   "Follow on to r29208 \"Delete svn_client_propget3() and rename", 
+   "svn_client_propget4() to svn_client_propget3().\"  Updating the Ruby bindings.", 
+   "* subversion/bindings/swig/ruby/svn/client.rb", 
+   "(Svn::Client::Context#propget): Use propget3 instead of propget4."
+  ], 
+  "revision_id": "869335"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-10T05:16:32.934722Z", 
+  "msg": [
+   "On the capabilities-abstraction branch:", 
+   "Start unifying some of the capabilities code, because r29259 made it", 
+   "clearer than ever that we have a duplication problem (although solving", 
+   "that problem may turn out not to be worth the trouble).", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(struct svn_ra_session_t): Add new server_capabilities field.", 
+   "(svn_ra__server_capability_yes, svn_ra__server_capability_no,", 
+   "svn_ra__server_capability_server_yes): New extern constants.", 
+   "* subversion/libsvn_ra_neon/ra_neon.h", 
+   "(ne_request_dispatch): Rename capabilities to server_capabilities", 
+   "and document that it refers outward now.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__conn_setup): Rename capabilities to server_capabilities", 
+   "and document that it refers outward now.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h", 
+   "(struct svn_ra_svn_conn_st): Rename capabilities field to", 
+   "server_capabilities, add comment about unresolved issues.", 
+   "(struct svn_ra_svn__session_baton_t): Add new server_capabilities field,", 
+   "document that it refers outward to the svn_ra_session_t object.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_has_capability, svn_ra_svn_set_capabilities): Leave", 
+   "comments reminding about namespace issues.", 
+   "(svn_ra_svn_create_conn): Adjust, and add comment saying what needs", 
+   "to happen.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(open_session): Take new server_capabilities hash argument, set it", 
+   "in conn, and add comments saying what's left to be done.", 
+   "(ra_svn_reparent): Pass ra_session->server_capabilities to", 
+   "open_session, and add comment about unresolved questions.", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(parse_capabilities, svn_ra_neon__has_capability,", 
+   "svn_ra_neon__has_capability): Adjust for new names.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(exchange_capabilities, svn_ra_serf__has_capability,", 
+   "svn_ra_serf__open): Adjust for new names."
+  ], 
+  "revision_id": "869334"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-10T04:50:26.153151Z", 
+  "msg": [
+   "On the mergeinfo-capability branch:", 
+   "Start on issue #3089: only report mergeinfo capability if repository", 
+   "supports it.", 
+   "Add correct mergeinfo probing to the client side for DAV RA layers.", 
+   "Still to come: ra_svn, ra_local, and ensuring that FSFS backend", 
+   "actually returns unsupported-feature svn_fs_get_mergeinfo is called on", 
+   "an un-upgraded repository.", 
+   "[Note: the code duplication here, plus that already present in the RA", 
+   "capabilities code, led me to start the capabilities-abstraction branch.", 
+   "However, I'm not sure yet that the benefits of de-duplication will", 
+   "outweigh the costs -- the path below may well be the one we stay on.]", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(capability_server_yes): New capability state.", 
+   "(capabilities_headers_iterator_callback): Set above state for mergeinfo.", 
+   "(svn_ra_serf__has_capability): Only claim mergeinfo capability if", 
+   "repository supports it as well as server.", 
+   "* subversion/libsvn_ra_neon/session.c", 
+   "(capability_server_yes): New capability state.", 
+   "(parse_capabilities): Set above state for mergeinfo.", 
+   "(svn_ra_neon__has_capability): Only't claim mergeinfo capability if", 
+   "repository supports it as well as server.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_mergeinfo): Correct a comment about mergeinfo support.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal): Insert temporary debugging call to", 
+   "probe mergeinfo capability during updates."
+  ], 
+  "revision_id": "869333"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-10T04:30:21.787759Z", 
+  "msg": [
+   "Create a (possibly throwaway) branch for capabilities abstraction work."
+  ], 
+  "revision_id": "869332"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2008-02-10T04:28:15.847240Z", 
+  "msg": [
+   "Create temporary branch for mergeinfo-capability work."
+  ], 
+  "revision_id": "869331"
+ }
+]

@@ -1,0 +1,102 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T06:31:28.512362Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_read_conflicts): constify a descriptor to fix a const", 
+   "mismatch compilation warning."
+  ], 
+  "revision_id": "879660"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T05:25:32.866946Z", 
+  "msg": [
+   "Simplify and streamline some entries-writing code.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(entries_write): folded into svn_wc__entry_modify2()", 
+   "(svn_wc__entry_modify2): concepts pulled in from entries_write().", 
+   "create/destroy a subpool for this function's operation to ensure that", 
+   "databases are closed on exit (this may be an obsolete feature).", 
+   "perform a write check. narrow the scope of delete_entry handling, and", 
+   "simply defer to entry_remove() for this functionality. directly call", 
+   "svn_wc__entries_write_new() to flush the entries to disk. and before", 
+   "leaving, stash the entries back into the access baton."
+  ], 
+  "revision_id": "879659"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T04:20:41.713455Z", 
+  "msg": [
+   "Fix a compilation bug from a late merge before committing. Also fix a", 
+   "couple type conflicts due to const-ness.", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(handle_killme): adjust params to svn_wc__db_read_info() to account for", 
+   "the changes in conflict status reporting.", 
+   "* subversion/libsvn_wc/props.c:", 
+   "(get_existing_prop_reject_file): per the docstring, make sure we return", 
+   "NULL if there is no prop reject file. constify the conflicts array.", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(already_in_a_tree_conflict): constify the conflict localvar."
+  ], 
+  "revision_id": "879658"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-09-25T03:34:26.119649Z", 
+  "msg": [
+   "Remove svn_wc__entry_modify() in favor of the modify2() variant (which has", 
+   "new-style parameters and finer-grained control).", 
+   "Along the way, remove some access batons and switch to some newer APIs.", 
+   "* subversion/libsvn_wc/adm_ops.c:", 
+   "(tweak_entries): use the iterpool in a couple extra places", 
+   "(svn_wc_add4): switch from entry_modify() to the modify2() variant.", 
+   "(svn_wc__set_file_external_location): adjust params to DB/ABSPATH and", 
+   "rename the pool. switch to modify2().", 
+   "* subversion/libsvn_wc/update_editor.c:", 
+   "(add_directory): don't mess around with access batons, and switch to use", 
+   "entry_modify2().", 
+   "* subversion/libsvn_wc/log.c:", 
+   "(log_do_modify_entry): shift tfile assignment higher in function to get", 
+   "rid of a duplicate construction. switch to use entry_modify2().", 
+   "(log_do_delete_changelist): switch to entry_modify2().", 
+   "(log_do_committed): switch to entry_modify2() rather than entry_modify().", 
+   "switch to svn_wc__remove_from_version_control().", 
+   "(handle_killme): change params to take DB/ABSPATH rather than an access", 
+   "baton. fetch version information directly, rather than via entries.", 
+   "switch to entry_modify2().", 
+   "(run_log): pull DB out to a local variable, and use it in the call to", 
+   "handle_killme(), and others. clear the iterpool within the conflict", 
+   "handling.", 
+   "(run_existing_logs): shift the iterpool destruction to later so we can", 
+   "use it a couple more times. adjust params to handle_killme().", 
+   "* subversion/libsvn_wc/entries.h:", 
+   "(svn_wc__entry_modify): removed", 
+   "(svn_wc__entry_modify2): tweak docstring. mush in entry_modify() doc.", 
+   "still pretty bad/out-of-date.", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(svn_wc__entry_modify2): remove NULL check for name, as that won't ever", 
+   "be returned by get_entry_access_info().", 
+   "(svn_wc__entry_modify): removed.", 
+   "* subversion/include/svn_wc_private.h:", 
+   "(svn_wc__set_file_external_location): adjust params to DB/ABSPATH style", 
+   "* subversion/libsvn_client/externals.c:", 
+   "(switch_file_external): adjust call to set_file_external_location."
+  ], 
+  "revision_id": "879657"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2009-09-24T21:28:04.349022Z", 
+  "msg": [
+   "Following up on r39580, declare the conflict_data column as BLOB, because", 
+   "it will contain binary data. (Property values, etc.)", 
+   "This is a safe operation, because we haven't activated format 14 yet.", 
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(format 14): Update ALTER TABLE statement"
+  ], 
+  "revision_id": "879656"
+ }
+]

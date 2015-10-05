@@ -1,0 +1,105 @@
+[
+ {
+  "author": "sussman", 
+  "date": "2004-11-17T03:58:59.905122Z", 
+  "msg": [
+   "Locking branch:  one line logic fix.", 
+   "* libsvn_fs_base/lock.c (txn_body_lock):  make the strcmp correct."
+  ], 
+  "revision_id": "852005"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-11-17T01:07:33.704884Z", 
+  "msg": [
+   "Locking branch:  implement svn_fs_lock() in libsvn_fs_base.", 
+   "* include/svn_fs.h", 
+   "(svn_fs_lock):  clarify docstring.", 
+   "* libsvn_fs/err.h, err.c", 
+   "(svn_fs_base__err_not_file):  new error-returning function.", 
+   "(svn_fs_base__err_path_locked):  new error-returning function.", 
+   "* libsvn_fs_bdb/lock.c", 
+   "(generate_new_lock):  new helper func to generate an svn_lock_t.", 
+   "(struct lock_args):   new helper structure.", 
+   "(txn_body_lock):      new body function.", 
+   "(svn_fs_base__lock):  call new body function."
+  ], 
+  "revision_id": "852004"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2004-11-17T00:21:42.905767Z", 
+  "msg": [
+   "An additional win32 troubleshooting tip from Clifford Caoile.", 
+   "* packages/win32-innosetup/W32notes.txt", 
+   "Mentioned that Apache 2 startup logging is available via the Event", 
+   "Viewer, and explicitly called out the error which is caused by some", 
+   "missing DLLs.", 
+   "Note: The information from this file might be better off in INSTALL.", 
+   "Issue: http://subversion.tigris.org/issues/show_bug.cgi?id=2129"
+  ], 
+  "revision_id": "852003"
+ }, 
+ {
+  "author": "ruben", 
+  "date": "2004-11-16T22:40:39.015574Z", 
+  "msg": [
+   "Book Spanish. Paragraph translated."
+  ], 
+  "revision_id": "852002"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-11-16T20:25:18.718001Z", 
+  "msg": [
+   "Locking branch:  some fairly biggish BDB logic changes.", 
+   "Make the BDB path->token functions take 'kind' arguments, so they can", 
+   "secretly append trailing '/' to directory paths when storing or", 
+   "looking up path-key (to allow for partial lookups.)", 
+   "Because this implementation detail needs to be hidden from callers,", 
+   "this means pushing the auto-expiration code down into the BDB layer", 
+   "itself;  otherwise callers would need to do multiple DAG path-kind", 
+   "lookups to validate & expire hashes returned by the BDB funcs.", 
+   "* include/svn_fs.h:  add a general description of locks to public header.", 
+   "* libsvn_fs_bdb/err.c, err.h", 
+   "(svn_fs_base__err_lock_expired): new func and declaration.", 
+   "* libsvn_fs_bdb/locks-table.h", 
+   "(svn_fs_bdb__lock_get):  promise to auto-expire a lock upon retrieval.", 
+   "(svn_fs_bdb__locks_get):  new declaration, promises to auto-expire all locks", 
+   "before returning them in the hash.", 
+   "* libsvn_fs_bdb/locks-table.c", 
+   "(svn_fs_bdb__lock_get):  auto-expire the lock before returning it.", 
+   "(svn_fs_bdb__locks_get): new function, a tweaked version of", 
+   "__lock_tokens_get, verifies and auto-expires all locks before", 
+   "returning them in the hash.", 
+   "* libsvn_fs_base/lock-tokens-table.h", 
+   "(svn_fs_bdb__lock_tokens_get):  delete, no caller needs this anymore.", 
+   "(svn_fs_bdb__lock_token_add):  take new 'kind' argument.", 
+   "(svn_fs_bdb__lock_token_delete):  take new 'kind' argument.", 
+   "(svn_fs_bdb__lock_token_get):  take a 'kind' argument.  promise to", 
+   "auto-expire the lock if expired or missing; return more errors.", 
+   "* libsvn_fs_base/bdb/lock-tokens-table.c", 
+   "(svn_fs_bdb__lock_tokens_get):  delete, no caller needs this anymore.", 
+   "(svn_fs_bdb__lock_token_add):  take 'kind', append '/' to incoming dirs.", 
+   "(svn_fs_bdb__lock_token_delete):  do the same.", 
+   "(svn_fs_bdb__lock_token_get):  do the same.", 
+   "* libsvn_fs_base/lock.h", 
+   "(svn_fs_base__get_lock_from_path_helper):  declaration takes a 'kind' arg.", 
+   "(svn_fs_base__get_locks_helper):  declaration takes a 'kind' arg.", 
+   "(svn_fs_base__allow_locked_operation):   tweak docstring.", 
+   "* libsvn_fs_base/lock.c", 
+   "(check_lock_expired):  delete, no longer needed.", 
+   "(txn_body_unlock):  plan to all helper to get node-kind, update bdb call.", 
+   "(txn_body_get_lock_from_path):  do the same.", 
+   "(txn_body_get_locks):  do the same.", 
+   "(txn_body_get_lock_from_token):  stop trying to expire the lock.", 
+   "(svn_fs_base__get_locks_helper): just call svn_fs_bdb__locks_get()!!", 
+   "(svn_fs_base__allow_locked_operation):   pass 'kind' to bdb funcs.", 
+   "(svn_fs_base__get_lock_from_path_helper): take 'kind' arg, update bdb call,", 
+   "and stop trying to expire things.", 
+   "(svn_fs_base__allow_locked_operation): remove the use of forbidden", 
+   "trailing-slash knowledge!"
+  ], 
+  "revision_id": "852001"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2004-03-22T15:26:38.421386Z", 
+  "msg": [
+   "Some book fixes.", 
+   "* doc/book/book/ch00.xml", 
+   "Add Martin Further, Robert P. J. Day, and Steffen Prohaska to the", 
+   "contributors list.", 
+   "* doc/book/book/ch01.xml", 
+   "Lose the <firstterm> tags around meritocracy.", 
+   "* doc/book/book/ch04.xml", 
+   "Fix uses of short subcommand names.  Also, add log message to", 
+   "\"Resurrecting Deleted Items\" example.  Patches by Francois", 
+   "Beausoleil <fbos@users.sourceforge.net>.", 
+   "Also, clear up some confusing command examples.", 
+   "* doc/book/book/ch07.xml", 
+   "Fixup the vendor branch examples.  Patch by Steffen Prohaska", 
+   "<prohaska@zib.de>."
+  ], 
+  "revision_id": "849260"
+ }, 
+ {
+  "author": "ghudson", 
+  "date": "2004-03-22T04:00:21.503356Z", 
+  "msg": [
+   "Improve svnserve memory usage for commits of many files.", 
+   "(Actually, although memory usage gets much better for commits of many", 
+   "files with text mods, it gets worse for commits of many files with", 
+   "only prop mods, because that case was already handled well in the old", 
+   "code.  There's no perfect medium here.)", 
+   "* libsvn_ra_svn/editorp.c", 
+   "(ra_svn_driver_state_t): Add file_pool and file_refs fields.", 
+   "(ra_svn_token_entry_t): Document that the pool field is used", 
+   "differently for file entries.", 
+   "(ra_svn_handle_add_file, ra_svn_handle_open_file): Use ds->file_pool", 
+   "instead of creating a new subpool.  Increment ds->file_refs.", 
+   "(ra_svn_handle_apply_textdelta): Create a subpool, set the entry", 
+   "pool to it, and use it for the purposes of the text delta.", 
+   "(ra_svn_handle_textdelta_end): Destroy the subpool created above.", 
+   "(ra_svn_handle_change_file_prop): Pass just \"pool\" to the real", 
+   "editor, not the file entry pool; it's used only for temporary", 
+   "allocations.  (And the file entry pool may not be valid given the", 
+   "above changes.)", 
+   "(ra_svn_handle_close_file): Clear the file pool when the refcount", 
+   "hits zero, so that non-commit edit operations don't leak any file", 
+   "memory.", 
+   "(svn_ra_svn__drive_editorp): Set up the file pool and refcount."
+  ], 
+  "revision_id": "849259"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-03-22T03:38:48.331437Z", 
+  "msg": [
+   "Book tweaks.", 
+   "* ch06.xml:  reword the svn+ssh:// checklist."
+  ], 
+  "revision_id": "849258"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2004-03-22T03:26:10.294038Z", 
+  "msg": [
+   "Book tweaks.", 
+   "Thanks for feedback from Robert P. J. Day <rpjday@mindspring.com> and", 
+   "Martin Furter <mf@rola.ch>.", 
+   "* ch05.xml:      document the conf/ directory in a newly created repos.", 
+   "* ch09.xml:      fix typo in 'svnlook history' example.", 
+   "* ch06.xml:      show mod_dav being loaded in httpd.conf examples.", 
+   "* foreword.xml:  credit Karl Fogel."
+  ], 
+  "revision_id": "849257"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2004-03-22T01:55:32.274647Z", 
+  "msg": [
+   "An optimisation to reduce the number of system calls. This saves about", 
+   "5000 stat() calls when running \"svn status\" on a Subversion working", 
+   "copy, which is about 25% of the total number of system calls.", 
+   "* subversion/libsvn_wc/props.c", 
+   "(empty_props_p): Remove svn_io_check_path.", 
+   "(svn_wc_props_modified_p): Add comments about repeated stat calls.", 
+   "* subversion/libsvn_wc/questions.c", 
+   "(svn_wc__timestamps_equal_p): Use svn_wc_entry and avoid calling", 
+   "svn_io_check_path."
+  ], 
+  "revision_id": "849256"
+ }
+]

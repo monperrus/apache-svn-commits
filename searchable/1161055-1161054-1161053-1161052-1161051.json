@@ -1,0 +1,94 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2011-08-24T11:35:38.533478Z", 
+  "msg": [
+   "Merge r1158617, r1158875, r1158886, r1158896, r1158919, r1158924, r1158963", 
+   "from trunk:", 
+   "* r1158617, r1158875, r1158886, r1158896, r1158919, r1158924, r1158963", 
+   "Make 'svn revert' remove unversioned nodes resulting from reverting a copy.", 
+   "Fixes issue #3101.", 
+   "Justification:", 
+   "Bert suggested to backport this to 1.7.", 
+   "I myself am not really sure if we should consider this a bug fix", 
+   "or a behaviour change. I think we should merge this before 1.7.0", 
+   "if we decide to merge it.", 
+   "It does fix some fairly annoying usability issues.", 
+   "For instance: If a merge adds files, the merge result is reverted, and", 
+   "the merge is repeated, the second merge does not produce the same result", 
+   "as the first merge. It will skip the, now unversioned, files added by", 
+   "the first merge. There are various other cases where the unversioned", 
+   "files get in the way.", 
+   "Notes:", 
+   "All revisions depend on one another, but some amend or even undo changes", 
+   "made in earlier revisions. Instead of reviewing the individual commits", 
+   "I would suggest to run the following merge and review the resulting diff:", 
+   "svn merge -c1158617,1158875,1158886,1158896,1158919,1158924,1158963 \\", 
+   "^/subversion/trunk", 
+   "Votes:", 
+   "+1: stsp, rhuijben (but only if this gets into 1.7.0), philip"
+  ], 
+  "revision_id": "1161055"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2011-08-24T11:30:39.934878Z", 
+  "msg": [
+   "Merge r1158196, r1158201, r1158207, r1158209, r1158210, r1158217 from trunk:", 
+   "* r1158196, r1158201, r1158207, r1158209, r1158210, r1158217", 
+   "Fix another variant of issues #2557 and #3987: 'svnversion symlink/to/wc'.", 
+   "Justification:", 
+   "That syntax should work.", 
+   "Notes:", 
+   "r1158196, r1158201, r1158207 adds (and tweaks) the test for this problem.", 
+   "Notes:", 
+   "Tests fail.  Requires r1158187, which needs one more vote.", 
+   "Votes:", 
+   "+1: rhuijben, cmpilato", 
+   "+1 (once tests pass): danielsh"
+  ], 
+  "revision_id": "1161054"
+ }, 
+ {
+  "author": "rbircher", 
+  "date": "2011-08-24T11:28:54.210029Z", 
+  "msg": [
+   "Adding de webcontent part 2"
+  ], 
+  "revision_id": "1161053"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2011-08-24T11:28:40.659363Z", 
+  "msg": [
+   "Merge r1158187, r1158196, r1158201, r1158207 from trunk:", 
+   "* r1158187, r1158196, r1158201, r1158207", 
+   "Fix issues #2557 and #3987: 'svn info symlink/to/wc'.", 
+   "Justification:", 
+   "The svn_wc__db api should allow passing a working copy root when that root", 
+   "is a symlink. Without r1158187 it allows any node in such a working copy", 
+   "but not the root itself. But once a child is used it would work as the", 
+   "working copy is cached in the svn_wc__db_t.", 
+   "Votes:", 
+   "+1: danielsh (without r1158187, so just the tests and not the fix)", 
+   "+1: rhuijben, cmpilato, philip"
+  ], 
+  "revision_id": "1161052"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2011-08-24T11:24:15.239841Z", 
+  "msg": [
+   "Follow-up to r1161046:", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(make_file_baton): Do not run read_info() and scan_deletion() here.", 
+   "The extra read_info() call is a performance concern.", 
+   "This means that callers will have to initialise the file baton's", 
+   "MOVED_TO_ABSPATH member.", 
+   "(open_file): This code already runs read_info(), so query the existing", 
+   "status value and initialise the file baton's MOVED_TO_ABSPATH if needed.", 
+   "Suggested by: rhuijben"
+  ], 
+  "revision_id": "1161051"
+ }
+]

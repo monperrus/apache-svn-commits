@@ -1,0 +1,99 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-02-04T15:28:54.854308Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Easy out: don't look for the repos id if we don't have the uuid to begin with.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(svn_wc__entries_write): If the uuid is null, don't even try to get the repos", 
+   "id, and error if we do have a uuid, but it is not in the db."
+  ], 
+  "revision_id": "875745"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-04T15:06:48.986727Z", 
+  "msg": [
+   "On the explore-wc branch:", 
+   "Fix an off-by-one error.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(read_entries): entry->incomplete should be set if the number of incomplete", 
+   "children in the base_node table is greater than 0, not 1."
+  ], 
+  "revision_id": "875744"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-04T14:55:28.758988Z", 
+  "msg": [
+   "Rename a couple of pool variables to match our conventions.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(harvest_committables): pool -> scratch_pool, loop_pool -> iterpool"
+  ], 
+  "revision_id": "875743"
+ }, 
+ {
+  "author": "arfrever", 
+  "date": "2009-02-04T14:51:51.490732Z", 
+  "msg": [
+   "Follow-up to r35665:", 
+   "Don't use very useful features supported only by GNU sed.", 
+   "* build/ac-macros/berkeley-db.m4", 
+   "(SVN_LIB_BERKELEY_DB_TRY): Don't use '\\n' in the replacement argument", 
+   "of the 's' command of sed.", 
+   "* configure.ac: Don't pass the '-i' option to sed.", 
+   "Found by: hwright", 
+   "stsp"
+  ], 
+  "revision_id": "875742"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2009-02-04T05:51:43.410893Z", 
+  "msg": [
+   "On the issue-3334-dirs branch: When a delete lands on a tree with local edits", 
+   "reschedule the tree for addition as a copy of its pre-delete self along with", 
+   "the local mods.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(struct modcheck_baton_t): Add all_edits_are_deletes member.", 
+   "(modcheck_found_entry): Set new modcheck_baton_t member.", 
+   "(tree_has_local_mods): Add reference arg to signal case where all local", 
+   "modifications are deletions.", 
+   "(check_tree_conflict): If a conflict is found because a delete is incoming", 
+   "on a tree with edits, but these \"edits\" are *all* deletions to subtrees", 
+   "of the three, then set the return conflict reason to", 
+   "svn_wc_conflict_reason_deleted rather than svn_wc_conflict_reason_edited.", 
+   "(set_copied_baton_t): Add member to track the root of the tree we are", 
+   "re-adding.", 
+   "(set_copied_callback): Get more restrictive on what we re-add.", 
+   "(schedule_existing_item_for_re_add): Don't change the base revision of the", 
+   "re-added item to the target rev, it doesn't exist at that rev.", 
+   "If we are re-adding a directory, also note in the directory's parent entry", 
+   "that we are doing so.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(tree_conflicts_on_switch_1_2, tree_conflicts_on_switch_2_2,", 
+   "tree_conflicts_on_switch_3): Expect incoming deletes that land on local", 
+   "deletes to *really* remove the deleted paths; that is, they should be", 
+   "status '!' not scheduled for deletion (they were already deleted!).", 
+   "(tree_conflicts_on_switch_2_1): Oddly this test was not set to XFail even", 
+   "though it leaves the WC in a broken state with switched paths that are not", 
+   "really switched.  We actually expect incorrect output, get it, and consider", 
+   "this a passing test!  Ok, end of rant :-D", 
+   "Change test expectations so an incoming tree delete on a leaf", 
+   "edit is a tree conflict (as always) but the \"deleted\" tree is re-", 
+   "scheduled as a copy with history along with the local edits.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_delete_modified_files, tree_conflicts_on_update_2_1):   Change test", 
+   "expectations so an incoming tree delete on a leaf edits is a tree", 
+   "conflict (as always) but the \"deleted\" tree is rescheduled as a copy with", 
+   "history along with the local edits.", 
+   "(tree_conflicts_on_update_1_2, tree_conflicts_on_update_2_2,", 
+   "tree_conflicts_on_update_3): As per tree_conflicts_on_switch_1_2 above.", 
+   "(tree_conflict_uc2_schedule_re_add): Make set of local mods upon which", 
+   "a delete lands a bit more varied.  Check that the two scenarios result in", 
+   "the same WC."
+  ], 
+  "revision_id": "875741"
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "author": "svanderwaal", 
+  "date": "2011-04-27T08:48:02.568437Z", 
+  "msg": [
+   "Updated links to Incubator page and wiki (coming soon)"
+  ], 
+  "revision_id": "1097040"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-04-27T08:44:13.255783Z", 
+  "msg": [
+   "In the repository diff handler: only retrieve the pristine file if we are", 
+   "actually going to use this file. Retrieve only the properties if that is", 
+   "what we need.", 
+   "Before this patch we fetched the pristine files for files that only had", 
+   "property changes and then we passed NULL for the file to the callback.", 
+   "At the same time start using a per file and per directory pool which will be", 
+   "cleared when the file/directory is closed. This reduces the lifetime of the", 
+   "scratch_pool which is used for processing and passed to the callbacks.", 
+   "(And it also removes temp files earlier when using an ra layer that", 
+   "doesn't use subpools for files and directories)", 
+   "* subversion/libsvn_client/repos_diff.c", 
+   "(make_dir_baton,", 
+   "make_file_baton): Create dir/file pool and use it to store the data in.", 
+   "(get_file_from_ra): Allow retrieving just the properties. Use revision from", 
+   "baton. Add scratch_pool argument.", 
+   "(remove_non_prop_changes): Move the issue #3657 fix to its own function to", 
+   "allow calling it only just before the callbacks. This allows loading the", 
+   "pristine file on demand.", 
+   "(diff_deleted_dir): Update caller.", 
+   "(delete_entry): Use scratch pool for most work to allow callers (read: merge)", 
+   "to use the scratch pool.", 
+   "(add_file): Don't retrieve the empty file yet.", 
+   "(open_file): Store base revision for later retrieval, but don't retrieve the", 
+   "pristine file yet.", 
+   "(apply_textdelta): Get a pristine file here. Use file pool as scratch pool.", 
+   "(close_file): If we have prop changes, but no file changes retrieve only the", 
+   "pristine props. Filter non-changes. Destroy file pool when done.", 
+   "(close_directory): Pass scratch pool to callbacks. Destroy pool when done.", 
+   "Filter non prop-changes here.", 
+   "(change_file_prop,", 
+   "change_dir_prop): Just store the propchanges. We can filter later on."
+  ], 
+  "revision_id": "1097039"
+ }, 
+ {
+  "author": "svanderwaal", 
+  "date": "2011-04-27T08:41:52.846615Z", 
+  "msg": [
+   "Align logo with left menu and title with main content"
+  ], 
+  "revision_id": "1097038"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2011-04-27T08:40:16.312128Z", 
+  "msg": [
+   "DSLs are just an 'add' and not 'update'"
+  ], 
+  "revision_id": "1097037"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2011-04-27T08:39:27.411214Z", 
+  "msg": [
+   "added missing latest closed issues for alpha-3"
+  ], 
+  "revision_id": "1097036"
+ }
+]

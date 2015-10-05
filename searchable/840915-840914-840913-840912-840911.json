@@ -1,0 +1,90 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T09:44:40.933931Z", 
+  "msg": [
+   "Add a callback to the RA callbacks for fetching WC properties. This", 
+   "allows the RA functions to get version URLs of existing files when", 
+   "necessary. Given a version URL, we can fetch a diff from the server.", 
+   "* include/svn_ra.h (svn_ra_get_wc_prop_func_t, svn_ra_set_wc_prop_func_t):", 
+   "add more documentatoin", 
+   "(svn_ra_callbacks_t {}): add new get_wc_prop field", 
+   "(svn_ra_plugin_t {}): constify the callbacks to the open() method", 
+   "* libsvn_ra_local/ra_plugin.c (open): constify the callbacks param", 
+   "* libsvn_ra_dav/session.c (svn_ra_dav__open): constify callbacks param", 
+   "* libsvn_ra_dav/ra_dav.h (svn_ra_dav__open): add const to callbacks param", 
+   "* libsvn_client/ra.c (get_wc_prop): new function to fetch WC props", 
+   "(svn_client__open_ra_session): set up new get_wc_prop field"
+  ], 
+  "revision_id": "840915"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T09:06:18.773383Z", 
+  "msg": [
+   "Use the new svn_client__callback_baton_t type for the callback baton", 
+   "(rather than the auth baton). This allows us to keep some fields private", 
+   "from the calling app, and gives us room to expand for additional", 
+   "callback needs.", 
+   "* include/svn_client.h (svn_client_auth_baton_t {}): remove the pool,", 
+   "path, and do_store fields. they are not needed by applications.", 
+   "* libsvn_client/auth.c (get_username, get_password, get_user_and_pass,", 
+   "store_username, store_password, store_user_and_pass,", 
+   "svn_client__get_authenticator): the baton is the callback baton,", 
+   "not the auth baton. compensate.", 
+   "* libsvn_client/ra.c (open_admin_tmp_file, open_tmp_file): the baton is", 
+   "the callback baton, not the auth baton. copmensate.", 
+   "(get_ra_callbacks): removed; the contents were folded directly into", 
+   "the svn_client__open_ra_session function.", 
+   "(svn_client__open_ra_session): build the callback table and baton", 
+   "rather than calling the (obsolete) get_ra_callbacks.", 
+   "* libsvn_client/client.h (svn_client__callback_baton_t): new type for", 
+   "the base_dir since the trickle-down usage really wants a stringbuf", 
+   "for right now. use the explict type for the auth_baton since we", 
+   "know/require what it must be (rather than an opaque ptr). add the", 
+   "do_store and pool fields.", 
+   "* clients/cmdline/prompt.c (svn_cl__make_auth_baton): don't initialize", 
+   "the pool field; it has been removed."
+  ], 
+  "revision_id": "840914"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T08:07:33.345828Z", 
+  "msg": [
+   "Fix up the callback functions.", 
+   "* ra.c (get_ra_callbacks): renamed from svn_client__get_ra_callbacks and", 
+   "made private to the file. put newly-named svn_client__get_authenticator", 
+   "into the callback vtable. doc string moved here from client.h", 
+   "(svn_client__open_ra_session): call renamed get_ra_callbacks", 
+   "* auth.c (svn_client__get_authenticator): renamed from get_authenticator.", 
+   "doc string moved to client.h", 
+   "* client.h (svn_client__get_ra_callbacks): removed", 
+   "(svn_client__get_authenticator): added with doc from auth.c"
+  ], 
+  "revision_id": "840913"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T07:59:08.468667Z", 
+  "msg": [
+   "Moved some functions from auth.c to ra.c. NO CHANGES were made to the", 
+   "functions during the move.", 
+   "Note: this breaks the compilation since get_authenticator is not defined", 
+   "in ra.c.  Will fix in the next commit.", 
+   "* ra.c (svn_client__get_ra_callbacks, open_admin_tmp_file, open_tmp_file):", 
+   "moved here from auth.c", 
+   "* auth.c (svn_client__get_ra_callbacks, open_admin_tmp_file, open_tmp_file):", 
+   "moved to ra.c"
+  ], 
+  "revision_id": "840912"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-11T07:32:27.701092Z", 
+  "msg": [
+   "(log_do_committed): make sure to assign to 'err' before testing it."
+  ], 
+  "revision_id": "840911"
+ }
+]

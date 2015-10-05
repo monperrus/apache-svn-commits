@@ -1,0 +1,109 @@
+[
+ {
+  "author": "philip", 
+  "date": "2002-03-21T21:31:10.118299Z", 
+  "msg": [
+   "GCC 3.1 spotted this one.", 
+   "* svn/subversion/libsvn_wc/log.c", 
+   "(log_do_committed): Adjust argument to match format string."
+  ], 
+  "revision_id": "841650"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2002-03-21T20:52:14.001051Z", 
+  "msg": [
+   "Tweak the svn_wc_merge API back to the old one (that is, undo the API", 
+   "change of revision 1497).  The old API is a tad more awkward for the", 
+   "'svn up' use-case, but very necessary for the 'svn merge' use-case.", 
+   "* svn_wc.h (svn_wc_merge):  change declaration...", 
+   "* merge.c (svn_wc_merge):  instead of taking a parent dir and three", 
+   "basenames, take three fully independent paths.", 
+   "* log.c (log_do_merge):  change this caller of svn_wc_merge", 
+   "appropriately.  also, use a subpool to do the merge.", 
+   "* wc.h (SVN_WC__LOG_MERGE):  docstring tweak.", 
+   "* io.c (svn_io_run_diff3): print better error message.", 
+   "* diff.c (merge_cmd): change this caller of svn_wc_merge.  ahh, much better."
+  ], 
+  "revision_id": "841649"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-03-21T15:50:11.344791Z", 
+  "msg": [
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_commit_editor): Re-remove the callback", 
+   "functions/baton parameters."
+  ], 
+  "revision_id": "841648"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2002-03-21T15:22:15.123995Z", 
+  "msg": [
+   "Make Subversion compile on HP-UX with the native compiler.", 
+   "- the HP compiler doesn't like to switch on 64-bit types;", 
+   "- it hates to see a function called `open' that doesn't have the right", 
+   "prototype;", 
+   "- refuses to understand alloca without #include'ing <alloca.h>;", 
+   "- insists on constant aggregate initializers.", 
+   "* subversion/include/svn_ra.h: New enum svn_ra_auth_method. Replaces", 
+   "SVN_RA_AUTH_USERNAME and SVN_RA_AUTH_SIMPLE_PASSWORD defines.", 
+   "(svn_ra_simple_password_authenticator_t.get_authenticator): Changed type", 
+   "of `method' parameter from apr_uint64_t to enum svn_ra_auth_method. All", 
+   "uses changed.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c (open, close, get_latest_revnum,", 
+   "get_dated_revision, get_commit_editor, do_checkout, do_update, do_switch,", 
+   "do_status, get_log, do_check_path, get_file): Renamed RA callbacks,", 
+   "prepending svn_ra_local__ to each name.", 
+   "* subversion/libsvn_client/auth.c: Alighed with svn_ra.h changes.", 
+   "* subversion/libsvn_client/client.h: Likewise.", 
+   "* subversion/bindings/ruby/ra.c: Again.", 
+   "* subversion/libsvn_ra_dav/session.c: And again.", 
+   "* subversion/libsvn_ra_dav/util.c: Jus' one mo' time!", 
+   "* subversion/tests/libsvn_fs/fs-test.c: Use #defined strings instead of", 
+   "const char*'s, as those can't be portably used in aggregate initializers.", 
+   "* subversion/tests/libsvn_fs/skel-test.c (put_explicit_length): Use malloc", 
+   "instead of alloca."
+  ], 
+  "revision_id": "841647"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2002-03-21T13:55:23.519223Z", 
+  "msg": [
+   "Incremental commit of work done so far.  That is to say, \"so far from", 
+   "being done :-)\"  It compiles, and it doesn't interfere with current", 
+   "Subversion operations, that's all I can promise.", 
+   "* subversion/libsvn_client/client.h", 
+   "(SVN_CLIENT_COMMIT_ITEM_ADD, SVN_CLIENT_COMMIT_ITEM_DELETE,", 
+   "SVN_CLIENT_COMMIT_ITEM_TEXT_MODS, SVN_CLIENT_COMMIT_ITEM_PROP_MODS,", 
+   "SVN_CLIENT_COMMIT_ITEM_IS_COPY): New flags.", 
+   "(svn_client_commit_item_t): Add 'url' and 'state_flags' fields,", 
+   "removing 'text_mods' and 'prop_mods'.", 
+   "(svn_client__harvest_committables): Add 'locked_dirs' argument.", 
+   "(svn_client__condense_commit_items): Was svn_client__condense_committables.", 
+   "* subversion/libsvn_client/commit_util.c", 
+   "(add_committable): Add 'state_flags' and 'url' arguments, remove", 
+   "'text_mods' and 'prop_mods'.", 
+   "(harvest_committables): Some logic modifications.  Updated call to add_committable().", 
+   "(svn_client__sort_commit_item_urls): Sort by the item's URL, not the", 
+   "item's entry's URL('s sister's brother's neighbor).", 
+   "(svn_client__condense_commit_items): Was svn_client__condense_committables.", 
+   "Moved some temporary debug printing here from svn_client_commit().", 
+   "(svn_client__harvest_committables): Add 'locked_dirs' argument.  Unused.", 
+   "(do_item_commit): New helper function.", 
+   "(svn_client__do_commit): Begin implementation of this function.", 
+   "(struct edit_baton, open_root, add_item, delete_entry, open_item,", 
+   "change_prop, apply_textdelta, close_edit, get_test_editor): New", 
+   "temporary test editor functions (and structure).", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_commit): Updated calls to svn_client__harvest_committables", 
+   "and svn_client__condense_commit_items.  Added call to svn_client__do_commit.", 
+   "Move committables printed output to svn_client__condense_commit_items.", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(svn_wc_copy): Itty bitty code formatting change."
+  ], 
+  "revision_id": "841646"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "eevans", 
+  "date": "2011-04-18T17:08:06.449329Z", 
+  "msg": [
+   "prepend missing license headers", 
+   "Patch by eevans"
+  ], 
+  "revision_id": "1094655"
+ }, 
+ {
+  "author": "eevans", 
+  "date": "2011-04-18T17:07:47.792336Z", 
+  "msg": [
+   "update versioning for 0.8 beta1 release"
+  ], 
+  "revision_id": "1094654"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2011-04-18T17:02:39.319910Z", 
+  "msg": [
+   "In the update editor: Ensure that we only mark directories complete, when they", 
+   "are really complete. Before this (when using ra_serf) the directories were", 
+   "marked complete before they contained all children.", 
+   "When we call svn_wc__db_base_add_directory() we automatically mark the", 
+   "directory complete, while we might not have added all subdirectories and files.", 
+   "We can fix this in two ways:", 
+   "- The WC-1.0 way: Track the number of concurrent operations per directory", 
+   "and close the directory when this number reaches 0.", 
+   "- The WC-NG way: Directly add a not-present file in add_file(), to make sure", 
+   "the children list is always complete when calling close_directory().", 
+   "(This follows the pattern we like to follow with EditorV2, so I", 
+   "decided to go this way).", 
+   "I reused the maybe_bump_dir_info() infrastructure that was used to calculate", 
+   "when to mark a directory complete to clean the directory pools when possible.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(bump_dir_info): Remove now unused fields.", 
+   "(make_dir_baton): Don't copy data we don't need.", 
+   "(complete_directory): Remove function.", 
+   "(maybe_bump_dir_info): Rename to ...", 
+   "(maybe_release_dir_info): ... this, to mark its new function.", 
+   "(open_root): Update caller. Use standard check for target = anchor.", 
+   "(close_directory): Update caller. Document marking complete and move", 
+   "releasing the directory information.", 
+   "(add_file): Add not present node for new files.", 
+   "(close_file): Release directory after clearing our pool. Release db info", 
+   "at the end of this function.", 
+   "(close_edit): Only close the edit operation when we really opened it.", 
+   "Remove unused variable.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(end_directory_update): Update assertion to verify that the directory was", 
+   "really incomplete."
+  ], 
+  "revision_id": "1094653"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2011-04-18T17:00:59.454606Z", 
+  "msg": [
+   "r/m merge artifact"
+  ], 
+  "revision_id": "1094652"
+ }, 
+ {
+  "author": "jbellis", 
+  "date": "2011-04-18T17:00:35.432085Z", 
+  "msg": [
+   "merge from 0.7"
+  ], 
+  "revision_id": "1094651"
+ }
+]

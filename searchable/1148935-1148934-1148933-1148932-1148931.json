@@ -1,0 +1,78 @@
+[
+ {
+  "author": "rajith", 
+  "date": "2011-07-20T20:46:49.105742Z", 
+  "msg": [
+   "QPID-3358 Added a controller to coordinate tests run on several jvm's on the same host or multiple host machines.", 
+   "1. The controller registers participants and waits until the desired numbers of producers and consumers join the test.", 
+   "2. It then coordinates warmup runs between the participants and starts the actual test run.", 
+   "3. Once the test is done it collects stats and computes averages,max,minetc.. and prints them out.", 
+   "The collector is designed run by itself, but can be run inline with a producer for simplicity.", 
+   "Infact by default the producer will run a controller unless -Dext_controller=true is specified.", 
+   "This is done to ensure that the simple test cases like the per-report script can be run without additional configuration.", 
+   "The code would need a bit of cleanup later on. The current form was done quite quickly as a POC for an urgent task.", 
+   "I will be reviewing the code and making improvements over the comming days."
+  ], 
+  "revision_id": "1148935"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-07-20T20:44:31.077983Z", 
+  "msg": [
+   "Fix a compile bug for when PBTEST_ACTIVE is not defined.", 
+   "* subversion/libsvn_ra_serf/util.c:", 
+   "(PBTEST_FORCE_SPILL): add a ctx param"
+  ], 
+  "revision_id": "1148934"
+ }, 
+ {
+  "author": "atm", 
+  "date": "2011-07-20T20:42:15.371447Z", 
+  "msg": [
+   "HADOOP-7111. Several TFile tests failing when native libraries are present. (atm)"
+  ], 
+  "revision_id": "1148933"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-07-20T20:41:48.881418Z", 
+  "msg": [
+   "Fix up the testing code: ensure the tst machine only operates upon the", 
+   "proper request (ie. don't pause PROPFIND requests that are issued during", 
+   "the test sequence). Also switch forced advancement based on a parameter", 
+   "rather than the INJECT flag: we may be calling from the network code,", 
+   "instead of post-injection.", 
+   "* subversion/libsvn_ra_serf/util.c:", 
+   "(PBTEST_SET_PAUSED): only pause the parser if it is the *right* one", 
+   "(PBTEST_MAYBE_STEP): take a new param, to force advancement after we", 
+   "have inject some/all pending content", 
+   "(PBTEST_FORCE_SPILL): only force a spill for the proper request", 
+   "(PBTEST_THIS_REQ): macro to determine whether the given request is what", 
+   "we are using to perform the test sequence", 
+   "(maybe_next_step): take a new FORCE parameter, rather than relying on", 
+   "whether this particular step is intending to inject content. this", 
+   "function may be called by the network code *or* the injection code.", 
+   "only for the latter, do we want to advance. also: only do the", 
+   "advancement if we're looking at the proper request.", 
+   "(write_to_pending): adjust PBTEST_FORCE_SPILL() call, and adjust the", 
+   "spill-denial to apply *only* to the testing request", 
+   "(svn_ra_serf__process_pending): only disable content injection for the", 
+   "correct request. likewise, only perform step advancement (and exit)", 
+   "for the proper request. add some debug printing. NULL out the parser", 
+   "after we free it, along with an assert that nobody else NULL'd it.", 
+   "pass TRUE to PBTEST_MAYBE_STEP() since this is the injection code.", 
+   "(svn_ra_serf__handle_xml_parser): switch to use PBTEST_THIS_REQ(). add", 
+   "some debug printing. NULL out the parser when done, and assert that", 
+   "nobody else has NULL'd it."
+  ], 
+  "revision_id": "1148932"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2011-07-20T20:38:34.255296Z", 
+  "msg": [
+   "[SM-2048] Use slf4j as default logging system in place of commons-logging."
+  ], 
+  "revision_id": "1148931"
+ }
+]

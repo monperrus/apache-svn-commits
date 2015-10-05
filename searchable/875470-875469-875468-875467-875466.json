@@ -1,0 +1,94 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2009-01-22T19:31:18.746998Z", 
+  "msg": [
+   "Fix issue #3171: Add MacPorts and Apple's Developer Tools to list of Mac OS X", 
+   "distribution sources.  The former has been there for a while, so add the later.", 
+   "* www/getting.html:", 
+   "Add Apple's developer tools to the Mac OS X section."
+  ], 
+  "revision_id": "875470"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-22T19:14:23.276710Z", 
+  "msg": [
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(svn_sqlite__step): On error, don't finalize the statement, but just reset it.", 
+   "This prevents the double-finalization of statements later on when closing", 
+   "the database.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "875469"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-22T19:12:43.053630Z", 
+  "msg": [
+   "On the http-protocol-v2 branch: Begin teaching ra_serf how to use the", 
+   "new root stub URI where available (but don't actually use it anywhere", 
+   "just it).", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__discover_root): Add 'vcc_only' parameter.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(discover_vcc): New, cored from svn_ra_serf__discover_root().", 
+   "(svn_ra_serf__discover_root): Add 'vcc_only' parameter, and reduce", 
+   "to a wrapper around discover_vcc() that can also return a cached", 
+   "root stub URI.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "* subversion/libsvn_ra_serf/getdate.c", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "* subversion/libsvn_ra_serf/replay.c", 
+   "Callers of svn_ra_serf__discover_root() updated to pass TRUE for the", 
+   "new 'vcc_only' parameter."
+  ], 
+  "revision_id": "875468"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-01-22T19:03:56.383688Z", 
+  "msg": [
+   "Introduce and use a printf()-style API for binding arguments to sqlite", 
+   "statements.", 
+   "* subversion/libsvn_subr/sqlite.c", 
+   "(vbindf, svn_sqlite__bindf): New.", 
+   "* subversion/include/private/svn_sqlite.h", 
+   "(svn_sqlite__bindf): New.", 
+   "* subversion/libsvn_fs_fs/rep-cache.c", 
+   "(svn_fs_fs__get_rep_reference, svn_fs_fs__set_rep_reference): Use the new", 
+   "binding API."
+  ], 
+  "revision_id": "875467"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-01-22T18:59:25.328739Z", 
+  "msg": [
+   "On the http-protocol-v2 branch: Unbreak capabilities parsing broken in r34912.", 
+   "(You shouldn't use pointer equality comparison against #defines,", 
+   "because the preprocessor effectively substitutes the defined values in", 
+   "all the places it is used, creating multiple individual string", 
+   "instances, each with their own unpredictable pointer values.)", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(SERF_CAPABILITY_YES, SERF_CAPABILITY_NO,", 
+   "SERF_CAPABILITY_SERVER_YES): Remove.", 
+   "(svn_ra_serf__exchange_capabilities): New.", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(capability_yes, capability_no, capability_server_yes): Restore", 
+   "these static strings, which were errantly removed in r34912.", 
+   "(svn_ra_serf__exchange_capabilities): Was serf.c:exchange_capabilities().", 
+   "Callers updated.", 
+   "(svn_ra_serf__has_capability): Was serf.c:svn_ra_serf__has_capability().", 
+   "Now compare against the restored static capabilities string pointers.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(svn_ra_serf__open): Update call to svn_ra_serf__exchange_capabilities().", 
+   "(exchange_capabilities, svn_ra_serf__exchange_capabilities): Moved", 
+   "to options.c."
+  ], 
+  "revision_id": "875466"
+ }
+]

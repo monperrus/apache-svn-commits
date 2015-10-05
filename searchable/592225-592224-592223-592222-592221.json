@@ -1,0 +1,62 @@
+[
+ {
+  "author": "trustin", 
+  "date": "2007-11-06T02:18:02.757746Z", 
+  "msg": [
+   "Now echoserver example performs very very well without any custom configuration. :D"
+  ], 
+  "revision_id": "592225"
+ }, 
+ {
+  "author": "trustin", 
+  "date": "2007-11-06T02:11:40.540354Z", 
+  "msg": [
+   "* Removed I/O spinning on the reader side because it seems like there's no effect at all", 
+   "* Instead, increased the write spinning loop count to 256, which improves memory utilization and write throughput significantly."
+  ], 
+  "revision_id": "592224"
+ }, 
+ {
+  "author": "djencks", 
+  "date": "2007-11-06T01:48:34.343000Z", 
+  "msg": [
+   "GERONIMO-3570 GERONIMO-3571 GERONIMO-3575 Provide an AbstractLoginModuleTest to uniformize test setup and make it easier to determine if all relevant tests have been supplied."
+  ], 
+  "revision_id": "592223"
+ }, 
+ {
+  "author": "jdcasey", 
+  "date": "2007-11-06T01:34:38.516000Z", 
+  "msg": [
+   "cleaning up NPE in the realm manager, and adding clear() method calls to the embedder to cleanup the realm manager after it's used, to try to keep the number of open realms to a minimum..."
+  ], 
+  "revision_id": "592222"
+ }, 
+ {
+  "author": "jmsnell", 
+  "date": "2007-11-06T01:23:59.049570Z", 
+  "msg": [
+   "I'm not sure if this is something we should keep or not, but... as has been recently discussed", 
+   "on the user mailing list, there are still examples of Atom feeds in the wild that use the old", 
+   "work-in-progress atom namespace (\"http://purl.org/atom/ns#\").  Those feeds really should be updated,", 
+   "but until they are, there are developers who want to be able to do interesting things with those feeds.", 
+   "Rather than go through and implement full support for the old namespace, this change provides a way for", 
+   "developers to optionally enable a QName-Alias mapping.  It is turned off by default.", 
+   "Example use:", 
+   "String s = \"<entry xmlns='http://purl.org/atom/ns#'/>\";", 
+   "StringReader sr = new StringReader(s);", 
+   "Abdera abdera = new Abdera();", 
+   "ParserOptions options = abdera.getParser().getDefaultParserOptions();", 
+   "options.setQNameAliasMappingEnabled(true);", 
+   "Map<QName,QName> map = new HashMap<QName,QName>();", 
+   "map.put(new QName(\"http://purl.org/atom/ns#\",\"entry\"),Constants.ENTRY);", 
+   "options.setQNameAliasMap(map);", 
+   "Document doc = abdera.getParser().parse(sr,options);", 
+   "System.out.println(doc.getRoot().getClass());", 
+   "Ordinarily, without the QName Alias Map, the parser would parse the element as an extension element, meaning the Entry interface could not be used. With the QName alias map in place, it is parsed as if the QName was the proper Atom qname.  In the resulting object model, and in the reserialized result, it will come out with the proper Atom namespace.", 
+   "There are several drawbacks to this approach, however... specifically, once a QName has been aliased in this way, there is no going back. The reserialized entry will use the Atom namespace.", 
+   "Like I said, I'm not sure if this is a solution we'll want to keep long term.  Please review it; if you think it's unnecessary or if there is a better way, let me know"
+  ], 
+  "revision_id": "592221"
+ }
+]

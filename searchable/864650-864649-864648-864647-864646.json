@@ -1,0 +1,108 @@
+[
+ {
+  "author": "malcolm", 
+  "date": "2007-04-14T14:09:19.745947Z", 
+  "msg": [
+   "FSFS: Shard revision files and revprop files into many directories by default.", 
+   "This changes the path used to store revisions and revprop files so they", 
+   "are grouped into directories of N files (1000, by default).  In the", 
+   "default scheme, r12345 will now be stored in the file db/revs/12/12345.", 
+   "This is primarily intended to allow the usage of large repositories", 
+   "on filesystems that prohibit directories larger than a certain size", 
+   "(either a hard limit, like the VFAT 64k limit, or a configurable limit,", 
+   "like some NFS servers).", 
+   "It will also improve performance on filesystems that have poor performance", 
+   "if the number of files in a directory exceeds a certain size.  The SCO", 
+   "UNIX default filesystem and VFAT are good examples.", 
+   "This implementation appends information to the FSFS db/format file to", 
+   "describe the directory layout, rather than forcing a fixed sharding", 
+   "amount.", 
+   "We also add a --pre-1.5-compatible flag to svnadmin to allow creation", 
+   "of repositories in the format created by 1.4 by default.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(SVN_FS_FS_DEFAULT_MAX_FILES_PER_DIR): New.", 
+   "(path_rev_shard, path_revprops_shard): New.  Return the shard directory", 
+   "for a particular rev or revprop.", 
+   "(svn_fs_fs__path_rev, path_revprops): Take account of sharding when", 
+   "determining the paths.", 
+   "(check_format_file_buffer_numeric): New.  Helper function for read_format().", 
+   "(read_format): Implement without using svn_io_read_version_file(),", 
+   "since we need to read content after the first line.  Parse the new", 
+   "'layout' option.", 
+   "(write_format): New.  Function to write out the format number and", 
+   "format options.", 
+   "(check_format): Support formats 1-3.", 
+   "(svn_fs_fs__open): Read the format options and store in the FSFS private", 
+   "data.", 
+   "(svn_fs_fs__hotcopy): Read the format options, take account of sharding", 
+   "when copying the revision and revprop files.  Write the format file", 
+   "out using write_format().", 
+   "(commit_body): Create new shards on demand.", 
+   "(svn_fs_fs__create): Determine the format number to use earlier,", 
+   "determine the layout to use (based on the format number), and", 
+   "optionally create the new sharded layout.  Write the format file", 
+   "out using write_format().", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(SVN_FS_FS__FORMAT_NUMBER): Bump the default filesystem format to '3'.", 
+   "(SVN_FS_FS__MIN_LAYOUT_FORMAT_OPTION_FORMAT): New.", 
+   "(fs_fs_data_t): Add 'max_files_per_dir'.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "Document the new filesystem format and format options.", 
+   "* subversion/include/svn_fs.h", 
+   "(SVN_FS_CONFIG_PRE_1_5_COMPATIBLE): New.", 
+   "* subversion/svnadmin/main.c", 
+   "(svnadmin__pre_1_5_compatible): New option value.", 
+   "(options): Add --pre-1.5-compatible.", 
+   "(cmd_table): Make 'svnadmin create' accept --pre-1.5-compatible.", 
+   "(struct svnadmin_opt_state): Add 'pre_1_5_compatible'.", 
+   "(subcommand_create): Set the SVN_FS_CONFIG_PRE_1_5_COMPATIBLE value in", 
+   "the filesystem config hash if the --pre-1.5-compatible option is given.", 
+   "(main): Set the option state for --pre-1.5-compatible."
+  ], 
+  "revision_id": "864650"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-14T00:13:37.282036Z", 
+  "msg": [
+   "* www/hacking.html", 
+   "(error-messages, other-conventions): Note the need to use the", 
+   "canonical path and file name form for inputs to Subversion APIs,", 
+   "and convert them back to local style when receiving them as output."
+  ], 
+  "revision_id": "864649"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2007-04-13T23:53:32.380324Z", 
+  "msg": [
+   "* www/hacking.html", 
+   "(other-conventions): Account for the addition of the new", 
+   "include/private/ area, and note that it should be used for symbols", 
+   "which are shared amongst modules, but private to Subversion."
+  ], 
+  "revision_id": "864648"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-04-13T21:09:31.725379Z", 
+  "msg": [
+   "Follow-up to r24572, put back XFail accidentally removed.", 
+   "Not quite ready for that yet...", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(test_list):Keep mergeinfo_update_elision as XFail for now."
+  ], 
+  "revision_id": "864647"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2007-04-13T20:49:19.175036Z", 
+  "msg": [
+   "Expand test coverage of mergeinfo elision during updates.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(mergeinfo_update_elision): Test elision of update target itself, not", 
+   "only elision of its children to itself."
+  ], 
+  "revision_id": "864646"
+ }
+]

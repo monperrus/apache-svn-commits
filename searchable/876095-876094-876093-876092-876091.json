@@ -1,0 +1,110 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2009-02-19T21:17:52.410855Z", 
+  "msg": [
+   "Update the WC schema based on recent learnings.", 
+   "- remove \"absent\" notion in favor of a general \"presence\" which can be", 
+   "\"normal\", \"absent\", \"excluded\", or \"incomplete\"", 
+   "- move changelist and tree_conflict_data to the ACTUAL table, and fold the", 
+   "changelist name into the table (rather than a separate table to map", 
+   "names to/from IDs)", 
+   "- make some columns of BASE_NODE null-able for cases where we don't know", 
+   "the information (i.e. non-present nodes)", 
+   "- add a \"text_mod\" to the ACTUAL table", 
+   "- change the LOCK table to use a repos_id/repos_relpath pair rather than", 
+   "just a simple url", 
+   "* subversion/libsvn_wc/wc-metadata.sql:", 
+   "(BASE_NODE): add PRESENCE column. make REVNUM, CHANGED_*, and", 
+   "PROPERTIES null-able.", 
+   "(WORKING_NODE): remove CHANGELIST_ID and TREE_CONFLICT_DATA columns", 
+   "(ACTUAL_NODE): renamed CHANGELIST_ID to CHANGELIST, accepting the actual", 
+   "changelist name rather than a mapped id. add TEXT_MOD and", 
+   "TREE_CONFLICT_DATA columns.", 
+   "(CHANGELIST): remove", 
+   "(LOCK): switch from URL to <REPOS_ID, REPOS_RELPATH> for the key", 
+   "* subversion/libsvn_wc/entries.c:", 
+   "(statement_keys, statements): remove INSERT_CHANGELIST, adjust the sql", 
+   "for the new/removed columns.", 
+   "(db_working_node_t): remove changelist_id and tree_conflict_data", 
+   "(db_actual_node_t): switch changelist_id to just changelist. add", 
+   "tree_conflict_data.", 
+   "(db_changelist_t): remove", 
+   "(db_lock_t): switch url to (repos_id, repos_relpath) fields.", 
+   "(fetch_base_nodes): renumber SELECT result column indices.", 
+   "(fetch_working_nodes): don't fetch changelist or tree conflict data", 
+   "(fetch_catual_nodes): switch to changelist name, and fetch tree conflict", 
+   "data.", 
+   "(read_entries): pull conflict data from ACTUAL. set the changelist field", 
+   "based on what we find in ACTUAL.", 
+   "(insert_base_node): renumber insert fields. bind \"normal\" to the", 
+   "PRESENCE column.", 
+   "(insert_working_node): do not insert changelist or conflict data", 
+   "(insert_actual_node): insert changelist name rather than an ID.", 
+   "(insert_changelist): removed", 
+   "(write_entry): simplify changelist handling. put the tree conflict data", 
+   "into ACTUAL."
+  ], 
+  "revision_id": "876095"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-19T21:14:30.070595Z", 
+  "msg": [
+   "Before writing a directory full of entries to the wc database, remove all", 
+   "existing WORKING and BASE nodes.  These nodes will be overwritten by any", 
+   "entries to be written, and this allows us to remove any additional orphan", 
+   "nodes (such as schedule-add -> schedule-delete).", 
+   "Current number of WC-NG test failures: 330", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(statement_keys, statements): New statements.", 
+   "(entries_write_body): Remove all WORKING and BASE nodes before adding", 
+   "the nodes for this directory."
+  ], 
+  "revision_id": "876094"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2009-02-19T19:13:00.734808Z", 
+  "msg": [
+   "Tagging release 1.6.0-rc2 with svn_version.h matching tarball."
+  ], 
+  "revision_id": "876093"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-02-19T18:45:45.320871Z", 
+  "msg": [
+   "Continued documentation and slight evolution of wc_db.", 
+   "* subversion/libsvn_wc/wc_db.h:", 
+   "(svn_wc__db_kind_t): document values. add UNKNOWN value.", 
+   "(svn_wc__db_status_t): add INCOMPLETE value", 
+   "(svn_wc__db_base_add_directory, svn_wc__db_base_add_file,", 
+   "svn_wc__db_base_add_symlink, svn_wc__db_base_get_prop,", 
+   "svn_wc__db_base_get_props, svn_wc__db_base_get_children,", 
+   "svn_wc__db_base_get_symlink_target): add docstrings", 
+   "(svn_wc__db_base_delete): renamed to ...", 
+   "(svn_wc__db_base_remove): ... this. added docstring.", 
+   "(svn_wc__db_base_get_info): added docstring. added STATUS parameter.", 
+   "removed SWITCHED parameter (let caller make a second API call).", 
+   "* subversion/libsvn_wc/wc_db.c:", 
+   "(svn_wc__db_base_delete): renamed to ...", 
+   "(svn_wc__db_base_remove): ... this.", 
+   "(svn_wc__db_base_get_info): updated parameters.", 
+   "* subversion/include/svn_error_codes.h:", 
+   "(SVN_ERR_WC_NOT_SYMLINK): new error code"
+  ], 
+  "revision_id": "876092"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2009-02-19T18:38:21.198327Z", 
+  "msg": [
+   "Make switch_tests.py 10 stop XPASSing over ra_serf.", 
+   "* subversion/tests/cmdline/switch_tests.py", 
+   "(file_dir_file): Add some checks that the switches which succeed", 
+   "actually make the dirent kind changes they were supposed to."
+  ], 
+  "revision_id": "876091"
+ }
+]
