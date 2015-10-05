@@ -1,0 +1,83 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2012-11-10T09:26:08.149044Z", 
+  "msg": [
+   "* serf.h: typo + indent fix, no functional change."
+  ], 
+  "revision_id": "1699228"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2012-11-09T15:58:01.549992Z", 
+  "msg": [
+   "Follow-up to r1676: Implement serf__kerb_reset_sec_context() for Windows", 
+   "SSPI.", 
+   "* auth/auth_kerb_sspi.c", 
+   "(serf__kerb_rese): Reset security context."
+  ], 
+  "revision_id": "1699227"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2012-11-09T15:31:43.989212Z", 
+  "msg": [
+   "Implement serf_connection_get_latency() to return estimated network", 
+   "latency. It could be used by smart application to disable compression for", 
+   "local area networks.", 
+   "* serf.h", 
+   "(serf_connection_get_latency): Declare.", 
+   "* outgoing.c", 
+   "(serf__open_connections): Remember time when we started connecting to", 
+   "server.", 
+   "(prepare_conn_streams): Calculate estimated network latency.", 
+   "(serf_connection_create): Initialize latency to -1 (unknown).", 
+   "(serf_connection_get_latency): Return estimated latency.", 
+   "* serf_private.h", 
+   "(serf_connection_t): Add connect_time and latency members."
+  ], 
+  "revision_id": "1699226"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2012-11-09T12:03:15.859147Z", 
+  "msg": [
+   "Rework detecting truncated response. Introduce new bucket type", 
+   "RESPONSE_BODY for fetching non-chunked responses and do not rely on gzip", 
+   "for detected truncated compressed responses.", 
+   "* buckets/response_buckets.c", 
+   "(response_context_t, serf_response_read): Remove check_length,", 
+   "exp_body_len and actual_body_len. Response body buckets are now", 
+   "responsible for detecting truncated responses.", 
+   "(run_machine): Use response_body bucket for non-chunked response instead", 
+   "of limit bucket.", 
+   "* buckets/response_body_buckets.c", 
+   "(): New bucket type.", 
+   "* serf.mak", 
+   "(LIB32_OBJS): Compile response_body_buckets.", 
+   "* serf_bucket_types.h", 
+   "(SERF_BUCKET_IS_RESPONSE_BODY, serf_bucket_response_body_create): New.", 
+   "* test/test_buckets.c", 
+   "(test_response_body_chunked_gzip_small): New test for truncated chunked", 
+   "compressed response.", 
+   "(test_buckets): Add test to suite."
+  ], 
+  "revision_id": "1699225"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2012-11-09T10:16:30.360300Z", 
+  "msg": [
+   "Follow-up r1685: Detect response truncation in edge cases.", 
+   "* buckets/dechunk_buckets.c", 
+   "(serf_dechunk_read): Raise error on EOF when reading trailing CRLF after", 
+   "chunk.", 
+   "* test/test_buckets.c", 
+   "(read_all): New.", 
+   "(test_response_body_chunked_no_crlf,", 
+   "test_response_body_chunked_incomplete_crlf): New tests.", 
+   "(test_buckets): Add tests to list."
+  ], 
+  "revision_id": "1699224"
+ }
+]

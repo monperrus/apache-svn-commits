@@ -1,0 +1,73 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2007-03-22T20:21:15.996173Z", 
+  "msg": [
+   "Add SERF_VERSION_AT_LEAST macro.", 
+   "* serf.h", 
+   "(SERF_VERSION_AT_LEAST): Add version test macro based on APR_VERSION_AT_LEAST."
+  ], 
+  "revision_id": "1698638"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2007-03-22T20:03:31.632392Z", 
+  "msg": [
+   "Add SSL client certificate support.", 
+   "* buckets/ssl_buckets.c", 
+   "(apr_portable.h, apr_strings.h, openssl/pkcs12.h): Include.", 
+   "(serf_ssl_context_t): Add in fields for client cert callbacks.", 
+   "(bio_file_read, bio_file_write, bio_file_gets, bio_file_method): Support", 
+   "OpenSSL BIOs for apr_file_t's.", 
+   "(ssl_decrypt): Do not abort() in the general error case - try to propogate", 
+   "errors upwards.", 
+   "(ssl_need_client_cert): Callback invoked by OpenSSL when it wants a cert.", 
+   "(serf_ssl_client_cert_provider_set, serf_ssl_client_cert_password_set):", 
+   "Callbacks invoked by our application if they want to support client certs.", 
+   "(ssl_init_context): This is the only way to do things; and register our", 
+   "ssl_need_client_cert callback and let our OpenSSL callers find us later.", 
+   "* serf_bucket_types.h", 
+   "(serf_ssl_need_client_cert_t, serf_ssl_need_cert_password_t): New prototypes", 
+   "to fetch a SSL client cert and password.", 
+   "(serf_ssl_client_cert_provider_set, serf_ssl_client_cert_password_set): New", 
+   "callbacks for a client to register they support client certs."
+  ], 
+  "revision_id": "1698637"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-12-30T02:12:55.397648Z", 
+  "msg": [
+   "* buckets/headers_buckets.c", 
+   "(serf_headers_read_iovec): Add a comment explaining why this optimization", 
+   "is safe; fix up the avail == 0 case; reflow bad identation."
+  ], 
+  "revision_id": "1698636"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-12-30T01:43:02.856421Z", 
+  "msg": [
+   "Implement serf_request_read_iovec to further condense TCP writev() calls.", 
+   "* buckets/request_buckets.c", 
+   "(serf_request_read_iovec): Implement.", 
+   "(serf_bucket_type_request): Delegate to the aggregate bucket directly", 
+   "instead of letting a level of indirection separate the read() passes."
+  ], 
+  "revision_id": "1698635"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-12-29T17:30:14.815365Z", 
+  "msg": [
+   "Implement optimized iovec reads for header buckets.", 
+   "This greatly optimizes the network performance when lots of headers are in use", 
+   "by allowing smarter (and larger) writev() calls.", 
+   "* buckets/headers_buckets.c", 
+   "(serf_headers_read_iovec): Implement.", 
+   "(serf_bucket_type_headers): Use optimized iovec reader instead of default", 
+   "* CHANGES: Note this change."
+  ], 
+  "revision_id": "1698634"
+ }
+]

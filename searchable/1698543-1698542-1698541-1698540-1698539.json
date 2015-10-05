@@ -1,0 +1,116 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-09T18:15:11.772912Z", 
+  "msg": [
+   "Gracefully handle the case where our connection has a write error or we get a", 
+   "Connection: Close header back.", 
+   "We will notify all of the remaining request handlers that the connection is", 
+   "about to be terminated by passing a NULL response pointer to them.  (Invoking", 
+   "with a NULL has been denoted in the design-guide as our mechanism for", 
+   "indicating this scenario, but was not previously implemented.)", 
+   "* serf.h", 
+   "(SERF_ERROR_CLOSING): New code returned by handler to indicate that it", 
+   "thinks that the response has a Conn: Close header.", 
+   "(serf_connection_reset): New function that will reset a connection and", 
+   "cause serf to later reopen the socket.", 
+   "(serf_debug__bucket_alloc_check): New debug function that will check an", 
+   "allocator to ensure that it has no remaining allocations before it dies.", 
+   "* buckets/allocator.c", 
+   "(allocator_cleanup): Always free the allocator - in the case of a cleanup,", 
+   "we know that there will be unfreed buckets (as we never read) - so don't", 
+   "abort() in that case.", 
+   "(serf_debug__bucket_alloc_check): If we have unfreed allocs, abort().", 
+   "* context.c", 
+   "(serf_connection_t): Add fields to indicate that we have a socket that has", 
+   "received a write error and hold all subsequently delivered requests until", 
+   "we are ready to reopen the socket.", 
+   "(update_pollset): Put back in HUP and ERR for now.  (I know that we took", 
+   "this out before, but let's try again.)", 
+   "(no_more_writes): Mark the connection as unstable when it has a write error;", 
+   "we will defer the actual request cancelations in the hope that we'll get", 
+   "ERROR_CLOSING from handler (we may have to rethink this though).", 
+   "(write_to_connection): Call no_more_writes when we get an EPIPE error.", 
+   "(read_from_connection): If a handler returns SERF_ERROR_CLOSING, we treat", 
+   "this as an EOF with the additional meaning that we should reset our socket;", 
+   "call the alloc check on the request->allocator as it should be freed now.", 
+   "(cancel_request): Actually do the request cancellation properly.", 
+   "(serf_connection_reset): Clear out the socket and all unresponded to", 
+   "requests and prep the socket to be re-opened.", 
+   "(link_requests): Add the new request to the end of a list.", 
+   "(serf_request_deliver): If our connection is closing, just add it to our", 
+   "hold list; otherwise add it to the active list and update our pollset."
+  ], 
+  "revision_id": "1698543"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2006-02-08T15:03:28.401413Z", 
+  "msg": [
+   "Added for consideration...", 
+   "This is a Python-based end-user build script. There is no autogen/buildconf", 
+   "step, nor a ./configure step. It uses apr/apu-config to fetch all the", 
+   "right bits and simply Does The Work.", 
+   "Still rather hacky/incomplete/demo, but it demonstrates a new, simple way", 
+   "to skip the auto* mess (and leverage APR). It can build the library and", 
+   "all the test programs, along with running the equiv of \"make check\".", 
+   "* serfmake: new python building script"
+  ], 
+  "revision_id": "1698542"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2006-02-08T09:01:43.058601Z", 
+  "msg": [
+   "Clarify some bucket behavior and take some notes on a revision of the API", 
+   "to enable some bucket tracking.", 
+   "* design-guide.txt: clarify bucket behavior and proper usage", 
+   "* STATUS: two allocators will enable better tracking"
+  ], 
+  "revision_id": "1698541"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2006-02-08T02:57:13.725945Z", 
+  "msg": [
+   "Justin discovered an overflow in the tracking array when we first filled", 
+   "it up. The cur_index would reach TRACK_BUCKET_COUNT and we'd try to insert", 
+   "some data there, which is out of bounds.", 
+   "This change renames cur_index to next_index, indicating where the next", 
+   "bucket will be stored within the tracking ring. It also gets rid of the", 
+   "special index==0 bucket stuff, simplifying the semantics around this", 
+   "stuff. The find_read_status() has been rewritten to account for these new", 
+   "semantics.", 
+   "The __entered_loop function didn't actually work -- it never reset the", 
+   "(old) cur_index value. This function isn't actually called, so we never", 
+   "ran into the problem. It has been corrected should we start to call it in", 
+   "the future.", 
+   "As a minor side change, I've also added \"const\" to some bucket parameters", 
+   "where we were not doing anything with the bucket (just its pointer).", 
+   "* serf.h:", 
+   "(serf_debug__record_read, serf_debug__bucket_destroy): constify an arg", 
+   "* buckets/allocator.c:", 
+   "(read_status_t): constify the bucket pointer we're tracking", 
+   "(track_state_t): rename cur_index to next_index, to indicate where we'll", 
+   "store the NEXT bucket that gets tracked. changed callers.", 
+   "(find_read_status): constify the bucket arg and rewrite to use the", 
+   "clarified next_index semantics.", 
+   "(serf_debug__record_read, serf_debug__bucket_destroy): constify an arg", 
+   "(serf_debug__entered_loop): reset the next_index value, and forget about", 
+   "storing anything into info[0]."
+  ], 
+  "revision_id": "1698540"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-04T02:52:52.108909Z", 
+  "msg": [
+   "Really fix the chunking problem seen in r853 by saving ->stream's state.", 
+   "The commit in r853 would return EAGAIN too soon when there wasn't a need to do", 
+   "so just yet as we should exhaust ->chunk first.", 
+   "Suggested by: Greg", 
+   "Dunce cap:    Justin"
+  ], 
+  "revision_id": "1698539"
+ }
+]

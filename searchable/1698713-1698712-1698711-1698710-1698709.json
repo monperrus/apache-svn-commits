@@ -1,0 +1,102 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2008-03-17T01:04:06.808119Z", 
+  "msg": [
+   "Add SSL server certification validation. This uses the default OpenSSL", 
+   "validation algorithm, but also provides a callback to override the result.", 
+   "This fixes issue #31.", 
+   "* serf_bucket_types.h", 
+   "(global): add cert. validation failure codes.", 
+   "(serf_ssl_need_server_cert_t): function type for the validation callback.", 
+   "(serf_ssl_server_cert_callback_set): allows to override the validation", 
+   "algorithm.", 
+   "(serf_ssl_use_default_certificates): allows using any pre-installed CA", 
+   "certificates.", 
+   "(serf_ssl_cert_issuer, serf_ssl_cert_subject,", 
+   "serf_ssl_cert_certificate): functions to extract information from the", 
+   "certificate.", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_context_t): add some members to support the cert. validation.", 
+   "(serf_ssl_certificate_t): define structure.", 
+   "(ssl_init_context): defined the internal callback for server cert. validation.", 
+   "(serf_ssl_server_cert_callback_set,", 
+   "serf_ssl_use_default_certificates,", 
+   "serf_ssl_cert_issuer,", 
+   "serf_ssl_cert_subject,", 
+   "serf_ssl_cert_certificate): new function definitions.", 
+   "(ssl_decrypt): pass-through any certificate validation error."
+  ], 
+  "revision_id": "1698713"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-03-03T17:33:27.203217Z", 
+  "msg": [
+   "* CHANGES: Update in preparation of 0.2 release."
+  ], 
+  "revision_id": "1698712"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-03-03T15:31:11.099686Z", 
+  "msg": [
+   "Simplify serf's API:", 
+   "- Allow the user to create a serf_connection to a url instead of an address.", 
+   "- Add a new function to create request buckets with a 'Host' header and an", 
+   "absolute url for proxy support.", 
+   "* serf.h", 
+   "(serf_connection_create2,", 
+   "serf_request_bucket_request_create): New declarations.", 
+   "* context.c", 
+   "(struct serf_connection_t): Add two fields to store host info.", 
+   "(serf_connection_create2): New function, creates connection based on hostname.", 
+   "(serf_request_bucket_request_create): New function, creates request bucket and", 
+   "initializes with Host header and for proxy support.", 
+   "* test/test_context.c", 
+   "(setup_request): use serf_request_bucket_request_create for its proxy support.", 
+   "(test_serf_connection_request_create,", 
+   "test_serf_connection_priority_request_,", 
+   "test_serf_closed_connection,", 
+   "test_keepalive_limit_one_by_one_and_burst,", 
+   "test_serf_progress_callback): Update calls to test_server_create.", 
+   "(test_serf_setup_proxy): Check for the Host header. Update calls to", 
+   "test_server_create.", 
+   "* test/test_serf.h", 
+   "(test_server_create): Add host_url argument.", 
+   "* test/test_util.c", 
+   "(test_server_create): Add host_url argument. Use serf_connection_create2 if", 
+   "host_url is set."
+  ], 
+  "revision_id": "1698711"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-03-03T15:13:23.079184Z", 
+  "msg": [
+   "Cleanup in test suite.", 
+   "* test/test_all.c", 
+   "(main): destroy global pool on exit."
+  ], 
+  "revision_id": "1698710"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-03-01T16:20:27.591414Z", 
+  "msg": [
+   "Free some resources in the test suite to avoid memory leaks showing up", 
+   "in valgrind.", 
+   "* test/CuTest.h", 
+   "(CuStringFree, CuTestFree, CuSuiteFree, CuSuiteFreeDeep): New function", 
+   "declarations.", 
+   "(CuTest.name): No more const so we can pass it to free() without cast away", 
+   "constness.", 
+   "* test/CuTest.c", 
+   "(CuStringFree, CuTestFree, CuSuiteFree, CuSuiteFreeDeep): New functions that", 
+   "free resources.", 
+   "* test/test_all.c", 
+   "(main): Free resources after use."
+  ], 
+  "revision_id": "1698709"
+ }
+]

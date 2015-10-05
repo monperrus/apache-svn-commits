@@ -1,0 +1,123 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-05-02T20:39:58.225080Z", 
+  "msg": [
+   "* test/CuTest.h: Updated list of modifications for serf."
+  ], 
+  "revision_id": "1699358"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-02T20:26:48.407406Z", 
+  "msg": [
+   "In the testsuite, add a per-suite constructor and destructor that's run resp.", 
+   "before and after every test. This should solve the issue that if one test fails", 
+   "all subsequent tests fail (server port in use error).", 
+   "* test/CuTest.h", 
+   "(TestCallback): New type.", 
+   "(struct CuTest): Add setup and teardown callbacks.", 
+   "(struct CuSuite): Add setup and teardown callbacks.", 
+   "(CuSuiteSetSetupTeardownCallbacks): New function declaration.", 
+   "* test/CuTest.c", 
+   "(CuTestRun): Run setup() before and teardown() after the test.", 
+   "(CuSuiteInit): Init setup and teardown to NULL.", 
+   "(CuSuiteAdd): Set the callbacks on the test.", 
+   "(CuSuiteSetSetupTeardownCallbacks): New function.", 
+   "* test/server/test_server.c", 
+   "(test_server_destroy): Function doesn't need pool argument.", 
+   "(cleanup_server): New function.", 
+   "(test_setup_server): Register the cleanup function to be called on pool", 
+   "destruction.", 
+   "* test/test_util.c", 
+   "(cleanup_conn): New function.", 
+   "(setup): Register the cleanup function to be called on pool destruction.", 
+   "(test_server_teardown): Remove, now handled by clean_conn and cleanup_server.", 
+   "(test_setup,", 
+   "test_teardown): Change signature to match TestCallback.", 
+   "* test/test_serf.h", 
+   "(test_server_teardown): Remove, now handled by clean_conn and cleanup_server.", 
+   "(test_setup,", 
+   "test_teardown): Change signature to match TestCallback.", 
+   "* test/server/test_server.h:", 
+   "(test_server_destroy): Function doesn't need pool argument.", 
+   "* test/test_context.c", 
+   "* test/test_ssl.c", 
+   "* test/test_buckets.c", 
+   "* test/mock_buckets.c:", 
+   "(*): Don't call setup() and teardown() functions explicitly.", 
+   "Test_pool now is set on the testCase", 
+   "(test_[ssl|context|buckets|mock_bucket]): Init suite with test_setup() and", 
+   "test_teardown() callbacks."
+  ], 
+  "revision_id": "1699357"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-05-02T13:02:46.807084Z", 
+  "msg": [
+   "SPNego authentication optimization.", 
+   "* auth/auth_kerb.c", 
+   "(serf__validate_response_kerb_auth): Retrieve auth header only when", 
+   "needed."
+  ], 
+  "revision_id": "1699356"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-02T09:56:08.541714Z", 
+  "msg": [
+   "Enable the test suite's ssl server to return a chain of certificates to the", 
+   "client.", 
+   "* test/test_serf.h", 
+   "(test_https_server_setup): Take array of certs.", 
+   "* test/test_util.c", 
+   "(test_https_server_setup): Take array of certs, update test_setup_https_server", 
+   "call.", 
+   "* test/server/test_server.h", 
+   "(test_setup_https_server,", 
+   "init_ssl_context): Take array of certs.", 
+   "* test/server/test_server.c", 
+   "(test_setup_https_server): Take array of certs. Update init_ssl_context call.", 
+   "* test/server/test_sslserver.c", 
+   "(init_ssl_context): Take the array of certs, add all certs to the chain.", 
+   "* test/test_context.c", 
+   "(server_certs[]): Certs that the server will pass to the client.", 
+   "(test_serf_ssl_handshake): This test relies on all cert validation's failing,", 
+   "so don't let the server return multiple certs here.", 
+   "(https_set_root_ca_conn_setup): No need to explicitly trust the ca cert,", 
+   "it will be provided by the server.", 
+   "(test_serf_ssl_trust_rootca,", 
+   "test_serf_ssl_application_rejects_cert,", 
+   "test_serf_ssl_certificate_chain,", 
+   "test_serf_ssl_no_servercert_callback_allok,", 
+   "test_serf_ssl_no_servercert_callback_fail,", 
+   "test_serf_ssl_large_response): Update call to test_https_server_setup,", 
+   "use server_certs[] to make the server return both server and ca cert.", 
+   "The root ca cert is not in this chain, so that one has to be explicitly", 
+   "trusted still."
+  ], 
+  "revision_id": "1699355"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-02T09:24:28.438643Z", 
+  "msg": [
+   "In the test suite, update mock_buckets to calculate the length of the action", 
+   "data.", 
+   "Suggested by: chemodax.", 
+   "* test/test_serf.h", 
+   "(struct mockbkt_action): Remove len member variable.", 
+   "* test/mock_buckets.c", 
+   "(next_action): Calculate action data length.", 
+   "(serf_mock_readline,", 
+   "serf_mock_read,", 
+   "serf_mock_peek): Use ctx->remaining_data instead of action->len. Use", 
+   "ctx->current_data as the pointer to the current start of data.", 
+   "(test_basic_mock_bucket): Don't set len when creating mockbkt_action's.", 
+   "* test/test_buckets.c", 
+   "(test_linebuf_crlf_split): Don't set len when creating mockbkt_action's."
+  ], 
+  "revision_id": "1699354"
+ }
+]

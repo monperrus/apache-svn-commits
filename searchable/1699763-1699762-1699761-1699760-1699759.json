@@ -1,0 +1,92 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2013-11-12T11:59:35.421072Z", 
+  "msg": [
+   "Improve readability of some code. No functional changes.", 
+   "* buckets/ssl_buckets.c", 
+   "(bio_bucket_read,", 
+   "bio_bucket_write): Don't use ctx->bio and bio. They point to the same", 
+   "variable and mixing them only obfuscates this already hard to read", 
+   "code.", 
+   "(ssl_decrypt,", 
+   "ssl_encrypt): Document that these functions implement serf_databuf_reader_t."
+  ], 
+  "revision_id": "1699763"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-10-28T11:21:52.909890Z", 
+  "msg": [
+   "* trunk/buckets/ssl_buckets.c", 
+   "(validate_server_certificate):", 
+   "Handle the X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE error that you get", 
+   "when  you connect to a server that doesn't publish the full certificate", 
+   "chain and don't have the proper root (and intermediate certificates) in", 
+   "openssl as an 'Unknown Certificate Authority' error.", 
+   "This allows accepting this certificate in Subversion, where it used to", 
+   "be reported as an unsuppressable 'unknown certificate error'.", 
+   "(This matches ssl_verify_alarm_type()'s implementation of this specific", 
+   "error type)", 
+   "Found while testing the Windows certificate verification code in Subversion", 
+   "trunk in several worst case scenarios from the SharpSvn tests."
+  ], 
+  "revision_id": "1699762"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-19T10:57:23.407219Z", 
+  "msg": [
+   "Add flag to scons to disable logging at compile time.", 
+   "* SConstruct", 
+   "(DISABLE_LOGGING): New parameter. Pass SERF_DISABLE_LOGGING flag to compiler", 
+   "when set.", 
+   "* serf_private.h", 
+   "(SERF_LOGGING_ENABLED): Enable only when SERF_DISABLE_LOGGING is not set."
+  ], 
+  "revision_id": "1699761"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-19T10:54:39.854535Z", 
+  "msg": [
+   "Follow up to r2222: Fix the code to enable logging for testing.", 
+   "* logging.c", 
+   "(log_baton_t): Remove obsolete variables level & comps.", 
+   "(serf__log_init): Save the log_baton first before it's used to add the log", 
+   "output."
+  ], 
+  "revision_id": "1699760"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-19T08:33:53.013308Z", 
+  "msg": [
+   "Add a logging API so that an application can configure log level/components", 
+   "and output stream at runtime.", 
+   "* context.c", 
+   "(serf_context_create_ex): Cache a config object in the context.", 
+   "* logging.c", 
+   "(log_baton_t): Add output_list variable.", 
+   "(log_to_output_t): New callback declaration.", 
+   "(serf_log_output_t): New struct declaration.", 
+   "(serf__log_init): Initialize the output_list, add some test code to setup", 
+   "logging to stderr.", 
+   "(serf__log_nopref,", 
+   "serf__log): Log the message to each of the definded output modules.", 
+   "(log_to_stream_output): New function, logs to a FILE stream.", 
+   "(serf_logging_create_stream_output): Create a output module for a standard", 
+   "stream type (stdout, stderr).", 
+   "(serf_logging_add_output): Enable an output module for this context.", 
+   "* serf.h", 
+   "(serf_log_output_t, serf_log_layout_t): New typedefs.", 
+   "(SERF_LOG_DEFAULT_LAYOUT): New placeholder define.", 
+   "(serf_logging_create_stream_output,", 
+   "serf_logging_add_output): New declarations.", 
+   "* serf_private.h", 
+   "(SERF_LOGGING_ENABLED): Enable logging by default.", 
+   "(serf_context_t): Cache config object."
+  ], 
+  "revision_id": "1699759"
+ }
+]

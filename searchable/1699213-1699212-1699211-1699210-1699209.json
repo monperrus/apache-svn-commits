@@ -1,0 +1,90 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2012-11-06T16:05:29.625704Z", 
+  "msg": [
+   "The current assumption in auth_kerb.c that SPNEGO authentication is per", 
+   "connection is not always valid (depends on the server). A large rewrite of that", 
+   "code was needed to cleanly support both per-connection or per-request", 
+   "authentication.", 
+   "This should fix issues 77 and 89.", 
+   "This change also adds extra logging and many comments in the SPNEGO authn code.", 
+   "* auth/auth_kerb.h", 
+   "(serf__kerb_reset_sec_context): New function declaration.", 
+   "* auth/auth_kerb_sspi.c", 
+   "(serf__kerb_reset_sec_context): Empty implementation of the new function,", 
+   "to be implemented in a later patch.", 
+   "* auth/auth_kerb_gss.c", 
+   "(serf__kerb_reset_sec_context): Implement the new function.", 
+   "(serf__kerb_init_sec_context): Add/fix comments.", 
+   "* auth/auth_kerb.c", 
+   "(): Update comments of how the Negotiate handshake works.", 
+   "(enum authn_persistence_state_t): New.", 
+   "(struct gss_authn_info_t): Add pstate member.", 
+   "(do_auth): Take response code as argument. Implement the new state machine to", 
+   "find out if the server wants per-connection or per-request authentication.", 
+   "Also, enable HTTP pipelining only if we know the server supports", 
+   "per-connection authentication!", 
+   "(serf__init_kerb_connection): Set initial persistence state.", 
+   "(serf__handle_kerb_auth): Add support for per-request authentication.", 
+   "(serf__validate_response_kerb_auth): Add support for per-connection", 
+   "authentication."
+  ], 
+  "revision_id": "1699213"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-06T14:36:15.495313Z", 
+  "msg": [
+   "* outgoing.c: Comment fix, no functional change."
+  ], 
+  "revision_id": "1699212"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-10-30T21:06:37.553411Z", 
+  "msg": [
+   "Small refactoring in preparation of an auth_kerb improvement: fix incorrect", 
+   "usage of http response code to indicate host or proxy authentication.", 
+   "* serf_private.h", 
+   "(serf__setup_request_func_t): Add extra 'peer' argument.", 
+   "* auth/auth.h", 
+   "* auth/auth_kerb.c", 
+   "(serf__setup_request_kerb_auth)", 
+   "* auth/auth_digest.c", 
+   "(serf__init_digest_connection)", 
+   "* auth/auth_basic.c", 
+   "(serf__init_basic_connection): Update functions to take the extra peer", 
+   "argument, use it to select between host or proxy authentication.", 
+   "* outgoing.c", 
+   "(serf_request_bucket_request_create): Use HOST or PROXY instead of 401/407 in", 
+   "calls to authn request setup implementations."
+  ], 
+  "revision_id": "1699211"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-10-27T08:51:36.675820Z", 
+  "msg": [
+   "* auth/auth.c: Fix use of the wrong status variable."
+  ], 
+  "revision_id": "1699210"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-10-23T21:41:17.344664Z", 
+  "msg": [
+   "Implement partial fix for issue 89: for Negotiate authentication, use", 
+   "the SPNEGO OID when initializing the GSS-API security context.", 
+   "* auth/auth_kerb_gss.c", 
+   "(GSS_SPNEGO_MECHANISM): Define OID.", 
+   "(struct serf__kerb_context_t): Update comment.", 
+   "(serf__kerb_create_sec_context): Use GSS_SPNEGO_MECHANISM instead of", 
+   "GSS_C_NO_OID to initiate the context.", 
+   "(serf__kerb_init_sec_context): Ignore the actual mechanism used for the", 
+   "handshake, we have to keep passing GSS_SPNEGO_MECHANISM to subsequent calls", 
+   "to gss_init_sec_context."
+  ], 
+  "revision_id": "1699209"
+ }
+]

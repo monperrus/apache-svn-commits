@@ -1,0 +1,62 @@
+[
+ {
+  "author": "ggregory", 
+  "date": "2015-08-15T23:10:55.626809Z", 
+  "msg": [
+   "findbugs-maven-plugin 3.0.1 -> 3.0.2 on Java 7."
+  ], 
+  "revision_id": "1696108"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2015-08-15T23:09:55.821717Z", 
+  "msg": [
+   "findbugs-maven-plugin 3.0.1 -> 3.0.2."
+  ], 
+  "revision_id": "1696107"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2015-08-15T23:07:53.760987Z", 
+  "msg": [
+   "findbugs-maven-plugin 3.0.0 -> 3.0.2."
+  ], 
+  "revision_id": "1696106"
+ }, 
+ {
+  "author": "jailletc36", 
+  "date": "2015-08-15T22:05:08.886832Z", 
+  "msg": [
+   "With the current implementation, it is likely to connect/close a socket with the memcache server for each command sent.", 
+   "The root cause is a too small idle timeout (600 microseconds).", 
+   "Add a new directive, 'MemcacheConnTTL',  to control this idle connection timeout with the memcache server(s).", 
+   "Change the default value from 600 usec (!) to 15 sec as per Yann suggestion.", 
+   "I've limited accepted values from 1 to 1800 seconds (half an hour) because internaly, the value passed to 'apr_memcache_server_create' is still in mirco-seconds.", 
+   "PR 58091", 
+   "~~~~~~~~~~~~~~~~~~~_", 
+   "Homemade measurement (on a slighly modified version of httpd) shows a +30% in number of processed requests using memcache to cache /index.html.", 
+   "Comparison made between the 600 usec and 15 sec TTL.", 
+   "Memcache config:", 
+   "default", 
+   "httpd Config:", 
+   "CacheEnable socache /", 
+   "CacheSocache memcache:127.0.0.1", 
+   "LoadModule mpm_event_module modules/mod_mpm_event.so", 
+   "httpd compiled with:", 
+   "./configure --enable-mpms-shared=all --with-included-apr --with-mysql --with-libxml2 --enable-modules=reallyall --enable-ssl-ct=no --enable-maintainer-mode --prefix=$HOME/httpd-2.5", 
+   "httpd and memcache running on the same VM running under Ubuntu 15.04", 
+   "Load tested using:", 
+   "ab -n 20000 http://127.0.0.1/index.html", 
+   "Creation/closing of connections beetween httpd and memcache confirmed using the telnet connection to memcache and the stats command"
+  ], 
+  "revision_id": "1696105"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2015-08-15T21:39:31.509841Z", 
+  "msg": [
+   "Remove unused import."
+  ], 
+  "revision_id": "1696104"
+ }
+]

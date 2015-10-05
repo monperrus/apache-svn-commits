@@ -1,0 +1,97 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-05-13T16:49:49.388612Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Add extra test for the DER decoding code. The test is easy to expand with new", 
+   "certificates to decode and validate.", 
+   "* test/test_ssl.c", 
+   "(struct test_dn_t, struct test_cert_t): New structure types.", 
+   "(validate_dn): New helper function, validates that all fields of a subject", 
+   "or issuer are correctly decoded.", 
+   "(validate_cert): New helper function, validates that all fields of a", 
+   "certificate are correctly decoded (excluding sha1 for now).", 
+   "(test_ssl_cert_subject,", 
+   "test_ssl_cert_issuer): Use the new helper functions.", 
+   "(extract_cert_from_pem): Generalize this function so that it can also", 
+   "include the BEGIN/END delimiter lines in the output.", 
+   "(test_ssl_cert_export): Update call to extract_cert_from_pem.", 
+   "(read_certificate): New helper function, reads a certificate from", 
+   "test/certificates.pem.", 
+   "(test_certs[]): Expected values for the certificates in test/certificates.pem.", 
+   "(test_sectrans_DER_decoding): New test.", 
+   "(test_ssl): Run the new test.", 
+   "* buckets/bucket_private.h", 
+   "* buckets/sectrans_buckets.c", 
+   "(load_CA_cert_from_buffer): Add a helper function to load a certificate", 
+   "from a memory buffer. Private to serf and the test suite for now."
+  ], 
+  "revision_id": "1699383"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-13T16:40:35.987785Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Make CuAssertStrEquals support expected value NULL. This also fixes an incorrect", 
+   "match in case the actual string = expected string + a postfix.", 
+   "* CuTest.c", 
+   "(CuAssertStrEquals_LineMsg): Reimplement using strcmp.", 
+   "* CuTest.h: Update list of modifications."
+  ], 
+  "revision_id": "1699382"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-13T06:18:27.330570Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Use specific pool during ssl handshake for temporary resources.", 
+   "* buckets/sectrans_buckets.c", 
+   "(struct sectrans_context_t): Add handshake_pool member variable.", 
+   "(sectrans_init_context): Initialize the handshake pool.", 
+   "(sectrans_free_context): Destroy the handshake pool. No need to delete the", 
+   "keychain here, it's now bound to the pool.", 
+   "(create_temp_keychain): Use pool passed in as argument.", 
+   "(provide_client_certificate): Use the handshake pool for the client identity", 
+   "and temporary keychain."
+  ], 
+  "revision_id": "1699381"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-11T10:00:19.928314Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Implement the certificate chain callback.", 
+   "* buckets/sectrans_buckets.c", 
+   "(log_certificate): New helper function.", 
+   "(find_issuer_cert): Finds the certificate of the issuer of a certificate", 
+   "in the trusted anchor list.", 
+   "(validate_server_certificate): Cleanup some obsolete code. Rename certrefs", 
+   "to anchor_certrefs. Don't use the new failure codes (yet). Get the", 
+   "certificates in the chain via SecTrustGetCertificateAtIndex. Get or", 
+   "construct the complete certicicate chain to pass to the application.", 
+   "* buckets/sectrans_x509_cert.c", 
+   "(dataref_cleanup): New helper function.", 
+   "(read_X509_DER_DistinguishedName,", 
+   "serf__sectrans_read_X509_DER_certificate): Store the DER encoding of issuer", 
+   "and subject in the output hashtable, to be used as search key."
+  ], 
+  "revision_id": "1699380"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-11T09:15:36.725430Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "* buckets/sectrans_buckets.c", 
+   "(validate_server_certificate,", 
+   "serf_sectrans_encrypt_read,", 
+   "decrypt_more_data): Consistently use variable name osstatus for", 
+   "the status codes returned by the Core Foundation API's."
+  ], 
+  "revision_id": "1699379"
+ }
+]

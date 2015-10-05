@@ -1,0 +1,114 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2014-09-01T13:27:25.478451Z", 
+  "msg": [
+   "SSPI authentication correctness fix. See issue #147.", 
+   "* auth/auth_spnego_sspi.c", 
+   "(serf__spnego_init_sec_context): Do not use ISC_REQ_CONFIDENTIALITY since", 
+   "we're not going to encrypt anything."
+  ], 
+  "revision_id": "1699953"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-31T14:37:18.373933Z", 
+  "msg": [
+   "Keep track of the number of pending requests, both written and unwritten. Add", 
+   "two functions to the API to get these numbers per connection, which the", 
+   "application can use to select the fastest connection.", 
+   "* serf.h", 
+   "(serf_connection_queued_requests,", 
+   "serf_connection_pending_requests): New API declarations.", 
+   "* outgoing.c", 
+   "(req_list_length): Helper function, calculates the length of a linked list.", 
+   "(reset_connection,", 
+   "write_to_connection, read_from_connection,", 
+   "serf_connection_request_create,", 
+   "priority_request_create): Keep track of the number of unwritten and written", 
+   "reqests.", 
+   "(serf_connection_queued_requests,", 
+   "serf_connection_pending_requests): New function definitions.", 
+   "* serf_private.h", 
+   "(serf_connection_t): Add nr_of_written_reqs, nr_of_unwritten_reqs fields."
+  ], 
+  "revision_id": "1699952"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-21T17:35:53.167726Z", 
+  "msg": [
+   "Add a workaround for issue #135: SSL renegotiation over a connection that", 
+   "uses HTTP pipelining will fail with OpenSSL.", 
+   "The workaround: when a connection has pipelining enabled, detect when a server", 
+   "initiates a SSL renegotiation via the SSL alert info callback, reset the", 
+   "connection, disable pipelining on the connection and reconnect to the server.", 
+   "* serf.h", 
+   "(SERF_ERROR_SSL_NEGOTIATE_IN_PROGRESS): New error code.", 
+   "(SERF_CONFIG_CONN_PIPELINING): New config key, its value is \"Y\" or \"N\" to", 
+   "indicate if HTTP pipelining is enabled on the connection.", 
+   "(SERF_CONFIG_*) Renumber to clarify that their code is per category.", 
+   "* buckets/ssl_buckets.c", 
+   "(struct serf_ssl_context_t): New flag renegotiation.", 
+   "(detect_renegotiate): New OpenSSL state callback, listens for the", 
+   "\"SSL renegotiate ciphers\" alert and raises an error flag.", 
+   "(bio_bucket_read,", 
+   "bio_bucket_write): When the renegotiation flag is raised bailed out", 
+   "immediately.", 
+   "(ssl_init_context): Initiate the renegotiation flag.", 
+   "(serf_ssl_set_config): When the SERF_CONFIG_CONN_PIPELINING key is set to \"Y\",", 
+   "detect renegotiation events.", 
+   "* outgoing.c", 
+   "(serf__open_connections): Set the SERF_CONFIG_CONN_PIPELINING config value to", 
+   "\"Y\" if HTTP pipelining is enabled on the connection.", 
+   "(read_from_connection): Handle SERF_ERROR_SSL_NEGOTIATE_IN_PROGRESS errors.", 
+   "TODO: we probably have to do this in write_to_connection as well.", 
+   "* test/test_ssl.c", 
+   "(test_ssl_renegotiate): Enable and finish the already written test for this", 
+   "issue.", 
+   "* test/MockHTTPinC/MockHTTP_server.c", 
+   "(setupTCPServer,", 
+   "_mhRunServerLoop): Handle sudden connection aborts initiated by the client.", 
+   "(initSSLCtx): Add some logging."
+  ], 
+  "revision_id": "1699951"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-20T16:09:48.888016Z", 
+  "msg": [
+   "Fix issue #152: when inflating a gzip-encoded file larger than 4GB, its length", 
+   "stored in the trailer is stored module 2^32 (IOW, in 4 bytes). When comparing", 
+   "the expected length from the trailer with the actual length, we also have to use", 
+   "the actual length module 2^32.", 
+   "* test/test_buckets.c", 
+   "(deflate_compress): Update to handle larger data buffers.", 
+   "(deflate_buckets,", 
+   "test_deflate_buckets): Extract the test code to deflate_buckets, so that the", 
+   "test can be run with different amounts of data.", 
+   "(discard_data, hold_open,", 
+   "put_32bit, create_gzip_deflate_bucket,", 
+   "test_deflate_4GBplus_buckets): Add a new test the creates a 4GB+ buffer and", 
+   "runs it to the compression/decompression filters.", 
+   "(test_buckets): Add the test in comments, but don't actually run it as it", 
+   "takes too long (couple of minutes).", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_read): Reduce the scope of some variables. Compare the actual", 
+   "inflated length module 2^32 with the expected length."
+  ], 
+  "revision_id": "1699950"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-20T14:33:39.804482Z", 
+  "msg": [
+   "Follow up to r2417: cover some extra cases where inflate() needs to write", 
+   "more data than there's place available in the buffer.", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_read): Keep inflating data as long as zlib returns Z_OK, even", 
+   "if no data is on the in buffer. Provide data to the application when the", 
+   "output buffer is full, or zlib tells us that it needs more space."
+  ], 
+  "revision_id": "1699949"
+ }
+]

@@ -1,0 +1,116 @@
+[
+ {
+  "author": "", 
+  "date": "2007-11-26T17:44:47.989603Z", 
+  "msg": [
+   "Fix compilation warnings.", 
+   "* test/test_context.c", 
+   "(test_serf_connection_request_create,", 
+   "test_serf_connection_priority_request_create,", 
+   "test_serf_closed_connection, test_serf_setup_proxy,", 
+   "test_keepalive_limit_one_by_one,", 
+   "test_keepalive_limit_one_by_one_and_burst): Make functions static."
+  ], 
+  "revision_id": "1698698"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-25T14:16:35.958929Z", 
+  "msg": [
+   "Add a way to limit the outstanding number of requests. This is a very simple", 
+   "solution to make serf send requests one by one, or put limits on the bandwidth", 
+   "or memory usage.", 
+   "One known use case is with connection-based authentication like NTLM, where we", 
+   "want to send the first request over and over until the 3-phase handshake is", 
+   "finished.", 
+   "* serf.h", 
+   "(serf_set_max_outstanding_requests): New function declaration.", 
+   "* context.c", 
+   "(struct serf_connection_t): Add new field max_outstanding_requests.", 
+   "(serf_set_max_outstanding_requests): New function, sets the maximum number of", 
+   "outstanding requests.", 
+   "(update_pollset): Don't trigger APR_POLLOUT event when we have the max.", 
+   "number of requests open.", 
+   "(write_to_connection): Don't send more requests than allowed to be open.", 
+   "* test/test_util.c", 
+   "(replay): If we received more data than expected raise error.", 
+   "* test/test_context.c", 
+   "(test_keepalive_limit_one_by_one): New test.", 
+   "(handle_response_keepalive_limit): Helper function.", 
+   "(test_keepalive_limit_one_by_one_and_burst): New test.", 
+   "(handle_response_keepalive_limit_burst): Helper function.", 
+   "(test_context): Run the two new tests."
+  ], 
+  "revision_id": "1698697"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-24T22:45:59.042721Z", 
+  "msg": [
+   "Test code cleanup.", 
+   "* test/test_context_c", 
+   "(global): Move definition of CRLF from here ...", 
+   "* test/test_serf.h", 
+   "(global): ... to here."
+  ], 
+  "revision_id": "1698696"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-24T11:58:41.281744Z", 
+  "msg": [
+   "Continuing on proxy support: if the request uri is a relative path, prefix it", 
+   "with the absolute url of the remote host. Add a public function to set that", 
+   "url on the request bucket, needed because serf doesn't control creation time", 
+   "nor has direct access to the request bucket during its lifetime.", 
+   "Http/1.1 proxies that don't require authentication are hereby supported.", 
+   "Authentication can be handled in an external response handler.", 
+   "* serf_bucket_types.h", 
+   "(serf_bucket_request_set_root): New function declaration.", 
+   "* buckets/request_buckets.c", 
+   "(serf_bucket_request_set_root): New function.", 
+   "* test/test_util.c", 
+   "(global): Move SERV_PORT define to ...", 
+   "* test/test_serf.h", 
+   "(global): ... here, also define SERV_PORT_STR", 
+   "* test/test_context.c", 
+   "(handler_baton_t): Add two new proxy related fields.", 
+   "(setup_request): If we're using a proxy, set the remote host's root url.", 
+   "(test_serf_connection_request_create,", 
+   "test_serf_connection_priority_request_create,", 
+   "test_serf_closed_connection): Initialize new fields in handler_baton.", 
+   "(test_serf_setup_proxy): Expected request message on proxy server should have", 
+   "absolute url."
+  ], 
+  "revision_id": "1698695"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-21T20:58:11.618350Z", 
+  "msg": [
+   "Add first part of proxy support. This change allows serf library users to", 
+   "set the address of the proxy server, and serf will use it for all connections", 
+   "in the same context.", 
+   "This is still work-in-progress, as indicated in the doc of the new public", 
+   "function. But, if the proxy address isn't set, serf works as before.", 
+   "* serf.h", 
+   "(serf_config_proxy): New function declaration.", 
+   "* context.c", 
+   "(serf_config_proxy): New function.", 
+   "(open_connections): Open a connection to the proxy server address, if set.", 
+   "* test/test_serf.h", 
+   "(test_server_create): Take an address as argument.", 
+   "* test/test_util.c", 
+   "(replay): Allow servers that shouldn't receive nor send any data at all.", 
+   "(test_server_create): Take an address as argument, bind the server socket to", 
+   "it.", 
+   "* test/test_context.c", 
+   "(test_serf_connection_request_create,", 
+   "test_serf_connection_priority_request_create,", 
+   "test_serf_closed_connection): Update call to the test_server_create.", 
+   "(test_serf_setup_proxy): New test.", 
+   "(test_context): Run the new test."
+  ], 
+  "revision_id": "1698694"
+ }
+]

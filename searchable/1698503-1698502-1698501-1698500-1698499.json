@@ -1,0 +1,112 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-10T19:58:02.732946Z", 
+  "msg": [
+   "Now that SSL buckets are marginally working, do some cleanup before progressing.", 
+   "* buckets/ssl_buckets.c: Rearrange some code and add high-level comments."
+  ], 
+  "revision_id": "1698503"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-10T19:21:49.402556Z", 
+  "msg": [
+   "Another pass at SSL buckets.  serf_get now retrieves SSL pages without crashing", 
+   "and without any leaks.", 
+   "The lifetime of the request/response buckets needs to be thought out about a", 
+   "little bit now as the request must stick around for polling after we don't", 
+   "really have any use for it any longer.", 
+   "* buckets/allocator.c:", 
+   "(serf_debug__bucket_destroy): Add SSL_ENCRYPT to the exception list.", 
+   "* buckets/ssl_buckets.c: Remove SSL_VERBOSE by default.", 
+   "(ssl_context_t, serf_bucket_ssl_create, serf_ssl_destroy_and_data): Don't", 
+   "record whether we 'own' the context or not.  That was broken.", 
+   "(ssl_encrypt): If our source returned EOF, return EOF.  It'll still be", 
+   "converted to EAGAIN later on in this function if the request is by itself.", 
+   "(ssl_free_context): SSL_free implicitly calls BIO_free.", 
+   "* context.c:", 
+   "(read_from_connection): If our request bucket hasn't cleared itself out yet,", 
+   "destroy it explicitly."
+  ], 
+  "revision_id": "1698502"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-10T11:50:13.283093Z", 
+  "msg": [
+   "Checkpoint progress with SSL buckets.  With debugging turned on, it'll fetch a", 
+   "page; then crash in cleanups.  (With debugging off, it'll crash.)", 
+   "Fix a few other bugs that cropped up during debugging SSL.", 
+   "* buckets/response_buckets.c", 
+   "(serf_bucket_response_status): If we're now in STATE_HEADERS, that means", 
+   "that the line we just read was the status line.", 
+   "* buckets/allocator.c", 
+   "(serf_debug__closed_conn): Fix bug that caused a false positive abort()", 
+   "when the current index pointed to the bucket we were just looking at and", 
+   "it had an EAGAIN status code.  (What a nightmare to debug!)", 
+   "(serf_debug__bucket_destroy): Skip over DECRYPT SSL buckets as they don't", 
+   "necessarily get read to EOF - just like SOCKET buckets.", 
+   "* buckets/aggregate_buckets.c", 
+   "(serf_bucket_aggregate_append): Fix SEGV due to next not being initialized.", 
+   "* buckets/ssl_buckets.c: 2nd pass through SSL buckets; highlights include", 
+   "SSL_VERBOSE logging; have serf_ssl_context_t be responsible for itself.", 
+   "(ssl_decrypt): Call SSL_read() before anything else to try to flush out", 
+   "pending data.", 
+   "(ssl_encrypt): Actually implement correctly (or mostly).", 
+   "(ssl_init_context): The context must own its own pool and allocator.", 
+   "(ssl_free_context): Try to free the context on our way out.", 
+   "(bio_bucket_read): Return proper error message on EOF and set/clear retry", 
+   "flags.", 
+   "(bio_bucket_write): Copy the data to be written.", 
+   "(bio_bucket_ctrl): Implement mandatory ctrl options."
+  ], 
+  "revision_id": "1698501"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-10T01:27:59.542970Z", 
+  "msg": [
+   "Checkpoint progress on SSL buckets.  Compiles, but does goofy bad things (like", 
+   "crash) when used.", 
+   "* buckets/ssl_buckets.c: First cut at SSL buckets using OpenSSL's BIOs.", 
+   "* test/serf_get.c: If we have an https request, wrap SSL buckets.", 
+   "(accept_baton): Store our context.", 
+   "(accept_response): Create wrapper decryption bucket if using SSL.", 
+   "(main): Create wrapper encryption bucket if using SSL.", 
+   "* serf_bucket_util.h: Make databuf reader's function a prototype.", 
+   "* buckets/buckets.c: Fix reversed conditional.", 
+   "(serf_databuf_read, serf_databuf_readline): If we have something remaining,", 
+   "return SUCCESS; otherwise return status.  (Now matches comment/intent.)", 
+   "* context.c: Exit if the underlying buckets gave us EAGAIN.", 
+   "(write_to_connection): If we received EAGAIN, exit this loop.", 
+   "* serf_bucket_types.h: Add standard declarations for the SSL encrypt and", 
+   "decrypt buckets.", 
+   "* Makefile: Compile in SSL buckets and add '-lssl -lcrypto' to our LIBS."
+  ], 
+  "revision_id": "1698500"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-09T02:24:20.354503Z", 
+  "msg": [
+   "Fix up some buglets in chunking.", 
+   "* test/testcases/chunked.response: Fix error in chunk size.  Doh.", 
+   "* test/testcases/chunked-trailers.response (copied from chunked.response): add", 
+   "test case that emits trailer header; fix above error as well.", 
+   "* test/serf_response.c: Look for 'Trailer-Test' header; if present, print it;", 
+   "only call pstrmemdup when we have a len to copy.", 
+   "* buckets/response_buckets.c: Protocol itself changes when using chunking...", 
+   "(response_context_t): Add back in chunked flag", 
+   "(serf_bucket_response_create): Init to us not chunking anything.", 
+   "(serf_bucket_response_get_headers): Add function to return response headers.", 
+   "(run_machine): Set chunked flag to 1 when we add the dechunk bucket.", 
+   "(serf_response_read): Set *len to 0 when we return APR_EOF due to STATE_DONE;", 
+   "mask the result of the EOF from the chunked body as we need to force to read", 
+   "the trailers later (we had this earlier, dummy me removed it earlier today).", 
+   "* serf_bucket_types.h: Add serf_bucket_response_get_headers prototype.", 
+   "* Makefile: Add chunked-trailers.response test"
+  ], 
+  "revision_id": "1698499"
+ }
+]

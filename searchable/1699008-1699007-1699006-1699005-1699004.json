@@ -1,0 +1,68 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-25T02:40:28.462080Z", 
+  "msg": [
+   "Based on traffic analysis of ra_serf patterns, bump the chunk iovec size to 64", 
+   "so we have a better chance of grabbing everything we want in one iovec.", 
+   "This cuts the TCP packet count on Subversion's basic benchmark tests from ~17k", 
+   "packets down to ~15k.", 
+   "* buckets/chunk_buckets.c", 
+   "(create_chunk): Bump from 32 to 64."
+  ], 
+  "revision_id": "1699008"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-25T01:08:49.017569Z", 
+  "msg": [
+   "Issue 71: Handle ECONNREFUSED on Windows.", 
+   "* outgoing.c", 
+   "(serf__process_connection): Only assume we are in the lingering close", 
+   "state if we actually wrote a request.  Otherwise, something bad is going on", 
+   "and we should inform our caller."
+  ], 
+  "revision_id": "1699007"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-25T01:00:38.047729Z", 
+  "msg": [
+   "Fix out-of-order issue when we create multiple priority requests before writing", 
+   "to the socket.", 
+   "* serf_private.h", 
+   "(serf_request_t): Add priority flag.", 
+   "* outgoing.c", 
+   "(serf_connection_request_create): Set priority to 0.", 
+   "(serf_connection_priority_request_create): Set priority to 1; ensure that", 
+   "we add ourselves *after* any outstanding priority requests not before."
+  ], 
+  "revision_id": "1699006"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-19T06:35:42.074491Z", 
+  "msg": [
+   "Fix bucket leak.", 
+   "* outgoing.c", 
+   "(write_to_connection): Now that the connection uses a stream bucket which", 
+   "doesn't delete its items, we have to explicitly delete our request bucket."
+  ], 
+  "revision_id": "1699005"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-15T09:51:06.870533Z", 
+  "msg": [
+   "Further optimize socket writes by increasing iovec sizes to help ensure a", 
+   "single Serf request fits into one TLS packet and utilize iovec's for filling", 
+   "the output of the encrypted OpenSSL buffer so it goes into one socket write.", 
+   "For same Subversion operation (svn ls -v), ra_serf now exchanges 44 TCP packets", 
+   "while ra_neon requires 99.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_encrypt): Up from 32 to 64 based upon inspection of how ra_serf", 
+   "builds requests; fill the returned buffer via read_iovec rather than read."
+  ], 
+  "revision_id": "1699004"
+ }
+]

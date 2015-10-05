@@ -1,0 +1,70 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T07:36:09.701358Z", 
+  "msg": [
+   "Another simplification: replace a call to prepare_conn_streams()", 
+   "* outgoing.c:", 
+   "(do_conn_setup): move the latency calc from prepare_conn_streams to here.", 
+   "(prepare_conn_streams): remove the latency calc.", 
+   "(serf__open_connections): skip prepare_conn_streams and call", 
+   "do_conn_setup() directly."
+  ], 
+  "revision_id": "1699628"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T05:37:20.342494Z", 
+  "msg": [
+   "* outgoing.c:", 
+   "(write_to_connection): no need to set up the REQUEST localvar before", 
+   "entering the loop; it is unused. remove the code and tighten the", 
+   "scope of the variable."
+  ], 
+  "revision_id": "1699627"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T05:33:08.859666Z", 
+  "msg": [
+   "* outgoing.c:", 
+   "(no_more_writes): this doesn't need a REQUEST parameter. remove it.", 
+   "(write_to_connection): track change to no_more_writes()"
+  ], 
+  "revision_id": "1699626"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T04:10:57.927522Z", 
+  "msg": [
+   "For the SSL tunnel's CONNECT request, stop using", 
+   "serf_request_bucket_request_create(). It just makes everything", 
+   "more complicated.", 
+   "* ssltunnel.c:", 
+   "(setup_request): replace s_r_b_r_c() with its contents, then", 
+   "simplify for the CONNECT request.", 
+   "* outgoing.c:", 
+   "(serf_request_bucket_request_create): renamed SSLTUNNEL localvar to", 
+   "tunneled for clarity -- it describes whether we're tunneled rather", 
+   "than referring to the CONNECT (tunnel setup) request. simplify all", 
+   "conditions, knowing request->ssltunnel is FALSE."
+  ], 
+  "revision_id": "1699625"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T02:21:26.601958Z", 
+  "msg": [
+   "The auth subsystem shouldn't be aware of request internals.", 
+   "* serf_private.h:", 
+   "(serf__request_requeue): new function to requeue with new authn", 
+   "* outgoing.c:", 
+   "(serf__request_requeue): creates and requeues a new request based on", 
+   "the old request.", 
+   "* auth/auth.c:", 
+   "(serf__handle_auth_response): use new helper. note that we still", 
+   "toss the new, requeued request."
+  ], 
+  "revision_id": "1699624"
+ }
+]

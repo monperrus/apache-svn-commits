@@ -1,0 +1,96 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-09-04T19:42:42.985177Z", 
+  "msg": [
+   "Fine-tune ra_svn's item type definition: Remove a level of indirection", 
+   "from the LIST union element.", 
+   "This saves an extra allocation per list and the space for one pointer", 
+   "per list at the expense of adding space of 8 bytes per item.  In total,", 
+   "a 10..20% increase in RAM usage for typical protocol data.", 
+   "* subversion/include/private/svn_ra_svn_private.h", 
+   "(SVN_RA_SVN__LIST_ITEM): Allow for \"&\" at the start of the list argument.", 
+   "(svn_ra_svn__item_t): Instantiate the list directly instead of using", 
+   "a pointer.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(parse_prop_diffs,", 
+   "parse_iproplist,", 
+   "ra_svn_get_dir,", 
+   "perform_ra_svn_log,", 
+   "perform_get_location_segments,", 
+   "ra_svn_lock,", 
+   "ra_svn_unlock,", 
+   "ra_svn_get_locks): Update all references to the list union element.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn__to_public_item,", 
+   "svn_ra_svn__to_private_item): Same.", 
+   "(read_item): No longer allocate the list struct but simply initialize it.", 
+   "(vparse_tuple,", 
+   "svn_ra_svn__read_tuple,", 
+   "svn_ra_svn__parse_proplist,", 
+   "svn_ra_svn__handle_failure_status,", 
+   "svn_ra_svn__read_list): Update all references to the list union element.", 
+   "* subversion/svnserve/serve.c", 
+   "(add_lock_tokens,", 
+   "unlock_paths,", 
+   "lock_many,", 
+   "unlock_many): Same."
+  ], 
+  "revision_id": "1701318"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-09-04T19:17:44.874058Z", 
+  "msg": [
+   "Finally, make svn_ra_svn__list_t actually a fully typed, ra_svn-specific", 
+   "object.  Update the creation functions; everything else already \"just fits\".", 
+   "This change provides small performance and memory usage improvements", 
+   "over plain APR arrays. The runtime savings come from apr_array_push", 
+   "calling overhead and the non-allocation of the items array in case it is", 
+   "empty. The space savings are due to allocating only the amount of elements", 
+   "needed (if these are no more than 4) and the smaller array header type.", 
+   "However, more performance improvements will be provided by follow-up", 
+   "commits that merge array and string headers with the item type.", 
+   "* subversion/include/private/svn_ra_svn_private.h", 
+   "(svn_ra_svn__list_t): Define locally as a struct now.", 
+   "(SVN_RA_SVN__LIST_ITEM): Update access macro.", 
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn__to_private_array): Adapt conversion code.", 
+   "(read_item): Efficiently create instances of the new array type."
+  ], 
+  "revision_id": "1701317"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-09-04T19:17:06.179346Z", 
+  "msg": [
+   "Last preparations for switching to a different type for ra_svn item lists.", 
+   "This replaces the last usages of APR arrays for protocol items with the", 
+   "appropriate ra_svn type and access macro.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_dir,", 
+   "get_mergeinfo,", 
+   "log_cmd,", 
+   "get_locations,", 
+   "lock_many,", 
+   "unlock_many): Use the new array type and access macro for item lists."
+  ], 
+  "revision_id": "1701316"
+ }, 
+ {
+  "author": "mattmann", 
+  "date": "2015-09-04T19:11:28.171729Z", 
+  "msg": [
+   "Fix for CRC unit test checks from OODT-871 Issues with OODT 0.10 RC#1 contributed by lewismc, mattmann."
+  ], 
+  "revision_id": "1701315"
+ }, 
+ {
+  "author": "mattmann", 
+  "date": "2015-09-04T18:52:16.758054Z", 
+  "msg": [
+   "Fix dev version and scm tags for 0.10 RC #2."
+  ], 
+  "revision_id": "1701314"
+ }
+]

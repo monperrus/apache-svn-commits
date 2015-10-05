@@ -1,0 +1,92 @@
+[
+ {
+  "author": "olegk", 
+  "date": "2015-09-09T19:36:30.098213Z", 
+  "msg": [
+   "Updated project website for HttpCore 4.4.3 release"
+  ], 
+  "revision_id": "1702093"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-09-09T19:30:52.277943Z", 
+  "msg": [
+   "Fix an edge case parser bug found while investigating BZ 57136"
+  ], 
+  "revision_id": "1702092"
+ }, 
+ {
+  "author": "degenaro", 
+  "date": "2015-09-09T19:19:20.320556Z", 
+  "msg": [
+   "UIMA-4569 DUCC OR+WS expunge \"shares\""
+  ], 
+  "revision_id": "1702091"
+ }, 
+ {
+  "author": "jpountz", 
+  "date": "2015-09-09T19:18:59.367366Z", 
+  "msg": [
+   "LUCENE-6590: More missing calls to ToStringUtils.boost."
+  ], 
+  "revision_id": "1702090"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-09-09T19:14:04.420824Z", 
+  "msg": [
+   "Explicitly release file locks on Windows, instead of relying on them to be", 
+   "automatically unlocked by the OS.", 
+   "Documentation for LockFileEx() [1] states that, although a process doesn't", 
+   "necessarily have to release its file locks before closing the handle, it", 
+   "is not recommended, and a better choice is to explicitly unlock them:", 
+   "[[[", 
+   "If a process terminates with a portion of a file locked or closes a file", 
+   "that has outstanding locks, the locks are unlocked by the operating system.", 
+   "However, the time it takes for the operating system to unlock these locks", 
+   "depends upon available system resources. Therefore, it is recommended that", 
+   "your process explicitly unlock all files it has locked when it terminates.", 
+   "If this is not done, access to these files may be denied if the operating", 
+   "system has not yet unlocked them.", 
+   "]]]", 
+   "This changeset turns our common locking sequences from", 
+   "CreateFile \u2192 LockFile \u2192 (...) \u2192 CloseFile", 
+   "into", 
+   "CreateFile \u2192 LockFile \u2192 (...) \u2192 UnlockFileSingle \u2192 CloseFile", 
+   "I conducted a couple of performance tests with svnadmin load, setrevprop,", 
+   "simple commits, parallel short-living svnadmin instances doing work \u2014 i.e.,", 
+   "tests where explicit unlocking could behave differently from delegating this", 
+   "to OS.  There is no noticeable difference, at least on my machine.  So, we", 
+   "do this not because it causes visible effects in common scenarios, but just", 
+   "to follow the recommended practice and reduce the chance of encountering a", 
+   "hard-to-diagnose problem.", 
+   "Here is one of the performance tests that I used:", 
+   "[[[", 
+   "def lock_performance(sbox):", 
+   "\"lock performance\"", 
+   "sbox.build(create_wc=False)", 
+   "input_file = sbox.get_tempname()", 
+   "svntest.main.file_write(input_file, 'New log message')", 
+   "def setlog(n):", 
+   "svntest.actions.run_and_verify_svnadmin([], [], 'setrevprop', '-r1',", 
+   "sbox.repo_dir, 'prop' + str(n),", 
+   "input_file)", 
+   "import multiprocessing.dummy", 
+   "start = time.time()", 
+   "p = multiprocessing.dummy.Pool()", 
+   "results = p.map(setlog, range(2000))", 
+   "p.close()", 
+   "p.join();", 
+   "stop = time.time()", 
+   "logger.info('<TOTAL TIME = %.6f>' % (stop - start))", 
+   "]]]", 
+   "[1] https://msdn.microsoft.com/en-us/library/windows/desktop/aa365203", 
+   "Found by: ivan", 
+   "* subversion/libsvn_subr/io.c", 
+   "(file_clear_locks): Always compile this function.", 
+   "(svn_io_lock_open_file, svn_io_unlock_open_file): Install and remove pool", 
+   "cleanup handlers on all platforms.  Update the corresponding comments."
+  ], 
+  "revision_id": "1702089"
+ }
+]

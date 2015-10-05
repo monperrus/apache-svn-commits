@@ -1,0 +1,82 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2013-08-01T06:03:21.439728Z", 
+  "msg": [
+   "serf_bucket_headers_get() is inherently broken: the caller doesn't", 
+   "know whether it must call mem_free() on the result or not.", 
+   "Thankfully, this really only makes a different when fetching", 
+   "*-Authenticate headers. And even then... most allocators are never", 
+   "queried if unfreed items exist. And... the memory gets tossed with the", 
+   "pool. But: this is still an API bug.", 
+   "For now: move the *-Authenticate query into a debug space. Leave a", 
+   "marker in the _get() function. Revisit in the future.", 
+   "* buckets/headers_buckets.c:", 
+   "(serf_bucket_headers_get): leave a marker that this is broken.", 
+   "* auth/auth.c:", 
+   "(dispatch_auth): move the logging into a block enclosed by", 
+   "AUTH_VERBOSE. just rely on the gather-into-hash to see if there", 
+   "are headers. (we don't have to fast-path check for headers since", 
+   "they *should* be there, per spec)"
+  ], 
+  "revision_id": "1699638"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-08-01T00:12:39.372586Z", 
+  "msg": [
+   "When constructing an SSL tunnel, we construct a SOCKET bucket to", 
+   "deliver the CONNECT request in plaintext. When we rejigger the", 
+   "connection into SERF_CONN_CONNECTED mode, we need to toss that SOCKET", 
+   "bucket. (later, the app will build encrypt/decrypt buckets into the", 
+   "conn->stream member)", 
+   "* ssltunnel.c:", 
+   "(handle_response): make sure we toss the SOCKET bucket"
+  ], 
+  "revision_id": "1699637"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-08-01T00:08:11.920206Z", 
+  "msg": [
+   "Don't try and debug an absent allocator.", 
+   "* outgoing.c:", 
+   "(destroy_request): move the allocator check within the RESPOOL", 
+   "check. we allocate both at the same time. it is possible the queue", 
+   "request was never setup(), and is missing an allocator/pool."
+  ], 
+  "revision_id": "1699636"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T23:49:01.038532Z", 
+  "msg": [
+   "Fix an allocation/responsibility bug in the 408 (Request Timed Out)", 
+   "test function. It was placing buckets into an aggregate that wasn't", 
+   "taking responsibility for them. Make it do so.", 
+   "* test/test_context.c:", 
+   "(detect_eof): rename to ...", 
+   "(queue_part2): ... this, to better explain what is going on.", 
+   "(setup_request_timeout): don't use the private interface to create", 
+   "an ownership-less bucket. create a normal AGGREGATE. use the \"hold", 
+   "open\" interface to hack the bucket into appending more data later.", 
+   "in the end, PART2 will get freed when the AGGREGATE is freed", 
+   "during connection close and request cancellation."
+  ], 
+  "revision_id": "1699635"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-31T19:56:40.020211Z", 
+  "msg": [
+   "Additional small cleanups.", 
+   "* outgoing.c:", 
+   "(write_to_connection): avoid a localvar and clarify what is", 
+   "happening when we are setting up an ssltunnel. add a comment for", 
+   "the normal max_outstanding_requests. reformat some series", 
+   "conditions for no_more_writes() invocation, and combine a couple", 
+   "if-statements for same."
+  ], 
+  "revision_id": "1699634"
+ }
+]

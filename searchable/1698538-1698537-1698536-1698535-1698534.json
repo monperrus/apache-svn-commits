@@ -1,0 +1,69 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-30T23:08:09.038054Z", 
+  "msg": [
+   "Two minor bug fixes for pipelined responses.", 
+   "* buckets/buckets.c", 
+   "(serf_util_readline): If we don't find a newline in our buffer, we need to", 
+   "advance the buffer so that we can fetch more (otherwise, we'll loop forever).", 
+   "Our callers must deal with the _NONE response anyway, so let's give them the", 
+   "partial line.", 
+   "* buckets/response_buckets.c:", 
+   "(serf_response_read): If we are waiting for the body and we see EAGAIN before", 
+   "we get there, update the length to reflect that the rest of the loop will", 
+   "not run (otherwise, we'll have an unset *len value)."
+  ], 
+  "revision_id": "1698538"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-28T06:39:39.065718Z", 
+  "msg": [
+   "* context.c (open_connections): Use the context directly."
+  ], 
+  "revision_id": "1698537"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-28T02:43:12.049970Z", 
+  "msg": [
+   "Fix buglet introduced in r855.", 
+   "* context.c", 
+   "(read_from_connection): return APR_SUCCESS in the case where we're exhausted."
+  ], 
+  "revision_id": "1698536"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-28T02:40:30.153609Z", 
+  "msg": [
+   "Revert r854 and replace with a better strategy by marking a pollset as dirty", 
+   "when needed and only updating the pollset when we next run the context.", 
+   "* context.c", 
+   "(serf_context_t): Add flag to indicate we have a dirty pollset.", 
+   "(serf_connection_t): Indicate our connection needs its pollset entry updated", 
+   "(open_connections): Flag our pollset and new connection as dirty", 
+   "(write_to_connection, read_from_connection): When we're exhausted, change", 
+   "our pollset flag.", 
+   "(check_dirty_pollsets): Walk our connection list if we have a dirty pollset.", 
+   "(serf_context_run): Call check_dirty_pollsets after openning connections.", 
+   "(serf_request_deliver): Always update the pollset flag (the root cause of", 
+   "the problem identified in r854)."
+  ], 
+  "revision_id": "1698535"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-01-28T01:36:15.712992Z", 
+  "msg": [
+   "Fix a pipelining bug that occurs if we push in a request while we are", 
+   "processing another request that is not completed.", 
+   "* context.c", 
+   "(read_from_connection): If we switched to a new request, update the", 
+   "pollset unconditionally.  Otherwise, the pollset might not know that", 
+   "we have data to write this time around."
+  ], 
+  "revision_id": "1698534"
+ }
+]

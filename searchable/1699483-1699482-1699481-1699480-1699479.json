@@ -1,0 +1,89 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T20:25:18.533092Z", 
+  "msg": [
+   "Follow up r1944: a CONNECT request should be a priority request, and thus added", 
+   "first in the queue.", 
+   "* outgoing.c", 
+   "(serf__ssltunnel_request_create): Ensure that this request is a priority", 
+   "request."
+  ], 
+  "revision_id": "1699483"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T20:23:21.262356Z", 
+  "msg": [
+   "Add two new tests for ssltunnel proxy authentication.", 
+   "* test/test_context.c", 
+   "(test_setup_ssltunnel): Fix compiler warning.", 
+   "(proxy_authn_callback,", 
+   "test_ssltunnel_no_creds_cb,", 
+   "test_ssltunnel_basic_auth): New helper function & new tests.", 
+   "(test_context): Run the new tests."
+  ], 
+  "revision_id": "1699482"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T17:06:42.904185Z", 
+  "msg": [
+   "Fix basic/digest proxy authentication when setting up an SSL tunnel.", 
+   "When proxy authentication is needed during ssl tunnel setup, we setup the first", 
+   "request provided by the application and use that request and baton to call", 
+   "back to the application for credentials.", 
+   "That request hasn't been written to the socket yet, but that's an implementation", 
+   "detail invisible to the application.", 
+   "* outgoing.c", 
+   "(setup_request): New function, calls the application to setup a request.", 
+   "Code extracted from write_to_connection.", 
+   "(write_to_connection): Use the new setup_request function. Requests can now", 
+   "be in a temporary state where they are set up, but not yet added to the", 
+   "outgoing stream.", 
+   "(serf__provide_credentials): New function. If it's called in response to a", 
+   "CONNECT request that requires proxy authentication, setup the next", 
+   "(application provided) request. Use that to call back to the application", 
+   "for credentials.", 
+   "(create_request): Add ssltunnel parameter, use it to initialize the request.", 
+   "(serf_connection_request_create,", 
+   "serf_connection_priority_request_c): Update call to create_request.", 
+   "(serf__ssltunnel_request_create): New function, creates a priority request", 
+   "that has the ssltunnel flag set.", 
+   "* serf_private.h", 
+   "(struct serf_request_t): New variable ssltunnel.", 
+   "(serf__ssltunnel_request_create,", 
+   "serf__provide_credentials): New declarations.", 
+   "* ssltunnel.c", 
+   "(serf__ssltunnel_connect): Use serf__ssltunnel_request_create to create a", 
+   "priority ssltunnel request.", 
+   "* auth/auth_basic.c", 
+   "(serf__handle_basic_auth):", 
+   "* auth/auth_digest.c", 
+   "(serf__handle_digest_auth): In both authn handlers, don't call the application", 
+   "directly for username and password but use the new helper function."
+  ], 
+  "revision_id": "1699481"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T16:47:43.271563Z", 
+  "msg": [
+   "Small refactoring.", 
+   "* outgoing.c", 
+   "(create_request): New function, constructor for a serf_request_t object.", 
+   "(serf_connection_request_create,", 
+   "serf_connection_priority_request_create): Move request creation to the", 
+   "new function."
+  ], 
+  "revision_id": "1699480"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T16:45:56.426510Z", 
+  "msg": [
+   "* serf_private.h: Disable debug logging accidently enabled in r1939."
+  ], 
+  "revision_id": "1699479"
+ }
+]

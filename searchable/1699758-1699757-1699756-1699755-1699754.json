@@ -1,0 +1,100 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T21:14:17.408370Z", 
+  "msg": [
+   "Add new test for serf_config_remove_value.", 
+   "* test/test_internal.c", 
+   "(test_config_store_remove_objects): New test.", 
+   "(test_internal): Run the new test."
+  ], 
+  "revision_id": "1699758"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T21:10:31.294619Z", 
+  "msg": [
+   "Implement at runtim configurable logging using the new shared configuration.", 
+   "This change introduces:", 
+   "- log levels: ERROR, WARNING, INFO, DEBUG", 
+   "- log components: AUTHN, CONN, SSL, COMPR", 
+   "- each serf__log call needs to specify both the log level and the component", 
+   "- the log level as string in the logging output", 
+   "- one global flag SERF_LOGGING_ENABLED to disable all logging at compile time", 
+   "(enabled by default)", 
+   "This is all internal for now, no API yet.", 
+   "* logging.c", 
+   "(log_baton_t,", 
+   "loglvl_labels): New declarations.", 
+   "(serf__log_init): Initialize log level and components mask.", 
+   "(log_time): Build only when SERF_LOGGING_ENABLED is defined.", 
+   "(serf__log_nopref): Take separate level and components parameters, use these", 
+   "to decide whether to log the message or not.", 
+   "(serf__log): Here too. Also, log the level as string.", 
+   "* serf.h", 
+   "(SERF_LOG_*,", 
+   "SERF_LOGCOMP_*): New defines.", 
+   "* serf_private.h", 
+   "(*_VERBOSE): Remove the old logging flags.", 
+   "(LOGLVL_*, LOGCOMP_*): New defines, shortcuts for SERF_LOG[COMP]_*.", 
+   "(serf__log_baton_t): Remove here, no need to share it within serf.", 
+   "(serf__log_nopref,", 
+   "serf__log): Take level and components params instead of verbose_flag.", 
+   "* buckets/log_wrapper_buckets.c", 
+   "* auth/auth.c", 
+   "* auth/auth_spnego.c", 
+   "* auth/auth_spnego_gss.c", 
+   "* auth/auth_spnego_sspi.c", 
+   "* buckets/deflate_buckets.c", 
+   "* buckets/ssl_buckets.c", 
+   "* outgoing.c", 
+   "* ssltunnel.c", 
+   "(*): Assign a log level and component to each serf__log[_nopref] call."
+  ], 
+  "revision_id": "1699757"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T09:05:57.308811Z", 
+  "msg": [
+   "Remove the cached socket info from the configuration when closing the socket.", 
+   "* config_store.c", 
+   "(serf_config_remove_value): Implement.", 
+   "* outgoing.c", 
+   "(clean_skt): Clean local IP and remove IP values stored in the config.", 
+   "(reset_connection,", 
+   "serf_connection_close): Reuse clean_skt() to close the socket."
+  ], 
+  "revision_id": "1699756"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:54:17.782938Z", 
+  "msg": [
+   "Fix hardcoded stderr.", 
+   "* logging.c", 
+   "(log_time): Use logfp instead of stderr."
+  ], 
+  "revision_id": "1699755"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:51:04.223439Z", 
+  "msg": [
+   "Now that all the logging was been migrated to the new config ...", 
+   "* auth/auth.c", 
+   "* auth/auth_spnego.c", 
+   "* auth/auth_spnego_gss.c", 
+   "* auth/auth_spnego_sspi.c", 
+   "* buckets/deflate_buckets.c", 
+   "* buckets/log_wrapper_buckets.c", 
+   "* buckets/ssl_buckets.c", 
+   "* logging.c", 
+   "* outgoing.c", 
+   "* serf_private.h", 
+   "* ssltunnel.c", 
+   "(*): Rename serf__log_cfg to serf__log."
+  ], 
+  "revision_id": "1699754"
+ }
+]

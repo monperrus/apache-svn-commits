@@ -1,0 +1,83 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-15T09:24:16.040378Z", 
+  "msg": [
+   "If we see SERF_ERROR_WAIT_CONN prior to EOF being read, treat as EAGAIN.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_decrypt): Add debug line.", 
+   "(ssl_encrypt): If the BIO tells us we should read, read!", 
+   "* outgoing.c", 
+   "(write_to_connection): Treat SERF_ERROR_WAIT_CONN as EAGAIN here."
+  ], 
+  "revision_id": "1699003"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-15T08:25:42.730144Z", 
+  "msg": [
+   "Optimize SSL traffic by doing our best to gather the pending writes so that", 
+   "they fit into one TLS packet.  Otherwise, lots of small TLS packets would be", 
+   "generated.  (The last set of commit would try to coalesce these into one", 
+   "network write - this makes it so they are in one TLS packet.)", 
+   "This also reveals a bug in that we couldn't handle the initial TLS handshake if", 
+   "we also completed the request in the same bucket read.  To fix that, add an", 
+   "error code to distinguish between EAGAIN that can be handled by more coming in", 
+   "on this socket and EAGAIN-like that requires something else to happen.", 
+   "* serf.h", 
+   "(SERF_ERROR_WAIT_CONN): Add error code akin to EAGAIN to indicate that the", 
+   "connection should be backed off until something happens...", 
+   "(SERF_BUCKET_READ_ERROR): Allow our new code to be treated like EAGAIN.", 
+   "* buckets/aggregate_buckets.c", 
+   "(read_aggregate): Allow our new code to be treated like EAGAIN.", 
+   "* outgoing.c", 
+   "(write_to_connection): Do not permit SERF_ERROR_WAIT_CONN states to", 
+   "have its state advanced.", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_stream_t): Add flags to indicate when we're blocked and when", 
+   "we should reset.", 
+   "(bio_bucket_read, bio_bucket_write): If we're waiting, unblock ourselves", 
+   "and reset BIO.", 
+   "(ssl_decrypt): Add debugging message.", 
+   "(ssl_encrypt): Handle exhausted state and set us up so we write as much as", 
+   "we can through iovec's."
+  ], 
+  "revision_id": "1699002"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-15T08:15:11.018102Z", 
+  "msg": [
+   "* buckets/aggregate_buckets.c", 
+   "(serf_bucket_aggregate_prepend_iovec): Fix bug that would cause us to", 
+   "lose the first iovec when pre-pending."
+  ], 
+  "revision_id": "1699001"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-14T13:26:07.924274Z", 
+  "msg": [
+   "Fix new OpenSSL encryption logic to work with the core expecting to see", 
+   "EAGAIN - not EOF.  (serf_get now will send the full request.)", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_encrypt): Do a better job of preserving stream errors.", 
+   "* outgoing.c", 
+   "(write_to_connection): Don't advance the request pointers until the bucket", 
+   "returns something other than APR_SUCCESS."
+  ], 
+  "revision_id": "1699000"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2011-05-13T12:08:54.698187Z", 
+  "msg": [
+   "Optimize SSL writes by gathering them into larger chunks on-the-wire rather", 
+   "than lots of small socket writes.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_encrypt): Rewrite to try to exhaust the underlying stream to better", 
+   "fill the OpenSSL buffers so we can send larger chunks at one time."
+  ], 
+  "revision_id": "1698999"
+ }
+]

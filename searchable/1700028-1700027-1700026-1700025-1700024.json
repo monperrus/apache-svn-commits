@@ -1,0 +1,117 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2015-04-10T14:05:14.934449Z", 
+  "msg": [
+   "Add some comments for easier tracking all auth vtable implementations.", 
+   "* auth/auth_basic.c", 
+   "* auth/auth_digest.c", 
+   "* auth/auth_spnego.c", 
+   "(serf__handle_basic_auth, serf__init_basic_connection,", 
+   "serf__setup_request_basic_auth, validate_response_func,", 
+   "serf__handle_digest_auth, serf__init_digest_connection,", 
+   "serf__setup_request_digest_auth, serf__validate_response_digest_auth,", 
+   "serf__init_spnego_connection, serf__handle_spnego_auth,", 
+   "serf__setup_request_spnego_auth, serf__validate_response_spnego_auth):", 
+   "Mention what kind of auth callback function implements."
+  ], 
+  "revision_id": "1700028"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2015-04-08T18:43:35.474356Z", 
+  "msg": [
+   "* auth/auth.c", 
+   "(handle_auth_headers): Fix a typo in comment."
+  ], 
+  "revision_id": "1700027"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2015-04-08T18:38:47.768243Z", 
+  "msg": [
+   "Remove unused authentication scheme callback for per-context", 
+   "initialization. We may return it back if needed.", 
+   "* auth/auth.c", 
+   "(handle_auth_headers): Do not call init_ctx_func() for authn schemes.", 
+   "* auth/auth.h", 
+   "(serf__init_context_func_t): Remove.", 
+   "(serf__authn_scheme_t): Remove INIT_CTX_FUNC field.", 
+   "* auth/auth_basic.c", 
+   "(serf__init_basic): Remove no-op function.", 
+   "(serf__basic_authn_scheme): Update vtable definition.", 
+   "* auth/auth_digest.c", 
+   "(serf__init_digest): Remove no-op function.", 
+   "(serf__digest_authn_scheme): Update vtable definition.", 
+   "* auth/auth_spnego.c", 
+   "(serf__init_spnego): Remove no-op function.", 
+   "(serf__spnego_authn_scheme, serf__ntlm_authn_scheme): Update vtable", 
+   "definition."
+  ], 
+  "revision_id": "1700026"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2015-04-08T17:46:40.980144Z", 
+  "msg": [
+   "More auth framework refactoring: move auth schemes vtable definitions", 
+   "to appropriate file with authn scheme implementation.", 
+   "* auth/auth.c", 
+   "(default_auth_response_handler): Remove.", 
+   "(serf_authn_schemes): Change type to array of pointers to", 
+   "serf__authn_scheme_t structures.", 
+   "(handle_auth_headers): Update code to reflect serf_authn_schemes type", 
+   "change.", 
+   "* auth/auth.h", 
+   "(serf__init_basic, serf__init_basic_connection,", 
+   "serf__handle_basic_auth, serf__setup_request_basic_auth,", 
+   "serf__init_digest, serf__init_digest_connection,", 
+   "serf__handle_digest_auth, serf__setup_request_digest_auth,", 
+   "serf__validate_response_digest_auth, serf__init_spnego,", 
+   "serf__init_spnego_connection, serf__handle_spnego_auth,", 
+   "serf__setup_request_spnego_auth, serf__validate_response_spnego_auth):", 
+   "Remove function declarations -- we use authn scheme vtable to", 
+   "access them.", 
+   "(serf__basic_authn_scheme, serf__digest_authn_scheme,", 
+   "serf__spnego_authn_scheme, serf__ntlm_authn_scheme): Declare authn", 
+   "schemes.", 
+   "* auth/auth_basic.c", 
+   "(serf__handle_basic_auth, serf__init_basic,", 
+   "serf__init_basic_connection, serf__setup_request_basic_auth): Mark", 
+   "as static.", 
+   "(validate_response_func): New.", 
+   "(serf__basic_authn_scheme): Factored out from serf_authn_schemes in", 
+   "auth.c", 
+   "* auth/auth_digest.c", 
+   "(serf__handle_digest_auth, serf__init_digest,", 
+   "serf__init_digest_connection, serf__setup_request_digest_auth,", 
+   "serf__validate_response_digest_auth): Mark as static.", 
+   "(serf__digest_authn_scheme): Factored out from serf_authn_schemes in", 
+   "auth.c", 
+   "* auth/auth_spnego.c", 
+   "(serf__init_spnego_connection, serf__handle_spnego_auth,", 
+   "serf__setup_request_spnego_auth): Mark as static.", 
+   "(serf__spnego_authn_scheme, serf__ntlm_authn_scheme): Factored out", 
+   "from serf_authn_schemes in auth.c"
+  ], 
+  "revision_id": "1700025"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2015-04-08T13:04:15.091995Z", 
+  "msg": [
+   "Reduce visibility of auth related structures.", 
+   "* serf_private.h", 
+   "(serf__auth_handler_func_t, serf__init_context_func_t,", 
+   "serf__init_conn_func_t, serf__setup_request_func_t,", 
+   "serf__validate_response_func_t, serf__authn_scheme_t): Move to ...", 
+   "* auth/auth.h", 
+   "(serf__auth_handler_func_t, serf__init_context_func_t,", 
+   "serf__init_conn_func_t, serf__setup_request_func_t,", 
+   "serf__validate_response_func_t, serf__authn_scheme_t): ... here.", 
+   "* auth/auth_spnego_sspi.c", 
+   "(): Include \"auth.h\""
+  ], 
+  "revision_id": "1700024"
+ }
+]

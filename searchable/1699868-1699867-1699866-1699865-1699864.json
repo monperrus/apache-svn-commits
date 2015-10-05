@@ -1,0 +1,73 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2014-04-11T17:14:12.223479Z", 
+  "msg": [
+   "Rename serf_ssl_load_crl_file API to avoid confusion: the similarly named", 
+   "serf_ssl_load_cert_file only loads a cert from file, whereas", 
+   "serf_ssl_load_crl_file not only loads the file, but also tells OpenSSL to use it.", 
+   "* buckets/ssl_buckets.c", 
+   "* serf_bucket_types.h", 
+   "(serf_ssl_load_crl_file): Rename to ...", 
+   "(serf_ssl_add_crl_from_file): ... this."
+  ], 
+  "revision_id": "1699868"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-04-11T17:08:53.592662Z", 
+  "msg": [
+   "Finalize initial CRL support for serf. Add an API to enable or disable", 
+   "CRL checking.", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_check_crl): New definition.", 
+   "(serf_ssl_load_crl_file): Use serf_ssl_check_crl to enable CRL checking.", 
+   "* serf_bucket_types.h", 
+   "(serf_ssl_check_crl): New declaration.", 
+   "(serf_ssl_load_crl_file): Add comments."
+  ], 
+  "revision_id": "1699867"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-04-11T16:37:35.702539Z", 
+  "msg": [
+   "Continue on add CRL support to serf. When OpenSSL can't open the CRL url as", 
+   "specified in the certificate (if there's one specified), it'll return an error", 
+   "during validation for that certificate. Pass this error back to the application", 
+   "to let it decide what to do with it.", 
+   "* buckets/ssl_buckets.c", 
+   "(validate_server_certificate): Restrict declaration of err to a smaller", 
+   "scope. Handle failure X509_V_ERR_UNABLE_TO_GET_CRL.", 
+   "* serf_bucket_types.h", 
+   "(SERF_SSL_CERT_UNABLE_TO_GET_CRL): New error code.", 
+   "* test/test_context.c", 
+   "(ssl_server_cert_cb_log_failures,", 
+   "test_ssl_revoked_server_cert): Log all failures per depth first and then", 
+   "validate at each depth after the handshake is finished.", 
+   "(test_context): The test is now supposed to pass, so run it."
+  ], 
+  "revision_id": "1699866"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2014-04-11T12:44:32.128982Z", 
+  "msg": [
+   "Make logging.c more readable by splitting up logging not implemented code path.", 
+   "* logging.c", 
+   "(serf__log_init, serf__log_nopref, serf__log,", 
+   "serf_logging_create_stream_output, serf_logging_add_output): Define empty", 
+   "public functions when logging is not compiled-in."
+  ], 
+  "revision_id": "1699865"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2014-04-11T03:10:23.265352Z", 
+  "msg": [
+   "* test/serf_get.c", 
+   "(print_ssl_cert_errors): Print error for revoked cert."
+  ], 
+  "revision_id": "1699864"
+ }
+]

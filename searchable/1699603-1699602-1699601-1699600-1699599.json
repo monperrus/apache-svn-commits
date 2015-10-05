@@ -1,0 +1,80 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-07-21T14:21:27.997623Z", 
+  "msg": [
+   "On the 1.3.x branch:", 
+   "Merge all pending testsuite inmprovements from trunk:", 
+   "r1998: new unit test for ssl tunnel authentication", 
+   "r2006: test_server: add missing return value", 
+   "r2030: Fix issue in CuTest test framework.", 
+   "r2043: Check that certificate and key file loaded successfully.", 
+   "r2055+r2064: Fix segfault in the test suite.", 
+   "r2056: Fix compilation warning.", 
+   "r2060: Resolve two segfaults on Windows", 
+   "r2062: Fix ssl tests on Windows by moving  BROKEN_WSAPOLL to serf_private.h", 
+   "r2065: Fix ssl IO in test server"
+  ], 
+  "revision_id": "1699603"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-19T15:26:18.340311Z", 
+  "msg": [
+   "Properly handle a few cases where openssl says that it needs further IO on the", 
+   "underlying network. This avoids breaking the network connection when we don't", 
+   "have to.", 
+   "Add a ### comment to document that we might check the wrong error as in theory", 
+   "reads may cause writes on the network layer and writes can cause reads.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_decrypt): Add comment and handle the theoretical SSL_ERROR_WANT_WRITE.", 
+   "(ssl_encrypt): Add comment.", 
+   "* server/test_sslserver.c", 
+   "(ssl_handshake): Handle SSL_ERROR_SYSCALL, as just returning an error causes", 
+   "15 tests to fail on my Windows machine."
+  ], 
+  "revision_id": "1699602"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-19T15:10:36.999305Z", 
+  "msg": [
+   "Follow up to r2055: Fix segfault in the test suite.", 
+   "* test/server/test_server.c", 
+   "(proxy_replay): Create servctx->servstream when needed."
+  ], 
+  "revision_id": "1699601"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-19T13:53:00.511822Z", 
+  "msg": [
+   "Fix running the bucket tests on Windows, by using the static library build", 
+   "instead of a combination of the shared library build and certain direct", 
+   "object files.", 
+   "This had the nice side effect of adding a second definition of", 
+   "\"serf_buckets_are_v2\", outside 'serf-2.dll'", 
+   "* SConstruct", 
+   "- Pass existing $PATH to check.py, to allow running tests on Windows.", 
+   "- Link to the static library name on Windows.", 
+   "(This doesn't have side effects on other platforms because the", 
+   "serf library name for shared and static libraries are identical there)", 
+   "- Remove explicit linking to bucket/*.c from the tests."
+  ], 
+  "revision_id": "1699600"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-19T13:25:00.447421Z", 
+  "msg": [
+   "Fix the failing authz tests with 'Connection: close' on Windows, by moving", 
+   "the define of BROKEN_WSAPOLL to serf_private.h, to also use this value in", 
+   "test_server.c, which already expected its definition.", 
+   "* context.c", 
+   "(BROKEN_WSAPOLL): Move definition from here to...", 
+   "* serf_private.h", 
+   "(BROKEN_WSAPOLL): ... here."
+  ], 
+  "revision_id": "1699599"
+ }
+]

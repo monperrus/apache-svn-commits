@@ -1,0 +1,114 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-04-01T11:36:30.321260Z", 
+  "msg": [
+   "* test/test_buckets.c", 
+   "(test_aggregate_buckets): Add extra tests."
+  ], 
+  "revision_id": "1699288"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-04-01T10:22:29.290930Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Continue working on the Secure Transport ssl handshake, start implementation-", 
+   "independent certificate handling.", 
+   "* buckets/bucket_private.h", 
+   "(struct serf_ssl_bucket_type_t): Add cert_issuer, cert_subject,", 
+   "cert_certificate and cert_export methods to this vtable.", 
+   "(struct serf_ssl_certificate_t): Move type here. Add implementation-specific", 
+   "certificate pointer.", 
+   "(serf__create_certificate): New factory function for serf_ssl_certificate_t.", 
+   "* buckets/openssl_buckets.c", 
+   "(struct serf_ssl_certificate_t): Type moved to bucket_private.h.", 
+   "(validate_server_certificate): Use new function to create", 
+   "serf_ssl_certificate_t.", 
+   "(serf__openssl_trust_cert,", 
+   "serf__openssl_cert_depth,", 
+   "serf__openssl_cert_issuer,", 
+   "serf__openssl_cert_subject,", 
+   "serf__openssl_cert_certificate,", 
+   "serf__openssl_cert_export): Use the updated serf_ssl_certificate_t type.", 
+   "(serf_ssl_bucket_type_openssl): Add certificate accessor methods.", 
+   "* buckets/securetransport_buckets.c", 
+   "(*): Naming convention, always use ssl_ctx for a sectrans_context_t *.", 
+   "(struct sectrans_context_t): Add allocator and server certificate callbacks.", 
+   "(sectrans_init_context): Create the encrypt and decrypt stream objects", 
+   "(in analogy with openssl_buckets). Instruct Secure Transport to break the", 
+   "handshake when a server certificate is received during the handshake.", 
+   "(sectrans_read_cb): Fix logging.", 
+   "(get_hostname): New function, gets hostname from Secure Transport API.", 
+   "(validate_server_certificate): New function.", 
+   "(do_handshake): Call validate_server_certificate when a server certificate", 
+   "is received.", 
+   "(decrypt_create,", 
+   "encrypt_create): Setup the new encrypt and decrypt streams.", 
+   "(server_cert_callback_set,", 
+   "server_cert_chain_callback_set): Store application provided callback", 
+   "functions.", 
+   "(set_hostname): Implement with Secure Transport.", 
+   "(serf_sectrans_encrypt_read): Correctly handle the initial handshake and", 
+   "reading enqueued encrypted data.", 
+   "(cert_depth,", 
+   "cert_issuer,", 
+   "cert_subject,", 
+   "cert_certificate,", 
+   "cert_export,", 
+   "serf_sectrans_encrypt_readline,", 
+   "serf_sectrans_decrypt_readline): Add placeholder functions.", 
+   "(serf_sectrans_readline,", 
+   "struct serf_bucket_type_sectrans_encrypt): Rename serf_sectrans_readline to", 
+   "serf_sectrans_encrypt_readline.", 
+   "(serf_ssl_bucket_type_securetransport): Add certificate accessor methods.", 
+   "* buckets/ssl_buckets.c", 
+   "(*): Fix formatting.", 
+   "(serf__create_certificate): New factory function for serf_ssl_certificate_t.", 
+   "(serf_ssl_cert_depth,", 
+   "serf_ssl_cert_issuer,", 
+   "serf_ssl_cert_subject,", 
+   "serf_ssl_cert_certificate,", 
+   "serf_ssl_cert_export): Now wrappers to specific implementations.", 
+   "(serf_ssl_load_cert_file): Moved, not yet implemented.", 
+   "* SConstruct: Add CoreFoundation framework for string functions in Secure", 
+   "Transport implementation."
+  ], 
+  "revision_id": "1699287"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-03-30T22:04:54.726521Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "update handshaking code to also work with more data (many certificates...).", 
+   "* buckets/securetransport_buckets.c:", 
+   "(sectrans_read_cb): Fix actual and remaining received data calculations.", 
+   "(serf_sectrans_encrypt_read): Reorder code a bit, in preparation for next", 
+   "phase."
+  ], 
+  "revision_id": "1699286"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-03-30T21:22:46.689121Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "* buckets/securetransport_buckets.c:", 
+   "(sectrans_read_cb): Fix non-const pointer. Fix line to wide."
+  ], 
+  "revision_id": "1699285"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-03-30T21:02:06.289467Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "* buckets/securetransport_buckets.c:", 
+   "(*): Implement the basic framework of Secure Transport-based ssl/tls", 
+   "communication. Currently the handshake works, certificate validation", 
+   "not included."
+  ], 
+  "revision_id": "1699284"
+ }
+]

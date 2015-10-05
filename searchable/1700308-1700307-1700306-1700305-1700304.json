@@ -1,0 +1,79 @@
+[
+ {
+  "author": "semancik", 
+  "date": "2015-08-31T19:19:26.973246Z", 
+  "msg": [
+   "Support for relaxed mode in the registries. Skipping OID syntax check in relaxed mode."
+  ], 
+  "revision_id": "1700308"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2015-08-31T19:18:59.786823Z", 
+  "msg": [
+   "weird logic"
+  ], 
+  "revision_id": "1700307"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2015-08-31T19:16:43.996767Z", 
+  "msg": [
+   "bit more fuzzy logic"
+  ], 
+  "revision_id": "1700306"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-08-31T19:16:06.801198Z", 
+  "msg": [
+   "[Reverted in r1700774.]", 
+   "Add a function to destroy / remove a mark from a stream.", 
+   "For some streams, a mark is a relatively expensive object.  Merely relying", 
+   "on timely pool cleanups is not always enough because our pool usage pattern", 
+   "often relies on the caller to clean up pools in a timely manner.  Having", 
+   "explicit control over the lifetime of stream marks similar to what we have", 
+   "with file objects will improve ease of use.", 
+   "In this patch, only wrapping streams and those with \"heavy\" mark objects", 
+   "implement svn_stream_remove_mark().  For all other streams that support", 
+   "svn_stream_mark() it defaults to a no-op.", 
+   "We use the new API in svn_stream_readline() to prevent long-living marks", 
+   "on the new buffering read stream wrapper.  This, in turn, limits the buffer", 
+   "size of that stream to 2x SVN__STREAM_CHUNK_SIZE in all non-degenerate", 
+   "cases.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_remove_mark_fn_t,", 
+   "svn_stream_set_remove_mark,", 
+   "svn_stream_remove_mark): Definition trio for the new public stream API.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_t): Add a  function table entry for the new function.", 
+   "(svn_stream_set_remove_mark): Implement new public API.", 
+   "(svn_stream_remove_mark): Same. Make it a no-op by default.", 
+   "(stream_readline_chunky): Use the new API to release stream marks asap.", 
+   "(remove_mark_handler_disown,", 
+   "svn_stream_disown): Explicitly implement the new API as forwarding to", 
+   "the wrapped stream.", 
+   "(buffering_stream_wrapper_mark): Extend the mark object such that we", 
+   "can call the cleanup explicitly.", 
+   "(mark_handler_buffering_wrapper): Update mark constructor.", 
+   "(remove_mark_handler_buffering_wrapper,", 
+   "svn_stream_wrap_buffered_read): Explicitly implement the new API with the", 
+   "same effect as an explicit pool cleanup.", 
+   "(seek_handler_lazyopen,", 
+   "svn_stream_lazyopen_create): Explicitly implement the new API as", 
+   "forwarding to the wrapped stream.", 
+   "* subversion/libsvn_subr/subst.c", 
+   "(translated_stream_seek,", 
+   "stream_translated): Same."
+  ], 
+  "revision_id": "1700305"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2015-08-31T19:15:48.698388Z", 
+  "msg": [
+   "typo"
+  ], 
+  "revision_id": "1700304"
+ }
+]

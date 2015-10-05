@@ -1,0 +1,98 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-05-07T07:47:41.848393Z", 
+  "msg": [
+   "Add a test for the certificate chain callback where the server provided all", 
+   "certificates, including root CA. This in contrast to the already existing", 
+   "test that explicitly trusted the root CA in the client.", 
+   "* test/test_context.c", 
+   "(test_serf_ssl_certificate_chain): Rename to ...", 
+   "(test_serf_ssl_certificate_chain_with_anchor) ... this.", 
+   "(chain_rootca_callback_conn_setup,", 
+   "cert_chain_all_certs_cb): New helper function.", 
+   "(chain_callback_conn_setup): Reuse this function for the new test.", 
+   "(test_serf_ssl_certificate_chain_all_from_server): New test.", 
+   "(test_context): Rename test and run the new test."
+  ], 
+  "revision_id": "1699373"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-07T06:54:23.294735Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Implement first part of the certificate chain callback mechanism. Not complete,", 
+   "Keychain unfortunately does not include anchor certificates in the chain", 
+   "copied through its API unlike OpenSSL.", 
+   "* buckets/sectrans_buckets.c", 
+   "(delete_temp_keychain): Silence compile warning by adding prototype.", 
+   "(sectrans_free_context): Remove unneeded variable decl.", 
+   "(validate_server_certificate): Call the cert_chain callback if set by the", 
+   "application, provide it with all certs by the server (possibly excluding", 
+   "anchor certs)."
+  ], 
+  "revision_id": "1699372"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-07T06:37:38.654259Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch: Support DER tag type UTF8String.", 
+   "* buckets/sectrans_x509_cert.c", 
+   "(read_DER_TLvalue): Use the string read function to support UTF8String's."
+  ], 
+  "revision_id": "1699371"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-06T08:24:38.376020Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Support the use of client certificates. Works but improvements needed.", 
+   "* buckets/sectrans_buckets.c", 
+   "(sectrans_context_t): Add variables for the client_cert and client_cert_pw", 
+   "callback functions. Add variables for temporary keychain.", 
+   "(translate_sectrans_status): Log error description.", 
+   "(sectrans_init_context): Make the handshake break if a client certificate", 
+   "was requested.", 
+   "(sectrans_free_context): Delete the temporary keychain.", 
+   "(load_data_from_file,", 
+   "load_certificate_from_databuf,", 
+   "load_identity_from_databuf): Helper functions to read certificates and", 
+   "private keys from file or from memory buffers.", 
+   "(create_temp_keychain): New function, creates a temporary Keychain to load", 
+   "a .p12 file.", 
+   "(delete_temp_keychain): New function.", 
+   "(provide_client_certificate): New function, handles the request of the server", 
+   "for a client certificate by calling the application-provided callback.", 
+   "(do_handshake): Invoke provide_client_certificate when client cert requested.", 
+   "Delete the temporary keychain when the handshake is successful.", 
+   "(client_cert_provider_set,", 
+   "client_cert_password_set): Implement these ssl_bucket API functions.", 
+   "(splitext): Remove now obsolete function.", 
+   "(load_CA_cert_from_file): Reimplement using the new helper functions.", 
+   "(serf_sectrans_encrypt_read): Add comment.", 
+   "(serf_sectrans_decrypt_readline): Whitespace fix.", 
+   "* serf.h", 
+   "(SERF_ERROR_SSL_CLIENT_CERT_PW_FAILED): New error. Renumber the other ssl", 
+   "related errors."
+  ], 
+  "revision_id": "1699370"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-05T23:33:53.109226Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch: continue the ssl handshake until", 
+   "finished.", 
+   "* buckets/sectrans_buckets.c", 
+   "(serf_sectrans_encrypt_read): Move the handshake related code to ...", 
+   "(do_handshake): ... here.", 
+   "(serf_sectrans_decrypt_read,", 
+   "serf_sectrans_decrypt_readline): Finish the handshake first before returning", 
+   "data to the application."
+  ], 
+  "revision_id": "1699369"
+ }
+]

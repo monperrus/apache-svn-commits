@@ -1,0 +1,92 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:39:48.218097Z", 
+  "msg": [
+   "Create the first layer of at runtime configurable logging.", 
+   "* serf_private.h", 
+   "(SSL_VERBOSE): Undo accidental enabling.", 
+   "(serf__log_baton_t): New type.", 
+   "(serf__log_nopref): Take serf_config_t * parameter.", 
+   "* buckets/buckets.c", 
+   "(log_time, serf__log_nopref, serf__log_cfg): Remove here...", 
+   "* logging.c: New file", 
+   "(serf__log_init): New function, initializes log_baton, hardcode stderr as", 
+   "logging target for now.", 
+   "(log_time): Take FILE * parameter.", 
+   "(serf__log_nopref): Add serf_config_t * parameter.", 
+   "(serf__log_cfg): Find log_baton in the shared config, output log lines to the", 
+   "FILE pointer stored in that log_baton instead of stderr directly.", 
+   "* buckets/log_wrapper_buckets.c", 
+   "(serf_log_wrapped_read_iovec): Update serf__log_nopref calls.", 
+   "* context.c", 
+   "(serf_context_create_ex): Init logging layer.", 
+   "* outgoing.c", 
+   "(clean_skt, socket_writev):", 
+   "(serf_connection_create): Move logging to ...", 
+   "(serf_connection_create2): ... here, shared config is not configured in", 
+   "serf_connection_create (because we can't return status from that function)."
+  ], 
+  "revision_id": "1699753"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:29:22.395678Z", 
+  "msg": [
+   "* test/test_internal.c", 
+   "(test_config_store_error_handling): Test serf_config_[set|get]_object()."
+  ], 
+  "revision_id": "1699752"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:27:33.843419Z", 
+  "msg": [
+   "Start preparing for at runtime configurable logging.", 
+   "* serf.h", 
+   "(serf_config_ctx_logbaton,", 
+   "SERF_CONFIG_CTX_LOGBATON): New declarations.", 
+   "(serf_config_set_object): Update the definition, this is a no-copy function.", 
+   "(serf_config_get_object): New declaration.", 
+   "* config_store.c", 
+   "(serf_config_ctx_logbaton): New definition.", 
+   "(serf_config_set_object): Implement.", 
+   "(serf_config_get_object): New function.", 
+   "(serf_config_set_string): Reimplement using serf_config_set_object.", 
+   "(serf_config_get_string): Reimplement using serf_config_get_object."
+  ], 
+  "revision_id": "1699751"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-16T07:00:52.425638Z", 
+  "msg": [
+   "Add serf__log_nopref to the test suite's logging framework, so that we can", 
+   "refactor the existing one to use the configuration store.", 
+   "* test/server/test_server.h", 
+   "(test__log_nopref): New declarations.", 
+   "* test/test_util.c", 
+   "(test__log_nopref): New functions.", 
+   "* test/server/test_sslserver.c", 
+   "(ssl_handshake, ssl_socket_read): Replace serf__log_nopref with", 
+   "test__log_nopref."
+  ], 
+  "revision_id": "1699750"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T22:00:48.654289Z", 
+  "msg": [
+   "Switch the remaining serf__log calls to serf__log_cfg, then cleanup the now", 
+   "obsolete serf__log and serf__log_skt functions.", 
+   "* serf_private.h", 
+   "(serf__log, serf__log_skt): Remove.", 
+   "* buckets/buckets.c", 
+   "(serf__log, serf__log_skt): Remove.", 
+   "* buckets/ssl_buckets.c", 
+   "(apps_ssl_info_callback,", 
+   "init_ssl_libraries): Switch from serf__log to serf__log_cfg."
+  ], 
+  "revision_id": "1699749"
+ }
+]

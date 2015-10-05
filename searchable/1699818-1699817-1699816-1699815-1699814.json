@@ -1,0 +1,110 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2014-01-30T19:27:39.300542Z", 
+  "msg": [
+   "Fix error handling in the test suite.", 
+   "* test/MockHTTPinC/MockHTTP.c", 
+   "(mhRunServerLoop): Return a generic error code in case of server error.", 
+   "* test/test_util.c", 
+   "(run_client_and_mock_servers_loops): If there's an error, break out of the", 
+   "loop."
+  ], 
+  "revision_id": "1699818"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-01-29T22:13:22.445998Z", 
+  "msg": [
+   "Fix issue #119: Endless loop with ssl tunnel over proxy with KeepAlive off and", 
+   "Negotiate.", 
+   "The root cause is that proxy authentication info was stored per connection.", 
+   "Combined with the proxy killing the connection after a 407 response, serf never", 
+   "got to initiate the Negotiate handshake.", 
+   "The solution is to store the Negotiate proxy authentication info per serf", 
+   "context instead.", 
+   "* serf_private.h", 
+   "(struct serf_connection_t): Remove proxy_authn_baton because no authn scheme", 
+   "stores it info per connection anymore. Remove authn_baton and replace it", 
+   "with a authn_info object for consistency with serf_context_t.", 
+   "* auth/auth_spnego.c", 
+   "(serf__init_spnego_connection): Store the gss_info object (contains the", 
+   "SSPI & GSSAPI secure context object) used for proxy authentication per", 
+   "serf context instead of per connection.", 
+   "This enables reuse of this context between multiple connections, and", 
+   "makes serf send the initial Negotiate headers on the first request on a", 
+   "new connection to the proxy.", 
+   "(serf__handle_spnego_auth,", 
+   "serf__validate_response_spnego_auth): Update to new location of gss_info *."
+  ], 
+  "revision_id": "1699817"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-01-29T19:59:10.849348Z", 
+  "msg": [
+   "Some refactoring in the test suite, to prepare for proxy tests using the new", 
+   "mock test framework.", 
+   "* test/MockHTTPinC/*: Update to latest version.", 
+   "* test/test_serf.h", 
+   "(setup_test_client_context,", 
+   "setup_test_client_https_context,", 
+   "setup_test_client_context_with_proxy): Remove unused argument.", 
+   "* test/test_util.c", 
+   "(initTestCtx): New function.", 
+   "(setup): Extract test ctx init code to initTestCtx.", 
+   "(test_setup, test_teardown): Initialize  and cleanup the test context now", 
+   "resp. before and after running the test.", 
+   "(clean_mh): Remove, integrated in test_teardown.", 
+   "(setup_test_client_context,", 
+   "setup_test_client_https_context,", 
+   "setup_test_client_context_with_proxy): When these functions are called, test", 
+   "context and server setup will already be done, so we can dynamically", 
+   "fetch proxy and server info from the test context instead of hardcoding", 
+   "this info. Remove unused argument (init array with fixed capacity).", 
+   "(setup_test_mock_server,", 
+   "setup_test_mock_https_server): Store the actual server url.", 
+   "* test/test_auth.c", 
+   "* test/test_buckets.c", 
+   "* test/test_context.c", 
+   "* test/test_internal.c", 
+   "* test/test_ssl.c", 
+   "(test_*): The test_baton * with a pool is now created during test setup.", 
+   "Setup server and/or proxy first before creating the serf context. This", 
+   "enables using dynamically assigned port numbers. Drop the", 
+   "'nr of messages' argument in the function calls to setup the client ctx.", 
+   "(test_setup_ssltunnel_kerbauthn): Work in progress test, disabled for now."
+  ], 
+  "revision_id": "1699816"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-01-28T19:14:53.921622Z", 
+  "msg": [
+   "Migrate the proxy setup test to the new test framework.", 
+   "* test/MockHTTPinC/*: Update to latest version.", 
+   "* test/test_serf.h", 
+   "(setup_test_client_context_with_proxy,", 
+   "setup_test_mock_proxy): New declarations.", 
+   "* test/test_util.c", 
+   "(setup_test_client_context): Improve comment.", 
+   "(setup_test_client_context_with_proxy): New function.", 
+   "(setup_test_mock_server,", 
+   "setup_test_mock_https_server): Update initialization to follow changes in the", 
+   "mock test library.", 
+   "(setup_test_mock_proxy): New function.", 
+   "* test/test_context.c", 
+   "(test_setup_proxy): Migrate to use the mock proxy/server and macro's.", 
+   "(test_context): Reorder tests."
+  ], 
+  "revision_id": "1699815"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-01-26T20:00:51.617968Z", 
+  "msg": [
+   "* test/test_util.c: add some comments."
+  ], 
+  "revision_id": "1699814"
+ }
+]

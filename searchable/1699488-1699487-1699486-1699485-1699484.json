@@ -1,0 +1,83 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-06-24T20:30:09.219850Z", 
+  "msg": [
+   "Fix issue 108 - provide a more detailed socket error code. Based on the patch", 
+   "attached to that issue provided by Bert.", 
+   "* outgoing.c", 
+   "(serf__process_connection): When possible get a the last error from the socket", 
+   "using the platform's socket API."
+  ], 
+  "revision_id": "1699488"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-23T10:21:20.220899Z", 
+  "msg": [
+   "Fix Digest proxy authentication when setting up an SSL tunnel.", 
+   "* auth/auth_digest.c", 
+   "(serf__setup_request_digest_auth): The uri used in the Digest authentication", 
+   "for the CONNECT request should be hostname:port. Add special case,", 
+   "apr_uri_parse doesn't parse this correctly.", 
+   "* outgoing.c", 
+   "(serf_request_bucket_request_create): SSL tunnel is a special case for authn", 
+   "headers: proxy authn headers on the initial CONNECT request, server", 
+   "authn headers on the application requests.", 
+   "* test/test_context.c", 
+   "(test_ssltunnel_basic_auth): Validate context run result code.", 
+   "(proxy_digest_authn_callback,", 
+   "test_ssltunnel_digest_auth): New helper function and test.", 
+   "(test_ssltunnel_digest_auth): Run the new test."
+  ], 
+  "revision_id": "1699487"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-23T08:43:58.855134Z", 
+  "msg": [
+   "Add test for Digest authentication.", 
+   "* test/test_serf.h", 
+   "(CHUNKED_REQUEST_URI): New macro.", 
+   "* test/test_auth.c", 
+   "(digest_authn_callback,", 
+   "test_digest_authentication): New helper function and test.", 
+   "(test_auth): Run the new test."
+  ], 
+  "revision_id": "1699486"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-23T08:00:13.093806Z", 
+  "msg": [
+   "Fix ssltunnel proxy authentication when credentials aren't accepted the first", 
+   "time.", 
+   "* auth/auth.c", 
+   "(serf__handle_auth_response): When putting the CONNECT request again on the", 
+   "queue make sure it's labeled a ssltunnel request, so that serf knows it", 
+   "can't use this request to call back to the application.", 
+   "* test/test_context.c", 
+   "(test_ssltunnel_basic_auth): Add 2 'authentication failed' responses."
+  ], 
+  "revision_id": "1699485"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T20:29:26.942468Z", 
+  "msg": [
+   "Fix the realm string used in the credentials callback for Basic and Digest", 
+   "authentication for a proxy: use the proxy's name and port instead of the server.", 
+   "* auth/auth.h", 
+   "(serf__construct_realm): New function declaration.", 
+   "* auth/auth.c", 
+   "(serf__construct_realm): New function. Creates realmstring with host or proxy", 
+   "hostname and port.", 
+   "* auth/auth_basic.c", 
+   "(serf__handle_basic_auth):", 
+   "* auth/auth_digest.c", 
+   "serf__handle_digest_auth): Use serf__construct_realm to correctly construct", 
+   "the realm string."
+  ], 
+  "revision_id": "1699484"
+ }
+]

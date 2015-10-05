@@ -1,0 +1,80 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2015-09-04T17:24:34.886513Z", 
+  "msg": [
+   "Fix spurious 'Access Denied' errors during checkout or commit on Windows", 
+   "reported on TortoiseSVN users mailing list [1].", 
+   "The issue can be reproduced locally even though known problems reports are", 
+   "with working copies stored on network share. The reproduction script is:", 
+   "1. Checkout working copy with a file 'foo'", 
+   "2. Run 'for /L %I in (1,1,50000000) do type foo' command in background to", 
+   "emulate indexers/antivirus scanners", 
+   "3. Modify file 'foo' in repository via another working copy.", 
+   "4. Update the original working copy with 'type foo' running", 
+   "The real fix is to add retry loop for SetFileInformationByHandle() call. All", 
+   "other changes are refactoring to move existing platform specific code from", 
+   "libsvn_subr/stream.c to libsvn_subr/io.c to use WIN32_RETRY_LOOP macro. We", 
+   "already have retry loops for almost all IO operations on Windows.", 
+   "[1] http://tortoisesvn.tigris.org/ds/viewMessage.do?dsForumId=4061&dsMessageId=3134203", 
+   "* subversion/include/private/svn_io_private.h", 
+   "(svn_io__win_delete_file_on_close, svn_io__win_rename_open_file): Declare", 
+   "new library private functions.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(FILE_RENAME_INFO, FILE_DISPOSITION_INFO, FileRenameInfo,", 
+   "FileDispositionInfo, SetFileInformationByHandle_t,", 
+   "set_file_information_by_handle_proc): Move it here from", 
+   "libsvn_subr/stream.c.", 
+   "(win_init_dynamic_imports): Obtain pointer to SetFileInformationByHandle().", 
+   "(win32_set_file_information_by_handle): New helper.", 
+   "(svn_io__win_delete_file_on_close): New. Implementation extracted from", 
+   "svn_stream__install_delete().", 
+   "(svn_io__win_rename_open_file): New. Implementation extracted from", 
+   "svn_stream__install_stream(). Retry operation on Access Denied errors.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(FILE_RENAME_INFO, FILE_DISPOSITION_INFO, SetFileInformationByHandle_t):", 
+   "Move to libsvn_subr/io.c.", 
+   "(SetFileInformationByHandle, SetFileInformationByHandle_a,", 
+   "find_SetFileInformationByHandle): Remove.", 
+   "(svn_stream__install_stream): Use svn_io__win_rename_open_file().", 
+   "(svn_stream__install_delete): Use svn_io__win_delete_file_on_close()."
+  ], 
+  "revision_id": "1701298"
+ }, 
+ {
+  "author": "tripod", 
+  "date": "2015-09-04T17:13:02.090658Z", 
+  "msg": [
+   "OAK-3324 Evaluation with restriction is not consistent with parent ACLs", 
+   "- fixed it, so that the behavior is consisten between single node privs and dual node privs"
+  ], 
+  "revision_id": "1701297"
+ }, 
+ {
+  "author": "tripod", 
+  "date": "2015-09-04T17:12:50.477542Z", 
+  "msg": [
+   "OAK-3324 hasPermission does not reflect actual behavior with restrictions", 
+   "- adding more tests", 
+   "Conflicts:", 
+   "oak-core/src/test/java/org/apache/jackrabbit/oak/security/authorization/restriction/PermissionTest.java"
+  ], 
+  "revision_id": "1701296"
+ }, 
+ {
+  "author": "dligach", 
+  "date": "2015-09-04T17:12:17.820219Z", 
+  "msg": [
+   "printing local context instead of entire sentence"
+  ], 
+  "revision_id": "1701295"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2015-09-04T17:05:51.307878Z", 
+  "msg": [
+   "Safety checks against some NullPointerException."
+  ], 
+  "revision_id": "1701294"
+ }
+]

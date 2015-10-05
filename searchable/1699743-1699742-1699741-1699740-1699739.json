@@ -1,0 +1,111 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-10-14T18:34:12.208410Z", 
+  "msg": [
+   "Convert ssl logging to the new config system. To make this work, call set_config", 
+   "directly after creating a bucket systematically, both in the context handling", 
+   "code as in the bucket code (for nested buckets).", 
+   "* buckets/chunk_buckets.c", 
+   "(chunk_context_t): Add config variable.", 
+   "(create_chunk): Set_config on the nested bucket after creation.", 
+   "(serf_chunk_set_config): Store config.", 
+   "* buckets/deflate_buckets.c: Idem", 
+   "* buckets/response_buckets.c: Idem", 
+   "* buckets/request_buckets.c: Idem", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_context_t): Add config variable.", 
+   "(bio_bucket_read, bio_bucket_write,", 
+   "ssl_decrypt, ssl_encrypt,", 
+   "ssl_need_client_cert): Convert serf__log to serf__log_cfg. This has as", 
+   "consequence that the ssl log lines will now have local and remote ip.", 
+   "(serf_ssl_set_config): Store config.", 
+   "* outgoing.c", 
+   "(do_conn_setup): Set_config before using the stream buckets."
+  ], 
+  "revision_id": "1699743"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-14T11:34:24.158065Z", 
+  "msg": [
+   "Follow up to r2203, value returned by serf_get_config_string is now a const *.", 
+   "* test/test_internal.c", 
+   "(test_config_store_per_context,", 
+   "test_config_store_per_connection_different_host,", 
+   "test_config_store_per_connection_same_host): Make actual variables a", 
+   "const char *."
+  ], 
+  "revision_id": "1699742"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-14T11:30:51.383482Z", 
+  "msg": [
+   "* test/CuTest.h", 
+   "* test/CuTest.c", 
+   "(CuAssertPtrEquals_LineMsg): Make expected and actual pointers const. This", 
+   "makes it possible to test that a 'const char *' value is NULL without", 
+   "cast."
+  ], 
+  "revision_id": "1699741"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-14T09:18:26.656197Z", 
+  "msg": [
+   "Start making logging use the config objects.", 
+   "* buckets/buckets.c", 
+   "(serf__log_cfg): New function, will replace serf__log_skt.", 
+   "* buckets/log_wrapper_buckets.c", 
+   "(log_wrapped_context_t): Remove obsolete skt variable.", 
+   "(serf_log_wrapped_readline,", 
+   "serf_log_wrapped_read_iovec,", 
+   "serf_log_wrapped_read): Switch from serf__log_skt to serf__log_cfg.", 
+   "(serf__bucket_log_wrapper_create): Remove unneeded skt parameter.", 
+   "* context.c", 
+   "(serf_context_bucket_socket_create): Update call to", 
+   "serf__bucket_log_wrapper_create.", 
+   "* config_store.c", 
+   "(serf_config_conn_localip,", 
+   "serf_config_conn_remoteip): New configuration keys.", 
+   "(serf_set_config_stringf): New helper function, formats string directly in the", 
+   "target pool's memory.", 
+   "(serf_get_config_string): Make output variable const.", 
+   "* outgoing.c", 
+   "(clean_skt,", 
+   "request_or_data_pending,", 
+   "no_more_writes,", 
+   "reset_connection,", 
+   "socket_writev,", 
+   "serf_connection_set_max_outstanding_requests,", 
+   "serf_connection_close): Switch from serf__log_skt to serf__log_cfg.", 
+   "(store_ipaddresses_in_config): New helper function, stores local and remote", 
+   "ip addresses in string format in the configuration.", 
+   "(serf__open_connections): Switch from serf__log_skt to serf__log_cfg. Use", 
+   "store_ipaddresses_in_config.", 
+   "* serf.h", 
+   "(serf_config_conn_localip, serf_config_conn_remoteip,", 
+   "SERF_CONFIG_CONN_LOCALIP, SERF_CONFIG_CONN_REMOTEIP): New declarations.", 
+   "(serf_set_config_stringf): New declaration.", 
+   "(serf_get_config_string): Make output variable const.", 
+   "* serf_private.h", 
+   "(serf__bucket_log_wrapper_create): Remove unneeded skt parameter.", 
+   "(serf__log_cfg): New declaration."
+  ], 
+  "revision_id": "1699740"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-14T08:08:31.951234Z", 
+  "msg": [
+   "Make serf_get_config_from_store a private function, application should not get", 
+   "access to serf internal structures.", 
+   "* serf.h", 
+   "(serf_get_config_from_store): Remove and move to ...", 
+   "* serf_private.h", 
+   "(serf_get_config_from_store): ... here."
+  ], 
+  "revision_id": "1699739"
+ }
+]

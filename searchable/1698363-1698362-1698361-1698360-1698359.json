@@ -1,0 +1,90 @@
+[
+ {
+  "author": "jwross", 
+  "date": "2015-08-28T16:24:16.634149Z", 
+  "msg": [
+   "ARIES-1356 getInstance method on the core Activator shows up on jvisualvm sampling during performance analysis", 
+   "Make instance field volatile.", 
+   "Merge the checkInstance and getInstance methods.", 
+   "Remove synchronization from the getInstance method.", 
+   "Remove entry/exit tracing."
+  ], 
+  "revision_id": "1698363"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2015-08-28T16:22:01.226157Z", 
+  "msg": [
+   "Get it to build via ant"
+  ], 
+  "revision_id": "1698362"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2015-08-28T16:14:17.922300Z", 
+  "msg": [
+   "Add amazons3 dependencies to make-core-deps"
+  ], 
+  "revision_id": "1698361"
+ }, 
+ {
+  "author": "jwross", 
+  "date": "2015-08-28T16:02:20.546494Z", 
+  "msg": [
+   "ARIES-1388 Compute requirement filters only once.", 
+   "ResourceHelper.matches(Requirement, Capability) is an often used method during resolution. Currently, it recomputes the requirement filter with each call.", 
+   "The measurements used the same test scenario being developed as part of ARIES-1357. The time it took to install 50 features was measured. Each feature consists of 10 bundles plus one application. All features share the same 10 bundles. Each bundle exports 5 unique packages. Each application consists of 10 unique bundles. The bundles import packages offered by the containing feature.", 
+   "The baseline average time for installing all 50 features was 67.9 seconds.", 
+   "AbstractRequirement will now lazily compute the requirement filter when asked for the first time. Subsequent calls will return the already computed value.", 
+   "ResourceHelper now asks whether or not the Requirement is an instance of AbstractRequirement. If so, it asks for the filter directly. If not, the filter is computed as before.", 
+   "After these modifications, the average time for installing all 50 features was 46.6 seconds, a 31.3% improvement."
+  ], 
+  "revision_id": "1698360"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-08-28T15:53:10.066896Z", 
+  "msg": [
+   "[Reverted in r1700797 and re-applied as part of r1700799.]", 
+   "Introduce a stream wrapper object that adds mark/seek support to any", 
+   "readable stream.  Use it on the stdin streams in our CL tools.", 
+   "As it turns out, parsing data from a stdin byte-by-byte incurs a", 
+   "massive overhead of 100% internal and 300% system load over a buffered", 
+   "stream.  'svnadmin load-revprops' sees a 5 times speedup if all data", 
+   "is in OS disc caches.  This is a realistic assumption in a \"final sync", 
+   "and switch over to new repository\" scenario.", 
+   "The other 2 uses of stdin either have less data to process (svnfsfs", 
+   "load-index) or parse only a small fraction of the stream (svnadmin load).", 
+   "To avoid any memory usage issue due to the added buffering, svnadmin", 
+   "load will not use the stream wrapper - the loader might clean up some", 
+   "of the pools only once per revision.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_wrap_buffered_read): Declare the new stream constructor API.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(buffering_stream_wrapper_baton,", 
+   "buffering_stream_wrapper_mark): New data structures describing the", 
+   "wrapper stream and marker states.", 
+   "(read_handler_buffering_wrapper,", 
+   "decrement_mark_count,", 
+   "mark_handler_buffering_wrapper,", 
+   "seek_handler_buffering_wrapper,", 
+   "data_available_handler_buffering_wrapper,", 
+   "is_buffered_handler_buffering_wrapper,", 
+   "assert_zero_mark_count): Internal logic of the new stream object.", 
+   "(svn_stream_wrap_buffered_read): New constructor implementation.", 
+   "* subversion/svnadmin/svnadmin.c", 
+   "(subcommand_load_revprops): Wrap the stdin stream.", 
+   "* subversion/svnfsfs/load-index-cmd.c", 
+   "(subcommand__load_index): Same.", 
+   "* subversion/tests/libsvn_subr/stream-test.c", 
+   "(struct stream_baton_t,", 
+   "read_handler,", 
+   "data_available_handler,", 
+   "create_test_read_stream): New configurable test read stream.", 
+   "(expect_line_content,", 
+   "test_stream_buffered_wrapper): New test for the new wrapper stream.", 
+   "(test_funcs): Register the new test."
+  ], 
+  "revision_id": "1698359"
+ }
+]

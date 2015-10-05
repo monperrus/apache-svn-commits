@@ -1,0 +1,77 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-08-12T18:54:44.757827Z", 
+  "msg": [
+   "Follow up r2123, make PREFIX work again if LIBDIR isn't specified.", 
+   "* SConstruct:", 
+   "(default_libdir): Use $PREFIX as default prefix dir.", 
+   "(PathVariable LIBDIR): Fix typo."
+  ], 
+  "revision_id": "1699663"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-08-12T17:16:10.807264Z", 
+  "msg": [
+   "Fix issue #121: scons CFLAGS doesn't accept more than one flag.", 
+   "* SConstruct: Make CFLAGS, LIBS, LINKFLAGS and CPPFLAGS take a space-separated", 
+   "list so that flags like \"-Wl,-foo,fooval\" can be specified."
+  ], 
+  "revision_id": "1699662"
+ }, 
+ {
+  "author": "astieger", 
+  "date": "2013-08-10T19:44:43.748999Z", 
+  "msg": [
+   "Fix issue #112: add soname", 
+   "SConstruct would not set an SONAME or create versioned shared library", 
+   "files. Use SHLIBVERSION and InstallVersionedLib to do that. This is", 
+   "supported with scons 2.3.0.", 
+   "* SConstruct: add SHLIBVERSION and use InstallVersionedLib", 
+   "* README: note that this works on scons 2.3.0"
+  ], 
+  "revision_id": "1699661"
+ }, 
+ {
+  "author": "astieger", 
+  "date": "2013-08-10T19:13:58.033077Z", 
+  "msg": [
+   "Fix issue #111: fix hardcoded library path", 
+   "The installation to platform-dependent library direcories was not", 
+   "possible. Fix by introducing the LIBDIR parameter which defaults to", 
+   "/usr/local/lib and, if specified so, can install to /usr/lib{,64}.", 
+   "* SConstruct: add LIBDIR parameter", 
+   "* README: add explanatory text and example for packagers"
+  ], 
+  "revision_id": "1699660"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-08-09T18:10:05.196758Z", 
+  "msg": [
+   "Fix issue #120: Error with ssl tunnel over proxy with KeepAlive off and Basic", 
+   "authentication.", 
+   "Don't requeue the CONNECT request on a new connection after the old connection", 
+   "was reset by an 407 response. A CONNECT request will be automatically created", 
+   "when setting up a new connection, if the queue already had one from a previous", 
+   "connection, that extra request will be sent to the server over the ssl tunnel.", 
+   "(which is wrong).", 
+   "This also fixes an (not reported) issue where the application's credentials", 
+   "callback function is called with requeued CONNECT request (which the app doesn't", 
+   "know) an a NULL baton, potentially causing crashes in the application.", 
+   "* test/test_context.c", 
+   "(ssltunnel_basic_auth): Take a new parameter proxy_resp_hdrs and add it", 
+   "value as headers to the responses of the proxy.", 
+   "(test_ssltunnel_basic_auth,", 
+   "test_ssltunnel_basic_auth_server_has_keepalive_off): Update call to", 
+   "ssltunnel_basic_auth with an empty proxy header.", 
+   "(test_ssltunnel_basic_auth_server_has_keepalive_off): New test.", 
+   "(test_context): Run the new test.", 
+   "* outgoing.c", 
+   "(reset_connection): When requeueing requests on a new connection, filter", 
+   "out the CONNECT request."
+  ], 
+  "revision_id": "1699659"
+ }
+]

@@ -1,0 +1,109 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2010-05-23T10:08:09.153788Z", 
+  "msg": [
+   "Edited wiki page through web user interface."
+  ], 
+  "revision_id": "1698913"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-05-16T18:21:15.571095Z", 
+  "msg": [
+   "Make the tests that make use of the test server more deterministic. Keep track", 
+   "of the actual messages (instead of handling those as raw data), and allow the", 
+   "server to ignore some of them before killing a connection, if we know the client", 
+   "should retry those messages on the new connection.", 
+   "Use socket events to correctly determine when to read or write data.", 
+   "This should fix issues 51 and 54.", 
+   "* test/test_serf.h", 
+   "(struct kind): Add new kinds of server actions.", 
+   "(test_server_message_t): New type.", 
+   "(test_baton_t): Add some new members to handle messages and outstanding", 
+   "responses.", 
+   "(test_server_create): Function now takes a list of expected messages and a", 
+   "list of actions.", 
+   "* test/test_util.c", 
+   "(next_message): New function.", 
+   "(replay): Split the actions list in two: messages and actions. Read messages", 
+   "when data is available (and only then), initiate actions when it's possible", 
+   "to write on the socket.", 
+   "(test_server_create): Update definition to match the new declaration.", 
+   "* test/test_context.c", 
+   "(test_serf_connection_request_create,", 
+   "test_serf_connection_priority_request_create,", 
+   "test_serf_closed_connection,", 
+   "test_serf_setup_proxy,", 
+   "test_keepalive_limit_one_by_one,", 
+   "test_keepalive_limit_one_by_one_and_burst,", 
+   "test_serf_progress_callback): Update the tests. Keep both a message list", 
+   "and an action list. Pass both to the function that creates a new test", 
+   "server. Fix some conditions when we expect the client-server traffic to", 
+   "be completely finished."
+  ], 
+  "revision_id": "1698912"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-05-15T18:40:49.836177Z", 
+  "msg": [
+   "Remove serf_declare.h and its usage from all the code.", 
+   "* serf_declare.h: removed", 
+   "* serf.h: remove inclusion of serf_declare.h", 
+   "* buckets/aggregate_buckets.c:", 
+   "* buckets/allocator.c:", 
+   "* buckets/barrier_buckets.c:", 
+   "* buckets/buckets.c:", 
+   "* buckets/bwtp_buckets.c:", 
+   "* buckets/chunk_buckets.c:", 
+   "* buckets/dechunk_buckets.c:", 
+   "* buckets/deflate_buckets.c:", 
+   "* buckets/file_buckets.c:", 
+   "* buckets/headers_buckets.c:", 
+   "* buckets/limit_buckets.c:", 
+   "* buckets/mmap_buckets.c:", 
+   "* buckets/request_buckets.c:", 
+   "* buckets/response_buckets.c:", 
+   "* buckets/simple_buckets.c:", 
+   "* buckets/socket_buckets.c:", 
+   "* buckets/ssl_buckets.c:", 
+   "* context.c:", 
+   "* incoming.c:", 
+   "* outgoing.c:", 
+   "(...): remove all SERF_DECLARE and SERF_DECLARE_DATA macros"
+  ], 
+  "revision_id": "1698911"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-05-15T18:19:02.169486Z", 
+  "msg": [
+   "Remove SERF_DECLARE() and SERF_DECLARE_DATA from the header files, and add", 
+   "a build script that will generate a .DEF file for Windows builds.", 
+   "* build/gen_def.py: new script", 
+   "* buildconf:", 
+   "(): remove construction of ./build since it is part of source control.", 
+   "invoke gen_def.py to create serf.def for distributions", 
+   "* serf.h:", 
+   "* serf_bucket_types.h:", 
+   "* serf_bucket_util.h:", 
+   "(...): remove SERF_DECLARE() from all declarations. standardize the", 
+   "formatting of all function declarations and function typedefs. remove", 
+   "SERF_DECLARE_DATA from the bucket type structures.", 
+   "* trunk/:", 
+   "(svn:ignore): remove 'build' since it is now part of source control"
+  ], 
+  "revision_id": "1698910"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-05-14T17:56:05.688801Z", 
+  "msg": [
+   "One more time...", 
+   "* outgoing.c:", 
+   "(socket_writev): compiler fix for adjustment of iov_base"
+  ], 
+  "revision_id": "1698909"
+ }
+]

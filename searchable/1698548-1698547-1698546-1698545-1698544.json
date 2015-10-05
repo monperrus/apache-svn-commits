@@ -1,0 +1,74 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T22:22:21.660049Z", 
+  "msg": [
+   "Destroy the response and request buckets for cancelled requests.", 
+   "* context.c", 
+   "(cancel_request): Clear out allocator debug info and then destroy the buckets"
+  ], 
+  "revision_id": "1698548"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T22:20:27.382009Z", 
+  "msg": [
+   "Move the socket to its own sub-pool of the connection.", 
+   "(This avoids race conditions with the pool cleanup code closing the socket", 
+   "multiple times.)", 
+   "* context.c", 
+   "(serf_connection_t): Add skt_pool field.", 
+   "(clean_skt): New cleanup function that will close a socket and update the", 
+   "pointer to the socket to indicate its closed.", 
+   "(open_connection): Clear the subpool and re-register the cleanup; create", 
+   "the socket out of the new pool.", 
+   "(serf_connection_create): Create subpool for the socket."
+  ], 
+  "revision_id": "1698547"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T15:40:38.762948Z", 
+  "msg": [
+   "Upon further review, don't try to hide all socket errors - just this one edge", 
+   "case that we know about (i.e. that httpd may not deal with lingering close", 
+   "correctly).", 
+   "* context.c", 
+   "(process_connection): Only reset the conn on POLLERR if we haven't", 
+   "completed a keepalive connection cycle yet."
+  ], 
+  "revision_id": "1698546"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T06:58:10.573677Z", 
+  "msg": [
+   "* context.c", 
+   "(process_connection): Reset our connection if we get a HUP or ERR."
+  ], 
+  "revision_id": "1698545"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T02:42:12.399464Z", 
+  "msg": [
+   "Don't try to flood the server with pipelined requests until we have an idea", 
+   "of its limits.", 
+   "* context.c", 
+   "(serf_connection_t): Add three fields to help us track how hard we're", 
+   "pounding the server.", 
+   "(write_to_connection): If we have a 'discovered' keepalive limit and we've", 
+   "hit the max already, hold off; count the number of requests we've sent and", 
+   "purposely send one more than the limit each time as a trial balloon.", 
+   "(read_from_connection): Update each time we get a completed response without", 
+   "getting a Conn: Close; if we go past our previous keepalive limit, then", 
+   "release the cap.", 
+   "(process_connection): Deal with HUP and ERR earlier for now.", 
+   "(link_requests): Move earlier in file.", 
+   "(serf_connection_reset): Clear out request count; insert held, but not", 
+   "delivered, requests *after* we've cancelled the previous requests - this", 
+   "preserves the ordering."
+  ], 
+  "revision_id": "1698544"
+ }
+]

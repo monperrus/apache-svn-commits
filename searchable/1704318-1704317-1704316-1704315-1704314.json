@@ -1,0 +1,87 @@
+[
+ {
+  "author": "markt", 
+  "date": "2015-09-21T15:23:18.379302Z", 
+  "msg": [
+   "Fix https://bz.apache.org/bugzilla/show_bug.cgi?id=58284", 
+   "Correctly implement session serialization so non-serializable attributes are skipped with a warning.", 
+   "Patch provided by Andrew Shore."
+  ], 
+  "revision_id": "1704318"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-09-21T15:19:40.059518Z", 
+  "msg": [
+   "Use compressed svndiff1 format for deltas when committing changes over", 
+   "http:// and https://.", 
+   "Something I learned while working on the ra_serf-stream-commit branch is", 
+   "that ra_serf doesn't use compression when sending deltas over http(s)://", 
+   "\u2014 as opposed to, for instance, ra_svn, where compression is turned on by", 
+   "default.  Enabling compression has a positive impact on commits that happen", 
+   "over the WAN, especially, with slow connections, where the network speed is", 
+   "the bottleneck.", 
+   "Benchmarks over http:// with the repository located on a remote server,", 
+   "before and after this patch:", 
+   "1) Committing a Windows application build (.exe, .dll, resources),", 
+   "35 files, 55 MiB total size:", 
+   "51.901 s \u2192 22.404 s", 
+   "2) Committing a random bunch of compressible and incompressible files,", 
+   "135 files, 161 MiB total size:", 
+   "156.072 s \u2192 115.445 s", 
+   "3) Importing a subtree of TortoiseSVN's trunk, 1742 files, 81 MiB total size:", 
+   "186.548 s \u2192 167.285 s", 
+   "4) Importing Windows Installer log files, 23 files, 15 MiB total size:", 
+   "15.130 s \u2192 6.030 s", 
+   "So, we begin using compressed svndiff1 format in ra_serf, if that's possible.", 
+   "This is done for servers that advertise Subversion's HTTP v2 protocol, unless", 
+   "compression is disabled by the 'http-compression = no' client configuration", 
+   "option.  Existing Apache HTTPd + mod_dav_svn servers know how to deal with", 
+   "svndiff1, starting from Subversion 1.4, but the reasoning behind enabling", 
+   "it with HTTP v2 is that if the user is stuck with the old protocol version,", 
+   "she probably does not really care about the performance.  I tested existing", 
+   "custom implementations of Subversion's HTTP v2 protocol that are not based", 
+   "on mod_dav_svn, and they as well now how to deal with svndiff1 format.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__session_t.using_compression): Update comment.", 
+   "(svn_ra_serf__session_t.supports_svndiff1): New field.", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(capabilities_headers_iterator_callback): Remember that we can use svndiff1", 
+   "upon witnessing a Subversion's HTTPv2 protocol header.  Document the", 
+   "reasoning behind this.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(apply_textdelta): Use svndiff1 when calling svn_txdelta_to_svndiff3(), if", 
+   "possible.", 
+   "* subversion/libsvn_ra_serf/serf.c", 
+   "(ra_serf_dup_session): Duplicating a session begins with apr_pmemdup(), and", 
+   "automatically covers all primitive fields, e.g., the new supports_svndiff1", 
+   "field or already existing supports_rev_rsrc_replay field.  So, just update", 
+   "the comment block."
+  ], 
+  "revision_id": "1704317"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2015-09-21T15:18:35.590630Z", 
+  "msg": [
+   "SLING-5049 : Scheduled tasks should set a meaningful thread name during execution. Apply patch from Georg Henzler"
+  ], 
+  "revision_id": "1704316"
+ }, 
+ {
+  "author": "paulmerlin", 
+  "date": "2015-09-21T15:15:15.378044Z", 
+  "msg": [
+   "zest: update 2.1 documentation, remove empty tutorial page"
+  ], 
+  "revision_id": "1704315"
+ }, 
+ {
+  "author": "bdelacretaz", 
+  "date": "2015-09-21T15:09:06.077702Z", 
+  "msg": [
+   "SLING-5040 - move installer-duplicate.jsp to ServerSideInstallerTest"
+  ], 
+  "revision_id": "1704314"
+ }
+]

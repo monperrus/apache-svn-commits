@@ -1,0 +1,76 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2014-03-07T17:30:30.369986Z", 
+  "msg": [
+   "Following up on r2258, handle response handling errors during auth handling", 
+   "in a single location to avoid discarding requests without telling the", 
+   "application about it.", 
+   "This resolves the segfault reported by philipm on dev@subversion.a.o, by", 
+   "properly reporting requests as cancelled if the status line can't be read", 
+   "while having a auth callback hooked.", 
+   "* auth/auth.c", 
+   "(serf__handle_auth_response): Remove request discard callbacks here,", 
+   "to move them to the single caller...", 
+   "* outgoing.c", 
+   "(handle_response): ... here."
+  ], 
+  "revision_id": "1699853"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-03-06T20:23:59.518352Z", 
+  "msg": [
+   "Make implementation of a few bio file handlers really do what openssl", 
+   "expects us to do.", 
+   "* buckets/ssl_buckets.c", 
+   "(bio_file_read): Stop updating unused retry flags.", 
+   "(bio_file_gets): Really implement gets() behavior by calling the right", 
+   "apr function to really stop reading at the end of a line, instead of only", 
+   "at the end of the buffer."
+  ], 
+  "revision_id": "1699852"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-03-06T20:21:08.248953Z", 
+  "msg": [
+   "Fix some valgrind errors in the test suite.", 
+   "* test/MockHTTPinC/MockHTTP_server.c", 
+   "(readLine, readBody, readChunk): Use memmove instead of memcpy when dest", 
+   "and src buffers are overlapping."
+  ], 
+  "revision_id": "1699851"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-03-02T20:08:17.652916Z", 
+  "msg": [
+   "Fix a crash caused by incorrect reuse of the ssltunnel CONNECT request.", 
+   "Reported by Stefan Kueng on the svn-dev list:", 
+   "http://svn.haxx.se/dev/archive-2014-02/0289.shtml", 
+   "* test/MockHTTPinC/*: Latest version introduces HeaderNotSet and the", 
+   "CloseConnection action.", 
+   "* ssltunnel.c", 
+   "(handle_response): When a CONNECT request is cancelled during reset of the", 
+   "connection, don't retry it as a non-tunnel request. Instead don't do", 
+   "anything, as a new CONNECT request will be setup when a new socket", 
+   "gets initialized.", 
+   "* test/test_context.c", 
+   "(basic_authn_callback_2ndtry,", 
+   "test_ssltunnel_basic_auth_2ndtry): New test.", 
+   "(test_context): Run the new test."
+  ], 
+  "revision_id": "1699850"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-02-27T01:04:19.239116Z", 
+  "msg": [
+   "* buckets/ssl_buckets.c", 
+   "(ssl_need_client_cert): Following up on r2314, resolve a small memory leak", 
+   "in a similar usage of the bio infrastructure."
+  ], 
+  "revision_id": "1699849"
+ }
+]

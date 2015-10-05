@@ -1,0 +1,94 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-06-03T12:07:21.567858Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Add error description.", 
+   "* context.c", 
+   "(serf_error_string): Cleanup whitespace. Add error description for", 
+   "SERF_ERROR_SSL_CLIENT_CERT_PW_FAILED."
+  ], 
+  "revision_id": "1699433"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-03T11:51:51.119393Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Almost there...", 
+   "Two important improvements to server certificate validation:", 
+   "1. Use the system root certificates if the application has allowed us to.", 
+   "2. Don't call the application callback(s) in case:", 
+   "a. the user explicitly marked the server certificate in the keychain", 
+   "as trusted.", 
+   "b. a fatal error occured during evaluation that Secure Transport cannot", 
+   "ignore.", 
+   "* buckets/sectrans_buckets.c", 
+   "(struct sectrans_context_t): Add use_system_roots and anchor_certrefs", 
+   "member variables.", 
+   "(validate_server_certificate): When no evaluation is in progress yet, combine", 
+   "both custom anchor and system root certificates in one array and use", 
+   "this during trust evaluation. Don't call the application callbacks in", 
+   "case of fatal error, or if the user already trusts this cert (info", 
+   "from Keychain). Use specific codes for the fatal errors.", 
+   "(serf__sectrans_use_default_certificates): Set user_system_roots flag.", 
+   "* context.c", 
+   "(serf_error_string): Add error string for the new codes.", 
+   "* serf.h", 
+   "(SERF_ERROR_SSL_*): New error codes, update error numbers.", 
+   "* serf_bucket_types.h", 
+   "(SERF_SSL_CERT_RECOVERABLE,", 
+   "SERF_SSL_CERT_FATAL): Remove unused failure codes."
+  ], 
+  "revision_id": "1699432"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-02T20:06:26.849349Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Fix issue in server certificate validation.", 
+   "* buckets/sectrans_buckets.c", 
+   "(do_handshake): Dan't call SSLHandshake again before the results of the", 
+   "validation are in. If they are received call the application first."
+  ], 
+  "revision_id": "1699431"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-02T17:10:20.047447Z", 
+  "msg": [
+   "Merge c1845 from branches/multiple_ssl_impls:", 
+   "Make CuAssertStrEquals support expected value NULL. This also fixes an incorrect", 
+   "match in case the actual string = expected string + a postfix.", 
+   "* test/CuTest.c", 
+   "(CuAssertStrEquals_LineMsg): Reimplement using strcmp.", 
+   "* test/CuTest.h: Update list of modifications."
+  ], 
+  "revision_id": "1699430"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-02T16:59:55.216409Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Fix some more warnings.", 
+   "* buckets/sectrans_buckets.c", 
+   "(validate_server_certificate,", 
+   "serf_sectrans_find_preferred_identity_in_keychain,", 
+   "serf__sectrans_cert_export): Put declarations at beginning of function.", 
+   "(serf__sectrans_set_hostname): Convert OSStatus to apr_status_t.", 
+   "* buckets/sectrans_helper.m", 
+   "(showTrustCertificateDialog,", 
+   "showSelectIdentityDialog): Put declarations at beginning of function.", 
+   "* test/test_context.c", 
+   "(test_context): Here too.", 
+   "* test/test_ssl.c", 
+   "(read_certificate,", 
+   "test_ssl_no_implementations,", 
+   "test_ssl): And here too."
+  ], 
+  "revision_id": "1699429"
+ }
+]

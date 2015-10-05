@@ -1,0 +1,85 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-09-29T06:37:46.776964Z", 
+  "msg": [
+   "On the 1.3.x branch:", 
+   "Merge fixes from trunk:", 
+   "r2011+2012: Improve conformance to RFC2616: don't expect body for certain", 
+   "responses.", 
+   "r2144: Do not invoke progress callback if no data received from network.", 
+   "r2145:", 
+   "r2146: Fix crash (ssl_buckets) when apr_terminate() is called without", 
+   "clearing connection pool.", 
+   "r2170: Fix host header when url contains a username or password", 
+   "r2171: Fix issue #130: HTTP header field names are case insensitive.", 
+   "r2178+2179: Make serf_bucket_response_wait_for_headers() return APR_SUCCESS", 
+   "instead of APR_EOF on responses that don't contain a body.", 
+   "Added r2011 and r20212, needed for r2178,-9. Manual conflict resolution in", 
+   "test/test_buckets.c for r2011."
+  ], 
+  "revision_id": "1699718"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-09-29T06:22:07.418675Z", 
+  "msg": [
+   "On the 1.3.x branch:", 
+   "Merge serf_get.c changes from trunk:", 
+   "r2004: handle connections closed by the server.", 
+   "r2016: Fix compiler warnings.", 
+   "r2177: Allow HEAD requests without a protocol error.", 
+   "r2175+r2176: Don't filter the query part of the url.", 
+   "r2143: Enable serf_get to take extra request headers."
+  ], 
+  "revision_id": "1699717"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-09-26T11:02:05.086343Z", 
+  "msg": [
+   "Follow-up to r2178: Type correctness fix.", 
+   "* buckets/response_buckets.c", 
+   "(run_machine): Pass NULL as data and 0 as length to", 
+   "serf_bucket_simple_create() call."
+  ], 
+  "revision_id": "1699716"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-09-26T09:47:04.540365Z", 
+  "msg": [
+   "Make serf_bucket_response_wait_for_headers() return APR_SUCCESS instead of", 
+   "APR_EOF on responses that don't contain a body.", 
+   "Without this patch 'HEAD' requests and some special response statees won't", 
+   "handle the response headers, because callers (such as the auth subsystem)", 
+   "will assume that the request is already completed.", 
+   "This problem was visible in Subversion as 'HEAD' requests returning a 401", 
+   "response, without trying authorization first.", 
+   "* buckets/response_buckets.c", 
+   "(run_machine): Set state to STATE_BODY even when no body is expected as this", 
+   "state is required to note that we finished reading the headers.", 
+   "* test/test_auth.c", 
+   "(test_auth_on_HEAD): New function.", 
+   "* test/test_util.c", 
+   "(accept_response): Properly create HEAD requests, by marking them as such.", 
+   "(setup_request): Allow creating requests without a request body. This is not", 
+   "necessary for HEAD requests and improves test coverage by not enabling", 
+   "chunked encoding in the request."
+  ], 
+  "revision_id": "1699715"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-09-25T15:06:31.866252Z", 
+  "msg": [
+   "Extend serf_get to allow HEAD requests without a protocol error.", 
+   "* test/serf_get.c", 
+   "(app_baton_t): Add variable.", 
+   "(accept_response): For head requests, mark that no body is expected", 
+   "This matches how Subversion's libsvn_ra_serf marks this kind of requests.", 
+   "(main): Detect head request."
+  ], 
+  "revision_id": "1699714"
+ }
+]

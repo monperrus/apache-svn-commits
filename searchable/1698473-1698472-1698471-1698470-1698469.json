@@ -1,0 +1,78 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2004-08-27T13:13:54.291069Z", 
+  "msg": [
+   "Fix some various, small nits regarding error flow during read operations.", 
+   "* serf_bucket_util.h:", 
+   "(SERF_BUCKET_READ_ERROR): new function to determine when an error on a", 
+   "bucket read has occurred.", 
+   "* buckets/buckets.c:", 
+   "(common_databuf_prep): document the function's operation/returns a bit", 
+   "with a comment. tweak the logic a bit: if data is present, then return", 
+   "it regardless of error/return status; put the condition back in that", 
+   "an EAGAIN read will store data into the buffer.", 
+   "* buckets/response_buckets.c:", 
+   "(fetch_line): add a bit more error processing on bucket reads. add", 
+   "comments for future work/verification."
+  ], 
+  "revision_id": "1698473"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-08-27T13:05:53.023045Z", 
+  "msg": [
+   "small note about bucket reads and returning errors"
+  ], 
+  "revision_id": "1698472"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-27T07:11:26.970373Z", 
+  "msg": [
+   "Instead of using respool, use conn->pool as a parent to tmppool.  This was the", 
+   "alternative to the pool lifetime bug I discussed in my previous log and which", 
+   "Greg agreed was cleaner.", 
+   "Also send tmppool to accept_response and have the response acceptor use the", 
+   "request's allocator.", 
+   "* context.c (read_from_connection): Revert part of r176 and switch to", 
+   "conn->pool as the parent for tmppool instead of respool.", 
+   "* test/serf_get.c (accept_response): Use the request's allocator instead.", 
+   "* test/: Add serf_get to svn:ignore"
+  ], 
+  "revision_id": "1698471"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-08-27T06:39:45.283604Z", 
+  "msg": [
+   "add a nit about prototype review"
+  ], 
+  "revision_id": "1698470"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-27T00:20:52.345938Z", 
+  "msg": [
+   "Exit successfully by keeping a count of how many requests are outstanding and", 
+   "also fix a double-free condition/pool-lifetime bug that would only be caught on", 
+   "exit (due to delayed free() semantics of the apr_allocator).", 
+   "test/serf_get can now return a page's contents without crashing!", 
+   "* test/serf_get.c", 
+   "(handle_response): Decrement our outstanding requests when we read EOF.", 
+   "(main): Initialize APR atomics; initialize our outstanding requests; pass", 
+   "a suitable baton to handle_response; if we don't have any more", 
+   "requests, stop looping and exit the program.", 
+   "* context.c (read_from_connection): When we clear request->respool, we *also*", 
+   "clear the tmppool implicitly (as it is a subpool of request->respool).  So,", 
+   "the subpool methodology just doesn't work here.  Calling apr_pool_destroy", 
+   "twice causes the APR allocators to go haywire and do a double free() later.", 
+   "Furthermore, if we actually continue this loop, we've *just* destroyed the", 
+   "tmppool by virtue of destroying the request->respool.  So, always create", 
+   "tmppool on each iteration.  (The alternative is to create tmppool such that", 
+   "it isn't parented by a resppool; haven't thought through the implications", 
+   "of that yet.)"
+  ], 
+  "revision_id": "1698469"
+ }
+]

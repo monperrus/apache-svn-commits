@@ -1,0 +1,91 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T06:14:24.212644Z", 
+  "msg": [
+   "Convert to an autoconf-based build system and use APR's libtool to build.", 
+   "* serf.h", 
+   "(SERF_MAJOR_VERSION, SERF_MINOR_VERSION, SERF_PATCH_VERSION): define", 
+   "* buildconf: Copy relevant m4 files from apr/apr-util and run autoconf", 
+   "* configure.in: Basic autoconf-able file.", 
+   "* Makefile: Moved to...", 
+   "* Makefile.in: here; modifications to support autoconf'd exported info", 
+   "* config.layout (added): Bare-bones configuration layout", 
+   "* NOTICE (added): Cover buildconf/configure.in usage", 
+   "* svn:ignore (modified): Ignore generated files"
+  ], 
+  "revision_id": "1698523"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T06:00:52.030478Z", 
+  "msg": [
+   "Fix segfault when -f isn't specified to serf_get.", 
+   "* test/serf_get.c", 
+   "(main): Explicitly set req_body_path to NULL.", 
+   "Noticed at approximately the same time by: Garrett Rooney"
+  ], 
+  "revision_id": "1698522"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-06-24T00:04:17.480809Z", 
+  "msg": [
+   "Add 'deflate' Content-Encoding support.", 
+   "* buckets/aggregate_buckets.c:", 
+   "(serf_aggregate_read): Prevent segfault if we read a zero-length bucket", 
+   "at the end of the list.", 
+   "* buckets/response_buckets.c:", 
+   "(run_machine): Accept 'deflate' C-E and pass new format parameter to", 
+   "deflate bucket create.", 
+   "* serf_bucket_types.h:", 
+   "Add SERF_DEFLATE_GZIP and SERF_DEFLATE_DEFLATE #defines", 
+   "(serf_bucket_deflate_create): Add format parameter.", 
+   "* buckets/deflate_buckets.c", 
+   "(deflate_context_t): Add format field; add new states.", 
+   "(serf_bucket_deflate_create): Add format parameter.", 
+   "(serf_deflate_destroy_and_data): Don't delete inflate_stream if we've", 
+   "already appended it to the stream.", 
+   "(serf_deflate_read): Add new two new states (STATE_INIT, STATE_FINISH);", 
+   "Read from the remainder of our stream in STATE_DONE;", 
+   "Major changes to STATE_INFLATE, such as: read from our decompressed stream", 
+   "if there is data read; handle case where there is left-over data from", 
+   "previous read that needs to get processed; handle jump to next states."
+  ], 
+  "revision_id": "1698521"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-03-30T00:23:53.604738Z", 
+  "msg": [
+   "Add chunked request body support (aka 'Serf blows chunks now').", 
+   "./serf_get -m POST -f testcases/simple.request http://www.example.com/", 
+   "* Makefile: Build chunk_buckets.c", 
+   "* serf_bucket_types.h: Add serf_bucket_chunk_* functions.", 
+   "* buckets/chunk_buckets.c (added): New bucket type that chunks a bucket.", 
+   "* buckets/request_buckets.c", 
+   "(serialize_data): Set T-E: chunked and wrap body with a chunking bucket.", 
+   "* buckets/limit_buckets.c", 
+   "(serf_bucket_type_limit): Correct name for LIMIT bucket", 
+   "* test/serf_get.c", 
+   "(main): add in 'f:' to getopt, arrange case statements in alphabetical", 
+   "order, create a body bucket from the file passed via the -f option.", 
+   "* test/testcases/simple.request (added): A trivial body."
+  ], 
+  "revision_id": "1698520"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-03-29T19:36:03.095541Z", 
+  "msg": [
+   "Add real argument parsing capabilities.", 
+   "* test/serf_get.c", 
+   "(handler_baton_t): Add print_headers field.", 
+   "(handle_response): Control printing of response headers via baton.", 
+   "(print_usage): New function that prints a summary of options.", 
+   "(main): Use apr_getopt rather than relying upon hard-coded arg positions;", 
+   "set the print_headers baton value; use the passed in HTTP method if present."
+  ], 
+  "revision_id": "1698519"
+ }
+]

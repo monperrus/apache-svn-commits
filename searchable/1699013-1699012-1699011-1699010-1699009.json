@@ -1,0 +1,92 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2011-06-13T10:20:29.117727Z", 
+  "msg": [
+   "Use connection state SERF_CONN_CLOSING instead of the separate 'closing' flag.", 
+   "* serf_private.h:", 
+   "(serf_connection_t): remove closing member variable.", 
+   "(serf__connection_state_t): document each of the states.", 
+   "* outgoing.c:", 
+   "(*): replace closing with SERF_CONN_CLOSING check."
+  ], 
+  "revision_id": "1699013"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-13T09:50:50.223829Z", 
+  "msg": [
+   "In the test suite, separate the code of the test server from the client code.", 
+   "* test/server/test_server.c", 
+   "* test/server/test_server.h: New files.", 
+   "* Makefile.in", 
+   "* serfmake", 
+   "* serf.mak: Also build server/test_server.c", 
+   "* test/test_serf.h: Remove all declarations related to the test server.", 
+   "Renamed test_server_create to test_server_setup.", 
+   "Renamed test_server_destroy to test_server_teardown.", 
+   "* test/test_util.c: Moved all code related to the test server to test_server.c", 
+   "* test/test_context.c", 
+   "In calls to test_server_run, pass the new serv_ctx_t* instead of", 
+   "a test_baton_t*.", 
+   "Renamed test_server_create to test_server_setup.", 
+   "Renamed test_server_destroy to test_server_teardown."
+  ], 
+  "revision_id": "1699012"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-05T09:19:58.822727Z", 
+  "msg": [
+   "Fix issue #49: set up a SSL tunnel over an HTTP proxy when connecting to an", 
+   "HTTPS server.", 
+   "* ssltunnel.c: New file.", 
+   "* Makefile.in", 
+   "* serf.mak", 
+   "* serfmake: Build the new file.", 
+   "* serf_private.h", 
+   "(serf__connection_state_t): New enum.", 
+   "(serf_connection_t): Add state and ssltunnel_ostream members.", 
+   "(serf__ssltunnel_connect): New declaration.", 
+   "* outgoing.c:", 
+   "(serf__open_connections): If https over http proxy, open ssl tunnel.", 
+   "(prepare_conn_streams): New function. Create either the stream buckets", 
+   "for an ssl tunnel or for a normal connection depending on the state of", 
+   "the connection.", 
+   "(write_to_connection): As long as the tunnel isn't set up yet, send reqs", 
+   "one by one. Use prepare_conn_streams instead of do_conn_setup.", 
+   "(read_from_connection): Use prepare_conn_streams instead of do_conn_setup.", 
+   "(serf_connection_create): Set initial state of the connection. Remove", 
+   "ENOTIMPL for https over http proxies."
+  ], 
+  "revision_id": "1699011"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-05T08:03:49.473563Z", 
+  "msg": [
+   "Fix issue #53.", 
+   "* buckets/ssl_buckets.c:", 
+   "(serf_bucket_ssl_decrypt_create): Don't create pending bucket, it's already", 
+   "created in ssl_init_context."
+  ], 
+  "revision_id": "1699010"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2011-05-26T22:29:41.376353Z", 
+  "msg": [
+   "Fix some compiler warnings.", 
+   "* buckets/ssl_buckets.c:", 
+   "(ssl_encrypt): remove unused TMP localvar", 
+   "(serf_ssl_cert_export): rename P to UNUSED and make it unsigned. adjust", 
+   "code in the function.", 
+   "* buckets/iovec_buckets.c:", 
+   "(serf_iovec_read_iovec): remove unused CURRENT_SIZE localvar", 
+   "(serf_iovec_peek): remove unused VEC localvar", 
+   "(serf_iovec_snapshot, serf_iovec_restore_snapshot,", 
+   "serf_iovec_is_snapshot_set): remove unused CTX localvar"
+  ], 
+  "revision_id": "1699009"
+ }
+]

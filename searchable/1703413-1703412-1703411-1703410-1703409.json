@@ -1,0 +1,71 @@
+[
+ {
+  "author": "romseygeek", 
+  "date": "2015-09-16T14:10:40.481109Z", 
+  "msg": [
+   "LUCENE-6489: Move Payload queries to queries module and PayloadSpanUtil to sandbox"
+  ], 
+  "revision_id": "1703413"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-09-16T14:04:55.570378Z", 
+  "msg": [
+   "On the ra_serf-stream-commit branch: Begin switching one of our delta editor", 
+   "drives, svn_client_import5(), to using the apply_textdelta_stream() callback.", 
+   "This avoids creating temporary files with svndiff during 'svn import' over", 
+   "http:// and https:// protocols.  Creating these temporary files has a certain", 
+   "overhead (time to write them and consuming disk space), but, what's probably", 
+   "more important, creating them between the actual PUT requests can interfere", 
+   "with TCP auto-tuning techniques that rely on the data being sent steadily.", 
+   "A couple of my preliminary tests show difference of up to three times \u2014 i.e.,", 
+   "importing 10 files, with a total size of ~50 MiB over http:// to a remote", 
+   "server, took 53s with the temporary files and around 18s without them.", 
+   "[ Note from the future:", 
+   "These preliminary tests are wrong, and their results have nothing to do", 
+   "with replacing temporary files with a streaming approach.  The tests were", 
+   "executed with binaries that enabled (accidentally) delta compression by", 
+   "switching to svndiff1 instead of svndiff0.  That is what was causing the", 
+   "difference.  I repeated the experiments with proper binaries, and avoiding", 
+   "temporary files doesn't have an impact on how fast the commit works.", 
+   "Also see https://svn.apache.org/r1704317 ]", 
+   "* subversion/libsvn_client/import.c", 
+   "(open_txdelta_baton_t): New baton.", 
+   "(send_file_contents): Move the core logic of this function, i.e., preparing", 
+   "the delta stream into ...", 
+   "(open_txdelta): ...this new function, and pass the necessary arguments via", 
+   "the callback.", 
+   "(import_file): Use apply_textdelta_stream() when driving the editor, and", 
+   "pass open_txdelta() to open the appropriate svn_txdelta_stream_t.  Drop", 
+   "the support for result checksums for now, and leave a corresponding TODO", 
+   "comment."
+  ], 
+  "revision_id": "1703412"
+ }, 
+ {
+  "author": "reschke", 
+  "date": "2015-09-16T14:02:27.905123Z", 
+  "msg": [
+   "OAK-3410: RDB*Store diagnostics: strip line feeds from product information"
+  ], 
+  "revision_id": "1703411"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-09-16T13:45:46.805015Z", 
+  "msg": [
+   "* tools/client-side/svn-mergeinfo-normalizer/logic.c", 
+   "(remove_lines): Fix commentary. No functional change."
+  ], 
+  "revision_id": "1703410"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-09-16T13:41:03.484159Z", 
+  "msg": [
+   "Fix https://bz.apache.org/bugzilla/show_bug.cgi?id=58386", 
+   "On the basis that access() and finish() are synchronized, extend synchronization to other methods that access same fields."
+  ], 
+  "revision_id": "1703409"
+ }
+]

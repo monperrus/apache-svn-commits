@@ -1,0 +1,102 @@
+[
+ {
+  "author": "pquerna", 
+  "date": "2009-12-25T08:47:51.724445Z", 
+  "msg": [
+   "buckets/headers_buckets.c (serf_bucket_headers_setx): Remove unneeded assignment to iter, it already has this value from its initialization."
+  ], 
+  "revision_id": "1698823"
+ }, 
+ {
+  "author": "pquerna", 
+  "date": "2009-12-25T08:05:29.329898Z", 
+  "msg": [
+   "Fix basic operation when APR is compiled with pool debugging.   When pool debugging is active, pool->allocator is NULL, because malloc/free are used directly by APR"
+  ], 
+  "revision_id": "1698822"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-12-17T19:21:09.066652Z", 
+  "msg": [
+   "BWTP support: properly process incoming async messages.", 
+   "* serf_bucket_types.h", 
+   "(serf_bucket_type_bwtp_incoming_frame): Declare.", 
+   "(SERF_BUCKET_IS_BWTP_INCOMING_FRAME): Declare helper macro.", 
+   "(serf_bucket_bwtp_frame_get_type, serf_bucket_bwtp_frame_get_phrase): Add", 
+   "helpers.", 
+   "(serf_bucket_bwtp_frame_create): Remove.", 
+   "(serf_bucket_bwtp_incoming_frame_create,", 
+   "serf_bucket_bwtp_incoming_frame_wait_for_headers): Declare.", 
+   "* outgoing.c", 
+   "(handle_async_response): When we see an EOF from our handler, we can try to", 
+   "run again.", 
+   "(read_from_connection): If we see EAGAIN, break out of the loop.", 
+   "* buckets/bwtp_buckets.c", 
+   "(apr_lib.h): Include.", 
+   "(bwtp_frame_context_t): Rename to...", 
+   "(frame_context_t): this; change to int type and s/uri/phrase/.", 
+   "(incoming_context_t): Add struct for processing incoming messages.", 
+   "(serf_bucket_bwtp_channel_close, serf_bucket_bwtp_channel_open,", 
+   "serf_bucket_bwtp_header_create, serialize_data): Adjust for structure", 
+   "changes.", 
+   "(serf_bucket_bwtp_message_create): Add.", 
+   "(serf_bucket_bwtp_frame_get_channel, serf_bucket_bwtp_frame_get_type,", 
+   "serf_bucket_bwtp_get_phrase): Add.", 
+   "(serf_bucket_bwtp_frame_get_headers): Reimpl to use common bucket types.", 
+   "(serf_bucket_bwtp_incoming_frame_create, bwtp_incoming_destroy_and_data,", 
+   "fetch_line, parse_status_line, fetch_headers, run_machine, wait_for_body,", 
+   "serf_bucket_bwtp_incoming_frame_wait_for_headers, bwtp_incoming_read,", 
+   "bwtp_incoming_readline, bwtp_incoming_peek,", 
+   "serf_bucket_type_bwtp_incoming_frame): Implement - mostly copied from", 
+   "response_buckets.c, but tweaked for BWTP semantics.", 
+   "* test/serf_bwtp.c", 
+   "(accept_bwtp, handle_bwtp): Use appropriate helpers and print debug info."
+  ], 
+  "revision_id": "1698821"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2009-12-16T10:06:35.078598Z", 
+  "msg": [
+   "Add first-cut support for BWTP (http://bwtp.wikidot.com/): an asynchronous", 
+   "HTTP/1.1-like protocol.", 
+   "(BWTP is at least somewhat sane in comparison to SPDY, so it's first...)", 
+   "serf_bwtp handles the UPGRADE from HTTP/1.1 and can set up the initial BWTP", 
+   "channel and send a few MESSAGE headers, but it doesn't yet create async", 
+   "responses (it purposely aborts in our incoming frame create code for now).", 
+   "* serf.h", 
+   "(serf_connection_set_async_responses): Function to tell the serf core that", 
+   "we will now receive unsolicited responses and what functions to call when it", 
+   "sees something.", 
+   "* serf_private.h", 
+   "(serf_connection_t): Add private fields for async.", 
+   "* serf_bucket_types.h: Add BWTP bucket types.", 
+   "* buckets/response_buckets.c", 
+   "(run_machine): Handle 101 HTTP/1.1 responses sanely.", 
+   "* outgoing.c", 
+   "(serf__conn_update_pollset): Always look for incoming data if we have", 
+   "async responses enabled.", 
+   "(destroy_request): Helper function to clean up requests.", 
+   "(write_to_connection): If we are in async mode, don't expect a response.", 
+   "(handle_response): Tabs begone.", 
+   "(handle_async_response): Do \"right\" thing when we have an incoming async", 
+   "message.", 
+   "(read_from_connection): Handle async connections as a special case; more", 
+   "tabs begone!", 
+   "(serf_connection_set_async_responses): Implement.", 
+   "* buckets/bwtp_buckets.c: Add rough cut of BWTP buckets.", 
+   "* test/serf_bwtp.c: Fork of serf_get to do BWTP.", 
+   "* Makefile.in: Add bwtp_buckets and serf_bwtp targets."
+  ], 
+  "revision_id": "1698820"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2009-11-12T20:18:05.283907Z", 
+  "msg": [
+   "Add reference to SPDY"
+  ], 
+  "revision_id": "1698819"
+ }
+]

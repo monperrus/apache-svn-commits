@@ -1,0 +1,122 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2013-07-03T08:14:31.870832Z", 
+  "msg": [
+   "Follow-up to r1982.", 
+   "* buckets/ssl_buckets.c", 
+   "* serf_bucket_types.h", 
+   "(ssl_resume_session): Rename to serf_ssl_resume_session().", 
+   "* test/serf_get.c", 
+   "(conn_setup): Use new name."
+  ], 
+  "revision_id": "1699523"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T23:14:17.474922Z", 
+  "msg": [
+   "Add new test for Basic authentication with (simulated) KeepAlive off.", 
+   "* test/test_auth.c", 
+   "(basic_authentication): Extract code from test_basic_authentication in this", 
+   "new helper function. Allow the caller to set extra headers to be added", 
+   "in the response.", 
+   "(test_basic_authentication): Call the new helper.", 
+   "(test_basic_authentication_keepalive_off): New test, adds \"Connection: close\"", 
+   "header to the response with the authn headers, to test that the Basic", 
+   "headers will be added to the retried request on the new connection.", 
+   "(test_auth): Run the new test."
+  ], 
+  "revision_id": "1699522"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T20:51:17.428141Z", 
+  "msg": [
+   "Follow up r1983 with some extra and updated comments.", 
+   "* auth/auth_basic.c", 
+   "* auth/auth_digest.c: change comments, no code changes."
+  ], 
+  "revision_id": "1699521"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T20:31:39.413258Z", 
+  "msg": [
+   "Add per server authentication info cache. Use it to cache the Digest", 
+   "authencation parameters between multiple connections to the same server.", 
+   "This fixes two issues:", 
+   "1. Digest authn will now work when the server is configured with KeepAlive Off.", 
+   "2. The application will not be called back for credentials for each new", 
+   "connection to the same server.", 
+   "* serf_private.h", 
+   "(struct serf_context_t): Add server_authn_info member variable, hash table", 
+   "that keeps a serf__authn_info_t object per server.", 
+   "(serf__get_authn_info_for_server): New function declaration.", 
+   "* auth/auth.c", 
+   "(handle_auth_headers): Get the authn_info object for the server, combine", 
+   "duplicate code for proxy and server.", 
+   "(serf__handle_auth_response): Get the authn_info object for the server.", 
+   "(serf__get_authn_info_for_server): New function, finds a cached authn_info", 
+   "object for the server, or creates a new empty one.", 
+   "* auth/auth_basic.c", 
+   "(serf__handle_basic_auth,", 
+   "serf__init_basic_connection,", 
+   "serf__setup_request_basic_auth): Use authn_info cached per server instead of", 
+   "one cached per context.", 
+   "(serf__init_basic): No more cache for all connections in the same context.", 
+   "* auth/auth_digest.c", 
+   "(serf__handle_digest_auth,", 
+   "serf__init_digest_connection,", 
+   "serf__setup_request_digest_auth,", 
+   "serf__validate_response_digest_auth): Use authn_info cached per server", 
+   "instead of one cached per connection.", 
+   "* auth/auth_spnego.c", 
+   "(do_auth): Use authn_info cached per server instead of one cached per context.", 
+   "* context.c", 
+   "(serf_context_create_ex): Initialize the server_authn_info hashtable on the", 
+   "context.", 
+   "* outgoing.c", 
+   "(serf__open_connections,", 
+   "serf_request_bucket_request_create): Use authn_info cached per server instead", 
+   "of one cached per context.", 
+   "* test/test_auth.c", 
+   "(digest_authentication): Extract code from test_digest_authentication in this", 
+   "new helper function. Allow the caller to set extra headers to be added", 
+   "in the response.", 
+   "(test_digest_authentication): Call the new helper.", 
+   "(test_digest_authentication_keepalive_off): New test, adds \"Connection: close\"", 
+   "header to the response with the authn headers, to test that the Digest", 
+   "headers will be added to the retried request on the new connection.", 
+   "(test_auth): Run the new test."
+  ], 
+  "revision_id": "1699520"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-07-02T15:28:23.117358Z", 
+  "msg": [
+   "Add API for reusing SSL sessions.", 
+   "* serf_bucket_types.h", 
+   "(SERF_HAS_SSL_SESSION_API): New macro to detected serf API support in", 
+   "compile time.", 
+   "(serf_ssl_session_t, serf_ssl_session_export, serf_ssl_session_import,", 
+   "serf_ssl_new_session_t, serf_ssl_new_session_callback_set,", 
+   "ssl_resume_session): New.", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_context_t): Add new_session_cb and new_session_cb_baton.", 
+   "(serf_ssl_session_t): New.", 
+   "(serf_ssl_new_session_callback_set, new_session, serf_ssl_session_export,", 
+   "cleanup_session, serf_ssl_session_import, ssl_resume_session): New.", 
+   "(ssl_init_context): Initialize new_session_cb to NULL. Enable", 
+   "SSL_CTX_sess_set_new_cb callback and disable internal session management.", 
+   "* test/serf_get.c", 
+   "(app_baton_t): Add session_filename.", 
+   "(new_ssl_session, read_ssl_session): New.", 
+   "(conn_setup): Attempt to reuse existing SSL session if requested.", 
+   "(print_usage: Mention new '-s' option.", 
+   "(main): Parse new '-s' option."
+  ], 
+  "revision_id": "1699519"
+ }
+]

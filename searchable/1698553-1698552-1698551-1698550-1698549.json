@@ -1,0 +1,70 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-14T01:38:06.291547Z", 
+  "msg": [
+   "* context.c", 
+   "(serf_connection_t): Change completed_requests, completed_responses, and", 
+   "probable_keepalive_limit to unsigned int."
+  ], 
+  "revision_id": "1698553"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-12T02:17:06.991953Z", 
+  "msg": [
+   "In order to properly remove a socket from a pollset, you must also provide", 
+   "the passed in reqevents that were given to pollset_add().  (ugh)", 
+   "Additionally, kevent on Mac OS X will return a socket multiple times with the", 
+   "same retevents flags if there is a read and write pair in the queue.  So, we", 
+   "have to add code to track what events we've already seen for a socket in a", 
+   "poll() run to avoid calling read() or write() multiple times when the socket", 
+   "isn't ready.", 
+   "* context.c", 
+   "(serf_connection_t): Add reqevents and seen_in_pollset fields.", 
+   "(update_pollset): Restore the reqevents from the previous invocation and", 
+   "save it before exiting.", 
+   "(open_connection): Clear out seen_in_pollset fields when we walk the", 
+   "connection lists.", 
+   "(serf_context_run): Check the seen_in_pollset bitmask to ensure we're", 
+   "not invoking a connection multiple times in the same pollset run.", 
+   "(remove_connection): Pass along reqevents to pollset_remove().", 
+   "(serf_connection_reset): If we reset a connection manually, ensure we", 
+   "don't see the APR_POLLHUP flag again for this socket."
+  ], 
+  "revision_id": "1698552"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-12T02:08:07.398966Z", 
+  "msg": [
+   "* context.c", 
+   "(serf_connection_reset): Remove a misleading comment and conditionally", 
+   "remove the bucket stream only if it exists."
+  ], 
+  "revision_id": "1698551"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T22:26:59.502579Z", 
+  "msg": [
+   "Destroy the stream bucket.", 
+   "* context.c", 
+   "(serf_connection_reset): Destroy our stream bucket instead of letting it", 
+   "dangle; add a blank line for readability."
+  ], 
+  "revision_id": "1698550"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-10T22:25:16.931421Z", 
+  "msg": [
+   "Reformat conn_reset to avoid the pointless loop.", 
+   "No functional changes.", 
+   "(We're not doing the memmove so we don't need to update the context at all).", 
+   "* context.c", 
+   "(serf_connection_reset): Remove for loop."
+  ], 
+  "revision_id": "1698549"
+ }
+]

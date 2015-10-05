@@ -1,0 +1,95 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2009-12-27T09:15:21.204852Z", 
+  "msg": [
+   "New authentication handler framework. This framework allows for plugging in", 
+   "authentication handler modules without alterating any of the serf code.", 
+   "This is a first version, only tested with Basic authentication. However, it's", 
+   "flexible enough to support digest and connection-based authn handlers like", 
+   "NTLM and Kerberos (Negotiate).", 
+   "Note: this code is partly copied from Subversion libsvn_ra_serf, so I added", 
+   "a line about this in NOTICE.", 
+   "* serf_private.h", 
+   "(serf__authn_info_t, serf__authn_scheme_t): New structures.", 
+   "(serf_context_t, serf_connection_t): Add fields for context and connection", 
+   "specific authentication info.", 
+   "(serf__auth_handler_func_t, serf__init_context_func_t,", 
+   "serf__init_conn_func_t, serf__setup_request_func_t,", 
+   "serf__validate_response_func_t): Function prototypes, to be implemented when", 
+   "adding new authn handlers.", 
+   "(serf__handle_auth_response): New declaration.", 
+   "* NOTICE: Add message that serf contains code copied from the Subversion project.", 
+   "* serf.h", 
+   "(SERF_ERROR_AUTHN_*): New error codes for authentication errors.", 
+   "(serf_credentials_callback_t): Callback to be implemented by the application", 
+   "to get credentials.", 
+   "(SERF_AUTHN_*", 
+   "serf_config_authn_types,", 
+   "serf_config_credentials_callback): New declarations.", 
+   "* serfmake: make serfmake build the auth C files.", 
+   "* context.c", 
+   "(serf_config_authn_types,", 
+   "serf_config_credentials_callback): New functions.", 
+   "(serf_context_create): Enable all authn handlers by default.", 
+   "* outgoing.c", 
+   "(serf_open_connections): Setup the authn handler on this connection.", 
+   "(handle_conn_closed): New function, calls the conn->closed callback.", 
+   "(serf_connection_close,", 
+   "reset_connection): Use handle_conn_closed.", 
+   "(handle_response): Try handling a 401 or 407 response.", 
+   "(serf_request_bucket_request_create): Setup authn headers on the new request.", 
+   "* auth/auth.h", 
+   "* auth/auth.c", 
+   "* auth/auth_basic.c: New files, implementing the authn framework and Basic", 
+   "authentication."
+  ], 
+  "revision_id": "1698828"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-12-26T23:28:53.868385Z", 
+  "msg": [
+   "* context.c", 
+   "* outgoing.c: Cleanup whitespace and fix indentation."
+  ], 
+  "revision_id": "1698827"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-12-26T20:24:56.220123Z", 
+  "msg": [
+   "Follow up to r1288.", 
+   "* outgoing.c", 
+   "(serf__conn_update_pollset):", 
+   "Use the new 'written' field as a flag instead of setting setup to NULL."
+  ], 
+  "revision_id": "1698826"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2009-12-26T20:13:36.343188Z", 
+  "msg": [
+   "In preparation of adding authentication handlers to serf, kee a separate flag", 
+   "to remember if a request has already been written.", 
+   "Serf now sets the setup callback function to NULL when a request is written,", 
+   "but this function might still be needed if authentication fails and the request", 
+   "has to be retried.", 
+   "* serf_private.h", 
+   "(struct serf_request_t): Add written field.", 
+   "* outgoing.c", 
+   "(reset_connection, write_to_connection, read_from_connection,", 
+   "serf_connection_request_create, serf_connection_priority_request_create):", 
+   "Use the new field as a flag instead of setting setup to NULL."
+  ], 
+  "revision_id": "1698825"
+ }, 
+ {
+  "author": "pquerna", 
+  "date": "2009-12-25T08:50:13.877285Z", 
+  "msg": [
+   "* incoming.c (serf_listener_create): Check return value of pollset add"
+  ], 
+  "revision_id": "1698824"
+ }
+]

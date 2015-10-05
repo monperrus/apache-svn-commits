@@ -1,0 +1,77 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2006-03-04T03:13:02.299682Z", 
+  "msg": [
+   "Minor clarification in the doc for serf_response_handler_t."
+  ], 
+  "revision_id": "1698578"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-03T23:58:41.637567Z", 
+  "msg": [
+   "Modify handler behavior to return EAGAIN when the data is exhausted (instead of", 
+   "SUCCESS) and treat SUCCESS as the desire for the handler to be invoked again.", 
+   "We'll also now pass in the serf_request_t to the handler so that it can update", 
+   "the handler if it wants to do so.", 
+   "(Returning EAGAIN from the handlers is a much more natural fit with buckets.)", 
+   "* context.c", 
+   "(read_from_connection): Call handler with request struct; re-call handler", 
+   "if it returns SUCCESS; treat EAGAIN as there is no more to read.", 
+   "(cancel_request): Pass in request to the cancellation invocation of the", 
+   "handler.", 
+   "* serf.h", 
+   "(serf_response_handler_t): Tweak doc string and add in request to prototype.", 
+   "* test/serf_get.c, test/serf_spider.c, test/serf_response.c", 
+   "Update examples to match new handler semantics."
+  ], 
+  "revision_id": "1698577"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-03T23:51:14.899189Z", 
+  "msg": [
+   "Add serf_bucket_response_wait_for_headers() which will only return APR_SUCCESS", 
+   "once the headers are received.  This makes it so that you don't need to read", 
+   "the body just to ensure you get the headers.", 
+   "* buckets/response_buckets.c", 
+   "(serf_bucket_response_wait_for_headers): Implement.", 
+   "* serf_bucket_types.h", 
+   "(serf_bucket_response_wait_for_headers): Declare."
+  ], 
+  "revision_id": "1698576"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-03T23:36:24.734376Z", 
+  "msg": [
+   "* buckets/ssl_buckets.c", 
+   "(init_ssl_libraries): Use the latest recommended init sequence for OpenSSL."
+  ], 
+  "revision_id": "1698575"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-03-02T01:18:01.742213Z", 
+  "msg": [
+   "Fix up some bucket lifetime issues and support multiple open SSL contexts.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_encrypt): Have the pending stream share our stream's bucket; when", 
+   "reading from our pending stream (i.e. already decrypted data), read the", 
+   "bufsize limit not the ssl_len limit; if we don't see an EOF from our", 
+   "aggregate bucket when our stream is exhausted, return that instead.", 
+   "(init_ssl_libraries): New function that should be called only once.", 
+   "(ssl_init_context): Support multiple SSL contexts open at once; delay", 
+   "creation of the pending buckets until we have the associated streams", 
+   "available.", 
+   "(ssl_free_context): Only destroy the pending buckets if we have them.", 
+   "(serf_bucket_ssl_decrypt_create, serf_bucket_ssl_encrypt_create): Create", 
+   "our pending buckets.", 
+   "(serf_ssl_encrypt_destroy_and_data): Destroy our pending encryption", 
+   "bucket; Always reset our context's encrypted stream and databuf status when", 
+   "we replace the underlying stream; create a pending bucket if we need to."
+  ], 
+  "revision_id": "1698574"
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-04-30T23:56:31.562956Z", 
+  "msg": [
+   "Fix a possible endless loop situation in serf_linebuf_fetch as reported in", 
+   "r1814.", 
+   "* buckets/buckets.c", 
+   "(serf_linebuf_fetch): Exit from the loop if the stream bucket did not have", 
+   "more data to read."
+  ], 
+  "revision_id": "1699353"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-04-30T23:51:39.971714Z", 
+  "msg": [
+   "Follow up to r1814: fix the mock bucket, add a function to trigger \"more data", 
+   "arrived\" so that the test added in r1814 more accurately represents the error", 
+   "situation.", 
+   "* test/test_serf.h", 
+   "(serf_bucket_mock_more_data_arrived): New declaration.", 
+   "* test/mock_buckets.c:", 
+   "(mockbkt_context_t,", 
+   "serf_bucket_mock_create,next_action): Rename current_remaining to", 
+   "remaining_times).", 
+   "(serf_mock_read,", 
+   "serf_mock_readline): Allow reading partial lines.", 
+   "(serf_bucket_mock_more_data_arrived): New function, simulates the arrival", 
+   "of more data in the bucket (// data arriving on a socket).", 
+   "(test_basic_mock_bucket): Add more tests.", 
+   "* test/test_buckets.c", 
+   "(test_serf_default_read_iovec): Update the context loop to trigger \"new data", 
+   "arrived\" on the mock bucket when serf successfully returns with the", 
+   "APR_EAGAIN status. (which it currently doesn't)."
+  ], 
+  "revision_id": "1699352"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-04-29T20:32:01.730056Z", 
+  "msg": [
+   "Add a test to simulate an endless loop issue in serf_linebuf_fetch.", 
+   "The specific case is a CRLF split state where the streams returns APR_EAGAIN", 
+   "with 0 bytes read. serf_linebuf_fetch ignores this APR_EAGAIN and keeps peeking", 
+   "the stream, which it shouldn't do according to the API rules.", 
+   "The endless loop is easy to encounter in the test suite, where the stream can", 
+   "only get new data when serf exits from serf_context_run so that the server", 
+   "context can be triggered.", 
+   "Note: this commit only adds the test and associated framework, it does not solve", 
+   "the issue.", 
+   "* buckets/buckets.c", 
+   "(serf_linebuf_fetch): Add note about the issue.", 
+   "* test/test_serf.h", 
+   "(*): Add mock bucket declarations. Move some decls from test_buckets.c to", 
+   "here to make them available to other tests.", 
+   "* test/test_buckets.c", 
+   "(CR, LF, CRLF,", 
+   "read_and_check_bucket,", 
+   "readlines_and_check_bucket): Declare in test/test_serf.h.", 
+   "(readlines_and_check_bucket): Keep reading in case of SERF_NEWLINE_CRLF_SPLIT.", 
+   "(test_linebuf_crlf_split): New test.", 
+   "(test_buckets): Run the new test.", 
+   "* test/mock_buckets.c: New bucket type, simulates source buckets (like socket).", 
+   "* SConstruct", 
+   "(test_all): Add mock_buckets.c to compile target.", 
+   "* test/test_all.c", 
+   "(testlist): Add commented out mock bucket test suite."
+  ], 
+  "revision_id": "1699351"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-04-28T15:42:26.211287Z", 
+  "msg": [
+   "Run the basic test added in r1812 also over https. Update the test ssl_server", 
+   "to handle large responses.", 
+   "* test/server/test_sslserver.c", 
+   "(init_ssl_context): Allow partial writes for larger responses.", 
+   "(ssl_socket_write): Handle a 'I can't write for now' situation in the server.", 
+   "* test/test_context.c", 
+   "(create_large_response_message): Create a large response message, helper", 
+   "function extracted from test_serf_connection_large_response.", 
+   "(test_serf_connection_large_response): Use the new helper function.", 
+   "(test_serf_ssl_large_response): New test.", 
+   "(test_context): Run the new test."
+  ], 
+  "revision_id": "1699350"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-04-28T11:14:55.955219Z", 
+  "msg": [
+   "Add a basic test that reads a large chunked response.", 
+   "* test/test_context.c", 
+   "(test_serf_connection_large_response): New test.", 
+   "(test_context): Run the new test."
+  ], 
+  "revision_id": "1699349"
+ }
+]

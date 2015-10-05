@@ -1,0 +1,70 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T08:59:48.731237Z", 
+  "msg": [
+   "Follow up r1980 with a small code improvement.", 
+   "Suggested by: gstein", 
+   "* outgoing.c", 
+   "(serf__open_connections): Tighter scope for dummy variables."
+  ], 
+  "revision_id": "1699518"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T08:12:56.691975Z", 
+  "msg": [
+   "Small performance improvement during setup of a https connection.", 
+   "* outgoing.c", 
+   "(destroy_ostream, do_conn_setup,", 
+   "prepare_conn_streams, destroy_ostream): Move code, no changes.", 
+   "(serf__open_connections): Setup the bucket chain for a connection right after", 
+   "connecting to the server or proxy. The effect is that the application's", 
+   "conn_setup callback is called during the first and second legs of TCP's", 
+   "3-way handshake. That idle time can be used e.g. for loading the default", 
+   "certificates, so that the ssl context is initialized when the socket", 
+   "becomes writable."
+  ], 
+  "revision_id": "1699517"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-02T07:48:41.088479Z", 
+  "msg": [
+   "Fix the busy loop during ssl negotiation: stop trying to write to the connection", 
+   "when OpenSSL indicated that some data needs to be read first.", 
+   "This reduces CPU usage when initiating a https connection, and drastically", 
+   "reduces the amount of log lines printed when SSL_VERBOSE is set.", 
+   "* outgoing.c", 
+   "(serf__conn_update_pollset): Don't register POLLOUT for a connection if it", 
+   "has the stop_writing flag set.", 
+   "(write_to_connection): If status SERF_ERROR_WAIT_CONN was returned (now only", 
+   "by the openssl buckets), set the stop_writing flag on the connection.", 
+   "(read_from_connection): Reset the stop_writing flag if we have some data to", 
+   "read.", 
+   "* serf_private.h", 
+   "(serf_connection_t): Add stop_writing flag."
+  ], 
+  "revision_id": "1699516"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-02T05:40:52.771677Z", 
+  "msg": [
+   "Remove the 'copy-bucket' branch. It was merged to trunk in r1907."
+  ], 
+  "revision_id": "1699515"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-07-02T05:36:41.323699Z", 
+  "msg": [
+   "On the 1.3.x branch:", 
+   "Reverse-merge r1910 where some prototype APIs were added to serf.h.", 
+   "NOTE: svn:mergeinfo on '.' has not been updated with the reverse", 
+   "merge info. Refer to:", 
+   "http://subversion.tigris.org/issues/show_bug.cgi?id=2881"
+  ], 
+  "revision_id": "1699514"
+ }
+]

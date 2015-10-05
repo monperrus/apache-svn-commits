@@ -1,0 +1,74 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2012-11-09T09:21:03.670506Z", 
+  "msg": [
+   "Follow-up to r1682: Fix Windows build.", 
+   "* buckets/response_buckets.c", 
+   "(serf_response_full_become_aggregate): Use apr_snprintf() instead of", 
+   "snprintf()."
+  ], 
+  "revision_id": "1699223"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-08T20:20:11.021584Z", 
+  "msg": [
+   "Similar to r1678, raise an error when the body of a chunk-encoded HTTP response", 
+   "is smaller than what we expect from the chunk size.", 
+   "This avoids the application - which now gets APR_EOF - to think the response", 
+   "was complete.", 
+   "* buckets/dechunk_buckets.c", 
+   "(serf_dechunk_read): Return error when APR_EOF is received from the stream", 
+   "and the current chunk hasn't been read completely.", 
+   "* test/test_buckets.c", 
+   "(test_response_body_too_small_cl): comment fix to clarify that this test", 
+   "relates to response bodies with Content-Length.", 
+   "(test_response_body_too_small_chunked): New test case that simulates", 
+   "this issue.", 
+   "(test_buckets): Run the new test case."
+  ], 
+  "revision_id": "1699222"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-08T19:55:18.554039Z", 
+  "msg": [
+   "* test/test_buckets.c: cleanup a bit."
+  ], 
+  "revision_id": "1699221"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-08T19:41:55.412328Z", 
+  "msg": [
+   "Follow up to r1678: use apr_int64_t for total length of response body.", 
+   "Suggested by: chemodax", 
+   "* buckets/response_buckets.c:", 
+   "(struct response_context_t): Use apr_int64_t for exp_body_len and", 
+   "actual_body_len so that we can correctly handle response bodies with lengths", 
+   "larger than 4GB."
+  ], 
+  "revision_id": "1699220"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-08T18:26:56.464081Z", 
+  "msg": [
+   "Add an internal API to response_bucket that will allows serf to look at the", 
+   "status code and headers of a response without consuming this data, so that", 
+   "it can be read back later in an application-specific bucket.", 
+   "* serf_private.h", 
+   "(serf_response_full_become_aggregate): New function declaration.", 
+   "* buckets/response_buckets.c", 
+   "(serf_response_full_become_aggregate): Implement reconstructs the status line", 
+   "and morph the response bucket in an aggregate bucket wrapping status line,", 
+   "headers and the (assumed unready) body.", 
+   "* test/test_buckets.c", 
+   "(test_header_buckets): New test for existing but yet untested functionality.", 
+   "test_response_bucket_peek_at_headers): New test for the new internal API.", 
+   "(test_buckets): Add the new tests, reorder a bit."
+  ], 
+  "revision_id": "1699219"
+ }
+]

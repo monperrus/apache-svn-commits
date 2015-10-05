@@ -1,0 +1,79 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2007-11-19T20:20:49.697434Z", 
+  "msg": [
+   "Use a new action SERVER_KILL_CONNECTION (instead of character '\\01' to indicate", 
+   "the server should kill the client connection.", 
+   "Suggested by: Ivan Zhakov", 
+   "* test/test_serf.h", 
+   "(enum kind): Add SERVER_KILL_CONNECTION.", 
+   "* test/test_util.c", 
+   "(replay): Check for action SERVER_KILL_CONNECTION to kill the current client", 
+   "socket.", 
+   "* test/test_context.c", 
+   "(test_serf_closed_connection): Replace '\\01' with separate action", 
+   "SERVER_KILL_CONNECTION."
+  ], 
+  "revision_id": "1698693"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-18T22:18:42.503343Z", 
+  "msg": [
+   "Follow up to r1152 with a better fix, which now passes our regression tests.", 
+   "* context.c", 
+   "(read_from_connection): If we find that the server will close the connection,", 
+   "we need to requeue all requests on a new connection. We want to avoid that", 
+   "current request is sent twice, so we have to cleanup current request first", 
+   "before requeueing the other requests."
+  ], 
+  "revision_id": "1698692"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-18T22:10:28.293584Z", 
+  "msg": [
+   "Fix the test for connections closed by the server.", 
+   "* test/test_util.c", 
+   "(replay): Better output when things go wrong. Close the connection when", 
+   "finding an '\\01' character in the replay data.", 
+   "(test_server_run): Don't reset replay buffer here, we might work over", 
+   "multiple connections.", 
+   "(prepare_server): Initialize the replay data.", 
+   "* test/test_context.c", 
+   "(handler_baton_t): Add test_baton_t* field.", 
+   "(handle_response): Recreate the request when it was cancelled.", 
+   "(test_serf_closed_connection): Mark with '\\01' characters in the replay data", 
+   "where we want the server to kill the client socket. Alter the test to handle", 
+   "that serf is now possibly setting up requests multiple times."
+  ], 
+  "revision_id": "1698691"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-18T21:47:08.809780Z", 
+  "msg": [
+   "Small code reorganisation in preparation of a larger modification, just to", 
+   "avoid getting unreadable diffs.", 
+   "* test/test_context.c", 
+   "(setup_request): Move up, before handle_response. No code modifications."
+  ], 
+  "revision_id": "1698690"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2007-11-18T14:50:58.006348Z", 
+  "msg": [
+   "Make serf handle Connection:close headers.", 
+   "This functionality already existed in Subversion's ra_serf, but it fits better", 
+   "in serf itself. Also, this ensures that response handlers don't need to change", 
+   "the request queue anymore which elimates another cause of double free aborts.", 
+   "* context.c", 
+   "(is_conn_closing): New function.", 
+   "(read_from_connection): Reset the connection if the server is going to close", 
+   "it."
+  ], 
+  "revision_id": "1698689"
+ }
+]

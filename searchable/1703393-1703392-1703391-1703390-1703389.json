@@ -1,0 +1,76 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2015-09-16T12:45:06.107087Z", 
+  "msg": [
+   "Implement a conflict walker directly in the 'svn' client.", 
+   "This is needed to keep moving the client over to the new svn_client_conflict", 
+   "API, and as a result keep improving this API.", 
+   "Before this change, the 'svn' client was forced to resolve conflicts by", 
+   "passing a legacy conflict result back to libsvn_wc, since the resolution", 
+   "process was driven from within libsvn_wc.", 
+   "Now, the client drives the resolution process without using the conflict", 
+   "callback. It relies on 'status' and some private libsvn_wc APIs for this", 
+   "purpose. Use of private APIs will go away once more use of the public", 
+   "svn_client_conflict API is implemented.", 
+   "There may be some fallout in interactive conflict resolution mode since it", 
+   "cannot be automatically tested. However, the regression test suite passes.", 
+   "If you're using a trunk client and run into problems during interactive", 
+   "conflict resolution, please let me know.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__resolve_conflict): Declare. No docstring yet since I'm not sure", 
+   "whether this is going to stay around very long.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(svn_cl__resolve_conflict): Implement.", 
+   "* subversion/svn/resolve-cmd.c", 
+   "(conflict_status_walker_baton, tree_conflict_collector,", 
+   "conflict_status_walker, walk_conflicts): Implement a conflict walker based", 
+   "on similar code in libsvn_wc.", 
+   "(svn_cl__resolve): Use the new conflict APIs instead of svn_client_resolve()."
+  ], 
+  "revision_id": "1703393"
+ }, 
+ {
+  "author": "romseygeek", 
+  "date": "2015-09-16T12:43:31.614021Z", 
+  "msg": [
+   "LUCENE-6489: Move Payload queries to queries module and PayloadSpanUtil to sandbox"
+  ], 
+  "revision_id": "1703392"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2015-09-16T12:33:49.334320Z", 
+  "msg": [
+   "* subversion/libsvn_client/resolved.c", 
+   "(conflict_get_internal): Always add a legacy conflict for now so", 
+   "all callers can assume it will be present and use it."
+  ], 
+  "revision_id": "1703391"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-09-16T12:18:51.293438Z", 
+  "msg": [
+   "On the ra_serf-stream-commit branch: Lay the groundwork for supporting the", 
+   "the new apply_textdelta_stream() function in the ra_serf's commit editor.", 
+   "We are going to be taking the svn_txdelta_stream_t, converting it to a", 
+   "generic svn_stream_t, and sending the contents of this stream as the PUT", 
+   "request body.  So, introduce a new serf bucket type for the last part.", 
+   "* subversion/libsvn_ra_serf/stream_bucket.c", 
+   "New file with functions that create a bucket wrapping around a generic", 
+   "readable svn_stream_t.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__create_stream_bucket): Declare this new function."
+  ], 
+  "revision_id": "1703390"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2015-09-16T12:11:58.224954Z", 
+  "msg": [
+   "Added some pages"
+  ], 
+  "revision_id": "1703389"
+ }
+]

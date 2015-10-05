@@ -1,0 +1,98 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2004-09-17T08:09:25.512558Z", 
+  "msg": [
+   "Small tweak to remove a connection from a context when it is closed.", 
+   "* context.c:", 
+   "(GET_CONN): new macro to access a connection within a context", 
+   "(open_connections): use GET_CONN rather than manual indexing", 
+   "(serf_connection_close): use GET_CONN rather than manual indexing. after", 
+   "closing the bits in the connection, remove it from the context. have", 
+   "the function return APR_NOTFOUND if the connection is unknown."
+  ], 
+  "revision_id": "1698513"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-09-17T06:10:08.630255Z", 
+  "msg": [
+   "Minor tweaks to get rid of some compilation warnings.", 
+   "* buckets/ssl_buckets.c:", 
+   "- include openssl/err.h for ERR_load_crypto_strings()", 
+   "(ssl_decrypt): remove unused variables 'read_len' and 'agg_status'", 
+   "(ssl_encrypt): move agg_status decl into a tighter scope", 
+   "(ssl_init_context): add a 'void' to the function definition params", 
+   "(serf_ssl_decrypt_destroy_and_data): remove unused 'ssl_ctx' var", 
+   "* test/serf_response.c:", 
+   "(main): remove unused 'url', 'raw_url', 'req_file' vars"
+  ], 
+  "revision_id": "1698512"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-15T00:46:25.735798Z", 
+  "msg": [
+   "Rewrite SSL buckets to work with pipelined connections.", 
+   "* buckets/ssl_buckets.c:", 
+   "(bucket_list_t): Copied from aggregate buckets.", 
+   "(serf_ssl_stream_t): Abstract structure to store encrypt/decrypt streams.", 
+   "(ssl_context_t): Alter databuf to be a pointer to the encrypt/decrypt databuf;", 
+   "Leave a pointer to 'our' stream so that we can clean it up later.", 
+   "(bio_bucket_read, bio_bucket_write): Correct to use correct stream.", 
+   "(ssl_decrypt, ssl_encrypt): Now receive serf_ssl_context_t; read from", 
+   "decrypt stream.", 
+   "(ssl_init_context): Move to below ssl_encrypt/ssl_decrypt; initialize", 
+   "new databufs and buckets;", 
+   "(ssl_free_context): Rearrange; clear decrypt/encrypt pending buckets.", 
+   "(serf_bucket_ssl_create): Remove unnecessary arguments.", 
+   "(serf_bucket_ssl_decrypt_create): Point to the decrypt databuf and stream.", 
+   "(serf_bucket_ssl_encrypt_create): Point to the encrypt databuf and stream;", 
+   "if we have multiple requests, append our request to the list.", 
+   "(serf_ssl_destroy_and_data): Don't delete stream...", 
+   "(serf_ssl_decrypt_destroy_and_data): Delete our stream and call delegate.", 
+   "(serf_ssl_encrypt_destroy_and_data): Advance the shared encryption stream", 
+   "when we are deleted; delete our stream and call delegate; abort() otherwise.", 
+   "(serf_ssl_read, serf_ssl_readline, serf_ssl_peek): Use databuf pointer.", 
+   "(serf_bucket_type_ssl_encrypt, serf_bucket_type_ssl_decrypt): Call delegate", 
+   "destroy function."
+  ], 
+  "revision_id": "1698511"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-15T00:35:51.392440Z", 
+  "msg": [
+   "Correct serf_get behavior to adjust for bucket lifetime issues.", 
+   "Pipelining now works for http connections.", 
+   "* test/serf_get.c", 
+   "(accept_baton_t): Move so closed_connection can see; add bucket_alloc.", 
+   "(closed_connection): Implement.", 
+   "(accept_response): 'Cache' socket and/or SSLDECRYPT bucket and protect with", 
+   "BARRIER.", 
+   "(main): Init accept_ctx's allocator; pass accept_ctx to closed_connection;", 
+   "reuse SSL context if possible; add serf_debug__closed_conn() call in", 
+   "serf_context_run() so that we don't error out on EAGAIN reads; explicitly", 
+   "call serf_connection_close().", 
+   "* serf.h:", 
+   "(serf_connection_closed_t): Note that serf_connection_close() may call this.", 
+   "(serf_connection_close): New prototype.", 
+   "* context.c:", 
+   "(serf_connection_close): Implement.", 
+   "(serf_request_cancel): Implement."
+  ], 
+  "revision_id": "1698510"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-14T22:20:46.682576Z", 
+  "msg": [
+   "Lay foundation to pipeline requests.", 
+   "(Does not work just yet; more commits coming.)", 
+   "* test/serf_get.c:", 
+   "(main): Take additional argument which says how many times to fetch URL;", 
+   "call serf_request_deliver() the appropriate number of times."
+  ], 
+  "revision_id": "1698509"
+ }
+]

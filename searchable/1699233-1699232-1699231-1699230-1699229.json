@@ -1,0 +1,74 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2012-12-02T20:02:03.038316Z", 
+  "msg": [
+   "Follow up to r1695: bail out on error, e.g. the server aborting the connection.", 
+   "* outgoing.c", 
+   "(read_from_connection): Only pass a valid unexpected response to the server,", 
+   "bail out on error."
+  ], 
+  "revision_id": "1699233"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2012-11-17T19:15:11.268610Z", 
+  "msg": [
+   "Fix an off-by-one in buffer sizing (patch from mod_pagespeed)", 
+   "* buckets/headers_buckets", 
+   "(serf_bucket_headers_get): Allocate one more byte for trailling zero."
+  ], 
+  "revision_id": "1699232"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-17T18:35:38.542275Z", 
+  "msg": [
+   "Fix issue #91: If a response comes in while the request is still being written,", 
+   "pass it to the application. When the app has handled the response, destroy the", 
+   "request without writing the rest of it.", 
+   "* serf.h", 
+   "(serf_request_is_written): Function to check if a request was completely", 
+   "written when handling a response.", 
+   "* outgoing.c", 
+   "(read_from_connection): Don't error out of a valid response comes in.", 
+   "Add comments.", 
+   "(serf_request_is_written): New function.", 
+   "* test/test_context.c", 
+   "(test_serf_request_timeout): New test.", 
+   "(test_context): run the new test.", 
+   "(handle_response_timeout,", 
+   "setup_request_timeout,", 
+   "detect_eof): Helper functions for the new test."
+  ], 
+  "revision_id": "1699231"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-14T18:51:32.402971Z", 
+  "msg": [
+   "* buckets/ssl_buckets.c:", 
+   "(serf_ssl_use_compression): Remove unneeded code."
+  ], 
+  "revision_id": "1699230"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-11-14T07:42:31.277268Z", 
+  "msg": [
+   "Disable SSL compression by default, add an API to allow the application to", 
+   "enable it per session. Requires OpenSSL >= 1.0 to work.", 
+   "The reason is a confirmed security issue with OpenSSL compression:", 
+   "http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2012-4929", 
+   "* serf_bucket_types.h", 
+   "(serf_ssl_use_compression): New function declaration.", 
+   "* buckets/ssl_buckets.c:", 
+   "(disable_compression): New function, disables compression for all SSL", 
+   "sessions.", 
+   "(ssl_init_context): Call new disable_compression.", 
+   "(serf_ssl_use_compression): New function, allows application to re-enable", 
+   "SSL compression."
+  ], 
+  "revision_id": "1699229"
+ }
+]

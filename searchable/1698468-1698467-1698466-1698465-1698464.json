@@ -1,0 +1,120 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-25T21:35:33.661551Z", 
+  "msg": [
+   "More work to fix memory leaks.", 
+   "serf_get now abort()s after the request and response are completed and all data", 
+   "is freed.  It seems there is a POLLIN on the socket even when we haven't issued", 
+   "for another request.  Perhaps something was left unread?", 
+   "(The metadata API is still wonky, but it'll free what it alloc's now.)", 
+   "* test/serf_get.c (accept_response): Create a new allocator instead of", 
+   "reusing the one for the request; however, it needs to be tied to the", 
+   "request's pool.  (Hence, change to context.c below)", 
+   "* serf_bucket_util.h: Add serf_bstrmemdup() that does the work of copying", 
+   "a string and appending a NULL byte and allocs from the bucket allocator", 
+   "instead of a pool.", 
+   "* buckets/response_buckets.c", 
+   "(serf_response_destroy_and_data): Free our allocated memory, walk metadata", 
+   "tree to free the hash keys and values that we allocated earlier.", 
+   "(run_machine, serf_bucket_response_status): Use serf_bstrmemdup().", 
+   "* buckets/buckets.c:", 
+   "(serf_default_get_metadata): If the name is NULL, return the hash.", 
+   "(*hold nose*)", 
+   "(serf_bstrmemdup): Implement.", 
+   "* buckets/aggregate_buckets.c: Fix memory leaks!", 
+   "(serf_aggregate_destroy_and_data): Free our list and our done buckets.", 
+   "(serf_aggregate_read): Free the list item created when we added the bucket.", 
+   "* buckets/request_buckets.c:", 
+   "(serialize_data): Correct the hash size computation and abort() if over.", 
+   "(serf_request_get_metadata, serf_request_set_metadata): Toss since", 
+   "both the request and response buckets need to iterate through the metadata;", 
+   "so any solution has to be done generically.", 
+   "* context.c: Call the acceptor with a pool that has the same lifetime as", 
+   "the request not the temporary pool."
+  ], 
+  "revision_id": "1698468"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-25T16:58:33.985376Z", 
+  "msg": [
+   "Work on getting test_serf to actually return a page.", 
+   "It will now abort() *after* the contents are printed out in the", 
+   "allocator_cleanup() which is still unimplemented.  Good time to checkpoint.", 
+   "(I still need to review Greg's recent comments about the metadata; we should be", 
+   "able to remove the request bucket's metadata functions...)", 
+   "* test/serf_get.c: Define a VERSION_STRING to send as our User-Agent;", 
+   "(accept_response): Just create the response bucket wrapping the socket", 
+   "bucket.", 
+   "(handle_response): Retrieve the response status; read the first 2048 bytes", 
+   "and print it.", 
+   "(main): Set the Host and User-Agent headers in the request.  (Setting the", 
+   "Host header seems broken.)", 
+   "* buckets/response_buckets.c:", 
+   "(response_context_t): Add needed fields to capture our context.", 
+   "(fetch_line): Get out when we see EAGAIN from readline as len is not", 
+   "reliable in this case.", 
+   "(run_machine): Implement STATE_STATUS_LINE and STATE_HEADERS (memcpy's", 
+   "required for the metadata not to be corrupted later; should metadata API", 
+   "handle?)", 
+   "(wait_for_body): Keep running run_machine() until we hit STATE_BODY", 
+   "(serf_bucket_response_status): Implement (or finish implementation).", 
+   "(serf_response_read): Implement with correct EOF generation.", 
+   "(serf_response_readline): Pass-through implementation that doesn't handle", 
+   "EOFs right.", 
+   "* buckets/buckets.c:", 
+   "(fix_crlf): Fix an off-by-one error in fix_crlf", 
+   "(common_databuf_prep): don't try to further process the read call when", 
+   "EAGAIN is returned from the lower levels.", 
+   "* buckets/request_buckets.c:", 
+   "(serialize_data): Use an iovec to build the request string to allow us to", 
+   "use REQUESTHEADERS as defined by the client.", 
+   "(serf_request_set_metadata, serf_request_get_metadata): Placeholders to allow", 
+   "forward progress until we can sort metadata out.", 
+   "* context.c:", 
+   "(process_connection): Ignore APR_POLLERR for the moment and emit a warning.", 
+   "I'm not sure what to do yet or why I was seeing it occassionally.  (MacOSX", 
+   "should be using kevent()'s here; need to be able to reproduce consistently...)", 
+   "* serf_bucket_types.h: Add a metadata key for response headers; define a", 
+   "SERF_BUCKET_SIMPLE_STRING_LEN for when we already know how long the string", 
+   "is to save the strlen cost.", 
+   "* Makefile: Require apr-1-config and apu-1-config; build test/serf_get by", 
+   "default."
+  ], 
+  "revision_id": "1698467"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-08-25T01:33:20.613313Z", 
+  "msg": [
+   "Clarify and correct some documentation.", 
+   "* design-guide.txt: fix some typos", 
+   "* STATUS: tweak a bit of the doc metadata. expand on some of points. add a", 
+   "new point about connection closure. propose tossing metadata, describe", 
+   "its original purpose, and how we fulfill that purpose \"better\".", 
+   "* serf.h: clarify some of the docstrings. note that the acceptor_baton is", 
+   "specified during request creation, not connection creation. fix a", 
+   "reference to serf_request_cancel (it had the old name)."
+  ], 
+  "revision_id": "1698466"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-13T07:07:34.727617Z", 
+  "msg": [
+   "* serf/*: Relicense serf under ALv2 with updated copyright holder information.", 
+   "* LICENSE: add ALv2 text.", 
+   "(Greg and Justin hold the initial copyright for all serf code.)"
+  ], 
+  "revision_id": "1698465"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-08-13T06:27:04.363701Z", 
+  "msg": [
+   "* svn-commit.tmp: Remove file that should not have been imported."
+  ], 
+  "revision_id": "1698464"
+ }
+]

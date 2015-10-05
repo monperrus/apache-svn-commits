@@ -1,0 +1,115 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2014-08-20T10:42:56.019934Z", 
+  "msg": [
+   "Fix an issue in the deflate_buckets: when the last data read from the stream", 
+   "inflates to more than 8096 bytes, deflate_buckets would incorrectly assume", 
+   "there's something wrong with the incoming data (EOF from the stream but not", 
+   "Z_STREAM_END from zlib).", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_read): make the application read more data when the input", 
+   "stream is empty but inflation isn't finished yet.", 
+   "* test/test_buckets.c", 
+   "(deflate_compress,", 
+   "read_bucket_and_check_pattern,", 
+   "test_deflate_buckets): Add a new test case and helper functions.", 
+   "(test_buckets): Run the new test."
+  ], 
+  "revision_id": "1699948"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-19T08:18:03.238810Z", 
+  "msg": [
+   "In the config store, use a linked list instead of a hash table to store the", 
+   "configuration values. Since we are only storing one or two values per category", 
+   "this improves the performance, especially during logging when the log_baton", 
+   "is retrieved from the per-context configuration object.", 
+   "The global store still uses hash tables to store the config objects per host &", 
+   "per connection, but these are only used when setting up a new serf connection,", 
+   "so they aren't a bottleneck.", 
+   "* config_store.c", 
+   "(struct serf__config_hdr_t, struct config_entry_t,", 
+   "create_config_hdr, add_or_replace_entry): Implementation of a linked list.", 
+   "(serf__config_store_init,", 
+   "serf__config_store_get_config,", 
+   "serf_config_set_string,", 
+   "serf_config_set_stringc,", 
+   "serf_config_set_stringf,", 
+   "serf_config_set_object,", 
+   "serf_config_get_string,", 
+   "serf_config_get_object,", 
+   "serf_config_remove_value): Replace the config hash table with the custom", 
+   "linked list. As a result we don't have to use pointers to keys anymore,", 
+   "so replace serf_config_key_ptr_t by serf_config_key_t.", 
+   "* serf.h", 
+   "(serf_config_key_ptr_t): Remove declaration.", 
+   "(SERF_CONFIG_*): Define directly as integer, no need for pointers in the", 
+   "linked list.", 
+   "(serf__config_store_init,", 
+   "serf__config_store_get_config,", 
+   "serf_config_set_string,", 
+   "serf_config_set_stringc,", 
+   "serf_config_set_stringf,", 
+   "serf_config_set_object,", 
+   "serf_config_get_string,", 
+   "serf_config_get_object,", 
+   "serf_config_remove_value): Replace serf_config_key_ptr_t by", 
+   "serf_config_key_t.", 
+   "* serf_private.h", 
+   "(serf__config_hdr_t): New declaration.", 
+   "(struct serf_config_t,", 
+   "struct serf__config_store_t): Use the linked list instead of a hash table.", 
+   "* test/test_internal.c", 
+   "(PER__*): Define directly as integer, no need for pointers in the linked list."
+  ], 
+  "revision_id": "1699947"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-18T13:40:57.362014Z", 
+  "msg": [
+   "* serf.h: Update table of values stored in the configuration store."
+  ], 
+  "revision_id": "1699946"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-18T13:25:38.415956Z", 
+  "msg": [
+   "Introduce an internal method to disable HTTP pipeling, so that authn schemes", 
+   "don't have to fiddle with the application-set max_outstanding_requests (and", 
+   "even worse, overwrite its value).", 
+   "* auth/auth_digest.c", 
+   "(serf__handle_digest_auth,", 
+   "serf__init_digest_connection): Use serf__connection_set_pipelining instead of", 
+   "serf_connection_set_max_outstanding_requests.", 
+   "* auth/auth_spnego.c", 
+   "(do_auth,", 
+   "serf__init_spnego_connection,", 
+   "serf__validate_response_spnego_auth): Use serf__connection_set_pipelining", 
+   "instead of serf_connection_set_max_outstanding_requests.", 
+   "* outgoing.c", 
+   "(write_to_connection): Introduce temp. variable for the number of unanswered", 
+   "requests. Don't send new requests when pipeling is disabled an already", 
+   "one response is pending.", 
+   "(serf_connection_create): Enable pipelining by default.", 
+   "* serf_private.h", 
+   "(struct serf_connection_t): Add pipelining variable.", 
+   "(serf__connection_set_pipelining): New declaration."
+  ], 
+  "revision_id": "1699945"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-08-18T11:01:39.831499Z", 
+  "msg": [
+   "Fix issue 151: SCons env['LIBPATH'] sometimes is a string and that breaks RPATH.", 
+   "Patch by: mgorny at gentoo.org (slightly modified).", 
+   "* SConstruct: Always append a list to environment variables, to guarantee that", 
+   "the outcome is a list so further appends will add the new values to a list."
+  ], 
+  "revision_id": "1699944"
+ }
+]

@@ -1,0 +1,90 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-24T00:08:37.326490Z", 
+  "msg": [
+   "Create a copy of the chunk_hdr so that we can have multiple chunk streams open", 
+   "at once - as if our underlying stream has more than >32 buckets ready.", 
+   "* chunk_buckets.c", 
+   "(create_chunk): Create a copy of the chunk_header so we can have multiple", 
+   "chunks alive at one time without corrupting each other."
+  ], 
+  "revision_id": "1698568"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-23T18:25:36.756296Z", 
+  "msg": [
+   "Fix a segfault when an allocator is unused (i.e. no allocations) and we try to", 
+   "free it.", 
+   "* buckets/allocator.c", 
+   "(cleanup_allocator): If we never allocated anything, don't try to free NULL."
+  ], 
+  "revision_id": "1698567"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-21T23:58:03.468879Z", 
+  "msg": [
+   "Update serf_get and serf_spider to compile against recent serf API changes.", 
+   "There's also a bunch of improvements to serf_spider, but it is still just a", 
+   "proof of concept spider and nothing more."
+  ], 
+  "revision_id": "1698566"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-17T08:39:35.307453Z", 
+  "msg": [
+   "Make queuing a request a truly constant-time operation at the cost of a bit", 
+   "more space.  (We'll store the tail of the request list to achieve this.)", 
+   "This gets to be noticable when we have 4,000+ requests in our pipeline...", 
+   "* context.c", 
+   "(serf_connection_t): Store a pointer to the tail of the list.", 
+   "(no_more_writes): Move the tail to our hold list and reset the request tail.", 
+   "(read_from_connection): Do not assume that every request has been written;", 
+   "update our tail if we're truly exhausted now.", 
+   "(link_requests): Handle updating a tail pointer instead of walking the", 
+   "entire list to add a new request or linked requests.", 
+   "(serf_connection_reset): Pass in the tail pointers to link_requests; move", 
+   "the held requests back to the ->requests list in O(1) time.", 
+   "(serf_request_connection_create): Pass in the tail pointers to link_requests."
+  ], 
+  "revision_id": "1698565"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2006-02-16T09:13:03.138881Z", 
+  "msg": [
+   "Defer as much of the request creation as we can until we're actually ready to", 
+   "deliver the request.", 
+   "We are removing serf_request_deliver() and replacing it with a new setup", 
+   "callback that will be invoked when we are about to write the request.", 
+   "* serf.h", 
+   "(serf_request_setup_t): Declare new callback function invoked right before", 
+   "the request would be written.", 
+   "(serf_connection_request_create): Take in request setup callback and a baton.", 
+   "(serf_request_deliver): Remove.", 
+   "* context.c", 
+   "(serf_request_t): Add in setup and setup_baton fields.", 
+   "(serf_connection_t): Create a bucket allocator to alloc requests from.", 
+   "(update_pollset): Do not turn on writability when we're blocked or have no", 
+   "outstanding requests.", 
+   "(write_to_connection): Update outstanding request checks to look at the", 
+   "setup field; when we are about to deliver a request but don't have a", 
+   "request bucket, invoke the setup callback to finish creating the request;", 
+   "(read_from_connection): when we are done reading the response, free the", 
+   "request memory from the connection's allocator.", 
+   "(cancel_request): Don't execute the handler if we don't have it (i.e. setup", 
+   "has not run); conditionally destroy the respool; give our request back to", 
+   "the connection's allocator", 
+   "(serf_connection_create): Create a bucket allocator for the connection.", 
+   "(serf_connection_reset): Don't 'cancel' requests which haven't been", 
+   "delivered - instead just plop them back in the requests list unchanged.", 
+   "(serf_connection_request_create): Allocate ourselves from the connection's", 
+   "bucket allocator and just insert us into the requests list now.", 
+   "(serf_request_deliver): Remove."
+  ], 
+  "revision_id": "1698564"
+ }
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T12:21:14.218729Z", 
+  "msg": [
+   "Fix 400 Bad Request returned when opening an ssl tunnel to a https server", 
+   "on a non-default port (ie. not 443).", 
+   "This fixes test test_setup_ssltunnel added in r1940.", 
+   "* ssltunnel.c", 
+   "(serf__ssltunnel_connect): Use host_info.hostname to build the uri for the", 
+   "CONNECT request. host_info.hostinfo that's used now will include the", 
+   "port number if that's not 443."
+  ], 
+  "revision_id": "1699478"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-22T12:15:27.290535Z", 
+  "msg": [
+   "Add a test for ssl tunneling. Add a test proxy server.", 
+   "There's a bug in the tunnel code, so the test is failing right now. Will fix", 
+   "in another rev.", 
+   "* test/server/test_server.c", 
+   "(create_client_socket,", 
+   "detect_eof,", 
+   "proxy_replay): New functions.", 
+   "(replay): For action PROXY_FORWARD, use stream buckets to cache data", 
+   "incoming from the client and from the server.", 
+   "(run_test_server): Listen for events on the proxy client socket.", 
+   "(setup_test_server): Create allocator from pool.", 
+   "* test/server/test_server.h", 
+   "(enum kind): New PROXY_FORWARD kind.", 
+   "(serv_ctx_t): New variables allocator, proxy_client_sock, clientstream,", 
+   "servstream.", 
+   "* test/test_context.c", 
+   "(test_setup_ssltunnel): New test.", 
+   "(test_context): Run the new test.", 
+   "* test/test_serf.h", 
+   "(test_https_server_proxy_setup): New function declaration.", 
+   "* test/test_util.c", 
+   "(test_https_server_proxy_setup): New function.", 
+   "(test_helper_run_requests_no_check): Also run the proxy event loop if the", 
+   "test uses one."
+  ], 
+  "revision_id": "1699477"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-21T20:58:37.776802Z", 
+  "msg": [
+   "Follow up to r1933:", 
+   "Explicitly store the port number of the host when creating the connection, even", 
+   "if that's the default port for the scheme. It's needed during connection setup.", 
+   "* serf_private.h", 
+   "(serf_connection_t): Fix comment: port_str is not set on the host_info", 
+   "variable.", 
+   "* outgoing.c", 
+   "(serf_connection_create2): Store the port number."
+  ], 
+  "revision_id": "1699476"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-13T11:31:47.641582Z", 
+  "msg": [
+   "Cosmetic change.", 
+   "* auth_basic.c:", 
+   "(serf__setup_request_basic_auth): Rename authn_info to basic_info to be", 
+   "consistent with the rest of the code."
+  ], 
+  "revision_id": "1699475"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-06-13T10:32:21.358865Z", 
+  "msg": [
+   "* test/test_auth.c", 
+   "(test_basic_authentication): Remove unused variable."
+  ], 
+  "revision_id": "1699474"
+ }
+]

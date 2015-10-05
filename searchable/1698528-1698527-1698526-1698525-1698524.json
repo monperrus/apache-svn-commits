@@ -1,0 +1,72 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-09-03T03:07:54.006483Z", 
+  "msg": [
+   "Add multi-threaded serf_spider based on design posted to serf-dev@.  This is", 
+   "a two-thread design at the moment: one 'network' thread and one 'walker'", 
+   "thread.  The 'network' thread reads the data and shoves it into expat;", 
+   "the 'walker' thread will walk the final XML tree to find all hrefs and will", 
+   "add them to the 'network' thread's to-do list.", 
+   "It'll fetch multiple requests from the same server.  Other than that, ???.", 
+   "Also, fix some bugs when we try to reuse the same connection.", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_bucket_deflate_create): Properly intialize data structures to prevent", 
+   "corruption later (i.e. the memory we get might not be zero'd).", 
+   "(serf_deflate_read): Go through the loop after we're done with STATE_INFLATE", 
+   "so that we do the verify stage on the next serf_deflate_read.", 
+   "* context.c", 
+   "(serf_request_deliver): If we are delivering a request to an 'idle'", 
+   "connection, update our pollset so that we mark it as needing to write.", 
+   "* Makefile.in: Add test/serf_spider target", 
+   "* test/serf_spider.c: Copied from serf_spider; use APR-util's expat to parse", 
+   "the stream; use a separate thread to walk through the XML tree after", 
+   "parsing; introduce condition variables to sync between the 'handler' thread", 
+   "and the 'parser' thread."
+  ], 
+  "revision_id": "1698528"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T22:40:19.845019Z", 
+  "msg": [
+   "Build a libtool-ized library for serf.", 
+   "* Makefile.in: Move SERF_*_VERSION to top; define TARGET_LIB; add prefix foo;", 
+   "switch targets to use library rather than objects directly; build test", 
+   "programs statically (so that they can run from test dir); clean library too"
+  ], 
+  "revision_id": "1698527"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T22:37:09.879488Z", 
+  "msg": [
+   "Confirmed that this particular combination works okay."
+  ], 
+  "revision_id": "1698526"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T07:39:24.689839Z", 
+  "msg": [
+   "Fix failure to propogate APR_EAGAIN to callers in deflate buckets.", 
+   "* buckets/deflate_buckets.c", 
+   "(deflate_context_t): Add field to save the underlying stream's status", 
+   "(serf_deflate_read): When we see EOF from inflate_stream, use saved stream", 
+   "status; save status when reading underlying stream.", 
+   "Bug found by: Paul Querna against http://slashdot.org/", 
+   "Assist to: serf's debugging code for catching this one via abort()ing."
+  ], 
+  "revision_id": "1698525"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2005-08-25T06:17:35.779679Z", 
+  "msg": [
+   "* test/serf_get.c", 
+   "(main): If we don't have a URL path, default to /.", 
+   "Suggested by: Paul Querna"
+  ], 
+  "revision_id": "1698524"
+ }
+]

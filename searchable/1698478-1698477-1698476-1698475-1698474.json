@@ -1,0 +1,89 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2004-09-04T05:07:38.505435Z", 
+  "msg": [
+   "Justin pointed out that the .readline() method of the headers bucket would", 
+   "not advance the read pointer forward. This was fixed by factoring out some", 
+   "logic from the read method to consume the current chunk of header data.", 
+   "* buckets/headers_buckets.c:", 
+   "(consume_chunk): logic factored out of the read() method to consume the", 
+   "current data chunk of the header. it also computes an appropriate", 
+   "return status code based on whether further data is available.", 
+   "(serf_headers_read): factor out the chunk consumption logic into", 
+   "consume_chunk().", 
+   "(serf_headers_readline): use the new consume_chunk() function."
+  ], 
+  "revision_id": "1698478"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-09-03T23:58:11.400167Z", 
+  "msg": [
+   "Add a new headers bucket to hold request/response headers. Multiple", 
+   "headers are stored in a single bucket, which supports random access and", 
+   "data generation through the bucket's read() functions.", 
+   "Internally, we store the headers in a simple linked list. The bucket", 
+   "supports borrowing the memory, or allocating the values internally. It", 
+   "also contains a simple state machine for reading out the data.", 
+   "* buckets/headers_buckets.c: new file. new implementation.", 
+   "* serf_bucket_types.h: add the new headers bucket declarations", 
+   "(serf_bucket_type_headers, SERF_BUCKET_IS_HEADERS,", 
+   "serf_bucket_headers_create): add standard bucket declarations.", 
+   "(serf_bucket_headers_set, serf_bucket_headers_setc,", 
+   "serf_bucket_headers_setn, serf_bucket_headers_get): new accessor", 
+   "functions.", 
+   "* Makefile: compile the new bucket."
+  ], 
+  "revision_id": "1698477"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-09-03T23:39:28.648118Z", 
+  "msg": [
+   "Various cleanups, and add some additional bucket support functions.", 
+   "* serf_bucket_util.h:", 
+   "(serf_bmemdup, serf_bstrdup): new functions, analogous to their APR", 
+   "counterparts.", 
+   "* buckets/buckets.c:", 
+   "(serf_bstrmemdup): small variable rename. tweak code org.", 
+   "(serf_bmemdup, serf_bstrdup): new functions", 
+   "* buckets/response_buckets.c:", 
+   "- add some missing headers", 
+   "(serf_response_destroy_and_data): should be static, rather than publicly", 
+   "visible.", 
+   "(run_machine): initialize status to avoid a gcc warning. remove an", 
+   "unused variable.", 
+   "* buckets/request_buckets.c:", 
+   "- add a missing header", 
+   "* test/serf_get.c:", 
+   "- add a missing atomics header", 
+   "(handle_response): remove an unused variable", 
+   "* design-guide.txt: tweak some bucket read function return values."
+  ], 
+  "revision_id": "1698476"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-03T20:50:39.264990Z", 
+  "msg": [
+   "Fix logic in serf_util_readline to handle the 0 bytes read case", 
+   "(triggered when EAGAIN received from apr_socket_recv)", 
+   "* buckets/buckets.c (serf_util_readline): Do not adjust data when we do not", 
+   "find a CR or LF.  Otherwise, we'd set *data to be 1 which blew up things", 
+   "badly.  So, keep *len the same by not adjusting *data."
+  ], 
+  "revision_id": "1698475"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-08-27T19:44:54.857813Z", 
+  "msg": [
+   "Move the SERF_BUCKET_READ_ERROR() macro to the correct location. It is for", 
+   "bucket users (serf.h) rather than bucket implementors (serf_bucket_util.h)", 
+   "* serf_bucket_util.h (SERF_BUCKET_READ_ERROR): moved from here ...", 
+   "* serf.h: ... to here"
+  ], 
+  "revision_id": "1698474"
+ }
+]

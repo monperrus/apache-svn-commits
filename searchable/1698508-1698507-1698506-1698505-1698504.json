@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-14T21:56:32.299759Z", 
+  "msg": [
+   "Add capability to print the response headers: does so *after* the response", 
+   "is completed.", 
+   "* test/serf_get.c:", 
+   "(handle_response): Get the response header buckets and print them out."
+  ], 
+  "revision_id": "1698508"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-14T21:49:54.072384Z", 
+  "msg": [
+   "Add BARRIER buckets to help address the bucket lifetime issue.", 
+   "(This does not change serf_get because it needs other fixes that are coming.)", 
+   "* test/serf_response.c:", 
+   "(accept_baton_t): Add 'cached' bucket.", 
+   "(accept_response): Use the 'cached' FILE bucket wrapped by a BARRIER.", 
+   "(main): Explictly destroy out accept context's 'cached' bucket.", 
+   "* buckets/limit_buckets.c:", 
+   "(serf_limit_destroy): Delete our enclosed stream now.", 
+   "* buckets/dechunk_buckets.c:", 
+   "(serf_dechunk_destroy_and_data): Delete our enclosed stream now.", 
+   "* buckets/barrier_buckets.c: Add new bucket type that doesn't delete its", 
+   "enclosed buckets.", 
+   "* buckets/response_buckets.c:", 
+   "(run_machine): Place a BARRIER bucket around our stream before we create", 
+   "the limit or dechunk buckets.", 
+   "* buckets/allocator.c:", 
+   "(serf_debug__bucket_destroy): Skip over BARRIER buckets.", 
+   "* serf_bucket_types.h: Add standard declarations for BARRIER buckets.", 
+   "* Makefile: Compile in BARRIER buckets."
+  ], 
+  "revision_id": "1698507"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2004-09-14T10:24:57.322083Z", 
+  "msg": [
+   "add vsn section. add placeholder for lifetime discussion."
+  ], 
+  "revision_id": "1698506"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-13T17:37:24.694749Z", 
+  "msg": [
+   "Remove dead code.", 
+   "* serf_get.c: Remove code that has been surrounded by #if 0 for a while as", 
+   "there isn't much point in keeping that code around as the current API", 
+   "bears no resemblance to that API."
+  ], 
+  "revision_id": "1698505"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-10T20:11:23.806493Z", 
+  "msg": [
+   "Add a variant of the simple_create bucket function that creates a private copy.", 
+   "(Allows removal of duplicate code throughout ssl_buckets.c)", 
+   "* buckets/ssl_buckets.c:", 
+   "(free_read_data): Remove as unneeded now.", 
+   "(bio_bucket_write, ssl_decrypt, ssl_encrypt): Create a copy of the read data", 
+   "by calling serf_bucket_simple_copy_create instead.", 
+   "* buckets/simple_buckets.c:", 
+   "(free_copied_data): New function to free allocated data.", 
+   "(serf_bucket_simple_copy_create): New function that uses a simple bucket and", 
+   "does a memcpy and registers a cleanup.", 
+   "* serf_bucket_types.h: Add prototype for serf_bucket_simple_copy_create."
+  ], 
+  "revision_id": "1698504"
+ }
+]

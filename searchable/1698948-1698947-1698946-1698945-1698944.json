@@ -1,0 +1,88 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2010-09-14T21:20:38.433079Z", 
+  "msg": [
+   "Add a new httpconn bucket type, that can read from and write to a socket.", 
+   "This in order to simplify the code a bit, and prepare for adding ssl tunneling", 
+   "over http proxy support.", 
+   "* serf/serf_private.h", 
+   "(serf_connection_t): Remove the members that stored that data read from", 
+   "the output stream. Add the httpconn bucket.", 
+   "* serf/serfmake", 
+   "* serf/Makefile.in: Add httpconn_buckets.c.", 
+   "* serf/buckets/httpconn_buckets.c: New bucket type.", 
+   "* serf/outgoing.c", 
+   "(clean_skt): Moved to buckets/httpconn_buckets.c", 
+   "(serf__conn_update_pollset): get the socket object from the", 
+   "httpconn bucket.", 
+   "(destroy_ostream,", 
+   "detect_eof): Moved before do_conn_setup.", 
+   "(do_conn_setup): Create a httpconn bucket, and pass the input and", 
+   "output stream to it.", 
+   "(serf_open__conections,", 
+   "handle_conn_closed,", 
+   "socket_writev): Move te socket handling code to httpconn_buckets.c.", 
+   "(write_to_connection): Move the code that reads the output stream and", 
+   "writes the data on the socket to httpconn_buckets.c", 
+   "(read_from_connection): Plenty of changes to accomodate the move of", 
+   "code to httpconn_buckets.c", 
+   "* serf/context.c", 
+   "(serf_event_trigger): The skt object has moved to the httpconn bucket.", 
+   "* serf/serf_bucket_types.h", 
+   "(serf_bucket_httpconn_create,", 
+   "serf_httpconn_connect,", 
+   "serf_httpconn_close,", 
+   "serf_httpconn_unwritten_data,", 
+   "serf_httpconn_clear_state,", 
+   "serf_httpconn_socket,", 
+   "serf_httpconn_set_streams,", 
+   "serf_httpconn_write_iovec): New declarations."
+  ], 
+  "revision_id": "1698948"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-09-13T20:47:40.855510Z", 
+  "msg": [
+   "* build/gen_def.py: fix example in comment."
+  ], 
+  "revision_id": "1698947"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-09-11T11:32:48.614445Z", 
+  "msg": [
+   "* serfmake: Don't install the testsuite's include files."
+  ], 
+  "revision_id": "1698946"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-09-08T21:04:11.780313Z", 
+  "msg": [
+   "Follow up r1388: The SSL bucket stores its unread data in the aggregate", 
+   "bucket from which it's reading data. Since r1388 this aggregate bucket", 
+   "does not own and destroy its children anymore (after use), so this unread", 
+   "data stays in memory.", 
+   "The alternative is to wrap the bucket from which the SSL bucket reads", 
+   "data always with a real bucket-owning aggregate bucket, so that we still", 
+   "can use the same method of pushing data back to the bucket for next", 
+   "reading, while not worrying about ownership and memory cleanup.", 
+   "* buckets/ssl_buckets.:", 
+   "(serf_bucket_ssl_encrypt_create): Wrap the bucket from which data is", 
+   "read always with an aggregate bucket.", 
+   "(ssl_encrypt): this workaround for situations where we read from a", 
+   "non-aggregate bucket is now always used."
+  ], 
+  "revision_id": "1698945"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2010-08-25T20:48:53.528917Z", 
+  "msg": [
+   "Tag the 0.7.0 release."
+  ], 
+  "revision_id": "1698944"
+ }
+]

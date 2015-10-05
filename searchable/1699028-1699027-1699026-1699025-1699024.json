@@ -1,0 +1,72 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2011-06-18T13:01:47.075391Z", 
+  "msg": [
+   "Improvements in error signaling of response buckets.", 
+   "* serf.h", 
+   "(SERF_ERROR_BAD_HTTP_RESPONSE): New error code.", 
+   "(SERF_BAD_RESPONSE_ERROR): Add SERF_ERROR_BAD_HTTP_RESPONSE as a condition", 
+   "to this macro.", 
+   "* buckets/response_buckets.c", 
+   "(parse_status_line,", 
+   "fetch_headers): replace APR_EGENERAL by SERF_ERROR_BAD_HTTP_RESPONSE."
+  ], 
+  "revision_id": "1699028"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-18T12:48:41.077518Z", 
+  "msg": [
+   "Improvements in error signaling.", 
+   "* serf.h", 
+   "(SERF_ERROR_DECOMPRESSION_FAILED): New error code.", 
+   "(SERF_BAD_RESPONSE_ERROR): New macro. Added so that applications can", 
+   "distinguish recoverable errors from general, unrecoverable errors.", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_read): replace APR_EGENERAL by SERF_ERROR_DECOMPRESSION_FAILURE", 
+   "where applicable."
+  ], 
+  "revision_id": "1699027"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-16T17:43:58.133522Z", 
+  "msg": [
+   "Follow up r1465: Fix endless loop while reading data from the socket stream.", 
+   "* buckets/ssl_buckets.c:", 
+   "(ssl_encrypt): when the pending stream has more than 8000 bytes available,", 
+   "the loop will never end as after one or a few iterations the number of", 
+   "still to be fetched bytes will be 0, and the status will be APR_SUCCESS.", 
+   "The fix is to stop the loop not only on !APR_SUCCESS, but also when all", 
+   "requested bytes have been successfully read."
+  ], 
+  "revision_id": "1699026"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-16T17:37:49.626236Z", 
+  "msg": [
+   "Fix issue 76: don't segfault when cleaning up connections after", 
+   "an error occurred.", 
+   "* outgoing.c", 
+   "(clean_resp): when a connection pool is cleaned up because of an error,", 
+   "apr will first destroy the pool where req_bkt and resp_bkt were created", 
+   "(request->respool), and only then cancel all requests. During cancel", 
+   "request it's too late to destroy resp/req_bkt, as those pointers are already", 
+   "invalidated. Solution: set both pointers to NULL after the respool is", 
+   "cleaned."
+  ], 
+  "revision_id": "1699025"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2011-06-16T10:07:32.166321Z", 
+  "msg": [
+   "* test/test_ssl.c:", 
+   "* buckets/ssl_buckets.c: Revert changes made in r1464, these shouldn't have", 
+   "been committed."
+  ], 
+  "revision_id": "1699024"
+ }
+]

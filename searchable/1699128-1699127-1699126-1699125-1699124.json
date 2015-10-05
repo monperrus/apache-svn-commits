@@ -1,0 +1,70 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2012-03-22T22:54:11.295269Z", 
+  "msg": [
+   "* buckets/ssl_buckets.c:", 
+   "(serf_ssl_cert_certificate): fix signed-ness of the string to copy"
+  ], 
+  "revision_id": "1699128"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-22T22:52:26.770287Z", 
+  "msg": [
+   "Reorganize the chain construction a bit to avoid a cast.", 
+   "Before applying the patch in r1589, I tweaked the code to always fetch", 
+   "the chain (to avoid a compiler warning about uninitialized 'chain').", 
+   "However, that causes a leak when building a one-cert chain. So... free", 
+   "the old chain. (the original was fine in setting chain, but the", 
+   "compiler didn't know that)", 
+   "* buckets/ssl_buckets.c:", 
+   "(validate_server_certificate): free any possible fetched chain.", 
+   "reorganize the chain construction a bit. toss the later cast."
+  ], 
+  "revision_id": "1699127"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-22T22:29:08.033700Z", 
+  "msg": [
+   "Issue 68: add a new API for providing the entire certificate chain to", 
+   "a callback for validation.", 
+   "Patch by: muzzlehatch{_AT_}gmail.com", 
+   "* serf_bucket_types.h:", 
+   "(serf_ssl_server_cert_chain_cb_t): new callback type", 
+   "(serf_ssl_server_cert_chain_callback_set): new function for setting", 
+   "the certificate verification callbacks (single server certificate,", 
+   "and/or the entire chain)", 
+   "* buckets/ssl_buckets.c:", 
+   "(serf_ssl_context_t): add new SERVER_CERT_CHAIN_CALLBACK member", 
+   "(validate_server_certificate): invoke the callback whenever an error", 
+   "occurs, and at least once when validating the server certificate.", 
+   "(serf_ssl_server_cert_chain_callback_set): store the callbacks", 
+   "(ssl_init_context): store NULL for the callbacks", 
+   "* test/serf_get.c:", 
+   "(print_ssl_cert_errors): helper function to print the errors", 
+   "(ignore_all_cert_errors): print the errors when they occur", 
+   "(print_certs): new helper to print the whole chain", 
+   "(conn_setup): use serf_ssl_server_chain_callback_set for installing", 
+   "both callbacks"
+  ], 
+  "revision_id": "1699126"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-20T19:45:26.138096Z", 
+  "msg": [
+   "Update CHANGES on the 1.1.x branch"
+  ], 
+  "revision_id": "1699125"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-20T19:42:49.066242Z", 
+  "msg": [
+   "Set the correct version number for the 1.1.x branch"
+  ], 
+  "revision_id": "1699124"
+ }
+]

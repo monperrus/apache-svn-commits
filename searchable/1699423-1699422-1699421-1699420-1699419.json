@@ -1,0 +1,107 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-06-02T09:05:00.449683Z", 
+  "msg": [
+   "On the multiple_ssl_impls branch:", 
+   "Add a method to select the active SSL implementation from those built in.", 
+   "Use these to run the ssl tests with both implementations.", 
+   "* serf_bucket_types.h", 
+   "(SERF_IMPL_*): Types to select the active bucket implementations.", 
+   "(serf_config_enable_bucket_impls,", 
+   "serf_config_disable_bucket_impls,", 
+   "serf_config_get_bucket_impls): New function declarations.", 
+   "* buckets/buckets.c", 
+   "(init_bucket_impls,", 
+   "serf_config_enable_bucket_impls,", 
+   "serf_config_disable_bucket_impls,", 
+   "serf_config_get_bucket_impls): New functions, manage the active SSL", 
+   "bucket implementations.", 
+   "* buckets/ssl_buckets.c", 
+   "(decide_ssl_bucket_type): Use the active SSL implementations as set by the", 
+   "application to select between OpenSSL and Sectrans. Prefer Sectrans", 
+   "over OpenSSL.", 
+   "* test/test_context.c", 
+   "(test_context): Run the ssl tests for both OpenSSL and Sectrans where", 
+   "available.", 
+   "* test/test_ssl.c", 
+   "(test_ssl): Run the ssl tests for both OpenSSL and Sectrans where", 
+   "available.", 
+   "* test/test_serf.h", 
+   "(test_openssl_setup,", 
+   "test_openssl_teardown,", 
+   "test_sectransssl_setup,", 
+   "test_sectransssl_teardown): New function declarations.", 
+   "* test/test_util.c", 
+   "(test_openssl_setup,", 
+   "test_openssl_teardown,", 
+   "test_sectransssl_setup,", 
+   "test_sectransssl_teardown): New helper functions."
+  ], 
+  "revision_id": "1699423"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-31T21:50:08.015512Z", 
+  "msg": [
+   "Fix issue 102: digest authentication fails.", 
+   "Use the request uri when validating the Authentication-Info header on a", 
+   "successful response.", 
+   "* serf_private.h", 
+   "(serf__setup_request_func_t): Take a serf_request_t *.", 
+   "(serf_request_t): Add auth_baton member. This as a workaround to store the uri", 
+   "of the request. We already have this uri in the request bucket, but this", 
+   "is created by the application and therefore not accessible.", 
+   "* auth/auth.h", 
+   "(serf__setup_request_basic_auth,", 
+   "serf__setup_request_digest_auth,", 
+   "serf__setup_request_kerb_auth): Take a serf_request_t *.", 
+   "* outgoing.c", 
+   "(serf_request_bucket_request_create): Update calls to setup_request_func to", 
+   "take a serf_request_t *.", 
+   "* auth/auth_digest.c", 
+   "(serf__setup_request_digest_auth): Take a serf_request_t *. Store the uri", 
+   "of the request in its auth_baton member.", 
+   "(serf__validate_response_digest_auth): Use the uri of the request to build", 
+   "the A2 string.", 
+   "* auth/auth_basic.c", 
+   "(serf__setup_request_basic_auth): Take a serf_request_t *.", 
+   "* auth/auth_kerb.c", 
+   "(serf__setup_request_kerb_auth): Take a serf_request_t *."
+  ], 
+  "revision_id": "1699422"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-05-31T17:53:11.365066Z", 
+  "msg": [
+   "Follow up to r1879:", 
+   "* SConstruct: build with -Wdeclaration-after-statement."
+  ], 
+  "revision_id": "1699421"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-05-31T14:20:13.775831Z", 
+  "msg": [
+   "Move REQUESTED_MAX constant to serf_private.h.", 
+   "* buckets/limit_buckets.c", 
+   "(): Include serf_private.h.", 
+   "(REQUESTED_MAX): Move to serf_private.h.", 
+   "* serf_private.h", 
+   "(REQUESTED_MAX): Move from limit_buckets.c."
+  ], 
+  "revision_id": "1699420"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2013-05-31T13:27:50.265022Z", 
+  "msg": [
+   "Dereference INTDIR in serf.mak.", 
+   "* serf.mak", 
+   "(ALL, INTDIR, CHECK, STATIC_LIB): Use $(INTDIR) instead of INTDIR.", 
+   "Patch by dpb at corrigendum.ru."
+  ], 
+  "revision_id": "1699419"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-07-28T14:01:13.054431Z", 
+  "msg": [
+   "Fix issue 116: scons check should return non-zero exit staths", 
+   "* build/check.py: return exit code 1 when a test fails."
+  ], 
+  "revision_id": "1699618"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-26T19:06:26.875186Z", 
+  "msg": [
+   "Fix scons --install-sandbox on Mac OS X.", 
+   "* SConstruct:", 
+   "(install): Use the target absolute path as shared library id, not the", 
+   "intermediate sandbox path."
+  ], 
+  "revision_id": "1699617"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-26T11:15:29.591254Z", 
+  "msg": [
+   "Fix issue 113: add gssapi libs in the serf pc file.", 
+   "* SConstruct: Append the output of krb5config --libs to the libs line in", 
+   "serf-x.pc."
+  ], 
+  "revision_id": "1699616"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-26T09:07:29.845655Z", 
+  "msg": [
+   "Fix issue 114.", 
+   "Scenario: the server triggers a ssl/tls renegotiation after receiving a request", 
+   "but before writing a response.", 
+   "Issue: The renegotiation request arrives in the ssl layer, and while reading", 
+   "that data OpenSSL will write a response.", 
+   "If the request was the only request pending on the connection (say one opening", 
+   "non-pipelined request), serf will have no more requests to send, and won't check", 
+   "for socket writability. So the data that OpenSSL has add to the outgoing stream", 
+   "will never be written on the socket, and after a timeout the server will abort", 
+   "the connection.", 
+   "The fix check for socket writability not only if there are requests pending,", 
+   "but also if the outgoing stream has data pending.", 
+   "* outgoing.c", 
+   "(request_or_data_pending): New function, checks if there's a request or if", 
+   "the outgoing stream contains data to send.", 
+   "(serf__conn_update_pollset): Use request_or_data_pending to decide when to", 
+   "set POLLOUT.", 
+   "(write_to_connection): Use request_or_data_pending to decide whether to enter", 
+   "the writing loop. Adapt some checks to handle the situation where there's", 
+   "data to send but no request pending. Connection is dirty when while", 
+   "reading the response of the last request, data was written on the", 
+   "outgoing stream."
+  ], 
+  "revision_id": "1699615"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-26T08:23:06.489408Z", 
+  "msg": [
+   "Improve logging.", 
+   "* buckets/socket_buckets.c", 
+   "(socket_reader): Add option to log # of bytes read without logging the actual", 
+   "data.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_need_client_cert): Log that function is called."
+  ], 
+  "revision_id": "1699614"
+ }
+]

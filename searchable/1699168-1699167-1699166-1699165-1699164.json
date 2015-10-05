@@ -1,0 +1,87 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2012-08-31T20:39:05.261619Z", 
+  "msg": [
+   "Remove the hold_requests queue on the connection. We can get the same", 
+   "results much easier now with requests queue. When the connection is", 
+   "being reset, serf has to stop listening for POLLOUT events on that connection.", 
+   "This fixes issue #86.", 
+   "* outgoing.c", 
+   "(serf__conn_update_pollset): Read from a socket only when it's created,", 
+   "write to a socket until it's closing down.", 
+   "(serf__open_connections, no_more_writes,", 
+   "reset_connection): stop using the hold_requests queue.", 
+   "(serf_connection_request_create,", 
+   "serf_connection_priority_request_create): No more hold_requests, so link", 
+   "the new request respecitvely at the end of the request queue or just", 
+   "after the last written request.", 
+   "* serf_private.h", 
+   "(struct serf_connection_t): stop using the hold_requests queue."
+  ], 
+  "revision_id": "1699168"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-08-30T20:28:40.061419Z", 
+  "msg": [
+   "Return the correct error status in case of fatal SSL failure, even when", 
+   "calls to ssl_encrypt or ssl_decrypt are repeated after the failure error", 
+   "occured.", 
+   "This happens in context.c/handle_response, where serf ignores the status", 
+   "of the authn handler to pass the same data to the application's response", 
+   "handler.", 
+   "* buckets/ssl_buckets.c", 
+   "(struct serf_ssl_context_t): Add fatal_err field.", 
+   "(ssl_init_context): Init fatal_err.", 
+   "(ssl_decrypt, ssl_encrypt): quickly return with error if fatal error", 
+   "has occurred, set it when needed."
+  ], 
+  "revision_id": "1699167"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-08-23T07:39:28.328181Z", 
+  "msg": [
+   "Follow up r1628 with better error detection.", 
+   "* buckets/ssl_buckets.c:", 
+   "(ssl_decrypt): Close the connection if a clean shutdown was initiated by the", 
+   "server. Otherwise return error."
+  ], 
+  "revision_id": "1699166"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-08-20T10:41:49.112075Z", 
+  "msg": [
+   "Fix https onnection abort issue when using https. This should fix", 
+   "Subversion issue 4174:", 
+   "http://subversion.tigris.org/issues/show_bug.cgi?id=4174", 
+   "When the server sends us a \"close notify\" SSL Alert indicating that it's", 
+   "going to close the socket, we have to stop sending on that socket immediately.", 
+   "Failing to do so will make the server reset the connection, which can result", 
+   "in an ECONNABORTED error upon next read or write. This seems to happen esp.", 
+   "on Windows.", 
+   "* buckets/ssl_buckets.c", 
+   "(ssl_decrypt): when SSL_read returns ok but with length 0, a \"close notify\"", 
+   "alert was received. Return APR_EOF to let upstream know that we're done", 
+   "with this socket.", 
+   "* outgoing.c", 
+   "(read_from_connection): Add comment to note that SSL alert's are also an", 
+   "example of unexpected incoming data."
+  ], 
+  "revision_id": "1699165"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2012-08-19T11:04:43.224883Z", 
+  "msg": [
+   "SSL_VERBOSE: Log incoming SSL alerts. Code copied from example at:", 
+   "http://www.openssl.org/docs/ssl/SSL_CTX_set_info_callback.html .", 
+   "* ssl_buckets.c", 
+   "(apps_ssl_info_callback): New function.", 
+   "(ssl_init_context): Set the new function as callback for SSL alert messages."
+  ], 
+  "revision_id": "1699164"
+ }
+]

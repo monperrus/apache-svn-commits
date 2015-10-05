@@ -1,0 +1,79 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2014-07-03T22:08:54.950253Z", 
+  "msg": [
+   "Implement first part of OCSP stapling support. When the feature is activated", 
+   "by the application, serf will ask the HTTPS server to validate the server", 
+   "certificate with the CA and include its response with that certificate.", 
+   "This is a cleaned up portion of Justin's patch on @serf-dev. The remainder will", 
+   "be added when the test suite grows full OCSP responder functionality.", 
+   "* buckets/ssl_buckets.c", 
+   "(ocsp_callback): New function.", 
+   "(serf_ssl_check_cert_status_request): New function, enables OCSP stapling.", 
+   "* serf_bucket_types.h", 
+   "(SERF_SSL_CERT_*): Rewrite values in hex.", 
+   "(SERF_SSL_OCSP_RESPONDER_): New error codes.", 
+   "(serf_ssl_need_server_cert_t): Add comment, this callback will take a NULL", 
+   "*cert argument in case of a OCSP response.", 
+   "* test/test_context.c", 
+   "(ocsp_response_cb_expect_failures,", 
+   "test_ssl_ocsp_response_error_and_override): New test.", 
+   "(test_context): Run the new test.", 
+   "* test/test_serf.h", 
+   "(struct test_baton_t): Add enable_ocsp_stapling flag.", 
+   "(TEST_RESULT_OCSP_CHECK_SUCCESSFUL): New test result flag.", 
+   "* test/test_util.c", 
+   "(default_https_conn_setup): Enable ocsp stapling when its flag is set.", 
+   "* test/MockHTTPinC/*: update to latest version, implements partial OCSP support."
+  ], 
+  "revision_id": "1699918"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-28T19:41:51.048717Z", 
+  "msg": [
+   "Update the MockHTTP test framework to v0.1.0, fix some tests in response to the", 
+   "changed API.", 
+   "* test/test_context.c", 
+   "(test_request_timeout,", 
+   "test_connection_large_response,", 
+   "test_ssl_large_response,", 
+   "test_connect_to_non_http_server): WithRawData now requires a size parameter.", 
+   "* test/MockHTTPinC/*: update to v0.1.0."
+  ], 
+  "revision_id": "1699917"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-28T09:10:04.740374Z", 
+  "msg": [
+   "Fix memory leaks in the SPNEGO authn scheme implementation using GSSAPI.", 
+   "* auth/auth_spnego_gss.c", 
+   "(log_error): Release status text buffer.", 
+   "(serf__spnego_init_sec_context): Release hostname buffer."
+  ], 
+  "revision_id": "1699916"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-22T19:35:40.904859Z", 
+  "msg": [
+   "* serf.h: Comment out the serf 2.0 connection API."
+  ], 
+  "revision_id": "1699915"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2014-06-16T17:26:07.504589Z", 
+  "msg": [
+   "Fix problems with NTLM authentication when accessing local server", 
+   "using alias hostname on Windows due strict loopback checks [1]", 
+   "[1] http://support.microsoft.com/kb/896861/en-us", 
+   "* auth/auth_spnego_sspi.c", 
+   "(get_canonical_host): Try use reverse DNS to resolve canonical name for", 
+   "SPN. Most GSSAPI implementation already doing the same on other platforms."
+  ], 
+  "revision_id": "1699914"
+ }
+]

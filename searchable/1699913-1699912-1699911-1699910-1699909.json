@@ -1,0 +1,91 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2014-06-16T16:44:27.192615Z", 
+  "msg": [
+   "Follow-up to r2376: Fix Windows build.", 
+   "* buckets/iovec_buckets.c", 
+   "(serf_bucket_iovec_create): Add cast to char pointer since void pointer", 
+   "has unknown size."
+  ], 
+  "revision_id": "1699913"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-15T15:29:33.059751Z", 
+  "msg": [
+   "When the application sends many pipelined requests faster than the server", 
+   "can respond, the connection will build up a queue of written but unanswered", 
+   "requests. On each call to request_or_data_pending(), serf will iterate over", 
+   "that queue, resulting in quite a bottleneck.", 
+   "This change introduces a separate linked list to keep the written requests, so", 
+   "that serf has access to the first unwritten request directly.", 
+   "* serf_private.h", 
+   "(struct serf_connection_t): Split requests and requests_tail in", 
+   "written_reqs, written_reqs_tail and unwritten_reqs, unwritten_reqs_tail.", 
+   "* outgoing.c", 
+   "(request_or_data_pending): Don't iterator over requests, use the unwritten", 
+   "queue directly.", 
+   "(serf__conn_update_pollset): Poll for READ event if either written or", 
+   "unwritten request is pending. (Note: this might be a good occassion to", 
+   "fix the long-standing TODO.)", 
+   "(serf__open_connections): Update renamed conn->requests.", 
+   "(reset_connection): Reimplement to handle both written and unwritten queue.", 
+   "(write_to_connection): When a request is completely written, move it from", 
+   "the unwritten to the written queue. Update renamed conn->requests.", 
+   "(serf__provide_credentials): Update the ssltunnel hack to find the first", 
+   "application request.", 
+   "(read_from_connection): Find request for which a response is arriving on the", 
+   "written or unwritten queue (resp. complete or partially sent request).", 
+   "In line with the change to serf__conn_update_pollset, update the pollset", 
+   "only f either written or unwritten request is pending.", 
+   "(serf_connection_request_create): Append the request to the unwritten queue.", 
+   "(priority_request_create): Prepend the request to the unwritten queue.", 
+   "(serf_request_cancel): Find the request on either unwritten or written queue", 
+   "to remove it from the right queue."
+  ], 
+  "revision_id": "1699912"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-15T10:49:46.054668Z", 
+  "msg": [
+   "Follow up 2378 with a better comment.", 
+   "* outgoing.c", 
+   "(read_from_connection): Improve comment."
+  ], 
+  "revision_id": "1699911"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-15T10:37:46.303558Z", 
+  "msg": [
+   "Drastically reduce the amount of pollset_add/pollset_remove calls when the", 
+   "application keeps the outgoing queue filled with requests.", 
+   "* outgoing.c", 
+   "(read_from_connection): No need to update the pollset after a received", 
+   "response, when there's more responses expected (aka requests pending)."
+  ], 
+  "revision_id": "1699910"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2014-06-14T15:51:06.379039Z", 
+  "msg": [
+   "Optimize creation and use of a barrier_bucket.", 
+   "* buckets/barrier_buckets.c", 
+   "(struct barrier_context_t): This structure with only one pointer is not", 
+   "needed, we can store the pointer value directly in the data member", 
+   "of serf_bucket_t.", 
+   "(serf_bucket_barrier_create,", 
+   "serf_barrier_read,", 
+   "serf_barrier_read_iovec,", 
+   "serf_barrier_readline,", 
+   "serf_barrier_peek,", 
+   "serf_barrier_destroy,", 
+   "serf_barrier_get_remaining,", 
+   "serf_barrier_set_config): Update to not use barrier_context_t."
+  ], 
+  "revision_id": "1699909"
+ }
+]

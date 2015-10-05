@@ -1,0 +1,74 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2010-01-05T22:20:17.732493Z", 
+  "msg": [
+   "Don't build the Kerberos code if GSSAPI isn't available.", 
+   "Note: the configuration needed to load the GSSPI libraries isn't committed yet,", 
+   "so this basically #if 0's the Kerberos code.", 
+   "* auth/auth.h", 
+   "* auth/auth.c", 
+   "* auth/auth_kerb.c: Wrap the Kerberos authn code with #ifdef SERF_HAVE_GSSAPI."
+  ], 
+  "revision_id": "1698843"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-01-05T22:04:41.841354Z", 
+  "msg": [
+   "Add Kerberos authantication handler using Negotiate message exchange. The", 
+   "implementation uses GSSAPI so it'll only work on *nix platforms.", 
+   "* auth/auth.h", 
+   "(serf__init_kerb, serf__init_kerb_connection,", 
+   "serf__handle_kerb_auth, serf__setup_request_kerb_auth,", 
+   "serf__validate_response_kerb_auth): New function declarations.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Enable Kerberos authentication.", 
+   "* auth/auth_kerb.c: New file, implementing Kerberos authentication.", 
+   "* serf.h: Add error code for authentication initialization failures.", 
+   "* serf.mak:", 
+   "* serfmake:", 
+   "* Makefile.in: add auth/auth_kerb."
+  ], 
+  "revision_id": "1698842"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-01-05T21:42:39.886828Z", 
+  "msg": [
+   "Cleanup only, no functional change.", 
+   "* buckets/headers_buckets.c", 
+   "(serf_bucket_headers_get): Init value to avoid build warning; replace tabs", 
+   "with spaces."
+  ], 
+  "revision_id": "1698841"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-01-05T20:54:55.660318Z", 
+  "msg": [
+   "Avoid segfault when resetting a connection due to (authentication) error.", 
+   "* context.c", 
+   "(serf_event_trigger): If the connection was reset due to an error, the", 
+   "socket is already removed from the pollset and cleared so do not try", 
+   "to do that again here.", 
+   "TODO: use remove_connection from outgoing.c."
+  ], 
+  "revision_id": "1698840"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-01-02T21:08:46.462747Z", 
+  "msg": [
+   "Enable Digest and Basic authentication to proxy servers.", 
+   "* auth/auth_digest.c:", 
+   "(global): Fix RFC number in comment.", 
+   "(serf__setup_request_digest_auth,", 
+   "serf__validate_response_digest_auth): Set correct header when talking to a", 
+   "proxy server.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Enable Basic and Digest proxy authn handlers."
+  ], 
+  "revision_id": "1698839"
+ }
+]

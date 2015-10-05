@@ -1,0 +1,110 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-07-01T12:14:31.777203Z", 
+  "msg": [
+   "Improve RFC 2617 compliance, authentication scheme matching should be case", 
+   "insensitive.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Add lower case scheme name to all authn handlers.", 
+   "(handle_auth_headers): Use the all lower case key to match the authn scheme.", 
+   "(store_header_in_dict): Convert the scheme name from the request headers", 
+   "to lower case before storing in the dictionary.", 
+   "* serf_private.h", 
+   "(struct serf__authn_scheme_t): Fix incorrect comment. Add key variable, which", 
+   "should be the scheme name in lower case. This will be used to matching", 
+   "scheme names of incoming responses.", 
+   "* test/test_auth.c", 
+   "(test_basic_authentication): Modify scheme name in the response header to", 
+   "use a special case."
+  ], 
+  "revision_id": "1699508"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-01T10:32:07.185574Z", 
+  "msg": [
+   "Pass the correct realm to the client credentials callback when fetching", 
+   "resources from multiple realms on the same connection.", 
+   "* auth/auth_basic.c", 
+   "(serf__handle_basic_auth): Always read the realm from the 401/407 response,", 
+   "don't cache it on the serf context. Now passes the correct realm to the", 
+   "creds callback.", 
+   "* auth/auth_digest.c", 
+   "(serf__handle_digest_auth): Don't cache the realm on the serf context.", 
+   "* serf_private.h", 
+   "(struct serf__authn_info_t): Remove the now obsolete realm member.", 
+   "* test/test_auth.c", 
+   "(test_authentication_disabled,", 
+   "test_unsupported_authentication): Remove unneeded variable definitions.", 
+   "(switched_realm_authn_callback,", 
+   "authentication_switch_realms,", 
+   "test_basic_switch_realms,", 
+   "test_digest_switch_realms): New helper functions and two new tests.", 
+   "(test_auth): Run the new tests."
+  ], 
+  "revision_id": "1699507"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-07-01T08:11:36.361656Z", 
+  "msg": [
+   "Combine the www and proxy authentication scheme handlers per type. This removes", 
+   "some unneeded definitions and has a (negligible) positive performance impact.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Remove code from all scheme definitions, then remove", 
+   "the duplicates.", 
+   "(handle_auth_headers): No more checking for 401 or 407, scheme handlers", 
+   "support both.", 
+   "* serf_private.h", 
+   "(struct serf__authn_scheme_t): Remove code member.", 
+   "* test/test_auth.c", 
+   "(authn_callback_expect_not_called,", 
+   "test_authentication_disabled,", 
+   "test_unsupported_authentication): New helper function and tests.", 
+   "(test_auth): Run the new tests."
+  ], 
+  "revision_id": "1699506"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-06-30T19:38:17.714077Z", 
+  "msg": [
+   "Improved RFC 2617 compliance: use the strongest available authn scheme first,", 
+   "instead of using the order of the xxxx-Authenticate headers in the response.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Reorder to Negotiate, NTLM, Digest, Basic.", 
+   "(struct auth_baton_t): This baton is now only used to store headers in a", 
+   "hashtable, remove all unneeded fields.", 
+   "(handle_auth_header): Rename to ...", 
+   "(handle_auth_headers): ... this. This function now checks the available authn", 
+   "schemes in order of their definition. For each defined scheme it checks", 
+   "if the servers provided a xxxx-Authenticate header. If yes use that. In", 
+   "case of authn failure fall back to the next scheme.", 
+   "(store_header_in_dict): New function, add a xxxx-Authenticate header to the", 
+   "hashtable.", 
+   "(dispatch_auth): Store all xxxx-Authenticate headers and their attributes in", 
+   "a hashtable.", 
+   "* test/test_context.c", 
+   "(test_ssltunnel_digest_auth): Add a Basic and NonExistent authn header to", 
+   "test that Digest is tried first."
+  ], 
+  "revision_id": "1699505"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2013-06-30T06:52:23.213392Z", 
+  "msg": [
+   "We should never read more from the wrapped bucket than requested;", 
+   "thus, we should never need to hold leftovers. Remove the iovec stuff", 
+   "to hold unread data.", 
+   "* buckets/copy_buckets.c:", 
+   "(struct copy_context_t): remove VECS and VECS_COUNT", 
+   "(serf_bucket_copy_create): skip init of VECS_COUNT", 
+   "(serf_copy_read, serf_copy_readline, serf_copy_read_iovec,", 
+   "serf_copy_read_for_sendfile, serf_copy_read_bucket,", 
+   "serf_copy_peek): remove draft code to deal with VECS(_COUNT)"
+  ], 
+  "revision_id": "1699504"
+ }
+]

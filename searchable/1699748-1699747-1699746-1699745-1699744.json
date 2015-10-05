@@ -1,0 +1,113 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T21:50:31.209404Z", 
+  "msg": [
+   "Give the test suite its own logging implementation, so we refactor the existing", 
+   "one to use the configuration store.", 
+   "* test/server/test_server.h", 
+   "(test__log,", 
+   "test__log_skt): New declarations.", 
+   "* test/test_util.c", 
+   "(log_time,", 
+   "test__log, test__log_skt): New functions.", 
+   "* test/server/test_server.c", 
+   "* test/server/test_sslserver.c", 
+   "* test/test_context.c", 
+   "(*): Rename serf__log[_skt] to test__log[_skt]."
+  ], 
+  "revision_id": "1699748"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T19:41:04.963702Z", 
+  "msg": [
+   "Convert some more serf__log calls to serf__log_cfg to improve logging info", 
+   "(notably the local and remote ip:port).", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_read): Replace serf__log with serf__log_cfg.", 
+   "* outgoing.c", 
+   "(clean_conn,", 
+   "serf__open_connections,", 
+   "serf_connection_create,", 
+   "serf_connection_close): Replace serf__log with serf__log_cfg."
+  ], 
+  "revision_id": "1699747"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T19:17:08.306853Z", 
+  "msg": [
+   "Improve the 'set a config key and copy its string value' API.", 
+   "* config_store.c", 
+   "(serf_config_set_string): Drop copy_flags parameter. Remove the value copy", 
+   "code.", 
+   "(serf_config_set_stringc): New function.", 
+   "(serf_config_set_stringf): Update call to serf_config_set_string.", 
+   "* outgoing.c", 
+   "(serf_connection_create2): Replace calls to serf_config_set_string with", 
+   "calls to serf_config_set_stringc.", 
+   "* serf.h", 
+   "(serf_config_copy_flags_t): Remove now obsolete enum.", 
+   "(serf_config_set_string): Drop copy_flags.", 
+   "(serf_config_set_stringc): New function.", 
+   "* test/test_internal.c", 
+   "(test_config_store_per_context,", 
+   "test_config_store_per_connection_different_host,", 
+   "test_config_store_per_connection_same_host,", 
+   "test_config_store_error_handling): Update calls to", 
+   "serf_config_set_string to drop copy_flags."
+  ], 
+  "revision_id": "1699746"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T13:42:55.788201Z", 
+  "msg": [
+   "Replace serf__log_skt with serf__log_cfg where possible.", 
+   "* auth/auth.c", 
+   "(handle_auth_headers,", 
+   "dispatch_auth): Replace serf__log_skt with serf__log_cfg.", 
+   "* auth/auth_spnego.c", 
+   "(do_auth,", 
+   "serf__init_spnego_connection,", 
+   "serf__setup_request_spnego_auth,", 
+   "serf__validate_response_spnego_auth): Here too.", 
+   "* auth/auth_spnego_sspi.c", 
+   "(serf__spnego_init_sec_context): Here too.", 
+   "* ssltunnel.c", 
+   "(handle_response, serf__ssltunnel_connect): Here too.", 
+   "* auth/auth_spnego_gss.c", 
+   "(log_error): Take serf_config_t * instead of apr_socket_t *. Replace", 
+   "serf__log_skt with serf__log_cfg.", 
+   "(serf__spnego_init_sec_context): Update log_error call."
+  ], 
+  "revision_id": "1699745"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2013-10-15T12:54:39.903116Z", 
+  "msg": [
+   "Rename config[_store] functions to match serf function naming conventions.", 
+   "* serf.h", 
+   "(serf_set_config_string): Rename to serf_config_set_string.", 
+   "(serf_set_config_stringf): Rename to serf_config_set_stringf.", 
+   "(serf_set_config_object): Rename to serf_config_set_object.", 
+   "(serf_get_config_string): Rename to serf_config_get_string.", 
+   "(serf_remove_config_value): Rename to serf_config_remove_value.", 
+   "* serf_private.h", 
+   "(serf__init_config_store): Rename to serf__config_store_init.", 
+   "(serf_get_config_from_store): Rename to serf__config_store_get_config.", 
+   "(serf__remove_connection_from_config_store): Rename to", 
+   "serf__config_store_remove_connection.", 
+   "(serf__remove_host_from_config_store): Rename to serf__config_store_remove_host.", 
+   "* buckets/buckets.c", 
+   "* config_store.c", 
+   "* context.c", 
+   "* outgoing.c", 
+   "* test/test_internal.c", 
+   "(*): Rename functions."
+  ], 
+  "revision_id": "1699744"
+ }
+]

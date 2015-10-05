@@ -1,0 +1,66 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2008-12-18T09:34:42.916565Z", 
+  "msg": [
+   "Fix conn close segfault by explicitly closing conn when pool is destroyed.", 
+   "The segfault is accessing conn->stream in serf_connection_close() after the", 
+   "connection's allocator is already destroyed and invalidates all pointers.", 
+   "Oops.  We even had a #### there.", 
+   "* context.c", 
+   "(clean_conn): New function to force proper closure of connection.", 
+   "(serf_connection_create): Register cleanup.", 
+   "* CHANGES: Update."
+  ], 
+  "revision_id": "1698743"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2008-12-18T09:30:23.557827Z", 
+  "msg": [
+   "Fix minor type issue in Content-Length parsing.", 
+   "* buckets/response_buckets.c", 
+   "(run_machine): Set length to apr_uint64_t."
+  ], 
+  "revision_id": "1698742"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2008-12-16T20:46:28.745081Z", 
+  "msg": [
+   "Fix segmentation fault that can occur when reading from a response bucket", 
+   "wrapping a socket bucket (indirectly through a barrier).", 
+   "When all data is read from a socket bucket, an extra read might be needed", 
+   "to get EOF returned. Test for this situation to avoid working on a buffer", 
+   "of length 0.", 
+   "Found by: Arfrever Frehtes Taifersar Arahesis", 
+   "* buckets/buckets.c", 
+   "(serf_linebuf_fetch): check for EOF and length 0 when reading from the", 
+   "data stream, return (early) if found."
+  ], 
+  "revision_id": "1698741"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2008-11-14T17:10:48.161715Z", 
+  "msg": [
+   "Expose the depth of the SSL certificate so the validator can use that info.", 
+   "* serf_bucket_types.h", 
+   "(serf_ssl_cert_depth): Add helper function to expose depth of the cert.", 
+   "* buckets/ssl_buckets.c", 
+   "(serf_ssl_certificate_t): Store depth.", 
+   "(validate_server_certificate): Stash depth away for later use.", 
+   "(serf_ssl_cert_depth): Implement.", 
+   "* CHANGES: Update."
+  ], 
+  "revision_id": "1698740"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "2008-10-12T19:44:16.154052Z", 
+  "msg": [
+   "remove old email addresses"
+  ], 
+  "revision_id": "1698739"
+ }
+]

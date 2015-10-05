@@ -1,0 +1,102 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-09T01:05:05.131994Z", 
+  "msg": [
+   "Get 'Content-Encoding: gzip' to work correctly with test case.", 
+   "Move C-L limit from the response_bucket into a new bucket to simplify matters.", 
+   "* test/serf_get.c", 
+   "(main): Indicate acceptance of 'gzip' encoded responses.", 
+   "* buckets/response_buckets.c: Instead of a specific 'dechunk' or 'raw'", 
+   "bucket for body, use a generic 'body' stream that may be wrapped accordingly.", 
+   "Adding a third case for 'deflate' body that might be either chunked or raw", 
+   "makes little sense.", 
+   "(run_machine, STATE_HEADERS): Create a limit bucket if in the C-L case", 
+   "instead; create a dechunk bucket if T-E: chunked; set the body to be the", 
+   "raw stream, but note the problem we'll have on exit(); if we have C-E: gzip,", 
+   "add in the deflate wrapper bucket.", 
+   "(serf_bucket_read): Remove all code about body length as the underlying", 
+   "bucket needs to know this.", 
+   "* buckets/limit_buckets.c: New bucket based off simple bucket that returns", 
+   "an EOF at a certain point in the wrapped stream's output.", 
+   "* buckets/deflate_buckets.c", 
+   "(serf_deflate_destroy_and_data): Destroy our inner stream too; this is", 
+   "necessary as this might be an aggregate bucket and we wouldn't cleanup.", 
+   "(serf_deflate_read): Use 'private_data'/'private_len' to avoid trouncing", 
+   "on the values intended for our caller; correct STATE_VERIFY buffer location;", 
+   "when we receive EOF from zlib in STATE_INFLATE, place the remaining bytes", 
+   "in avail_in ptr in a aggregate bucket with our 'real' stream appended.", 
+   "* buckets/aggregate_buckets.c", 
+   "(serf_aggregate_read): If at the end of the list, return EOF in one shot.", 
+   "* serf_bucket_types.h: Add standard declarations for the limit bucket.", 
+   "* Makefile: Add limit buckets; Add in deflate test case and print out test", 
+   "case names.", 
+   "Two small unrelated changes...", 
+   "* serf (svn:ignore): Ignore .gdb_history", 
+   "* test (svn:ignore): Ignore serf_request and serf_response"
+  ], 
+  "revision_id": "1698498"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-08T19:34:41.449521Z", 
+  "msg": [
+   "First cut at adding deflate buckets.  Compiles, but completely untested.", 
+   "* buckets/deflate_buckets.c: First cut at a bucket that handles deflate'd data.", 
+   "* serf_bucket_types.h: Add standard declarations for the deflate bucket.", 
+   "* Makefile: Compile deflate_buckets and also link against -lz for now."
+  ], 
+  "revision_id": "1698497"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-07T19:55:24.301986Z", 
+  "msg": [
+   "Revert the bogus parts of r195.  serf_response has been tweaked not to use", 
+   "this code anyway.", 
+   "The relevant parts of r195's log that are being removed are:", 
+   "* context.c:", 
+   "(serf_connection_t): add write function and write_baton.", 
+   "(update_pollset): *close eyes* in order to get this to work right now.", 
+   "(open_connections): Just call update_pollset if we have a write_baton;", 
+   "intialize the socket to the write_baton.", 
+   "(write_to_connection): Call the write function instead.", 
+   "(read_from_connection): Pass the write_baton to acceptor instead of skt.", 
+   "(remove_pollset): *close eyes* in order to get this to work right now.", 
+   "(serf_connection_create): Init write func to apr_socket_send.", 
+   "(serf_connection_ex): New function that takes a write func and write baton.", 
+   "* serf.h:", 
+   "(serf_response_acceptor_t): Send a generic write_baton not a socket.", 
+   "(serf_connection_write_t): New function type to act as write prototype.", 
+   "(serf_connection_create_ex): New function that takes a write func and baton"
+  ], 
+  "revision_id": "1698496"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-07T19:52:13.118939Z", 
+  "msg": [
+   "Rename serf_file to serf_response.", 
+   "* test/serf_file.c: Renamed...", 
+   "* test/serf_response: to this.", 
+   "* Makefile: Update to match rename."
+  ], 
+  "revision_id": "1698495"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2004-09-07T19:49:57.562162Z", 
+  "msg": [
+   "Revamp serf_file.c to not use the serf_connection/serf_request code.  Fix bugs", 
+   "in dechunking.", 
+   "* test/serf_file.c: Rewrite to remove dependency upon serf_connection_t,", 
+   "serf_request_t, serf_deliver and friends.", 
+   "* test/testcases/chunked.response: Actually make it conformant to HTTP/1.1 RFC.", 
+   "* buckets/response_buckets.c (serf_response_read): Mask dechunk's EOF with", 
+   "SUCCESS as we need to read the trailers.", 
+   "* buckets/dechunk_buckets.c (serf_dechunk_read): Set *len to 0 when we", 
+   "exit out without reading a body chunk."
+  ], 
+  "revision_id": "1698494"
+ }
+]

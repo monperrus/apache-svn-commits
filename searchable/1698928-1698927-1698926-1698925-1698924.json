@@ -1,0 +1,67 @@
+[
+ {
+  "author": "lgo", 
+  "date": "2010-05-26T22:34:53.144110Z", 
+  "msg": [
+   "* CHANGES: Add line about test framework fix."
+  ], 
+  "revision_id": "1698928"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-05-26T22:33:04.189179Z", 
+  "msg": [
+   "Merge r1386,r1388 and r1389 from trunk."
+  ], 
+  "revision_id": "1698927"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-05-26T22:25:19.080538Z", 
+  "msg": [
+   "* CHANGES: Add 0.6.2 and line about the 'double free abort' fix."
+  ], 
+  "revision_id": "1698926"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-05-26T22:19:36.877123Z", 
+  "msg": [
+   "Fix a lifetime issue where request buckets were potentially destroyed in", 
+   "two places, once when the request itself was cancelled and once when the", 
+   "aggregate bucket holding the request's body bucket was cleaned up.", 
+   "The fix is to introduce a new variant of the aggregate bucket, that doesn't", 
+   "own its child buckets so it never destroys them.", 
+   "The issue was typically encountered on Windows.", 
+   "* serf_bucket_types.h", 
+   "(serf_bucket_aggregate_eof_t): Moved.", 
+   "(serf__bucket_stream_create): New function declaration, creates an aggregate", 
+   "bucket variant.", 
+   "* buckets/aggregate_buckets.c", 
+   "(aggregate_contex_t): Add bucket_owner member.", 
+   "(cleanup_aggregate): If this is a stream bucket, don't kill the read child", 
+   "buckets.", 
+   "(serf__bucket_stream_create): Creates an aggregate bucket of type", 
+   "'stream bucket'.", 
+   "(create_aggreggate): An aggregate bucket owns its children.", 
+   "(serf_aggregate_destroy_and_data): Don't destroy the child bucket if we're", 
+   "not the owner (not a stream bucket).", 
+   "* outgoing.c", 
+   "(destroy_request): Align with request destruction code in cancel_request.", 
+   "(cancel_request): Make cancel_request use destroy_request to reduce code", 
+   "duplication. Don't cleanup the aggregate bucket here, we're using a", 
+   "stream now.", 
+   "(do_conn_setup): Use the stream bucket instead of aggregate bucket."
+  ], 
+  "revision_id": "1698925"
+ }, 
+ {
+  "author": "lgo", 
+  "date": "2010-05-26T21:53:28.113251Z", 
+  "msg": [
+   "* Makefile.in:", 
+   "(HEADERS): Remove serf_declare.h here too."
+  ], 
+  "revision_id": "1698924"
+ }
+]

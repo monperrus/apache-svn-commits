@@ -1,0 +1,117 @@
+[
+ {
+  "author": "ivan", 
+  "date": "2010-02-22T17:36:00.224592Z", 
+  "msg": [
+   "Reintegrate the 'windows-sspi' branch into trunk."
+  ], 
+  "revision_id": "1698878"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2010-02-22T17:29:55.687567Z", 
+  "msg": [
+   "* Makefile.in", 
+   "(OBJECTS): Add 'auth/auth_kerb_gss.lo'."
+  ], 
+  "revision_id": "1698877"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2010-02-22T17:24:52.863359Z", 
+  "msg": [
+   "On windows-sspi branch: Allocate SSPI/GSSAPI security context in pool and", 
+   "free them it automatically on pool cleanup.", 
+   "* auth/auth_kerb.h", 
+   "(SERF__KERB_NO_CONTEXT): Removed.", 
+   "(serf__kerb_create_sec_context): New function declaration. Creates", 
+   "empty security context in pool and delete it on pool cleanup.", 
+   "(serf__kerb_init_sec_context): Add RESULT_POOL parameter to allocate", 
+   "output buffers.", 
+   "* auth/auth_kerb_gss.c", 
+   "(): Remove stdlib.h include.", 
+   "(cleanup_ctx): New. Deletes GSS security context on pool cleanup.", 
+   "(cleanup_sec_buffer): New. Releases GSS buffer on pool cleanup.", 
+   "(serf__kerb_create_sec_context): New.", 
+   "(serf__kerb_init_sec_context): Add RESULT_POOL parameter. Do not", 
+   "create security context on demand. Register pool cleanup handler to", 
+   "release GSS output buffer.", 
+   "(serf__kerb_delete_sec_context, serf__kerb_release_buffer): Removed.", 
+   "* auth/auth_kerb_sspi.c", 
+   "(cleanup_ctx): New. Deletes SSPI security context on pool cleanup.", 
+   "(cleanup_sec_buffer): New. Releases SSPI buffer on pool cleanup.", 
+   "(serf__kerb_create_sec_context): New. Allocate security context structure,", 
+   "acquire credentials from SSPI and register pool cleanup handler to delete", 
+   "security context.", 
+   "(serf__kerb_init_sec_context): Add RESULT_POOL parameter. Do not", 
+   "create security context on demand. Register pool cleanup handler to", 
+   "release SSPI output buffer.", 
+   "(serf__kerb_delete_sec_context, serf__kerb_release_buffer): Removed.", 
+   "* auth/auth_kerb.c", 
+   "(gss_api_get_credentials): Use serf__kerb_init_sec_context's ability to", 
+   "allocate output token in specified pool.", 
+   "(cleanup_gss_info): Removed.", 
+   "(serf__init_kerb_connection): Use serf__kerb_create_sec_context to create", 
+   "initial security context. Do not register pool cleanup handler since", 
+   "serf__kerb_create_sec_context already done it."
+  ], 
+  "revision_id": "1698876"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2010-02-21T09:34:24.168355Z", 
+  "msg": [
+   "Follow-up to r1337: Fix compilation of auth/auth_kerb_gss.c on *nix.", 
+   "* auth/auth_kerb_gss.c", 
+   "(): Include gssapi.h and stdlib.h for malloc.", 
+   "(serf__spnego_context_t): Rename to serf__kerb_context_t.", 
+   "(serf__spnego_init_sec_context): Rename to serf__kerb_init_sec_context.", 
+   "(serf__kerb_init_sec_context): Remove unused variable and fix types ctx_p,", 
+   "input_buf and output_buf parameters.", 
+   "(serf__kerb_release_buffer, serf__kerb_delete_sec_context): Fix parameter", 
+   "type.", 
+   "* serfmake", 
+   "(LIB_FILES): Add auth/auth_kerb_gss.c to compilation list."
+  ], 
+  "revision_id": "1698875"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2010-02-20T15:57:24.332290Z", 
+  "msg": [
+   "On windows-sspi branch: Factor out platform depended code from auth_kerb.c", 
+   "to serf__kerb_* functions and implement them using GSSAPI and SSPI.", 
+   "* auth/auth.c", 
+   "(serf_authn_schemes): Drop separate SSPI authentication. Use auth_kerb if", 
+   "SERF_HAVE_KERB is defined.", 
+   "* auth/auth.h", 
+   "(): Include auth_kerb.h", 
+   "(serf__init_kerb, serf__init_kerb_connection,", 
+   "serf__handle_kerb_auth,  serf__setup_request_kerb_auth,", 
+   "serf__validate_response_kerb_auth): Wrap within SERF_HAVE_KERB macro.", 
+   "(serf__init_sspi, serf__init_sspi_connection,", 
+   "serf__handle_sspi_auth, serf__setup_request_sspi,", 
+   "serf__validate_response_sspi_auth): Removed.", 
+   "* auth/auth_kerb.c", 
+   "(): Include auth_kerb.h. Replaced SERF_HAVE_GSSAPI to SERF_HAVE_KERB.", 
+   "(gss_authn_info): Hold pointer to serf__kerb_context_t, instead of", 
+   "gss_ctx_id_t directly. Removed mech member.", 
+   "(create_gss_api_error): Removed, will be implemented in platform", 
+   "specific layer.", 
+   "(gss_api_get_credentials, cleanup_gss_info,", 
+   "serf__init_kerb_connection): Use new serf__kerb_* layer instead of", 
+   "calling GSSAPI directly.", 
+   "* auth/auth_kerb.h", 
+   "(): New. Declaration of internal serf__kerb_* layer.", 
+   "* auth/auth_kerb_gss.c", 
+   "(): New. Implements serf__kerb_* functions using GSSAPI if available.", 
+   "* auth/auth_kerb_sspi.c", 
+   "(): New. Implements serf__kerb_* functions using SSPI if available.", 
+   "* auth/auth_sspi.c", 
+   "(): Removed.", 
+   "* serf.mak", 
+   "(LIB32_OBJS): Add auth_kerb_gss.c and auth_kerb_sspi.c to compile list."
+  ], 
+  "revision_id": "1698874"
+ }
+]
