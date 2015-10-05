@@ -1,0 +1,64 @@
+[
+ {
+  "author": "benh", 
+  "date": "2013-03-16T00:21:21.015202Z", 
+  "msg": [
+   "Fixed a bug where we didn't expect a future to get discarded. We saw", 
+   "this in tests likely because the ordering of process termination was", 
+   "causing the isolation module to get cleaned up before the", 
+   "monitor. Rather than try and always make sure the isolation module is", 
+   "cleaned up _after_ the monitor we simply log the message (similar to", 
+   "if there was an actual error).", 
+   "Review: https://reviews.apache.org/r/9975"
+  ], 
+  "revision_id": "1457178"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2013-03-16T00:21:19.358536Z", 
+  "msg": [
+   "Fixed a bug where a filter specified via --gtest_filter (or", 
+   "GTEST_FILTER) was not properly included in the filter we construct", 
+   "based on the environment.", 
+   "Review: https://reviews.apache.org/r/9973"
+  ], 
+  "revision_id": "1457177"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2013-03-16T00:21:17.779467Z", 
+  "msg": [
+   "Changed a ZooKeeper master detector test to be more permissive to", 
+   "avoid test failures.", 
+   "Review: https://reviews.apache.org/r/9968"
+  ], 
+  "revision_id": "1457176"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2013-03-16T00:21:16.196290Z", 
+  "msg": [
+   "Removed filter in test event listener instead of in destructor.", 
+   "Review: https://reviews.apache.org/r/9967"
+  ], 
+  "revision_id": "1457175"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2013-03-16T00:21:14.523500Z", 
+  "msg": [
+   "Changed cleanup of processes to ensure arbitrary code outside of", 
+   "libprocess does not get executed when holding the ProcessManager's", 
+   "processes lock. In particular:", 
+   "* ProcessManager::cleanup now deletes events before grabbing the", 
+   "prcesses lock (since deleting an event may cause arbitrary", 
+   "destructors to get invoked).", 
+   "* Moved filtering from event enqueue to event dequeue (since", 
+   "ProcessManager::cleanup holds the processes lock when it invokes", 
+   "SocketManager::exited which may enqueue exited events on", 
+   "processes).", 
+   "Review: https://reviews.apache.org/r/9966"
+  ], 
+  "revision_id": "1457174"
+ }
+]

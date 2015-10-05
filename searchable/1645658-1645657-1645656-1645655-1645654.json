@@ -1,0 +1,99 @@
+[
+ {
+  "author": "bdelacretaz", 
+  "date": "2014-12-15T13:40:28.650674Z", 
+  "msg": [
+   "Refer to current snapshots"
+  ], 
+  "revision_id": "1645658"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-15T13:37:52.218531Z", 
+  "msg": [
+   "On the fsx-id branch:  Replace instances of svn_fs_x__dag_get_id", 
+   "with one of the new ID getters on the DAG node.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(make_path_mutable): Directly ask for the noderev ID.", 
+   "(svn_fs_x__node_id): Use the new DAG API to return the FS API level IDs.", 
+   "(merge): Simplify using the noderev IDs directly.", 
+   "(copy_helper,", 
+   "stringify_node,", 
+   "verify_node): Switch to using noderev IDs."
+  ], 
+  "revision_id": "1645657"
+ }, 
+ {
+  "author": "fmeschbe", 
+  "date": "2014-12-15T13:35:27.507783Z", 
+  "msg": [
+   "SLING-4241 Improve JS execution performance", 
+   "(apply patch by Radu Cotescu; thanks a lot)"
+  ], 
+  "revision_id": "1645656"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-15T13:31:26.197816Z", 
+  "msg": [
+   "On the fsx-id branch: Begin to isolate our internal ID usage from", 
+   "FS API ID by storing only the noderev ID inside the DAG node.", 
+   "We introduce two new DAG accessor functions, svn_fs_x__dag_get_fs_id", 
+   "and the temporary svn_fs_x__dag_get_noderev_id.  The latter will", 
+   "later be renamed to and replace svn_fs_x__dag_get_id.", 
+   "To be able to update the DAG function implementations, we need two", 
+   "new ID helpers and must switch other internal API functions to the", 
+   "new noderev ID.", 
+   "* subversion/libsvn_fs_x/id.h", 
+   "(svn_fs_x__id_part_reset,", 
+   "svn_fs_x__id_part_used): Declare new internal API functions.", 
+   "* subversion/libsvn_fs_x/id.c", 
+   "(svn_fs_x__id_part_reset,", 
+   "svn_fs_x__id_part_used): Implement.", 
+   "* subversion/libsvn_fs_x/cached_data.h", 
+   "(svn_fs_x__rev_get_root): Switch signature our internal ID type and", 
+   "drop the result pool.  The caller now", 
+   "provides the ID struct.", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(svn_fs_x__rev_get_root): Update Implementation.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(create_new_txn_noderev_from_rev): Switch to our internal ID type.", 
+   "(svn_fs_x__create_txn): Update caller.", 
+   "* subversion/libsvn_fs_x/dag.h", 
+   "(svn_fs_x__dag_get_id): The node parameter is now, temporarily, mutable.", 
+   "This will later be replaced by ...", 
+   "(svn_fs_x__dag_get_noderev_id): ... this new function.", 
+   "(svn_fs_x__dag_get_fs_id): New function.  To be used where we actually", 
+   "want an FS API level ID.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(dag_node_t): Switch members to our internal ID type.", 
+   "(svn_fs_x__dag_get_id): Reimplement to temporary backward compat.", 
+   "Will eventually be replaced by ...", 
+   "(svn_fs_x__dag_get_noderev_id): ... this new code.", 
+   "(get_node_revision): Update and simplify.", 
+   "(svn_fs_x__dag_get_fs_id): Implement new function.", 
+   "(svn_fs_x__dag_check_mutable,", 
+   "svn_fs_x__dag_get_node,", 
+   "svn_fs_x__dag_get_revision,", 
+   "svn_fs_x__dag_set_proplist,", 
+   "svn_fs_x__dag_increment_mergeinfo_count,", 
+   "svn_fs_x__dag_set_has_mergeinfo,", 
+   "svn_fs_x__dag_revision_root,", 
+   "svn_fs_x__dag_clone_child,", 
+   "svn_fs_x__dag_dup): Update struct accessors and API callers.", 
+   "(svn_fs_x__dag_serialize,", 
+   "svn_fs_x__dag_deserialize): Update and simplify.", 
+   "(svn_fs_x__dag_update_ancestry): For now, use the ID provided in", 
+   "the noderev struct."
+  ], 
+  "revision_id": "1645655"
+ }, 
+ {
+  "author": "rombert", 
+  "date": "2014-12-15T13:28:41.509203Z", 
+  "msg": [
+   "downloads: org.apache.sling.adapter 2.1.4"
+  ], 
+  "revision_id": "1645654"
+ }
+]

@@ -1,0 +1,48 @@
+[
+ {
+  "author": "mpetria", 
+  "date": "2014-10-29T16:39:23.250537Z", 
+  "msg": [
+   "SLING-4106: fixing some some session management issues"
+  ], 
+  "revision_id": "1635193"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2014-10-29T16:37:40.938713Z", 
+  "msg": [
+   "Commit for https://issues.apache.org/jira/browse/OFBIZ-5843", 
+   "The storeOrder service, implemented by the OrderService.createOrder() method, synchronously calls the countProductQuantityOrdered service implemented in Minilang. OOTB, the countProductQuantityOrdered service is only called by the storeOrder service implementation. It's called inside a loop on orderItems.", 
+   "While intentionally load testing a custom project with JMeter on a weak m1.small AWS machine, I noticed the overhead of the service call for each order item iteration was significant on this slow machine. With only 30 concurrent users the process was blocked by  a timeout on the countProductQuantityOrdered service.", 
+   "I then decided to transform the minilang code into an OrderService.countProductQuantityOrdered() method that can be directly called inside OrderService.createOrder() and also implements the countProductQuantityOrdered service. Hence it avoids the overhead of the  minilang service calls in loop while still providing a countProductQuantityOrdered service for possible external uses. For that I moved the definition from Product component to Order component to avoid the hard coded dependency of Order to Product. I then did not cross issues with the same load test.", 
+   "I also added a test for the countProductQuantityOrdered service by adding an order item of a virtual product (GZ-1006-1) in SalesOrderTest."
+  ], 
+  "revision_id": "1635192"
+ }, 
+ {
+  "author": "andham", 
+  "date": "2014-10-29T16:33:52.113211Z", 
+  "msg": [
+   "[MSHARED-361] DefaultProjectDependencyAnalyzer.buildArtifactClassMap assumes dependencies are jar files (regression)"
+  ], 
+  "revision_id": "1635191"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2014-10-29T16:18:32.553638Z", 
+  "msg": [
+   "Replace explicit declaration of DefaultResponsibleParty by a @XmlSeeAlso annotation.", 
+   "This allow less surprising behavior for applications that use Apache SIS with their own JAXBContext.", 
+   "Credit: this is a proposal from Guilhem Legal."
+  ], 
+  "revision_id": "1635190"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2014-10-29T16:11:34.628696Z", 
+  "msg": [
+   "Added a test and minor cleaning."
+  ], 
+  "revision_id": "1635189"
+ }
+]

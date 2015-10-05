@@ -1,0 +1,77 @@
+[
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-13T12:16:37.698870Z", 
+  "msg": [
+   "[MPOM-50] configure site staging for multi-modules"
+  ], 
+  "revision_id": "1586968"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2014-04-13T12:05:49.285840Z", 
+  "msg": [
+   "proposals"
+  ], 
+  "revision_id": "1586967"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2014-04-13T12:00:07.241719Z", 
+  "msg": [
+   "https://issues.apache.org/bugzilla/show_bug.cgi?id=49993", 
+   "Add changelog entry for old r1000718", 
+   "That was in 7.0.3"
+  ], 
+  "revision_id": "1586966"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2014-04-13T11:51:06.600892Z", 
+  "msg": [
+   "Sample recipies for build/release"
+  ], 
+  "revision_id": "1586965"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-13T11:48:40.496722Z", 
+  "msg": [
+   "On the thunder branch: Greatly simplify the delay strategy / code.", 
+   "As it turns out, locking and unlocking mutexes as well as broadcasting", 
+   "signals to waiting threads is quite time consuming even for moderate", 
+   "numbers of threads.  Hence, we replace apr_thread_cond_timedwait with", 
+   "a simple sleep.  This has the added benefit of preventing further read", 
+   "conflicts for some time (delayed readers need some time to catch up", 
+   "again with the first one).", 
+   "Moreover, we can do with a single global mutex and can remove the", 
+   "sync objects from access_t entirely.", 
+   "* subversion/libsvn_fs_util/thunder.c", 
+   "(access_t): Remove sync. objects and update documentation.", 
+   "(set_access): No longer needed as a separate, serialized function.", 
+   "Merged into caller.", 
+   "(get_access): Take start time and thread as parameter such that we", 
+   "don't need to retrieve them inside the critical section.", 
+   "Also, use them to return the data from the access_t", 
+   "object atomically such that we don't need to access it", 
+   "outside this serialized function.  Remove obsolete", 
+   "serialization code.", 
+   "(reset_access): Obsolete as we don't manipulate the key anymore outside", 
+   "get_access.", 
+   "remove_access,", 
+   "recycle_access): No longer needed as a separate, serialized function.", 
+   "Merged into caller.", 
+   "(release_access): Remove access_t from \"in progress\" list (if still", 
+   "the same the was reported in the token) and put it", 
+   "into the recycler.  No signals etc. required anymore.", 
+   "(svn_fs__thunder_begin_access): Use get_access as the sole point of", 
+   "access serialization and simply wait", 
+   "until timeout if we weren't the first.", 
+   "Serialize call to release_access as per", 
+   "changed contract.", 
+   "(svn_fs__thunder_end_access): Serialize call to release_access as per", 
+   "changed contract."
+  ], 
+  "revision_id": "1586964"
+ }
+]

@@ -1,0 +1,56 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2012-06-21T16:05:09.535931Z", 
+  "msg": [
+   "QPID-4082: cluster de-sync after broker restart & queue replication", 
+   "Having queue state replication between 2 clusters, restarting a broker in both", 
+   "source+destination clusters sometimes leads to cluster de-sync. No QMF", 
+   "communication is involved, though symptoms are similar to the bug caused by", 
+   "missing propagation of QMF errors within a cluster.", 
+   "The bug is caused by \"deliveryCount\" in SemanticState::ConsumerImpl", 
+   "(qpid/broker/SemanticState.cpp) not being replicated to a joining cluster node", 
+   "during catch-up. When the elder broker in src.cluster sends session.sync() after", 
+   "sending 5 messages (per --ack 5 in qpid-route), the recently joiner node in", 
+   "src.cluster does not do so, what leads to the cluster de-sync.", 
+   "The patch:", 
+   "- adds to \"consumer-state\" method (see xml/cluster.xml file change) to update a new joi-ner a new property deliveryCount", 
+   "- updates cluster::Connection::consumerState to send deliveryCount to the method", 
+   "- updates cluster::Connection::consumerState to set the received deliveryCount", 
+   "- add two methods to broker::SemanticState::ConsumerImpl for getting and setting deliveryCount"
+  ], 
+  "revision_id": "1352588"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2012-06-21T16:03:33.377067Z", 
+  "msg": [
+   "MYFACES-3572 [perf] remember initial state for properties changed in normal JSF lifecycle"
+  ], 
+  "revision_id": "1352587"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2012-06-21T16:03:15.701092Z", 
+  "msg": [
+   "MYFACES-3572 [perf] remember initial state for properties changed in normal JSF lifecycle"
+  ], 
+  "revision_id": "1352586"
+ }, 
+ {
+  "author": "jghoman", 
+  "date": "2012-06-21T16:02:07.599681Z", 
+  "msg": [
+   "GIRAPH-192. Move aggregators to a separate sub-package. Contributed by Jan van der Lugt."
+  ], 
+  "revision_id": "1352585"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2012-06-21T15:56:51.633031Z", 
+  "msg": [
+   "MYFACES-3562 [perf] Optimize UIOutput.saveState(FacesContext)"
+  ], 
+  "revision_id": "1352584"
+ }
+]

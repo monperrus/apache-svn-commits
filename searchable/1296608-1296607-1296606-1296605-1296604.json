@@ -1,0 +1,82 @@
+[
+ {
+  "author": "solomax", 
+  "date": "2012-03-03T11:36:41.720605Z", 
+  "msg": [
+   "library check is fixed"
+  ], 
+  "revision_id": "1296608"
+ }, 
+ {
+  "author": "ferdy", 
+  "date": "2012-03-03T11:35:50.238974Z", 
+  "msg": [
+   "GORA-101 HBaseStore should properly support multiple tables in the mapping file. (part2)"
+  ], 
+  "revision_id": "1296607"
+ }, 
+ {
+  "author": "sebawagner", 
+  "date": "2012-03-03T11:33:51.629372Z", 
+  "msg": [
+   "Move OpenMeetings config XSD generation to Test directory"
+  ], 
+  "revision_id": "1296606"
+ }, 
+ {
+  "author": "sebawagner", 
+  "date": "2012-03-03T11:32:17.786793Z", 
+  "msg": [
+   "Remove OpenLazslo XSD and DTD test generation"
+  ], 
+  "revision_id": "1296605"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-03-03T11:31:17.109017Z", 
+  "msg": [
+   "Certain operations, e.g. svn ls -v, will contain timestamp and author", 
+   "information from many different revisions.  A list of all projects", 
+   "in the root of the wordpress repository will open, read and close", 
+   ">75.000 revision property files (3 reads for each list entry)", 
+   "This commit implements revprop caching.  It will be activated as", 
+   "part of the full-text caching option.", 
+   "Since revprops may be written by other threads or processes, we", 
+   "need to track the revprop changes.  A new special file contains a", 
+   "counter that will be increased each time revision properties get", 
+   "rewritten.", 
+   "This counter is internally called \"revprop generation\" and will be", 
+   "read upon the first revprop access for given fs_t.  Later changes", 
+   "may remain invisible for that fs_t.  This behavior is in line with", 
+   "our revprop handling in other parts of FS_FS.  If a revprop gets", 
+   "rewritten, the fs_t doing the write will use the new generation", 
+   "from that point on and will thus see all caches up to and including", 
+   "its own.", 
+   "Since the revprop generation becomes part of the cache key, each", 
+   "fs_t will only see revprops from its generation.  It may also", 
+   "create new cache entries tagged with that generation, i.e. those", 
+   "would appear to be outdated for newer fs_t.  But that will simply", 
+   "cause a benign false negative upon lookup.  No fs_t will see", 
+   "data that got replaced before that fs_t was created.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_REVPROP_GEN): declare name of new special file", 
+   "(fs_fs_data_t): add member to hold that file's content;", 
+   "add new cache for revprops", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches): initialize revprop cache", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_revprop_generation): path constructor for new special file", 
+   "(check_file_buffer_numeric): new, more generic utility function", 
+   "(check_format_file_buffer_numeric): call the new utility", 
+   "(read_revprop_generation, check_revprop_generation,", 
+   "increment_revprop_generation): new functions to read & write", 
+   "the revprop generation from / to our new special file", 
+   "(set_revision_proplist): if we change existing revprops, increment", 
+   "the revprop generation", 
+   "(revision_proplist): use and populate the revprop cache", 
+   "(svn_fs_fs__create): initialize our new special file", 
+   "(hotcopy_create_empty_dest): hotcopy the new special file"
+  ], 
+  "revision_id": "1296604"
+ }
+]

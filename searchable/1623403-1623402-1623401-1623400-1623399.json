@@ -1,0 +1,73 @@
+[
+ {
+  "author": "ilgrosso", 
+  "date": "2014-09-08T14:20:19.618199Z", 
+  "msg": [
+   "[SYNCOPE-544] Now having a dedicate LICENSE / NOTICE pair for all binary artifacts"
+  ], 
+  "revision_id": "1623403"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-09-08T14:15:25.312609Z", 
+  "msg": [
+   "Do not use the recently introduced instance IDs in the cache keys (as per", 
+   "discussion in http://svn.haxx.se/dev/archive-2014-08/0239.shtml).  Utilize", 
+   "them only when accessing the filesystem shared data.", 
+   "We were trying to avoid stale cache entries in a situation when a repository", 
+   "is hot swapped with an older version of itself.  However, doing so might give", 
+   "the users a false sense of security, as long as the instance IDs do not work", 
+   "on copy-pasted or snapshotted repositories.  Users are unlikely to actually", 
+   "corrupt the repository with or without the instance IDs (the race is quite", 
+   "hard to hit, see below).  However, *without* the instance IDs in the cache", 
+   "keys, they are going to receive different sort of errors both on the client", 
+   "and on the server, e.g.:", 
+   "E200014: Checksum mismatch for 'path'", 
+   "E200014: Checksum mismatch while reading representation", 
+   "E160004: Malformed svndiff data in representation\"", 
+   "These errors should give the users a hint that what they're doing is wrong", 
+   "and will vanish after the server restart.  We consider this a better choice", 
+   "compared to silently narrowing the window of the problem.", 
+   "A bit more on the possible repository corruption \u2014 the race is triggerable", 
+   "with the following sequence of actions.  The introduction of the instance IDs", 
+   "does not have an ability to solve the problem, but I suppose there might be", 
+   "another way (and I am probably going to track this issue separately):", 
+   "- We start with an empty repository served by Apache HTTP Server", 
+   "- Then we create a backup of the empty repository with 'cp repository'", 
+   "- svn checkout [wc1]; echo A > file ; svn add file ; svn commit", 
+   "- Now we perform a hot swap of the backup (with 0 revisions)", 
+   "- svn checkout [wc2]; echo B > file ; svn add file ; svn commit", 
+   "- Now, within [wc1] \u2014 svn cp file file-copy ; svn commit", 
+   "(this will corrupt the repository with 'svn diff -c 2' returning a", 
+   "\"svn: E200014: Checksum mismatch for 'file\" error)", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches, svn_fs_fs__initialize_txn_caches):", 
+   "Do not use the instance IDs in the cache keys."
+  ], 
+  "revision_id": "1623402"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2014-09-08T14:04:30.416361Z", 
+  "msg": [
+   "Extract 'BlockParams'; clean-up DB construction"
+  ], 
+  "revision_id": "1623401"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2014-09-08T14:03:23.414633Z", 
+  "msg": [
+   "Remove Java 1.5 workaround"
+  ], 
+  "revision_id": "1623400"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2014-09-08T13:46:28.961159Z", 
+  "msg": [
+   "Auth Core 1.2.0"
+  ], 
+  "revision_id": "1623399"
+ }
+]

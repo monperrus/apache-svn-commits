@@ -1,0 +1,78 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2013-10-21T13:46:21.969736Z", 
+  "msg": [
+   "Move the initialization of the platform specific ssl server certificate", 
+   "initialization to svn_auth_get_platform_specific_client_providers().", 
+   "* subversion/libsvn_subr/auth.c", 
+   "(svn_auth_get_platform_specific_client_providers): Move ssl server provider", 
+   "setup here..", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_create_auth_baton): ... that somehow stayed here when we moved", 
+   "the other providers some time ago."
+  ], 
+  "revision_id": "1534153"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2013-10-21T13:46:10.915860Z", 
+  "msg": [
+   "Abandon the @EPSG annotation experiment. It was polluting a bit the javadoc and source files,", 
+   "and was more difficult to apply than initially though because the relationship was not always", 
+   "one-to-one. We will rely on javadoc instead."
+  ], 
+  "revision_id": "1534152"
+ }, 
+ {
+  "author": "cwiklik", 
+  "date": "2013-10-21T13:45:25.380234Z", 
+  "msg": [
+   "3257 drop for the next RC"
+  ], 
+  "revision_id": "1534151"
+ }, 
+ {
+  "author": "lofwyr", 
+  "date": "2013-10-21T13:43:33.920279Z", 
+  "msg": [
+   "TOBAGO-1330: Not using deprecated API for saving view state"
+  ], 
+  "revision_id": "1534150"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-10-21T13:37:14.877416Z", 
+  "msg": [
+   "Extend the Windows CRYPTOAPI based ssl certificate verification to properly", 
+   "handle intermediate authorities, like how webbrowsers handle this.", 
+   "When I originally implemented the ssl server certificate verification, most", 
+   "certificates were directly signed by the root authority while since then", 
+   "most certificates moved to using short lived intermediate authorities.", 
+   "This re-enables common cases like", 
+   "$ svn info https://svn.apache.org/repos/asf/", 
+   "to work directly on Windows, without an initial prompt for accepting a", 
+   "certificate from an unknown authority, just like it worked a few years ago.", 
+   "* subversion/include/private/svn_auth_private.h", 
+   "(SVN_AUTH_CRED_SSL_SERVER_AUTHORITY): Declare new credential type.", 
+   "(svn_auth__get_windows_ssl_server_authority_provider): New function.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(includes): Add svn_auth_private.h.", 
+   "(ssl_server_cert): Instead of just recording authority failures call a", 
+   "new (optional) provider to allow", 
+   "* subversion/libsvn_subr/auth.c", 
+   "(includes): Add svn_auth_private.h.", 
+   "(svn_auth_get_platform_specific_provider): Allow loading new provider.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_create_auth_baton): Hook new provider in the same place as", 
+   "where we hook the server certificate provider.", 
+   "* subversion/libsvn_subr/win32_crypto.c", 
+   "(windows_ssl_server_trust_first_credentials): Fix an old bug, where instead", 
+   "of properly accepting a failure, we removed the failure where it was", 
+   "originally stored. (This happened to work in serf an neon for years)", 
+   "(windows_server_authority_provider): New variable.", 
+   "(svn_auth__get_windows_ssl_server_authority_provider): New function."
+  ], 
+  "revision_id": "1534149"
+ }
+]

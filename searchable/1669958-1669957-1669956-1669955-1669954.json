@@ -1,0 +1,66 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-03-29T19:58:17.426585Z", 
+  "msg": [
+   "On the 1.10-cache-improvements branch: Follow-up to r1669192.", 
+   "* subversion/tests/libsvn_subr/cache-test.c", 
+   "(test_null_cache): The getter always returns a pointer."
+  ], 
+  "revision_id": "1669958"
+ }, 
+ {
+  "author": "cmueller", 
+  "date": "2015-03-29T19:45:45.303340Z", 
+  "msg": [
+   "update the year in copyright to 2015"
+  ], 
+  "revision_id": "1669957"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-03-29T19:43:53.732951Z", 
+  "msg": [
+   "* STATUS: Add the 1.8.x-memory-fragmentation branch and vote for it."
+  ], 
+  "revision_id": "1669956"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-03-29T19:21:05.956020Z", 
+  "msg": [
+   "On the 1.8.x-memory-fragmentation branch:", 
+   "Prevent excessive memory fragmentation in FSFS when activating fulltext", 
+   "caching in Apache with MaxFreeMem set to 0 (unbounded, the default in 2.2).", 
+   "Inspired by r1591005 on /trunk.", 
+   "The default Apache 2.2 configuration does not limit the amount of unused", 
+   "memory held by the worker thread's allocator.  Requests involving slowly", 
+   "growing fulltext sizes (such as 'svn annotate') will often not fit into", 
+   "an existing memory node but cause APR to allocate a new one.  This gives", 
+   "O(n^2) worst-case memory consumption when fulltext caching is enabled.", 
+   "Without fulltext caching, we don't allocate large, arbitrarily sized blocks", 
+   "(arrays etc. already grow similarly to what we do here).", 
+   "This fix is simple:  Pre-allocate the string buffer for larger fulltexts", 
+   "as a power of 2 minus some room for overhead.  Because we only request few", 
+   "different sizes, the respective memory nodes can be reused.  If N is the", 
+   "size of the longest fulltext, the allocator will at most allocate 4N bytes", 
+   "for fulltexts over its lifetime (assuming they never get released to the OS).", 
+   "Since we only select the initial size of our auto-reallocating SVN string", 
+   "buffer object, this patch will not affect the correctness of the remaining", 
+   "code.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(optimimal_allocation_size): New utility function. Taken from /trunk.", 
+   "(rep_read_get_baton): Use the new function to allocate large", 
+   "buffers as blocks of 2^N bytes."
+  ], 
+  "revision_id": "1669955"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2015-03-29T19:20:29.768314Z", 
+  "msg": [
+   "fix some tests for systems with log4net residing in the GAC"
+  ], 
+  "revision_id": "1669954"
+ }
+]

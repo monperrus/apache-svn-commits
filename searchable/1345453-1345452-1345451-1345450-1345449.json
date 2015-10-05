@@ -1,0 +1,91 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-06-02T06:28:09.894647Z", 
+  "msg": [
+   "[jira] [HBASE-6064] [89-fb] Add timestamp to the Thrift mutation API", 
+   "Author: mbautin", 
+   "Summary: Adding timestamp to the Mutation Thrift datatype. If timestamp is set to LATEST_TIMESTAMP in a particular mutation, the timestamp provided as a Thrift call argument is used for that mutation. Also adding a new unit test for Thrift mutation API and a couple of bugs/optimizations to the checkAndMutate implementation.", 
+   "Test Plan: Unit tests", 
+   "Reviewers: schen, liyintang, kannan, kranganathan, aaiyer, avf", 
+   "Reviewed By: avf", 
+   "CC: nzhang, chip", 
+   "Differential Revision: https://reviews.facebook.net/D3381"
+  ], 
+  "revision_id": "1345453"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-06-02T06:27:45.287607Z", 
+  "msg": [
+   "[master] [0.89-fb] fix setUnassigned to abort the master upon zk failures", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "fix setUnassigned to abort on zk failures", 
+   "In theory, any operation that contacts ZK can throw an exception (Say, the zk nodes were un reachable or something.)", 
+   "Currently, the master catches these exceptions, logs and error and continues silently. This is wrong.", 
+   "We have been discussing how to handle these exceptions:", 
+   "Approach 1) was to handle these exceptions and retry.", 
+   "Approach 2) is to kill the master itself.", 
+   "We are going with approach 2 here, because we do not expect ZKWrapper to have intermittent failures. Intermittent failures (connection/socket etc.) are already retried by the ZKWrapper. If there is an exception that percolates above, then it means that there is something wrong and the master is unable to contact the ZK.", 
+   "If the master cannot talk to ZK, it is better to fast kill the master, than try to handle retries. (The master is going to die regardless, in a few seconds after it fails to keep its ZNode alive)", 
+   "Test Plan: TBD: test on MR", 
+   "Reviewers: kannan, pkhemani", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@, kranganathan", 
+   "Differential Revision: https://phabricator.fb.com/D482166"
+  ], 
+  "revision_id": "1345452"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2012-06-02T06:27:38.336802Z", 
+  "msg": [
+   "updated link to maven-plugin-testing-harness"
+  ], 
+  "revision_id": "1345451"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-06-02T06:27:22.227671Z", 
+  "msg": [
+   "[jira][HBASE-6103][89-fb] Optimize the HBaseServer to deserialize the data for each ipc connection in parallel", 
+   "Author: liyintang", 
+   "Summary:", 
+   "Currently HBaseServer is running with a single listener thread, which is", 
+   "responsible for accepting the connection, reading the data from network", 
+   "chann", 
+   "When there are multiple hbase clients connecting to the region server", 
+   "(HBaseServer) and reading/writing a large set of data, the listener and", 
+   "the resp", 
+   "So the solution is to deserialize the data for each ipc connection in", 
+   "parallel for HBaseServer", 
+   "BTW, it is also one of the reasons that the parallel scanning from", 
+   "multiple clients is far slower than single client case.", 
+   "Test Plan: Running all the uni tests", 
+   "Reviewers: Kannan, mbautin, JIRA, Karthik", 
+   "Reviewed By: kranganathan", 
+   "CC: JIRA", 
+   "Differential Revision: https://reviews.facebook.net/D3435"
+  ], 
+  "revision_id": "1345450"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-06-02T06:26:56.377177Z", 
+  "msg": [
+   "[jira] [HBASE-6121] [89-fb] Fix TaskMonitor/MultiPut multithreading bug", 
+   "Author: amirshim", 
+   "Summary:", 
+   "We shouldn't clear an ArrayList that might be iterated on by another thread.", 
+   "Specifically, multiput() calls clear() on ArrayList (to free up some memory) while MultiPut.toMap is iterating over that ArrayList in a different thread (called from MonitorTasks UI)", 
+   "Test Plan: Run a load tester that does lots of multiputs, and access the web gui. Make sure it doesn't crash. (It's hard to test multithreaded bugs)", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: mbautin, rthiessen, nspiegelberg, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D474094", 
+   "Task ID: 1066743"
+  ], 
+  "revision_id": "1345449"
+ }
+]

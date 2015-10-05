@@ -1,0 +1,104 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2013-11-22T09:22:42.248702Z", 
+  "msg": [
+   "[KARAF-2459] help now uses the completion mode to work better with subshell"
+  ], 
+  "revision_id": "1544443"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-11-22T09:20:43.647063Z", 
+  "msg": [
+   "adding jaxrs and ehcache doc"
+  ], 
+  "revision_id": "1544442"
+ }, 
+ {
+  "author": "davidb", 
+  "date": "2013-11-22T09:16:59.293767Z", 
+  "msg": [
+   "[KARAF-2568] Backport of role based access for JMX to 2.x branch", 
+   "This adds role-based access to JMX operations. Whenever a JMX operation", 
+   "is invoked the roles of the current user are checked against the", 
+   "required roles for this operation. This is done through a JMX", 
+   "interceptor which is added through the following command line option", 
+   "-Djavax.management.builder.initial=org.apache.karaf.management.boot.KarafMBeanServerBuilder", 
+   "The required roles for JMX operations are defined in configuration files", 
+   "read via OSGi ConfigAdmin.", 
+   "JMX RBAC-related configuration is prefixed with jmx.acl and based on the", 
+   "JMX ObjectName that it applies to. For example specific configuration for", 
+   "an MBean with the following objectName: foo.bar:type=Test can be placed in", 
+   "a configuration file called jmx.acl.foo.bar.Test.cfg. More generic", 
+   "configuration can be placed in the domain (e.g. jmx.acl.foo.bar.cfg) or", 
+   "at the top level (jmx.acl.cfg). A simple configuration file looks like", 
+   "this:", 
+   "test : admin", 
+   "getVal : manager, viewer", 
+   "The system looks for required roles using the following process:", 
+   "The most specific configuration file/pid is tried first. E.g. in the", 
+   "above example the jmx.acl.foo.bar.Test.cfg is looked at first. In this", 
+   "configuration, the system looks for a:", 
+   "1. Specific match for the current invocation, e.g. test(int)[\"17\"] : role1", 
+   "2. Reg exp match for the current invocation, e.g. test(int)[/[0-9]/] : role2", 
+   "In both cases the passed argument is converted to a String for the", 
+   "comparison.", 
+   "If any of the above match all the roles with matching definitions", 
+   "are collected and allowed. If no matches are found the following is tried:", 
+   "3. Signature match for the invocation, e.g. test(int) : role3. If", 
+   "matched the associated roles are used.", 
+   "4. Method name match for the invocation, e.g. test : role4. If matched", 
+   "the associated roles are used.", 
+   "5. A method name wildcard match, e.g. te* : role5. For all the", 
+   "wildcard matches found in the current configuration file, the roles", 
+   "associated with the longest match are used. So if you have te* and * and", 
+   "the method invoked is 'test', then the roles defined with te* are used,", 
+   "not the ones defined with *.", 
+   "If no matching definition is found in the current configuration file, a", 
+   "more general configuration file is looked for. So jmx.acl.foo.bar.cfg is", 
+   "tried next, this matches the domain of the MBean. If there is no match", 
+   "found in the domain the most generic configuration file is consulted", 
+   "(jmx.acl.cfg).", 
+   "If a matching definition is found, this is used and the process will not", 
+   "look for any other matching definitions. So the most specific definition", 
+   "always takes precedence.", 
+   "For some example role definitions, see the following example", 
+   "configurations:", 
+   "jmx.acl.org.apache.karaf.services.cfg a very simple configuration:", 
+   "list : viewer", 
+   "jmx.acl.org.apache.karaf.bundles.cfg, a more advanced configuration, e.g.", 
+   "bundles 0-49 can only be stopped by an admin, others can be stopped my a", 
+   "manager:", 
+   "stop(java.lang.String)[/([1-4])?[0-9]/] : admin", 
+   "stop : manager", 
+   "jmx.acl.cfg a catchall configuration for invocations of any MBean that", 
+   "don't have a rule specified elsewhere:", 
+   "list* = viewer", 
+   "get* = viewer", 
+   "is* = viewer", 
+   "set* = admin", 
+   "* = admin", 
+   "This commit also contains bunch of unit tests to verify the above", 
+   "behaviour and is the first in a series for KARAF-2568 as a reflective JMX", 
+   "API will also be contributed as well as some system tests."
+  ], 
+  "revision_id": "1544441"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-11-22T09:16:20.442294Z", 
+  "msg": [
+   "better implementation for PerformanceServerFilter"
+  ], 
+  "revision_id": "1544440"
+ }, 
+ {
+  "author": "jakob", 
+  "date": "2013-11-22T08:51:15.069959Z", 
+  "msg": [
+   "Added the graduation-logos"
+  ], 
+  "revision_id": "1544439"
+ }
+]

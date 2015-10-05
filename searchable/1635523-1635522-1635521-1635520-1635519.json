@@ -1,0 +1,73 @@
+[
+ {
+  "author": "reschke", 
+  "date": "2014-10-30T15:40:44.967390Z", 
+  "msg": [
+   "OAK-1941 - use getLastCheckTime() rather than getCreated(), and properly maintain it in implementation of query(...)"
+  ], 
+  "revision_id": "1635523"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2014-10-30T15:34:40.237138Z", 
+  "msg": [
+   "Fix CMIS test"
+  ], 
+  "revision_id": "1635522"
+ }, 
+ {
+  "author": "ylavic", 
+  "date": "2014-10-30T15:24:58.343831Z", 
+  "msg": [
+   "MPMs, core: make duplicated listeners (SO_REUSEPORT) introduced in r1599531", 
+   "less intrusive.", 
+   "Submitted by: Yingqi Lu <yingqi.lu@intel.com>", 
+   "Modified/Committed by: ylavic", 
+   "Add ListenCoresBucketsRatio which is a configurable ratio between the number of", 
+   "CPU cores (online) and the number of listeners buckets to create, defaulting to", 
+   "zero (so that listeners buckets become an opt-in, ie. ncpus / ratio > 1).", 
+   "This could also be made an opt-out by using the previous hardcoded value (8) as", 
+   "default.", 
+   "Make ap_close_listeners() act on all the listeners (including duplicated ones),", 
+   "since the function is also called externally (eg. mod_cgid, mod_ssl_ct and", 
+   "possibly any third party module) to cleanup opened descriptors when a process", 
+   "is forked (the duplicated listeners are kept in a scoped/static variable).", 
+   "Add ap_close_listeners_ex() to close a single bucket of listeners, used by the", 
+   "children to close unused duplicates and internally by ap_close_listeners().", 
+   "Make ap_duplicate_listeners() compute the number of buckets to be used, instead", 
+   "of each MPM. This number is now based on the above ratio and will not change", 
+   "unless asked to (given *num_buckets < 1, that is when the MPM does not run in", 
+   "one-process mode nor after a graceful restart).", 
+   "Remove some global variables (mpm_listen, enable_default_listeners) previously", 
+   "used to communicate between MPMs and ap_listen, since ap_duplicate_listeners()", 
+   "API can now be used to do so.", 
+   "Also rename num_buckets as ap_num_listen_buckets, and prefix have_so_reuseport", 
+   "with ap_ (both printed by ap_log_common(), hence kept global).", 
+   "Detect ap_have_so_reuseport once only at startup.", 
+   "Restore dummy_connection() as before r1599531 since sending POD signals should", 
+   "not depend on the number of listeners buckets (there is still one single socket", 
+   "receiving the connections).", 
+   "For each MPM (concerned), move the bucket data (pod, listeners and eventually", 
+   "accept mutex) into a struct and instanciate an array of them (sized by the", 
+   "number of buckets), for each child to use its own data according to its bucket", 
+   "index, and the parent to maintain the whole."
+  ], 
+  "revision_id": "1635521"
+ }, 
+ {
+  "author": "orudyy", 
+  "date": "2014-10-30T15:01:58.197423Z", 
+  "msg": [
+   "QPID-6200: Change broker upgraders to upgrade virtual host data from model 1.x into virtual host nodes"
+  ], 
+  "revision_id": "1635520"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2014-10-30T15:00:09.213402Z", 
+  "msg": [
+   "adding my key"
+  ], 
+  "revision_id": "1635519"
+ }
+]

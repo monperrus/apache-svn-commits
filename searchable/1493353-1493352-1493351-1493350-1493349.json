@@ -1,0 +1,106 @@
+[
+ {
+  "author": "jleroux", 
+  "date": "2013-06-15T13:45:26.759923Z", 
+  "msg": [
+   "Partially \"Applied fix from trunk for revision: 1493352\" appbarclose.ftl was not concerned", 
+   "------------------------------------------------------------------------", 
+   "r1493352 | jleroux | 2013-06-15 15:40:42 +0200 (sam., 15 juin 2013) | 40 lines", 
+   "A patch from Olivier Heintz for \"Portal page personalization is not working\" https://issues.apache.org/jira/browse/OFBIZ-5189", 
+   "Two simples errors after last change from FastList to standard java List :", 
+   "1) go to example component / Dasboard", 
+   "1.1) click on edit for one page", 
+   "Screen is blocked", 
+   "reason :", 
+   "{code}", 
+   "for (GenericValue portalPage : portalPages) {", 
+   "cond = EntityCondition.makeCondition(UtilMisc.toList(", 
+   "EntityCondition.makeCondition(\"ownerUserLoginId\", EntityOperator.EQUALS, userLoginId),", 
+   "EntityCondition.makeCondition(\"originalPortalPageId\", EntityOperator.EQUALS, portalPage.getString(\"portalPageId\"))),", 
+   "EntityOperator.AND);", 
+   "List <GenericValue> privatePortalPages = delegator.findList(\"PortalPage\", cond, null, null, null, false);", 
+   "if (UtilValidate.isNotEmpty(privatePortalPages)) {", 
+   "portalPages.remove(portalPage);", 
+   "portalPages.add(privatePortalPages.get(0));", 
+   "}", 
+   "}", 
+   "{code}", 
+   "code iterate on a list and modify it, I don't know how it could work before ;-)", 
+   "I propose to use an other list on iterate", 
+   "One other bug in portal page personalization.", 
+   "When trying to delete portlet or column in portal page, there is an error because in delete service, cache is used to read data before remove.", 
+   "Correction proposed is to remove use-cache=\"true\"", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1493353"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-06-15T13:40:42.324601Z", 
+  "msg": [
+   "A patch from Olivier Heintz for \"Portal page personalization is not working\" https://issues.apache.org/jira/browse/OFBIZ-5189", 
+   "Two simples errors after last change from FastList to standard java List :", 
+   "1) go to example component / Dasboard", 
+   "1.1) click on edit for one page", 
+   "Screen is blocked", 
+   "reason :", 
+   "{code}", 
+   "for (GenericValue portalPage : portalPages) {", 
+   "cond = EntityCondition.makeCondition(UtilMisc.toList(", 
+   "EntityCondition.makeCondition(\"ownerUserLoginId\", EntityOperator.EQUALS, userLoginId),", 
+   "EntityCondition.makeCondition(\"originalPortalPageId\", EntityOperator.EQUALS, portalPage.getString(\"portalPageId\"))),", 
+   "EntityOperator.AND);", 
+   "List <GenericValue> privatePortalPages = delegator.findList(\"PortalPage\", cond, null, null, null, false);", 
+   "if (UtilValidate.isNotEmpty(privatePortalPages)) {", 
+   "portalPages.remove(portalPage);", 
+   "portalPages.add(privatePortalPages.get(0));", 
+   "}", 
+   "}", 
+   "{code}", 
+   "code iterate on a list and modify it, I don't know how it could work before ;-)", 
+   "I propose to use an other list on iterate", 
+   "2) on appbarclose.ftl for tomawak theme there is", 
+   "{code}", 
+   "<#assign portalPage = delegator.findOne(\"PortalPage\", findMap, true)>", 
+   "{code}", 
+   "when you click to \"revert to original\" in dasboard screen", 
+   "{code}", 
+   "Error on line 45, column 5 in component://tomahawk/includes/appbarClose.ftl delegator.findOne(\"PortalPage\", findMap, true) is undefined. It cannot be assigned to portalPage The problematic instruction: ---------- ==> assignment: portalPage=delegator.findOne(\"PortalPage\", findMap, true) [on line 45, column 5 in component://tomahawk/includes/appbarClose.ftl] -", 
+   "{code}", 
+   "2.1) to see the error, modify ExampleMenus.xml and change menu-item name from \"Dasboard\" to \"Dasboard1\"", 
+   "2.2) go to example / dashboard and edit one page", 
+   "2.3) click to \"revert to original\"", 
+   "I propose to add ?if_exists", 
+   "One other bug in portal page personalization.", 
+   "When trying to delete portlet or column in portal page, there is an error because in delete service, cache is used to read data before remove.", 
+   "Correction proposed is to remove use-cache=\"true\""
+  ], 
+  "revision_id": "1493352"
+ }, 
+ {
+  "author": "smarthi", 
+  "date": "2013-06-15T13:25:35.392868Z", 
+  "msg": [
+   "MAHOUT-1263: Serialize/Deserialize Lambda value for OnlineLogisticRegression - code cleanup"
+  ], 
+  "revision_id": "1493351"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2013-06-15T12:50:56.742706Z", 
+  "msg": [
+   "HTTPCLIENT-1374: Added route parameter to HttpConnectionFactory"
+  ], 
+  "revision_id": "1493350"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2013-06-15T12:45:34.083139Z", 
+  "msg": [
+   "Revert temporary incremental compiler hack; sometimes p-i files are needed", 
+   "The hack can be added to child poms instead."
+  ], 
+  "revision_id": "1493349"
+ }
+]

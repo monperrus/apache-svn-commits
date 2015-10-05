@@ -1,0 +1,56 @@
+[
+ {
+  "author": "sarowe", 
+  "date": "2014-03-17T22:05:19.951076Z", 
+  "msg": [
+   "SOLR-5647,SOLR-5770 entries -> 4.7.1 release section"
+  ], 
+  "revision_id": "1578623"
+ }, 
+ {
+  "author": "jitendra", 
+  "date": "2014-03-17T22:04:13.680013Z", 
+  "msg": [
+   "HIVE-6649: Vectorization: some date expressions throw exception. (jitendra, reviewed by Eric Hanson)"
+  ], 
+  "revision_id": "1578622"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2014-03-17T21:56:45.678429Z", 
+  "msg": [
+   "Adds new ant targets to handled patching in projects which use different staging areas.", 
+   "In create-component ant target at r1150560+1571994+r1571996 I added staging, qa and production sub-folders under patches folder.", 
+   "The reason is to allow to put there patches for different staging areas where URLs and other parameters vary.", 
+   "Then I did not add related ant targets to allow patching the corresponding OFBiz instances in the different staging areas servers.", 
+   "Also I wrongly named the \"test\" area \"staging\".", 
+   "Let me explain quickly how it supposed to work. You have:", 
+   "1) A \"dev\" environment/area (most of the time on developers own machines) where the development is done, maybe using Derby DB for instance. Anyway an area where all production constraints are not yet taken into account.", 
+   "2) A \"test\" area, something like the \"dev\" area but with a different environment (clustered, not the same DB, etc.) something not yet similar to production but near. Because most of the time you don't have yet a production area ready when you begin to test. This area remains in the hand of developpers. Load tests for instance can be done there.", 
+   "3) A \"QA\" area, this comes later and is a duplicate of the production area where all tests are finally done. It's in the hand of QA engineers who qualify/guarantee the development to be production ready.", 
+   "4) A \"production\" area, this is the latest stage available when the development is production ready (though it might appears before QA sometimes when the shareholders are in a hurry...). It's in the hand of sysops (or devops if you prefer).", 
+   "So this patch adds the \"build-test\", \"build-qa\" and \"build-production\" targets in the main build.xml file. For the purpose of adapting the areas when building they calls the main build targets, but the build target does not depend on them, so can still be used w/o them. They complete the \"create|apply|reapply|revert-ofbiz-patches\" targets which target only the \"dev\" area or can be used in an early stage of the development, notably on dev machines.", 
+   "Those targets depends on the \"prepare-to-build-dev\", \"prepare-to-build-test\", \"prepare-to-build-qa\" and \"prepare-to-build-production\" targets in common.xml. Themselves relying on the macro \"apply-patches\".", 
+   "The \"prepare-to-build-qa|production\" have something specific. When you maintain URLs and misc. parameters variation inside properties files, it's often easier to directly maintain those files and copy them over in those areas than maintaining/updating patches for them which can be a repetitive and tedious task...", 
+   "Moreover, sometimes you don't even create any hot-deploy components (eg. some projects might use OFBiz as a web services API). Then currently you don't have an easy way to keep your OFBiz working copy free from modifications (which could else been put in one of your hot-deploy components patches directory, which is anyway not very logical). So I created another ant target \"build-dev\", it's purposely independent of any other target but relies on the content of a new runtime/patches folder where \"core\" patches (those which change OFBiz as it's OOTB)are supposed to be.", 
+   "These changes add new possibilities but don't change the way things were done so far. So you can use them or not depending on your needs. The idea for the new \"build-dev\" ant target is to keep patches with features separated (ie grouping different files changed in a patch), but you can, or may have to, do it on a file level, notably when 2 or more features impact the same file..."
+  ], 
+  "revision_id": "1578621"
+ }, 
+ {
+  "author": "snagel", 
+  "date": "2014-03-17T21:56:32.328145Z", 
+  "msg": [
+   "NUTCH-1671 indexchecker to add digest field"
+  ], 
+  "revision_id": "1578620"
+ }, 
+ {
+  "author": "jianhe", 
+  "date": "2014-03-17T21:54:25.583600Z", 
+  "msg": [
+   "Merge r1578618 from branch-2. Fixed AM container log to show on NM web page after application finishes if log-aggregation is disabled. Contributed by Rohith Sharmaks"
+  ], 
+  "revision_id": "1578619"
+ }
+]

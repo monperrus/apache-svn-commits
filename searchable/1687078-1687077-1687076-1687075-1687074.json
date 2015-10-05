@@ -1,0 +1,68 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2015-06-23T14:31:05.451938Z", 
+  "msg": [
+   "Properly initialize shared data for a hotcopy destination instead of", 
+   "reusing the shared data of the hotcopy source.  Nothing prevents us from", 
+   "performing this part of the initialization in an ordinary way, instead of", 
+   "sharing the same pointer between two separate fs_fs_data_t objects.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__initialize_shared_data): Declare the new function.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(svn_fs_fs__initialize_shared_data): New.  Wraps fs_serialized_init()", 
+   "and serializes a call to it using the passed-in COMMON_POOL_LOCK mutex.", 
+   "(fs_hotcopy): Adjust the calling site of svn_fs_fs__hotcopy() that now", 
+   "accepts COMMON_POOL_LOCK and COMMON_POOL arguments.", 
+   "* subversion/libsvn_fs_fs/hotcopy.h", 
+   "(svn_fs_fs__hotcopy): Add COMMON_POOL_LOCK and COMMON_POOL arguments to", 
+   "the declaration of this function.  Tweak the docstring.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(svn_fs_fs__hotcopy): Call the new svn_fs_fs__initialize_shared_data()", 
+   "function instead of making the shared data of the hotcopy destination", 
+   "point to the shared data of the source.  That's what ...", 
+   "(hotcopy_setup_shared_fs_data): ...we were doing previously in this", 
+   "function.  As a consequence, this function is no longer necessary, so", 
+   "remove it."
+  ], 
+  "revision_id": "1687078"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2015-06-23T14:25:54.454986Z", 
+  "msg": [
+   "Fixing backmerge"
+  ], 
+  "revision_id": "1687077"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2015-06-23T14:25:49.109900Z", 
+  "msg": [
+   "Fixing a bug when not encrypting the symmetric encryption key"
+  ], 
+  "revision_id": "1687076"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2015-06-23T14:25:13.007342Z", 
+  "msg": [
+   "* branches/1.7.x/STATUS: Vote for r1659867 and the r1654932 group."
+  ], 
+  "revision_id": "1687075"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-06-23T14:24:46.433126Z", 
+  "msg": [
+   "Inline the hotcopy_create_empty_dest() function into the only place where", 
+   "it is being called.  This allows us to get rid of unnecessary indirection", 
+   "and have the incremental and non-incremental hotcopy initialization in one", 
+   "place, as these operations belong to the same level of abstraction.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_create_empty_dest): Inline this function ...", 
+   "(svn_fs_fs__hotcopy): ...here."
+  ], 
+  "revision_id": "1687074"
+ }
+]

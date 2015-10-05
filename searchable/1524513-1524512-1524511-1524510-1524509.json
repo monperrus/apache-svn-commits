@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jukka", 
+  "date": "2013-09-18T18:18:25.967527Z", 
+  "msg": [
+   "OAK-1001: SegmentMK: 32bit support for the file backend", 
+   "Enabled the new 32bit code"
+  ], 
+  "revision_id": "1524513"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-09-18T18:18:23.832741Z", 
+  "msg": [
+   "[HBASE-3149] Per CF Flushing of the Memstores (Reloaded)", 
+   "Author: gauravm", 
+   "Summary:", 
+   "Creating a new diff for the per-CF flushing of the memstore.", 
+   "The idea is, if the memstore has hit the the threshold, we can flush only the families which occupy a large chunk of the memstore. This will avoid creating lots of smaller files, and deamortize our IO when flushing.", 
+   "For eg. if the memstore flush limit is 128 MB, we can set a limit for flushing of individual stores to 32 MB. When the total memstore size hits 128 MB, we will flush only those column families which are above 32 MB. If we don't find any such column family, we flush all the column families.", 
+   "Test Plan:", 
+   "- Unit Tests", 
+   "- Tested this on a couple of machines on my mini-shadow.", 
+   "- Plotted graphs of the size of memstores of all the column families in a", 
+   "particular region over time:", 
+   "x-axis is time, y-axis is the size (in MB). The black line is the total size", 
+   "of memstores. The other lines are for specific column families When this line", 
+   "hits 128 MB, a flush happens.", 
+   "Graph 1 - Without the change (https://www.facebook.com/pxlcld/kwtv )", 
+   "As you can see, when the black line hits 128 MB, it falls to 0, and so do all the other lines. Then they all rise up again at the same time, and fall back.", 
+   "Graph 2 - With the change (https://www.facebook.com/pxlcld/kwts )", 
+   "When the black line hits 128 MB, only the column families which are above 32 MB fall down to zero, while other column families retain their size. After a couple of flushes, we have all the families of the same size, but none above 32 MB. In that case, all of them are flushed.", 
+   "Notice once we have flushed the first time, we do four flushes (128/32 = 4) each of which takes 1/4th the time of the first flush, since we are flushing only 32 MB (1/4th of 128 MB) in each of the smaller flush.", 
+   "Reviewers: aaiyer, liyintang, manukranthk", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D947028", 
+   "Task ID: 2220663"
+  ], 
+  "revision_id": "1524512"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-09-18T18:18:19.168952Z", 
+  "msg": [
+   "[master] Move newly added enum element to the end", 
+   "Author: fan", 
+   "Summary:", 
+   "When new element is inserted between other elements, the ordinal of later elements changes.", 
+   "This offset messes up interpretation of HMsgs communication between servers.", 
+   "Test Plan: Test rolling restart again and we should not see further region multipe assignment problem.", 
+   "Reviewers: aaiyer", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D972908", 
+   "Task ID: 2843192"
+  ], 
+  "revision_id": "1524511"
+ }, 
+ {
+  "author": "danhaywood", 
+  "date": "2013-09-18T18:10:21.778247Z", 
+  "msg": [
+   "fixing minor typo"
+  ], 
+  "revision_id": "1524510"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2013-09-18T18:06:42.292797Z", 
+  "msg": [
+   "HIVE-4487 - Hive does not set explicit permissions on hive.exec.scratchdir (Chaoyu Tang via Brock Noland)"
+  ], 
+  "revision_id": "1524509"
+ }
+]

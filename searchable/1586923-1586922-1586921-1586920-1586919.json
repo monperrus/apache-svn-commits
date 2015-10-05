@@ -1,0 +1,69 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-04-13T05:42:44.564695Z", 
+  "msg": [
+   "Reduce server-side memory consumption during 'svn log'.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(detect_changed): Since the incomming change hash already lives in", 
+   "POOL, we don't need to duplicate any of that data.", 
+   "New info needs to copied to POOL, though."
+  ], 
+  "revision_id": "1586923"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-13T04:40:40.787455Z", 
+  "msg": [
+   "[Reverted in r1598291]", 
+   "Speed up file / stream comparison, i.e. minimize the processing overhead", 
+   "for finding the first mismatch.", 
+   "The approach is two-sided.  Instead of fetching SVN__STREAM_CHUNK_SIZE", 
+   "from all sources before comparing data, we start with a much lower 4kB", 
+   "and increase the chunk size until we reach SVN__STREAM_CHUNK_SIZE while", 
+   "making sure that all reads are naturally aligned.  So, we quickly find", 
+   "mismatches near the beginning of the file.", 
+   "On the other end side, we bump the SVN__STREAM_CHUNK_SIZE to 64kB which", 
+   "gives better throughput for longer distances to the first mismatch -", 
+   "without causing ill effects in APR's memory management.", 
+   "* subversion/include/svn_types.h", 
+   "(SVN__STREAM_CHUNK_SIZE): Bump to 64k and add some documentation on", 
+   "the general restrictions for future changes.", 
+   "* subversion/include/private/svn_io_private.h", 
+   "(svn_io__next_chunk_size): New utility function generating the new", 
+   "read block size sequence.", 
+   "* subversion/libsvn_subr/io.c", 
+   "(svn_io__next_chunk_size): Implement.", 
+   "(contents_identical_p,", 
+   "contents_three_identical_p): Let the new utility determine the read", 
+   "block size.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_contents_same2): Ditto."
+  ], 
+  "revision_id": "1586922"
+ }, 
+ {
+  "author": "akm", 
+  "date": "2014-04-13T04:34:13.415013Z", 
+  "msg": [
+   "MAHOUT-1420: Add solr-recommender to examples; typo fix"
+  ], 
+  "revision_id": "1586921"
+ }, 
+ {
+  "author": "akm", 
+  "date": "2014-04-13T04:25:53.827634Z", 
+  "msg": [
+   "MAHOUT-1420: Add solr-recommender to examples"
+  ], 
+  "revision_id": "1586920"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2014-04-13T04:07:20.137286Z", 
+  "msg": [
+   "COMPRESS-277 share the buffer used in skip - concurrent writes to the buffer won't do any harm as the data is discarded ayway"
+  ], 
+  "revision_id": "1586919"
+ }
+]

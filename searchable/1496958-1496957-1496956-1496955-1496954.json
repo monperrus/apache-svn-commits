@@ -1,0 +1,81 @@
+[
+ {
+  "author": "astaric", 
+  "date": "2013-06-26T15:15:52.075358Z", 
+  "msg": [
+   "More robust handling of resources in timeline widget.", 
+   "Should fix problem described in #547."
+  ], 
+  "revision_id": "1496958"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-06-26T15:14:43.144877Z", 
+  "msg": [
+   "Try a different approach to optimize 'svn log' on the repo root.", 
+   "* subversion/libsvn_client/log.c", 
+   "(svn_client_log5): at repo root, we already know the only location segment"
+  ], 
+  "revision_id": "1496957"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2013-06-26T15:13:24.888756Z", 
+  "msg": [
+   "Shift down a proposal which appears to have zero traction.", 
+   "Vote against modifying the default config to offer a less secure cipher stack,", 
+   "since users shouldn't be using 2.0 branch for new deployments anyways."
+  ], 
+  "revision_id": "1496956"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-06-26T15:08:55.406589Z", 
+  "msg": [
+   "Turns out that svn_client__repos_location_segments is too general to", 
+   "correctly implement any shortcuts.", 
+   "Reverting r1494966, r1496886.", 
+   "* subversion/libsvn_client/ra.c", 
+   "(svn_client__repos_location_segments): revert optimization for \"/\""
+  ], 
+  "revision_id": "1496955"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-06-26T15:02:55.989782Z", 
+  "msg": [
+   "Allow 'svn cleanup' to remove unversioned items from the working copy.", 
+   "This should address the feature request from issue #3549.", 
+   "Add two new options to 'svn cleanup', --remove-unversioned and --no-ignore.", 
+   "The former causes unversioned files and directories to be removed after", 
+   "successful cleanup. The latter causes ignored items to be removed as well.", 
+   "One remaining question is what to do with externals. Right now, 'svn cleanup'", 
+   "never recurses into externals. Should it recurse into externals if the", 
+   "--remove-unversioned option is given? Should we change it to always recurse", 
+   "into externals by default? I'm not quite sure.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_cleanup2): Declare.", 
+   "(svn_client_cleanup): Deprecate.", 
+   "* subversion/libsvn_client/cleanup.c", 
+   "(remove_unversioned_items): New helper function.", 
+   "(svn_client_cleanup2): Implement as an extension of svn_client_cleanup(),", 
+   "which can optionally remove unversioned items after all other cleanup", 
+   "actions, via a status walk.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_cleanup): Implement as a wrapper around svn_client_cleanup2().", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add new 'remove_unversioned' option.", 
+   "* subversion/svn/cleanup-cmd.c", 
+   "(svn_cl__cleanup): Run svn_client_cleanup2() to support removal of", 
+   "unversioned items. Reject --no-ignore option without --remove-unversioned.", 
+   "* subversion/svn/svn.c", 
+   "(svn_cl__longopt_t): Add opt_remove_unversioned.", 
+   "(svn_cl__options): Add --remove-unversioned option.", 
+   "(svn_cl__cmd_table): Extend help text of 'svn cleanup'.", 
+   "(sub_main): Handle --remove-unversioned option.", 
+   "* subversion/tests/cmdline/wc_tests.py", 
+   "(cleanup_unversioned_items, test_list): New test."
+  ], 
+  "revision_id": "1496954"
+ }
+]

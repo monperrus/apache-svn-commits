@@ -1,0 +1,119 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-04T20:39:29.304390Z", 
+  "msg": [
+   "Convert ra_serfs 'svn_ra_replay' support to the transition based xml parser.", 
+   "Also improve the memory usage of the driven editor by passing per-node scoped", 
+   "pools to the editor's 'add_*' and 'open_*' methods.", 
+   "* subversion/libsvn_ra_serf/replay.c", 
+   "(includes): Add svn_hash.h.", 
+   "(replay_state_e): Add new states. Use common prefix.", 
+   "(replay_ttable): New transition table.", 
+   "(replay_node_t): New struct, containing per file/dir state.", 
+   "(replay_context_t): Renamed to...", 
+   "(revision_report_t): ... this. Remove per item state and now unused vars.", 
+   "(push_state): Remove function.", 
+   "(start_replay,", 
+   "end_replay,", 
+   "cdata_replay): Remove functions fold functionality in these...", 
+   "(replay_opened,", 
+   "replay_closed,", 
+   "replay_cdata): New functions. Add more error checking based on the node", 
+   "stack.", 
+   "(replay_done): New function. Handles magic that was part of the old xml parser.", 
+   "(create_replay_body): Use passed pool for tempvars instead of long lived ctx.", 
+   "(svn_ra_serf__replay): Store context on the stack. Use handler->done.", 
+   "Use new parser.", 
+   "(svn_ra_serf__replay_range): Move variables referenced from contexts to the outer", 
+   "scope, to show they are used out of scope. Use new parser. Reduce scope of", 
+   "done handling variables."
+  ], 
+  "revision_id": "1499863"
+ }, 
+ {
+  "author": "mahadev", 
+  "date": "2013-07-04T20:37:52.442768Z", 
+  "msg": [
+   "AMBARI-2568. Setup LDAP does not validate true/false response. (Dmitry L via mahadev)"
+  ], 
+  "revision_id": "1499862"
+ }, 
+ {
+  "author": "peter_firmstone", 
+  "date": "2013-07-04T20:31:55.541608Z", 
+  "msg": [
+   "Synchronization fixes relating to LeaseMap implementations.  The LeaseMap interface was originally specified as an unsynchronized Map, however relaxing this requirement allows for some implementations to be synchronized or concurrent.", 
+   "Updated ClassServer to use Starter interface.", 
+   "Changed ReadyState to be non blocking when ready.", 
+   "Fixed unsynchronized access to proxy references in FiddlerImpl."
+  ], 
+  "revision_id": "1499861"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-04T20:30:34.841577Z", 
+  "msg": [
+   "Extend the transition based xml parser in ra_serf with two features:", 
+   "- explicit http status value checking", 
+   "- an optional done callback", 
+   "In multi-request operations as update and replay a success callback", 
+   "is needed to mark a request as done, and to signal the context loop that", 
+   "cleanup work is needed.", 
+   "This commit adds the necessary plumbing to provide better error handling", 
+   "and to support the conversion of the replay handling, which I will add as", 
+   "separate patches.", 
+   "* subversion/libsvn_ra_serf/blame.c", 
+   "(svn_ra_serf__get_file_revs): Update caller.", 
+   "* subversion/libsvn_ra_serf/getdate.c", 
+   "(svn_ra_serf__get_dated_revision): Update caller.", 
+   "* subversion/libsvn_ra_serf/getlocations.c", 
+   "(svn_ra_serf__get_locations): Update caller.", 
+   "* subversion/libsvn_ra_serf/getlocationsegments.c", 
+   "(svn_ra_serf__get_location_segments): Update caller.", 
+   "* subversion/libsvn_ra_serf/getlocks.c", 
+   "(svn_ra_serf__get_locks): Update caller.", 
+   "* subversion/libsvn_ra_serf/get_deleted_rev.c", 
+   "(svn_ra_serf__get_deleted_rev): Update caller.", 
+   "* subversion/libsvn_ra_serf/inherited_props.c", 
+   "(svn_ra_serf__get_inherited_props): Update caller.", 
+   "* subversion/libsvn_ra_serf/locks.c", 
+   "(locks_expected_status): New variable.", 
+   "(svn_ra_serf__get_lock): Update caller. Expect status 207.", 
+   "(svn_ra_serf__lock): Update caller.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(svn_ra_serf__get_log): Update caller.", 
+   "* subversion/libsvn_ra_serf/merge.c", 
+   "(svn_ra_serf__run_merge): Update caller.", 
+   "* subversion/libsvn_ra_serf/mergeinfo.c", 
+   "(svn_ra_serf__get_mergeinfo): Update caller.", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(create_options_req): Update caller.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(propfind_expected_status): New variable.", 
+   "(svn_ra_serf__deliver_props): Update caller. Expect 207.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__xml_done_t): New type.", 
+   "(svn_ra_serf__xml_context_create): Add done_cb argument.", 
+   "(svn_ra_serf__create_expat_handler): Add expected status argument.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(expat_ctx_t): Add expected status.", 
+   "(expat_response_handler): Handle expected status. Use slightly safer", 
+   "check for parser failures.", 
+   "(svn_ra_serf__create_expat_handler): Store expected_status.", 
+   "* subversion/libsvn_ra_serf/xml.c", 
+   "(svn_ra_serf__xml_context_t): Add callback.", 
+   "(svn_ra_serf__xml_context_done): Call done callback if available.", 
+   "(svn_ra_serf__xml_context_create): Store done callback."
+  ], 
+  "revision_id": "1499860"
+ }, 
+ {
+  "author": "fuankg", 
+  "date": "2013-07-04T20:25:31.217775Z", 
+  "msg": [
+   "Propose."
+  ], 
+  "revision_id": "1499859"
+ }
+]

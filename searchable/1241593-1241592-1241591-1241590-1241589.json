@@ -1,0 +1,97 @@
+[
+ {
+  "author": "srowen", 
+  "date": "2012-02-07T20:18:45.406098Z", 
+  "msg": [
+   "MAHOUT-970 Centralize version numbers"
+  ], 
+  "revision_id": "1241593"
+ }, 
+ {
+  "author": "bmahe", 
+  "date": "2012-02-07T20:15:30.146536Z", 
+  "msg": [
+   "BIGTOP-388. Update Mahout to 0.6"
+  ], 
+  "revision_id": "1241592"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-02-07T20:15:26.724376Z", 
+  "msg": [
+   "Not all new accounts come from a voting process. Tweak the", 
+   "documentation to align with potential PMC conventions.", 
+   "* content/dev/pmc.mdtext:", 
+   "(#newcommitter): tweak the section title. adjust the discussion", 
+   "around providing the vote link into the acreq form."
+  ], 
+  "revision_id": "1241591"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2012-02-07T20:13:44.009438Z", 
+  "msg": [
+   "o Updated docs on how to debug/attach debugger"
+  ], 
+  "revision_id": "1241590"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-02-07T20:09:41.343478Z", 
+  "msg": [
+   "[jira] [HBASE-5292] [89-fb] Prevent counting getSize on compactions", 
+   "Summary:", 
+   "Added two separate metrics for both get() and next(). This is done by", 
+   "refactoring on internal next() API. To be more specific, only Get.get()", 
+   "and ResultScanner.next() passes the metric name (\"getsize\" and", 
+   "\"nextsize\" repectively) to", 
+   "HRegion::RegionScanner::next(List<KeyValue>, String)", 
+   "This will eventually hit StoreScanner()::next((List<KeyValue>,", 
+   "int, String) where the metrics are counted.", 
+   "And their call paths are:", 
+   "1) Get", 
+   "HTable::get(final Get get)", 
+   "=> HRegionServer::get(byte [] regionName, Get get)", 
+   "=> HRegion::get(final Get get, final Integer lockid)", 
+   "=> HRegion::get(final Get get)      [pass METRIC_GETSIZE to the", 
+   "callee]", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, String", 
+   "metric)", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, int limit,", 
+   "String metric)", 
+   "=> HRegion::RegionScanner::nextInternal(int limit, String metric)", 
+   "=> KeyValueHeap::next(List<KeyValue> result, int limit, String metric)", 
+   "=> StoreScanner::next(List<KeyValue> outResult, int limit, String", 
+   "metric)", 
+   "2) Next", 
+   "HTable::ClientScanner::next()", 
+   "=> ScannerCallable::call()", 
+   "=> HRegionServer::next(long scannerId)", 
+   "=> HRegionServer::next(final long scannerId, int nbRows)  [pass", 
+   "METRIC_NEXTSIZE to the callee]", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, String", 
+   "metric)", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, int limit,", 
+   "String metric)", 
+   "=> HRegion::RegionScanner::nextInternal(int limit, String metric)", 
+   "=> KeyValueHeap::next(List<KeyValue> result, int limit, String metric)", 
+   "=> StoreScanner::next(List<KeyValue> outResult, int limit, String", 
+   "metric)", 
+   "Task ID: #898948", 
+   "Blame Rev:", 
+   "Reviewers: kanan, liyintang, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: kanan, liyintang, mbautin, zhiqiu", 
+   "Test Plan:", 
+   "1. Passed unit tests.", 
+   "2. Created a testcase TestRegionServerMetrics::testGetNextSize to", 
+   "guarantee:", 
+   "* Get/Next contributes to getsize/nextsize metrics", 
+   "* Both getsize/nextsize are per Column Family", 
+   "* Flush/compaction won't affect these two metrics", 
+   "Revert Plan:", 
+   "Tags:"
+  ], 
+  "revision_id": "1241589"
+ }
+]

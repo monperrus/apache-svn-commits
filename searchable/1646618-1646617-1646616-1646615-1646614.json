@@ -1,0 +1,61 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2014-12-19T03:18:57.641259Z", 
+  "msg": [
+   "QPID-6278: HA broker abort in TXN soak test", 
+   "The crash appears to be a race condition in async completion exposed by the HA", 
+   "TX code code as follows:", 
+   "1. Message received and placed on tx-replication queue, completion delayed till backups ack.", 
+   "Completion count goes up for each backup then down as each backup acks.", 
+   "2. Prepare received, message placed on primary's local persistent queue.", 
+   "Completion count goes up one then down one for local store completion (null store in this case).", 
+   "The race is something like this:", 
+   "- last backup ack arrives (on backup IO thread) and drops completion count to 0.", 
+   "- prepare arrives (on client thread) null store bumps count to 1 and immediately drops to 0.", 
+   "- both threads try to invoke the completion callback, one deletes it while the other is still invoking.", 
+   "The old completion logic assumed that only one thread can see the atomic counter", 
+   "go to 0.  It does not handle the count going to 0 in one thread and concurrently", 
+   "being increased and decreased back to 0 in another. This case is introduced by", 
+   "HA transactions because the same message is put onto a tx-replication queue and", 
+   "then put again onto another persistent local queue, so there are two cycles of", 
+   "completion.", 
+   "The new logic fixes this only one call to completion callback is possible in all cases.", 
+   "Also fixed missing lock in ha/Primary.cpp."
+  ], 
+  "revision_id": "1646618"
+ }, 
+ {
+  "author": "tallison", 
+  "date": "2014-12-19T03:13:56.039110Z", 
+  "msg": [
+   "TIKA-1497: update changes.txt"
+  ], 
+  "revision_id": "1646617"
+ }, 
+ {
+  "author": "tallison", 
+  "date": "2014-12-19T03:12:38.794288Z", 
+  "msg": [
+   "TIKA-1497: add JSON and XMP output to tika-server's /meta"
+  ], 
+  "revision_id": "1646616"
+ }, 
+ {
+  "author": "hwright", 
+  "date": "2014-12-19T03:03:20.989123Z", 
+  "msg": [
+   "* subversion/libsvn_client/locking_commands.c:", 
+   "Don't allocate a variable that is never used."
+  ], 
+  "revision_id": "1646615"
+ }, 
+ {
+  "author": "spamassassin_role", 
+  "date": "2014-12-19T02:43:31.189695Z", 
+  "msg": [
+   "updated scores for revision 1646404 active rules added since last mass-check"
+  ], 
+  "revision_id": "1646614"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "rmannibucau", 
+  "date": "2012-10-01T15:30:06.159059Z", 
+  "msg": [
+   "TOMEE-439 ClassListInfo store in a linkedhashset (because we can't impl comparable)"
+  ], 
+  "revision_id": "1392393"
+ }, 
+ {
+  "author": "ilgrosso", 
+  "date": "2012-10-01T15:29:09.199908Z", 
+  "msg": [
+   "[SYNCOPE-124][SYNCOPE-202] Fixed concurrency issues with Quartz at JobInstanceLoader level + set transaction isolation level to READ-COMMITTED at Spring DataSource level + re-verified integration tests with all supported DBMS"
+  ], 
+  "revision_id": "1392392"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-10-01T15:25:44.092429Z", 
+  "msg": [
+   "For mixed-revision moves, set the moved-here wc.db column only on children", 
+   "with the same op-depth as the op-root. This makes mixed-revision moves appear", 
+   "as a move of the directory at the op-root's revision, plus copies of nodes", 
+   "at other revisions into the moved directory.", 
+   "For example, this sequence, starting at a single-rev WC at r2 ...", 
+   "svn add epsilon/foo", 
+   "svn commit", 
+   "svn mv epsilon epsilon2", 
+   "... now results in the following table (op-depth zero omitted).", 
+   "op_depth    local_relpath  presence    revision    moved_here", 
+   "----------  -------------  ----------  ----------  ----------", 
+   "1           epsilon        base-delet", 
+   "1           epsilon/foo    base-delet", 
+   "1           epsilon/zeta   base-delet", 
+   "1           epsilon2       normal      2           1", 
+   "1           epsilon2/foo   not-presen  3", 
+   "1           epsilon2/zeta  normal      2           1", 
+   "2           epsilon2/foo   normal      3", 
+   "Whereas, before this change, the last row would read:", 
+   "2           epsilon2/foo   normal      3           1", 
+   "Suggested by: philip", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(op_depth_for_copy): Return the parent's op-depth.", 
+   "(db_op_copy): Replace boolean is_move parameter with move_op_depth parameter.", 
+   "Set moved-here only on op-roots of moves and moved-along children at the", 
+   "same op-depth. Keep moved-here set on children which have been moved into", 
+   "a subtree which is itself being moved.", 
+   "(op_copy_baton): Add dst_op_root_relpath for use by op_copy_txn.", 
+   "(op_copy_txn): Determine the move op-root's op-depth and make this", 
+   "information available to it db_op_copy.", 
+   "(svn_wc__db_op_copy): Store the op_root_relpath into op_copy_baton.", 
+   "(db_op_copy_shadowed_layer): Replace boolean is_move parameter with", 
+   "move_op_depth parameter. Set moved-here only on moved-along children", 
+   "at the same op-depth.", 
+   "(op_depth_for_copy): Return the parent's op-depth, too.", 
+   "(svn_wc__db_op_copy_dir, svn_wc__db_op_copy_file): Set moved-here only on", 
+   "op-roots of moves and moved-along children at the same op-depth.", 
+   "Keep moved-here set on children which have been moved into only if the", 
+   "copied directory is at the same op-depth as its parent.", 
+   "(svn_wc__db_op_copy_symlink): Pass dummy parent_op_depth parameter to", 
+   "op_depth_for_copy.", 
+   "* subversion/tests/libsvn_wc/op-depth-test.c", 
+   "(mixed_rev_move): Don't expect moved-here on nodes which weren't moved", 
+   "along with the parent at the same revision."
+  ], 
+  "revision_id": "1392391"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2012-10-01T15:25:24.462933Z", 
+  "msg": [
+   "[CONTINUUM-2686] list of previously prepared releases should not depend on build agent state", 
+   "[CONTINUUM-2687] preparing subsequent releases appends timestamp to ID, but never lists them for performing", 
+   "Improve handling of previously prepared releases, allowing multiple versions to be listed in the prepare releases dialog if prepared sequentially."
+  ], 
+  "revision_id": "1392390"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2012-10-01T15:24:57.402686Z", 
+  "msg": [
+   "Reformat"
+  ], 
+  "revision_id": "1392389"
+ }
+]

@@ -1,0 +1,70 @@
+[
+ {
+  "author": "mck", 
+  "date": "2014-02-25T10:48:17.010991Z", 
+  "msg": [
+   "Use blank strings instead of nulls as placeholder values when replacing placeholders.", 
+   "Reference from mailing list:", 
+   "http://thread.gmane.org/gmane.comp.apache.tiles.user/685", 
+   ">  <definition name=\"layout\" template=\"/WEB-INF/layout/web.jsp\"/>", 
+   ">   <definition name=\"layout.mob\" template=\"/WEB-INF/layout/mob.jsp\"/>", 
+   ">   <definition name=\"layout.tab\" template=\"/WEB-INF/layout/tab.jsp\"/>", 
+   ">   <definition name=\"REGEXP:home(\\.(mob|tab))?\" extends=\"layout{1}\">", 
+   ">     <put-attribute name=\"heading\" value=\"Home\" />", 
+   ">     <put-list-attribute name=\"body\">", 
+   ">       <add-attribute value=\"/WEB-INF/views/home.jsp\" />", 
+   ">     </put-list-attribute>", 
+   ">   </definition>", 
+   ">", 
+   "> The above rules match a pattern employed with spring-mobile where", 
+   ">  views can be resolved based on (mob)ile/(tab)let/normal , as normal is", 
+   ">  a fallback it does not contain a suffix.", 
+   ">", 
+   "> I can understand why this fails as the capture {1} does not exist in", 
+   ">  the found pattern, instead I'd like it to recognise this and evaluate", 
+   ">  to an empty string.", 
+   ">", 
+   "> Full stack-trace is as follows:", 
+   "> java.lang.NullPointerException", 
+   ">        at org.apache.tiles.BasicAttributeContext.inherit(BasicAttributeContext.java:212)", 
+   ">        at org.apache.tiles.definition.dao.ResolvingLocaleUrlDefinitionDAO.getDefinitionFromResolver(ResolvingLocaleUrlDefinitionDAO.java:84)", 
+   ">        \u2026", 
+   "The code ends up looking for \"layoutnull\" instead of \"layout\".", 
+   "This comes from in RegexpDefinitionPatternMatcher.createDefinition(..) the call to matcher.group(i) returning null.", 
+   "Rather than fix it there though i'd rather put the fix in lower down in PatternUtil.replacePlaceholders(..) so that any nulls in the vars parameter are always replaced with blanks."
+  ], 
+  "revision_id": "1571643"
+ }, 
+ {
+  "author": "marrs", 
+  "date": "2014-02-25T10:46:47.086178Z", 
+  "msg": [
+   "ACE-461 Committed a fix (and did some reformatting), plus a test case."
+  ], 
+  "revision_id": "1571642"
+ }, 
+ {
+  "author": "gunther", 
+  "date": "2014-02-25T10:36:31.067682Z", 
+  "msg": [
+   "HIVE-6501: Change hadoop dependency on tez branch (Gunther Hagleitner)"
+  ], 
+  "revision_id": "1571641"
+ }, 
+ {
+  "author": "erans", 
+  "date": "2014-02-25T10:27:21.852124Z", 
+  "msg": [
+   "Typo."
+  ], 
+  "revision_id": "1571640"
+ }, 
+ {
+  "author": "erans", 
+  "date": "2014-02-25T10:26:55.399867Z", 
+  "msg": [
+   "Fixed small inconsistency."
+  ], 
+  "revision_id": "1571639"
+ }
+]

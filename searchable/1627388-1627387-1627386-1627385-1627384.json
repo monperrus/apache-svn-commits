@@ -1,0 +1,70 @@
+[
+ {
+  "author": "markt", 
+  "date": "2014-09-24T18:24:59.642066Z", 
+  "msg": [
+   "Update changelog to include Windows signed binaries"
+  ], 
+  "revision_id": "1627388"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-09-24T18:22:13.338021Z", 
+  "msg": [
+   "Extract the signing service name to a property so RM's can do a dry run with the test signing service before doing the actual release."
+  ], 
+  "revision_id": "1627387"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-09-24T18:18:35.148031Z", 
+  "msg": [
+   "Switch over to the URL for production signing."
+  ], 
+  "revision_id": "1627386"
+ }, 
+ {
+  "author": "gunther", 
+  "date": "2014-09-24T18:16:56.920703Z", 
+  "msg": [
+   "HIVE-7482 (Addendum): missing update to golden file tez_union_group_by.q.out"
+  ], 
+  "revision_id": "1627385"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-09-24T18:16:53.625454Z", 
+  "msg": [
+   "NO-JIRA: Clean up how dispatch python code locates resources.", 
+   "This removes nasty qpid_dispatch_lib hacker from C code that was there simply to", 
+   "get the libqpiddispatch library location to python code.", 
+   "An overview of what I have done here", 
+   "The problem: Python code needs to find resources (the qpid_python_internal", 
+   "package and libqpidpython) that we do not install on the standard python search", 
+   "path.", 
+   "Some requirements:", 
+   "1. 'make install' to a standard location (e.g. /usr) must Just Work with no", 
+   "environment settings, fiddling with config files or anything like that.", 
+   "2. 'make install' to a non-standard location (e.g. /usr/local, $HOME/dispatch)", 
+   "must Just Work after setting only the required standard environment variables.", 
+   "(PATH, PYTHONPATH)", 
+   "3. When running tests in a development build: if python barfs it must barf with", 
+   "the filename of the *original source file*, not a cmake substituted file or a", 
+   "file that's been copied to an install directory. This is *really important*", 
+   "for deveoper sanity.", 
+   "4. All information about installed locations must come from CMAKE configuration.", 
+   "No guessing: \"but surely it's just $prefix/lib, no wait, is that lib64 arrgh!!!\"", 
+   "The solution:", 
+   "Two python modules:", 
+   "- site.py: Sets python vars QPID_DISPATCH_HOME and QPID_DISPATCH_LIB.", 
+   "It checks for same-named environment vars first, then looks in site_data module.", 
+   "- site_data.py.in: cmake substituted, defines install locations using cmake variables.", 
+   "For an installation: make install installs site_data.py in the normal", 
+   "python path with the proper CMAKE derived install locations.", 
+   "For a developer build: The run.py script that runs tests sets the required", 
+   "environment variables for site.py to pick up.", 
+   "Either way our scripts (qdstat etc.) just import site.py and do their thing."
+  ], 
+  "revision_id": "1627384"
+ }
+]

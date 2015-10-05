@@ -1,0 +1,86 @@
+[
+ {
+  "author": "spamassassin_role", 
+  "date": "2014-01-21T03:06:25.177738Z", 
+  "msg": [
+   "updated scores for revision 1559645 active rules added since last mass-check"
+  ], 
+  "revision_id": "1559913"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-01-21T03:06:00.315946Z", 
+  "msg": [
+   "Speed up 'svn log -g' to almost the same speed as 'svn log'.  Also, provide", 
+   "a basis for speeding up other mergeinfo detection based code.", 
+   "The problem is that svn_fs_path_change2_t used to report mergeinfo changes", 
+   "as simple prop changes.  Since most files are being created with default", 
+   "props attached to them, this creates a lot of unnecessary property read", 
+   "and comparison operations.", 
+   "The idea is to a derive a mergeinfo-mod flag from the FS propset function", 
+   "and store that in FSFS f7+ repositories (FSX will follow later).  An extended", 
+   "svn_fs_path_change2_t makes the information visible to the user.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_path_change2_t): Add mergeinfo-mod as a tristate since we don't", 
+   "have that information in old repositories.", 
+   "* subversion/libsvn_fs_util/fs-util.c", 
+   "(svn_fs__path_change_create_internal): Make sure the new member is always", 
+   "initialized properly.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(fs_mergeinfo_changed): Use the new information to skip unnecessary node", 
+   "prop processing.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(): Extend documentation to cover the new flag as well.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(SVN_FS_FS__MIN_MERGEINFO_IN_CHANGES_FORMAT): New format capability flag.", 
+   "* subversion/libsvn_fs_fs/low_level.c", 
+   "(read_change): Detect the presense of the mergeinfo-mod flag and parse", 
+   "it if found.", 
+   "(write_change_entry): Write the mergeinfo-mod flag dependent on whether", 
+   "its value is known and the new INCLUDE_MERGEINFO_MODS", 
+   "parameter has been set.", 
+   "(svn_fs_fs__write_changes): Include mergeinfo-mod only if supported by", 
+   "the current FS format.", 
+   "* subversion/libsvn_fs_fs/transaction.h", 
+   "(svn_fs_fs__add_change): Add mergeinfo-mod parameter.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(replace_change): Copy mergeinfo-mod info as well.", 
+   "(fold_change): Combine mergeinfo-mod info as well.", 
+   "(svn_fs_fs__add_change): Store mergeinfo-mod info as well.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(add_change): Add mergeinfo-mod pass-through parameter.", 
+   "(fs_change_node_prop): Determine whether merge info was touched.", 
+   "(fs_make_dir,", 
+   "fs_delete_node,", 
+   "copy_helper,", 
+   "fs_make_file,", 
+   "apply_textdelta,", 
+   "apply_text): These never modify mergeinfo."
+  ], 
+  "revision_id": "1559912"
+ }, 
+ {
+  "author": "alexoree", 
+  "date": "2014-01-21T02:59:03.559878Z", 
+  "msg": [
+   "JUDDI-782 adding uddiv2 ws classes, mapping to an from v2 and a special transport class so that we can use existing code with a uddiv2 server"
+  ], 
+  "revision_id": "1559911"
+ }, 
+ {
+  "author": "alexoree", 
+  "date": "2014-01-21T02:57:32.363070Z", 
+  "msg": [
+   "JUDDI-782 adding uddiv2 ws classes, mapping to an from v2 and a special transport class so that we can use existing code with a uddiv2 server"
+  ], 
+  "revision_id": "1559910"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2014-01-21T02:45:21.236764Z", 
+  "msg": [
+   "Fix for CONNECTORS-866."
+  ], 
+  "revision_id": "1559909"
+ }
+]

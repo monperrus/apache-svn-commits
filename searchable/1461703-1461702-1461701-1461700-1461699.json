@@ -1,0 +1,75 @@
+[
+ {
+  "author": "mfranklin", 
+  "date": "2013-03-27T16:50:51.255655Z", 
+  "msg": [
+   "Created web model for RAVE-924"
+  ], 
+  "revision_id": "1461703"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2013-03-27T16:48:30.632905Z", 
+  "msg": [
+   "Implement svn_fs_verify_root() for transactions in FSFS.", 
+   "There is no 'svnadmin' or config file API for this, but the new code will be", 
+   "run by default in maintainer builds.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_txn_root_data_t.txn_id): New struct member.", 
+   "(make_txn_root): Initialise it.", 
+   "(svn_fs_fs__verify_root): Implement for txn roots.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_commit_txn): Verify TXN just before committing it."
+  ], 
+  "revision_id": "1461702"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-03-27T16:48:00.290652Z", 
+  "msg": [
+   "For issue #4340, relax the check added in r1461580 to cover newlines instead", 
+   "of arbitrary control characters. Also move the check from the FS layer into", 
+   "the FSFS layer.", 
+   "This allows BDB filesystems to store filenames which contain newlines again.", 
+   "It also allows FSFS filesystems to store filenames which contain control", 
+   "characters other than newlines (I'm not entirely sure this is safe,", 
+   "but we can solve the problem one character at a time).", 
+   "* subversion/libsvn_fs/editor.c", 
+   "(can_create): Remove svn_path_check_valid() call.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs__path_valid): Remove svn_path_check_valid() call.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(escape_newline): New, based on illegal_path_escape from libsvn_subr/path.c.", 
+   "(check_newline): New, based on svn_path_check_valid().", 
+   "(fs_make_dir, fs_copy, fs_make_file): Prevent new paths which contain", 
+   "newlines from being added to the filesystem.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(filename_trailing_newline): Adjust test expectations such that BDB", 
+   "filesystem are allowed to store paths containing newlines, but FSFS", 
+   "filesystems aren't allowed to do so. Use a white-list approach to", 
+   "ensure that future filesystem implementations which accept newlines", 
+   "in pathnames fail this test unless explicitly listed.", 
+   "(test_funcs): Tweak description of filename_trailing_newline test."
+  ], 
+  "revision_id": "1461701"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2013-03-27T16:39:58.350115Z", 
+  "msg": [
+   "* subversion/include/svn_io.h", 
+   "(svn_io_filesizes_three_different_p,", 
+   "svn_io_files_contents_three_same_p): Mark new in 1.8."
+  ], 
+  "revision_id": "1461700"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2013-03-27T16:30:42.332224Z", 
+  "msg": [
+   "OAK-672: Avoid JCR APIs calling other JCR APIs", 
+   "simplify checking for index on name element"
+  ], 
+  "revision_id": "1461699"
+ }
+]

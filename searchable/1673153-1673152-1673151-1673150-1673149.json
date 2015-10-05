@@ -1,0 +1,67 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2015-04-13T10:47:33.758653Z", 
+  "msg": [
+   "Make 'svn ls -v file:///my/repos/tags' and 'svn ls --xml file:///my/repos/tags'", 
+   "about 20 times faster on tags directories containing far too many tags", 
+   "(like 8000), by simply avoiding a lot of unneeded work. (Removes 95% of the", 
+   "time from profile runs). The same code is also used by svnserve, and I think", 
+   "serf/mod_dav should be faster as well.", 
+   "This patch simply makes the code just ask for the dirent fields that", 
+   "it really cares about, thereby skipping the request for 'has_props'", 
+   "which takes 95% of the time, because it fetches all properties on", 
+   "all the created tags (which are stored in many different revision, thereby", 
+   "getting very bad caching behavior).", 
+   "Measurements on a repository that contains a repository with an", 
+   "empty /trunk dir, copied as /trunk@1 to /tags/T00001 ... /tags/T08000/", 
+   "each as their own revision.", 
+   "The results appear to vary by the number of tags (and probably some cache", 
+   "size), but for 8000 revisions this changes the processing time on a", 
+   "ramdrive from 1 minute 11 to just 3 seconds.", 
+   "I think we need a separate patch which allows filesystem implementations", 
+   "to answer 'has props' in a cheaper way, that doesn't trash the entire", 
+   "memory cache.", 
+   "* subversion/svn/list-cmd.c", 
+   "(print_dirent_fields,", 
+   "print_dirent_fields_verbose,", 
+   "print_dirent_xml_fields): New constant variables.", 
+   "(svn_cl__list): Only request the required fields."
+  ], 
+  "revision_id": "1673153"
+ }, 
+ {
+  "author": "mxm", 
+  "date": "2015-04-13T10:44:09.080682Z", 
+  "msg": [
+   "fix /latest redirect rule"
+  ], 
+  "revision_id": "1673152"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2015-04-13T10:40:35.857656Z", 
+  "msg": [
+   "Merge r1661486 from trunk:", 
+   "core.c: Fix warnings about unused variables", 
+   "Reviewed by: rjung, jailletc36"
+  ], 
+  "revision_id": "1673151"
+ }, 
+ {
+  "author": "noble", 
+  "date": "2015-04-13T10:33:22.424199Z", 
+  "msg": [
+   "SOLR-7110: Optimize JavaBinCodec to minimize string Object creation"
+  ], 
+  "revision_id": "1673150"
+ }, 
+ {
+  "author": "noble", 
+  "date": "2015-04-13T10:32:04.612636Z", 
+  "msg": [
+   "SOLR-7110: Optimize JavaBinCodec to minimize string Object creation"
+  ], 
+  "revision_id": "1673149"
+ }
+]

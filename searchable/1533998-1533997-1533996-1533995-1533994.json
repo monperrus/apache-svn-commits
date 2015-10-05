@@ -1,0 +1,73 @@
+[
+ {
+  "author": "markrmiller", 
+  "date": "2013-10-20T22:33:30.904985Z", 
+  "msg": [
+   "SOLR-5370: Requests to recover when an update fails should be done in background threads."
+  ], 
+  "revision_id": "1533998"
+ }, 
+ {
+  "author": "artietee", 
+  "date": "2013-10-20T22:33:23.090428Z", 
+  "msg": [
+   "translation corrections"
+  ], 
+  "revision_id": "1533997"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2013-10-20T22:31:36.703446Z", 
+  "msg": [
+   "SOLR-5370: Requests to recover when an update fails should be done in background threads."
+  ], 
+  "revision_id": "1533996"
+ }, 
+ {
+  "author": "elyograg", 
+  "date": "2013-10-20T21:40:55.401566Z", 
+  "msg": [
+   "SOLR-5042 SOLR-5125 SOLR-5368: mlt.count used incorrectly in MoreLikeThisComponent."
+  ], 
+  "revision_id": "1533995"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-10-20T21:35:23.242005Z", 
+  "msg": [
+   "Add a Windows specific svn_cmdline_puts() shortcut for the direct console", 
+   "output case to avoid the insanely expensive double character conversion", 
+   "in the Visual C++ CRT for this specific, but for Subversion very common case.", 
+   "Before:                              VM/Network WC  Host", 
+   "$ svn status -v trunk              = 7.5s           5.8s", 
+   "$ svn status -v trunk > file       = 0.7s           0.1s", 
+   "After:", 
+   "$ svn status -v trunk              = 1.3s           0.4s", 
+   "$ svn status -v trunk > file       = 0.7s           0.1s", 
+   "(Measured on Windows 7, 8 and 8.1 with several CRT versions >= 2008)", 
+   "When locales are explicitly enabled (such as in Subversion) the Visual", 
+   "C++ CRT applies a double character conversion to make the console output", 
+   "identical to what DOS and Win9X would do, while the console natively supports", 
+   "displaying unicode. Instead of using the standard conversion route, this", 
+   "shortcut converts our utf-8 to utf-16 and sends that to the attached console.", 
+   "This patch avoids the extreme performance penalty and at the same time", 
+   "enables displaying all unicode characters that the console support even", 
+   "when they can't be expressed in the ansi character set.", 
+   "Note that you will not see any change in the test suite, as the test suite", 
+   "redirects all output. It will make subversion easier to profile though,", 
+   "as before this patch many performance scenarios were console io bound on", 
+   "Windows.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(includes): Add conio.h on Windows. Add win32_xlate.", 
+   "(svn_cmdline_init): Detect if stdout and/or stderr are connected to the", 
+   "console.", 
+   "(svn_cmdline_fputs): Shortcut stdout/stderr to the console when possible.", 
+   "* subversion/libsvn_subr/win32_xlate.c", 
+   "(includes): Add svn_private_config.h.", 
+   "(svn_subr__win32_utf8_to_utf16): New function.", 
+   "* subversion/libsvn_subr/win32_xlate.h", 
+   "(svn_subr__win32_utf8_to_utf16): New function."
+  ], 
+  "revision_id": "1533994"
+ }
+]

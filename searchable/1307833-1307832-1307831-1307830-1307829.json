@@ -1,0 +1,66 @@
+[
+ {
+  "author": "olamy", 
+  "date": "2012-03-31T15:38:01.211136Z", 
+  "msg": [
+   "more links"
+  ], 
+  "revision_id": "1307833"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2012-03-31T15:37:51.795229Z", 
+  "msg": [
+   "r1307679 | mikem | 2012-03-30 18:12:49 -0700 (Fri, 30 Mar 2012) | 34 lines", 
+   "DERBY-5624 System can run out of stack space while processing DropOnCommit requests.", 
+   "backporting changes #1307679 from 10.8 to 10.7 branch.", 
+   "Taking care of cleanup after a commit is handled by notifying all \"Observers\"", 
+   "that an event has taken place that they might want to act on and cleanup. In", 
+   "the added test case this is triggered by off line commit which effectively", 
+   "drops and recreates the base table and all of its indexes after loading the", 
+   "data into them.", 
+   "Sometimes these Observers may execute work which adds to the Observer queue,", 
+   "and that queue can \"miss\" them in the first pass through.", 
+   "A previous fix for this problem added a recursive call to notifyObservers in", 
+   "the place that could cause this addition of observers. This recursive call", 
+   "was causing stack problems when the number of Observers became large. For", 
+   "the checked in test case this was 1000 indexes on 1000 columns of the table.", 
+   "For other users I believe the cause was a by product of sorts on large disk", 
+   "based sorts for multi-gigabyte tables and indexes. 2 users were reporting", 
+   "similar failed stacks for failing compresses of large tables, and one was", 
+   "able to take this fix to their environment and then successfully run the", 
+   "compress.", 
+   "The fix was to remove the recursion and instead loop at the outermost point", 
+   "until there were no Observers.", 
+   "backport to largedata suite did not go smoothly, so just put the test into", 
+   "the store suite.", 
+   "Only run the testDERBY_5624 on windows until linux issue resolved.", 
+   "Currently on linux with 1024 file descriptors per user this test fails."
+  ], 
+  "revision_id": "1307832"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-03-31T15:35:52.709745Z", 
+  "msg": [
+   "cleanup service to delete uploaded files, add form validation before starting upload"
+  ], 
+  "revision_id": "1307831"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-03-31T15:35:32.250599Z", 
+  "msg": [
+   "take of NPE, add rest method to cleanup uploaded files in session"
+  ], 
+  "revision_id": "1307830"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-03-31T15:35:00.379633Z", 
+  "msg": [
+   "file upload server implementation first code need some cleanup"
+  ], 
+  "revision_id": "1307829"
+ }
+]

@@ -1,0 +1,58 @@
+[
+ {
+  "author": "raminder", 
+  "date": "2012-04-05T19:37:32.529244Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag 0.10"
+  ], 
+  "revision_id": "1310033"
+ }, 
+ {
+  "author": "raminder", 
+  "date": "2012-04-05T19:37:24.531212Z", 
+  "msg": [
+   "[maven-release-plugin] prepare release 0.10"
+  ], 
+  "revision_id": "1310032"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2012-04-05T19:36:04.621500Z", 
+  "msg": [
+   "Some logic abstraction / API isolation.", 
+   "Reviewed by: pburba", 
+   "* subversion/libsvn_subr/win32_crypto.c", 
+   "(encrypt_data, decrypt_data): New helper functions which isolate the", 
+   "actual interaction with the Win32 Crypto API, abstracted from ...", 
+   "(windows_password_encrypter, windows_ssl_client_cert_pw_encrypter,", 
+   "windows_password_decrypter, windows_ssl_client_cert_pw_decrypter):", 
+   "... these functions, which now defer to the new helpers."
+  ], 
+  "revision_id": "1310031"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-04-05T19:34:23.715982Z", 
+  "msg": [
+   "NO-JIRA: Publish updated HA doc to site."
+  ], 
+  "revision_id": "1310030"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2012-04-05T19:33:21.506438Z", 
+  "msg": [
+   "Removed the code that attempts to dynamically adjusts the file threshold (depending on available memory) and that limits the concurrency in the createPartContent method.", 
+   "Reasons:", 
+   "1. That code seems to be responsible for sporadically occurring build failures, as reported in the following two posts on the mailing list:", 
+   "http://markmail.org/thread/eclcydt6kq3ygcot", 
+   "http://markmail.org/message/ikr6pxvblz6vn4qc", 
+   "2. The code limits the concurrency (to a maximum of 4 parallel executions) of a piece of code that contains blocking calls that may need to wait for data from a remote client. Depending on how Axiom is used, this may be exploited by a malicious client to cause a denial of service.", 
+   "3. The \"feature\" is completely undocumented and nothing in the API gives a hint about its existence. Only people reading the more obscure parts of the Axiom code would be aware of it.", 
+   "4. The algorithm that calculates the dynamic threshold uses Runtime#freeMemory() as variable. Because of the garbage collector, that variable is highly volatile and the feature doesn't work in a deterministic way. E.g. if the code is executed shortly before a garbage collection occurs, freeMemory will be small which may lead to unexpected results.", 
+   "5. The code was contributed by IBM and was likely optimized for usage in a specific product. The feature uses several fixed parameters and it is unlikely that this set of parameters are appropriate in other scenarios.", 
+   "6. From a design perspective, Axiom is not the right place for this kind of code, because Axiom may be used in a variety of use cases, but the code is tailored for a specific scenario. Axiom may define interfaces that allow to plug in this kind of features, but the implementation should be provided by the SOAP stack or the application server, not hardwired into Axiom."
+  ], 
+  "revision_id": "1310029"
+ }
+]

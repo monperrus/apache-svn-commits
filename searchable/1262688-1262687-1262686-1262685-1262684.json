@@ -1,0 +1,113 @@
+[
+ {
+  "author": "", 
+  "date": "2012-01-30T18:11:32.031580Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 4806", 
+   "Author:   pfarland@adobe.com", 
+   "Date:     2009-02-03T05:01:18.665465Z", 
+   "Log Message:", 
+   "-----------", 
+   "Fixes for Advanced CSS applying to inner components. The changes involved three areas:", 
+   "1. mx.styles.StyleProxy needed updating to support IAdvancedStyleClient", 
+   "2. mx.styles.StyleProtoChain required refactoring so that advanced selector matching functionality could be shared outside of this class (see next). The main change is in StyleProtoChain.addProperties() which is recursively called to handle the case when styleName is set to another IStyleClient (instead of a String). The change concerns the order of building the proto chain for this special case. Before advanced CSS, it seems we recursively did the following in the addProperties() subroutine:", 
+   "- Find type selectors, add to proto chain", 
+   "- Examine styleName:", 
+   "- if a CSSStyleDeclaration, add it to the proto chain next", 
+   "- if a IStyleClient, recurse again by calling addProperties to this IStyleClient", 
+   "- if a String, apply class selectors to proto chain", 
+   "- Finally, add inline style declarations to proto chain", 
+   "Advanced CSS might involve other universal selectors that aren't necessarily class selectors (such as id selectors), or we could have type selectors that are more specific that class selectors. So the new logic for Advanced CSS is:", 
+   "- Examine styleName:", 
+   "- if a CSSStyleDeclaration, add it to the list of selectors", 
+   "- Get all matching selectors, sort by specificity, and add to the proto chain.", 
+   "- Then, if styleName was an IStyleClient, recurse again by calling addProperties to this IStyleClient", 
+   "- Finally, add inline styleDeclarations to proto chain", 
+   "A styleName pointing to an IStyleClient means that it has a very high specificity and will override any other selector. The only thing that continues to always win are inline style declarations which are added last to the proto chain.", 
+   "3. mx.core.UIComponent.initThemeColor() needed updating to support advanced CSS selectors. This required the use of a new utility method in StyleProtoChain to find matching selectors.", 
+   "QA: Yes, please watch styles test results closely. Take a look at descendant/id/class selectors on more advanced components like DataGrid.", 
+   "Doc: No", 
+   "Checkintests: Pass", 
+   "Reviewer: Glenn", 
+   "Bugs:", 
+   "SDK-17358 - [Advanced CSS] When using an id selector without a Type selector, styles are not passed onto sub components (e.g. the drop down of a ComboBox)", 
+   "Modified Paths:", 
+   "--------------", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/frameworks/projects/framework/src/mx/styles/StyleProxy.as</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/frameworks/projects/framework/src/mx/core/UIComponent.as</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/frameworks/projects/framework/src/mx/styles/StyleProtoChain.as</path>"
+  ], 
+  "revision_id": "1262688"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-01-30T18:11:27.417357Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 8", 
+   "Author:   open-source-svn-admin@adobe.com", 
+   "Date:     2007-12-15T01:49:31.087529Z", 
+   "Log Message:", 
+   "-----------", 
+   "The beginning of the open-source Flex SDK.", 
+   "Populated the flex/sdk/trunk directory with an open-source subset of files from //depot/flex/sdk/...@191097 in the Faramir Perforce server. This changelist is a bit past the 3.0rc0 build.", 
+   "The Ant scripts will not successfully build yet. They need to be adapted to the open-source subset.", 
+   "Modified Paths:", 
+   "--------------", 
+   "2532 paths were modified"
+  ], 
+  "revision_id": "1262687"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-01-30T18:11:08.016342Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 23247", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2011-12-20T19:21:13.134833Z", 
+   "Log Message:", 
+   "-----------", 
+   "Remove ADOBE SYSTEMS license and replace with Apache license in headers - frameworks.  A 2nd pass will be needed to get the files not handled up by the scripts.", 
+   "Modified Paths:", 
+   "--------------", 
+   "4959 paths were modified"
+  ], 
+  "revision_id": "1262686"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-01-30T18:11:05.983541Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 23246", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2011-12-20T17:40:08.069454Z", 
+   "Log Message:", 
+   "-----------", 
+   "Rollback 23243.  If comment followed header it was stripped as well.", 
+   "Modified Paths:", 
+   "--------------", 
+   "2361 paths were modified"
+  ], 
+  "revision_id": "1262685"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-01-30T18:11:03.826001Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 23243", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2011-12-20T00:59:57.384047Z", 
+   "Log Message:", 
+   "-----------", 
+   "In frameworks, remove Adobe headers from all files except xml/mxml file types.  There are also a few .txt files that are license files that I didn't touch yet.", 
+   "Modified Paths:", 
+   "--------------", 
+   "2361 paths were modified"
+  ], 
+  "revision_id": "1262684"
+ }
+]

@@ -1,0 +1,118 @@
+[
+ {
+  "author": "markt", 
+  "date": "2014-11-06T19:32:23.814856Z", 
+  "msg": [
+   "Trivial Javadoc fix to test buildbot for Tomcat 9"
+  ], 
+  "revision_id": "1637188"
+ }, 
+ {
+  "author": "rhs", 
+  "date": "2014-11-06T19:16:28.835629Z", 
+  "msg": [
+   "generated proton 0.8 release content"
+  ], 
+  "revision_id": "1637187"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2014-11-06T19:13:19.652035Z", 
+  "msg": [
+   "Follow-up to r1637184: Remove some unused code.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(upgrade_body): Remove unused TXNS_DIR local variable and it's", 
+   "initialization.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(is_noderev_file, fnv1a_checksum_on_file_range): Remove unused functions.", 
+   "* subversion/libsvn_fs_fs/util.c", 
+   "(svn_fs_fs__path_txns_dir): Remove unused variable."
+  ], 
+  "revision_id": "1637186"
+ }, 
+ {
+  "author": "jfthomps", 
+  "date": "2014-11-06T19:09:21.951074Z", 
+  "msg": [
+   "VCL-776 - rework resource code to have a base class for all resources and inheriting classes for each resource type", 
+   "computer.php: modified AJsubmitCompStateChange: added 'timeout' to states in list for preg_match to put computer in availablenow array"
+  ], 
+  "revision_id": "1637185"
+ }, 
+ {
+  "author": "ivan", 
+  "date": "2014-11-06T19:03:31.376915Z", 
+  "msg": [
+   "Make FSFSv7 repositories always use consistent addressing mode, instead of", 
+   "saving revision number from which logical addressing was enabled.", 
+   "From the performance point of view there will be no big benefits to enable", 
+   "log addressing for an existing repository, because the existing old part", 
+   "of the repository will remain to be addressed physically. So those who", 
+   "want to benefit from the performance improvements related to the log", 
+   "addressing feature will be required to dump/load their repositories anyway.", 
+   "On the other hand, consistent addressing allows us to omit some tricky code.", 
+   "This also fixes problems with long living svn_fs_t instances during the hot", 
+   "repository upgrade in background.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_TXNS_LA_DIR): Remove.", 
+   "(fs_fs_data_t): Replace MIN_LOG_ADDRESSING_REV member with simple", 
+   "USE_LOG_ADDRESSING flag.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(initialize_fs_struct): Initialize USE_LOG_ADDRESSING field instead of", 
+   "MIN_LOG_ADDRESSING_REV.", 
+   "* subversion/libsvn_fs_fs/util.c", 
+   "* subversion/libsvn_fs_fs/util.h", 
+   "(svn_fs_fs__use_log_addressing): Remove REV argument.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(dbg_log_access, use_block_read, svn_fs_fs__rev_get_root,", 
+   "svn_fs_fs__check_rep, svn_fs_fs__get_changes): Adapt calls to", 
+   "svn_fs_fs__use_log_addressing().", 
+   "* subversion/libsvn_fs_fs/dump-index.c", 
+   "(svn_fs_fs__dump_index): Adapt calls to svn_fs_fs__use_log_addressing().", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(read_format): Replace MIN_LOG_ADDRESSING_REV output parameter with", 
+   "USE_LOG_ADDRESSING. Do not parse revision number if repository uses", 
+   "logical addressing mode.", 
+   "(svn_fs_fs__write_format): Simple write \"addressing physical\" or", 
+   "\"addressing logical\" to format file depending repository addressing mode.", 
+   "(svn_fs_fs__read_format_file): Adapt calls to read_format() function.", 
+   "(upgrade_body): Replace local variable  MIN_LOG_ADDRESSING_REV with", 
+   "USE_LOG_ADDRESSING flag. Adapt calls to read_format() and remove", 
+   "code that renames transaction folder during upgrade.", 
+   "(write_revision_zero): Adapt calls to svn_fs_fs__use_log_addressing().", 
+   "(svn_fs_fs__create_file_tree): Replace MIN_LOG_ADDRESSING_REV argument with", 
+   "USE_LOG_ADDRESSING flag and use it for FFD->USE_LOG_ADDRESSING", 
+   "initialization.", 
+   "(svn_fs_fs__create): Pass TRUE for USE_LOG_ADDRESSING parameter in call to", 
+   "svn_fs_fs__create_file_tree().", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__create_file_tree): Update function declaration and docstring.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_create_empty_dest): Adapt call to svn_fs_fs__create_file_tree().", 
+   "* subversion/libsvn_fs_fs/load-index.c", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(svn_fs_fs__item_offset, svn_fs_fs__load_index): Adapt calls", 
+   "to svn_fs_fs__use_log_addressing().", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(svn_fs_fs__order_dir_entries, pack_rev_shard): Adapt calls", 
+   "to svn_fs_fs__use_log_addressing().", 
+   "* subversion/libsvn_fs_fs/stats.c", 
+   "(parse_representation, read_noderev, read_revisions): Adapt calls", 
+   "to svn_fs_fs__use_log_addressing().", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(auto_truncate_proto_rev, store_p2l_index_entry, allocate_item_index,", 
+   "write_final_rev): Adapt calls to svn_fs_fs__use_log_addressing().", 
+   "(store_l2p_index_entry): Remove FINAL_REVISION argument. Adapt calls", 
+   "to svn_fs_fs__use_log_addressing().", 
+   "(compare_sort_p2l_entry, using_log_addressing, upgrade_transaction):", 
+   "Remove.", 
+   "(commit_body): Remove call to upgrade_transaction().", 
+   "* subversion/libsvn_fs_fs/verify.c", 
+   "(svn_fs_fs__verify): Adapt calls to svn_fs_fs__use_log_addressing().", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(upgrade_while_committing): Expect that begin_txn and commit doesn't fail", 
+   "after upgrade to fsfs7."
+  ], 
+  "revision_id": "1637184"
+ }
+]

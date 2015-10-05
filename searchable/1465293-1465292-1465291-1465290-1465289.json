@@ -1,0 +1,108 @@
+[
+ {
+  "author": "arne", 
+  "date": "2013-04-06T19:55:20.914391Z", 
+  "msg": [
+   "OWB-766: Removed public static ThreadLocal"
+  ], 
+  "revision_id": "1465293"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2013-04-06T19:27:09.426783Z", 
+  "msg": [
+   "Add an 'ignore ancestry' parameter to the RA layer 'update' APIs, for", 
+   "symmetry with the 'switch' APIs.  Also add a scratch pool for the same", 
+   "reason, although it is as yet unused.", 
+   "The 'switch' APIs historically ignored ancestry and have recently gained an", 
+   "'ignore ancestry' control (r1449413) so it can be disabled; they gained a", 
+   "scratch pool at the same time.  The 'update' APIs have historically never", 
+   "ignored ancestry, and now they can.", 
+   "For ra_local and ra_serf this works for all existing server versions, but", 
+   "for ra_svn this requires a new svnserve.  (Our DAV protocol already", 
+   "supported an 'ignore ancestry' flag.)", 
+   "Note: This 'ignore ancestry' option is the one that tells the server to", 
+   "report the difference between two unrelated nodes of the same kind as a", 
+   "content change instead of as a node replacement.  This is not the option to", 
+   "'svn switch' that allows the switch URL to be unrelated to the current URL,", 
+   "that is also named '--ignore-ancestry'.", 
+   "This was discussed in the dev@ email thread \"Consistency between 'update'", 
+   "and 'switch' APIs\", starting on 2013-03-13, archived at e.g.", 
+   "<http://svn.haxx.se/dev/archive-2013-03/0200.shtml>.", 
+   "* subversion/include/svn_ra.h,", 
+   "subversion/libsvn_ra/ra_loader.c,", 
+   "subversion/libsvn_ra/deprecated.c", 
+   "(svn_ra_do_update3): New, renamed from svn_ra_do_update2(). Add", 
+   "'ignore_ancestry' and scratch pool parameters.", 
+   "(svn_ra_do_update2): Deprecate, and rewrite as a wrapper.", 
+   "(svn_ra_do_update): Adjust the call to the vtable method.", 
+   "(svn_ra_do_switch3): Adjust the doc string.", 
+   "(svn_ra_do_diff3): Adjust a reference in the doc string.", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__vtable_t): Add 'ignore_ancestry' and scratch pool parameters to", 
+   "the 'do_update' method. Update the doc string of the 'do_switch' method.", 
+   "* subversion/libsvn_ra/wrapper_template.h", 
+   "(compat_do_update): Adjust the call to the vtable method.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__do_update): Add 'ignore_ancestry' and scratch pool", 
+   "parameters, the latter unused.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h,", 
+   "subversion/libsvn_ra_serf/update.c", 
+   "(svn_ra_serf__do_update): Add 'ignore_ancestry' and scratch pool", 
+   "parameters, the latter unused.", 
+   "* subversion/include/svn_ra_svn.h,", 
+   "subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn_write_cmd_update): Add the 'ignore_ancestry' flag.", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(ra_svn_update): Add 'ignore_ancestry' and scratch pool parameters, the", 
+   "latter unused.", 
+   "* subversion/svnserve/serve.c", 
+   "(update): Parse and use the 'ignore_ancestry' parameter; default to false", 
+   "if not present. Simplify the 'send_copyfrom_args' handling to match how", 
+   "it is done in 'switch'.", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "Document the addition of the new parameter to the 'update' command.", 
+   "Update the callers, without ever requesting to ignore ancestry:", 
+   "* subversion/libsvn_client/copy_foreign.c", 
+   "(copy_foreign_dir): Track the change to svn_ra_do_update3().", 
+   "* subversion/libsvn_client/export.c", 
+   "(export_directory): Track the change to svn_ra_do_update3().", 
+   "* subversion/libsvn_client/update.c", 
+   "(update_internal): Track the change to svn_ra_do_update3().", 
+   "* subversion/svnrdump/svnrdump.c", 
+   "(dump_initial_full_revision): Track the change to svn_ra_do_update3()."
+  ], 
+  "revision_id": "1465292"
+ }, 
+ {
+  "author": "arne", 
+  "date": "2013-04-06T19:04:24.769400Z", 
+  "msg": [
+   "OWB-814: Implemented ProducerFactory and InjectionTargetFactory and use them"
+  ], 
+  "revision_id": "1465291"
+ }, 
+ {
+  "author": "claude", 
+  "date": "2013-04-06T19:04:08.123142Z", 
+  "msg": [
+   "Added default constructor for simple testing.", 
+   "Fixed TestNamespace so that it can be executed in the test jar from another package."
+  ], 
+  "revision_id": "1465290"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2013-04-06T18:54:43.060466Z", 
+  "msg": [
+   "Teach the C tests to recognize a '--help' option.", 
+   "* subversion/tests/svn_test_main.c", 
+   "(help_opt): New option code.", 
+   "(cl_options): Add '--help' option. Tweak the whitespace in some other help", 
+   "strings.", 
+   "(help): New function.", 
+   "(main): Recognize and act on the '--help' option."
+  ], 
+  "revision_id": "1465289"
+ }
+]

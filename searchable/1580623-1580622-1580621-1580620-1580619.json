@@ -1,0 +1,91 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-03-23T21:48:46.600188Z", 
+  "msg": [
+   "Reduce the CPU overhead caused by the FSFS format 7 block read feature.", 
+   "Instead of parsing txdelta windows every time we encounter them, initially", 
+   "cache their raw form and parse it only when the window gets accessed for", 
+   "the first time.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.h", 
+   "(svn_fs_fs__raw_cached_window_t): Declare a data type for cached raw /", 
+   "unparsed txdelta windows.", 
+   "(svn_fs_fs__serialize_raw_window,", 
+   "svn_fs_fs__deserialize_raw_window): Declare the corresponding", 
+   "(de-)serialization functions.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(svn_fs_fs__serialize_raw_window,", 
+   "svn_fs_fs__deserialize_raw_window): Implement the new (de-)serialization", 
+   "functions.", 
+   "* subversion/include/private/svn_delta_private.h", 
+   "(svn_txdelta__read_raw_window_len): New private API to extract the minimum", 
+   "information we need to read a raw window.", 
+   "* subversion/libsvn_delta/svndiff.c", 
+   "(read_one_size): Add a parameter to ultimately count the number of header", 
+   "bytes we read.", 
+   "(read_window_header): Return the number of parsed header bytes as well.", 
+   "(svn_txdelta_read_svndiff_window,", 
+   "svn_txdelta_skip_svndiff_window): Update callers.", 
+   "(svn_txdelta__read_raw_window_len): Implement as a variation of", 
+   "svn_txdelta_skip_svndiff_window.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): Add the new cache instance.", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches): Initialize the new cache instance.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(rep_state_t): We have yet another delta window cache.", 
+   "(create_rep_state_body): Initialize that new member.", 
+   "(parse_raw_window): A new cache getter that converts the cached", 
+   "raw txdelta window into a parsed one.", 
+   "(get_cached_window): If we can't find the window in its parsed", 
+   "form, try to find the raw version in our", 
+   "cache and parse that.", 
+   "(read_delta_window): Check that both window caches are available,", 
+   "even though we should always either have", 
+   "all or neither of them.", 
+   "(init_rep_state): Update init code similarly to parse_raw_window.", 
+   "(get_window_header): Replaced by ...", 
+   "(get_txdelta_window_end): ... this function, which returns only the", 
+   "end offset of the respective window.", 
+   "(get_raw_window_end): New function that does the same for raw windows.", 
+   "(cache_windows): Rewrite as checking both caches before reading data", 
+   "and only populating the raw window cache.", 
+   "(block_read_windows): Make sure we attempt to cache delta windows", 
+   "only if the we have those caches."
+  ], 
+  "revision_id": "1580623"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-03-23T21:48:33.084844Z", 
+  "msg": [
+   "Fix typos spotted by Cyril Bont\u00e9."
+  ], 
+  "revision_id": "1580622"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-03-23T21:47:46.021289Z", 
+  "msg": [
+   "Fix typos spotted by Cyril Bont\u00e9."
+  ], 
+  "revision_id": "1580621"
+ }, 
+ {
+  "author": "lektran", 
+  "date": "2014-03-23T21:41:57.756670Z", 
+  "msg": [
+   "Fix bug that causes a service to keep retrying after a deadlock occurs until lockRetriesRemaining reached zero"
+  ], 
+  "revision_id": "1580620"
+ }, 
+ {
+  "author": "wkeil", 
+  "date": "2014-03-23T21:36:09.705307Z", 
+  "msg": [
+   "OPEN - issue DMAP-36: Sync with OpenDDR Resources - tagging", 
+   "https://issues.apache.org/jira/browse/DMAP-36"
+  ], 
+  "revision_id": "1580619"
+ }
+]

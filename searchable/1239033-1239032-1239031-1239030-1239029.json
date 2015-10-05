@@ -1,0 +1,82 @@
+[
+ {
+  "author": "philip", 
+  "date": "2012-02-01T10:04:14.889554Z", 
+  "msg": [
+   "First step to multi-layer moves in the working copy.  This mostly", 
+   "works as well as the existing moves on trunk but the implementation", 
+   "turns out to be more complicated than I hoped it would be, so it's", 
+   "on a branch for now until I decide it's going to work.  Most tests", 
+   "PASS but there are some regressions from trunk, in particular the", 
+   "final part of copy_tests.py 105 FAILs.", 
+   "* BRANCH-README: New", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(scan_addition): Add moved_from_op_depth parameter.", 
+   "(get_info_for_copy, read_url_txn, svn_wc__db_global_relocate): Adjust", 
+   "call to scan_addition.", 
+   "(db_op_copy): Don't set moved_to to 0, leave it NULL instead.", 
+   "(delete_update_movedto): Add op_depth parameter.", 
+   "(struct moved_node_t): New.", 
+   "(delete_node): Construct list of moves affected by delete and", 
+   "update moved_to as the last step.", 
+   "(get_moved_from_info): Add op_depth parameter.", 
+   "(struct scan_addition_baton_t): Add moved_from_op_depth element.", 
+   "(scan_addition_txn): Get op_depth from get_moved_from_info.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_SELECT_DELETION_INFO): Get moved_to from working.", 
+   "(STMT_INSERT_WORKING_NODE_COPY_FROM_BASE,", 
+   "STMT_INSERT_WORKING_NODE_COPY_FROM_WORKING): Preserve existing moved_to.", 
+   "(STMT_SELECT_MOVED_FROM_RELPATH, STMT_UPDATE_MOVED_TO_RELPATH,", 
+   "STMT_SELECT_MOVED_HERE_CHILDREN): Use working not base.", 
+   "(STMT_CLEAR_MOVED_TO_RELPATH, STMT_CLEAR_MOVED_TO_RELPATH_RECURSIVE): Clear", 
+   "all op-depth.", 
+   "(STMT_SELECT_MOVED_PAIR, STMT_SELECT_MOVED_PAIR2): New.", 
+   "* subversion/tests/libsvn_wc/op-depth-test.c", 
+   "(test_wc_move, nested_moves_child_first, nested_moves_child_last,", 
+   "copy_a_move, move_to_swap, move_on_move2, move_added): Adjust", 
+   "expectations.", 
+   "(move_in_copy, move_in_replace, move_on_move): Adjust expectations", 
+   "and mark PASS."
+  ], 
+  "revision_id": "1239033"
+ }, 
+ {
+  "author": "lofwyr", 
+  "date": "2012-02-01T09:55:23.270860Z", 
+  "msg": [
+   "merged against the trunk"
+  ], 
+  "revision_id": "1239032"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2012-02-01T09:54:25.263810Z", 
+  "msg": [
+   "Note a TODO for Lua 5.2.0 compatibility."
+  ], 
+  "revision_id": "1239031"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2012-02-01T09:51:59.693413Z", 
+  "msg": [
+   "Remove luaL_reg macro definition no longer needed", 
+   "and simplify lua_load compatibility macro.", 
+   "Note that in order to successfully compile with", 
+   "Lua 5.2.0 we still need to add LUA_COMPAT_ALL", 
+   "to CPPFLAGS. Detection in config.m4 is still", 
+   "missing."
+  ], 
+  "revision_id": "1239030"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2012-02-01T09:50:14.966472Z", 
+  "msg": [
+   "luaL_reg was already deprecated in Lua 5.1.4.", 
+   "It is gone in Lua 5.2.0 and was replaced by luaL_Reg", 
+   "which already existed in 5.1.4. So use that one.."
+  ], 
+  "revision_id": "1239029"
+ }
+]

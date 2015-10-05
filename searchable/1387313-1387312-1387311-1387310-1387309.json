@@ -1,0 +1,73 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2012-09-18T18:42:26.663799Z", 
+  "msg": [
+   "Drop the manually/clutch generated history files"
+  ], 
+  "revision_id": "1387313"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-09-18T18:40:20.647391Z", 
+  "msg": [
+   "[HBASE-5783] [0.89-fb] Reliably bulk load Puts/Deletes to HBase, without WAL.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Currently, there are 2 ways to load data *reliably* into HBase:", 
+   "(i) individual Puts/Gets to HBase with WAL", 
+   "(ii) MapReduce based Bulk Load mechanism", 
+   "Option (i) is slow due to WALs. Option (ii) is slow due to the map", 
+   "reduce merges doing everything through disk.", 
+   "This is a hybrid approach of writing everything, directly to memstore,", 
+   "without WAL. And, then waiting/initiating a memstore flush to provide", 
+   "durability.", 
+   "Test Plan:", 
+   "add a new unit test", 
+   "TestBatchedUpload", 
+   "16 /tmp/2012-09-18_09_07_29_hbase-89int_newHiveUpload_v5-mrFailures  Failed on MR:  TestBatchedUpload TestFromClientSide TestHRegionCloseRetry TestHRegionServerFileSystemFailure TestHsHaServerCmdLine TestMasterFailover TestMultiClusters TestNativeThriftClient TestRegionSplitter TestReplication TestSchemaModificationLocks TestThreadPoolServerFramedCmdLine TestThreadPoolServerUnframedCmdLine TestThreadedSelectorServerCmdLine TestThriftServer TestTimestamp", 
+   "1 /tmp/2012-09-18_09_07_29_hbase-89int_newHiveUpload_v5-localFailures  Failed on Local:  None.", 
+   "Reviewers: kranganathan, liyintang", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@, mbautin, gqchen", 
+   "Differential Revision: https://phabricator.fb.com/D570100"
+  ], 
+  "revision_id": "1387312"
+ }, 
+ {
+  "author": "solomax", 
+  "date": "2012-09-18T18:40:14.062055Z", 
+  "msg": [
+   "OPENMEETINGS-436 Ability to moderate room chat is added;", 
+   "code cleanup"
+  ], 
+  "revision_id": "1387311"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-09-18T18:39:54.481762Z", 
+  "msg": [
+   "[jira] [HBASE-6807] [89-fb] Add region name to most HBase Thrift calls and use it to bypass client code", 
+   "Author: mbautin", 
+   "Summary: This is an enhancement for Liyin's diff D562373 that adds region name to a few HBase Thrift API functions. As I started testing this with hbc, I realized that the few calls that were overridden in the original diff were not triggered by any of hbc's standard commands. I tested them through the auto-generated Python client and that worked fine, but end-to-end (including hbc) is needed. Therefore, I am adding the regionName parameter to most HBase Thrift API methods except scanner-related methods and checkAnd* methods. I am also removing the copy-paste optimizations in HRegionThriftServer which perform region lookup by row unconditionally. Those should be unnecessary now that the region name is passed from the client.", 
+   "Test Plan:", 
+   "Compile hbc with D564078 and issue put/get commands from the command line.", 
+   "Connect to the regionserver with a debugger and verify that we are hitting the optimized path and not going through HTable.", 
+   "Reviewers: kranganathan, kannan, pritam, aaiyer, avf, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: ajoyfrank, hbase-eng@, davejwatson", 
+   "Differential Revision: https://phabricator.fb.com/D568325", 
+   "Task ID: 1430675"
+  ], 
+  "revision_id": "1387310"
+ }, 
+ {
+  "author": "tross", 
+  "date": "2012-09-18T18:37:05.571487Z", 
+  "msg": [
+   "PROTON-24 - Added context field to pn_delivery_t.", 
+   "Renamed existing internal context field to transport_context."
+  ], 
+  "revision_id": "1387309"
+ }
+]

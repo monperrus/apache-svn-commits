@@ -1,0 +1,85 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-04T23:46:26.143749Z", 
+  "msg": [
+   "[master] Average load should compensate for ignored servers", 
+   "Summary:", 
+   "When computing the average load across region servers for load balancing", 
+   "purposes, ServerManager ignores all regions hosted by servers which have", 
+   "regions being held for them (preferred assignments). However, the number", 
+   "of servers over which the load was being averaged was not adjusted,", 
+   "causing the average load to change significantly (and incorrectly)", 
+   "whenever a preferred assignment was made.", 
+   "This change adjusts the number of servers when computing the average", 
+   "load, to compensate for the servers which are ignored.", 
+   "Test Plan:", 
+   "mvn -Dtest=TestRegionRebalancing test", 
+   "Use the shell's move_region command on a balanced cluster and observe", 
+   "that there are no extraneous region movements.", 
+   "Reviewers: kranganathan, kannan, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@lists, kranganathan, liyintang", 
+   "Differential Revision: 375176"
+  ], 
+  "revision_id": "1227393"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-04T23:46:22.973238Z", 
+  "msg": [
+   "[master] Preferred assignments should ignore servers with no load info", 
+   "Summary:", 
+   "Before a server becomes dead or its info is removed from the collection", 
+   "of server infos, it may be in the process of shutting down. Regions with", 
+   "preferred assignments should not go to servers which are in such a", 
+   "state, as identified by the absence of load information, which is among", 
+   "the first things to be removed when a server shuts down.", 
+   "Before, regions might get transient assignments to a server which is in", 
+   "the process of shutting down, then that assignment would have to timeout", 
+   "before the region could be assigned to another server. This change", 
+   "should prevent that.", 
+   "Test Plan:", 
+   "Gracefully stop a region server which is the primary favored node for", 
+   "some regions. Observe that those regions move to secondary or tertiary", 
+   "nodes immediately.", 
+   "Reviewers: kranganathan, kannan, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@lists, kranganathan, liyintang, kannan", 
+   "Differential Revision: 376982"
+  ], 
+  "revision_id": "1227392"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-04T23:46:19.775794Z", 
+  "msg": [
+   "[HBASE-5014] PutSortReducer should adhere to memory limits"
+  ], 
+  "revision_id": "1227391"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-04T23:46:15.948435Z", 
+  "msg": [
+   "[master] Increase the sleep time for TestZooKeeper"
+  ], 
+  "revision_id": "1227390"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-04T23:46:09.919783Z", 
+  "msg": [
+   "[jira] [HBASE-5031] [89-fb] Remove hard-coded non-existent host name from TestScanner", 
+   "Summary: TestScanner is failing on 0.89-fb because it has a hard-coded fake host", 
+   "name that it is trying to look up. Replacing this with 127.0.0.1:<random_port>", 
+   "instead.", 
+   "Reviewed at https://reviews.facebook.net/D867.", 
+   "Test Plan: Run TestScanner", 
+   "Reviewers: Liyin, Kannan, JIRA", 
+   "Reviewed By: Liyin", 
+   "CC: Liyin"
+  ], 
+  "revision_id": "1227389"
+ }
+]

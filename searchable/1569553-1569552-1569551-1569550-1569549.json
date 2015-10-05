@@ -1,0 +1,85 @@
+[
+ {
+  "author": "kiwiwings", 
+  "date": "2014-02-18T23:08:09.083841Z", 
+  "msg": [
+   "fixed \"The processing instruction target matching [xX][mM][lL]\" error"
+  ], 
+  "revision_id": "1569553"
+ }, 
+ {
+  "author": "rgodfrey", 
+  "date": "2014-02-18T23:07:41.975499Z", 
+  "msg": [
+   "QPID-5562 : [Java Broker] make all failed ACL checks throw AccessControlException"
+  ], 
+  "revision_id": "1569552"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-02-18T23:03:08.321562Z", 
+  "msg": [
+   "Reimplement the 'arbitrary nodes diff' in libsvn_client as a proper driver of", 
+   "the diff processor, instead of a driver of the old diff callbacks 'with nice", 
+   "output' (which was in some cases invalid and didn't follow any of the", 
+   "ordering rules).", 
+   "This removes the last real driver of the old diff callbacks and will finally", 
+   "make it possible to convert the diff output handling to the diff processor", 
+   "api, which will allow resolving some long standing bugs and feature", 
+   "requests.", 
+   "In theory this might even allow driving merge over this diff (to allow", 
+   "things like maintaining vendor branches), but this will require more work.", 
+   "* subversion/libsvn_client/diff_local.c", 
+   "(includes): Add private/svn_diff_tree.h.", 
+   "(do_file_diff,", 
+   "do_dir_diff): New prototype.", 
+   "(do_arbitrary_files_diff): Remove function.", 
+   "(arbitrary_diff_walker_baton): Remove struct.", 
+   "(arbitrary_diff_walker,", 
+   "arbitrary_diff_this_dir): Remove prototypes.", 
+   "(do_arbitrary_dirs_diff,", 
+   "arbitrary_diff_this_dir): Fold into each other and rrename to...", 
+   "(inner_dir_diff): ... this. Obtain dirents in both directories and", 
+   "handle the results recursively, following the diff editor rules.", 
+   "(do_dir_diff,", 
+   "do_file_diff): New functions.", 
+   "(arbitrary_diff_walker): Remove function.", 
+   "(svn_client__arbitrary_nodes_diff): Wrap callbacks using the standard", 
+   "wrapper. Update caller.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_two_working_copies): Assume that additions are reported as", 
+   "'revision 0', like how all other diff drivers produce the data.", 
+   "Assume that the driver properly notices the change from F of a directory", 
+   "to a file, and as such reports a delete and add.", 
+   "(But directory deletes can't report property deletes via the old", 
+   "callbacks api)", 
+   "(diff_arbitrary_files_and_dirs): Assume that additions are reported as", 
+   "'revision 0', like how all other diff drivers produce the data."
+  ], 
+  "revision_id": "1569551"
+ }, 
+ {
+  "author": "mbenson", 
+  "date": "2014-02-18T22:56:38.460286Z", 
+  "msg": [
+   "upgrade asm; shade dependencies for weaver modules for best portability and predictability"
+  ], 
+  "revision_id": "1569550"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2014-02-18T22:49:38.427670Z", 
+  "msg": [
+   "The txn-list-lock protects the shared txn structures but not the", 
+   "protorev file so the txn-list-lock can be released before doing the", 
+   "disk IO to open, and seek to the end of, the protorev file.  This", 
+   "reduces contention for the txn-list-lock.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(unlock_proto_rev_list_locked): Remove.", 
+   "(struct get_writable_proto_rev_baton): Remove file member.", 
+   "(get_writable_proto_rev_body): Move open/seek from here ...", 
+   "(get_writable_proto_rev): ... to here."
+  ], 
+  "revision_id": "1569549"
+ }
+]

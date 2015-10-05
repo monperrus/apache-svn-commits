@@ -1,0 +1,84 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2012-11-16T00:02:44.646406Z", 
+  "msg": [
+   "[HBASE-2376] Introduce an API to perform FlashBackQueries.", 
+   "Author: pritam", 
+   "Summary:", 
+   "Updated the relevant sections of scanning to make sure the", 
+   "FlashBackQuery API is supported completely. I also changed the writables", 
+   "for Get and Scan. I removed some version checking during write which I", 
+   "felt was unnecessary (maybe I'm not clear on why we had that, but feel", 
+   "free to point something that I obviously missed out).", 
+   "This is on top of D606550", 
+   "Test Plan: Unit tests added.", 
+   "Reviewers: kannan, kranganathan, liyintang, aaiyer, adela, cjin", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, erling", 
+   "Differential Revision: https://phabricator.fb.com/D618553", 
+   "Task ID: 1733764"
+  ], 
+  "revision_id": "1410118"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-16T00:02:06.637986Z", 
+  "msg": [
+   "[HBASE-7169] Adding average/max latency counters to HTableMultiplexer", 
+   "Author: vinodv", 
+   "Summary:", 
+   "My first HBase diff! Didn't really open a JIRA or anything, just want to", 
+   "verify that the approach looks ok. I may have reinvented the wheel a", 
+   "little with my simple moving window average counter, but I looked around", 
+   "in hadoop.metrics and hbase.metrics, but didn't find anything that was", 
+   "easy to expose to clients. It was simpler for me to reuse the", 
+   "boilerplate that Liyin wrote for exporting stats to clients.", 
+   "Test Plan:", 
+   "Tested on ODSS in my devserver. Checked that the latency counters look", 
+   "reasonable both in fb303 and by adding some logging. Also ensured the", 
+   "unittest ran correctly.", 
+   "Reviewers: liyintang, cgthayer", 
+   "Reviewed By: liyintang", 
+   "Differential Revision: https://phabricator.fb.com/D525688", 
+   "Task ID: 1183034"
+  ], 
+  "revision_id": "1410117"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-16T00:01:30.316271Z", 
+  "msg": [
+   "[HBASE-7164] Using HFileOutputFormat as MapOutputFormat", 
+   "Author: liyintang", 
+   "Summary:", 
+   "We mainly use HFileOutputFormat as Reducer's output format. It depends on the MR framework to sort the values before written into HFiles.", 
+   "However, if the mapper task can guarantee the total order for its output value, it will be more efficient to use HFileOutputFormat as MapOutputFormat.", 
+   "The motivation comes from ODS use cases. The rollup job takes the TableInputFormat as MapInputFormation,  and then each mapper task rolls up some key values and emits the result value to output format.", 
+   "Since all the result values are emitted in order, it would be more convenient to use HFileOutputFormat directly and bulk upload all the output files into HBase as the final step. By this approach, it would reduce the performance impact of roll up jobs into minimal.", 
+   "BTW, the new unit test, TestTableInputFormatWithHFileOutputFormat, simulates the ODS rollup job's behavior.", 
+   "Test Plan: Unit tests", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: vinodv, hbase-eng@, erling", 
+   "Differential Revision: https://phabricator.fb.com/D631227"
+  ], 
+  "revision_id": "1410116"
+ }, 
+ {
+  "author": "yonik", 
+  "date": "2012-11-15T23:56:02.200288Z", 
+  "msg": [
+   "QueryParsing.toString support for WrappedQuery, ExtendedQuery"
+  ], 
+  "revision_id": "1410115"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2012-11-15T23:52:46.420961Z", 
+  "msg": [
+   "Fixed a connection leak if we can't bind the connection while trying to open a new one. See DIRAPI-96."
+  ], 
+  "revision_id": "1410114"
+ }
+]

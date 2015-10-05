@@ -1,0 +1,117 @@
+[
+ {
+  "author": "rjung", 
+  "date": "2015-05-22T12:40:58.546090Z", 
+  "msg": [
+   "Fix configure when building against APR which", 
+   "is not installed in the standard system location."
+  ], 
+  "revision_id": "1681093"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2015-05-22T12:39:51.980035Z", 
+  "msg": [
+   "Sync trunk with 1.1.x branch for ssl.", 
+   "1.1 has several additions trunk never got, e.g.", 
+   "OCSP support, pkcs12 support and others.", 
+   "Below is a list of revisions added to 1.1.x which are part", 
+   "of the forward port. The only remaining changes that have not been", 
+   "forward ported all concern sslnetwork.c:", 
+   "r1456353 | mturk | 2013-03-14 08:35:56 +0100 (Thu, 14 Mar 2013) | 1 line", 
+   "Prevent infinite loop for SSL_ERROR_SSL", 
+   "r1409681 | mturk | 2012-11-15 08:59:36 +0100 (Thu, 15 Nov 2012) | 1 line", 
+   "Clean up SSL network layer. Ensure the behavior is similar to standard APR layer", 
+   "They have not (yet) been forward ported, because it is not clear", 
+   "(to me) how well they apply and whether they conflict with the following", 
+   "change in trunk, which is not part of 1.1:", 
+   "r1299312 | costin | 2012-03-11 00:59:25 +0100 (Sun, 11 Mar 2012) | 5 lines", 
+   "Small fix for ssl_read/ssl_write if the socket is not blocking. Tomcat is not currently using apr", 
+   "in non blocking mode, so it shouldn't be affected. Without the fix read would block.", 
+   "Also added/fixed methods in sslext to set the mode - needed for non-blocking write.", 
+   "It would be nice if we could clean up this remaining difference.", 
+   "Apart from that the only things in trunk ssl that are now not in 1.1", 
+   "are the recent additions concerning ALPN and SNI support.", 
+   "An addition to forward ports, this commit also removes all code", 
+   "with #if or #ifdef checks which only apply to OpenSSL 1.0.1 or", 
+   "earlier and removes all code only active when OPENSSL_USE_DEPRECATED", 
+   "is defined. As a consequence support for custom DHE params is gone", 
+   "but this will re-intgrated from mod_ssl in a more appropriate form", 
+   "to trunk and 1.1 next.", 
+   "List of forward ports contained in this commit:", 
+   "r1680456 | billbarker | 2015-05-20 06:22:58 +0200 (Wed, 20 May 2015) | 1 line", 
+   "Fix errors when compiling against openssl master", 
+   "r1673617 | billbarker | 2015-04-15 04:08:02 +0200 (Wed, 15 Apr 2015) | 1 line", 
+   "More cleanup of thread ID handling for openssl master plus remove compile warning that doesn't make any difference. Still no change if compiling against any currently released v", 
+   "ersion of openssl", 
+   "r1673333 | billbarker | 2015-04-14 03:41:49 +0200 (Tue, 14 Apr 2015) | 1 line", 
+   "openssl master handles thread id itself (and better than we do).  No change if compiling against any currently released version of openssl", 
+   "r1649733 | billbarker | 2015-01-06 05:42:24 +0100 (Tue, 06 Jan 2015) | 1 line", 
+   "More fixes to help Gump build. No change if compiling against any currently released version of openssl", 
+   "Plus removing all code that is only used for older OpenSSL versions than 1.0.2", 
+   "plus remove all code that only runs for OPENSSL_USE_DEPRECATED.", 
+   "r1649278 | billbarker | 2015-01-04 02:06:53 +0100 (Sun, 04 Jan 2015) | 1 line", 
+   "Fix compilation error for Gump. There is no change if compiling against any currently released version of openssl.", 
+   "r1586221 | mturk | 2014-04-10 07:44:09 +0200 (Thu, 10 Apr 2014) | 1 line", 
+   "Revert NO_SSL_INTERN define. We need direct struct access for sslinfo", 
+   "r1585957 | mturk | 2014-04-09 14:54:25 +0200 (Wed, 09 Apr 2014) | 1 line", 
+   "Ensure we have the needed ECDH with the OpenSSL used", 
+   "r1585923 | mturk | 2014-04-09 11:52:40 +0200 (Wed, 09 Apr 2014) | 1 line", 
+   "As per Tom's suggestion. Set SSL_OP_SINGLE_ECDH_USE to context", 
+   "r1585898 | mturk | 2014-04-09 09:32:29 +0200 (Wed, 09 Apr 2014) | 1 line", 
+   "Apply Ognjen's patch for bz55915", 
+   "r1507125 | schultz | 2013-07-25 23:01:25 +0200 (Thu, 25 Jul 2013) | 5 lines", 
+   "Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=53937", 
+   "Eliminate double-call to apr_pool_destroy.", 
+   "r1409079 | mturk | 2012-11-14 06:21:53 +0100 (Wed, 14 Nov 2012) | 1 line", 
+   "Trim trailing spaces - No functional change", 
+   "r1350270 | rjung | 2012-06-14 16:38:33 +0200 (Thu, 14 Jun 2012) | 4 lines", 
+   "Return error if BIO_flush() didn't work.", 
+   "Fixes compiler warning about unused return", 
+   "value.", 
+   "r1294171 | mturk | 2012-02-27 15:56:07 +0100 (Mon, 27 Feb 2012) | 1 line", 
+   "Ensure that cert_file is present. Key can be null in which case it'll get the cert_file value, but cer must be provided", 
+   "r1293368 | mturk | 2012-02-24 19:07:07 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "Fix typo. Thanks Felix :)", 
+   "r1293187 | mturk | 2012-02-24 12:29:35 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "Use correct variable types to suppress compile time warning", 
+   "r1293144 | mturk | 2012-02-24 10:26:28 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "Fix few remaining issues in OCSP patch", 
+   "r1293123 | mturk | 2012-02-24 09:01:52 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "Fix code style. No functional change", 
+   "r1293122 | mturk | 2012-02-24 08:58:26 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "Apply additional security check from mod_ssl", 
+   "r1293120 | mturk | 2012-02-24 08:46:39 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "No need for public function", 
+   "r1293119 | mturk | 2012-02-24 08:43:44 +0100 (Fri, 24 Feb 2012) | 1 line", 
+   "BZ45392 Apply modified patch. OCSP is enabled is explicitly configure with --enable-ocsp at build time", 
+   "r1292859 | mturk | 2012-02-23 18:21:50 +0100 (Thu, 23 Feb 2012) | 1 line", 
+   "Add support for loading pkcs12 certificates. Certificate must have .pkcs12 extension"
+  ], 
+  "revision_id": "1681092"
+ }, 
+ {
+  "author": "ragerri", 
+  "date": "2015-05-22T12:38:24.614850Z", 
+  "msg": [
+   "OPENNLP-775 add support for lowercased word cluster dictionaries"
+  ], 
+  "revision_id": "1681091"
+ }, 
+ {
+  "author": "britter", 
+  "date": "2015-05-22T12:29:41.836874Z", 
+  "msg": [
+   "Use findbugs version defined in parent pom"
+  ], 
+  "revision_id": "1681090"
+ }, 
+ {
+  "author": "britter", 
+  "date": "2015-05-22T12:21:24.119332Z", 
+  "msg": [
+   "Update to latest parent pom"
+  ], 
+  "revision_id": "1681089"
+ }
+]

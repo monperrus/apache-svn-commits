@@ -1,0 +1,58 @@
+[
+ {
+  "author": "clr", 
+  "date": "2012-08-28T16:24:42.795656Z", 
+  "msg": [
+   "Publish\\ 25\\ July\\ 2012\\ minutes"
+  ], 
+  "revision_id": "1378208"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2012-08-28T16:24:31.892157Z", 
+  "msg": [
+   "move imports down"
+  ], 
+  "revision_id": "1378207"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2012-08-28T16:24:19.091504Z", 
+  "msg": [
+   "DERBY-5531 Assert failure when inserting NULL into indexed column with territory-based collation", 
+   "At bind time of insert node, we go through the individual columns in the insert statement to determine if there is a need for normalization or not. In case if the insert resultset has all null values, we conclude that we do not need normalization. At execution time, as part of normalization, the data type conversion from datatypes like SQLVarchar to CollatorSQLVarchar will happen if we are dealing with territory based database. But this never happens if insert resultset has all null values and hence a later assert check in OpenBTree fails because the datatypes do not match(in the example given in this jira, SQLVarchar and CollatorSQLVarchar mismatch at runtime will cause an assert failure). Here is the relevant code in InsertNode.bindStatement()", 
+   "/* Insert a NormalizeResultSetNode above the source if the source", 
+   "* and target column types and lengths do not match.", 
+   "*/", 
+   "if (! resultColumnList.columnTypesAndLengthsMatch(", 
+   "resultSet.getResultColumns()))", 
+   "{", 
+   "resultSet =", 
+   "(ResultSetNode) getNodeFactory().getNode(", 
+   "C_NodeTypes.NORMALIZE_RESULT_SET_NODE, resultSet,", 
+   "resultColumnList, null, Boolean.FALSE,", 
+   "getContextManager());", 
+   "}", 
+   "To fix this problem, we are changing OpenBTree.isIndexableRowConsistent to not throw an assert failure if dealing with null values. If the value is null, then we will not assert the column datatypes. As it is, this method is meaningful only in sane mode. Insane jars do not give any error for the test case provided in the jira because assertion only happens with sane jars.", 
+   "In short, the fix is, if the row column's value is null, then don't worry about the data type match at execution time."
+  ], 
+  "revision_id": "1378206"
+ }, 
+ {
+  "author": "doebele", 
+  "date": "2012-08-28T16:23:55.359415Z", 
+  "msg": [
+   "EMPIREDB-164", 
+   "new function getSQLNumberString() to validate numeric values encoded in sql commands"
+  ], 
+  "revision_id": "1378205"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2012-08-28T16:16:54.361752Z", 
+  "msg": [
+   "use {@code ...}"
+  ], 
+  "revision_id": "1378204"
+ }
+]

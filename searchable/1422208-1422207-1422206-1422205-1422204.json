@@ -1,0 +1,97 @@
+[
+ {
+  "author": "desruisseaux", 
+  "date": "2012-12-15T09:40:21.164665Z", 
+  "msg": [
+   "Updated the GeoAPI dependency declared in the NetBeans project."
+  ], 
+  "revision_id": "1422208"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2012-12-15T09:15:37.243092Z", 
+  "msg": [
+   "A patch from Naofumi Fukue for \"javascript error in hidden form\" https://issues.apache.org/jira/browse/OFBIZ-5098", 
+   "HtmlMenuRenderer generates like bellow form tags. It generates double target=\"_BLANK\" , then cause javascript error.", 
+   "<li><form method=\"post\" action=\"/ar/control/invoice.pdf\" target=\"_BLANK\" name=\"InvoiceSubTabBar_pdf_LF_8\"><input name=\"invoiceId\" value=\"8010\" type=\"hidden\"/></form><a target=\"_BLANK\" href=\"javascript:document.InvoiceSubTabBar_pdf_LF_8.submit()\">PDF</a></li>", 
+   "document.InvoiceSubTabBar_pdf_LF_8 is undefined @ javascript:document.InvoiceSubTabBar_pdf_LF_8.submit()", 
+   "jleroux: to reproduce", 
+   "For example, edit applications/accounting/webapp/accounting/WEB-INF/controller.xml like this.", 
+   "<request-map uri=\"invoice.pdf\">", 
+   "<security https=\"true\" auth=\"true\"/>", 
+   "<event name=\"test\" type=\"java\" path=\"org.ofbiz.webapp.event.TestEvent\" invoke=\"test\"/> <= add this", 
+   "<response name=\"success\" type=\"view\" value=\"InvoicePDF\"/>", 
+   "</request-map>", 
+   "And in invoice screen, click 'PDF' button. Exist or not exist above line, generated html is different.", 
+   "As is", 
+   "~event: PDF rendered", 
+   "<li><a target=\"_BLANK\" href=\"/ar/control/invoice.pdf?invoiceId=8010\">PDF</a></li>", 
+   "event:  PDF not rendered", 
+   "<li><form method=\"post\" action=\"/ar/control/invoice.pdf\" target=\"_BLANK\" name=\"InvoiceSubTabBar_pdf_LF_8\"><input name=\"invoiceId\" value=\"8010\" type=\"hidden\"/></form><a target=\"_BLANK\" href=\"javascript:document.InvoiceSubTabBar_pdf_LF_8.submit()\">PDF</a></li>", 
+   "patched", 
+   "~event: PDF rendered", 
+   "<li><a target=\"_BLANK\" href=\"/ar/control/invoice.pdf?invoiceId=8010\">PDF</a></li>", 
+   "event: PDF rendered", 
+   "<li><form method=\"post\" action=\"/ar/control/invoice.pdf\" target=\"_BLANK\" name=\"InvoiceSubTabBar_pdf_LF_8\"><input name=\"invoiceId\" value=\"8010\" type=\"hidden\"/></form><a href=\"javascript:document.InvoiceSubTabBar_pdf_LF_8.submit()\">PDF</a></li>"
+  ], 
+  "revision_id": "1422207"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2012-12-15T09:03:23.852516Z", 
+  "msg": [
+   "Fix issue #4101 (\"'svnrdump dump -rN:M <URL>/subpath' strips subpath", 
+   "in first rev only\") by teaching the special-case code in svnrdump used", 
+   "to handle the first revision of non-incremental range-based dump which", 
+   "doesn't begin with r0 to:", 
+   "1. generate dump stream commands for adding the missing parent tree", 
+   "structure, and", 
+   "2. use full repository relpaths for the Node-path: headers.", 
+   "NOTE: I'm a bit torn about whether I should have done #1 above.", 
+   "Perhaps that bit of the functionality should be tied to a", 
+   "--parents options?", 
+   "* subversion/svnrdump/svnrdump.h", 
+   "(svn_rdump__get_dump_editor, svn_rdump__get_dump_editor_v2): Add", 
+   "edit_root_relpath' parameter.", 
+   "* subversion/svnrdump/svnrdump.c", 
+   "(replay_revstart, replay_revstart_v2): Update call to", 
+   "svn_rdump__get_dump_editor()", 
+   "(dump_initial_full_revision): Calculate the source repository", 
+   "relpath, passing that to an updated call to svn_rdump__get_dump_editor()", 
+   "* subversion/svnrdump/dump_editor.c", 
+   "(dump_edit_baton): Add 'edit_root_relpath' member.", 
+   "(dump_node): Prepend the edit root relpath to the dump stream path", 
+   "if necessary.", 
+   "(dump_mkdir): New helper function.", 
+   "(open_root): If 'edit_root_relpath' is non-NULL, use dump_mkdir() to", 
+   "generate dump-stream additions for the dump source directory and", 
+   "its parents.", 
+   "(svn_rdump__get_dump_editor): Add 'edit_root_relpath' parameter,", 
+   "and stuff it into the dump edit baton.", 
+   "* subversion/tests/cmdline/svnrdump_tests_data/root-range.expected.dump,", 
+   "* subversion/tests/cmdline/svnrdump_tests_data/trunk-A-range.expected.dump,", 
+   "* subversion/tests/cmdline/svnrdump_tests_data/trunk-only-range.expected.dump", 
+   "New test data.", 
+   "* subversion/tests/cmdline/svnrdump_tests.py", 
+   "(range_dump, only_trunk_range_dump, only_trunk_A_range_dump): New tests.", 
+   "(test_list): Add references to new tests."
+  ], 
+  "revision_id": "1422206"
+ }, 
+ {
+  "author": "spamassassin_role", 
+  "date": "2012-12-15T08:53:37.276444Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "1422205"
+ }, 
+ {
+  "author": "spamassassin_role", 
+  "date": "2012-12-15T08:50:03.055137Z", 
+  "msg": [
+   "promotions validated"
+  ], 
+  "revision_id": "1422204"
+ }
+]

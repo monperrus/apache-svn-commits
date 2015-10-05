@@ -1,0 +1,57 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2012-07-19T19:16:29.112844Z", 
+  "msg": [
+   "QPID-4148: HA Not setting initial queues for new RemoteBackups", 
+   "Fix bug introduced by r1362584:", 
+   "\"QPID-4144 HA broker deadlocks on broker::QueueRegistry lock and ha::Primary lock\"", 
+   "Stopped setting initial queues on new (i.e. not expected) RemoteBackups."
+  ], 
+  "revision_id": "1363488"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-07-19T19:16:21.703070Z", 
+  "msg": [
+   "QPID-4145: HA Minor fixes to recovery", 
+   "- Demote timed-out backups from ready to catch-up.", 
+   "- Don't cancel connected backups on timeout, only disconnected ones.", 
+   "- Don't allow promotion of a catch-up broker.", 
+   "- Minor logging improvement."
+  ], 
+  "revision_id": "1363487"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-07-19T19:16:12.038795Z", 
+  "msg": [
+   "QPID-4144 HA broker deadlocks on broker::QueueRegistry lock and ha::Primary lock", 
+   "Running tests repeatedly, the broker deadlocked with the attached stack trace.", 
+   "The problem call sequences are:", 
+   "1. QueueRegistry::destroy takes QueuerRegistry lock > ConfigurationObserver::queueDestroy > ha::Primary::queueDestroy takes Primary lock.", 
+   "2. ConnectionObserver::opened cals Primary::opened lock> RemoteBackup>getQueues().eachQueue", 
+   "This patch breaks the deadlock at both ends: QueueRegistry no longer holds the lock across the observer call and Primary does not hold the lock across eachQueue."
+  ], 
+  "revision_id": "1363486"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-07-19T19:16:03.652932Z", 
+  "msg": [
+   "QPID-4138: HA sporadic failure in ha_tests", 
+   "This was another test issue: trace logging had been left on by mistake, which was", 
+   "slowing down the tests to the point they were hitting test time-outs.", 
+   "Also in this patch: Include symbolic satus in membership update log message."
+  ], 
+  "revision_id": "1363485"
+ }, 
+ {
+  "author": "juanpablo", 
+  "date": "2012-07-19T19:13:15.025049Z", 
+  "msg": [
+   "some few tweaks more..."
+  ], 
+  "revision_id": "1363484"
+ }
+]

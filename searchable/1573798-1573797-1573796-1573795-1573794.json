@@ -1,0 +1,68 @@
+[
+ {
+  "author": "mxmanghi", 
+  "date": "2014-03-03T23:09:56.310420Z", 
+  "msg": [
+   "creating tagged release 2.1.4"
+  ], 
+  "revision_id": "1573798"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-03-03T23:09:50.509553Z", 
+  "msg": [
+   "YARN-1748. Excluded core-site.xml from hadoop-yarn-server-tests package's jar and thus avoid breaking downstream tests. Contributed by Sravya Tirukkovalur.", 
+   "svn merge --ignore-ancestry -c 1573795 ../../trunk/"
+  ], 
+  "revision_id": "1573797"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-03-03T23:09:31.068236Z", 
+  "msg": [
+   "YARN-1748. Excluded core-site.xml from hadoop-yarn-server-tests package's jar and thus avoid breaking downstream tests. Contributed by Sravya Tirukkovalur.", 
+   "svn merge --ignore-ancestry -c 1573795 ../../trunk/"
+  ], 
+  "revision_id": "1573796"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-03-03T23:09:08.080187Z", 
+  "msg": [
+   "YARN-1748. Excluded core-site.xml from hadoop-yarn-server-tests package's jar and thus avoid breaking downstream tests. Contributed by Sravya Tirukkovalur."
+  ], 
+  "revision_id": "1573795"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-03-03T22:58:28.718671Z", 
+  "msg": [
+   "Tweak the get_root_changes_offset() routine in order to fix the problems I", 
+   "identified in http://svn.haxx.se/dev/archive-2014-02/0189.shtml", 
+   "This changeset fixes the following issues in its implementation:", 
+   "- It avoids seeking to a negative offset for the scenarios when the revision", 
+   "file is smaller than buffer.", 
+   "- It avoids touching internal svn_stringbuf_t fields (such as DATA and LEN)", 
+   "and achieves the wanted behavior using the stringbuf API only.", 
+   "- We no longer rely on the allocator-specific BLOCKSIZE when determining the", 
+   "buffer size for the trailer.  In a theoretical case where the allocator", 
+   "allocates huge 2KiB blocks for every stringbuf, we would fail to parse the", 
+   "trailer for smaller (< 2KiB) revision files.", 
+   "- It uses svn_io_file_read_full2() instead of svn_io_file_read() when reading", 
+   "the file block with the revision trailer.  svn_io_file_read(), as opposed", 
+   "to svn_io_file_read_full2(), can read any number of bytes <= NBYTES before", 
+   "exiting.  This essentially means we would fail to parse the revision", 
+   "trailer in all scenarios where this function returns without filling", 
+   "the buffer.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(get_root_changes_offset): Create the stringbuf around a stack-allocated", 
+   "BUFFER.  Do that only when the buffer is filled (thus avoiding the", 
+   "necessity to touch the internal stringbuf fields, i.e. DATA, LEN and", 
+   "BLOCKSIZE).  Handle the possibility of revision files being smaller than", 
+   "the expected trailer block size (64 bytes).  Do not attempt seeking to", 
+   "negative file offsets in that case.  Finally, use svn_io_file_read_full2()", 
+   "instead of svn_io_file_read() when reading the file contents."
+  ], 
+  "revision_id": "1573794"
+ }
+]

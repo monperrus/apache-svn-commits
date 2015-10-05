@@ -1,0 +1,83 @@
+[
+ {
+  "author": "ylavic", 
+  "date": "2014-06-21T21:07:36.947979Z", 
+  "msg": [
+   "Merge r1572655, r1572663, r1572668, r1572669, r1572670, r1572671, r1573224, r1586745, r1587594, r1587639, r1590509 from trunk.", 
+   "Commit 1 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Handle Zlib header buffering in the inflate output filter :", 
+   "- add the new deflate_ctx_t fields needed to re-enter the Zlib header parsing,", 
+   "- introduce the new consume_zlib_flags() function to parse/consume the ZLib flags (will be used by the other filters too),", 
+   "- use it to handle incomplete header in the output filter (deflate).", 
+   "This alone fixes PR 55666, but the issue remains for PR 46146 (inflate/deflate input filters), hence the following patches.", 
+   "Commit 2 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Handle Zlib header buffering in the inflate input filter :", 
+   "- loop until all the header is received,", 
+   "- handle non blocking reads returning empty brigade,", 
+   "- fix a double ap_get_brigade() when an EOS brigade is encountered while reading the header,", 
+   "- in that case and no data was received so far, don't return an error but SUCCESS with the EOS, otherwise fail,", 
+   "- don't remove the Content-Length and Content-MD5 headers until some data is read.", 
+   "Still does not handle Zlib flags for now, next commits.", 
+   "Commit 3 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Handle Zlib validation bytes buffering (CRC + length) in the inflate input filter :", 
+   "- use validation_buffer and validation_length as state,", 
+   "- loop until all the bytes are received.", 
+   "Commit 4 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Handle non blocking reads which would block in the inflate input filter (not an error).", 
+   "Commit 5 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Handle Zlib flags in the inflate input filter as in the output filter, using consume_zlib_flags().", 
+   "Commit 6 on 6 to fix reentrance (incomplete Zlib header or validation bytes) in mod_deflate's output and input filters.", 
+   "PR 46146 (patches from duplicated PR 55666)", 
+   "Ignore empty buckets and split buckets longer than INT_MAX (since zlib uses 32-bit ints only) in all filters.", 
+   "mod_deflate: when consuming zlibs flags, APR_INCOMPLETE implies no more bytes available.", 
+   "mod_deflate: update empty log tags.", 
+   "mod_deflate: Delay INFLATE input filter's self removal until all the buffered", 
+   "buckets are out (including EOS). PR 46146.", 
+   "mod_deflate: Don't return gzip-ed data when reading FLUSH bucket in INFLATE", 
+   "input filter, forward the FLUSH but keep reading should EOS/more", 
+   "follow (should not happen, but mod_deflate won't fix it).", 
+   "mod_deflate: follow up to r1587639.", 
+   "Don't break the looped brigade when moving the FLUSH bucket to the returned bb", 
+   "and continue reading.", 
+   "Reviewed by: ylavic, jim, covener"
+  ], 
+  "revision_id": "1604458"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-06-21T21:07:12.750591Z", 
+  "msg": [
+   "Updated white-spaces"
+  ], 
+  "revision_id": "1604457"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-06-21T21:06:20.498581Z", 
+  "msg": [
+   "Updated styles"
+  ], 
+  "revision_id": "1604456"
+ }, 
+ {
+  "author": "pmoravec", 
+  "date": "2014-06-21T20:48:01.771716Z", 
+  "msg": [
+   "QPID-5835: [C++ broker] Broker recovery forgets auto-delete flag on queues and exchanges"
+  ], 
+  "revision_id": "1604455"
+ }, 
+ {
+  "author": "djencks", 
+  "date": "2014-06-21T20:15:30.789436Z", 
+  "msg": [
+   "FELIX-4405 Easy half of prototype scope, expose service as PrototypeServiceFactory"
+  ], 
+  "revision_id": "1604454"
+ }
+]

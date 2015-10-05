@@ -1,0 +1,96 @@
+[
+ {
+  "author": "cwiklik", 
+  "date": "2013-12-30T16:20:38.425494Z", 
+  "msg": [
+   "UIMA-2881 updated Apache header"
+  ], 
+  "revision_id": "1554268"
+ }, 
+ {
+  "author": "gryzor", 
+  "date": "2013-12-30T16:14:27.293992Z", 
+  "msg": [
+   "[trunk][doc] Introducing .fr translation for mod_dav_lock.xml & mod_dav.xml"
+  ], 
+  "revision_id": "1554267"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2013-12-30T16:00:57.619108Z", 
+  "msg": [
+   "Applied fix from trunk for revision: 1554242", 
+   "===", 
+   "Upgrade to the latest official major version of Groovy: 2.2.1"
+  ], 
+  "revision_id": "1554266"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2013-12-30T15:53:07.596519Z", 
+  "msg": [
+   "This is a refactoring of the product promotion engine in order to overcome some limitations that prevented it to select and apply the best set of promotions under special conditions.", 
+   "Example: Consider two promotions:", 
+   "* consider two products: Product A, with price $20, and Product B, with price $40", 
+   "* Promotion 1: 20% discount on all the products in a category containing Product A and Product B", 
+   "* Promotion 2: 40% discount on Product A", 
+   "When Product A and Product B are both in the cart:", 
+   "* Expected behavior: on Product A the Promotion 2 should be applied i.e. 40% discount, and on Product B Promotion 1 should be applied i.e. 20% discount.", 
+   "** Summary", 
+   "Product\t\tPrice\tDiscount\t\tSubtotal", 
+   "A\t\t$20\t$8 (40% discount)\t$12", 
+   "B\t\t$40\t$8 (20% discount)\t$32", 
+   "Total Adjustment: $16", 
+   "* OFBiz behavior (before this fix): Promotion 1 is applied to Product A and Product B; this happens because the total discount of Promotion 1 is greater than the total discount of Promotion 2 and OFBiz applies promotions sorted by discount (desc)", 
+   "** Summary", 
+   "Product\t\tPrice\tDiscount\t\tSubtotal", 
+   "A\t\t$20\t$4 (20% discount)\t$16", 
+   "B\t\t$40\t$8 (20% discount)\t$32", 
+   "Total Adjustment: $12", 
+   "The new solution fixes this issue and similar ones.", 
+   "Here are some details about the new algorithm.", 
+   "Overview of the flow:", 
+   "1) run the promotions one by one in a test run", 
+   "2) collect the ProductPromoUse information", 
+   "3) sort them by weight (i.e. the ratio between the discount and the value of the products discounted)", 
+   "4) execute the ProductPromoUse in the given order", 
+   "In order to understand this solution, and specifically the changes to ProductPromoWorker.java, there is an important concept to consider:", 
+   "one Promotion can generate more than one ProductPromoUseInfo objects.", 
+   "For example if I have 2 units of WG-1111 in the cart (in one cart item) and I have the promotion \u201c20% discount on WG-1111 and GZ-1000\u201d then the system will create TWO ProductPromoUseInfo objects both associated to the same promotion one for each of the 2 units discounted.", 
+   "Similarly if I had two lines: 2 units of WG-1111 and 1 unit of GZ-1000 I would get 3 ProductPromoUseInfo objects 2 objects for WG-1111 and 1 object for GZ-1000", 
+   "We can sort these ProductPromoUseInfo objects based on their weight (i.e. the ratio between the discount and the value of the products discounted) in desc order", 
+   "and now we have a sorted list of ProductPromoUseInfo objects ready to be executed", 
+   "However we only want to execute each of them once and for this reason we set (in memory, not in the DB) the useLimitPerOrder to 1 in the first ProductPromoUseInfo of a given promotion and then to 2 if the same ProductPromoUseInfo is associated to the same promotion etc...", 
+   "in this way the end result is that the system will generate, as we desire, ONE ProductPromoUseInfo only for each of the ProductPromoUseInfo in the list.", 
+   "Here is an example:", 
+   "we have 2 promotions:", 
+   "PROMO A", 
+   "PROMO B", 
+   "After test run:", 
+   "ProductPromoUseInfo - PROMO A - #1 - weight 0.3", 
+   "ProductPromoUseInfo - PROMO A - #2 - weight 0.3", 
+   "ProductPromoUseInfo - PROMO B - #1 - weight 0.4", 
+   "After sorting:", 
+   "ProductPromoUseInfo - PROMO B - #1 - weight 0.4", 
+   "ProductPromoUseInfo - PROMO A - #1 - weight 0.3", 
+   "ProductPromoUseInfo - PROMO A - #2 - weight 0.3", 
+   "Based on this we create a list (sortedExplodedProductPromoList) of ProductPromo:", 
+   "PROMO B - with useLimitPerOrder=1", 
+   "PROMO A - with useLimitPerOrder=1", 
+   "PROMO A - with useLimitPerOrder=2", 
+   "When we apply these to the cart we get the following results:", 
+   "PROMO B - with useLimitPerOrder=1 APPLIED", 
+   "PROMO A - with useLimitPerOrder=1 APPLIED", 
+   "PROMO A - with useLimitPerOrder=2 NOT APPLIED (because PROMO B used the item)"
+  ], 
+  "revision_id": "1554265"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2013-12-30T15:51:50.131923Z", 
+  "msg": [
+   "Remove BufferingWriter - buffered in byte, not char, space."
+  ], 
+  "revision_id": "1554264"
+ }
+]

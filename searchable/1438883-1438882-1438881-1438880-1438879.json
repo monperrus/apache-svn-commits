@@ -1,0 +1,92 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2013-01-26T11:54:08.813862Z", 
+  "msg": [
+   "On the 1.7.x-r1438879 branch, merge r1438879, resolving conflicts.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(show_diff): This function expects svn_wc_conflict_description_t in 1.7.x,", 
+   "not svn_wc_conflict_description2_t as it does on trunk. Some struct members", 
+   "have changed names in the second revision of the struct but contain the", 
+   "same data. Use appropriate names to access these members."
+  ], 
+  "revision_id": "1438883"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-01-26T11:48:35.264099Z", 
+  "msg": [
+   "Create a 1.7.x backport branch for r1438879."
+  ], 
+  "revision_id": "1438882"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2013-01-26T11:46:42.069003Z", 
+  "msg": [
+   "CAMEL-5999: Improved restlet component to better deregister restlet routers when routes is removed in Camel."
+  ], 
+  "revision_id": "1438881"
+ }, 
+ {
+  "author": "davsclaus", 
+  "date": "2013-01-26T11:45:34.638135Z", 
+  "msg": [
+   "CAMEL-5999: Improved restlet component to better deregister restlet routers when routes is removed in Camel."
+  ], 
+  "revision_id": "1438880"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-01-26T11:38:47.768173Z", 
+  "msg": [
+   "At the interactive conflict prompt, make the 'show-diff' option show", 
+   "more sensible diffs.", 
+   "We used to always show a diff between 'base' and 'merged', which shows how", 
+   "the pristine version of the file differs from the merged version.", 
+   "However, with conflicts recorded during 'svn merge', the 'base' version", 
+   "of the file is the 3-way merge base, which can be a file on a different", 
+   "branch. Thus the diff would be unnecessarily large, and show changes that", 
+   "don't actually appear when the user runs 'svn diff' in the working copy.", 
+   "In some cases the 'show-diff' option was entirely useless to help identify", 
+   "the incoming changes (e.g. try a merge of r1438602 into a working copy of", 
+   "1.7.x@1438875 and select the 'show-diff' option during the conflict prompt).", 
+   "To fix this, show the diff between 'mine' and 'merged' during merges,", 
+   "and show the diff between 'theirs' and 'merged' during updates (this", 
+   "doesn't actually change behaviour, since 'base' matches 'theirs' during", 
+   "updates, but eliminates an unnecessary non-NULL check for the 'base' abspath).", 
+   "A simple example of the resulting visible change in behaviour:", 
+   "Consider the file ^/trunk/alpha which changed its content from 'alpha'", 
+   "to 'foo' in r3, and a ^/branch off trunk@2, where 'alpha' was changed from", 
+   "'alpha' to 'boo' in r4 on the branch.", 
+   "When merging trunk into a branch there is a conflict, and we used to show:", 
+   "--- /tmp/svn-sOVNQg     Sat Jan 26 12:00:28 2013", 
+   "+++ /tmp/svn-sandbox/branch/.svn/tmp/alpha.tmp  Sat Jan 26 12:00:28 2013", 
+   "@@ -1 +1,5 @@", 
+   "-alpha", 
+   "+<<<<<<< .working", 
+   "+boo", 
+   "+=======", 
+   "+foo", 
+   "+>>>>>>> .merge-right.r4", 
+   "This is actually diffing 'alpha' as it appeared on trunk in r2 with", 
+   "the merged file, showing the content which is already present on the", 
+   "branch as newly added. This is clearly confusing (and even more confusing", 
+   "in real life with large files).", 
+   "Now, diff-full shows:", 
+   "--- /tmp/svn-sandbox/branch/alpha.working       Sat Jan 26 12:03:25 2013", 
+   "+++ /tmp/svn-sandbox/branch/alpha       Sat Jan 26 12:03:25 2013", 
+   "@@ -1 +1,5 @@", 
+   "+<<<<<<< .working", 
+   "boo", 
+   "+=======", 
+   "+foo", 
+   "+>>>>>>> .merge-right.r4", 
+   "which clearly shows the change brought in during the merge, and matches", 
+   "what 'svn diff' shows when we postpone the conflict.", 
+   "* subversion/svn/conflict-callbacks.c", 
+   "(show_diff): Tweak docstring and implementation as per above."
+  ], 
+  "revision_id": "1438879"
+ }
+]

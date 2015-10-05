@@ -1,0 +1,64 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-12-30T15:16:34.152677Z", 
+  "msg": [
+   "[Reverted in r1655649.]", 
+   "Follow-up to r1648537: Make sure all callers of dag_node_cache_get", 
+   "ultimately return nodes allocated in their respective result pools.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(get_dag): Auto-copy the DAG node before returning it."
+  ], 
+  "revision_id": "1648538"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-30T15:05:41.319144Z", 
+  "msg": [
+   "[Reverted in r1655649.]", 
+   "In FSFS, instead of locking the L1 DAG cache when handing out references", 
+   "to its contents, copy the nodes into the result pool.  Because DAG nodes", 
+   "are large objects (~1KB typ.), copy them only if they are not already in", 
+   "the result pool.", 
+   "This is the core patch for the memory growth issue caused by long-living", 
+   "pools inadvertently holding locks on the cache.  The now unused locking", 
+   "logic will be removed in later commits.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_copy_into_pool): New wrapper around svn_fs_fs__dag_dup", 
+   "that prevents unnecessary copies.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs_fs__dag_copy_into_pool): Implement.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(dag_node_cache_get): Ignore the cache lock requests.  Cache locking", 
+   "is no longer necessary.", 
+   "(make_parent_path,", 
+   "open_path): Ensure that all DAG nodes in the parent_path_t structure", 
+   "are allocated in the result pool."
+  ], 
+  "revision_id": "1648537"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2014-12-30T14:52:15.486224Z", 
+  "msg": [
+   "Undeprecate constants; these are of value of the update handlers"
+  ], 
+  "revision_id": "1648536"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2014-12-30T14:27:02.172928Z", 
+  "msg": [
+   "Hook up filtering functionality"
+  ], 
+  "revision_id": "1648535"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2014-12-30T14:23:10.392487Z", 
+  "msg": [
+   "Document how test arrays are currently used"
+  ], 
+  "revision_id": "1648534"
+ }
+]

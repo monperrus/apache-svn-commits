@@ -1,0 +1,82 @@
+[
+ {
+  "author": "hashutosh", 
+  "date": "2015-01-16T16:58:35.241420Z", 
+  "msg": [
+   "HIVE-9377 : UDF in_file() in WHERE predicate causes NPE. (Mithun Radhakrishnan via Ashutosh Chauhan)"
+  ], 
+  "revision_id": "1652458"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-16T16:50:35.207325Z", 
+  "msg": [
+   "Most path constructors in FSX are glorified svn_dirent_join_many calls.", 
+   "If it can be helped, we should not allocate temporary buffers.  This will", 
+   "allow us to stick with a single pool parameter.  Most callers will use", 
+   "these functions to create temporary data only and forcing them to pass", 
+   "in the same scratch pool a second time is pointless.", 
+   "In this patch, get rid of the temporary buffers for transaction directories", 
+   "and the standard files in them.", 
+   "* subversion/libsvn_fs_x/util.c", 
+   "(construct_txn_path): New path construction utility.", 
+   "(svn_fs_x__path_txn_dir,", 
+   "svn_fs_x__path_txn_changes,", 
+   "svn_fs_x__path_txn_props,", 
+   "svn_fs_x__path_txn_props_final,", 
+   "svn_fs_x__path_l2p_proto_index,", 
+   "svn_fs_x__path_p2l_proto_index,", 
+   "svn_fs_x__path_txn_next_ids,", 
+   "svn_fs_x__path_txn_item_index): Simplify by calling the new utility.", 
+   "The POOL is now a pure RESULT_POOL.", 
+   "* subversion/libsvn_fs_x/util.h", 
+   "(svn_fs_x__path_txn_dir,", 
+   "svn_fs_x__path_txn_changes,", 
+   "svn_fs_x__path_txn_props,", 
+   "svn_fs_x__path_txn_props_final,", 
+   "svn_fs_x__path_l2p_proto_index,", 
+   "svn_fs_x__path_p2l_proto_index,", 
+   "svn_fs_x__path_txn_next_ids,", 
+   "svn_fs_x__path_txn_item_index): Sync declarations with the implementations."
+  ], 
+  "revision_id": "1652457"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-16T16:49:59.620959Z", 
+  "msg": [
+   "Key / ID processing in FSX is much simpler these days. They are no longer", 
+   "strings that need to be allocated.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(get_and_increment_txn_key_baton): Drop unnecessary result POOL member.", 
+   "(get_and_increment_txn_key_body): Use the SCRATCH_POOL provided for", 
+   "temporary objects.", 
+   "(create_txn_dir): Update struct initialization."
+  ], 
+  "revision_id": "1652456"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-16T16:49:43.235651Z", 
+  "msg": [
+   "* subversion/libsvn_fs_x/revprops.c", 
+   "(parse_revprop): Use the SCRATCH_POOL where no result data is being", 
+   "constructed."
+  ], 
+  "revision_id": "1652455"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-16T16:49:27.266054Z", 
+  "msg": [
+   "Remove unused POOL parameters from static functions in FSX/lock.c.", 
+   "* subversion/libsvn_fs_x/lock.c", 
+   "(hash_fetch): Drop POOL parameter.", 
+   "(read_digest_file): Update caller.", 
+   "(verify_lock): Drop POOL parameter.", 
+   "(get_locks_callback,", 
+   "svn_fs_x__allow_locked_operation): Update callers."
+  ], 
+  "revision_id": "1652454"
+ }
+]

@@ -1,0 +1,66 @@
+[
+ {
+  "author": "dag", 
+  "date": "2014-08-07T15:58:30.524150Z", 
+  "msg": [
+   "DERBY-6690 ROW_NUMBER should not be allowed in generation clause", 
+   "Backported cleanly from trunk as:", 
+   "svn merge -c 1616365 https://svn.apache.org/repos/asf/db/derby/code/trunk", 
+   "Patch *derby-6690* makes this illegal by adding a check in", 
+   "TableElementList#bindAndValidateGeneration. I had to add an", 
+   "acceptChildren method to GenerationClauseNode for the visitor to reach", 
+   "down into the generation clause. Added a test to", 
+   "OLAPTest#testBasicOperations for both CREATE TABLE and ALTER TABLE ADD", 
+   "COLUMN."
+  ], 
+  "revision_id": "1616518"
+ }, 
+ {
+  "author": "fmui", 
+  "date": "2014-08-07T15:58:07.865368Z", 
+  "msg": [
+   "minor query improvements"
+  ], 
+  "revision_id": "1616517"
+ }, 
+ {
+  "author": "tmill", 
+  "date": "2014-08-07T15:57:00.368398Z", 
+  "msg": [
+   "Added Q about managing resources in eclipse."
+  ], 
+  "revision_id": "1616516"
+ }, 
+ {
+  "author": "dag", 
+  "date": "2014-08-07T15:53:54.339262Z", 
+  "msg": [
+   "DERBY-6688 NPE (or sane: ASSERT failure) with ROW_NUMBER in some subqueries", 
+   "Backported from trunk with a manual merge as:", 
+   "svn merge -c 1616332 https://svn.apache.org/repos/asf/db/derby/code/trunk", 
+   "In FromSubquery (used in the OK subquery) the phasing is different", 
+   "than in SubqueryNode (used in the failing query): the order by list is", 
+   "pushed down too late in the SubqueryNode (after the", 
+   "SelectNode#preprocess), so that the fact that the order by carries an", 
+   "implicit window definition isn't recorded, causing the \"windows\" field", 
+   "to be null, leading to missing rewriting in the getProjectRestrict", 
+   "phase, hence the error.", 
+   "In FromSubquery, the order by list is pushed down into the child", 
+   "select node just before calling its preprocess method, i.e. the order", 
+   "by list is present what that happens.", 
+   "The patch (derby-6688-b) moves the pushing down of the order by list", 
+   "in SubqueryNode#preprocess to the resultSet (the SelectNode) to just", 
+   "before the call to preprocess of the resultSet, so the rest of the", 
+   "windows rewriting machinery kicks in."
+  ], 
+  "revision_id": "1616515"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2014-08-07T15:51:43.019702Z", 
+  "msg": [
+   "Improved the way we start Tomcat embedded to remove a series of warnings at startup."
+  ], 
+  "revision_id": "1616514"
+ }
+]

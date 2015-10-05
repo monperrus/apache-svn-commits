@@ -1,0 +1,102 @@
+[
+ {
+  "author": "tross", 
+  "date": "2014-01-28T19:39:47.007827Z", 
+  "msg": [
+   "QPID-5491 - Log API improvements based on the patch from Rajith Attapattu"
+  ], 
+  "revision_id": "1562173"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2014-01-28T19:36:17.717661Z", 
+  "msg": [
+   "On the fsfs-ucsnorm branch: Make serialization, deserialization, caching", 
+   "and searching of directories aware of normalization-independent lookup.", 
+   "We use a new in-memory (and in-cache) representation of a directory entry", 
+   "which extends svn_fs_dirent_t, adding a (possibly normalized) key that may", 
+   "be different from the dirent name. We populate the key when the directory is", 
+   "parsed from disk, and drop it when it's unparsed again. The cache contains", 
+   "a serialized key (iff it's different from the name), and we sort and search", 
+   "arrays of directory entries by key, no longer by name.", 
+   "The goal is to perform as few normalizations as possible, and only minimally", 
+   "affect the size of the cache; in the usual case where entry names in the", 
+   "repository are already normalized, the cached data uses only an additional", 
+   "pointer per cached directory entry.", 
+   "* subversion/libsvn_fs_fs/dirent.h: New file.", 
+   "(svn_fs_fs__dirent_t): New; a \"subclass\" of svn_fs_dirent_t.", 
+   "(svn_fs_fs__set_dirent_key):", 
+   "New; populates the key of a svn_fs_fs__dirent_t from an svn_fs_dirent_t.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__normalize): New; utility for normalizing a string.", 
+   "* subversion/libsvn_fs_fs/util.c: Include svn_utf_private.h and dirent.h.", 
+   "(svn_fs_fs__dirent_t, svn_fs_fs__set_dirent_key): Implement.", 
+   "* subversion/libsvn_fs_fs/cached_data.h: Include dirent.h.", 
+   "(svn_fs_fs__find_dir_entry,", 
+   "svn_fs_fs__rep_contents_dir_entry): Note normalization requirement.", 
+   "Change the return type to the subclassed entry type.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(sorted, compare_dirents, compare_dirent_name):", 
+   "Use keys, not names, for comparison.", 
+   "(read_dir_entries): Populate the (normalized) key when reading dirents.", 
+   "(get_dir_contents): Update calls of read_dir_entries.", 
+   "(svn_fs_fs__find_dir_entry):", 
+   "Change the return type to the subclassed entry type.", 
+   "(svn_fs_fs__rep_contents_dir_entry):", 
+   "Change the return type to the subclassed entry type.", 
+   "Propagate the entry key to the copied returned object.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.h: Include dirent.h.", 
+   "(svn_fs_fs__extract_dir_entry): Note that the reutrned object is", 
+   "a wrapped entry type.", 
+   "(replace_baton_t): Note that the 'name' member must be normalized.", 
+   "Change the type of the 'new_entry' member to a wrapped entry.", 
+   "(svn_fs_fs__replace_dir_entry): Note that the implementation", 
+   "expects a wrapped entry type.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(dir_data_t): Change the type of the 'entries' field.", 
+   "(serialize_dir_entry): Serialize a whole wrapped entry, including key.", 
+   "(serialize_dir): Operate on wrapped entries.", 
+   "(deserialize_dir): Operate on wrapped entries.", 
+   "Deserialize the wrapped entry's key, taking care to maintain the", 
+   "key == name invariant when the name and key are identical.", 
+   "(find_entry): Find entries by key, not by name.", 
+   "(svn_fs_fs__extract_dir_entry): Operate on wrapped entries,", 
+   "and deserialize the wrapped entry's key, taking care to maintain the", 
+   "key == name invariant when the name and key are identical.", 
+   "(slowly_replace_dir_entry): Operate on wrapped entries.", 
+   "(svn_fs_fs__replace_dir_entry): Operate on wrapped entries.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(unparse_dir_entries): Operate on wrapped entries,", 
+   "but do not unparse the key.", 
+   "(svn_fs_fs__set_entry): Make sure that replace_baton_t::name contains", 
+   "a normalized name when normalized lookups are enabled, and that", 
+   "replace_baton_t::new_entry's key is defined.", 
+   "(write_final_rev): Operate on wrapped entries."
+  ], 
+  "revision_id": "1562172"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2014-01-28T19:32:10.169585Z", 
+  "msg": [
+   "try myfaces site skin"
+  ], 
+  "revision_id": "1562171"
+ }, 
+ {
+  "author": "covener", 
+  "date": "2014-01-28T19:28:44.368837Z", 
+  "msg": [
+   "copy/paste errors"
+  ], 
+  "revision_id": "1562170"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2014-01-28T19:26:53.323472Z", 
+  "msg": [
+   "try myfaces site skin"
+  ], 
+  "revision_id": "1562169"
+ }
+]

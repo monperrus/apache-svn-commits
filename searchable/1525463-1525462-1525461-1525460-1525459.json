@@ -1,0 +1,107 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T22:25:14.771208Z", 
+  "msg": [
+   "[Reverted in r1597989]", 
+   "Last API layer to update: bump svn_client_log.", 
+   "Simply pass an extra move_behavior option to the next layer", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_log6): declare bumped API", 
+   "(svn_client_log5): deprecate", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_log5): implement in terms of svn_client_log6", 
+   "* subversion/libsvn_client/log.c", 
+   "(run_ra_get_log): pass the extra paramter through", 
+   "(svn_client_log6): ditto; replaces ...", 
+   "(svn_client_log5): ... this one"
+  ], 
+  "revision_id": "1525463"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T22:17:44.164056Z", 
+  "msg": [
+   "[Reverted in r1597989]", 
+   "Use the bumped RA layer API log function throughout ra/compat.c.", 
+   "So far, we don't do anything special for moves but simply count them", 
+   "as creating log segments etc. as any add-with-history would do.", 
+   "* subversion/libsvn_ra/compat.c", 
+   "(svn_ra__locations_from_log,", 
+   "svn_ra__location_segments_from_log,", 
+   "svn_ra__file_revs_from_log,", 
+   "svn_ra__get_deleted_rev_from_log): use fastest option to traverse history"
+  ], 
+  "revision_id": "1525462"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T22:12:55.641606Z", 
+  "msg": [
+   "* subversion/libsvn_repos/log.c", 
+   "(fs_mergeinfo_changed): Fix commentary. No functional change."
+  ], 
+  "revision_id": "1525461"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T22:10:53.445335Z", 
+  "msg": [
+   "[Reverted in r1597989]", 
+   "Support the MOVes in the RA log API:", 
+   "Bump svn_ra_get_log to support the move_behavior option.", 
+   "For ra_serf, we add an optional move-behavior element to the LOG report.", 
+   "If not given, it defaults to 1.8 behavior reporting all moves as adds.", 
+   "For ra_svn, we append an optional integer parameter determining the", 
+   "move-behavior option.  Same default behavior as above.", 
+   "For ra_local, we simply call the new repos layer API directly.", 
+   "* subversion/include/svn_ra.h", 
+   "(svn_ra_get_log3): declare bumped API", 
+   "(svn_ra_get_log2): deprecate", 
+   "* subversion/libsvn_ra/deprecated.c", 
+   "(svn_ra_get_log2): implement in terms of svn_ra_get_log3", 
+   "* subversion/libsvn_ra/ra_loader.h", 
+   "(svn_ra__vtable_t): add move_behavior parameter to get_log", 
+   "* subversion/libsvn_ra/ra_loader.c", 
+   "(svn_ra_get_log2): replaced by ...", 
+   "(svn_ra_get_log3): ... this; pass new paramter through to vtable", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_log): update to use new repos layer API", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__get_log): update declaration to match vtable.get_log", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(log_context_t): add move_behavior parameter", 
+   "(create_log_body): send it unless we want 1.8 behavior (\"no moves\")", 
+   "(svn_ra_serf__get_log): pass new parameter through", 
+   "* subversion/mod_dav_svn/merge.c", 
+   "(do_resources): add move_behavior in case we want to call this function", 
+   "from places other than dav_svn__merge_response;", 
+   "handle the new change types", 
+   "(dav_svn__merge_response): report commit result as recorded", 
+   "* subversion/libsvn_ra_svn/protocol", 
+   "(log): update protocol description", 
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(dav_svn__log_report): parse new \"move-behavior\" element, if present;", 
+   "call the latest repos layer log API", 
+   "* subversion/libsvn_ra_svn/client.c", 
+   "(perform_ra_svn_log,", 
+   "ra_svn_log): append move_behavior option in log command request", 
+   "* subversion/svnserve/serve.c", 
+   "(log_cmd): test for & get the new, optional move_behavior parameter;", 
+   "call the latest repos layer log API", 
+   "* subversion/libsvn_ra/wrapper_template.h", 
+   "(compat_get_log): request 1.8 / \"no moves\" behavior"
+  ], 
+  "revision_id": "1525460"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T22:09:40.274373Z", 
+  "msg": [
+   "[Reverted in r1597989]", 
+   "* subversion/include/svn_types.h", 
+   "(svn_move_behavior_t): fix enum values. No functional change"
+  ], 
+  "revision_id": "1525459"
+ }
+]

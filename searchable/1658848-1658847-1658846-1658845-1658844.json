@@ -1,0 +1,87 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-11T00:42:01.567695Z", 
+  "msg": [
+   "Make the (non recursive) revert db operation properly report tree conflicts", 
+   "that it creates by both fixing what is stored in the tree conflict and by", 
+   "properly creating notifications.", 
+   "Note that a recursive revert wouldn't encounter this problem as it", 
+   "would just break the moves.", 
+   "* subversion/libsvn_wc/token-map.h", 
+   "(kind_map): New array.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_CREATE_REVERT_LIST): Only add interesting rows.", 
+   "(STMT_SELECT_REVERT_LIST_RECURSIVE): Make the revert information available", 
+   "instead of just the name.", 
+   "(STMT_CREATE_UPDATE_MOVE_LIST): Store kind as token like in other places,", 
+   "to allow transforming to revert information.", 
+   "(STMT_MOVE_NOTIFY_TO_REVERT): New statement.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(op_revert_txn): Only bump moved nodes after they have been moved to the", 
+   "final op-depth. Transform move_update information into revert information.", 
+   "(revert_list_read): Simplify, since we can now assume only normal reverts", 
+   "are in the list.", 
+   "(svn_wc__db_revert_list_notify): Handle new tree conflict notifications and", 
+   "pass kind when available.", 
+   "* subversion/libsvn_wc/wc_db_private.h", 
+   "(svn_wc__db_op_raise_moved_away_internal): New function.", 
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(update_move_list_add): Set kind as token instead of as integer.", 
+   "(svn_wc__db_update_move_list_notify): Read kind as token.", 
+   "(resolve_delete_raise_moved_away): Rename to...", 
+   "(svn_wc__db_op_raise_moved_away_internal): ... this. Make public and add", 
+   "delete_op_depth argument, to allow bumping from a higher root node.", 
+   "(break_moved_away_children): Use existing kind column to improve", 
+   "notifications.", 
+   "* subversion/tests/cmdline/move_tests.py", 
+   "(revert_del_root_of_move): New function.", 
+   "* subversion/tests/libsvn_wc/op-depth-test.c", 
+   "(move_in_delete): Remove ### comment.", 
+   "(test_funcs): Remove XFail marker from move_in_delete."
+  ], 
+  "revision_id": "1658848"
+ }, 
+ {
+  "author": "tpalsulich", 
+  "date": "2015-02-11T00:38:21.303092Z", 
+  "msg": [
+   "TIKA-1269. Add Miredot documentation for tika-server."
+  ], 
+  "revision_id": "1658847"
+ }, 
+ {
+  "author": "arkurth", 
+  "date": "2015-02-11T00:03:26.096880Z", 
+  "msg": [
+   "VCL-815", 
+   "Reworked OS.pm::update_cluster. Each reservation now only creates a cluster_info file for itself. The firewall processes was also improved to be much more efficient.", 
+   "Fixed problem with Windows code which creates the cluster_info file. The line endings were not Windows-style because the sed command in OS.pm::set_text_file_line_endings was failing. Sed under Cygwin can't handle a Windows-style file path if the \"-i\" switch is used. Added get_cygwin_unix_file_path subroutine. This gets called and the result gets passed to set_text_file_line_endings.", 
+   "Other", 
+   "Cleaned up and renamed Windows.pm::get_cygwin_path --> get_cygwin_installation_directory_path. It was messy. There were notify messages obviously copied/pasted from another subroutine which made no sense. Its name had also become vague with the addition of get_cygwin_unix_file_path, both of which call cygpath.exe."
+  ], 
+  "revision_id": "1658846"
+ }, 
+ {
+  "author": "rgodfrey", 
+  "date": "2015-02-10T23:57:54.852194Z", 
+  "msg": [
+   "QPID-6381 : if detach with close=true is received, then actually destroy the link"
+  ], 
+  "revision_id": "1658845"
+ }, 
+ {
+  "author": "arkurth", 
+  "date": "2015-02-10T23:54:39.051425Z", 
+  "msg": [
+   "VCL-816", 
+   "Added \"-n\" switch to the command in utils.pm::nmap_port. This causes the command to run much faster.", 
+   "VCL-16", 
+   "Changed utils.pm::get_request_info to use cached info by default. For large cluster requests, each reservation process was retrieving the same image and other information over and over - n-squared problem.", 
+   "VCL-174", 
+   "Removed section from utils.pm::get_request_info which populates the natport table. This was being done by every cluster reservation for all other cluster reservations. Moved to State.pm::initialize.", 
+   "Updated utils.pm::get_computer_info to only call get_computer_nathost_info if a nathostcomputermap entry exists for the computer."
+  ], 
+  "revision_id": "1658844"
+ }
+]

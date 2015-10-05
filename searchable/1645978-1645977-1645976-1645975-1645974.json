@@ -1,0 +1,83 @@
+[
+ {
+  "author": "seelmann", 
+  "date": "2014-12-16T15:34:53.229926Z", 
+  "msg": [
+   "Explicit import javax packages, not all OSGi runtimes (Felix) import them by default"
+  ], 
+  "revision_id": "1645978"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2014-12-16T15:29:31.280258Z", 
+  "msg": [
+   "Completes r1645954, I got a power outage here and things got complicated :/"
+  ], 
+  "revision_id": "1645977"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-12-16T15:29:27.993668Z", 
+  "msg": [
+   "DISPATCH-87: Double load of libqpid-dispatch.so", 
+   "We use ctypes to call from python into the qpid-dispatch.so library.", 
+   "In some situations (running a build exe where there was an installed dispatch),", 
+   "the exe could open the build library but ctypes could open the installed library", 
+   "causing mayhem and core dumps.", 
+   "Fixed the code to use dlopen(RTLD_NOLOAD) in C to get a handle to the library loaded by C,", 
+   "and then use the handle rather than the library name to open the library in ctypes", 
+   "which ensures the same library.", 
+   "NOTE: When running qdrouterd from a build you still need to use the right", 
+   "environment (config.sh) to pick up the correct python libraries (correct", 
+   "PYTHONPATH and internal libraries) or things will still go wrong."
+  ], 
+  "revision_id": "1645976"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2014-12-16T15:27:38.299347Z", 
+  "msg": [
+   "no Jira, format text a bit better"
+  ], 
+  "revision_id": "1645975"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-16T15:25:24.942877Z", 
+  "msg": [
+   "On the fsx-id branch:  Where immediately possible, replace access to the", 
+   "noderev's full ID with access to the respective ID part.", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(get_dir_contents,", 
+   "locate_dir_cache,", 
+   "svn_fs_x__get_proplist): Access the noderev_id part directly.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(svn_fs_x__dag_get_node_id,", 
+   "svn_fs_x__dag_get_copy_id): Access the ID parts directly instead of", 
+   "contructing a temp. svn_fs_t instance.", 
+   "* subversion/libsvn_fs_x/fs_x.c", 
+   "(svn_fs_x__prop_rep_equal): Checking the noderev IDs is the correct", 
+   "identity check for noderevs. Duh!", 
+   "* subversion/libsvn_fs_x/low_level.c", 
+   "(svn_fs_x__read_noderev,", 
+   "svn_fs_x__write_noderev): No detour via the full ID required anymore.", 
+   "* subversion/libsvn_fs_x/pack.c", 
+   "(copy_node_to_temp): The wanted ID parts are now readily available.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(create_new_txn_noderev_from_rev,", 
+   "svn_fs_x__set_entry,", 
+   "shards_spanned): Same.", 
+   "(rep_write_cleanup,", 
+   "rep_write_get_baton,", 
+   "rep_write_contents_close): Extract the txn ID directly from the", 
+   "noderev_id.", 
+   "(set_representation): The noderev_id is enough to check for txns.", 
+   "Store the correct ID (part) in an error message.", 
+   "(svn_fs_x__create_successor): The revision can now be read directly", 
+   "from the noderev_id.", 
+   "(svn_fs_x__set_proplist): The noderev_id is now readily available.", 
+   "(write_final_rev): Remove redundant copying."
+  ], 
+  "revision_id": "1645974"
+ }
+]

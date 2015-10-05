@@ -1,0 +1,67 @@
+[
+ {
+  "author": "doogie", 
+  "date": "2014-08-13T19:38:30.203007Z", 
+  "msg": [
+   "Initialize the eca handler in asycnhronously.  This requires the previous", 
+   "patch, that initializes the eca handlers DispatchContext asynchronously.", 
+   "With it, when the eca attempts to initialize, the DelegatorContext will", 
+   "also initialize at the same time; this will end up calling back into the", 
+   "same delegator, and a deadlock will occur.", 
+   "When both are asynchronous, then the eca initialization will return", 
+   "quickly, and upon first access, the DispatchContext future will be", 
+   "waited for."
+  ], 
+  "revision_id": "1617813"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-08-13T19:38:24.582617Z", 
+  "msg": [
+   "Initialize the eca handler's DispatchContext asynchronously.  This means", 
+   "the eca handler will be available sooner, but might briefly pause the", 
+   "first time it is used, while it waits for the DispatchContext to finish", 
+   "initializing.", 
+   "This patch is needed to prevent a deadlock when the eca handler itself", 
+   "is initialized asynchronously in the delegator; see the next commit."
+  ], 
+  "revision_id": "1617812"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-08-13T19:38:18.749313Z", 
+  "msg": [
+   "Add a simple Future implementation, that returns a constant,", 
+   "non-changing value."
+  ], 
+  "revision_id": "1617811"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-08-13T19:38:12.405030Z", 
+  "msg": [
+   "Add a GLOBAL_BATCH thread pool.  This is different than GLOBAL_EXECUTOR,", 
+   "in that:", 
+   "* BATCH does not block when all the coreThreads are busy, as would", 
+   "happen with EXECUTOR.  When all coreThreads are busy, new threads will", 
+   "be spawned.", 
+   "* Scheduled jobs can *not* be submitted.", 
+   "You can simulate the first problem, by modifying ExecutionPool, and", 
+   "force-setting the threadCount to 1.  Then, submit something to the pool,", 
+   "that will then itself submit more items into the pool.  Dead-lock will", 
+   "occur.", 
+   "BATCH should be used when it might be posslbe that more items could be", 
+   "submitted by code you are calling."
+  ], 
+  "revision_id": "1617810"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-08-13T19:38:01.769291Z", 
+  "msg": [
+   "Add a global fork-join thread pool, and switch a bunch of stuff over to", 
+   "it."
+  ], 
+  "revision_id": "1617809"
+ }
+]

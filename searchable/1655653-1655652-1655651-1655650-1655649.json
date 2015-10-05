@@ -1,0 +1,75 @@
+[
+ {
+  "author": "brenninc", 
+  "date": "2015-01-29T13:38:37.208447Z", 
+  "msg": [
+   "fixed image links"
+  ], 
+  "revision_id": "1655653"
+ }, 
+ {
+  "author": "brenninc", 
+  "date": "2015-01-29T13:37:49.723056Z", 
+  "msg": [
+   "Added myExperiment stuff"
+  ], 
+  "revision_id": "1655652"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-01-29T13:32:50.082904Z", 
+  "msg": [
+   "Rework the way FSFS L1 DAG cache (fs_fs_dag_cache_t) deals with the lifetime", 
+   "of the cached nodes.  Drop the existing approach that performs a non-trivial", 
+   "reference counting for pools in favor of doing a couple of explicit dup()'s.", 
+   "As a consequence, this patch restores a standard pool usage pattern for the", 
+   "accessor functions to the cached DAG nodes \u2014 now these nodes are always", 
+   "allocated in the passed-in pool, and this is a good thing to have.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(dag_node_cache_get): Ensure that the result is always allocated in the", 
+   "passed-in pool instead of (maybe) binding its lifetime to that pool.", 
+   "Achieve this by using the passed-in pool when getting the node from L2", 
+   "cache and by making a dup() into the L1 cache pool.  For the nodes that", 
+   "already are in L1, make a dup() before yielding the result.  After that,", 
+   "remove the needs_lock_cache argument and tweak the docstring.", 
+   "(get_dag): Update the calls to dag_node_cache_get().  After that, remove", 
+   "the unused needs_lock_cache argument and tweak the docstring.", 
+   "(svn_fs_fs__create_dag_cache): Do not register the unlock_cache() pool", 
+   "cleanup handler, as we don't lock the cache anymore.", 
+   "(auto_clear_dag_cache): Do not check whether the cache has locks when", 
+   "attempting to clear it.", 
+   "(cache_lock_t, lock_cache, unlock_cache, unregister_locks): Remove.", 
+   "(fs_fs_dag_cache_t): Remove the 'first_lock' field, tweak the docstring.", 
+   "(svn_fs_fs__node_id, svn_fs_fs__node_created_rev, fs_node_relation,", 
+   "fs_node_created_path, fs_node_prop, fs_node_proplist, fs_props_changed,", 
+   "fs_dir_entries, fs_copied_from, fs_file_length, fs_file_checksum,", 
+   "fs_file_contents, fs_try_process_file_contents, fs_contents_changed,", 
+   "fs_get_file_delta_stream, history_prev, crawl_directory_dag_for_mergeinfo,", 
+   "add_descendant_mergeinfo, open_path, get_root, make_path_mutable,", 
+   "copy_helper, get_copy_inheritance): Update the calls to get_dag()."
+  ], 
+  "revision_id": "1655651"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2015-01-29T13:30:29.558289Z", 
+  "msg": [
+   "On the pin-externals branch, fix a docstring annotation.", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_copy6): This is for compat with 1.8, not 1.7.", 
+   "Found by: rhuijben"
+  ], 
+  "revision_id": "1655650"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-01-29T13:27:04.805471Z", 
+  "msg": [
+   "Revert the recent replacement for the FSFS DAG node cache locking scheme", 
+   "and the corresponding follow-ups [1], as we are now aware of a better way to", 
+   "do this.", 
+   "[1] r1653608, r1648612, r1648591, r1648542, r1648539, r1648538, r1648537"
+  ], 
+  "revision_id": "1655649"
+ }
+]

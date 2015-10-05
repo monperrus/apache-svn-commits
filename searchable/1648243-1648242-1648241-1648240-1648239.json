@@ -1,0 +1,71 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-12-28T18:59:08.834472Z", 
+  "msg": [
+   "[Reverted in r1648532]", 
+   "In FSFS, use a sub-pool in the functions that call get_dag and need to", 
+   "lock the cache until those functions complete.  The sub-pool's destruction", 
+   "will release the cache locks implicitly.", 
+   "As a side-benefit, we get a nicer memory usage profile because all these", 
+   "functions lack a separate scratch pool parameter.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_props_changed,", 
+   "fs_copy,", 
+   "fs_revision_link,", 
+   "fs_contents_changed,", 
+   "fs_get_file_delta_stream): Create a sub-pool and use that as a scratch pool", 
+   "for all non-result data.  Destroy that pool upon", 
+   "successful completion of the function."
+  ], 
+  "revision_id": "1648243"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-28T18:50:46.526118Z", 
+  "msg": [
+   "[Reverted in r1648532]", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_copied_from): Copy the result requested, so we don't need the", 
+   "node to remain valid.  Don't lock the DAG cache."
+  ], 
+  "revision_id": "1648242"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-28T18:47:43.369408Z", 
+  "msg": [
+   "[Reverted in r1648532]", 
+   "In FSFS, revise the calls to get_dag that requested a locked node.", 
+   "In several cases, the lock is not required.  Update those calls.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_node_created_path): Copy the result requested, so we don't need the", 
+   "node to remain valid.", 
+   "(get_root): Duplicate the cached node.  This function will be used at", 
+   "the beginning of e.g. commit().  So, it is not performance", 
+   "critical and we shouldn't lock the cache for the whole time.", 
+   "(crawl_directory_dag_for_mergeinfo,", 
+   "add_descendant_mergeinfo): It turns out that we never use two DAG nodes", 
+   "at a time, so we don't need to lock them.", 
+   "Document this and Update the get_dag call."
+  ], 
+  "revision_id": "1648241"
+ }, 
+ {
+  "author": "rfscholte", 
+  "date": "2014-12-28T18:28:50.329878Z", 
+  "msg": [
+   "Fix dependencies. tests-classified jars depend on junit, which was pulled in by old QDox versions. This makes the project valid again, although I'd prefer NOT to depend on tests-classified jars."
+  ], 
+  "revision_id": "1648240"
+ }, 
+ {
+  "author": "fschumacher", 
+  "date": "2014-12-28T18:26:25.671312Z", 
+  "msg": [
+   "Bug 57193: Add param and return tags to javadoc", 
+   "Bugzilla Id: 57193"
+  ], 
+  "revision_id": "1648239"
+ }
+]

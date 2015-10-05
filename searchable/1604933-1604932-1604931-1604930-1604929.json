@@ -1,0 +1,79 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-06-23T20:50:11.674530Z", 
+  "msg": [
+   "Make the FSFS format7 \"block read\" feature opt-in.  People with small", 
+   "caches (e.g. default config) or very fast fopen() and read() functions", 
+   "won't benefit from it and simply see high CPU usage.", 
+   "So, this adds the \"block-read\" config option to both servers (nothing", 
+   "here for file://).  SVNadmin always enables it as the usual dump and", 
+   "verify operations are naturally suited for this option.  This also helps", 
+   "our test coverage ('off' in RA defaults, 'on' in svnadmin tests).", 
+   "* subversion/include/svn_fs.h", 
+   "(SVN_FS_CONFIG_FSFS_BLOCK_READ): New config option.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(block_read): Skip if block-read has not been enabled and if the caller", 
+   "did not want us to read anything specific.  If they did,", 
+   "read the required item only.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): Add the new option flag.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(read_global_config): New utility function. Evaluating FS->CONFIG should", 
+   "not be merged with the fsfs config file reader.", 
+   "(svn_fs_fs__open,", 
+   "svn_fs_fs__create): Call the new util to init the new option flag.", 
+   "* subversion/mod_dav_svn/dav_svn.h", 
+   "(dav_svn__get_block_read_flag): New config option presence check as per", 
+   "usual pattern.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "(dir_conf_t): Add flag for the new option as per usual pattern.", 
+   "(merge_dir_config): Copy it with the lot.", 
+   "(SVNBlockRead_cmd): New option command / callback for it.", 
+   "(dav_svn__get_block_read_flag): Implement.", 
+   "(cmds): Register the new option.", 
+   "* subversion/mod_dav_svn/repos.c", 
+   "(get_resource): Set the option in the FS CONFIG structure just as", 
+   "all the others.", 
+   "* subversion/svnadmin/svnadmin.c", 
+   "(open_repos): Unconditionally enable block-read for svnadmin.", 
+   "* subversion/svnserve/svnserve.c", 
+   "(SVNSERVE_OPT_BLOCK_READ): Declare new option token / ID.", 
+   "(svnserve__options): Describe the new command line option.", 
+   "(sub_main): Handle the CL option and pass it to the FS CONFIG."
+  ], 
+  "revision_id": "1604933"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2014-06-23T20:41:54.576232Z", 
+  "msg": [
+   "Camel case type names: *NoSQL* -> *NoSql*"
+  ], 
+  "revision_id": "1604932"
+ }, 
+ {
+  "author": "bhavanki", 
+  "date": "2014-06-23T20:39:26.222386Z", 
+  "msg": [
+   "ACCUMULO-1834 Add Review Board guidelines for Accumulo."
+  ], 
+  "revision_id": "1604931"
+ }, 
+ {
+  "author": "mfriedenhagen", 
+  "date": "2014-06-23T20:37:28.784089Z", 
+  "msg": [
+   "Fixes MDEP-450: Add goal display-ancestors which will output the line of heritage for parent poms."
+  ], 
+  "revision_id": "1604930"
+ }, 
+ {
+  "author": "gmazza", 
+  "date": "2014-06-23T20:29:24.189361Z", 
+  "msg": [
+   "Switched to enum for WeblogEntryComment approval status; changed effect of Admin un-spamming a comment to that of disapproval instead of approval; removed no spam search option until properly implemented (via checkbox or multi-select list) as it doesn't work well with enums."
+  ], 
+  "revision_id": "1604929"
+ }
+]

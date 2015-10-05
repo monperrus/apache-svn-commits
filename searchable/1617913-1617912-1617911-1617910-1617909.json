@@ -1,0 +1,81 @@
+[
+ {
+  "author": "jkaluza", 
+  "date": "2014-08-14T12:15:31.717371Z", 
+  "msg": [
+   "* support/ab.c: Fix crash caused by integer overflow when printing stats with", 
+   "lot of requests (for example -n 500000000)."
+  ], 
+  "revision_id": "1617913"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2014-08-14T12:12:38.659976Z", 
+  "msg": [
+   "ensuring in our info tree we use the right path for @WebXXX and not an inherited one cause we use a messed up classloading hierarchy"
+  ], 
+  "revision_id": "1617912"
+ }, 
+ {
+  "author": "shaie", 
+  "date": "2014-08-14T11:41:02.159689Z", 
+  "msg": [
+   "LUCENE-5883: Move MergePolicy to LiveIndexWriterConfig"
+  ], 
+  "revision_id": "1617911"
+ }, 
+ {
+  "author": "shaie", 
+  "date": "2014-08-14T11:18:51.215489Z", 
+  "msg": [
+   "LUCENE-5883: Move MergePolicy to LiveIndexWriterConfig"
+  ], 
+  "revision_id": "1617910"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2014-08-14T10:55:42.705438Z", 
+  "msg": [
+   "[", 
+   "Note from the future:", 
+   "Reverted in r1617930; see r1617932 for a better fix", 
+   "]", 
+   "Record the update/switch target revision for missing tree conflicts", 
+   "victims in the tree conflict description so the revision can always", 
+   "be retrieved during conflict resolution.", 
+   "For instance, 'svn info' might show:", 
+   "Tree conflict: local file edit, incoming file delete or move upon update", 
+   "Source  left: (file) ^/trunk/alpha@2", 
+   "Source right: (none)", 
+   "With this change, 'svn info' shows the target revision (\"source right')", 
+   "of the update/switch which recorded the conflict, even if the node", 
+   "was missing:", 
+   "Tree conflict: local file edit, incoming file delete or move upon update", 
+   "Source  left: (file) ^/trunk/alpha@2", 
+   "Source right: (none) @4", 
+   "There is a slight API change involved which shouldn't affect compatibility.", 
+   "The semantics of svn_wc_conflict_version_create2() change such that the", 
+   "conflict victim's repos relpath is allowed to be NULL if the node kind", 
+   "is 'none'. Previously the API required a canonical path in all cases", 
+   "and would ASSERT otherwise, a contract which made it impossible to create", 
+   "conflict versions for nodes which don't exist. The provided revision", 
+   "number must still be valid in all cases, of course.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_conflict_version_create2): Update docstring.", 
+   "A NULL 'repos_relpath' is now valid if 'kind' is svn_node_none.", 
+   "* subversion/libsvn_wc/conflicts.c", 
+   "(conflict__prepend_location, conflict__read_location): Handle NULL", 
+   "repos-relpath fields in conflict description.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(complete_conflict): Create conflict versions for paths which don't exist", 
+   "so revision number information will be recorded.", 
+   "* subversion/libsvn_wc/util.c", 
+   "(svn_wc_conflict_version_create2): Accept a NULL repos_relpath if the", 
+   "node kind is svn_node_none.", 
+   "* subversion/svn/util.c", 
+   "(svn_cl__node_description): Print an empty path if the victim's kind", 
+   "is svn_node_none, instead of printing the ^/... placeholder path."
+  ], 
+  "revision_id": "1617909"
+ }
+]

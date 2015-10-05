@@ -1,0 +1,111 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-28T19:40:46.420205Z", 
+  "msg": [
+   "[master] Fix TestZooKeeper failure", 
+   "Summary:", 
+   "TestZooKeeper failed in a non deterministic  way caused by the thread", 
+   "interleaving.", 
+   "Fixed the problem by increasing the number of retry.", 
+   "Test Plan: Passed TestZooKeeper 20 times continuously.", 
+   "Reviewers: kannan, pkhemani", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, nspiegelberg, kannan", 
+   "Differential Revision: 377055", 
+   "Task ID: 841280"
+  ], 
+  "revision_id": "1225318"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-28T19:40:41.193525Z", 
+  "msg": [
+   "[master] upgrade the INCREMENT and GET SIZE metrics as schema metrics", 
+   "Summary:", 
+   "The INCREMENT and GET SIZE metrics are still using the old style of per column", 
+   "family metrics. So upgrade these 2 metrics as schema metrics.", 
+   "Tag this diff as [master] since this problem has been solved in open source", 
+   "trunk.", 
+   "Test Plan:", 
+   "Run all the unit tests. The following 4 unit tests are failed with and without", 
+   "this change.", 
+   "TestScanner", 
+   "TestZKBasedReopenRegion", 
+   "TestHeapSize", 
+   "TestRegionStateOnMasterFailure", 
+   "Reviewers: kannan, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, nspiegelberg, kannan", 
+   "Differential Revision: 377941"
+  ], 
+  "revision_id": "1225317"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-28T19:40:14.527074Z", 
+  "msg": [
+   "[HBASE-4997] Pull in HBASE-4897 and HBASE-4997", 
+   "Summary:", 
+   "This fixes 3 issues", 
+   "1. It fixes double counting of batch.installed. In createTaskIfAbsent(), if the", 
+   "newly constructed task is not eventually used then we have to remember to", 
+   "decrement batch.installed", 
+   "2. There was an unhandled race between the zk-callback thread updating a task", 
+   "without a batch and the another thread installing a batch into that task.", 
+   "3. Made sure that batch.installed is being accessed by only one thread. Easier", 
+   "to argue correctness that way.", 
+   "Test Plan: TestSplitLogManager passes", 
+   "Reviewers: kannan, kranganathan, mbautin", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, pkhemani, kannan", 
+   "Differential Revision: 375764"
+  ], 
+  "revision_id": "1225316"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-28T19:40:11.481527Z", 
+  "msg": [
+   "[master] Munkres' optimal assignment algorithm", 
+   "Summary:", 
+   "Explicit placement of regions by locality requires an algorithm for", 
+   "assigning regions to servers given the locality of each region on each", 
+   "server. This is an example of the assignment problem which aims to", 
+   "minimize the total cost (negative locality) of all assignments.", 
+   "Munkres' algorithm is an optimal algorithm for solving the assignment", 
+   "problem.  It runs in O(n^3) time and requires O(n^2) space. This may", 
+   "make it prohibitively costly for large clusters, but remains an option", 
+   "for moderately sized clusters.  This implementation took ~15s to run for", 
+   "size n=2000 with real-world cost values.", 
+   "Test Plan: mvn -Dtest=TestMunkresAssignment test", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan", 
+   "Differential Revision: 371585"
+  ], 
+  "revision_id": "1225315"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-28T19:40:07.218692Z", 
+  "msg": [
+   "[master] Randomize regions in RegionServer report", 
+   "Summary:", 
+   "The regions passed in the RegionServer report are used as the candidates", 
+   "for load balancing. The addition of load balancing regions by explicit", 
+   "placements will require that candidate regions are not always the so", 
+   "that any regions without explicit placements will eventually be", 
+   "considered for the default load balancing.", 
+   "The regions intended to be included in the report are the most loaded,", 
+   "but were simply just the first N. This change randomly chooses N regions", 
+   "to offer as load balancing candidates for each report.", 
+   "Test Plan: Verify that a cluster can load balance its regions", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan", 
+   "Differential Revision: 375841"
+  ], 
+  "revision_id": "1225314"
+ }
+]

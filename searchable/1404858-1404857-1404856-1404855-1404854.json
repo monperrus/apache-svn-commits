@@ -1,0 +1,95 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2012-11-02T02:17:14.852222Z", 
+  "msg": [
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(basic_upgrade): For some reason we must expect SVN_ERR_WC_NOT_DIRECTORY", 
+   "as well to make the windows buildbot happy. I suspect this has to do with", 
+   "out-of-tree test suite runs, rather than with the OS platform."
+  ], 
+  "revision_id": "1404858"
+ }, 
+ {
+  "author": "junrao", 
+  "date": "2012-11-02T02:07:03.531256Z", 
+  "msg": [
+   "KafkaRequestHandler needs to handle exceptions; patched by Yang Ye; reviewed by Jun Rao; KAFKA-491"
+  ], 
+  "revision_id": "1404857"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-11-02T01:53:23.430197Z", 
+  "msg": [
+   "Disable automatic working copy upgrades. This has been discussed over and", 
+   "over, with many people in the community indicating they prefer manual upgrades.", 
+   "For now, this is a hard-coded default. There is no way to enable auto-upgrade.", 
+   "And unfortunately there is no single knob to globally switch auto-upgrade on", 
+   "and off in the code. Rather, function parameters have to be tweaked in various", 
+   "places where a working copy database is opened.", 
+   "Some parts of the upgrade code were written and tested exclusively for", 
+   "upgrading from 1.6 and earlier working copy formats to wc-ng, and thus", 
+   "needed small fixes to allow 'svn upgrade' to run wc-ng -> wn-ng format", 
+   "bumps without crashing.", 
+   "* subversion/libsvn_wc/adm_files.c", 
+   "(svn_wc_create_tmp_file2): Don't auto-upgrade working copies.", 
+   "* subversion/libsvn_wc/adm_ops.c", 
+   "(svn_wc_get_pristine_copy_path): Don't auto-upgrade working copies.", 
+   "* subversion/libsvn_wc/cleanup.c", 
+   "(svn_wc_cleanup3): Don't auto-upgrade working copies.", 
+   "* subversion/libsvn_wc/context.c", 
+   "(svn_wc_context_create): Don't auto-upgrade working copies.", 
+   "* subversion/libsvn_wc/lock.c", 
+   "(pool_cleanup_locked, svn_wc_adm_open3, svn_wc_adm_probe_open3,", 
+   "open_anchor): Don't auto-upgrade working copies.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(svn_wc__upgrade_sdb): Initialise *result_format before use if the", 
+   "working copy is already at format SVN_WC__VERSION to prevent an assertion", 
+   "during no-op upgrades of wc-ng working copies.", 
+   "(is_old_wcroot): Remove Subversion version numbers from error messages.", 
+   "It is now misleading to say that an upgrade is not possible because a", 
+   "pre-1.7 working copy was found since 'svn upgrade' now runs on any format.", 
+   "(svn_wc_upgrade): Handle upgrades from wc-ng-style working copies.", 
+   "Enable auto-upgrade of the db during upgrades from pre-1.7 WCs to avoid", 
+   "'svn upgrade' advising users to run 'svn upgrade'.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_bump_format): New helper function for wc-ng -> wc-ng upgrades.", 
+   "Ensures that the upgrade target is a working copy root, and performs a", 
+   "format bump of wcroot->sdb, which isn't exposed outside of the wc_db layer.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_bump_format): Declare.", 
+   "* subversion/libsvn_wc/wc_db_wcroot.c", 
+   "(svn_wc__db_pdh_create_wcroot): Properly handle the case where we do not", 
+   "auto-upgrade and run into a working copy using an older format.", 
+   "Previously, we ended up asserting in VERIFY_USABLE_WCROOT() somewhere", 
+   "because no upgrade happened but no error was returned either. Instead,", 
+   "return an error advising the user to upgrade the working copy.", 
+   "* subversion/tests/cmdline/upgrade_tests.py", 
+   "(wc_is_too_old_regex): The error message matched by this regex has changed", 
+   "in some cases, so adjust the regex accordingly.", 
+   "(basic_upgrade): Expect slightly different error messages resulting from", 
+   "above changes. The error code returned is unchanged, however.", 
+   "(upgrade_tree_conflict_data, upgrade_from_format_28): These tests were", 
+   "running 'svn status' and 'svn info' to trigger auto-upgrades. Make them", 
+   "run 'svn upgrade' instead to keep them passing."
+  ], 
+  "revision_id": "1404856"
+ }, 
+ {
+  "author": "kamrul", 
+  "date": "2012-11-02T01:47:55.262540Z", 
+  "msg": [
+   "OOZIE-959  Use API from OOZIE-906 in console (Ashish via Mohammad)"
+  ], 
+  "revision_id": "1404855"
+ }, 
+ {
+  "author": "kamrul", 
+  "date": "2012-11-02T01:47:47.271340Z", 
+  "msg": [
+   "OOZIE-959  Use API from OOZIE-906 in console (Ashish via Mohammad)"
+  ], 
+  "revision_id": "1404854"
+ }
+]

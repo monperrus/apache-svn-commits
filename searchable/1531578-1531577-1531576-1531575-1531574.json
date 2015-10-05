@@ -1,0 +1,68 @@
+[
+ {
+  "author": "adrianc", 
+  "date": "2013-10-12T18:58:59.747259Z", 
+  "msg": [
+   "Oops, I forgot to remove a debug statement from my last commit."
+  ], 
+  "revision_id": "1531578"
+ }, 
+ {
+  "author": "adrianc", 
+  "date": "2013-10-12T18:54:59.059923Z", 
+  "msg": [
+   "Refactored SecurityFactory implementation - use Java's ServiceLoader to discover Security implementations, instead of using configuration files."
+  ], 
+  "revision_id": "1531577"
+ }, 
+ {
+  "author": "adrianc", 
+  "date": "2013-10-12T18:52:39.827610Z", 
+  "msg": [
+   "Removed unused META-INF folder from security component."
+  ], 
+  "revision_id": "1531576"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-10-12T18:51:06.145339Z", 
+  "msg": [
+   "Followup to r1531574: Fix missing library reference.", 
+   "* build.conf (ra-test): Requires libsvn_ra_svn."
+  ], 
+  "revision_id": "1531575"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-10-12T18:43:20.335074Z", 
+  "msg": [
+   "Added two new callbacks to the svn_ra_callbacks2_t table for opening", 
+   "and closing ra_svn tunnels. When they're used, they override all", 
+   "tunnel definitions in the config file, includint the built-in svn+ssh.", 
+   "* subversion/include/svn_ra.h (struct svn_ra_svn_conn_st): Forward-declare", 
+   "this struct that is otherwise typedef'd in svn_ra_svn.h.", 
+   "(svn_ra_open_tunnel_func_t, svn_ra_close_tunnel_func_t):", 
+   "New callback function typedefs.", 
+   "(svn_ra_callbacks2_t.open_tunnel, svn_ra_callbacks2_t.close_tunnel):", 
+   "New RA callbacks. Used only by ra_svn, and only if a tunnel is needed.", 
+   "* subversion/libsvn_ra_svn/ra_svn.h (svn_ra_svn__session_baton_t):", 
+   "New member tunnel_name.", 
+   "* subversion/libsvn_ra_svn/client.c (tunnel_data_t): New private struct,", 
+   "used as a pool-cleanup baton.", 
+   "(close_tunnel_cleanup): New; pool cleanup for closing tunnels.", 
+   "(open_session): New argument tunnel_name. Use the new callbacks", 
+   "if they're defined.", 
+   "(ra_svn_open): Do not call find_tunnel_agent if the open-tunnel", 
+   "callback is defined. Update call to open_sesssion.", 
+   "(ra_svn_reparent): Update call to open_sesssion.", 
+   "* subversion/tests/libsvn_ra/ra-test.c", 
+   "(make_and_open_local_repos): Use svn_ra_open4 instead of the", 
+   "deprecated svn_ra_open3.", 
+   "(tunnel_open_count, open_tunnel, close_tunnel): New.", 
+   "(tunel_callback_test): New test for tunnel callbacks.", 
+   "(test_funcs): Add tunel_callback_test.", 
+   "* CHANGES: Note API change."
+  ], 
+  "revision_id": "1531574"
+ }
+]

@@ -1,0 +1,81 @@
+[
+ {
+  "author": "pderop", 
+  "date": "2013-09-22T20:02:51.880202Z", 
+  "msg": [
+   "CMS migration ..."
+  ], 
+  "revision_id": "1525423"
+ }, 
+ {
+  "author": "mcaisse", 
+  "date": "2013-09-22T19:55:43.056453Z", 
+  "msg": [
+   "Reverting checkin of 3.1-rc1 in order to build a new version."
+  ], 
+  "revision_id": "1525422"
+ }, 
+ {
+  "author": "pderop", 
+  "date": "2013-09-22T19:55:37.298867Z", 
+  "msg": [
+   "CMS migration ..."
+  ], 
+  "revision_id": "1525421"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2013-09-22T19:52:28.418395Z", 
+  "msg": [
+   "Fix for CONNECTORS-778."
+  ], 
+  "revision_id": "1525420"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-09-22T19:52:09.178128Z", 
+  "msg": [
+   "[Reverted in r1597989]", 
+   "Teach FSFS to store and report MOVes.  However, this patch does not add", 
+   "fs_move() to the FS API, yet.", 
+   "This models MOVes similar to ADDs, i.e.", 
+   "- there is move as well as move-replace", 
+   "- fs_move is an add-with-history that requires the copy-from revision to", 
+   "be equal to the TXN's base revision", 
+   "- move sources must be deleted explicitly in a separate DEL operation", 
+   "Hence, all history traversal and TXN rebase code just works out of the box", 
+   "and no other operation ordering is required in the commit editor other than", 
+   "the one already in place for add / replaces.", 
+   "During the final commit stage, we check for duplicate move targets including", 
+   "intermediate revisions since the TXN's base revision.  We also check that", 
+   "all move source paths have been deleted by that TXN.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_AMBIGUOUS_MOVE,", 
+   "SVN_ERR_FS_INCOMPLETE_MOVE): declare new error codes", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_path_change_kind_t): add move and move-replace", 
+   "* subversion/libsvn_fs_fs/low_level.c", 
+   "(ACTION_MOVE,", 
+   "ACTION_MOVEREPLACE): declare new change type strings", 
+   "(read_change,", 
+   "write_change_entry): write / parse the new change types", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(replace_change):  factored out from ...", 
+   "(fold_change): ... this one; handle moves similar to adds", 
+   "(process_changes): handle move-replaces similar to replaces", 
+   "(write_final_changed_path_info): update move source revs to Rev-1;", 
+   "make changed_paths an input parameter", 
+   "(check_for_duplicate_move_source,", 
+   "verify_moves): new move verification code", 
+   "(commit_body):  verify moves when finalizing the commit;", 
+   "update function all", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(enum copy_type_t): declare new parameter type", 
+   "(copy_helper): support moves just like ADDs; add extra param checks", 
+   "(fs_copy,", 
+   "fs_revision_link): update callers", 
+   "(fs_move): add new function for MOVes"
+  ], 
+  "revision_id": "1525419"
+ }
+]

@@ -1,0 +1,113 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-10T18:14:27.291004Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(update_opened): Fix C89 compatibility by moving variable definition."
+  ], 
+  "revision_id": "1557208"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-10T18:10:32.768545Z", 
+  "msg": [
+   "Complete the conversion of serf to the transitational xml parser by converting", 
+   "the update (editor) handling.", 
+   "As the original xml parser implementation used many different storage methods", 
+   "for keeping state between different parts of the operations, this patch also", 
+   "converts the parser to using the usual per file/directory baton handling and", 
+   "proper subpools.", 
+   "The linked lists with TODOs that were handled from the update report handler", 
+   "before this patch are now replaced by callbacks that immediately perform the", 
+   "necessary work.", 
+   "The following summary is not a complete list of changes, as that would be", 
+   "nearly impossible to write given all the interdependencies.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(report_state_e): Update to remove old intermediate states. Add states that", 
+   "weren't handled.", 
+   "(update_ttable): Move here. Extend to cover the entire feature set in all", 
+   "6 modes.", 
+   "(SPILLBUF_BLOCKSIZE): Move to the other related macros.", 
+   "(report_dir_t): Rename to ...", 
+   "(dir_baton_t): ... this and make this conver the entire per directory state.", 
+   "(report_info_t): Rename to ...", 
+   "(file_baton_t): ... this and handle all file state from here. Attach to", 
+   "parent dir baton.", 
+   "(report_fetch_t): Rename to ...", 
+   "(fetch_ctx_t): ... this to make clear that this is just used for fetching", 
+   "resources.", 
+   "(report_context_t): Replace the linked lists by pointers to current file and", 
+   "directory.", 
+   "(create_dir_baton,", 
+   "create_file_baton): New functions.", 
+   "(open_connection_if_needed): Move here to allow opening additional", 
+   "connections while creating requests, instead of only after a batch", 
+   "of operations.", 
+   "(set_file_props,", 
+   "set_dir_props): Update for new batons.", 
+   "(ensure_dir_opened): Don't use baton as boolean.", 
+   "(close_dir): Rename to ...", 
+   "(maybe_close_dir): ... this and handle reference counting here.", 
+   "(ensure_file_opened): New function, like ensure_dir_opened.", 
+   "(check_lock): Directly sent result.", 
+   "(headers_fetch,", 
+   "cancel_fetch): Update caller.", 
+   "(open_updated_file): Rename to ...", 
+   "(open_file_txdelta): ... this and use ensure_file_opened.", 
+   "(close_file): Handle all file close tasks here, including releasing", 
+   "the directory reference.", 
+   "(handle_fetch): Simplify logic, based on earlier error handling improvements.", 
+   "(file_props_done,", 
+   "file_fetch_done): New functions, handling the completion of file requests.", 
+   "(fetch_for_file): New function, initiating requests for files when needed.", 
+   "(dir_props_done): New function, handling the completion of a per directory", 
+   "PROPFIND.", 
+   "(fetch_for_dir): New function, initiating PROPFIND for a directory if needed.", 
+   "(update_opened,", 
+   "update_closed,", 
+   "update_cdata): Implement xml parser callbacks.", 
+   "(link_path): When we have an explicit update target, store that path for this", 
+   "path instead of checking this later.", 
+   "(update_delay_baton_t): Replace network_eof boolean with ctx->report_completed.", 
+   "(update_delay_handler): Update caller. Return serferror instead of", 
+   "malfunctioning for specific serf cases.", 
+   "(process_pending): Update caller.", 
+   "(finish_report): Update initialization. Use a single iterpool. Remove TODO list", 
+   "handling. Don't close directories on invalid reports as that would break the", 
+   "incomplete logic.", 
+   "(make_update_reporter): Update caller.", 
+   "(svn_ra_serf__do_diff): Add comment.", 
+   "(handle_stream): Move function here, to make it obvious that it is just used", 
+   "for get_file().", 
+   "(svn_ra_serf__get_file): Stop faking a file context. Use standard single", 
+   "request infrastructure."
+  ], 
+  "revision_id": "1557207"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2014-01-10T17:59:22.859387Z", 
+  "msg": [
+   "SOLR-5529: add support for queries to use multiple suggesters in SuggestComponent"
+  ], 
+  "revision_id": "1557206"
+ }, 
+ {
+  "author": "rec", 
+  "date": "2014-01-10T17:52:05.997835Z", 
+  "msg": [
+   "no jira - Updated links to UIMA@GSCL resources from UKP"
+  ], 
+  "revision_id": "1557205"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2014-01-10T17:49:20.223397Z", 
+  "msg": [
+   "OAK-1318: EventIterator keeps references to already seen events", 
+   "Rename EventIterator to EventIterable to match the interface it implements"
+  ], 
+  "revision_id": "1557204"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2013-09-08T18:36:27.528086Z", 
+  "msg": [
+   "Re-implement the forced usage of shared libraries for our test suite using a", 
+   "proper build.conf flag. The updated implementation resolves a few cases where", 
+   "we linked some applications (E.g. op-depth-test) against both the shared and", 
+   "the static version of the same library, because direct and indirect", 
+   "dependencies were handled using different code paths.", 
+   "This last problem caused test failures on the Windows shared library buildbot,", 
+   "because svn_error_clear() unhooked a different function for its", 
+   "maintainer-abort on error leaks, than the other library inserted.", 
+   "* build.conf", 
+   "(msvc-force-static): Document.", 
+   "(locks-test,", 
+   "checksum-test,", 
+   "crypto-test,", 
+   "client-test,", 
+   "conflict-data-test,", 
+   "db-test,", 
+   "pristine-store-test,", 
+   "entries-compat-test,", 
+   "op-depth-test,", 
+   "wc-test): Mark these tests as msvc-force-static they use functions that", 
+   "aren't published from the libraries that define them.", 
+   "(entries-dump,", 
+   "wc-lock-tester,", 
+   "wc-incomplete-tester): Mark these wc.db test helpers as msvc-force-static.", 
+   "* build/generator/gen_base.py", 
+   "(DependencyGraph.remove): New function.", 
+   "(TargetExe): Read new value from build.conf.", 
+   "(disable_shared): Don't touch msvc_export.", 
+   "* build/generator/gen_win.py", 
+   "(get_install_targets): Handle the magic of forcing static library usage here,", 
+   "with the code that creates shared libraries.", 
+   "(create_dll_target): Remove magic name logic."
+  ], 
+  "revision_id": "1520893"
+ }, 
+ {
+  "author": "mbenson", 
+  "date": "2013-09-08T18:36:00.319734Z", 
+  "msg": [
+   "cache asm4-generated classes; do not defer to JdkProxyFactory for interface-only proxies"
+  ], 
+  "revision_id": "1520892"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-09-08T18:26:10.830725Z", 
+  "msg": [
+   "Tweak some serf and gmock dependencies to allow building a few more optional", 
+   "projects on Windows without compilation errors.", 
+   "* trunk/build.conf", 
+   "(libsvn_ra_serf): Remove secur32.lib that belongs on serf.", 
+   "(libgmock): Don't handle as shared library.", 
+   "(serf): Add zlib and secur32.lib as dependencies.", 
+   "(__MORE__): Add svnauth."
+  ], 
+  "revision_id": "1520891"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2013-09-08T18:19:23.804195Z", 
+  "msg": [
+   "install cache_common.h; add notes on other files that aren't installed"
+  ], 
+  "revision_id": "1520890"
+ }, 
+ {
+  "author": "mbenson", 
+  "date": "2013-09-08T18:09:03.594767Z", 
+  "msg": [
+   "use numbered classnames instead of superclass-based ones"
+  ], 
+  "revision_id": "1520889"
+ }
+]

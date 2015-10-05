@@ -1,0 +1,59 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2013-01-19T22:34:33.907895Z", 
+  "msg": [
+   "* subversion/libsvn_repos/reporter.c", 
+   "(drive): Following up on r1163903 and r1365592 (the issue #4224 fix),", 
+   "remove a ### comment that has been handled."
+  ], 
+  "revision_id": "1435743"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-01-19T22:28:08.511089Z", 
+  "msg": [
+   "* STATUS: Nominate issue #4295 fix for backporting. Cast vote"
+  ], 
+  "revision_id": "1435742"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-01-19T22:21:53.255612Z", 
+  "msg": [
+   "trying to get a small perf update regarding ear and events"
+  ], 
+  "revision_id": "1435741"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-01-19T22:19:44.744392Z", 
+  "msg": [
+   "\"Applied fix from R12.04 for revision: 1435705\"", 
+   "------------------------------------------------------------------------", 
+   "r1435701 | jleroux | 2013-01-19 22:05:23 +0100 (sam., 19 janv. 2013) | 19 lines", 
+   "A patch from Martin Kreidenweis  \"Delegator creation fails with new ExecutionPool on trunk\" https://issues.apache.org/jira/browse/OFBIZ-4335", 
+   "The problem is that the wrong class loader is used for the \"ofbiz-config-*\" threads (NativeLibClassLoader instead of CachedClassLoader). This happens when the threads are created by the static code in ExecutionPool.java when it is executed before the ClassLoaderContainer.init() initializes the CachedClassLoader.", 
+   "This also causes other problems like: The local resolution of XML Schema files won't work any more because it's also using the wrong classloader, which can't find the XSD files:", 
+   "[java] 2011-07-21 12:21:45,333 (ofbiz-config-0) [                 UtilXml:1022:WARN ] [UtilXml.LocalResolver.resolveEntity] could not find LOCAL DTD/Schema with publicId [null] and the file/resource is [service-eca.xsd]", 
+   "You can trigger this behavior in current ofbiz trunk by setting an expire time for the properties cache in cache.properties", 
+   "properties.UtilPropertiesResourceCache.expireTime=10000", 
+   "The Debug.log() statements in the ContainerLoader then load the logging configuration properties file and cache it. If an expire time is set, the ExecutionPool is used and creates the \"ofbiz-config-*\" threads too early.", 
+   "By not pre-starting the \"ofbiz-config-*\" threads in the static code (patch above), the threads are then created later on, when the \"main\" thread classloader has become the CachedClassLoader and everythings starts working again.", 
+   "jleroux:", 
+   "* I don't see any issues, but performance, to not start the whole core threads. This is BTW the default behaviour. So I'd recommend to use it for GLOBAL_EXECUTOR.", 
+   "* I also removed the useless deprecated methods", 
+   "------------------------------------------------------------------------", 
+   "Also contains a change Jacopo did at r1361955, it was a nightmare to merge else"
+  ], 
+  "revision_id": "1435740"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-01-19T22:19:31.788594Z", 
+  "msg": [
+   "Create issue #4295 backport branch"
+  ], 
+  "revision_id": "1435739"
+ }
+]

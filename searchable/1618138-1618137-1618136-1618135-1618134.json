@@ -1,0 +1,123 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2014-08-15T10:13:23.598563Z", 
+  "msg": [
+   "Avoid shared data clashes and false cache key aliasing between repositories", 
+   "duplicated using 'hotcopy' or created as a result of dump / load cycles.", 
+   "See the discussion in http://svn.haxx.se/dev/archive-2014-04/0245.shtml", 
+   "and http://svn.haxx.se/dev/archive-2014-08/0093.shtml", 
+   "This is not a \"scalability issue\" (as stated in the first of the referenced", 
+   "threads), but rather a full-fledged problem.  We have an ability to share", 
+   "data between different objects pointing to same filesystems.  This sharing", 
+   "works within a single process boundary; currently we share locks", 
+   "(svn_mutex__t objects) and certain transaction data.  Accessing this kind of", 
+   "shared data requires some sort of a key and we used to use a filesystem UUID", 
+   "for this purpose.  However, this is *not* good enough for at least a couple", 
+   "of cases.", 
+   "Filesystem UUIDs aren't really unique for every filesystem an end user might", 
+   "have, because they get duplicated during hotcopy, naive copy (copy-paste) or", 
+   "dump / load cycles.  Whenever we have two filesystems with the same UUIDs", 
+   "open within a single process, the shared data starts clashing and things can", 
+   "get pretty ugly.  For example, one can experience random errors with parallel", 
+   "commits to 2 repositories with the same UUID (hosted by Apache HTTP Server).", 
+   "Another example was recently mitigated by http://svn.apache.org/r1589653 \u2014 we", 
+   "did encounter a deadlock within nested 'svnadmin freeze' commands executed", 
+   "for two repositories with the same UUID.", 
+   "Errors that I witnessed include (but might not be limited to):", 
+   "- Cannot write to the prototype revision file of transaction '392-ax'", 
+   "because a previous representation is currently being written by this", 
+   "process (SVN_ERR_FS_CORRUPT)", 
+   "- Can't unlock unknown transaction '392-ax' (SVN_ERR_FS_CORRUPT)", 
+   "- Recursive locks are not supported (SVN_ERR_RECURSIVE_LOCK)", 
+   "# This used to be deadlock prior to http://svn.apache.org/r1591919", 
+   "Fix the issue by introducing a concept of \"instance IDs\" on the FS layer.", 
+   "Basically, this gives us an ability to distinguish filesystem duplicates or", 
+   "near-duplicates produced via our API.  We can now have different filesystems", 
+   "with the same \"original\" UUID, but with different instance IDs.  With this", 
+   "concept, it is rather easy to get rid of the shared data clashes described", 
+   "above.  While doing this, also prevent false aliasing for our cache keys by", 
+   "throwing in the instance ID there as well.  This kind of aliasing is no", 
+   "better than the shared data clashes \u2014 we might encounter a deadly situation", 
+   "when two entirely different filesystems access each other's cached data due", 
+   "to the UUID aliasing.", 
+   "[ Note from the future: We stopped using instance IDs in the cache keys in", 
+   "r1623402, see http://svn.haxx.se/dev/archive-2014-08/0239.shtml ]", 
+   "Patch by: stefan2", 
+   "me", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(SVN_FS_FS__MIN_INSTANCE_ID_FORMAT): New.", 
+   "(fs_fs_data_t.instance_id): New.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__set_uuid): Add the instance ID parameter.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_serialized_init): Use an instance ID as a part of the shared data key.", 
+   "(fs_set_uuid): New adapter wrapping the svn_fs_fs__set_uuid() function.", 
+   "Whenever we set a new UUID, imply that filesystem will be a different", 
+   "instance, i.e. have a new unique instance ID.  Strictly speaking, our", 
+   "approach should work fine even if we choose to preserve the instance ID", 
+   "upon the UUID bump.  However, we stick to the other option \u2014 it doesn't", 
+   "make any real difference, but is a bit simpler to implement and", 
+   "(arguably) fits the concept better.  Resetting a filesystem UUID probably", 
+   "implies that the user wants to recreate all identification markers for", 
+   "that filesystem, so we might as well generate a new instance ID.", 
+   "(fs_vtable): Use the new fs_set_uuid() adapter here.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__open): Read the instance ID when it is supported by the format.", 
+   "(svn_fs_fs__set_uuid): Rework this routine in order to support writing and", 
+   "generating instance IDs when required by the filesystem format.", 
+   "(upgrade_body, svn_fs_fs__create): Generate a new instance ID when", 
+   "necessary.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_create_empty_dest): Unconditionally generate a new instance ID.", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches, svn_fs_fs__initialize_txn_caches): Use an", 
+   "instance ID as a part of the cache key.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(check_hotcopy_fsfs_fsx): Allow different instance IDs when comparing the", 
+   "'db/uuid' file contents.", 
+   "(freeze_freeze): Do not change UUID of hotcopy for new formats supporting", 
+   "instance IDs.  For new formats, 'svnadmin freeze A (svnadmin freeze B)'", 
+   "should not deadlock or error out with SVN_ERR_RECURSIVE_LOCK even if 'A'", 
+   "and 'B' share the same UUID.", 
+   "(freeze_same_uuid): New (fails without the core change).", 
+   "(test_list): Reference the new test.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Layout of the FS directory): Tweak wording for the 'db/uuid' file.", 
+   "(Filesystem formats): Shortly list the format specifics of that file."
+  ], 
+  "revision_id": "1618138"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2014-08-15T10:11:59.738008Z", 
+  "msg": [
+   "JCR-3797: Add path exclusion to JackrabbitEventFilter"
+  ], 
+  "revision_id": "1618137"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2014-08-15T10:10:57.246561Z", 
+  "msg": [
+   "fix test bug: don't try to seek past number of ords"
+  ], 
+  "revision_id": "1618136"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2014-08-15T10:10:24.597183Z", 
+  "msg": [
+   "fix test bug: don't try to seek past number of ords"
+  ], 
+  "revision_id": "1618135"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-08-15T10:05:06.913870Z", 
+  "msg": [
+   "Open a (hopefully short-lived) development branch for instance IDs in FSFS."
+  ], 
+  "revision_id": "1618134"
+ }
+]

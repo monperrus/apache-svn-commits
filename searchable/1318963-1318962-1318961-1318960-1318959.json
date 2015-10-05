@@ -1,0 +1,123 @@
+[
+ {
+  "author": "", 
+  "date": "2012-03-29T04:25:32.256240Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 3535", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2008-10-09T12:30:35.909792Z", 
+   "Log Message:", 
+   "-----------", 
+   "1) SDK-17199.  Tweak bind expression parsing so if when looking for two-way bind, if @ found but not followed by {, it starts at the beginning of the string to look for one-way bind.  Best way to test is to use E4X expressions within a one-way bind expression.", 
+   "2)  Update compatibility-version to allow 3.0 to be specified.  Change CURRENT_VERSION to 4.0.  If compatibility version < 4 then '@{' will not be recognized as a two-way bind expression.", 
+   "4) SDK-17247.  Binding tag, only check source and destination are equal if both attributes are specified.", 
+   "5) Paul should fix commented out code in SyntaxTreeDumper.isMetaDataEmpty() which caused NPE.  I'm not sure of the intent.  It's a class used only for debugging so it's okay to comment it out for now.", 
+   "QA:  compatability tests seem to be missing since it wasn't possible to specify 3.0", 
+   "Doc: Can use compatability-version to avoid recognition of two-way inline bind.  For example {name}@{domain} in v3 would have to be changed to {name}\\@{domain} for v4 if two-way bind isn't disabled.", 
+   "Modified Paths:", 
+   "--------------", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/swfutils/src/java/flash/swf/tools/SyntaxTreeDumper.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/common/MxmlConfiguration.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/AbstractBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/analyzer/SyntaxAnalyzer.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/lang/TextParser.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/as3/binding/DataBindingFirstPassEvaluator.java</path>"
+  ], 
+  "revision_id": "1318963"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-03-29T04:25:29.107638Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 3491", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2008-10-06T19:50:02.261134Z", 
+   "Log Message:", 
+   "-----------", 
+   "SDK-17184, SDK-17183, SDK-17181.", 
+   "1. parseBindingExpression() - work on two-way bind parsing.  No lead, no tail, no empty content, and no nested binding expressions are allowed.  {name}@{domain} is an error in Flex 4.  The @ needs to be quoted as in {name}\\@{domain} if the intent is the binding expression (name) + @ + (domain).", 
+   "2.  For the Binding tag, the source and destination can not be the same.", 
+   "3.  For the Binding tag, if twoWay is a binding expression, the error 'Error: Data binding expressions not supported with attributes processed at compile time.' will be logged.", 
+   "QA: yes", 
+   "Reviewer: Paul", 
+   "Modified Paths:", 
+   "--------------", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/AbstractBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler_en.properties</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/analyzer/SyntaxAnalyzer.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/lang/TextParser.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/rep/MxmlDocument.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/InterfaceCompiler.java</path>"
+  ], 
+  "revision_id": "1318962"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-03-29T04:25:23.660647Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 3206", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2008-09-15T13:03:47.943081Z", 
+   "Log Message:", 
+   "-----------", 
+   "SDK-16849.  If parsing data binding expression for ClassInitializerTextParser, it's never constructed, since the parser is just looking for classes.  Before setting the constructTwoWay flag of the data binding, make sure the binding was created.", 
+   "Modified Paths:", 
+   "--------------", 
+   "/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/lang/TextParser.java"
+  ], 
+  "revision_id": "1318961"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-03-29T04:25:17.735352Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 3203", 
+   "Author:   cframpto@adobe.com", 
+   "Date:     2008-09-14T12:11:47.361849Z", 
+   "Log Message:", 
+   "-----------", 
+   "Add support for inline two-way data binding (syntax is @{expr}).  Also add support for two-way data binding via the <mx:Binding> tag and the new property twoWay=boolean (default is false).", 
+   "Code Reviewer: Paul", 
+   "QA: tests for this feature need to be added to the regression test suite", 
+   "Doc: new feature which needs to be documented", 
+   "Modified Paths:", 
+   "--------------", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/ModelBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/XMLBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/AnonymousObjectGraphBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/dom/BindingNode.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/AbstractBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/rep/BindingExpression.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler_en.properties</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/analyzer/SyntaxAnalyzer.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/lang/TextParser.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/rep/MxmlDocument.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/ServiceRequestBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/XMLListBuilder.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/InterfaceCompiler.java</path>", 
+   "<path kind=\"file\" action=\"M\">/flex/sdk/trunk/modules/compiler/src/java/flex2/compiler/mxml/builder/DocumentBuilder.java</path>"
+  ], 
+  "revision_id": "1318960"
+ }, 
+ {
+  "author": "", 
+  "date": "2012-03-29T04:25:14.049331Z", 
+  "msg": [
+   "Transferred from the Adobe Open Source Subversion Repository", 
+   "Revision: 2462", 
+   "Author:   jimurphy@adobe.com", 
+   "Date:     2008-07-14T19:13:06.620116Z", 
+   "Log Message:", 
+   "-----------", 
+   "gumbo push to trunk", 
+   "Modified Paths:", 
+   "--------------", 
+   "214 paths were modified"
+  ], 
+  "revision_id": "1318959"
+ }
+]

@@ -1,0 +1,69 @@
+[
+ {
+  "author": "gpetracek", 
+  "date": "2013-10-15T22:33:51.520804Z", 
+  "msg": [
+   "MYFACES-3786 (agreed) approach which doesn't require unique-ids"
+  ], 
+  "revision_id": "1532573"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-10-15T22:32:44.627820Z", 
+  "msg": [
+   "Add support for read-only access to svn_config_t.  In read-only mode,", 
+   "concurrent multi-threaded access to the same config data structure is", 
+   "safe.", 
+   "We introduce a simple private API function that allows us to switch", 
+   "a config struct into r/o mode (one-way as the reversal seems dangerous).", 
+   "Part of that transition is expanding all values to prevent internal", 
+   "state change upon later read access.", 
+   "The code expects r/o structs not to be written to and simply ignores", 
+   "write ops in release mode.  In debug mode, an assert()ion is triggered.", 
+   "This is because the existing setter functions don't provide error", 
+   "return values.", 
+   "* subversion/libsvn_subr/config_impl.h", 
+   "(svn_config_t): add r/o flag to structure", 
+   "* subversion/include/private/svn_subr_private.h", 
+   "(void svn_config__set_read_only): declare new private API function", 
+   "* subversion/libsvn_subr/config_file.c", 
+   "(expand_value,", 
+   "expand_values_in_section): new transition utilities", 
+   "(svn_config__set_read_only): implement new API", 
+   "* subversion/libsvn_subr/config.c", 
+   "(svn_config_create2): init new flag as well", 
+   "(make_string_from_option): assert that this gets never called in r/o mode", 
+   "(svn_config_set): in r/o mode no-op in release, assert() in debug", 
+   "* subversion/libsvn_repos/config_pool.c", 
+   "(expand_value,", 
+   "expand_values_in_section,", 
+   "expand_all_values): drop obsolete functions", 
+   "(auto_parse): simply call new API to ensure correct r/o behavior"
+  ], 
+  "revision_id": "1532572"
+ }, 
+ {
+  "author": "eae", 
+  "date": "2013-10-15T22:32:30.040575Z", 
+  "msg": [
+   "UIMA-2682 More progress on DUCC application development"
+  ], 
+  "revision_id": "1532571"
+ }, 
+ {
+  "author": "eae", 
+  "date": "2013-10-15T22:30:23.163262Z", 
+  "msg": [
+   "UIMA-3149 Replaced with DuccCasCC"
+  ], 
+  "revision_id": "1532570"
+ }, 
+ {
+  "author": "eae", 
+  "date": "2013-10-15T22:27:11.124393Z", 
+  "msg": [
+   "UIMA-3149 Sample job spec"
+  ], 
+  "revision_id": "1532569"
+ }
+]

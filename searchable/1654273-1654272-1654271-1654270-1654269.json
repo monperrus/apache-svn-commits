@@ -1,0 +1,123 @@
+[
+ {
+  "author": "jleroux", 
+  "date": "2015-01-23T17:23:12.712058Z", 
+  "msg": [
+   "Fixes a bug, and get rid of some more bsh scriptlets", 
+   "2015-01-23 18:19:10,216 |http-bio-8443-exec-6 |FlexibleStringExpander        |W| Error evaluating scriptlet [${bsh:isPromo!=null&&isPromo.equals(\"Y\")}]; error was: java.lang.IllegalArgumentException: Error ru", 
+   "nning bsh script [isPromo!=null&&isPromo.equals(\"Y\")]: javax.script.ScriptException: Sourced file: inline evaluation of: ``isPromo!=null&&isPromo.equals(\"Y\");'' : Attempt to resolve method: equals() on undefi", 
+   "ned variable or class name: isPromo : at Line: 1 : in file: inline evaluation of: ``isPromo!=null&&isPromo.equals(\"Y\");'' : isPromo .equals ( \"Y\" )"
+  ], 
+  "revision_id": "1654273"
+ }, 
+ {
+  "author": "danhaywood", 
+  "date": "2015-01-23T17:21:51.487680Z", 
+  "msg": [
+   "ISIS-970, recognized annotations updated"
+  ], 
+  "revision_id": "1654272"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2015-01-23T17:20:21.575954Z", 
+  "msg": [
+   "Fix a remaining part of issue #4551 'svnrdump load commits wrong properties,", 
+   "or fails, on a non-deltas dumpfile'. This change avoids making more than one", 
+   "change-property call to the commit editor per property.", 
+   "Since r1654194, RA-serf processes multiple change-property calls the same", 
+   "way as other RA layers, using only the most recent value for a given", 
+   "property, so this is only a theoretical bug. This fix is most easily tested", 
+   "against RA-serf prior to r1654194, when svnrdump_tests.py 52 53 55 all fail", 
+   "(XFail).", 
+   "* subversion/svnrdump/load_editor.c", 
+   "(node_baton): Add a prop-changes hash.", 
+   "(new_node_record): Initialize it.", 
+   "(set_node_property,", 
+   "delete_node_property): Accumulate the prop change in the hash instead of", 
+   "sending it immediately to the commit editor, thus storing only the most", 
+   "recent value for each property.", 
+   "(close_node): Send all pending prop changes to the commit editor."
+  ], 
+  "revision_id": "1654271"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-01-23T17:09:08.121630Z", 
+  "msg": [
+   "Resolve an old ra_serf TODO: Add scratch_pool arguments to", 
+   "svn_ra_serf__request_body_delegate_t and", 
+   "svn_ra_serf__request_header_delegate_t.", 
+   "No functional changes.", 
+   "* subversion/libsvn_ra_serf/blame.c", 
+   "(create_file_revs_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(create_checkout_body,", 
+   "setup_proppatch_headers): Add argument.", 
+   "(create_proppatch_body): Add argument. Set scratch pool to pool :(", 
+   "(create_put_body,", 
+   "create_empty_put_body,", 
+   "setup_put_headers,", 
+   "setup_copy_file_headers,", 
+   "setup_add_dir_common_headers,", 
+   "setup_copy_dir_headers,", 
+   "setup_delete_headers,", 
+   "create_txn_post_body,", 
+   "setup_post_headers): Add argument.", 
+   "* subversion/libsvn_ra_serf/getdate.c", 
+   "(create_getdate_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/getlocations.c", 
+   "(create_get_locations_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/getlocationsegments.c", 
+   "(create_gls_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/getlocks.c", 
+   "(create_getlocks_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/get_deleted_rev.c", 
+   "(create_getdrev_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/get_file.c", 
+   "(headers_fetch): Add argument.", 
+   "* subversion/libsvn_ra_serf/get_lock.c", 
+   "(create_getlock_body,", 
+   "setup_getlock_headers): Add argument.", 
+   "* subversion/libsvn_ra_serf/inherited_props.c", 
+   "(create_iprops_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/lock.c", 
+   "(set_lock_headers,", 
+   "create_lock_body,", 
+   "set_unlock_headers): Add argument.", 
+   "* subversion/libsvn_ra_serf/log.c", 
+   "(create_log_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/merge.c", 
+   "(setup_merge_headers,", 
+   "create_merge_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/mergeinfo.c", 
+   "(create_mergeinfo_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/options.c", 
+   "(create_options_body,", 
+   "create_simple_options_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/property.c", 
+   "(setup_propfind_headers,", 
+   "create_propfind_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__request_body_delegate_t,", 
+   "svn_ra_serf__request_header_delegate_t): Add argument. Remove old TODO.", 
+   "* subversion/libsvn_ra_serf/replay.c", 
+   "(create_replay_body): Add argument.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(headers_fetch,", 
+   "create_update_report_body,", 
+   "setup_update_report_headers): Add argument.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(setup_request): Update caller."
+  ], 
+  "revision_id": "1654270"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2015-01-23T17:01:08.794753Z", 
+  "msg": [
+   "[UIMA-4198] a better refactoring - resulted in improving the speedup from 2x to 5x. Also fix a bug in previous refactoring that used a wrong arg to a method"
+  ], 
+  "revision_id": "1654269"
+ }
+]

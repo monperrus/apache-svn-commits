@@ -1,0 +1,83 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2012-04-23T23:23:55.582261Z", 
+  "msg": [
+   "Fix build by adjusting params to svn_fs_editor_create()", 
+   "* subversion/libsvn_repos/commit.c:", 
+   "(svn_repos__get_commit_ev2): add AUTOCOMMIT param"
+  ], 
+  "revision_id": "1329508"
+ }, 
+ {
+  "author": "cws", 
+  "date": "2012-04-23T23:21:48.995651Z", 
+  "msg": [
+   "HIVE-2803 [jira] utc_from_timestamp and utc_to_timestamp returns incorrect", 
+   "results.", 
+   "(Kiyotaka Suzuki via Carl Steinbach)", 
+   "Summary:", 
+   "https://issues.apache.org/jira/browse/HIVE-2803", 
+   "HIVE-2803 utc_from_timestamp and utc_to_timestamp returns incorrect results.", 
+   "It changed so that applyOffset() return a new instance.", 
+   "How to reproduce:", 
+   "$ echo \"2011-12-25 09:00:00.123456\" > /tmp/data5.txt", 
+   "hive> create table ts1(t1 timestamp);", 
+   "hive> load data local inpath '/tmp/data5.txt' overwrite into table ts1;", 
+   "hive> select t1, from_utc_timestamp(t1, 'JST'), from_utc_timestamp(t1, 'JST')", 
+   "from ts1 limit 1;", 
+   "The following result is expected:", 
+   "2011-12-25 09:00:00.123456      2011-12-25 18:00:00.123456      2011-12-25", 
+   "18:00:00.123456", 
+   "However, the above query return incorrect result like this:", 
+   "2011-12-26 03:00:00.492456      2011-12-26 03:00:00.492456      2011-12-26", 
+   "03:00:00.492456", 
+   "This is because GenericUDFFromUtcTimestamp.applyOffset() does setTime()", 
+   "improperly.", 
+   "On evaluating query, timestamp argument always returns the same instance.", 
+   "GenericUDFFromUtcTimestamp.applyOffset() does setTime() on the instance.", 
+   "That means it adds all offsets in the query.", 
+   "Test Plan: EMPTY", 
+   "Reviewers: JIRA", 
+   "Differential Revision: https://reviews.facebook.net/D1959"
+  ], 
+  "revision_id": "1329507"
+ }, 
+ {
+  "author": "rvs", 
+  "date": "2012-04-23T23:16:49.457038Z", 
+  "msg": [
+   "BIGTOP-539. update puppet code for BIGTOP-534"
+  ], 
+  "revision_id": "1329506"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-04-23T23:16:35.533503Z", 
+  "msg": [
+   "Avoid overloading the TXN flags, and specify the editor's autocommit", 
+   "behavior seperately.", 
+   "Note that the flag has reversed its meaning. I wanted a default of", 
+   "zero to match the default of \"autocommit\". Now that it is explicit,", 
+   "we can say \"pass TRUE for default autocommit behavior\".", 
+   "Suggested by: blair", 
+   "* subversion/include/svn_fs.h:", 
+   "(SVN_FS_TXN_NO_AUTOCOMMIT): removed", 
+   "(svn_fs_editor_create): add AUTOCOMMIT flag", 
+   "* subversion/libsvn_fs/editor.c:", 
+   "(struct edit_baton): switch to AUTOCOMMIT", 
+   "(make_editor): flip semantics of param to AUTOCOMMIT", 
+   "(svn_fs_editor_create): add AUTOCOMMIT param and pass along", 
+   "(svn_fs_editor_create_for): switch to flag value to FALSE"
+  ], 
+  "revision_id": "1329505"
+ }, 
+ {
+  "author": "rvs", 
+  "date": "2012-04-23T23:15:01.950521Z", 
+  "msg": [
+   "BIGTOP-545. package testing manifest in trunk needs to be updated"
+  ], 
+  "revision_id": "1329504"
+ }
+]

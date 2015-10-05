@@ -1,0 +1,85 @@
+[
+ {
+  "author": "mattmann", 
+  "date": "2015-08-05T01:33:13.825580Z", 
+  "msg": [
+   "Fix for TIKA-1703: Can't Specify Tesseract Data Folder Distinct from Tesseract Executable Path Contributed by Christian Wolfe <taidan19@gmail.com> this closes #56."
+  ], 
+  "revision_id": "1694133"
+ }, 
+ {
+  "author": "pfg", 
+  "date": "2015-08-05T01:14:28.441589Z", 
+  "msg": [
+   "FreeBSD build fixes.", 
+   "This allows out the box builds with gcc and to", 
+   "simplify the build with clang and also the FreeBSD port.", 
+   "From Don Lewis (FreeBSD port maintainer):", 
+   "Because we need to use different CFLAGS for gcc and clang, I had to add", 
+   "some compiler detection logic.  On most platforms, the value of $(COM)", 
+   "is either set statically by set_soenv, or set_soenv parses the compiler", 
+   "name to figure out which compiler is being used and then set $(COM)", 
+   "appropriately.  The latter doesn't work for FreeBSD because cc could", 
+   "either be gcc or clang.  For FreeBSD, I added the compiler detection", 
+   "logic to configure, which then passes that to set_soenv, in a somewhat", 
+   "hackish manner.", 
+   "When building with ports gcc on FreeBSD, we need to pass the rpath for", 
+   "the gcc runtime to the linker.  The FreeBSD port attempts to to this by", 
+   "adding this information to LDFLAGS, which the openoffice configure", 
+   "script then steps on, and in any case, this does not help the out of the", 
+   "box build.  My solution is to add some logic to configure to generate", 
+   "the necessary linker flags, which it then passes to set_soenv for", 
+   "inclusion in FreeBSD*Env.Set.sh.", 
+   "On FreeBSD, the out of the box build needs to pass $LIBINTL_PREFIX in", 
+   "the environment to the build phase.  I added some code to configure to", 
+   "figure out the value of this variable and to pass it to set_soenv for", 
+   "inclusion in FreeBSD*Env.Set.sh so that this does not need to be done as", 
+   "a extra step in the build.", 
+   "Changing $(COM) from GCC to CLANG for clang builds caused a number", 
+   "regressions elsewhere in the build framework.  These were mostly caused", 
+   "by the framework checking for $(COM) == GCC and $(OS) == FREEBSD, with", 
+   "$(COM) == CLANG case unhandled.  The fix was generally to just ignore", 
+   "the value of $(COM) and only test the value of $(OS).  One special case", 
+   "was the bridgetest regression test, which started dumping core on INTEL", 
+   "32-bit when built with clang.  It turns out that this entire test is was", 
+   "skipped for $(COM) == gcc, $(OS) == FREEBSD, and $(CPU) == I.  Rather", 
+   "than also skipping this test when building with clang, I tracked down", 
+   "the failure to a particular subtest involving polymorphic structures", 
+   "that also fails on OS/2 and tweaked the code to also skip that subtest", 
+   "on FREEBSD INTEL (32-bit).  Now bridgetest is run and passes on FreeBSD", 
+   "with both gcc and clang, on both i386 and amd64.", 
+   "Submitted by: Don Lewis"
+  ], 
+  "revision_id": "1694132"
+ }, 
+ {
+  "author": "pfg", 
+  "date": "2015-08-05T01:13:43.834892Z", 
+  "msg": [
+   "Cleanup to fix the build with MacOS X (a commercial FreeBSD derivative)", 
+   "The problem is that clang defines __GNUC__, and __MACH__ is defined on", 
+   "the Mac.  Apparently clang on the Mac likes both the typeof(SIG_DFL) and", 
+   "__decltype(SIG_DFL)__ (the latter is what the lastest CoinMP uses on the", 
+   "Mac), but the with the previous version of the patch, both flavors of", 
+   "typedef were defined on the Mac.", 
+   "Submitted by:\tDon Lewis"
+  ], 
+  "revision_id": "1694131"
+ }, 
+ {
+  "author": "dsetrakyan", 
+  "date": "2015-08-05T00:05:06.134638Z", 
+  "msg": [
+   "udpated contributors"
+  ], 
+  "revision_id": "1694130"
+ }, 
+ {
+  "author": "mmartinec", 
+  "date": "2015-08-04T23:46:47.083894Z", 
+  "msg": [
+   "Bug 7231: simplify overlycomplicated debug-logging in Plugin::URIDNSBL::complete_a_lookup"
+  ], 
+  "revision_id": "1694129"
+ }
+]

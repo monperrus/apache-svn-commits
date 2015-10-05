@@ -1,0 +1,79 @@
+[
+ {
+  "author": "oheger", 
+  "date": "2014-04-20T19:14:41.831726Z", 
+  "msg": [
+   "NodeModel.clearTree() now returns information about removed elements.", 
+   "This is necessary to correctly populate a CLEAR_TREE event for hierarchical", 
+   "configurations. InMemoryNodeModel here returns a list with QueryResult objects", 
+   "for the nodes or attributes selected by the key passed to clearTree()."
+  ], 
+  "revision_id": "1588818"
+ }, 
+ {
+  "author": "covener", 
+  "date": "2014-04-20T19:09:12.612239Z", 
+  "msg": [
+   "remove dead DE archive links"
+  ], 
+  "revision_id": "1588817"
+ }, 
+ {
+  "author": "jhardin", 
+  "date": "2014-04-20T18:39:30.160655Z", 
+  "msg": [
+   "tweak some rules, disable some poor rules, fix dependency error"
+  ], 
+  "revision_id": "1588816"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-20T18:35:43.031840Z", 
+  "msg": [
+   "Enable FSFS to take out more than file lock at once through a single call.", 
+   "Use that functionality to take out the new pack lock for upgrade, hotcopy", 
+   "and recovery.  Also, disallow new TXNs during upgrade and recovery.", 
+   "The core is the introduction of a new data type describing a lock to take", 
+   "out, which can be nested / chained.  Switch all existing lock function to", 
+   "using that infrastructure.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__with_all_locks): Declare the new internal lock API.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(with_lock_baton_t): New data type.  It allows us to describe a whole", 
+   "chain of locks to take out with minimal extra", 
+   "overhead.", 
+   "(with_some_lock_file): Take all parameters and the lock pool from the", 
+   "new data struct.  Also, update the FS members", 
+   "only once before calling the user-provided BODY", 
+   "and release all file locks at once in the outermost", 
+   "nesting level.  Finally, make the funcion not", 
+   "hold / leak file locks when updating FS members", 
+   "failed.", 
+   "(with_lock): New wrapper around the above that ensures in-process", 
+   "serialization as well.", 
+   "(lock_id_t): New enum that enables us to abstractly specify a FS-internal", 
+   "lock.", 
+   "(init_lock_baton,", 
+   "create_lock_baton,", 
+   "chain_lock_baton): New functions to construct single block batons as", 
+   "well as whole chains of it.", 
+   "(svn_fs_fs__with_write_lock,", 
+   "svn_fs_fs__with_pack_lock,", 
+   "svn_fs_fs__with_txn_current_lock): Switch to the new infrastructure.", 
+   "(svn_fs_fs__upgrade): Use the new lock API for global serialization.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(svn_fs_fs__hotcopy): Same.", 
+   "* subversion/libsvn_fs_fs/recovery.c", 
+   "(svn_fs_fs__recover): Same."
+  ], 
+  "revision_id": "1588815"
+ }, 
+ {
+  "author": "jamestaylor", 
+  "date": "2014-04-20T18:23:06.873308Z", 
+  "msg": [
+   "Added documentation for Pig Loader (RaviMagham)"
+  ], 
+  "revision_id": "1588814"
+ }
+]

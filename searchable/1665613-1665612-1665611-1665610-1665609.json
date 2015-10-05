@@ -1,0 +1,76 @@
+[
+ {
+  "author": "brock", 
+  "date": "2015-03-10T16:49:06.532253Z", 
+  "msg": [
+   "HIVE-9909 - Specify hive branch to use on jenkins hms tests (Sergio Pena via Brock)"
+  ], 
+  "revision_id": "1665613"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2015-03-10T16:48:52.283959Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(_mod_dav_url_quoting_broken_versions): The quoting failures go all the way", 
+   "back to 2.4.5 when PR 54611 was \"fixed.\""
+  ], 
+  "revision_id": "1665612"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2015-03-10T16:39:02.263206Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(_mod_dav_url_quoting_broken_versions): Expand set to include the versions", 
+   "impacted by either Apache httpd PR 56480 or PR 55397."
+  ], 
+  "revision_id": "1665611"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-03-10T16:38:00.657180Z", 
+  "msg": [
+   "Verify that all directory and file batons are properly closed in the", 
+   "close_edit() logic of commit for ra_serf, and in the maintainer mode", 
+   "of ra_svn. The way commit is implemented on ra_serf, not closing batons", 
+   "might make your commit invalid as properties are collected and", 
+   "committed all at once.", 
+   "The bad examples of this problem in our test code were fixed in r1665532.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(commit_context_t): Add variable.", 
+   "(dir_context_t): Remove unused variable.", 
+   "(open_root,", 
+   "add_directory,", 
+   "open_directory,", 
+   "close_directory,", 
+   "add_file,", 
+   "open_file,", 
+   "close_file): Track number of open batons.", 
+   "(close_edit): Return error if some batons are left open.", 
+   "* subversion/libsvn_ra_svn/editorp.c", 
+   "(ra_svn_handle_close_edit):", 
+   "Return error if some batons are left open in maintainer mode."
+  ], 
+  "revision_id": "1665610"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-03-10T16:35:36.229045Z", 
+  "msg": [
+   "In ra-serf: When running a single request and the request is still scheduled", 
+   "when the handler reports itself as done: make sure the request is cancelled.", 
+   "This avoids continuing handling the request while the pool containing", 
+   "the request is not destroyed yet. This code is exercised by the merge code", 
+   "that cancels a log request after the first results arrived.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__unschedule_handler): New function, +- extracted from", 
+   "handler_cleanup.", 
+   "(svn_ra_serf__context_run_one): If the handler is still scheduled when", 
+   "returing, properly unschedule.", 
+   "(handler_cleanup): Call svn_ra_serf__unschedule_handler.", 
+   "Remove now unneeded check, that made this problem mostly invisible."
+  ], 
+  "revision_id": "1665609"
+ }
+]

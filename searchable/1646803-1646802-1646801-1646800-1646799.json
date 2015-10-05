@@ -1,0 +1,101 @@
+[
+ {
+  "author": "astepukonis", 
+  "date": "2014-12-19T17:31:03.364229Z", 
+  "msg": [
+   "Translation improved."
+  ], 
+  "revision_id": "1646803"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-19T17:30:22.264125Z", 
+  "msg": [
+   "On the fsx-id branch: Remove POOL member from svn_fs_id_t struct.", 
+   "It hasn't and won't be used.", 
+   "* subversion/libsvn_fs_x/id.c", 
+   "(fs_x__id_t): Remove POOL.", 
+   "(svn_fs_x__id_txn_create_root,", 
+   "svn_fs_x__id_create_root,", 
+   "svn_fs_x__id_txn_create,", 
+   "svn_fs_x__id_create,", 
+   "svn_fs_x__id_copy,", 
+   "id_parse,", 
+   "svn_fs_x__id_deserialize): No need to initialize the POOL member anymore."
+  ], 
+  "revision_id": "1646802"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2014-12-19T17:27:14.233181Z", 
+  "msg": [
+   "* STATUS: Propose config pool fix."
+  ], 
+  "revision_id": "1646801"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-19T17:26:09.310435Z", 
+  "msg": [
+   "On the fsx-id branch:  Remove the copy-ID member from the svn_fs_id_t.", 
+   "The copy ID remains being stored in the noderev record but we don't", 
+   "need it to be immediately accessible from the FS API level ID object.", 
+   "This allows / requires our containers to change their internal ID", 
+   "representation.  Changes only need noderev and node ID.  The noderevs", 
+   "container will store the separate ID parts now just like the noderev", 
+   "struct itself.  It also represents the predecessor as a single noderev", 
+   "ID because the node-ID remains the same and the copy ID is no longer", 
+   "required for constructing svn_fs_id_t.", 
+   "* subversion/libsvn_fs_x/id.h", 
+   "(svn_fs_x__id_copy_id): Remove.", 
+   "(svn_fs_x__id_txn_create,", 
+   "svn_fs_x__id_create): Drop the copy-ID parameter.", 
+   "* subversion/libsvn_fs_x/id.c", 
+   "(fs_x__id_t): Remove the copy-ID element.", 
+   "(svn_fs_x__id_copy_id): Remove.", 
+   "(svn_fs_x__id_unparse): Omit copy-ID in string.", 
+   "(svn_fs_x__id_txn_create): Drop the copy-ID parameter.", 
+   "(svn_fs_x__id_create): Same. Also return NULL for and \"unused\" noderev.", 
+   "(id_parse): No copy-ID to parse anymore.", 
+   "* subversion/libsvn_fs_x/changes.c", 
+   "(binary_change_t): Remove copy-ID member.", 
+   "(append_change,", 
+   "svn_fs_x__changes_get_list,", 
+   "svn_fs_x__write_changes_container,", 
+   "svn_fs_x__read_changes_container,", 
+   "svn_fs_x__changes_get_list_func): Remove all references to it.", 
+   "* subversion/libsvn_fs_x/low_level.c", 
+   "(svn_fs_x__read_noderev): Update caller.", 
+   "* subversion/libsvn_fs_x/noderevs.c", 
+   "(binary_id_t): Drop. We now store ID parts individually.", 
+   "(binary_noderev_t): Add elements for node and copy ID.", 
+   "(svn_fs_x__noderevs_create): There are more ID parts that IDs.", 
+   "(store_id): Instead of whole FS API IDs, store just an ID part.", 
+   "(svn_fs_x__noderevs_add): Store ID parts individually and convert", 
+   "the predecessor ID to an ID part as well.", 
+   "(svn_fs_x__noderevs_estimate_size): Update estimates.", 
+   "(get_id): Return ID parts now.", 
+   "(svn_fs_x__noderevs_get): Read ID parts individually and construct", 
+   "FS API level IDs from that.", 
+   "(svn_fs_x__write_noderevs_container,", 
+   "svn_fs_x__read_noderevs_container): Adapt (de-)serializer to struct", 
+   "changes.", 
+   "(svn_fs_x__noderevs_get_func): Update similarly to svn_fs_x__noderevs_get.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(svn_fs_x__create_node,", 
+   "svn_fs_x__add_change,", 
+   "svn_fs_x__create_successor,", 
+   "write_final_rev): Update callers."
+  ], 
+  "revision_id": "1646800"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2014-12-19T17:25:19.476189Z", 
+  "msg": [
+   "On 1.8.x-r1646797 branch: merge r1646785, 1646786, 1646797 and adapt", 
+   "regression test to 1.8.x."
+  ], 
+  "revision_id": "1646799"
+ }
+]

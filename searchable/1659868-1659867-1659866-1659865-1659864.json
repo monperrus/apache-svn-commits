@@ -1,0 +1,75 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-14T23:00:44.722248Z", 
+  "msg": [
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(commit_callback_wrapper): Following up on r1659863, use ra local specific", 
+   "api, add error tracing and rename pool to scratch pool."
+  ], 
+  "revision_id": "1659868"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-14T22:56:38.446742Z", 
+  "msg": [
+   "Add a safety net for a few ugly corner case where users would go into error", 
+   "handling and abort a commit that just succeeded, just because the commit", 
+   "callback failed.", 
+   "Daniel Shahaf reproduced this edge case by somehow causing a SIGPIPE in", 
+   "the commit (info) callback by producing a ^C at the right time. See", 
+   "todays irc log for details.", 
+   "The editor->close_edit() almost succeeded, but right before returning", 
+   "SVN_NO_ERROR we call into the callback, and then svn tries to write out", 
+   "\"Committed revision 64.\\n\", but fails with SIGPIPE. This makes close_edit()", 
+   "return this SIGPIPE and import/commit and probably other callers use this", 
+   "to trigger an abort_edit() call.", 
+   "This scenario is added as testcase to the ra tests.", 
+   "Note: ra-svn already had a similar safety net here.", 
+   "* subversion/libsvn_ra_serf/commit.c", 
+   "(close_edit): Make sure we don't try to abort a succeeded txn, by", 
+   "setting the right variables.", 
+   "* subversion/libsvn_repos/commit.c", 
+   "(close_edit): Clear some variables to avoid a theoretical case where", 
+   "we can abort a succeeded commit.", 
+   "* subversion/tests/libsvn_ra/ra-test.c", 
+   "(includes): Add svn_time.h.", 
+   "(commit_callback_with_failure): New function.", 
+   "(commit_callback_failure): New function.", 
+   "(test_list): Add commit_callback_failure.", 
+   "Found by: danielsh"
+  ], 
+  "revision_id": "1659867"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2015-02-14T22:45:54.945517Z", 
+  "msg": [
+   "Hive 1.1.0-rc0 release."
+  ], 
+  "revision_id": "1659866"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2015-02-14T22:38:16.707936Z", 
+  "msg": [
+   "Listing names of testsuites that have failed or skipped tests:", 
+   "Reorder, to make sure that tail output (in Gump) does not miss the failed test names.", 
+   "Fix slitting a ';'-separated string of test names.", 
+   "The issue was that when there are more than 2 test names in the string, only the first ';' was replaced with line separator. The goal is to print each test name on a separate line.", 
+   "Merged r1659835, r1659864 from tomcat/tc8.0.x/trunk."
+  ], 
+  "revision_id": "1659865"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2015-02-14T22:36:29.528286Z", 
+  "msg": [
+   "Listing names of testsuites that have failed or skipped tests:", 
+   "Fix slitting a ';'-separated string of test names.", 
+   "The issue was that when there are more than 2 test names in the string, only the first ';' was replaced with line separator. The goal is to print each est name on a separate line.", 
+   "Merged r1659862 from tomcat/trunk."
+  ], 
+  "revision_id": "1659864"
+ }
+]

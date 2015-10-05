@@ -1,0 +1,71 @@
+[
+ {
+  "author": "adrianc", 
+  "date": "2013-12-28T19:20:08.554815Z", 
+  "msg": [
+   "Upgrade Derby to 10.10.1.1."
+  ], 
+  "revision_id": "1553893"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-12-28T19:18:21.429533Z", 
+  "msg": [
+   "[HBASE-10205] Fix ConcurrentModificationException in BucketAllocator", 
+   "Author: arjen", 
+   "Summary: The different WriterThreads in the BucketCache share a reference to a single BucketAllocator. There is race condition between BucketAllocator.allocateBlock(), which is called when flushing each cache entry, and BucketAllocator.getIndexStatistics(), which usually gets called by the WriterThread after the queue with entries has been flushed. This diff adds some synchronization around these operations. Locking here is ok as calls to the BucketAllocator happen outside the critical path of adding to the cache. Removal of items from the cache happen by the compaction thread or on close, both should be ok here.", 
+   "Test Plan: Ran the loadtest on one of dev clusters for 12+ hours. Without this diff exceptions would show up within a few hours.", 
+   "Reviewers: liyintang, aaiyer, rshroff", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1108464", 
+   "Task ID: 3337650"
+  ], 
+  "revision_id": "1553892"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-12-28T19:18:17.899658Z", 
+  "msg": [
+   "[0.89-fb] [master] Ensure that rootRS death is processed correctly upon master failover.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "We have seen cases where kill-hbase can get the system into a state where", 
+   "the master is not able to assign any of the regions, because the master is", 
+   "not assigning the root region.", 
+   "This essentially seems to happen, because the old rootRegionServer was", 
+   "being processed as dead. But, as part of that, the master does a root", 
+   "scan -- that would fail because the region server is dead.", 
+   "ProcessServerShutdown checks if the deadServer is the root server and tries", 
+   "to get root assigned, when ProcessServerShutdown is instantiated. However, in", 
+   "the case of a master failover, where the state is reconstructed from", 
+   "ZKClusterStateRecovery, the rootRegionServer reference could be updated, after", 
+   "the ProcessServerShutdown is created. In this case, PSS never makes any", 
+   "progress after the split log stage.", 
+   "Test Plan: re pro the scenario on my dev cluster.", 
+   "Reviewers: liyintang, rshroff", 
+   "Reviewed By: liyintang", 
+   "CC: mbm, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1091877"
+  ], 
+  "revision_id": "1553891"
+ }, 
+ {
+  "author": "adrianc", 
+  "date": "2013-12-28T19:15:58.295252Z", 
+  "msg": [
+   "A small code cleanup in the entity engine - remove deprecated functionality. Originally, the \"blob\" field type was used as a catch-all for java.sql.Blob, byte[], and java.lang.Object. Now each Java type has its own field type - so you must specify the correct one.", 
+   "IMPORTANT: This commit might break some applications. If you get ClassCastExceptions, then you need to change the field type in your entity from blob to either byte-array or object. The change will have no effect on your database - because they are all persisted as BLOB SQL types."
+  ], 
+  "revision_id": "1553890"
+ }, 
+ {
+  "author": "cheolsoo", 
+  "date": "2013-12-28T19:08:40.745266Z", 
+  "msg": [
+   "PIG-3590 didn't delete TestPartitionFilterPushDown.java properly. Deleting it", 
+   "now."
+  ], 
+  "revision_id": "1553889"
+ }
+]

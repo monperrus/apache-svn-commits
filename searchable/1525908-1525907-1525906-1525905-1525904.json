@@ -1,0 +1,106 @@
+[
+ {
+  "author": "joyce", 
+  "date": "2013-09-24T14:46:46.648220Z", 
+  "msg": [
+   "CLIMATE-307 - OCW examples now pull NetCDF files from external server"
+  ], 
+  "revision_id": "1525908"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-09-24T14:46:46.127832Z", 
+  "msg": [
+   "Set different ports for testing in a CI environment (e.g. Jenkins) https://issues.apache.org/jira/browse/OFBIZ-4794", 
+   "*What's for?*", 
+   "OOTB the port offset is interesting in at least 3 cases:", 
+   "# To simultaneously run tests on the same Buildbot machine. This is related to http://mail-archives.apache.org/mod_mbox/www-builds/201209.mbox/%3C002101cd991b$0a16de50$1e449af0$@16degrees.com.au%3E", 
+   "# To simultaneously run the demos without having to change much things, just one parameter", 
+   "# To eventually run Sonar on OFBiz sources https://issues.apache.org/jira/browse/INFRA-3590", 
+   "*How it's done?*", 
+   "Basically, I just added a portoffset integer parameter to some ant targets (of course this JVM param can also be used in a Java call from command line):", 
+   "* in trunk and R13.07: start, start-batch, start-debug, start-pos, start-both, run-tests and run-test", 
+   "* in R12.04 and R11.04: run-tests, run-test. I did not set start targets because anyway it would miss the admin port offset, withouh much changes. So can't be used to demonstrate. We will continue to use the current paches for those.", 
+   "The portoffset parameter is set to zero by default in ClassLoaderContainer.java.", 
+   "If a value is passed, it's then grabed by Config.java and passed to ClassLoaderContainer.java, where it's set to this value.", 
+   "The portoffset is then used to change in one shoot all the default ports values defined (in config or hardcoded), and the admin port value in R13.07 and trunk.", 
+   "This is done in following classes:", 
+   "CatalinaContainer", 
+   "NamingServiceContainer", 
+   "ServiceEngine through ServiceLocation", 
+   "RmiServiceContainer", 
+   "XMLRPCClientEngine", 
+   "XmlRpcTests", 
+   "To avoid hardcoding locations in services definitions, I also had to create some service-locations: main-local-soap and main-remote-soap", 
+   "*What are the constraints?*", 
+   "* For demos: the offset should not be applied to trunk because <service-location name=\"main-remote-soap\" location=\"http://demo-trunk.ofbiz.apache.org:8080/webtools/control/SOAPService\"/> is used for tests by trunk *and all releases*. It's useless to apply to trunk anyway,  offsetting port in releases is enough.", 
+   "* I did not take into account the Ideal payment harcoded port values in IdealPaymentServiceTest.java. Weirdly I did not cross error during tests, though it seems there are tests using an harcoded port in url.", 
+   "*What is the status?*", 
+   "Locally (on Win XP)  I ran many tests combinations with <<ant load-demo run-tests>>.", 
+   "Applying the portoffset on a sole running test instance has no effects. I have still some fails (no errors) but those are not related to my changes, they appear also without.", 
+   "But when I run a combination of any releases/trunk but with R11.04, I get a time out error with testSOAPSimpleService, that I can't explain so far.", 
+   "If I run the trunk alone with the portoffset no errors occur. Same if I run a release with portoffset and only testSOAPSimpleService in trunk (w/ or w/o portoffset)", 
+   "*To summarize:* these changes will be used to run Buildot tests instances simultaneously . And, for coming releases, to run demos without having to create patches. Simply running ant start with a portoffset value which will take care of all ports values, including admin port. For running R12.04 demo as stable we will still need to create a patch for the last time.", 
+   "*What I will to do for now:* commit the patches and test if I cross the same issue on Buildbot. If it's the same (99% chances it will) I will revert and will continue to locally try to find the reason . I believe this issue is unrelated to the changes I implemened.  And it's just because it's now possible to simultaneously run tests that it appears.", 
+   "BTW I just noticed that when you run R11.04 with R12.04, R12.04 takes almost all the CPU (XP is not very, while when running any combinations w/o R11.04 the CPU load is shared.", 
+   "Also there are far less tests in R11.04, which coul be the reason when I run it with another test run instance there are no issues.  Because R11.04 tests finish before the other instance gets to run testSOAPSimpleService."
+  ], 
+  "revision_id": "1525907"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-09-24T14:46:34.897784Z", 
+  "msg": [
+   "Set different ports for testing in a CI environment (e.g. Jenkins) https://issues.apache.org/jira/browse/OFBIZ-4794", 
+   "*What's for?*", 
+   "OOTB the port offset is interesting in at least 3 cases:", 
+   "# To simultaneously run tests on the same Buildbot machine. This is related to http://mail-archives.apache.org/mod_mbox/www-builds/201209.mbox/%3C002101cd991b$0a16de50$1e449af0$@16degrees.com.au%3E", 
+   "# To simultaneously run the demos without having to change much things, just one parameter", 
+   "# To eventually run Sonar on OFBiz sources https://issues.apache.org/jira/browse/INFRA-3590", 
+   "*How it's done?*", 
+   "Basically, I just added a portoffset integer parameter to some ant targets (of course this JVM param can also be used in a Java call from command line):", 
+   "* in trunk and R13.07: start, start-batch, start-debug, start-pos, start-both, run-tests and run-test", 
+   "* in R12.04 and R11.04: run-tests, run-test. I did not set start targets because anyway it would miss the admin port offset, withouh much changes. So can't be used to demonstrate. We will continue to use the current paches for those.", 
+   "The portoffset parameter is set to zero by default in ClassLoaderContainer.java.", 
+   "If a value is passed, it's then grabed by Config.java and passed to ClassLoaderContainer.java, where it's set to this value.", 
+   "The portoffset is then used to change in one shoot all the default ports values defined (in config or hardcoded), and the admin port value in R13.07 and trunk.", 
+   "This is done in following classes:", 
+   "CatalinaContainer", 
+   "NamingServiceContainer", 
+   "ServiceEngine through ServiceLocation", 
+   "RmiServiceContainer", 
+   "XMLRPCClientEngine", 
+   "XmlRpcTests", 
+   "To avoid hardcoding locations in services definitions, I also had to create some service-locations: main-local-soap and main-remote-soap", 
+   "*What are the constraints?*", 
+   "* For demos: the offset should not be applied to trunk because <service-location name=\"main-remote-soap\" location=\"http://demo-trunk.ofbiz.apache.org:8080/webtools/control/SOAPService\"/> is used for tests by trunk *and all releases*. It's useless to apply to trunk anyway,  offsetting port in releases is enough.", 
+   "* I did not take into account the Ideal payment harcoded port values in IdealPaymentServiceTest.java. Weirdly I did not cross error during tests, though it seems there are tests using an harcoded port in url.", 
+   "*What is the status?*", 
+   "Locally (on Win XP)  I ran many tests combinations with <<ant load-demo run-tests>>.", 
+   "Applying the portoffset on a sole running test instance has no effects. I have still some fails (no errors) but those are not related to my changes, they appear also without.", 
+   "But when I run a combination of any releases/trunk but with R11.04, I get a time out error with testSOAPSimpleService, that I can't explain so far.", 
+   "If I run the trunk alone with the portoffset no errors occur. Same if I run a release with portoffset and only testSOAPSimpleService in trunk (w/ or w/o portoffset)", 
+   "*To summarize:* these changes will be used to run Buildot tests instances simultaneously . And, for coming releases, to run demos without having to create patches. Simply running ant start with a portoffset value which will take care of all ports values, including admin port. For running R12.04 demo as stable we will still need to create a patch for the last time.", 
+   "*What I will to do for now:* commit the patches and test if I cross the same issue on Buildbot. If it's the same (99% chances it will) I will revert and will continue to locally try to find the reason . I believe this issue is unrelated to the changes I implemened.  And it's just because it's now possible to simultaneously run tests that it appears.", 
+   "BTW I just noticed that when you run R11.04 with R12.04, R12.04 takes almost all the CPU (XP is not very, while when running any combinations w/o R11.04 the CPU load is shared.", 
+   "Also there are far less tests in R11.04, which coul be the reason when I run it with another test run instance there are no issues.  Because R11.04 tests finish before the other instance gets to run testSOAPSimpleService."
+  ], 
+  "revision_id": "1525906"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2013-09-24T14:44:48.223945Z", 
+  "msg": [
+   "LUCENE-5239: backport test to 4.x"
+  ], 
+  "revision_id": "1525905"
+ }, 
+ {
+  "author": "degenaro", 
+  "date": "2013-09-24T14:41:13.552019Z", 
+  "msg": [
+   "UIMA-2726 DUCC support Files tab (log directory contents) for Jobs/Reservations/Services details"
+  ], 
+  "revision_id": "1525904"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2015-04-13T12:38:30.157534Z", 
+  "msg": [
+   "* STATUS: Nominate two security fixes (r1667233, r1667235) that were", 
+   "released as a part of 1.8.13 and 1.7.20, but did not make it into", 
+   "/branches/1.9.x.  Put these nominations into 1.9.0 blocker section."
+  ], 
+  "revision_id": "1673173"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-04-13T12:31:24.944626Z", 
+  "msg": [
+   "* subversion/tests/libsvn_ra/ra-test.c", 
+   "(ra_list_has_props): Following up on r1673170, remove call to SVN_DBG()."
+  ], 
+  "revision_id": "1673172"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-04-13T12:27:30.796240Z", 
+  "msg": [
+   "* STATUS: Nominate r1673170 for 1.9.0."
+  ], 
+  "revision_id": "1673171"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-04-13T12:23:20.771705Z", 
+  "msg": [
+   "Add an fs layer api that allows obtaining just a boolean indicating whether", 
+   "properties exist on a node, instead of always obtaining the properties and", 
+   "checking their count.", 
+   "This is by far the most expensive operation on 'svn ls -v' in Subversion <=", 
+   "1.8.x on huge directories as it requires fetching much 'new' data, and has", 
+   "the risk of trashing the node cache.", 
+   "r1673153 made new 'svn' clients stop asking for this information for this", 
+   "scenario but existing clients do ask and so will most likely many third", 
+   "party clients (confirmed for TortoiseSVN), will keep asking for this", 
+   "information.", 
+   "This function introduces the FS api and updates callers, but doesn't provide", 
+   "optimized implementations yet, so the result is that this doesn't change", 
+   "runtime behaviour yet, but just moves the implementation into the fs layer.", 
+   "I hope this patch will be accepted for 1.9.0 to allow further improvements", 
+   "in later patches, potentially after 1.9.0.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_node_has_props): New function.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_node_has_props): New function.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t): Add node_has_props.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(base_node_has_props): New function.", 
+   "(root_vtable): Add function.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_node_has_props): New function.", 
+   "(root_vtable): Add function.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(x_node_has_props): New function.", 
+   "(root_vtable): Add function.", 
+   "* subversion/libsvn_ra_local/ra_plugin.c", 
+   "(svn_ra_local__get_dir): Use new optimized fs call. Rename subpool", 
+   "to iterpool.", 
+   "* subversion/libsvn_repos/repos.c", 
+   "(svn_repos_stat): Use new optimized fs call.", 
+   "* subversion/mod_dav_svn/liveprops.c", 
+   "(insert_prop_internal): Use optimized code for svn clients.", 
+   "* subversion/svnserve/serve.c", 
+   "(get_dir): Use optimized fs code.", 
+   "* subversion/tests/libsvn_ra/ra-test.c", 
+   "(ra_list_has_props): New function.", 
+   "(test_funcs): Add ra_list_has_props."
+  ], 
+  "revision_id": "1673170"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2015-04-13T12:22:56.331174Z", 
+  "msg": [
+   "Merge r1672628", 
+   "57788: Avoid NPE if nothing is found after going through the whole class hierarchy."
+  ], 
+  "revision_id": "1673169"
+ }
+]

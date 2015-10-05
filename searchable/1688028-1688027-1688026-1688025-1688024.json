@@ -1,0 +1,71 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-06-28T17:50:20.408850Z", 
+  "msg": [
+   "Fix issue #4543:", 
+   "Recursive configuration value definitions shall not segfault.", 
+   "They are still unsupported but now result in defined behavior.", 
+   "To prevent stack overflow or OOM errors, we need to detect cycles in", 
+   "configuration value definitions.  This patch replaces the boolean", 
+   "\"expanded\" state with a enum that allows us to e.g. mark a value as", 
+   "\"being in the process of being expanded\", thus enables us to detect", 
+   "cycles.  We also use it to mark a value as \"cyclic\" after detection.", 
+   "Because the public API does not provide any means of error return,", 
+   "we must implement a defined, deterministic answer for recursive value", 
+   "definitions.  With this patch, all values that depend on a recursive", 
+   "definition are normalized to empty strings.  That increases the chance", 
+   "of users actually noticing their mistake.", 
+   "* subversion/libsvn_subr/config.c", 
+   "(option_state_t): New value resolution state type.", 
+   "(cfg_option_t): Replace the binary resolution state.", 
+   "(rmex_callback): Update the reset logic.", 
+   "(make_string_from_option): Detect and propagate cycles using the", 
+   "refined state machine.", 
+   "(expand_option_value): Return whether the expansion was successful.", 
+   "(svn_config_create_option): Update constructor.", 
+   "(svn_config__is_expanded): Update state check.", 
+   "(svn_config_get): Default values need also be checked for references", 
+   "to recursive definitions.", 
+   "(svn_config_set): Update initial state.", 
+   "(svn_config_dup): Update element access.", 
+   "* subversion/tests/libsvn_subr/config-test.cfg", 
+   "(section1): Add recursive value definitions.", 
+   "* subversion/tests/libsvn_subr/config-test.c", 
+   "(test_expand): Extend to check the recursive definitions as well."
+  ], 
+  "revision_id": "1688028"
+ }, 
+ {
+  "author": "andyetitmoves", 
+  "date": "2015-06-28T17:20:17.425548Z", 
+  "msg": [
+   "SOLR-7485: Replace shards.info occurrences with ShardParams.SHARDS_INFO"
+  ], 
+  "revision_id": "1688027"
+ }, 
+ {
+  "author": "andyetitmoves", 
+  "date": "2015-06-28T17:19:27.255217Z", 
+  "msg": [
+   "SOLR-7485: Add CHANGES.txt"
+  ], 
+  "revision_id": "1688026"
+ }, 
+ {
+  "author": "andyetitmoves", 
+  "date": "2015-06-28T17:18:04.129847Z", 
+  "msg": [
+   "SOLR-7485: Replace shards.info occurrences with ShardParams.SHARDS_INFO"
+  ], 
+  "revision_id": "1688025"
+ }, 
+ {
+  "author": "pescetti", 
+  "date": "2015-06-28T17:03:25.372950Z", 
+  "msg": [
+   "Update site footer."
+  ], 
+  "revision_id": "1688024"
+ }
+]

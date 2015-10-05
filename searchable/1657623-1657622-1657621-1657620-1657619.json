@@ -1,0 +1,73 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2015-02-05T16:46:55.812026Z", 
+  "msg": [
+   "Tune the conditional compilation related to us using two different types", 
+   "of locks (apr_thread_mutex_t and apr_thread_rwlock_t) in the membuffer cache.", 
+   "Instead of having nested #if's for APR_HAS_THREADS and USE_SIMPLE_MUTEX,", 
+   "make every possible code path explicit and ensure that they don't intersect.", 
+   "We cannot really get rid of the conditional compilation, because using an", 
+   "apr_thread_mutex_t under Windows is a workaround for poor APR read-write lock", 
+   "performance and possible race condition (see [1,2]).", 
+   "However, what we can do here is avoid merging the conditionally compiled", 
+   "statements and ensure that only required fields of the struct svn_membuffer_t", 
+   "are compiled in the corresponding #if statements.  This patch gets rid of the", 
+   "'allow_blocking_writes' field initialization when we do not have a read-write", 
+   "lock, and also prevents a preprocessor from outputting code with multiple", 
+   "return statements, e.g.:", 
+   "static svn_error_t *", 
+   "read_lock_cache(svn_membuffer_t * cache)", 
+   "{", 
+   "return svn_mutex__lock(cache->lock);", 
+   "return SVN_NO_ERROR;", 
+   "}", 
+   "[1] http://svn.haxx.se/dev/archive-2014-12/0112.shtml", 
+   "(Message-ID: <CABw-3Yfs4ydsEZj6Y7yL=HK_zas6-9=xpZ=EwS+JaC=7huLQwQ@mail.gmail.com>)", 
+   "[2] https://issues.apache.org/bugzilla/show_bug.cgi?id=45455", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(struct svn_membuffer_t): Replace the nested #if's with two explicit", 
+   "conditions.  Compile out the 'allow_blocking_writes' field when we favor", 
+   "apr_thread_mutex_t over apr_thread_rwlock_t, as it is not being used on", 
+   "the corresponding code paths.", 
+   "(read_lock_cache, write_lock_cache, force_write_lock_cache, unlock_cache):", 
+   "Replace the nested #if's with explicit #if-elif-else conditions.", 
+   "(svn_cache__membuffer_cache_create): Same here, but without an #else, as", 
+   "with !APR_HAS_THREADS we don't have locks to initialize."
+  ], 
+  "revision_id": "1657623"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2015-02-05T16:38:18.335806Z", 
+  "msg": [
+   "Typos"
+  ], 
+  "revision_id": "1657622"
+ }, 
+ {
+  "author": "rfscholte", 
+  "date": "2015-02-05T16:36:48.380156Z", 
+  "msg": [
+   "Push to 3.0-SNAPSHOT, since this plugin is requiring Maven3", 
+   "Add documentation"
+  ], 
+  "revision_id": "1657621"
+ }, 
+ {
+  "author": "davidb", 
+  "date": "2015-02-05T16:19:40.986063Z", 
+  "msg": [
+   "Removing the osgi.implementation capability again as it turns out that it's not needed."
+  ], 
+  "revision_id": "1657620"
+ }, 
+ {
+  "author": "mreutegg", 
+  "date": "2015-02-05T16:16:52.651378Z", 
+  "msg": [
+   "OAK-2482: oak-mongo.js does not escape special characters for regular expressions"
+  ], 
+  "revision_id": "1657619"
+ }
+]

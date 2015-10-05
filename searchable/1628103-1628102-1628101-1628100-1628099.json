@@ -1,0 +1,71 @@
+[
+ {
+  "author": "eyang", 
+  "date": "2014-09-28T21:23:08.509253Z", 
+  "msg": [
+   "CHUKWA-730. Updated Solr schema to work with Solr 4.7.2.  (Eric Yang)"
+  ], 
+  "revision_id": "1628103"
+ }, 
+ {
+  "author": "eyang", 
+  "date": "2014-09-28T21:22:06.323408Z", 
+  "msg": [
+   "CHUKWA-730. Updated Solr schema to work with Solr 4.7.2.  (Eric Yang)"
+  ], 
+  "revision_id": "1628102"
+ }, 
+ {
+  "author": "myrnavl", 
+  "date": "2014-09-28T21:16:21.052369Z", 
+  "msg": [
+   "DERBY-6662; DatabaseMetaData.usesLocalFiles() returns true for in-memory databases", 
+   "preventing the optional tools test case to run with JDBC lower than 4"
+  ], 
+  "revision_id": "1628101"
+ }, 
+ {
+  "author": "nmalin", 
+  "date": "2014-09-28T20:45:08.104878Z", 
+  "msg": [
+   "I converted CRUD service to entity-auto for :", 
+   "ProductFeatureCategory", 
+   "ProductFeature", 
+   "ProductFeatureAppl", 
+   "ProductFeatureCategoryAppl", 
+   "ProductFeatureCatGrpAppl", 
+   "ProductFeatureGroup", 
+   "ProductFeatureType", 
+   "ProductFeatureApplAttr", 
+   "ProductFeaturePrice"
+  ], 
+  "revision_id": "1628100"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2014-09-28T19:50:14.981257Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1628096\"", 
+   "------------------------------------------------------------------------", 
+   "r1628096 | jleroux | 2014-09-28 21:48:53 +0200 (dim. 28 sept. 2014) | 21 lignes", 
+   "A patch from Anahita Goljahani  for \"Duplicated 'ALSO_BOUGHT' associations in product details page\" https://issues.apache.org/jira/browse/OFBIZ-5782", 
+   "I have noticed an undesired behavior when two products are associated by the \"ALSO_BOUGHT\" association type.", 
+   "Specifically, when a product, e.g., Tiny Gizmo (productId  = \"GZ-1000\"), is associated to another product, e.g., Micro Chrome Widget (productIdTo  = \"WG-1111\"), by setting productAssocTypeId equal to \"ALSO_BOUGHT\" in ProductAssoc, the Tiny Gizmo web page in the ecommerce site correctly shows the Micro Chrome Widget as \"Customers who bought this item also bought:\". Accordingly with the current software behavior, even if Micro Chrome Widget (productId = \"WG-1111\") was not explicitly  associated to Tiny Gizmo (productIdTo  = \"GZ-1000\"), also the Micro Chrome Widget web page shows Tiny Gizmo as \"Customers who bought this item also bought:\",  which may be useful in cases where the 'ALSO_BOUGHT' association is meant to be necessarily bidirectional, i.e., if prodA is associated to prodB, then prodB is associated to prodA and vice-versa. However, when the user wants to express the symmetric nature of the relationship by explicitly associating both Tiny Gizmo to Micro Chrome Widget and Micro Chrome Widget to Tiny Gizmo in ProductAssoc, the system erroneously shows the associated products twice, both in the Tiny Gizmo and Micro Chrome web pages.", 
+   "The undesired behavior can be reproduced as follows:", 
+   "# Run OFBiz with demo data", 
+   "# import the following associations from the OFBiz  XML Data Import form", 
+   "{code}", 
+   "<ProductAssoc productId=\"GZ-1000\" productIdTo=\"WG-1111\" productAssocTypeId=\"ALSO_BOUGHT\" fromDate=\"2014-09-02 12:00:00.000\"/>", 
+   "<ProductAssoc productId=\"WG-1111\" productIdTo=\"GZ-1000\" productAssocTypeId=\"ALSO_BOUGHT\" fromDate=\"2014-09-02 12:00:00.000\"/>", 
+   "{code}", 
+   "# click on Tiny Gizmo or Micro Chrome Widget from the main page of the ecommerce site.", 
+   "The attached patch modifies the above behavior as follows:", 
+   "- if only \"prodA\" (productId = \"prodA\") is associated to \"prodB\" (productIdTo = \"prodB\") in ProductAssoc, and not vice-versa, only \"prodA\" web page shows \"prodB\" as \"Customers who bought this item also bought:\".   This means that the 'ALSO_BOUGHT' association type becomes not necessarily bidirectional by default, which is in accordance with most common algorithms for the automatic generation of \"WHO BOUGHT X ALSO BOUGHT Y\" recommendations that may produce bidirectional associations for some couple of products and not for others, based on conditional probabilities and actual users behavior;", 
+   "- in those specific cases in which the association is actually bidirectional for a certain couple of products (prodA, prodB), i.e., both 'prodA to prodB' and 'prodB to prodA' associations are present in ProductAssoc, associated products are shown only ones in prodA and prodB web pages.", 
+   "The patch simply sets the value of the parameter \"bidirectional\" to its default value, i.e., \"false\", when alsoBoughtProducts are collected by calling getAssociatedProducts() from applications/order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy.", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1628099"
+ }
+]

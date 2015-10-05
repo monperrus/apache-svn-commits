@@ -1,0 +1,108 @@
+[
+ {
+  "author": "batkinson", 
+  "date": "2015-02-26T00:10:14.486836Z", 
+  "msg": [
+   "Canceled state always overridden to error for master builds."
+  ], 
+  "revision_id": "1662333"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-26T00:03:21.965309Z", 
+  "msg": [
+   "Simplify a few more code paths using the smarter Sqlite macros introduced", 
+   "some time ago.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(upgrade_working_copy_baton_t,", 
+   "upgrade_working_copy_txn): Remove helpers, as we can just...", 
+   "(svn_wc_upgrade): ... use SVN_SQLITE__WITH_LOCK() and call the function", 
+   "directly.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(svn_wc__db_txn_callback_t): Move callback type here.", 
+   "(with_finalization): Write out some portions of SVN_SQLITE__WITH_LOCK(),", 
+   "in a function that has initimite knowledge anyway, to avoid keeping", 
+   "further unused code alive.", 
+   "* subversion/libsvn_wc/wc_db_private.h", 
+   "(svn_wc__db_txn_callback_t): Remove type.", 
+   "(svn_wc__db_with_txn): Remove function.", 
+   "* subversion/libsvn_wc/wc_db_util.c", 
+   "(db_txn_callback_t,", 
+   "txn_baton_t): Remove type.", 
+   "(run_txn,", 
+   "svn_wc__db_with_txn): Remove function.", 
+   "* subversion/tests/cmdline/entries-dump.c", 
+   "(tree_dump_txn): Remove function.", 
+   "(tree_dump): Directly call svn_wc__internal_walk_children()."
+  ], 
+  "revision_id": "1662332"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-25T23:55:17.006957Z", 
+  "msg": [
+   "Make the working copy status reporter always report tree conflicts; even if", 
+   "the node with the tree conflict is shadowed by a file, somewhere up the", 
+   "tree.", 
+   "Usually the status walker doesn't descend below files that used to be", 
+   "directories, but after this patch it will descend if there are tree", 
+   "conflicts below this file.", 
+   "This fixes the ugly case that currently the tree conflict resolver doesn't", 
+   "even see these tree conflicts, unless it just created them. So it certainly", 
+   "wouldn't have resolved them properly.", 
+   "* subversion/libsvn_wc/status.c", 
+   "(svn_wc__internal_status_t): New struct.", 
+   "(edit_baton): Update status type.", 
+   "(internal_status,", 
+   "assemble_status,", 
+   "assemble_unversioned): Produce svn_wc__internal_status_t instead of", 
+   "svn_wc_status3_t.", 
+   "(send_status_structure,", 
+   "send_unversioned_item): Update caller.,", 
+   "(one_child_status): Update has descendants check.", 
+   "(hash_stash): Copy private values.", 
+   "(tweak_status_hash): Update init.", 
+   "(find_dir_repos_relpath): Update usage.", 
+   "(make_dir_baton): Update has descendants check.", 
+   "(is_sendable_status): Update type.", 
+   "(handle_statii): Update has descendants check.", 
+   "(close_directory): Update caller.", 
+   "(svn_wc__internal_walk_status): Update has descendants check.", 
+   "(internal_status): Update output type.", 
+   "(svn_wc_status3): Update caller.", 
+   "(svn_wc_dup_status3): Create svn_wc__internal_status_t, but duplicate", 
+   "only svn_wc_status3_t.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_FIND_CONFLICT_DESCENDANT): New query.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(find_conflict_descendants): New function.", 
+   "(read_children_info): Set has_descendants on a node if it is a directory in", 
+   "WORKING/ACTUAL or it was a directory at some layer, and has actual", 
+   "descendants.", 
+   "(read_single_info): Set has_descendants.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_info_t): Add boolean.", 
+   "* subversion/tests/cmdline/stat_tests.py", 
+   "(status_missing_conflicts): New test.", 
+   "(test_list): Add status_missing_conflicts."
+  ], 
+  "revision_id": "1662331"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2015-02-25T23:40:42.080255Z", 
+  "msg": [
+   "SOLR-7113: Multiple calls to UpdateLog#init is not thread safe with respect to the HDFS FileSystem client object usage."
+  ], 
+  "revision_id": "1662330"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2015-02-25T23:39:22.438098Z", 
+  "msg": [
+   "* configure.ac: Don't add -lstdc++ on FreeBSD 10 as it is not needed and", 
+   "adding it causes linking to fail."
+  ], 
+  "revision_id": "1662329"
+ }
+]

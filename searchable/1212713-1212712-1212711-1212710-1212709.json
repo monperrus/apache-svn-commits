@@ -1,0 +1,111 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-10T01:56:36.586341Z", 
+  "msg": [
+   "[master] Regions can have favored nodes which are passed to DFSClient", 
+   "Summary:", 
+   "HBase-based block placement depends on being able to place each block of", 
+   "a single region on a specific set of hosts. This change adds a favored", 
+   "node field to HRegions, and passes those nodes to the filesystem", 
+   "whenever a store file is written.", 
+   "Test Plan:", 
+   "New test suite TestRegionFavoredNodes. It uses hostname and port taken", 
+   "directly from the datanodes, whereas practical usage will likely use", 
+   "only the hostname of the region server. However, the HDFS test case", 
+   "TestFavoredNodes#testPartiallySpecifiedFavoredNodes covers the case", 
+   "where port is unspecified.", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@lists, kranganathan, cgist, nspiegelberg", 
+   "Differential Revision: 368588", 
+   "Task ID: 735408"
+  ], 
+  "revision_id": "1212713"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-10T01:55:56.979790Z", 
+  "msg": [
+   "D519 HBASE-4823 [jira] long running scans lose benefit of bloomfilters and timerange hints", 
+   "Revision Status:  Accepted \u00b7 Next step: arc commit --revision 519", 
+   "Author: aaiyer", 
+   "Reviewed by:  kannan", 
+   "Test Plan: mvn test on the MR", 
+   "Unit: \u2605 No Unit Test Coverage", 
+   "Lint: \u2605 No Linters Available", 
+   "Host: dev1396.snc6.facebook.com", 
+   "Path: /data/users/aaiyer/external-89/0.89-fb/ (svn)", 
+   "Arcanist Project: hbase", 
+   "Apply Patch:  arc patch D519", 
+   "Export Patch: arc export --revision 51"
+  ], 
+  "revision_id": "1212712"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-10T01:55:32.691791Z", 
+  "msg": [
+   "HBASE-4863 Fix thread leaks in the HBase thread pool server", 
+   "Summary: This is part of a fix to solve Thrift server problems observed on Eris", 
+   "and Hashout clusters. A recent jstack captured by @rthiessen on Eris at the time", 
+   "of a Thrift server crash had over 15,000 Thrift worker threads. We need to bound", 
+   "that number with a configuration knob and set it reasonably.", 
+   "Test Plan: Run Thrift server on a 5-node cluster, open a lot of connections,", 
+   "and monitor the number of worker threads using jstack.", 
+   "Reviewers: kannan, kranganathan, rthiessen, nspiegelberg", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, alasla, davejwatson, nspiegelberg, kannan, kranganathan,", 
+   "mbautin, cgthayer, pkhemani, gqchen", 
+   "Differential Revision: 364343", 
+   "Revert Plan: OK", 
+   "Task ID: 762593"
+  ], 
+  "revision_id": "1212711"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-10T01:54:26.920508Z", 
+  "msg": [
+   "[master] FSUtils can return per-host locality fraction", 
+   "Summary:", 
+   "HBase-based block placment benefits from having the fractional locality", 
+   "of each region on each server. This changes adds a way to output that", 
+   "from FSUtils. The process is the same as is used to get the best host", 
+   "per region, but saves the locality in a map.", 
+   "Test Plan:", 
+   "The HBase locality check tool outputs the same results as before,", 
+   "fractional locality output inspected manually.", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan, cgist", 
+   "Differential Revision: 364427"
+  ], 
+  "revision_id": "1212710"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2011-12-10T01:52:23.146974Z", 
+  "msg": [
+   "HBASE-4884 allow commands to have their own shell settings", 
+   "Summary:", 
+   "for example, we might want a smaller heap for thrift compared to the", 
+   "regionserver.", 
+   "This might help with an OOM situation we have been hitting on ERIS and HASHOUT,", 
+   "but even if not it's a useful knob to have.", 
+   "Test Plan:", 
+   "* tested with file missing.  no problem, used default conf/hbase-env.sh", 
+   "settings.", 
+   "* tested with conf/hbase-env-thrift.sh file with heap size of 1234.  ps axww", 
+   "showed -Xmx1234m", 
+   "* started regionserver using bin/hadoop-daemon.sh", 
+   "* started hbase shell", 
+   "* ran some jruby scripts via bin/hbase org.jruby.Main", 
+   "Reviewers: dhruba, kranganathan, mbautin, paultuckfield", 
+   "Reviewed By: paultuckfield", 
+   "CC: hbase-ops@lists, dsp, hbase-eng@lists, paultuckfield, dhruba", 
+   "Differential Revision: 364007"
+  ], 
+  "revision_id": "1212709"
+ }
+]

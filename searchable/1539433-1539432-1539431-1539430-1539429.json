@@ -1,0 +1,73 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-11-06T19:18:23.180314Z", 
+  "msg": [
+   "[master] Solve skipping data in HTable scans", 
+   "Author: maxim", 
+   "Summary:", 
+   "The HTable client cannot retry a scan operation in the getRegionServerWithRetries code path.", 
+   "This will result in the client missing data. This can be worked around using hbase.client.retries.number to 1.", 
+   "The whole problem is that Callable knows nothing about retries and the protocol it dances to as well doesn't support retires.", 
+   "This fix will keep Callable protocol (ugly thing worth merciless refactoring) intact but will change", 
+   "ScannerCallable to anticipate retries.  What we want is to make failed operations to be identities for outside world:", 
+   "N1 * N2 * F3 * N3 * F4 * F4 * N4 ... = N1 * N2 * N3 * N4 ...", 
+   "where Nk are successful operation and Fk are failed operations.", 
+   "Test Plan: 1/ Enusure that new tests in TestScanRetries are working", 
+   "Reviewers: manukranthk, liyintang, aaiyer", 
+   "Reviewed By: manukranthk", 
+   "CC: sfodor, aaiyer, jingweil, junfang, liyintang, peiyue, rishid, rshroff, san", 
+   "Differential Revision: https://phabricator.fb.com/D1027350", 
+   "Task ID: 2147851"
+  ], 
+  "revision_id": "1539433"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-11-06T19:18:20.263958Z", 
+  "msg": [
+   "[HBASE-9896] Adds mappers/job option for HBaseStreaming", 
+   "Author: rshroff", 
+   "Summary:", 
+   "Currently the split algo only supports mappers/region for any MR", 
+   "job for HBase Streaming. The reason is to have locality of the", 
+   "region server hosting the region and the mapper task.", 
+   "However in certain scenarios, we need to have a strict limit on", 
+   "the number of mappers per job.", 
+   "This changes adds an additional parameter to control the total", 
+   "number of mappers/job. The numMappersPerRegion  and numMappersPerJob", 
+   "are mutually exclusive.", 
+   "Test Plan: tested with various startRow/stopRow/num_mapper configs on SH004", 
+   "Reviewers: manukranthk, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, chaoyc, nzhang", 
+   "Differential Revision: https://phabricator.fb.com/D1032630", 
+   "Task ID: 2381046"
+  ], 
+  "revision_id": "1539432"
+ }, 
+ {
+  "author": "mcpierce", 
+  "date": "2013-11-06T19:11:00.254794Z", 
+  "msg": [
+   "PROTON-448: Added missed ChangeLog entry"
+  ], 
+  "revision_id": "1539431"
+ }, 
+ {
+  "author": "mcpierce", 
+  "date": "2013-11-06T19:06:20.920384Z", 
+  "msg": [
+   "PROTON-448: Added support for Data encode/decode to Ruby Swig."
+  ], 
+  "revision_id": "1539430"
+ }, 
+ {
+  "author": "nkeywal", 
+  "date": "2013-11-06T18:58:37.916311Z", 
+  "msg": [
+   "HBASE-9885 Avoid some Result creation in protobuf conversions"
+  ], 
+  "revision_id": "1539429"
+ }
+]

@@ -1,0 +1,69 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-10-03T12:51:23.460453Z", 
+  "msg": [
+   "[HBASE-6930] Avoid acquiring the same row lock repeatedly", 
+   "Author: liyintang", 
+   "Summary:", 
+   "When processing the multiPut, multiMutations or multiDelete operations, each IPC handler thread tries to acquire a lock for each row key in these batches. If there are duplicated row keys in these batches, previously the IPC handler thread will repeatedly acquire the same row key again and again.", 
+   "So the optimization is to sort each batch operation based on the row key in the client side,  and skip acquiring the same row lock repeatedly in the server side.", 
+   "Test Plan: Will test it on the fbtrace cluster.", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D590376"
+  ], 
+  "revision_id": "1393468"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-10-03T12:50:52.753215Z", 
+  "msg": [
+   "[HBASE-6925] Change socket write size from 8K to 64K for HBaseServer", 
+   "Author: kranganathan", 
+   "Summary: Changing this seems to improve scan perf by 25% (37% with prefetching enabled).", 
+   "Test Plan: Tested by running server with this limit. Will run unit tests as well.", 
+   "Reviewers: kannan, aaiyer", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D590312"
+  ], 
+  "revision_id": "1393467"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-10-03T12:50:24.055011Z", 
+  "msg": [
+   "[jira] [HBASE-6909] [89-fb] Thrift serializer for TableInputFormat", 
+   "Author: mbautin", 
+   "Summary: We want to be able to serialize TableInputFormat's results of scanning an HBase table using Thrift and pipe that to a streaming mapper written in C++. This goes together with map-reduce changes in D580952.", 
+   "Test Plan:", 
+   "- Run a streaming job:", 
+   "~/*MR/bin/hadoop jar ~/*MR/contrib/streaming/*streaming*.jar -D hbase.mapred.tablecolumns=input_cf -D stream.map.input.ignoreKey=true -D stream.map.input.ignoreNewLine=true -D stream.map.input.serializer.class=org.apache.hadoop.hbase.thrift.ThriftResultSerializer -D hbase.thrift.result.serializer.protocol.class=org.apache.thrift.protocol.TJSONProtocol -D mapred.reduce.tasks=0  -input input_table_name -mapper cat -inputformat org.apache.hadoop.hbase.mapred.TableInputFormat -output /user/mbautin/test_output", 
+   "- Examine the output and make sure it is JSON-serialized, with no separate key field and no line-end characters.", 
+   "Reviewers: kranganathan, nzhang, rvadali, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, davejwatson", 
+   "Differential Revision: https://phabricator.fb.com/D581920", 
+   "Task ID: 1735916"
+  ], 
+  "revision_id": "1393466"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2012-10-03T12:50:05.253409Z", 
+  "msg": [
+   "TOMEE-439 using webappdeployer even for tomee embedded"
+  ], 
+  "revision_id": "1393465"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2012-10-03T12:42:28.826256Z", 
+  "msg": [
+   "LUCENE-4456: fix MDW to print any exc when processing ghost files"
+  ], 
+  "revision_id": "1393464"
+ }
+]

@@ -1,0 +1,92 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2015-03-08T01:05:14.550378Z", 
+  "msg": [
+   "In JavaHL: Properly wrap Java exceptions as svn_error_t * when returning from", 
+   "many callbacks and add the wrapped exception (when not cleared by Subversion)", 
+   "as cause to the returned exception.", 
+   "This avoids keeping the JVM in the semi-broken 'exception' state until we", 
+   "somehow return and also makes it possible to do things in further callbacks", 
+   "(which we previously skipped by just returning an SVN_NO_ERROR on the still", 
+   "pending exceptions).", 
+   "Before this patch a status call that returned an exception in the first", 
+   "callback would continue the entire status walk and only after returning", 
+   "it would return the exception, potentially breaking the api contract", 
+   "of the function.", 
+   "After this patch an error is returned in Subversion... which builds", 
+   "the usual error chain in subversion.... Then when the call returns", 
+   "in JavaHL the cause of the ClientException is set to the originally", 
+   "raised exception in the callback and intermediate errors are added", 
+   "if necessary.", 
+   "* subversion/bindings/javahl/native/BlameCallback.cpp", 
+   "(BlameCallback::singleLine): Update exit handling.", 
+   "* subversion/bindings/javahl/native/CommitCallback.cpp", 
+   "(CommitCallback::commitInfo): Update exit handling.", 
+   "* subversion/bindings/javahl/native/CommitMessage.cpp", 
+   "(CommitMessage::getCommitMessage): Return svn_error_t * on error instead of", 
+   "trying the commit with no log message.", 
+   "* subversion/bindings/javahl/native/DiffSummaryReceiver.cpp", 
+   "(DiffSummaryReceiver::onSummary): Update exit handling.", 
+   "* subversion/bindings/javahl/native/InfoCallback.cpp", 
+   "(InfoCallback::singleInfo): Update exit handling.", 
+   "* subversion/bindings/javahl/native/JNIUtil.cpp", 
+   "(SVN_ERR_JAVAHL_WRAPPED): New constant.", 
+   "(assemble_error_message): Don't try to write standard text for", 
+   "SVN_ERR_JAVAHL_WRAPPED.", 
+   "(JNIUtil::wrappedHandleSVNError): If there is no jcause passed, check if we", 
+   "have a Java exception we can use stored in the error.", 
+   "(WrapExceptionTag): New variable.", 
+   "(WrappedException): New class.", 
+   "(JNIUtil::wrapJavaException,", 
+   "JNIUtil::unwrapJavaException): New functions.", 
+   "* subversion/bindings/javahl/native/JNIUtil.h", 
+   "(JNIUtil::wrapJavaException,", 
+   "JNIUtil::unwrapJavaException): New functions.", 
+   "(POP_AND_RETURN_EXCEPTION_AS_SVNERROR): New define.", 
+   "* subversion/bindings/javahl/native/ListCallback.cpp", 
+   "(ListCallback::doList): Update exit handling.", 
+   "* subversion/bindings/javahl/native/LogMessageCallback.cpp", 
+   "(LogMessageCallback::singleMessage): Update exit handling.", 
+   "* subversion/bindings/javahl/native/StatusCallback.cpp", 
+   "(StatusCallback::doStatus): Update exit handling.", 
+   "* subversion/bindings/javahl/tests/org/apache/subversion/javahl/ExceptionTests.java", 
+   "New file.", 
+   "* subversion/bindings/javahl/tests/org/apache/subversion/javahl/RunTests.java", 
+   "(SVNTestSuite.suite): Add ExceptionTests."
+  ], 
+  "revision_id": "1664938"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2015-03-07T23:45:46.818531Z", 
+  "msg": [
+   "Tweak"
+  ], 
+  "revision_id": "1664937"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2015-03-07T23:39:08.366335Z", 
+  "msg": [
+   "Tweak"
+  ], 
+  "revision_id": "1664936"
+ }, 
+ {
+  "author": "kiwiwings", 
+  "date": "2015-03-07T23:35:40.118379Z", 
+  "msg": [
+   "committing intermediate results - xslf now compiles - hslf needs to be migrated to common interface - drawing is not yet tested"
+  ], 
+  "revision_id": "1664935"
+ }, 
+ {
+  "author": "ebourg", 
+  "date": "2015-03-07T23:27:50.320599Z", 
+  "msg": [
+   "Replaced vectors with lists in AnnotationGenTestCase"
+  ], 
+  "revision_id": "1664934"
+ }
+]

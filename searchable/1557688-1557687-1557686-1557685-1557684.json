@@ -1,0 +1,70 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-13T12:29:37.116844Z", 
+  "msg": [
+   "* subversion/libsvn_ra_serf/blame.c", 
+   "(svn_ra_serf__get_file_revs): Expect 200 status.", 
+   "* subversion/libsvn_ra_serf/getdate.c", 
+   "(date_closed): Verify number format.", 
+   "(svn_ra_serf__get_dated_revision): Expect 200 status. Replace assertion", 
+   "with proper error."
+  ], 
+  "revision_id": "1557688"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-13T12:12:55.026684Z", 
+  "msg": [
+   "Following up on r1557287, resolve the same leak in the other location where we", 
+   "create temporary buckets to throttle the xml parser. Also avoid using a", 
+   "cleared pool by allocating the serf allocator in the right pool.", 
+   "* subversion/libsvn_ra_serf/update.c", 
+   "(process_pending): Explicitly destroy bucket after passing it to the inner", 
+   "handler."
+  ], 
+  "revision_id": "1557687"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-13T11:59:56.186171Z", 
+  "msg": [
+   "Make ra_serf use a pool cleanup handler on its request handlers to allow", 
+   "reusing the ra session in cases that before this patch would cause a segfault", 
+   "because it wasn't cleaned up.", 
+   "If the ra session would schedule a new request before timeout, the context", 
+   "would continue delivering data to old handlers. After this patch that won't", 
+   "happen again.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__handler_t): Add boolean.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__context_run_one): Remove specialized handling of", 
+   "SVN_ERR_CEASE_INVOCATION that was already not required after recent", 
+   "error handling cleanups, but is now completely unneeded.", 
+   "(handle_response): Unregister on request errors.", 
+   "(handle_response_cb): Unregister on EOF and/or errors.", 
+   "(svn_ra_serf__request_create): Check for double scheduling. Update comment", 
+   "to match current reality.", 
+   "(handler_cleanup): New function.", 
+   "(svn_ra_serf__create_handler): Register handler_cleanup."
+  ], 
+  "revision_id": "1557686"
+ }, 
+ {
+  "author": "lofwyr", 
+  "date": "2014-01-13T11:58:10.493381Z", 
+  "msg": [
+   "clean up"
+  ], 
+  "revision_id": "1557685"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-01-13T11:46:06.918360Z", 
+  "msg": [
+   "Reduce FindBugs warnings (equals() but no hashCode())", 
+   "(using Eclipse's generated code for equals() and hashCode() with just formatting changes)"
+  ], 
+  "revision_id": "1557684"
+ }
+]

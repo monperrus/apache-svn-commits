@@ -1,0 +1,120 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2012-02-07T22:55:32.510145Z", 
+  "msg": [
+   "Ev2 shims: Make sure we pass a valid props hash to add_file() and", 
+   "add_directory().", 
+   "* subversion/libsvn_delta/compat.c", 
+   "(process_actions): Provide an empty, rather than NULL, hash for props when", 
+   "doing an add (if no props already exist)."
+  ], 
+  "revision_id": "1241683"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-02-07T22:53:48.789338Z", 
+  "msg": [
+   "The conditional around the declaration of", 
+   "svn_auth_set_gnome_keyring_unlock_prompt_func (introduced in r1241585)", 
+   "was not functioning properly, it prevented the bindings from being", 
+   "generated on all platforms instead of just those without gnome-keyring", 
+   "support.", 
+   "This is because the swig preprocessor did not have the needed #defines", 
+   "available at the point where the function was declared. The reason the", 
+   "conditional does work for the implementation, is that the implementation", 
+   "is ignored by swig and included only in the core.c file, and that some", 
+   "other include (presumably) makes svn_auth.h available.", 
+   "To fix this, we move the declaration of the function to below the", 
+   "include of svn_auth.h. While we here, also merge the declaration and", 
+   "implementation using the swig %inline keyword.", 
+   "* core.i", 
+   "(svn_auth_set_gnome_keyring_unlock_prompt_func): Merge declaration with", 
+   "implementation and move both below the include of svn_auth.h.", 
+   "Patch by: Matthijs Kooijman <matthijs@stdin.nl>"
+  ], 
+  "revision_id": "1241682"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-02-07T22:51:40.368695Z", 
+  "msg": [
+   "[master] LocalityCK II -- the fine grained locality information", 
+   "Summary:", 
+   "In the last version of the localityck, it would return a very coarse grained", 
+   "locality result.", 
+   "Each region is either on the local region server or not.", 
+   "So the region locality is either 1 or 0.", 
+   "And the table locality = (sum of each region locality) / total regions.", 
+   "In the new generation, it will return a fine grained locality result.", 
+   "The region locality is defined as the percentage of the local blocks that its", 
+   "currently hosting region server has.", 
+   "Assuming each region has almost the same amount of total blocks, the average", 
+   "table locality = (sum of each region locality) / total regions.", 
+   "In this case, the table locality reflects a much more accurate data locality", 
+   "information in the cluster.", 
+   "Test Plan:", 
+   "After testing this tools on titanmigrate002 cluster, the following is the", 
+   "comparison between the previous localityck and the new generation of the", 
+   "localityck.", 
+   "Localityck I", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: ======== Locality Summary", 
+   "===============", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: For Table: test1 ; #Total", 
+   "Regions: 470 ; # Local Regions 458 rate = 97.44681 %", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: For Table: MigrationStatus ;", 
+   "#Total Regions: 1024 ; # Local Regions 1002 rate = 97.85156 %", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: For Table: .META. ; #Total", 
+   "Regions: 1 ; # Local Regions 0 rate = 0.0 %", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: For Table: -ROOT- ; #Total", 
+   "Regions: 1 ; # Local Regions 0 rate = 0.0 %", 
+   "12/01/26 22:33:58 INFO client.HBaseLocalityCheck: For Table: test2 ; #Total", 
+   "Regions: 465 ; # Local Regions 460 rate = 98.92473 %", 
+   "Localityck II", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: ======== Locality Summary", 
+   "===============", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: For Table: test1 ; #Total", 
+   "Regions: 470 ; The average locality is 73.989365 %", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: For Table: MigrationStatus ;", 
+   "#Total Regions: 1024 ; The average locality is 80.80051 %", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: For Table: .META. ; #Total", 
+   "Regions: 1 ; The average locality is 40.0 %", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: For Table: -ROOT- ; #Total", 
+   "Regions: 1 ; The average locality is 0.0 %", 
+   "12/01/26 22:32:57 INFO client.HBaseLocalityCheck: For Table: test2 ; #Total", 
+   "Regions: 465 ; The average locality is 96.61275 %", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists", 
+   "Differential Revision: https://phabricator.fb.com/D397713", 
+   "Task ID: 900734"
+  ], 
+  "revision_id": "1241681"
+ }, 
+ {
+  "author": "cezar", 
+  "date": "2012-02-07T22:51:14.596411Z", 
+  "msg": [
+   "Introducing a default maximum entity replacement limit of 10kb, it can be controled by using the option XmlOptions.setLoadEntityBytesLimit.", 
+   "Contribution by Jerry Sy."
+  ], 
+  "revision_id": "1241680"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-02-07T22:51:13.267864Z", 
+  "msg": [
+   "[jira] [HBASE-5001] [89-fb] Improve the performance of block cache keys (J-D, Lars H; pulling from trunk)", 
+   "Summary: Pulling the BlockCacheKey patch", 
+   "(https://issues.apache.org/jira/browse/HBASE-5001) and associated unit tests", 
+   "and dependencies from trunk. Had to upgrade Guava dependency to r09. Kept", 
+   "original formatting in most places.", 
+   "Test Plan: Unit tests, dev cluster", 
+   "Reviewers: kannan, liyintang, nspiegelberg, jdcryans, stack, lhofhansl, khemani", 
+   "Reviewed By: khemani", 
+   "CC: mbautin, khemani", 
+   "Differential Revision: https://reviews.facebook.net/D1587"
+  ], 
+  "revision_id": "1241679"
+ }
+]

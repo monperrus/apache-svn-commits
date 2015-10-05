@@ -1,0 +1,79 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2012-06-13T12:52:25.302843Z", 
+  "msg": [
+   "various voting/approvals"
+  ], 
+  "revision_id": "1349813"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-06-13T12:50:50.461594Z", 
+  "msg": [
+   "[master] improve error handling in getRegionServerWithRetries()", 
+   "Author: pkhemani", 
+   "Summary:", 
+   "retry only for NSRE. retry once if region server connection fails.", 
+   "sleep on nsre only if location hasn't changed.", 
+   "enable so_linger for 0 seconds.", 
+   "Test Plan:", 
+   "Test 1 - simulate connection timeout", 
+   "===", 
+   "pick a region server that doesn't have meta or root", 
+   "make the rs unavailable using iptables", 
+   "verify connect time failures, retries and that the settings hbase.client.retries.number, hbase.client.rpc.retry.timeout are working", 
+   "Test 2 - simulate connection reuse on dead server", 
+   "==", 
+   "increase hbase.ipc.client.connection.maxidletime", 
+   "fetch a key from a rs", 
+   "make rs unavailable", 
+   "fetch the same key from rs", 
+   "SocketReadTimeoutException - no retries.", 
+   "Test 3 - try to simulate a write failure on a reused connection", 
+   "==", 
+   "set hbase.rpc.timeout to 10 minutes and hbase.client.rpc.retry.timeout to 20 minutes", 
+   "reduce system sysctl setting net.ipv4.tcp_retries2 from 15 to 6 (more than 10 minutes write retry to about 1 minute)", 
+   "Verify that the first attempt fails. (It fails with java.io.IOException: Call to msgstore275.snc4.facebook.com/10.30.224.186:60020 failed on local exception: java.io.IOException: Connection timed out. Would have been better if the failure was more specific. The write always success. The read fails.)", 
+   "Verify that connection is retried", 
+   "We are not cleaning up the cache in this case - because the read fails with IOException.", 
+   "We should set the  net.ipv4.tcp_retries2 property to 4 on all our systems for a faster write failure signal. This should definitely be smaller than the socket read timeout. (the TCP_USER_TIMEOUT socket option is not available in java?)", 
+   "Test 4 - write to a dead connection", 
+   "send a rpc", 
+   "kill the regionserver", 
+   "send a rpc", 
+   "get EOFException. verify that retries happen. should we retry here? this is read failing.", 
+   "will continue testing", 
+   "Reviewers: mbautin, kannan, liyintang, kranganathan, aaiyer", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D481774", 
+   "Task ID: 1068376"
+  ], 
+  "revision_id": "1349812"
+ }, 
+ {
+  "author": "ihabunek", 
+  "date": "2012-06-13T12:48:08.631634Z", 
+  "msg": [
+   "Trivial change to trigger full site rebuild."
+  ], 
+  "revision_id": "1349811"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2012-06-13T12:47:54.030630Z", 
+  "msg": [
+   "[WSS-392] - WSS4J can't handle SAML KeyIdentifier references to encrypted SAML Assertions stored in the cache"
+  ], 
+  "revision_id": "1349810"
+ }, 
+ {
+  "author": "eric", 
+  "date": "2012-06-13T12:47:35.258939Z", 
+  "msg": [
+   "(re)Add pom.xml to postage (POSTAGE-23)"
+  ], 
+  "revision_id": "1349809"
+ }
+]

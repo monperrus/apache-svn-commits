@@ -1,0 +1,46 @@
+[
+ {
+  "author": "jleroux", 
+  "date": "2015-01-11T18:10:03.550221Z", 
+  "msg": [
+   "AA patch from Bob Morley for \"Errors attempting to use quantities with more than 2 decimals of precision\" https://issues.apache.org/jira/browse/OFBIZ-3666", 
+   "We have a need to handle inventory items with quantities up to four decimal places.  The data model currently supports 6 decimals so I thought I would try to complete a purchase order, sales order, and a return for an item that has this many digits of precision.  What I found was ...", 
+   "- The order item was calculated properly (including the total for the line) but the totals for the entire sales order were incorrect.  This was because when OrderReadHelper was getting the OrderItemQuantity as part of calculating the subtotal it would round it to the order's configured scale (2).  Since this is being used as a calculation it should not be rounded -- the total itself should be rounded.", 
+   "- In a number of spots in issuance and reservation services values were (sometimes) being rounded.  For example, when an order item was created it would create an InventoryItemDetail record that would reduce the ATP by the precise quantity, however when the order was placed the QOH was reduced by the rounded value.  All of these issues were the result of the mini-lang calculate element being used which by default uses a scale of 2 decimals (from the dtd).  The solution was when working with quantities pass in the precision scale (6) to ensure we do not lose precision.  Again, when order totals, taxes, things like that are being done the configured scale should take over, but the intermediate calculations should not be losing precision.", 
+   "jleroux: Adrian suggested to rather introduce types for quantity and money. This was almost 5 years ago. Because these types has not been introduced since I decided to pragmatically fix this 5 years old bug!"
+  ], 
+  "revision_id": "1650938"
+ }, 
+ {
+  "author": "ecki", 
+  "date": "2015-01-11T18:09:19.036730Z", 
+  "msg": [
+   "[sandbox] resolve all checkstyle warnings in mime provider"
+  ], 
+  "revision_id": "1650937"
+ }, 
+ {
+  "author": "msahyoun", 
+  "date": "2015-01-11T18:05:58.561267Z", 
+  "msg": [
+   "PDFBOX-2516 handle null when setting inheritable attributes"
+  ], 
+  "revision_id": "1650936"
+ }, 
+ {
+  "author": "britter", 
+  "date": "2015-01-11T17:52:52.768026Z", 
+  "msg": [
+   "Simplify test even more"
+  ], 
+  "revision_id": "1650935"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2015-01-11T17:50:40.345810Z", 
+  "msg": [
+   "Make the project accepting only Java 7"
+  ], 
+  "revision_id": "1650934"
+ }
+]

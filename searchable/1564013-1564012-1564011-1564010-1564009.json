@@ -1,0 +1,66 @@
+[
+ {
+  "author": "philip", 
+  "date": "2014-02-03T19:22:52.494539Z", 
+  "msg": [
+   "* STATUS: Vote for issue 4460 fix."
+  ], 
+  "revision_id": "1564013"
+ }, 
+ {
+  "author": "kstam", 
+  "date": "2014-02-03T19:22:44.390186Z", 
+  "msg": [], 
+  "revision_id": "1564012"
+ }, 
+ {
+  "author": "centic", 
+  "date": "2014-02-03T19:19:14.101741Z", 
+  "msg": [
+   "Bug 55927: Handle date types when exporting to XML"
+  ], 
+  "revision_id": "1564011"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-02-03T19:17:02.439401Z", 
+  "msg": [
+   "QPID-5528: HA Clean up error messages around rolled-back transactions.", 
+   "A simple transaction test on a 3 node cluster generates a lot of errors and", 
+   "rollback messages in the broker logs even though the test code never rolls back a", 
+   "transaction. E.g.", 
+   "qpid-cluster-benchmark -b 20.0.20.200 -n1 -m 1000 -q3 -s2 -r2 --send-arg=--tx --send-arg=10 --receive-arg=--tx --receive-arg=10", 
+   "The errors are caused by queues being deleted while backup brokers are using", 
+   "them. This happens a lot in the transaction test because a transactional session", 
+   "must create a new transaction when the previous one closes. When the session", 
+   "closes the open transaction is rolled back automatically. Thus there is almost", 
+   "always an empty transaction that is created then immediately rolled back at the", 
+   "end of the session. Backup brokers may still be in the process of subscribing to", 
+   "the transaction's replication queue at this point, causing (harmlesss) errors.", 
+   "This commit takes the following steps to clean up the unwanted error and rollback messages:", 
+   "HA TX messages cleaned up:", 
+   "- Remove log messages about rolling back/destroying empty transactions.", 
+   "- Remove misleading \"backup disconnected\" message for cancelled transactions.", 
+   "- Remove spurious warning about ignored unreplicated dequeues.", 
+   "- Include TxReplicator destroy in QueueReplicator mutex, idempotence check before destroy.", 
+   "Allow HA to suppress/modify broker exception logging:", 
+   "- Move broker exception logging into ErrorListener", 
+   "- Every SessionHandler has DefaultErrorListener that does the same logging as before.", 
+   "- Added SessionHandlerObserver to allow plugins to change the error listener.", 
+   "- HA plugin set ErrorListeners to log harmless exceptions as HA debug messages.", 
+   "Unrelated cleanup:", 
+   "- Broker now logs \"incoming execution exceptions\" as debug messages rather than ignoring.", 
+   "- Exception prefixes: don't add the prefix if already present.", 
+   "The exception test above should now pass without errors or rollback messages in the logs."
+  ], 
+  "revision_id": "1564010"
+ }, 
+ {
+  "author": "robweir", 
+  "date": "2014-02-03T19:16:51.095172Z", 
+  "msg": [
+   "Update to 90 million downloads"
+  ], 
+  "revision_id": "1564009"
+ }
+]

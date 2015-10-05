@@ -1,0 +1,105 @@
+[
+ {
+  "author": "kayyagari", 
+  "date": "2012-10-30T06:21:01.532377Z", 
+  "msg": [
+   "changed the log level"
+  ], 
+  "revision_id": "1403628"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-10-30T06:14:45.211840Z", 
+  "msg": [
+   "HBASE-6980: Parallel Flushing of Memstores", 
+   "Author: kannan", 
+   "Summary:", 
+   "For write dominated workloads, single threaded memstore flushing is an unnecessary bottleneck. With a single flusher thread, we are basically not setup to take advantage of the aggregate throughput that multi-disk nodes provide.", 
+   "* For puts with WAL enabled, the bottleneck is more likely the \"single\" WAL per region server. So this particular fix may not buy as much unless we unlock that bottleneck with multiple commit logs per region server. (Topic for a separate JIRA-- HBASE-6981).", 
+   "* But for puts with WAL disabled (e.g., when using HBASE-5783 style fast bulk imports), we should be able to support much better ingest rates with parallel flushing of memstores.", 
+   "----", 
+   "For the purposes of seeing some best case benefits of this change, in my setup I:", 
+   "1) had one Region Server (with 20 regions)", 
+   "2) disabled WAL", 
+   "3) disable all compactions; just flushing.", 
+   "4) Set the number of flusher threads at 6 (I have left the default at 2 though, because we need to account for WAL and compaction activity as well in normal setups).", 
+   "The command line for the loadtest I ran was:", 
+   "bin/hbase org.apache.hadoop.hbase.util.LoadTestTool -num_keys 2000000 -write 1:1000000:50 -tn loadtest -zk hbasedev134.ash3.facebook.com -compression NONE", 
+   "Without this change:", 
+   "[So essentially writing really big KVs (1M) or from 50 concurrent threads.]", 
+   "----", 
+   "Baseline:", 
+   "--------", 
+   "* Without parallel flushing, the max we throughput we could push to was about ~100MB/s.", 
+   "* iostat clearly revealed that at any one time only a single disk was busy.", 
+   "* There were often periods were memstore size would reach too high, and start blocking updates.", 
+   "With parallel flushing (6 threads):", 
+   "* Was able to get about 375-400MB/s sustained.", 
+   "* iostat often now show 3-4 multiple disks busy at any time.", 
+   "-----", 
+   "Initial implementation didn't get true concurrency, because of the cacheFlushLock which ended up serializing the flushes anyway. I have made this a R/W lock, and jstack dumps now confirmed that several threads were actually in the flush logic concurrently.", 
+   "----", 
+   "I had an earlier version of the implementation, but it came to my attention that there was a similar uncommitted patch done for trunk by Chenhui (HBASE-6466). So this patch is closer to Chenhui's implementation, but for 89-fb. It is not identical because there are other differences in the trunk code base.", 
+   "--------", 
+   "Test Plan: Going to run full suite of tests. And will post update when that run completes.", 
+   "Reviewers: liyintang, kranganathan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D605336", 
+   "Task ID: 1803690"
+  ], 
+  "revision_id": "1403627"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-10-30T06:14:06.258940Z", 
+  "msg": [
+   "[master] [0.89-fb] Ensure that new master does not split logs of recently checked in RS", 
+   "Author: aaiyer", 
+   "Summary: Sev on cell 13 saw a scenario where, upon master failover, the new master was splitting the logs for regionservers that were still running. This happens when there is an error in the SplitLog for one of the logs and the master does not acknowledge new servers.", 
+   "Test Plan:", 
+   "run MR tests.", 
+   "One failure. Also fails without the diff.", 
+   "Also, adding a unit test.", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D611291"
+  ], 
+  "revision_id": "1403626"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-10-30T06:13:24.184932Z", 
+  "msg": [
+   "[0.89-fb] [master] Update lastFlushedSequenceId again in HRegion", 
+   "Author: avf", 
+   "Summary:", 
+   "Looks like the fix for HBASE-6059 (rev 28942) accidentally removed", 
+   "the code that updated lastFlushedSequenceId upon every memstore flush,", 
+   "leading to failures in TestHLogFiltering", 
+   "This change puts the code back into place and also makes the test more", 
+   "robust by not assuming that each one of the regions lives on a", 
+   "distinct server.", 
+   "Test Plan:", 
+   "Run TestHLogFiltering and mrunit", 
+   "Revert Plan:", 
+   "Reviewers: kannan, lipi, aaiyer", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D610277", 
+   "Blame Revision: 28942", 
+   "Task ID: 1783053"
+  ], 
+  "revision_id": "1403625"
+ }, 
+ {
+  "author": "kayyagari", 
+  "date": "2012-10-30T06:13:13.755268Z", 
+  "msg": [
+   "o removed the duplicate code related to initializing SSL context in LDAPS and StartTLS handlers", 
+   "o removed hard coded supported control OIDs (now they are taken from the codec service)"
+  ], 
+  "revision_id": "1403624"
+ }
+]

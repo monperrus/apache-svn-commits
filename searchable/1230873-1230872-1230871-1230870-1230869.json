@@ -1,0 +1,51 @@
+[
+ {
+  "author": "mamta", 
+  "date": "2012-01-13T03:04:54.125395Z", 
+  "msg": [
+   "DERBY-4631 Wrong join column returned by right outer join with NATURAL or USING and territory-based collation", 
+   "I am adding more tests for this jira to show the kind of joins and queries that are impacted by this defect.", 
+   "In short, any join query which is either a NATURAL join or has a USING clause can run into the two problems as described in this jira.", 
+   "Problem 1)As per SQL spec, the join column's value should be derived by", 
+   "COALESCE(leftTable.joinColumn, rightTable.joinColumn).", 
+   "But Derby has it's own rule for deriving the join column's value. Derby's implementation, for a right outer join, gets the join column's value from the right table and for left outer join, it gets the value from the left table. This logic works for most cases, but it can give incorrect value for a right outer join (with NATURAL JOIN or USING clause) in case of a territory based database. Additionally, the join column in the SELECT list(with NATURAL JOIN or USING clause) gets associated with the left table's join column(for inner joins and left outer joins) or it gets associated with the right table's join column(for rihgt outer joins). Since SQL spec requires the join column to be COALESCE ( leftTable.C, rightTable.C ) AS C, the join column should not be really associated with any of the 2 join tables.", 
+   "Problem 2)The Derby's assocation of join column to left or right table as described in problem 1) causes it to allow incorrect queries. eg query", 
+   "select i from t1_D3880 inner join t2_D3880 USING(i) group by t1_D3880.i;", 
+   "The query above works because join column i got associated with left table which is t1_D3880. If the query was rewritten to do the group by on right table, it would fail.", 
+   "select i from t1_D3880 inner join t2_D3880 USING(i) group by t2_D3880.i;"
+  ], 
+  "revision_id": "1230873"
+ }, 
+ {
+  "author": "szetszwo", 
+  "date": "2012-01-13T03:00:14.212110Z", 
+  "msg": [
+   "svn merge -c 1213985 from trunk for HDFS-2663."
+  ], 
+  "revision_id": "1230872"
+ }, 
+ {
+  "author": "szetszwo", 
+  "date": "2012-01-13T02:57:44.880890Z", 
+  "msg": [
+   "svn merge -c 1213813 from trunk for HDFS-2650."
+  ], 
+  "revision_id": "1230871"
+ }, 
+ {
+  "author": "xiaming", 
+  "date": "2012-01-13T02:51:28.778499Z", 
+  "msg": [
+   "GERONIMO-6262 Recover the changes of tomcat-parent-7.0.19@1148324, which brought a cycle dependency issue We might merge the catalina and catalina-ha in one module in the future"
+  ], 
+  "revision_id": "1230870"
+ }, 
+ {
+  "author": "szetszwo", 
+  "date": "2012-01-13T02:47:53.493034Z", 
+  "msg": [
+   "svn merge -c 1213808 from trunk for HDFS-2666."
+  ], 
+  "revision_id": "1230869"
+ }
+]

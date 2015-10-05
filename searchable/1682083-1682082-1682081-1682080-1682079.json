@@ -1,0 +1,54 @@
+[
+ {
+  "author": "nick", 
+  "date": "2015-05-27T17:15:17.604087Z", 
+  "msg": [
+   "#57951 Use BigDecimal in some cases in DataFormatter.formatRawCellContents, to avoid rounding problems on JDK8. Patch from Robert Kish"
+  ], 
+  "revision_id": "1682083"
+ }, 
+ {
+  "author": "baedke", 
+  "date": "2015-05-27T17:12:49.323337Z", 
+  "msg": [
+   "OAK-2893: RepositoryUpgrade.copy() should optionally continue on errors.", 
+   "Merged changes 1680633, 1680643 from trunk."
+  ], 
+  "revision_id": "1682082"
+ }, 
+ {
+  "author": "nick", 
+  "date": "2015-05-27T17:10:45.333731Z", 
+  "msg": [
+   "Fix inconsistent indents"
+  ], 
+  "revision_id": "1682081"
+ }, 
+ {
+  "author": "baedke", 
+  "date": "2015-05-27T17:10:23.908084Z", 
+  "msg": [
+   "OAK-2893: RepositoryUpgrade.copy() should optionally continue on errors.", 
+   "Merged changes 1680633, 1680643 from trunk."
+  ], 
+  "revision_id": "1682080"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-05-27T17:09:47.023838Z", 
+  "msg": [
+   "Fix race condition in NIO2. The issue is:", 
+   "- Thread one (T1) triggers a non-blocking read", 
+   "- The read returns no data so a read (R1) is pending", 
+   "- T1 completes processing", 
+   "- R1 completes and notifies/dispatches to thread 2 (T2)", 
+   "- T1 calls awaitBytes which triggers a non-blocking read", 
+   "- T1's read returns no data so a read (R2) is pending", 
+   "- T2 starts processing", 
+   "- T2 tries to read but the read fails because R2 is pending (even though there is data in the read buffer from R1).", 
+   "It isn't safe to read the data from the read buffer while R2 is pending since R2 could modify the read buffer at any point.", 
+   "This fix ensures that R1 remains pending until T2 starts processing. This in turn means that T1's call to awaitBytes() becomes a NO-OP. When T2 tries to read since no read is pending it is able to read (and process) the data from the read buffer and continue."
+  ], 
+  "revision_id": "1682079"
+ }
+]

@@ -1,0 +1,75 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2012-06-16T12:58:26.929051Z", 
+  "msg": [
+   "JMS Point to Point reports too high response times in Request Response Mode", 
+   "- ensure the timeout is actually used", 
+   "Bugzilla Id: 53357"
+  ], 
+  "revision_id": "1350918"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-06-16T12:57:36.304457Z", 
+  "msg": [
+   "Make the conflict resolver send a conflict summary to the caller, before", 
+   "invoking the conflict callback.", 
+   "This will eventually allow 'svn' to print the conflict summary before the", 
+   "interactive conflict resolution callback is invoked. This summary is currently", 
+   "printed after the callback was invoked on each conflict, which isn't helpful.", 
+   "This commit has no visible behaviour change yet, as this would require all", 
+   "operations to delay conflict callback invocation, which has currently been", 
+   "implemented only for 'update'.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_notify_action_t): Add svn_wc_notify_conflict_summary action.", 
+   "This currently sends the number of text, property, and tree conflicts in", 
+   "the working copy. We might extend this later, but for now the goal is to", 
+   "move the current 'svn' conflict stats collecting into the conflict resolver.", 
+   "(svn_wc_notify_t): Add text_conflicts, prop_conflicts, and tree_conflicts", 
+   "counters for use during an svn_wc_notify_conflict_summary notification.", 
+   "* subversion/libsvn_wc/conflicts.c", 
+   "(conflict_status_walker_baton): Remove.", 
+   "(conflict_status_walker): Replaced by ...", 
+   "(gather_conflict_stats): ... this function, which only gathers conflict", 
+   "statistics and the list of conflicted paths.", 
+   "(gather_conflict_stats_baton): New baton for above status walker callback.", 
+   "(resolve_conflicts_on_node): New function, contains the guts of the former", 
+   "conflict_status_walker() callback.", 
+   "(svn_wc__resolve_conflicts): Gather conflict stats via the status walker,", 
+   "send a conflict summary via the notification mechanism, and then invoke", 
+   "the interactive conflict callback on each conflicted path found during", 
+   "the status walk.", 
+   "* subversion/svn/notify.c", 
+   "(notify): Handle the new conflict summary notification. For now, this only", 
+   "saves the resolver's conflict stats in the notify baton for later use.", 
+   "In the future, when all operations delay invocation of the conflict callback,", 
+   "we can rid of svn_cl__print_conflict_stats() and print the stats here."
+  ], 
+  "revision_id": "1350917"
+ }, 
+ {
+  "author": "gawor", 
+  "date": "2012-06-16T12:51:27.105653Z", 
+  "msg": [
+   "GERONIMO-6360: Support for Geronimo obr refresh"
+  ], 
+  "revision_id": "1350916"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2012-06-16T12:39:49.356082Z", 
+  "msg": [
+   "Replace deprecated ctor parameter"
+  ], 
+  "revision_id": "1350915"
+ }, 
+ {
+  "author": "xiaming", 
+  "date": "2012-06-16T12:38:22.172916Z", 
+  "msg": [
+   "Update scm urls"
+  ], 
+  "revision_id": "1350914"
+ }
+]

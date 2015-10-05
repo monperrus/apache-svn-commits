@@ -1,0 +1,54 @@
+[
+ {
+  "author": "rmuir", 
+  "date": "2012-07-23T15:58:24.945374Z", 
+  "msg": [
+   "LUCENE-3892: fix producer in this test to pass -1 if we arent indexing offsets"
+  ], 
+  "revision_id": "1364693"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2012-07-23T15:56:23.629594Z", 
+  "msg": [
+   "Rename another private method urlString to toUrlString."
+  ], 
+  "revision_id": "1364692"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2012-07-23T15:55:43.185799Z", 
+  "msg": [
+   "Rename private method urlString to toUrlString."
+  ], 
+  "revision_id": "1364691"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2012-07-23T15:55:23.255533Z", 
+  "msg": [
+   "DERBY-5407 When run across the network, dblook produces unusable DDL for VARCHAR FOR BIT DATA columns.", 
+   "The serialization of UDT associated with SYSCOLUMNS.COLUMNBDATATYPE on the wire from the network server end happens correctly. The same serialized data is received by the client but when we try to instantiate the UDT's TypeDescriptor based on this serialized data, we get confused between \"VARCHAR () FOR BIT DATA\" and \"VARCHAR FOR BIT DATA\". The deserialization on the client side happens through BaseTypeIdImpl.getTypeFormatId(). Here, we look at the string representation of the type descriptor that we received on the wire and choose the appropriate format id based on that string. The problem is in this", 
+   "BaseTypeIdImpl.getTypeFormatId() code, where the code looks for \"VARCHAR FOR BIT DATA\" rather than \"VARCHAR () FOR BIT DATA\" (notice the missing parentheses)", 
+   "else if ( \"VARCHAR FOR BIT DATA\".equals( unqualifiedName ) ) { return StoredFormatIds.VARBIT_TYPE_ID_IMPL; }", 
+   "Since \"VARCHAR FOR BIT DATA\" and \"VARCHAR () FOR BIT DATA\" do not match, we do not use format id VARBIT_TYPE_ID_IMPL.", 
+   "Later, we go through a switch statement based on the format id in BaseTypeIdlImpl.toParsableString(TypeDescriptor). In the switch statement, we are supposed to stuff in the width of the varchar for bit data into the parentheses ie string \"VARCHAR () FOR BIT DATA\" should get converted into \"VARCHAR (NUMBER) FOR BIT DATA\" but we don't do it because of getTypeFormatd() code problem explained earlier.", 
+   "To fix this, the patch has added check for", 
+   "If there might be dependencies on the original \"VARCHAR FOR BIT DATA\" check, then we can add additional check for \"VARCHAR () FOR BIT DATA\" in addition to the existing check for \"VARCHAR FOR BIT DATA\" as shown below and that fixes the problem", 
+   "else if ( \"VARCHAR FOR BIT DATA\".equals( unqualifiedName ) ) { return StoredFormatIds.VARBIT_TYPE_ID_IMPL; }", 
+   "else if ( \"VARCHAR () FOR BIT DATA\".equals( unqualifiedName ) ) { return StoredFormatIds.VARBIT_TYPE_ID_IMPL; }", 
+   "This commit does similar thing for \"CHAR FOR BIT DATA\", ie in addition to the existing test for \"CHAR FOR BIT DATA\", it adds a check for \"CHAR () FOR BIT DATA\".", 
+   "Keeping the existing checks will not break any dependencies that might exist on \"VARCHAR FOR BIT DATA\" check and \"CHAR FOR BIT DATA\" check.", 
+   "Have added a test for SYSCOLUMNS.COLUMNBDATATYPE for all the supported data types. This test will be run in both embedded and network server mode."
+  ], 
+  "revision_id": "1364690"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2012-07-23T15:53:56.867061Z", 
+  "msg": [
+   "In-line unused local var."
+  ], 
+  "revision_id": "1364689"
+ }
+]

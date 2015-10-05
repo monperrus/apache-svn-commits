@@ -1,0 +1,74 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2014-12-15T05:49:13.715192Z", 
+  "msg": [
+   "[scm-publish] Updating main website contents"
+  ], 
+  "revision_id": "1645568"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-15T05:49:08.245351Z", 
+  "msg": [
+   "Eliminate most of the \"random DAG walks\" in FSFS during checkout or ra_serf.", 
+   "For a c/o at revision REV, ra_serf will first ask for the node representing", 
+   "PATH@REV, get its last changed revision and then request PATH@LAST_CHANGED.", 
+   "On a branch or other copy, most of those LAST_CHANGED revisions will be the", 
+   "same and the parent / sibling lookup optimization in open_path() will kick", 
+   "in because parent(PATH)@LAST_CHANGED has probably been accessed recently.", 
+   "On a /trunk, the LAST_CHANGED info rarely matches between PATH, its parent", 
+   "or its siblings.  That requires a full path walk for path@LAST_CHANGED with", 
+   "all parent directories for this revision being read without a good chance", 
+   "to be reused soon.  This gets particularly bad for deltified directories", 
+   "as their histories, hence deltification chains, are again mostly unrelated.", 
+   "This patch makes the simple guess that if you ask for the same path in a", 
+   "different revision (if it was the same revision you would get it from cache", 
+   "directly instead of calling open_path), you will end up with same DAG node.", 
+   "We only need to verify that this is actually the case.", 
+   "A DAG node records the revision it was created in as well as the path that", 
+   "it got created for.  If that pair matches the requested PATH@LAST_CHANGED,", 
+   "we *know* that this it the correct answer: That node cannot be replaced or", 
+   "hidden within the same revision nor can there be two such nodes.  Although", 
+   "this verification would usually fail for the general case, it will usually", 
+   "succeed for ra_serf's pattern on /trunk.", 
+   "Lazy consensus given by this dev@ post:", 
+   "http://mail-archives.apache.org/mod_mbox/subversion-dev/201412.mbox/raw/%3CCA%2Bt0gk3buA%3DUi_mgJYo%3DzSYV4hMNFGpx5_NkQ-w%3DFU907-kgGA%40mail.gmail.com%3E/1/1", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_fs_dag_cache_t): Add a member pointing to last node read.", 
+   "(cache_lookup): Remember the position of the last node access.", 
+   "(cache_lookup_last_path,", 
+   "try_match_last_node): New functions using that info for the new", 
+   "optimistic lookup.", 
+   "(open_path): Attempt yet another optimistic lookup."
+  ], 
+  "revision_id": "1645567"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2014-12-15T05:46:39.458122Z", 
+  "msg": [
+   "Update release-schedule"
+  ], 
+  "revision_id": "1645566"
+ }, 
+ {
+  "author": "jailletc36", 
+  "date": "2014-12-15T05:44:48.231674Z", 
+  "msg": [
+   "Propose"
+  ], 
+  "revision_id": "1645565"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-15T05:37:58.971414Z", 
+  "msg": [
+   "Remove cache-server branch as there will be no development into that", 
+   "direction but rather towards a full repository server (if and when).", 
+   "All changes so far have to merged into /trunk a while ago.", 
+   "* branches/cache-server: Remove."
+  ], 
+  "revision_id": "1645564"
+ }
+]

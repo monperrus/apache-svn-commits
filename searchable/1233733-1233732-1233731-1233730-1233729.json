@@ -1,0 +1,100 @@
+[
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-20T02:23:09.226073Z", 
+  "msg": [
+   "[HBASE-3421] Fetch one KV at a time at compaction (v2 of the fix)", 
+   "Summary:", 
+   "Compactions have been failing in production, bringing the regionserver", 
+   "down with an OOM. The hypothesis is that there is a row with lots of KVs and", 
+   "they are brought into memory all at once. This fix makes a compaction fetch one", 
+   "KV at a time. Compared to the open-source fix", 
+   "(https://issues.apache.org/jira/browse/HBASE-3421) we are setting the limit to", 
+   "1", 
+   "instead of a configurable number because there is no real batching benefit", 
+   "(everything is already happening on the server side).", 
+   "This is a second version of the fix, reverting the last one that changed", 
+   "flush instead of compaction.", 
+   "Test Plan: Unit tests. Push to dark launch.", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: gqchen, hbase-eng@lists, kannan", 
+   "Differential Revision: https://phabricator.fb.com/D390382", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1233733"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-20T02:23:05.760608Z", 
+  "msg": [
+   "[HBASE-3421] Fetch one KV at a time at compaction", 
+   "Summary: Compactions have been failing in production, bringing the regionserver", 
+   "down with an OOM. The hypothesis is that there is a row with lots of KVs and", 
+   "they are brought into memory all at once. This fix makes a compaction fetch one", 
+   "KV at a time. Compared to the open-source fix", 
+   "(https://issues.apache.org/jira/browse/HBASE-3421) we are setting the limit to 1", 
+   "instead of a configurable number because there is no real batching benefit", 
+   "(everything is already happening on the server side).", 
+   "Test Plan: Unit tests. Push to dark launch.", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: gqchen, hbase-eng@lists, kannan", 
+   "Differential Revision: https://phabricator.fb.com/D390381", 
+   "Revert Plan: OK"
+  ], 
+  "revision_id": "1233732"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-20T02:23:02.159166Z", 
+  "msg": [
+   "[HBASE-3976] Control cacheOnWrite separately for compaction and flush", 
+   "Summary:", 
+   "In most of use cases, we want to control cacheOnWrite differently during", 
+   "compaction and flush time.  So whether enable the cacheOnWrite should be", 
+   "controlled on the store level.", 
+   "Public revision: https://reviews.facebook.net/D1251", 
+   "Test Plan: running all the unit tests now", 
+   "Reviewers: kannan", 
+   "CC: hbase-eng@lists, ods-storage@lists", 
+   "Differential Revision: https://phabricator.fb.com/D389333"
+  ], 
+  "revision_id": "1233731"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-20T02:22:56.586580Z", 
+  "msg": [
+   "[HBASE-5177] Add a non-caching version of getRegionLocation.", 
+   "Summary:", 
+   "There is a need for a non caching version of getRegionLocation", 
+   "on the client side. This API is needed for HBase backups to quickly lookup the", 
+   "regionserver that hosts a particular region without using the heavy weight", 
+   "getRegionsInfo() method.", 
+   "Test Plan: 1) Unit test added.", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, madhuvaidya, kannan", 
+   "Differential Revision: https://phabricator.fb.com/D387804"
+  ], 
+  "revision_id": "1233730"
+ }, 
+ {
+  "author": "nspiegelberg", 
+  "date": "2012-01-20T02:22:50.811263Z", 
+  "msg": [
+   "[master] Fix the MapReduce NPE for ODS rollup job [part 2]", 
+   "Summary:", 
+   "The change is based on https://phabricator.fb.com/D387115", 
+   "However we should commit this change to mapreduce package instead of mapred", 
+   "package.", 
+   "Test Plan: mvn test", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@lists, kannan", 
+   "Differential Revision: https://phabricator.fb.com/D387619"
+  ], 
+  "revision_id": "1233729"
+ }
+]

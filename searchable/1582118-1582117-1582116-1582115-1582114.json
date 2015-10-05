@@ -1,0 +1,101 @@
+[
+ {
+  "author": "jeffreyz", 
+  "date": "2014-03-26T23:27:31.460647Z", 
+  "msg": [
+   "HBASE-10833: Region assignment may fail during cluster start up"
+  ], 
+  "revision_id": "1582118"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-03-26T23:22:22.801409Z", 
+  "msg": [
+   "Simplify svn_object_pool__t code:  Support shared objects only and use", 
+   "standard APR memory pool handling.", 
+   "We simply provide ref-counted objects allocated through from a sub-pool", 
+   "of some user-provided memory pool.  References returned will no longer", 
+   "survive the cleanup of that user-provided container pool.  Unused objects", 
+   "may still be kept but the specifics are now an implementation detail.", 
+   "* subversion/include/private/svn_object_pool.h", 
+   "(svn_object_pool__create): Non-sharable objects are no longer supported", 
+   "and caching policies are hidden now.", 
+   "(svn_object_pool__pool): Replaced by ...", 
+   "(svn_object_pool__new_wrapper_pool): ... this one; directly returning a", 
+   "new sub-pool that may be used to", 
+   "hold a new object instance.", 
+   "(svn_object_pool__count): Update docstring.", 
+   "* subversion/libsvn_subr/object_pool.c", 
+   "(object_ref_t): Since all objects can be shared, there is no need to", 
+   "chain multiple instances.", 
+   "(svn_object_pool__t): We only keep two atomic counters for bookkeeping.", 
+   "There is only a standard pool now and no user-", 
+   "defined caching parameters.", 
+   "(destroy_object_pool): Drop as no specific destruction code is needed.", 
+   "(object_pool_cleanup): Do standard cleanup now and only verify correct", 
+   "reference lifetimes.", 
+   "(root_object_pool_cleanup): No longer needed with standard pool handling.", 
+   "(remove_unused_objects): Update removal logic.  Also, we don't need to", 
+   "the APR hash as it's implementation ensures that", 
+   "adding & removing entries does not make memory", 
+   "consumption to go up.", 
+   "(exit_on_error): No longer needed with standard pool cleanup.", 
+   "(object_ref_cleanup): Re-implement.  Still keep the actual object around", 
+   "but notify the container that there are unused", 
+   "objects that can be cleaned up at its discretion.", 
+   "(add_object_ref): Update only the counters that we still have.", 
+   "(insert): Adapt to simplified model and keep it consistent even in case", 
+   "of an error.  Implement caching / lazy object cleanup here.", 
+   "(svn_object_pool__create): Update to simplified data model and standard", 
+   "memory pool usage.", 
+   "(svn_object_pool__pool): Replace by ...", 
+   "(svn_object_pool__new_wrapper_pool): ... this.", 
+   "(svn_object_pool__count): Adapt to struct changes.", 
+   "* subversion/include/private/svn_repos_private.h", 
+   "(svn_repos__config_pool_create,", 
+   "svn_repos__config_pool_get,", 
+   "svn_repos__authz_pool_create,", 
+   "svn_repos__authz_pool_get): Update docstrings to reflect the changed", 
+   "object / pool lifetime restrictions.", 
+   "* subversion/libsvn_repos/authz_pool.c", 
+   "(svn_repos__authz_pool_create): Adapt to changed API and put the container", 
+   "into the POOL provided by the user.", 
+   "(svn_repos__authz_pool_get): Adapt to changed API.", 
+   "* subversion/libsvn_repos/config_pool.c", 
+   "(auto_parse): Ditto", 
+   "(svn_repos__config_pool_create): Same.  Also, put the container into the", 
+   "POOL provided by the user.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(test_config_pool): References must not live longer than the container", 
+   "anymore.  Thus, remove this part of the test case."
+  ], 
+  "revision_id": "1582117"
+ }, 
+ {
+  "author": "jeffreyz", 
+  "date": "2014-03-26T23:22:15.798150Z", 
+  "msg": [
+   "HBASE-10833: Region assignment may fail during cluster start up"
+  ], 
+  "revision_id": "1582116"
+ }, 
+ {
+  "author": "ate", 
+  "date": "2014-03-26T23:21:17.730177Z", 
+  "msg": [
+   "SCXML-200: adding support for multiple <invoke> elements in a <state> or <parallel> instead of just one.", 
+   "Note: this is primarily a model update only. Semantically and process-wise the <invoke> handling is not (by far) in line with the specification yet."
+  ], 
+  "revision_id": "1582115"
+ }, 
+ {
+  "author": "tripod", 
+  "date": "2014-03-26T23:20:47.141322Z", 
+  "msg": [
+   "JCRVLT-42 Do not allow creation of packages with illegal JCR names", 
+   "- added checks for valid names when creating or uploading or renaming packages", 
+   "- filter out packages with illegal names in list"
+  ], 
+  "revision_id": "1582114"
+ }
+]

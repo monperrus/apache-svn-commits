@@ -1,0 +1,47 @@
+[
+ {
+  "author": "stevehay", 
+  "date": "2013-07-17T08:20:36.892144Z", 
+  "msg": [
+   "Fix linking of Apache2::ServerUtil", 
+   "This commit reverts r1503137: I had failed to spot that ap_get_server_version is actually defined in modperl_apache_compat.c (thanks, Jan Kaluza!), which I should have known because I'd already fiddled with it in r1502135! This commit also reverts that, and (hopefully) does the job properly this time.", 
+   "Normally, ap_get_server_version is exported from an httpd library and AP_DECLARE in third-party code such as ours means to dllimport it from there. However, if we're building against httpd-2.3+ then httpd no longer provides that symbol, but we have our own definition in modperl_apache_compat.c instead. In this case we need AP_DECLARE to mean dllexport (like it does when building the httpd core) so that our compat version gets exported from mod_perl.so/lib (but we still need to dllimport it when building Apache2/ServerUtil/ServerUtil.dll, of course).", 
+   "This is effected by #defining AP_DECLARE_EXPORT in modperl_apache_compat.c (before modperl_apache_compat.h gets included, to cover the declaration too). This will affect all such declarations in that file (which is correct, being the whole point of the file) without affecting any other code, which continues to dllimport as usual (either from some httpd library, or from mod_perl.so/lib, whatever happens to provide the definition).", 
+   "The case of ap_get_server_banner/description must also have been similarly broken for httpd-2.2 builds, and should also be fixed by this commit."
+  ], 
+  "revision_id": "1504043"
+ }, 
+ {
+  "author": "pkluegl", 
+  "date": "2013-07-17T08:19:33.173704Z", 
+  "msg": [
+   "Initial import."
+  ], 
+  "revision_id": "1504042"
+ }, 
+ {
+  "author": "pkluegl", 
+  "date": "2013-07-17T08:19:06.383650Z", 
+  "msg": [
+   "UIMA-3077", 
+   "- created branch with old ide layout"
+  ], 
+  "revision_id": "1504041"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2013-07-17T08:14:59.271736Z", 
+  "msg": [
+   "OAK-906: Add the REP_VERSION_DESC descriptor"
+  ], 
+  "revision_id": "1504040"
+ }, 
+ {
+  "author": "bigosmallm", 
+  "date": "2013-07-17T08:01:51.848620Z", 
+  "msg": [
+   "Updated sdk-installer-config-3.0.xml to support selection of Flex versions in the Installer."
+  ], 
+  "revision_id": "1504039"
+ }
+]

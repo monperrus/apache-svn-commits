@@ -1,0 +1,99 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2012-06-14T10:44:24.850025Z", 
+  "msg": [
+   "Checkstyle fix in manual"
+  ], 
+  "revision_id": "1350183"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-06-14T10:38:49.893268Z", 
+  "msg": [
+   "Convert PROPFIND response processing over to the v2 XML process.", 
+   "The update/replay mechanisms that run their own PROPFIND have been", 
+   "rejiggered to get a handler_t back from deliver_props() (rather than", 
+   "an opaque propfind_context_t), which they must then run.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h:", 
+   "(svn_ra_serf__propfind_context_t): unused. removed.", 
+   "(svn_ra_serf__propfind_is_done): removed. use HANDLER->DONE.", 
+   "(svn_ra_serf__deliver_props): return a handler", 
+   "(svn_ra_serf__wait_for_props): wait on the handler instead of the", 
+   "old prop ctx. drop the session param.", 
+   "* subversion/libsvn_ra_serf/property.c:", 
+   "(NONE): renamed to ...", 
+   "(INITIAL): ... this.", 
+   "(MULTISTATUS, HREF, PROPSTAT, COLLECTION, HREF_VALUE): new states", 
+   "(prop_info_t): removed. unused.", 
+   "(svn_ra_serf__propfind_context_t): remove CURRENT_PATH, DONE, and", 
+   "PARSER_CTX. add local typedef.", 
+   "(propfind_ttable): new transition table for PROPFIND responses.", 
+   "(propfind_open): new callback to deal with wildcard property tags", 
+   "(propfind_closed): new callback for processing the response", 
+   "(push_state, start_propfind, end_propfind, cdata_propfind): disabled", 
+   "from compilation, but remaining for a clean diff.", 
+   "(svn_ra_serf__deliver_props): change param to return a handler.", 
+   "construct an xmlctx, set it up, and return it. strip out the old", 
+   "xml parser. do not create a serf request for the handler, as the", 
+   "caller might use run_one() (which does it).", 
+   "(svn_ra_serf__propfind_is_done): removed", 
+   "(svn_ra_serf__wait_for_props): take a handler rather than the old", 
+   "opaque context. drop the session param, as we don't need it.", 
+   "adjust the code to use run_one() and how it accesses the result", 
+   "information.", 
+   "(svn_ra_serf__retrieve_props): adjust for getting a handler rather", 
+   "than the old prop ctx.", 
+   "* subversion/libsvn_ra_serf/replay.c:", 
+   "(replay_context_t): store a handler for the propfind", 
+   "(start_replay): drop propfind_is_done() in favor of HANDLER->DONE", 
+   "(svn_ra_serf__replay_range): switch to getting a handler from", 
+   "deliver_props(), and create a serf request for it.", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(report_dir_t): switch to storing a handler for the PROPFIND", 
+   "(report_info_t): switch to storing a handler for the PROPFIND", 
+   "(report_context_t): note that DONE_PROPFINDS will contain handler", 
+   "references rather than the old opaque propfind contexts", 
+   "(fetch_file): adjust for getting a handler from deliver_props() and", 
+   "start a serf request for it.", 
+   "(end_report): adjust for a handler from deliver_props() and start a", 
+   "serf request for it.", 
+   "(finish_report): we will now find handlers in done_list->data, and", 
+   "we can examine the handler's DONE flag rather than using the old", 
+   "propfind_is_done() function"
+  ], 
+  "revision_id": "1350182"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2012-06-14T10:36:54.031393Z", 
+  "msg": [
+   "SLING-2396 : Add new resourceresolver project"
+  ], 
+  "revision_id": "1350181"
+ }, 
+ {
+  "author": "zym", 
+  "date": "2012-06-14T10:29:37.420357Z", 
+  "msg": [
+   "update cache ram hit status"
+  ], 
+  "revision_id": "1350180"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2012-06-14T10:22:22.758082Z", 
+  "msg": [
+   "Fix authz test #15 on jcovel's machine by properly draining the buckets.", 
+   "(The COPY response from add_directory wasn't being read properly, so when we", 
+   "come around to send the add_file, the response for COPY wasn't completely read", 
+   "and we crashed.)", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(svn_ra_serf__expect_empty_body, svn_ra_serf__handle_multistatus_only): Don't", 
+   "set done here.", 
+   "(handle_response): Set done when we see EOF so we ensure we wait long", 
+   "enough."
+  ], 
+  "revision_id": "1350179"
+ }
+]

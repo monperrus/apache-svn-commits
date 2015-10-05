@@ -1,0 +1,104 @@
+[
+ {
+  "author": "brane", 
+  "date": "2013-08-31T02:02:36.443340Z", 
+  "msg": [
+   "On the javahl-1.8-extensions branch: Synced JavaHL with trunk up to r1519126."
+  ], 
+  "revision_id": "1519128"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-08-31T01:47:22.496764Z", 
+  "msg": [
+   "On the javahl-1.7-extensions branch: Synced JavaHL with trunk up to r1519126."
+  ], 
+  "revision_id": "1519127"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-08-31T01:27:12.371479Z", 
+  "msg": [
+   "[Reverted in r1539931]", 
+   "Introduce global configuration options into JavaHL:", 
+   "- An option to completely ignore Subversion's authentication credentials", 
+   "store, so that JavaHL-based clients can implement their own auth store", 
+   "using the authentication callbacks;", 
+   "- A global callback triggered by loading the configuration files into", 
+   "memory (this replaces the current ISVNClient and ISVNRemote object-", 
+   "specific callbacks).", 
+   "* build.conf (private-built-includes):", 
+   "Added org_apache_subversion_javahl_util_ConfigLib.h.", 
+   "[in subversion/bindings/javahl/src/org/apache/subversion/javahl]", 
+   "* ISVNClient.java, SVNClient.java", 
+   "(ISVNClient.setConfigEventHandler): Removed.", 
+   "* remote/RemoteFactory.java", 
+   "(RemoteFactory.setConfigEventHandler. configHandler): Removed.", 
+   "(RemoteFactory.RemoteFactory): Removed configHandler parameter.", 
+   "(RemoteFactory.open): Likewise; all callers updated.", 
+   "* SVNUtil.java", 
+   "(SVNUtil.enableNativeCredentialsStore,", 
+   "SVNUtil.disableNativeCredentialsStore,", 
+   "SVNUtil.isNativeCredentialsStoreEnabled,", 
+   "SVNUtil.setConfigEventHandler,", 
+   "SVNUtil.getConfigEventHandler): New static methods.", 
+   "* util/ConfigLib.java (ConfigLib): New file and public class.", 
+   "Implements the new methods in SVNUtil.", 
+   "[in subversion/bindings/javahl/native]", 
+   "* GlobalConfig.h (GlobalConfig): New file and class.", 
+   "* JNIUtil.h (JNIUtil::g_configMutex): New global mutex.", 
+   "Controls access to the global configuration parameters.", 
+   "* JNIUtil.cpp (JNIUtil::JNIInit): Make initialisation guard atomic.", 
+   "Initialise JNIUtil::g_configMutex.", 
+   "* OperationContext.h", 
+   "(OperationContext::setConfigCallback,", 
+   "OperationContext::getConfigCallback): Removed.", 
+   "* OperationContext.cpp (OperationContext::attachJavaObject):", 
+   "Initialise the context-specific copy of the config event callback", 
+   "from the global configuration.", 
+   "(OperationContext::getAuthBaton): If the native credentials store is", 
+   "disabled, do not add the default authn providers.", 
+   "(OperationContext::setConfigCallback,", 
+   "OperationContext::getConfigCallback): Removed obsolete implementation.", 
+   "* RemoteSession.h (RemoteSession.open, RemoteSession.RemoteSession):", 
+   "Remove the jconfigHandler parameter from these functions.", 
+   "* RemoteSessionContext.h (RemoteSessionContext.RemoteSessionContext):", 
+   "Remove the jconfigHandler parameter.", 
+   "* RemoteSession.cpp, RemoteSessionContext.cpp: Update implementation", 
+   "now that the jconfigHandler parameters are gone.", 
+   "* SVNClient.cpp (SVNClient::openRemoteSession): Update implementation", 
+   "now that the jconfigHandler parameters are gone.", 
+   "* org_apache_subversion_javahl_SVNClient.cpp", 
+   "(Java_org_apache_subversion_javahl_SVNClient_setConfigEventHandler): Gone.", 
+   "* org_apache_subversion_javahl_remote_RemoteFactory.cpp", 
+   "(Java_org_apache_subversion_javahl_remote_RemoteFactory_open): No more", 
+   "jconfigHandler parameter.", 
+   "* org_apache_subversion_javahl_util_ConfigLib.cpp: New file.", 
+   "Implements ConfigLib native wrappers and the GlobalConfig class.", 
+   "[in subversion/bindings/javahl/tests/org/apache/subversion/javahl]", 
+   "* SVNRemoteTests.java", 
+   "(SVNRemoteTests.getSession, SVNRemoteTests.testGetSession_ConfigConstructor):", 
+   "Removed configHandler parameter.", 
+   "(SVNRemoteTests.testConfigHandler): Use SVNUtil method to set the handler.", 
+   "* SVNTests.java (SVNTests.init): Optionally disable the native credentials", 
+   "store for the test run."
+  ], 
+  "revision_id": "1519126"
+ }, 
+ {
+  "author": "alexoree", 
+  "date": "2013-08-31T01:07:50.493449Z", 
+  "msg": [
+   "JUDDI-614 closed"
+  ], 
+  "revision_id": "1519125"
+ }, 
+ {
+  "author": "stack", 
+  "date": "2013-08-31T00:27:51.556926Z", 
+  "msg": [
+   "First cut at doc on how to stage a release using new means -- the pom generating scripts and the mvn door I recently discovered"
+  ], 
+  "revision_id": "1519124"
+ }
+]

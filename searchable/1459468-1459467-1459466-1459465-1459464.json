@@ -1,0 +1,116 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:41.750153Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-7852] fix TestLoadIncrementalHFiles", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "TestIncrementalHFiles  does not use the Tool.run() mechanism to", 
+   "do the bulk load.", 
+   "In order to fix the test, ensure that we pick up the default options in", 
+   "the constructor. If Tool.run() is called, the default options are overridden.", 
+   "Test Plan: TestLoadIncrementalHFiles", 
+   "Reviewers: liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D718323", 
+   "Blame Revision: https://phabricator.fb.com/D693206"
+  ], 
+  "revision_id": "1459468"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:38.956487Z", 
+  "msg": [
+   "[HBASE-7903] Add the partial rows, max response size, prefetch options to streaming", 
+   "Author: rshroff", 
+   "Summary:", 
+   "Adds the partial rows, max response size, batchsize and prefetch options", 
+   "to the TableInputFormat for HBase streaming.", 
+   "Test Plan:", 
+   "Test it on SH004. Scanned a 1.3G row.", 
+   "http://hbase185.frc1.facebook.com.:50060/tasklog?taskid=attempt_201302121607_3232_m_000000_0&all=true", 
+   "O/P file: https://phabricator.fb.com/P1997817", 
+   "Reviewers: liyintang, pritam", 
+   "Reviewed By: liyintang", 
+   "CC: nzhang, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D715153", 
+   "Task ID: 2120016"
+  ], 
+  "revision_id": "1459467"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:35.139191Z", 
+  "msg": [
+   "[HBASE-5032] Add Delete Column into the delete bloom filter", 
+   "Author: adela", 
+   "Summary:", 
+   "https://issues.apache.org/jira/browse/HBASE-5032", 
+   "Previously, the delete family bloom filter only contains the row key", 
+   "which has the delete family. It helps us to avoid the top-row seek", 
+   "operation.", 
+   "This jira attempts to add the delete column into this delete bloom", 
+   "filter as well (rename the delete family bloom filter as delete bloom", 
+   "filter).", 
+   "The motivation is to save seek ops for scan time-range queries if we", 
+   "know there is no delete column for this row/column.", 
+   "We can seek directly to the exact timestamp we are interested in,", 
+   "instead of seeking to the latest timestamp and keep skipping to find", 
+   "out whether there is any delete column before the interested timestamp.", 
+   "Test Plan: write unit tests", 
+   "Reviewers: kannan, liyintang, kranganathan", 
+   "Reviewed By: liyintang", 
+   "CC: erling, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D622271", 
+   "Task ID: 849012, 1980066"
+  ], 
+  "revision_id": "1459466"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:29.532391Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-7852] Ensure that the command line options are respected.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "LoadIncrementalHFiles should extract the config options after", 
+   "Tool.run() is called, to ensure that the command line overrides", 
+   "are respected.", 
+   "Test Plan:", 
+   "Test out on the dev cluster, with command line overrides.", 
+   "Ensure that the command line override for configuration settings is", 
+   "respected", 
+   "Reviewers: adela, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, ryandm", 
+   "Differential Revision: https://phabricator.fb.com/D693206"
+  ], 
+  "revision_id": "1459465"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:26.604485Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-7517] Improve the PFFE mechanism such that (i) Ensure that if a thread gets the AtomicBoolean for a single server, it will not be stopped to get the AtomicBoolean for a different server. (ii) PFFE is only thrown for threads that are not a", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Improvements to the PFFE mechanism, so as to let the", 
+   "retrying threads to handle errors as if they were not in PFFE mode.", 
+   "Threads that are allowed to go through (1 per server) will follow the", 
+   "same logic as normal threads -- when not in fast fail mode. (The only", 
+   "exception being that all errors will be logged as LOG.error).", 
+   "These threads will never throw a PFFE.", 
+   "Threads that are not allowed to go through, will throw PFFE Exception.", 
+   "Test Plan:", 
+   "Add unit test to debug.", 
+   "Test it out on tsh025.", 
+   "Reviewers: liyintang, kannan, kranganathan, adela", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D690778"
+  ], 
+  "revision_id": "1459464"
+ }
+]

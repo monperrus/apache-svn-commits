@@ -1,0 +1,65 @@
+[
+ {
+  "author": "jacopoc", 
+  "date": "2015-01-27T14:06:29.993826Z", 
+  "msg": [
+   "Applied fix from trunk for revision: 1655046", 
+   "===", 
+   "Moved out from JobManager.getInstance the call to reloadCrashedJobs because it was causing a deadlock issue at bootstrap when an eca rule of type \"validate\" is defined on the JobSandbox entity.", 
+   "At bootstrap an eca definition like the following:", 
+   "<eca entity=\"JobSandbox\" operation=\"store\" event=\"validate\">", 
+   "<action service=\"ping\" mode=\"sync\"/>", 
+   "</eca>", 
+   "is causing a deadlock because it is triggered at startup when the reloadCrashedJobs method is executed; reloadCrashedJobs  is executed holding a lock on the JobManager object; within this method a \"find\" operation is performed that (because of the \"validate\" event) triggers the action; but for this a getDispatchContext is executed and this blocks until the task (executed by a thread Executor) that reads and setups the eca rules is complete; but this task requires a lock on the same JobManager object and thus we get the deadlock", 
+   "Thanks to Arun Patidar and Deepak Dixit for analyzing the issue with me."
+  ], 
+  "revision_id": "1655048"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2015-01-27T14:04:56.219339Z", 
+  "msg": [
+   "Applied fix from trunk for revision: 1655046", 
+   "===", 
+   "Moved out from JobManager.getInstance the call to reloadCrashedJobs because it was causing a deadlock issue at bootstrap when an eca rule of type \"validate\" is defined on the JobSandbox entity.", 
+   "At bootstrap an eca definition like the following:", 
+   "<eca entity=\"JobSandbox\" operation=\"store\" event=\"validate\">", 
+   "<action service=\"ping\" mode=\"sync\"/>", 
+   "</eca>", 
+   "is causing a deadlock because it is triggered at startup when the reloadCrashedJobs method is executed; reloadCrashedJobs  is executed holding a lock on the JobManager object; within this method a \"find\" operation is performed that (because of the \"validate\" event) triggers the action; but for this a getDispatchContext is executed and this blocks until the task (executed by a thread Executor) that reads and setups the eca rules is complete; but this task requires a lock on the same JobManager object and thus we get the deadlock", 
+   "Thanks to Arun Patidar and Deepak Dixit for analyzing the issue with me."
+  ], 
+  "revision_id": "1655047"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2015-01-27T14:02:50.114002Z", 
+  "msg": [
+   "Moved out from JobManager.getInstance the call to reloadCrashedJobs because it was causing a deadlock issue at bootstrap when an eca rule of type \"validate\" is defined on the JobSandbox entity.", 
+   "At bootstrap an eca definition like the following:", 
+   "<eca entity=\"JobSandbox\" operation=\"store\" event=\"validate\">", 
+   "<action service=\"ping\" mode=\"sync\"/>", 
+   "</eca>", 
+   "is causing a deadlock because it is triggered at startup when the reloadCrashedJobs method is executed; reloadCrashedJobs  is executed holding a lock on the JobManager object; within this method a \"find\" operation is performed that (because of the \"validate\" event) triggers the action; but for this a getDispatchContext is executed and this blocks until the task (executed by a thread Executor) that reads and setups the eca rules is complete; but this task requires a lock on the same JobManager object and thus we get the deadlock", 
+   "Thanks to Arun Patidar and Deepak Dixit for analyzing the issue with me."
+  ], 
+  "revision_id": "1655046"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2015-01-27T14:00:30.863794Z", 
+  "msg": [
+   "* STATUS: Nominate issue #4411 fix."
+  ], 
+  "revision_id": "1655045"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2015-01-27T13:57:50.825623Z", 
+  "msg": [
+   "Create a backport branch for issue #4411 fixes.", 
+   "This merges r1513479 and r1625522 from trunk, resolving conflicts."
+  ], 
+  "revision_id": "1655044"
+ }
+]

@@ -1,0 +1,91 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2014-04-24T18:18:48.913212Z", 
+  "msg": [
+   "[master] Fix a small problem of not closing the scanner", 
+   "Author: daviddeng", 
+   "Summary:", 
+   "If the user stops the scanning by calling `HTableClientScanner.close()` during scanning, it is possible the `Fetcher.callable` is not closed. A checking is added at the end of scanning to close the scanner if `callable` is not null.", 
+   "Refactoring: not calling `Fetcher`'s private variable from outside.", 
+   "Test Plan: `TestHTableClientScanner`", 
+   "Reviewers: manukranthk, liyintang", 
+   "Reviewed By: manukranthk", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1288020", 
+   "Task ID: 3546998"
+  ], 
+  "revision_id": "1589823"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-04-24T18:18:44.285595Z", 
+  "msg": [
+   "[master] Generate thrift files, some refactoring on thrift related things", 
+   "Author: daviddeng", 
+   "Summary:", 
+   "`gen_thrift_from_swift.sh` is optimized, adding new classes, adding namespaces", 
+   "`ArrayList` in endpoint service is replaced with `List`", 
+   "Methods in parents of `ThriftHRegionInterface` are copied to `ThriftHRegionInterface` and annotated there because thrift doesn't support extending more than one parent.", 
+   "Test Plan: `TestEndpoint`", 
+   "Reviewers: manukranthk, adela, gauravm", 
+   "Reviewed By: gauravm", 
+   "CC: hbase-eng@, andrewcox", 
+   "Differential Revision: https://phabricator.fb.com/D1287779", 
+   "Task ID: 4147004"
+  ], 
+  "revision_id": "1589822"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-04-24T18:18:40.773326Z", 
+  "msg": [
+   "[HBASE-9704] Do not retry on Hadoop port on exceptions while creating a thrift client", 
+   "Author: manukranthk", 
+   "Summary: We added this functionality such that we will be able to connect to regionservers while in a rolling restart state. Since this assumption does not hold anymore. We should remove this retry and simply throw in case of a failure.", 
+   "Test Plan: Not a major change. Removing a retry which doesn't work currently", 
+   "Reviewers: aaiyer, gauravm, adela", 
+   "Reviewed By: gauravm", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1290661"
+  ], 
+  "revision_id": "1589821"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-04-24T18:18:37.926875Z", 
+  "msg": [
+   "[HBASE-9704] Increasing the timeout on TestChangingEncoding#testCrazyRandomChanges", 
+   "Author: manukranthk", 
+   "Summary: Will increase the timeout here but keep the task open(mid-pri) for investigation later. This seemed like a better quick fix than muting.", 
+   "Test Plan: Run the unit tests.", 
+   "Reviewers: liyintang, adela, rshroff, gauravm, daviddeng", 
+   "Reviewed By: daviddeng", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1292419", 
+   "Task ID: 4191764"
+  ], 
+  "revision_id": "1589820"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-04-24T18:18:35.392665Z", 
+  "msg": [
+   "[HBASE-9930] Making callContext fully support profiling data in swift", 
+   "Author: adela", 
+   "Summary: we now support profiling time on the client and on the serverside. I also refactored a little bit the unit test for Header Protocol & profiling data", 
+   "Test Plan:", 
+   "extended TestHeaderSendReceive unit test, this is how it looks like", 
+   "profiling data after first put: client_network_latency.ms:40, hlog_sync_time.ms:1, total_server_time.ms:5", 
+   "profiling data after second put: client_network_latency.ms:3, hlog_sync_time.ms:1, total_server_time.ms:1", 
+   "profiling data after get: client_network_latency.ms:3, total_server_time.ms:1", 
+   "profiling data after get: client_network_latency.ms:4, total_server_time.ms:1", 
+   "Reviewers: manukranthk, gauravm, fan", 
+   "Reviewed By: manukranthk", 
+   "CC: elliott, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1290014", 
+   "Task ID: 3573857"
+  ], 
+  "revision_id": "1589819"
+ }
+]

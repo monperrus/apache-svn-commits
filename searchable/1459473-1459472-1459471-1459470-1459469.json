@@ -1,0 +1,103 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:54:05.189900Z", 
+  "msg": [
+   "[HBASE-8111] Avoids un necessary DNS lookup for master web ui page", 
+   "Author: rshroff", 
+   "Summary:", 
+   "Currently, whenever you load the master web ui, it will fetch the", 
+   "hostname by giving the address to generate the RS url. This is a DNS", 
+   "lookup, which might be slow sometimes. Hence, when we have a lot of RS like", 
+   "SH003(349), these DNS timeouts cause the loading of the web ui to fail.", 
+   "This failure will lead to alarm when the cluster goes into production.", 
+   "The fix is to use already cached hostName to avoid the DNS lookup.", 
+   "Test Plan:", 
+   "tested it on SH003", 
+   "http://hbaseproxy001.prn1.facebook.com/hbase_master/searchhbase003-frc1/master.jsp", 
+   "Reviewers: liyintang, aleksandr", 
+   "Reviewed By: aleksandr", 
+   "CC: arjen, aleksandr, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D739051", 
+   "Task ID: 2185822"
+  ], 
+  "revision_id": "1459473"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:54:02.004489Z", 
+  "msg": [
+   "[HBASE-8083] Adds more information for HBase RetriesExhaustedExceptions", 
+   "Author: rshroff", 
+   "Summary:", 
+   "The RetriesExhaustedException is the most common exception thrown to the", 
+   "HBase client. Currently it just has a string which is either a text", 
+   "message or set of exceptions converted into a text message.", 
+   "For better diagnosability on the client side we need give more", 
+   "information about these exceptions.", 
+   "The change adds a new class HRegionFailureInfo which stores:", 
+   "1. ServerName", 
+   "2. RegionName", 
+   "3. Exceptions encountered", 
+   "This class is a part of RetriesExhaustedException and the clients can", 
+   "use new methods to get more information about the exception.", 
+   "Test Plan:", 
+   "Added a few unit tests. Running MR unit test suite now.", 
+   "Sample output https://phabricator.fb.com/P2010393", 
+   "Reviewers: aaiyer, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D723010", 
+   "Task ID: 2121042"
+  ], 
+  "revision_id": "1459472"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:57.939208Z", 
+  "msg": [
+   "[HBASE-8082] Fixing NullPointerException in org.apache.hadoop.hbase.regionserver.HRegion.RegionScanner.nextRows", 
+   "Author: manukranthk", 
+   "Summary:", 
+   "On occurance of IOException in the scanprefetch call,", 
+   "the function should throw the exception instead of proceeding.", 
+   "Test Plan: Unit tests on MR", 
+   "Reviewers: liyintang, kranganathan, rshroff", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D735284"
+  ], 
+  "revision_id": "1459471"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:54.727386Z", 
+  "msg": [
+   "[Master]Optimize HRegionServer.updateOutboundMsgs and HRegionServer.addOutboundMsgs", 
+   "Author: adela", 
+   "Summary: Optimizing the two methods to execute in O(n).", 
+   "Test Plan: will run unittests", 
+   "Reviewers: aaiyer, liyintang, kannan", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D715356", 
+   "Task ID: 2124466"
+  ], 
+  "revision_id": "1459470"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:51.793458Z", 
+  "msg": [
+   "[0.89-fb] \t[HBASE-5783] Fix a possible ConcurrentModificationException", 
+   "Author: aaiyer", 
+   "Summary: Fix possible ConcurrentModificationException", 
+   "Test Plan: unit tests", 
+   "Reviewers: adela, liyintang", 
+   "Reviewed By: adela", 
+   "CC: hbase-eng@, manukranthk", 
+   "Differential Revision: https://phabricator.fb.com/D719424"
+  ], 
+  "revision_id": "1459469"
+ }
+]

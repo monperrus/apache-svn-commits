@@ -1,0 +1,86 @@
+[
+ {
+  "author": "nwellnhof", 
+  "date": "2012-11-09T00:07:57.275201Z", 
+  "msg": [
+   "Switch to Git"
+  ], 
+  "revision_id": "1407323"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-09T00:01:37.783838Z", 
+  "msg": [
+   "[0.89-fb] [master] Fix a race condition that might cause unassigned regions.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Doing a rolling restart on the darklaunch cluster, I noticed that the", 
+   "rolling restart script had gotten stuck because it could not get hbck", 
+   "to be OK. This was because we had gotten into a situation where there", 
+   "was one region that was unassigned.", 
+   "Here is a rough sketch of what happened. The region was on Secondary, when", 
+   "Primary came up.", 
+   "Master wanted to move the region from Secondary to Primary; asking the", 
+   "secondary to close the region.", 
+   "The request in RIT timed out and was deleted.", 
+   "- metaScanner should have seen an unassigned region and fixed it.", 
+   "Secondary closed the region, but was unable to update META, because the server", 
+   "hosting .META. was down.", 
+   "- ProcessServerClose could not update .META.", 
+   "- ProcessServerClose should not have succeded. But a bug/race condition let", 
+   "it believe that things were fine.", 
+   "MetaScanner ran multiple times, but did not bother re-assigning the region", 
+   "because everything seemed fine in .META.; It was as if the region was still on", 
+   "the old server (Secondary).", 
+   "The fix is really simple. We cannot ignore .META. unavailability in the", 
+   "innermost level.", 
+   "Test Plan: run mr tests", 
+   "Reviewers: kannan, kranganathan, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D624014"
+  ], 
+  "revision_id": "1407322"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-09T00:01:04.749763Z", 
+  "msg": [
+   "[0.89-fb] [master] Fix NPE upon processRegionOpen/Close on a master transition", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Upon master transition, the new master looks at ZK", 
+   "and processes unassigned nodes.", 
+   "If the new master has not yet heard from a region server, before", 
+   "it processes the regionserver's region, then this may result in", 
+   "a NPE because serverInfo is not found in the RegionManager.", 
+   "We can generate the serverInfo from the data in ZK (all but the", 
+   "server load).", 
+   "Test Plan:", 
+   "run mr tests. Try to repro the scenario and ensure that there is no", 
+   "npe", 
+   "Reviewers: liyintang, kannan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D618864", 
+   "Task ID: 1853876"
+  ], 
+  "revision_id": "1407321"
+ }, 
+ {
+  "author": "kevinwilfong", 
+  "date": "2012-11-08T23:57:07.333630Z", 
+  "msg": [
+   "HIVE-3675. NaN does not work correctly for round(n). (njain via kevinwilfong)"
+  ], 
+  "revision_id": "1407320"
+ }, 
+ {
+  "author": "myrnavl", 
+  "date": "2012-11-08T23:52:25.545411Z", 
+  "msg": [
+   "Switch PMC chair from Kristian to Myrna"
+  ], 
+  "revision_id": "1407319"
+ }
+]

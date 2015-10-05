@@ -1,0 +1,79 @@
+[
+ {
+  "author": "markt", 
+  "date": "2014-08-14T19:40:28.372868Z", 
+  "msg": [
+   "Don't use exceptions for flow control - especially in the class loader. This would slow things down in the case of external repositories."
+  ], 
+  "revision_id": "1618028"
+ }, 
+ {
+  "author": "dennisl", 
+  "date": "2014-08-14T19:33:25.368439Z", 
+  "msg": [
+   "Simplify invoker goals."
+  ], 
+  "revision_id": "1618027"
+ }, 
+ {
+  "author": "dennisl", 
+  "date": "2014-08-14T19:30:35.300565Z", 
+  "msg": [
+   "[RAT-168] Add integration test for apache-rat:rat to catch NPE", 
+   "Use the correct annotation for this kind of @Parameter. The \"property\" option is used for parameters that can be set from the command line as a system property using -D, but this parameter is read only so we should not use that. Instead we want the parameter to have a default value injected with the current project. The IT (it4_RAT-168) that was added for this issue still passes with this change."
+  ], 
+  "revision_id": "1618026"
+ }, 
+ {
+  "author": "mxmanghi", 
+  "date": "2014-08-14T19:28:54.449951Z", 
+  "msg": [
+   "* src/experimental/mod_rivet.c: implemented automatic bridge load mechanism.", 
+   "* src/experimental/rivet_worker_mpm.c: starting maximal number of threads (as per mpm_worker configuration)", 
+   "* configure.ac: automated parameters when build experimental module."
+  ], 
+  "revision_id": "1618025"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2014-08-14T19:22:30.546613Z", 
+  "msg": [
+   "For tree conflicts flagged during merges, record the proper node kinds", 
+   "of the versions of nodes involved in the conflict (the local working", 
+   "copy node kind, the merge-left node kind, and the merge-right node kind).", 
+   "Before this change misleading node kind information was recorded.", 
+   "For example, nodes which are deleted at the merge-right side of the incoming", 
+   "change would produce the following conflict information:", 
+   "Tree conflict: local file edit, incoming file delete or move upon merge", 
+   "Source  left: (file) ^/trunk/beta@1", 
+   "Source right: (file) ^/branch/beta@3", 
+   "This is misleading since ^/branch/beta does not exist in r3 since it", 
+   "was deleted in r2. With this change, the recorded node kind is 'none':", 
+   "Tree conflict: local file edit, incoming file delete or move upon merge", 
+   "Source  left: (file) ^/trunk/beta@1", 
+   "Source right: (none) ^/branch/beta@3", 
+   "* subversion/libsvn_client/merge.c", 
+   "(make_conflict_versions): Expect two node kinds, for the left and right", 
+   "side of the merge source, instead of just one.", 
+   "(merge_dir_baton_t, merge_file_baton_t): Add fields to store node kind", 
+   "information for tree conflict victims: tree_conflict_local_node_kind,", 
+   "tree_conflict_merge_left_node_kind, and tree_conflict_merge_right_node_kind.", 
+   "(record_tree_conflict): Add two node kind parameters for a total of three and", 
+   "rename the existing 'node_kind' parameter to 'local_node_kind'.", 
+   "Create conflict versions with merge-left/merge-right node kinds. The local", 
+   "node kind is used as the victim's node kind in the conflict description.", 
+   "(mark_dir_edited, mark_file_edited): Propagate node kind information stored", 
+   "in the dir/file baton to record_tree_conflict().", 
+   "(merge_file_opened, merge_dir_opened): Fill in all three node kinds involved", 
+   "in the conflict.", 
+   "(merge_file_changed): Pass merge-left/merge-right node kinds to the", 
+   "make_conflict_versions() function. For file edits both are svn_node_file.", 
+   "(merge_file_deleted, merge_dir_deleted): Pass all three node kinds involved", 
+   "in the conflict to record_tree_conflict().", 
+   "* subversion/libsvn_wc/tree_conflicts.c", 
+   "(svn_wc__serialize_conflict): 'none' is a legal node kind for tree conflicts.", 
+   "Adjust an assertion accordingly."
+  ], 
+  "revision_id": "1618024"
+ }
+]

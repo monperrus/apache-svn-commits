@@ -1,0 +1,88 @@
+[
+ {
+  "author": "olli", 
+  "date": "2015-02-08T15:54:05.805607Z", 
+  "msg": [
+   "SLING-4396 make template mode handlers configuration driven", 
+   "* add configuration policy \u201crequire\u201d", 
+   "* remove default patterns value"
+  ], 
+  "revision_id": "1658198"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-08T15:53:19.138287Z", 
+  "msg": [
+   "[Reverted in r1658210]", 
+   "Further reduce the ra_svn editor processing overhead.", 
+   "Most tokens are sent multiple times (e.g. file open, change fprops, close).", 
+   "So, keep a reference to the last one and quickly compare to that first.", 
+   "* subversion/libsvn_ra_svn/editorp.c", 
+   "(ra_svn_token_entry_t): Turn typedef into a forward declaration.", 
+   "(ra_svn_driver_state_t): Add element to point to the latest token.", 
+   "(ra_svn_token_entry_t): Remove typedef here.", 
+   "(store_token): Remember the latest hash entry.", 
+   "(lookup_token): Compare with / update the last token seen.", 
+   "Most times they match and no hash lookup is needed."
+  ], 
+  "revision_id": "1658197"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2015-02-08T15:44:49.161967Z", 
+  "msg": [
+   "On the pin-externals branch: Add JavaHL tests for copy with pinned externals.", 
+   "* BRANCH-README: Update status.", 
+   "* subversion/bindings/javahl/tests/org/apache/subversion/javahl/BasicTests.java", 
+   "(BasicTests.setupPinExternalsTest): New helper method.", 
+   "(BasicTests.testCopyPinExternals_wc2wc,", 
+   "BasicTests.testCopyPinExternals_wc2repo,", 
+   "BasicTests.testCopyPinExternals_repo2wc,", 
+   "BasicTests.testCopyPinExternals_repo2repo,", 
+   "BasicTests.testCopyPinExternals_repo2repo_explicit): New test cases."
+  ], 
+  "revision_id": "1658196"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-08T15:41:57.964220Z", 
+  "msg": [
+   "* subversion/libsvn_ra_svn/marshal.c", 
+   "(svn_ra_svn__parse_proplist): Read the hash key as svn_string_t to", 
+   "speed up hash construction."
+  ], 
+  "revision_id": "1658195"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-08T15:41:40.561531Z", 
+  "msg": [
+   "Improve efficiency of the token tracking in ra_svn's editor implementation.", 
+   "Instead of a plain const char *, store an svn_string_t which gives us the", 
+   "length info for free.  The ra_svn token parser internally uses svn_string_t", 
+   "already.  So, there is no point in willfully discarding that information.", 
+   "* subversion/libsvn_ra_svn/editorp.c", 
+   "(ra_svn_token_entry_t): Store the token as a proper string object.", 
+   "(store_token,", 
+   "lookup_token): Except tokens to be svn_string_t now, use the length", 
+   "info implied for faster hash access.", 
+   "(ra_svn_handle_open_root,", 
+   "ra_svn_handle_delete_entry,", 
+   "ra_svn_handle_add_dir,", 
+   "ra_svn_handle_open_dir,", 
+   "ra_svn_handle_change_dir_prop,", 
+   "ra_svn_handle_close_dir,", 
+   "ra_svn_handle_absent_dir,", 
+   "ra_svn_handle_add_file,", 
+   "ra_svn_handle_open_file,", 
+   "ra_svn_handle_apply_textdelta,", 
+   "ra_svn_handle_textdelta_chunk,", 
+   "ra_svn_handle_textdelta_end,", 
+   "ra_svn_handle_change_file_prop,", 
+   "ra_svn_handle_close_file,", 
+   "ra_svn_handle_absent): Update callers to request all tokens as", 
+   "svn_string_t."
+  ], 
+  "revision_id": "1658194"
+ }
+]

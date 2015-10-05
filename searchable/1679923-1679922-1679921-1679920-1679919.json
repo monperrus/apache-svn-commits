@@ -1,0 +1,95 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-05-18T03:46:58.470081Z", 
+  "msg": [
+   "Continue work on the fs-test 44 issue in FSFS:", 
+   "Begin work on the cache updater code.  Remove stale cache entries from cache,", 
+   "i.e. those who got changed on disk by 3rd parties, from cache instead of", 
+   "\"updating\" them.", 
+   "At this point, only the updater code needs to be completed (write new file", 
+   "size to cache) and the partial reader for single entries must be updated", 
+   "to check for the file size by further patches.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.h", 
+   "(svn_fs_fs__extract_dir_filesize): Declare accessor function that reads", 
+   "the txn-filesize of a cached directory.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(svn_fs_fs__extract_dir_filesize): Implement.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(svn_fs_fs__set_entry): Detect stale cache entries and remove them."
+  ], 
+  "revision_id": "1679923"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-05-18T03:36:54.663759Z", 
+  "msg": [
+   "In FSFS in-txn directory update code, reorder operations to make the", 
+   "next patch slightly smaller.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(svn_fs_fs__set_entry): First update the on-disk representation and", 
+   "then the cache. This will allow us to update", 
+   "the filesize as well in later patches."
+  ], 
+  "revision_id": "1679922"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-05-18T03:16:31.181008Z", 
+  "msg": [
+   "Continue work on the fs-test 44 issue:", 
+   "For full-dir access, record the in-txn filesize and check it upon access.", 
+   "Later commits will address the partial read and write access.  This patch", 
+   "is already enough to fix the XFAIL.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(get_txn_dir_info): New utility function.", 
+   "(get_dir_contents): Use the new function to store the filesize info", 
+   "alongside the dir contents.", 
+   "(svn_fs_fs__rep_contents_dir): Check that the cached filesize still", 
+   "matches the actual.", 
+   "* subversion/tests/libsvn_fs/fs-sequential-test.c", 
+   "(test_funcs): Our only test here is no longer XFAIL but should pass now."
+  ], 
+  "revision_id": "1679921"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-05-18T03:06:07.562905Z", 
+  "msg": [
+   "Begin working on the fs-test 44 issue with FSFS:", 
+   "Add an in-txn file size info to cached directories.  For that,", 
+   "we simply wrap the entries array into a new struct at the cache", 
+   "interface.", 
+   "This patch only introduces the struct and updates the cache", 
+   "access functions.  The filesize value is neither being set nor", 
+   "checked at this point.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(svn_fs_fs__dir_data_t): New data structure.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(get_dir_contents): Return the new struct instead of the plain", 
+   "entries array.", 
+   "(svn_fs_fs__rep_contents_dir): Update caller. Use the new struct", 
+   "at the cache interface.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(dir_data_t): Add TXN_FILESIZE element such that we can store", 
+   "all parts of the new svn_fs_fs__dir_data_t.", 
+   "(serialize_dir,", 
+   "deserialize_dir): Expect and return the new struct instead of", 
+   "a plain dir entries array.", 
+   "(svn_fs_fs__serialize_dir_entries,", 
+   "slowly_replace_dir_entry): Update caller.", 
+   "* subversion/libsvn_fs_fs/temp_serializer.h", 
+   "(svn_fs_fs__serialize_dir_entries,", 
+   "svn_fs_fs__deserialize_dir_entries): Update type in docstrings."
+  ], 
+  "revision_id": "1679920"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-05-18T02:51:05.213611Z", 
+  "msg": [
+   "* STATUS: Add r1679864 with r1679866."
+  ], 
+  "revision_id": "1679919"
+ }
+]

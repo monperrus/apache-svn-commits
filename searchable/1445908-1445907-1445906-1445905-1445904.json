@@ -1,0 +1,111 @@
+[
+ {
+  "author": "vinodkone", 
+  "date": "2013-02-13T20:42:00.308585Z", 
+  "msg": [
+   "Deleting 0.11.x branch."
+  ], 
+  "revision_id": "1445908"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-02-13T20:41:20.054083Z", 
+  "msg": [
+   "Following up on r1445812 resolve the:", 
+   "Program: ...n-2012\\dev\\Debug\\subversion\\tests\\libsvn_wc\\op-depth-test.exe", 
+   "Module: ...n-2012\\dev\\Debug\\subversion\\tests\\libsvn_wc\\op-depth-test.exe", 
+   "File: f:\\svn-2012\\dev\\subversion\\libsvn_wc\\wc_db_update_move.c Line: 2105", 
+   "Run-Time Check Failure #3 - The variable 'can_bump' is being used without", 
+   "being initialized.", 
+   "which currently hangs up the windows buildbots.", 
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(bump_moved_away): Initialize an otherwise uninitialized variable to the", 
+   "value that doesn't break the tests."
+  ], 
+  "revision_id": "1445907"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2013-02-13T20:40:13.147937Z", 
+  "msg": [
+   "LUCENE-4776: also do not cache huge arrays for non-existent/unindexed: just return EMPTY"
+  ], 
+  "revision_id": "1445906"
+ }, 
+ {
+  "author": "raulk", 
+  "date": "2013-02-13T20:30:16.054901Z", 
+  "msg": [
+   "Fix VmMultipleContextsStartStopTest to stop the second context so that it doesn't interfere with other tests. Rename and move a test from Seda to VM."
+  ], 
+  "revision_id": "1445905"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-02-13T20:27:45.454439Z", 
+  "msg": [
+   "Refactor the repos-wc diff to be fully ancestry aware, but at the same", 
+   "time able to suppress ancestry differences for files on files and", 
+   "directories on directories.", 
+   "For", 
+   "$ svn diff --notice-ancestry --show-copies-as-adds PATH -r 123", 
+   "The repos-wc diff will now properly describe all the changes required", 
+   "to turn r123 into PATH. For reasonably simple cases these patches are", 
+   "applicable with 'svn patch'.", 
+   "(svn patch still misses support to explicitly add and remove directories)", 
+   "$ svn diff --notice-ancesty --show-copies-as-adds PATH -r 123:BASE will", 
+   "now always describe the changes against the current pristine version of", 
+   "all nodes. (so the pristine of replacements)", 
+   "The old code mixed between pristine and as-checked-out.", 
+   "The diff tests appear to have been 'fixed' to hide a few bugs in the", 
+   "diff handling.", 
+   "* subversion/libsvn_wc/diff_editor.c", 
+   "(reverse_propchanges): Remove function.", 
+   "(get_pristine_file): Remove function.", 
+   "(dir_baton_t,", 
+   "file_baton_t): Use three booleans to keep track how the diff will be driven.", 
+   "Remove unneeded got_textdelta boolean.", 
+   "(make_dir_baton,", 
+   "make_file_baton): Remove initialization of shadowed.", 
+   "(NOT_PRESENT): New macro.", 
+   "(report_local_only_file,", 
+   "report_local_only_dir,", 
+   "report_base_only_file,", 
+   "report_base_only_dir): Add prototypes here.", 
+   "(file_diff): Rename to ...", 
+   "(base_working_diff): ... this to more closely resamble its only remaining", 
+   "function.", 
+   "(walk_local_nodes_diff): Don't create dir baton when directly walking inside", 
+   "a directory. Use that baton instead. Calculate what to report and use the", 
+   "report functions or base_working_diff to do the work.", 
+   "(report_local_only_file): Update assertion with more assumptions.", 
+   "(ensure_local_only_handled): Rename to ...", 
+   "(handle_local_only): ... and always report local changes if requested.", 
+   "(report_base_only_file): New function.", 
+   "(report_base_only_dir): New function.", 
+   "(open_root): Initialize left and right sources as we can report property", 
+   "changes on the root. (Diff processor correctness)", 
+   "(add_directory): Perform obstruction and ancestry check.", 
+   "(open_directory): Perform obstruction and ancestry check.", 
+   "(close_directory): Mark deleted children as handled. Only walk local children", 
+   "if necessary, otherwise rely on parent reporting. This to handle tree", 
+   "replacements. Simplify diff calculation. Properly pass batons.", 
+   "(add_file): Perform obstruction and ancestry check.", 
+   "(open_file): Perform obstruction and ancestry check.", 
+   "(close_file): Use temp_file_path instead of got_textdelta. Simplify diff", 
+   "calculation", 
+   "(wrap_dir_opened,", 
+   "wrap_dir_changed,", 
+   "wrap_file_changed): Add debug only assertions to verify diff drivers.", 
+   "* subversion/tests/cmdline/diff_tests.py", 
+   "(diff_schedule_delete): Assume that diff -r 2:BASE returns the inverse of", 
+   "-r BASE:2, and as body what is contained in r2, not what is in", 
+   "the pristine of the locally deleted WORKING. Use 'diff -r BASE' for that.", 
+   "(diff_with_depth): When diffing against -r 2, assume that we receive a diff", 
+   "against r2, not against something in r1.", 
+   "(local_tree_replace): Remove XFail. Fix assumption. (Lambda was expected to", 
+   "be added twice instead of deleted and added)."
+  ], 
+  "revision_id": "1445904"
+ }
+]

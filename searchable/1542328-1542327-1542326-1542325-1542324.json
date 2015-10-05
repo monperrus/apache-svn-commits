@@ -1,0 +1,88 @@
+[
+ {
+  "author": "jim", 
+  "date": "2013-11-15T17:06:32.539397Z", 
+  "msg": [
+   "remove empty file"
+  ], 
+  "revision_id": "1542328"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2013-11-15T17:06:18.966558Z", 
+  "msg": [
+   "Merge r1526168, r1527291, r1527294, r1527295, r1527926 from trunk:", 
+   "Streamline ephemeral key handling:", 
+   "- drop support for ephemeral RSA keys (only allowed/needed", 
+   "for export ciphers)", 
+   "- drop pTmpKeys from the per-process SSLModConfigRec, and remove", 
+   "the temp key generation at startup (unnecessary for DHE/ECDHE)", 
+   "- unconditionally disable null and export-grade ciphers by always", 
+   "prepending \"!aNULL:!eNULL:!EXP:\" to any cipher suite string", 
+   "- do not configure per-connection SSL_tmp_*_callbacks, as it is", 
+   "sufficient to set them for the SSL_CTX", 
+   "- set default curve for ECDHE at startup, obviating the need", 
+   "for a per-handshake callback, for the time being (and also", 
+   "configure SSL_OP_SINGLE_ECDH_USE, previously left out)", 
+   "For additional background, see", 
+   "https://mail-archives.apache.org/mod_mbox/httpd-dev/201309.mbox/%3C52358ED1.2070704@velox.ch%3E", 
+   "Follow-up fixes for r1526168:", 
+   "- drop SSL_TMP_KEY_* constants from ssl_private.h, too", 
+   "- make sure we also disable aNULL, eNULL and EXP ciphers", 
+   "for per-directory SSLCipherSuite directives", 
+   "- apply the same treatment to SSLProxyCipherSuite", 
+   "Increase minimum required OpenSSL version to 0.9.8a (in preparation", 
+   "for the next mod_ssl commit, which will rely on the get_rfcX_prime_Y", 
+   "functions added in that release):", 
+   "- remove obsolete #defines / macros", 
+   "- in ssl_private.h, regroup definitions based on whether", 
+   "they depend on TLS extension support or not", 
+   "- for ECC and SRP support, set HAVE_X and change the rather awkward", 
+   "#ifndef OPENSSL_NO_X lines accordingly", 
+   "For the discussion prior to taking this step, see", 
+   "https://mail-archives.apache.org/mod_mbox/httpd-dev/201309.mbox/%3C524275C7.9060408%40velox.ch%3E", 
+   "Improve ephemeral key handling (companion to r1526168):", 
+   "- allow to configure custom DHE or ECDHE parameters via the", 
+   "SSLCertificateFile directive, and adapt its documentation", 
+   "accordingly (addresses PR 49559)", 
+   "- add standardized DH parameters from RFCs 2409 and 3526,", 
+   "use them based on the length of the certificate's RSA/DSA key,", 
+   "and add a FAQ entry for clients which limit DH support", 
+   "to 1024 bits (such as Java 7 and earlier)", 
+   "- move ssl_dh_GetParamFromFile() from ssl_engine_dh.c to", 
+   "ssl_util_ssl.c, and add ssl_ec_GetParamFromFile()", 
+   "- drop ssl_engine_dh.c from mod_ssl", 
+   "For the standardized DH parameters, OpenSSL version 0.9.8a", 
+   "or later is required, which was therefore made a new minimum", 
+   "requirement in r1527294.", 
+   "PR 55616 (add missing APLOGNO), part 2", 
+   "Submitted by: kbrand", 
+   "Reviewed/backported by: jim"
+  ], 
+  "revision_id": "1542327"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-11-15T17:00:33.236115Z", 
+  "msg": [
+   "prefixing counter gauge by counter-"
+  ], 
+  "revision_id": "1542326"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-11-15T16:58:34.650517Z", 
+  "msg": [
+   "avoiding role.toString()"
+  ], 
+  "revision_id": "1542325"
+ }, 
+ {
+  "author": "jxiang", 
+  "date": "2013-11-15T16:56:35.025916Z", 
+  "msg": [
+   "HBASE-9947 Add CM action for online compression algorithm change"
+  ], 
+  "revision_id": "1542324"
+ }
+]

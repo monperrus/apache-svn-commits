@@ -1,0 +1,63 @@
+[
+ {
+  "author": "olamy", 
+  "date": "2012-10-24T14:40:55.809042Z", 
+  "msg": [
+   "Site checkin for project Helix"
+  ], 
+  "revision_id": "1401713"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2012-10-24T14:37:59.515130Z", 
+  "msg": [
+   "o Fixed table headings"
+  ], 
+  "revision_id": "1401712"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-10-24T14:33:25.024594Z", 
+  "msg": [
+   "Bug:868364 - QPID-4391: HA ignore stale responses.", 
+   "Related issue discovered while fixing this bug:", 
+   "The BrokerReplicater pulls management events and query responses from different", 
+   "queues, there is no co-ordination between them. If a response is processed late,", 
+   "after create and delete events, it will incorrectly re-create the deleted queue.", 
+   "This patch ignores responses if we have already seen an event for the queue or", 
+   "exchange."
+  ], 
+  "revision_id": "1401711"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-10-24T14:33:16.898721Z", 
+  "msg": [
+   "Bug-869420 - QPID-4393: BrokerReplicator should call queue->bind, not exchange->bind", 
+   "In BrokerReplicator, there are a few places that it calls", 
+   "exchange->bind(). We're seeing some incorrect behavior during failover testing", 
+   "(e.g. an exchange shows that it has 5 bindings when there is really only 1) and", 
+   "we think we've narrowed it down to this. Instead of calling exchange->bind(), it", 
+   "should call queue->bind(). If you look at qpid::broker::Broker::createObject(),", 
+   "you'll see that this method calls queue->bind() to bind a queue to an exchange."
+  ], 
+  "revision_id": "1401710"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2012-10-24T14:33:09.476288Z", 
+  "msg": [
+   "Bug 868364 - QPID-4391: HA replicating subscriptions should not auto-delete queues", 
+   "When an auto-delete queue is replicated, the replicating subscription attempts", 
+   "to auto-delete the queue after it has already been auto-deleted by the closing", 
+   "of the last non-HA consumer.  An issue occurs if a new auto-delete queue with", 
+   "the same name is created shortly after the deletion of the previously queue.", 
+   "This can occur when a client subscribes to an auto-delete queue and is", 
+   "temporarily disconnected from the broker.  It is possible for the cancelled HA", 
+   "subscription to remove the newly created queue from the queue registry since the", 
+   "old and new queues use the same names.  The HA replicating subscription should", 
+   "not execute the auto-delete logic when the subscription is cancelled."
+  ], 
+  "revision_id": "1401709"
+ }
+]

@@ -1,0 +1,89 @@
+[
+ {
+  "author": "hwright", 
+  "date": "2012-02-08T01:55:54.823497Z", 
+  "msg": [
+   "Ev2 shims: Make sure that if we are providing content to alter_file(), we", 
+   "are also providing a checksum.", 
+   "* subversion/libsvn_delta/compat.c", 
+   "(path_checksum_args): Remove checksum member.", 
+   "(process_actions): Checksum the content file.", 
+   "(ev2_apply_textdelta): Don't checksum the output stream."
+  ], 
+  "revision_id": "1241733"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-02-08T01:53:47.305191Z", 
+  "msg": [
+   "Refine some of the builtin Ev2 drive constraint checking code. In", 
+   "particular, allow \"alter\" on the targets of copies and moves, and", 
+   "ensure that move/rotate sources have never been touched.", 
+   "* subversion/libsvn_delta/editor.c:", 
+   "(singleton): removed", 
+   "(marker_done, marker_allow_add, marker_allow_alter): three new", 
+   "variables that reside at a unique location in memory", 
+   "(MARKER_DONE, MARKER_ALLOW_ADD, MARKER_ALLOW_ALTER): three new", 
+   "symbols that have unique values", 
+   "(MARK_FINISHED): new helper, with corresponding non-check version", 
+   "(MARK_COMPLETED): use MARKER_DONE rather than &singleton", 
+   "(SHOULD_NOT_BE_COMPLETED): clarify test for NULL", 
+   "(CLEAR_INCOMPLETE, MARK_ALLOW_ADD, SHOULD_ALLOW_ADD,", 
+   "MARK_ALLOW_ALTER, SHOULD_ALLOW_ALTER): new macros for managing", 
+   "the ordering checks. Empty versions are provided for when the", 
+   "checks are not being built.", 
+   "(allow_either): helper function to look for one of two markers", 
+   "(svn_editor_add_directory, svn_editor_add_file,", 
+   "svn_editor_add_symlink, svn_editor_add_absent): use", 
+   "SHOULD_ALLOW_ADD() as the entry check, rather than", 
+   "SHOULD_NOT_BE_COMPLETED(). this allows us to add a node at the", 
+   "path of a move's source. use CLEAR_INCOMPLETE() rather than manual", 
+   "changes to the hash.", 
+   "(svn_editor_add_directory): use \"\" for the value in the incomplete", 
+   "nodes. we don't need a singleton. just a non-NULL value.", 
+   "(svn_editor_alter_directory, svn_editor_alter_file,", 
+   "svn_editor_alter_symlink): switch the entry assertion over to", 
+   "SHOULD_ALLOW_ALTER() rather than SHOULD_NOT_BE_COMPLETED(). this", 
+   "allows us to alter the destination of a copy/move/rotate.", 
+   "(svn_editor_copy): change the entry assertion for the destination to", 
+   "SHOULD_ALLOW_ADD() so that we can copy to a path to where a node", 
+   "has been moved away.  mark the destination with MARK_ALLOW_ALTER()", 
+   "(svn_editor_move): change the entry assertion over to", 
+   "SHOULD_ALLOW_ADD() for the destination. this allows us to move a", 
+   "node to a path that has been previously moved away. mark the", 
+   "source of the move with MARK_ALLOW_ADD (so nodes can be added,", 
+   "copied-there, or moved-there) and the destination with", 
+   "MARK_ALLOW_ALTER().", 
+   "(svn_editor_rotate): verify the nodes have not been completed in any", 
+   "way, and after the callback, mark them with MARK_ALLOW_ALTER.", 
+   "(svn_editor_complete, svn_editor_abort): use MARK_FINISHED"
+  ], 
+  "revision_id": "1241732"
+ }, 
+ {
+  "author": "marvin", 
+  "date": "2012-02-08T01:52:45.475280Z", 
+  "msg": [
+   "Fix a glitch in POD generation that was causing the manual override for", 
+   "Indexer#new to be ignored."
+  ], 
+  "revision_id": "1241731"
+ }, 
+ {
+  "author": "sarowe", 
+  "date": "2012-02-08T01:49:32.468437Z", 
+  "msg": [
+   "LUCENE-3753: Restructure the Lucene build system"
+  ], 
+  "revision_id": "1241730"
+ }, 
+ {
+  "author": "namit", 
+  "date": "2012-02-08T01:37:59.467561Z", 
+  "msg": [
+   "HIVE-2779 Improve Hooks run in Driver", 
+   "(Kevin Wilfong via namit)"
+  ], 
+  "revision_id": "1241729"
+ }
+]

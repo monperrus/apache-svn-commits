@@ -1,0 +1,68 @@
+[
+ {
+  "author": "szetszwo", 
+  "date": "2012-03-19T22:09:14.984893Z", 
+  "msg": [
+   "HDFS-3105.  Add DatanodeStorage information to block recovery."
+  ], 
+  "revision_id": "1302683"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-19T22:04:36.710601Z", 
+  "msg": [
+   "Work on issue 3979: don't try to send chunked requests to HTTP/1.0", 
+   "servers. This will require serf 1.1.x and a new API.", 
+   "This commit lays all the groundwork, but doesn't change behavior yet.", 
+   "When HTTP/1.0 requests are needed, the request body will be placed", 
+   "into a spillbuf and then we use a new bucket type for the body which", 
+   "reads content out of the spillbuf. Meanwhile, the spillbuf gives us", 
+   "the total body size which we can place into a Content-Length header.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h:", 
+   "(svn_ra_serf__connection_t): add an http10 flag indicating that we", 
+   "must speak HTTP/1.0 to the server. it will be initially set, and", 
+   "then cleared when we learn the server speaks HTTP/1.1", 
+   "(svn_ra_serf__copy_into_spillbuf): copy a bucket's content into a", 
+   "spillbuf, and return it", 
+   "(svn_ra_serf__create_sb_bucket): create a bucket that reads out of a", 
+   "spillbuf.", 
+   "* subversion/libsvn_ra_serf/serf.c:", 
+   "(svn_ra_serf__open): initialize the http10 flag (to FALSE for now)", 
+   "* subversion/libsvn_ra_serf/update.c:", 
+   "(open_connection_if_needed): initialize the http10 flag (to FALSE", 
+   "for now)", 
+   "* subversion/libsvn_ra_serf/sb_bucket.c: new file with functions to", 
+   "copy a body into a spillbuf and to wrap a bucket around that.", 
+   "* subversion/libsvn_ra_serf/util.c:", 
+   "(svn_ra_serf__setup_serf_req): if we have a recent enough serf, then", 
+   "examine the http10 flag in the connection, and possibly rejigger", 
+   "the body bucket into a spillbuf. and tell the request bucket about", 
+   "the length of the body so it can set the Content-Length header"
+  ], 
+  "revision_id": "1302682"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2012-03-19T22:04:33.062568Z", 
+  "msg": [
+   "Get rid of debugging statements"
+  ], 
+  "revision_id": "1302681"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2012-03-19T22:02:06.226105Z", 
+  "msg": [
+   "code format"
+  ], 
+  "revision_id": "1302680"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2012-03-19T21:59:50.396008Z", 
+  "msg": [
+   "Edge/Vertex property selector no longer needed in the new architecture"
+  ], 
+  "revision_id": "1302679"
+ }
+]

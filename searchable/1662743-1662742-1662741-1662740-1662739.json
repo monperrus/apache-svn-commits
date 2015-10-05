@@ -1,0 +1,83 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2015-02-27T16:37:06.008671Z", 
+  "msg": [
+   "QPID-4710: [AMQP 1.0] Support for transactions in qpid::messaging C++ client.", 
+   "Implements the \"transactional retire and settle immediately\" option for", 
+   "transactions as specified in AMQP 1.0 in the qpid::messaging C++ client.", 
+   "NOTE: Transactions over AMQP 1.0 require proton 0.9 or greater.  With older", 
+   "versions, attempting a transactions over AMQP 1.0 will raise a link-detached", 
+   "exception \"Node not found: tx-transaction\"", 
+   "1. Added descriptor list to Variant with support in Encoder and PnData.", 
+   "Required to support transactions, need to be able to create described lists.", 
+   "Variant changes are source and binary compatible.", 
+   "A Variant now has a Variant::List of descripors which can be numeric or string.", 
+   "Nested descriptors are implemented by putting multiple descriptors in the list.", 
+   "Other minor changes:", 
+   "- Variant refactor: don't delete impl on every assignment.", 
+   "- Add Variant constructors that take a string encoding.", 
+   "(new constructors, not defaulted arguments, so the change is binary and source compatible.)", 
+   "- Growable buffer support for Encoder.", 
+   "- Printing described Variant prints descriptors in form @descriptor value", 
+   "2. Added transaction support to AMQP 1.0 client code", 
+   "Added messaging/amqp/Transaction.h,cpp: transaction logic", 
+   "- communicate with coordinator, send declare/dischange messages.", 
+   "- add tx state info to transfers and acknowledgements.", 
+   "- Sync session after discharge.", 
+   "- A transactional session automatically acks any message retrieved by fetch/get", 
+   "to bring them into the transaction. This is consistent the 0-10 client.", 
+   "Minor fixes to existing client code:", 
+   "- Fix use of pn_drain API in C++ client to work with C++ and Java brokers.", 
+   "- Make amqp::Exception derive from qpid::Exception", 
+   "3. Fixes to existing broker code:", 
+   "- Incoming.cpp fix: start async completion before processing message.", 
+   "- Delay accept of dischage message till commit is complete.", 
+   "- newSession - handle failover during session creation.", 
+   "4. Added tests", 
+   "interop_tests.py: transaction tests that can run against an external broker, see comments.", 
+   "ha_tests.py: Enable transaction tests over AMQP 1.0.", 
+   "Minor test fixes:", 
+   "- brokertest.py don't set default logging if QPID_LOG env vars set.", 
+   "- brokertest.py Pass kwargs to broker() create function.", 
+   "- qpid-receive: capacity should never be larger than message count.", 
+   "- Accept user:pass as well as user/pass in Url.", 
+   "- brokertest.py: Always do a ready() check on all brokers.", 
+   "If proton < 0.9 is used, transaction tests will be skipped or will downgrade to", 
+   "the amqp0-10 protocol with a printed warning."
+  ], 
+  "revision_id": "1662743"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2015-02-27T16:35:50.923004Z", 
+  "msg": [
+   "Prepare for 4.10.4"
+  ], 
+  "revision_id": "1662742"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2015-02-27T16:33:19.935091Z", 
+  "msg": [
+   "Update Fuseki documentation"
+  ], 
+  "revision_id": "1662741"
+ }, 
+ {
+  "author": "jpountz", 
+  "date": "2015-02-27T16:33:15.052016Z", 
+  "msg": [
+   "LUCENE-6300: Remove multi-term filters."
+  ], 
+  "revision_id": "1662740"
+ }, 
+ {
+  "author": "dligach", 
+  "date": "2015-02-27T16:32:57.967268Z", 
+  "msg": [
+   "added an option to specify relation type to be viewed"
+  ], 
+  "revision_id": "1662739"
+ }
+]

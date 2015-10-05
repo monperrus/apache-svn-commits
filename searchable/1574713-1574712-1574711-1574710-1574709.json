@@ -1,0 +1,102 @@
+[
+ {
+  "author": "nacx", 
+  "date": "2014-03-05T23:01:38.479987Z", 
+  "msg": [
+   "deploy jclouds site content"
+  ], 
+  "revision_id": "1574713"
+ }, 
+ {
+  "author": "tfischer", 
+  "date": "2014-03-05T22:48:05.964673Z", 
+  "msg": [
+   "TORQUE-310 detect presence of class name on already cleaned file, not on original file"
+  ], 
+  "revision_id": "1574712"
+ }, 
+ {
+  "author": "pderop", 
+  "date": "2014-03-05T22:45:53.569496Z", 
+  "msg": [
+   "added configadmin 1.8.1-SNAPSHOT in local repo"
+  ], 
+  "revision_id": "1574711"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2014-03-05T22:45:48.892798Z", 
+  "msg": [
+   "Kick off work on pkg-config support (issue #738, and also #4435).", 
+   "pkg-config support allows API consumers on UNIX-like systems to link", 
+   "to Subversion libraries without having to manually specify the correct", 
+   "set of linker flags, including the particular flags for dependencies", 
+   "required by a particular build of Subversion (bdb, serf, etc.).", 
+   "pkg-config uses libsvn_foo.pc files which describe the set of flags", 
+   "required to link to libsvn_foo.", 
+   "See http://www.freedesktop.org/wiki/Software/pkg-config/ for more information.", 
+   "Make gen-make.py produce .pc.in files for all Subversion libraries,", 
+   "and make the configure script produce .pc files from these .pc.in files.", 
+   "Dependency declarations and linker flags are based on information", 
+   "parsed from build.conf.", 
+   "Dependencies of Subversion which support pkg-config can be marked", 
+   "as such in build.conf, allowing pkg-config to resolve them. The", 
+   "name of the dependency's pkg-config script has to be specified", 
+   "without the .pc extension, e.g.:", 
+   "[gnome-keyring]", 
+   "type = lib", 
+   "external-lib = $(SVN_GNOME_KEYRING_LIBS)", 
+   "pkg-config = gnome-keyring-1", 
+   "Dependencies not aware of pkg-config are added to linker flags directly.", 
+   "To illustrate, the generated libsvn_client.pc file on my system contains:", 
+   "[[[", 
+   "prefix=/home/stsp/svn/prefix/svn-trunk", 
+   "exec_prefix=${prefix}", 
+   "libdir=${exec_prefix}/lib", 
+   "includedir=${prefix}/include", 
+   "Name: libsvn_client", 
+   "Description: Subversion Client Library", 
+   "Version: 1.9.0", 
+   "Required:  apr-1", 
+   "Required.private:", 
+   "Libs: -L${libdir}  -lsvn_wc -lsvn_ra -lsvn_delta -lsvn_diff -lsvn_subr", 
+   "Cflags: -I${includedir}", 
+   "]]]", 
+   "There is no support for optional dependencies between Subversion libraries", 
+   "yet, however. For instance, libsvn_client might or might not be linked to", 
+   "libsvn_ra_serf. Such dependencies are currently omitted. Also, I'm not", 
+   "sure yet what to do in cases where a dependency might be statically or", 
+   "dynamically linked, e.g. sqlite.", 
+   "The .pc files are not being installed yet. I don't want to expose these", 
+   "files to systems using pkg-config until all outstanding issues are resolved.", 
+   "* build/generator/gen_make.py", 
+   "(Generator.write): Generate .pc.in files.", 
+   "(Generator.write_pkg_config_dot_in_files): New helper function.", 
+   "* build/generator/templates/pkg-config.in.ezt: New file, the .pc.in template.", 
+   "* build.conf: apr, apr-util, serf, gnome-keyring, and sqlite support pkg-config.", 
+   "There may be others (kwallet?) but I haven't investiged more yet.", 
+   "I also haven't checked yet if all versions of these dependencies support", 
+   "pkg-config. The most recent versions do support it.", 
+   "* configure.ac", 
+   "(SVN_APR_MAJOR_VERSION): Declare. APR's major version number is needed", 
+   "to select the correct pkg-config script name (e.g. apr-1 or apr-2).", 
+   "Generate .pc files from pc.in files.", 
+   "* subversion/libsvn_auth_gnome_keyring, subversion/libsvn_auth_kwallet,", 
+   "subversion/libsvn_client, subversion/libsvn_delta, subversion/libsvn_diff,", 
+   "subversion/libsvn_fs, subversion/libsvn_fs_base, subversion/libsvn_fs_fs,", 
+   "subversion/libsvn_fs_util, subversion/libsvn_fs_x, subversion/libsvn_ra,", 
+   "subversion/libsvn_ra_local, subversion/libsvn_ra_serf,", 
+   "subversion/libsvn_ra_svn, subversion/libsvn_repos, subversion/libsvn_subr,", 
+   "subversion/libsvn_wc: Ignore generated .pc and .pc.in files."
+  ], 
+  "revision_id": "1574710"
+ }, 
+ {
+  "author": "pderop", 
+  "date": "2014-03-05T22:45:20.001563Z", 
+  "msg": [
+   "added configadmin 1.8.1-SNAPSHOT in local repo"
+  ], 
+  "revision_id": "1574709"
+ }
+]

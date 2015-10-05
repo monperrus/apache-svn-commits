@@ -1,0 +1,95 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T21:17:16.694411Z", 
+  "msg": [
+   "[HBASE-6672] [0.89-fb] Chunk up reads and writes so we do not allocate large direct memory buffers.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "sun.nio.ch.Utils seem to allocate direct memory buffers whenever it needs to", 
+   "write/read to/from sockets. For large puts/gets this can cause issues as the", 
+   "temporary buffer used is cached and it may be using more space than required.", 
+   "The idea here is to chunk up reads and writes to the Network stream, such that", 
+   "the maximum size of each chunk is bounded. This will bound the size of the", 
+   "allocated buffers.", 
+   "Test Plan:", 
+   "TestFromClientSide for consistency.", 
+   "Hack Load Test to write fixed sized data (no randomness) and compare the", 
+   "memory consumption with and without this change.", 
+   "was not able to see much difference on the YourKit. But atop shows significant difference.", 
+   "Reviewers: kannan, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D558555", 
+   "Task ID: 1411869"
+  ], 
+  "revision_id": "1378353"
+ }, 
+ {
+  "author": "dweiss", 
+  "date": "2012-08-28T21:16:51.115442Z", 
+  "msg": [
+   "LUCENE-4338: Redirect java.io.tmpdir so that each JVM gets their own tmpdir under a build/test."
+  ], 
+  "revision_id": "1378352"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T21:16:28.063077Z", 
+  "msg": [
+   "[master] Ignore NodeCreated for unassigned znodes if already in transition", 
+   "Author: mbautin", 
+   "Summary:", 
+   "In the master failover diff (D2085) we made the master watch for new children in /hbase/UNASSIGNED. Since the master is the only daemon that creates unassigned znodes, this turns out to only be useful in case the master creates a znode for a new region in transition, dies, and the new master receives the NodeCreated event after it has read an unassigned directory snapshot **without** that region. It is debatable whether that can really happen, but we can distinguish that case from the normal one by checking if the region is in transition. If it is, we can simply ignore the NodeCreated event.", 
+   "This fix is needed to fix a problem that occurred during rack failure testing found by @aaiyer. The logs indicate that the master set a region to OFFLINE to reassign it, which triggered a NodeCreated event, but when ZKUnassignedWatcher processed that event, the regionserver had already opened the region. When processing the NodeDataChanged event triggered by the regionserver updating the znode, the master decided that there was a duplicate assignment and forcibly un-assigned the region.", 
+   "Test Plan:", 
+   "Unit tests", 
+   "Dev cluster", 
+   "Reviewers: pkhemani, aaiyer", 
+   "Reviewed By: pkhemani", 
+   "Differential Revision: https://reviews.facebook.net/D4917"
+  ], 
+  "revision_id": "1378351"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T21:15:39.491913Z", 
+  "msg": [
+   "[HBASE-6673] Clear up the scanner in the thrift server whenever these scanners failed to read data", 
+   "Author: liyintang", 
+   "Summary:", 
+   "We have run into some memory leak problem in the thrift server. It is caused either by the application client never closed the outstanding scanner or the thrift server didn't automatically clear up any problematic scanners.", 
+   "Test Plan: not tested; will tested in dev cluster;", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: arjen, hbase-eng@, davejwatson", 
+   "Differential Revision: https://phabricator.fb.com/D541137"
+  ], 
+  "revision_id": "1378350"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T21:14:48.254782Z", 
+  "msg": [
+   "[HBASE-5898] Consider double-checked locking for block cache lock", 
+   "Author: liyintang", 
+   "Summary:", 
+   "I understand the intension of IdLock is to avoid duplicatedly loading data to cache.", 
+   "However, I believe it is more reasonable to acquire this IdLock ONLY when  the cache misses (assuming the cache is enabled).", 
+   "The sequence may be:", 
+   "1) check block has been cached or not", 
+   "2) If cached, just return the cached data.", 
+   "3) If not, acquire the IdLock", 
+   "4) Acquired the IdLock and check the block cache again", 
+   "5) If cache misses, load the data into cache and return the data", 
+   "6) If cache hits, return the cached data.", 
+   "In this way,  we don't need to pay this lock overhead if this particular block has already been cached.", 
+   "Test Plan: tested on the ODS shadow and production cluster for a while", 
+   "Reviewers: kannan, kranganathan, michalgr", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@, sdong", 
+   "Differential Revision: https://phabricator.fb.com/D552051"
+  ], 
+  "revision_id": "1378349"
+ }
+]

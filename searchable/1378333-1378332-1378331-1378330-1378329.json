@@ -1,0 +1,96 @@
+[
+ {
+  "author": "chirino", 
+  "date": "2012-08-28T20:55:31.643352Z", 
+  "msg": [
+   "Fixes APLO-246: Cannot start Apollo as a windows service when not on C drive", 
+   "Applied Christian Posta's patch.  Many thanks.", 
+   "Also update to the winsw version to 1.9 so that you can install as a service on windows vista and later."
+  ], 
+  "revision_id": "1378333"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T20:55:18.921091Z", 
+  "msg": [
+   "[master] [89-fb] HMaster shouldn't read /hbase/root-region-server-complete every second", 
+   "Author: avf", 
+   "Summary:", 
+   "After the new master failover design, LegacyRootZNodeUpdater in", 
+   "HMaster would read /hbase/root-region-server-complete every", 
+   "second. This is not necessary, as the only place where it is updated", 
+   "is in RegionManager: simply reading it once at start and then waking", 
+   "the LegacyRootZNodeUpdater thread up only if RegionManager updates", 
+   "/hbase/root-region-server-complete should suffice.", 
+   "Test Plan:", 
+   "Unit test, test master failover", 
+   "Revert Plan:", 
+   "Reviewers: kannan, kranganathan, mbautin, pkhemani", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@, aaiyer", 
+   "Differential Revision: https://phabricator.fb.com/D549793", 
+   "Task ID: 1383655"
+  ], 
+  "revision_id": "1378332"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T20:54:19.904609Z", 
+  "msg": [
+   "[HBASE-6590] Assign SequenceNumber to BulkLoaded files.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "StoreFiles within a store are sorted based on the sequenceId. SequenceId is a monotonically increasing number that accompanies every edit written to the WAL. For entries that update the same cell, we would like the latter edit to win. This comparision is accomplished using memstoreTS, at the KV level; and sequenceId at the StoreFile level (to order scanners in the KeyValueHeap).", 
+   "BulkLoaded files are generated outside of HBase/RegionServer, so they do not have a sequenceId written in the file.  This causes HBase to lose track of the point in time, when the BulkLoaded file was imported to HBase. Resulting in a behavior, that **only** supports viewing bulkLoaded files as files back-filling data from the begining of time.", 
+   "By assigning a sequence number to the file, we can allow the bulk loaded file to fit in where we want. Either at the \"current time\" or the \"begining of time\". The latter is the default, to maintain backward compatibility.", 
+   "Design approach:", 
+   "Store files keep track of the sequence Id in the trailer. Since we do not wish to edit/rewrite the bulk loaded file upon import, we will encode the assigned sequenceId into the fileName. The filename RegEx is updated for this regard. If the sequenceId is encoded in the filename, the sequenceId will be used as the sequenceId for the file. If none is found, the sequenceId will be considered 0 (as per the default, backward-compatible behavior).", 
+   "To enable clients to request pre-existing behavior, the command line utility allows for 2 ways to import BulkLoaded Files: to assign or not assign a sequence Number.", 
+   "- If a sequence Number is assigned, the imporeted file will be imported with the \"current sequence Id\".", 
+   "- if the sequence Number is not assigned, it will be as if it was backfilling old data, from the begining of time.", 
+   "Compaction behavior:", 
+   "- With the current compaction algorithm, bulk loaded files -- that backfill data, to the begining of time -- can cause a compaction storm, converting every minor compaction to a major compaction. To address this, these files are excluded from minor compaction, based on a config param. (enabled for the messages use case).", 
+   "- Since, bulk loaded files that are not back-filling data do not cause this issue, they will not be ignored during minor compactions based on the config parameter. This is also required to ensure that there are no holes in the set of files selected for compaction -- this is necessary to preserve the order of KV's comparision before and after comparision.", 
+   "Test Plan:", 
+   "mr tests", 
+   "extend test bulk import and test both behaviors.", 
+   "Reviewers: kannan, kranganathan, gqchen, nspiegelberg, mbautin, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: HBase Diffs Facebook Group", 
+   "Differential Revision: https://reviews.facebook.net/D3789"
+  ], 
+  "revision_id": "1378331"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-28T20:51:57.221723Z", 
+  "msg": [
+   "[master] Disable/Enable the load balancer from hbase shell", 
+   "Author: liyintang", 
+   "Summary:", 
+   "Disable/Enable the load balancer from hbase shell", 
+   "For example:", 
+   "./bin/hbase shell", 
+   "hbase(main):001:0> enable_loadbalancer", 
+   "LoadBalacner disabled: false", 
+   "hbase(main):002:0> disable_loadbalancer", 
+   "LoadBalacner disabled: true", 
+   "hbase(main):003:0> get_loadbalancer", 
+   "LoadBalacner disabled: true", 
+   "Test Plan: tested on dev cluster", 
+   "Reviewers: kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@, hbase-ops@lists, paultuckfield", 
+   "Differential Revision: https://phabricator.fb.com/D548720"
+  ], 
+  "revision_id": "1378330"
+ }, 
+ {
+  "author": "hibou", 
+  "date": "2012-08-28T20:51:02.397263Z", 
+  "msg": [
+   "fix test on windows: fix file descriptor leak while unziping"
+  ], 
+  "revision_id": "1378329"
+ }
+]

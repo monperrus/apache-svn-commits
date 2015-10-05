@@ -1,0 +1,69 @@
+[
+ {
+  "author": "coheigea", 
+  "date": "2011-12-09T17:20:51.036364Z", 
+  "msg": [
+   "Some cleanup of the ws-security system tests"
+  ], 
+  "revision_id": "1212528"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2011-12-09T17:19:38.529479Z", 
+  "msg": [
+   "Some cleanup of the ws-security system tests"
+  ], 
+  "revision_id": "1212527"
+ }, 
+ {
+  "author": "omalley", 
+  "date": "2011-12-09T17:14:43.681529Z", 
+  "msg": [
+   "AMBARI-149. Filter the meta ambari category out of the flattened stacks.", 
+   "(omalley)"
+  ], 
+  "revision_id": "1212526"
+ }, 
+ {
+  "author": "billie", 
+  "date": "2011-12-09T17:14:10.602969Z", 
+  "msg": [
+   "ACCUMULO-209 applied keith's change"
+  ], 
+  "revision_id": "1212525"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2011-12-09T17:14:03.005487Z", 
+  "msg": [
+   "Simplify some merge code by using an existing function to resolve the source", 
+   "URLs and revisions instead of trying to do sorta-kinda-the-same thing by", 
+   "hand.", 
+   "This would have a side effect of making svn_client_merge4() (the two-URL", 
+   "merge) resolve a source such as 'wcpath' or 'wcpath@BASE' to the working or", 
+   "base revision number of the URL of 'wcpath', which is not the same as using", 
+   "the WC itself (which may be mixed-rev and/or modified) as the source, so", 
+   "explicitly reject those cases where a WC path is specified with a working", 
+   "copy peg revision.  Previously it threw a rather spurious error \"E195000: A", 
+   "path under version control is needed for this operation\" in those cases.", 
+   "The 'svn' client does its own error detection and reporting for those cases", 
+   "since r1212463.", 
+   "in svn_client_merge_reintegrate() we only supply a peg, and it is fine for", 
+   "that to be a WC path with a WC peg revision.  The operative revisions are", 
+   "determined automatically and can never be WC revisions such as 'BASE'.  In", 
+   "svn_client_merge_peg4() we seem to ignore the fact that we can't read a WC", 
+   "as a merge source and we actually have tests that rely on it: things like", 
+   "'svn merge -rBASE:PREV mu'.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(normalize_merge_sources): Take a resolved instead of an unresolved", 
+   "revision number, to avoid resolving it internally, since the only caller", 
+   "(merge_peg_locked) can now easily provide that.", 
+   "(ensure_wc_path_has_repo_revision): New function.", 
+   "(merge_locked): Use svn_client__ra_session_from_path() instead of in-line", 
+   "code. Reject a source WC path with a WC peg revision.", 
+   "(merge_peg_locked): Use svn_client__ra_session_from_path() instead of", 
+   "in-line code."
+  ], 
+  "revision_id": "1212524"
+ }
+]

@@ -1,0 +1,118 @@
+[
+ {
+  "author": "prasanthj", 
+  "date": "2014-04-29T01:10:34.833658Z", 
+  "msg": [
+   "HIVE-6968: list bucketing feature does not update the location map for unpartitioned tables"
+  ], 
+  "revision_id": "1590853"
+ }, 
+ {
+  "author": "markg", 
+  "date": "2014-04-29T01:10:24.672602Z", 
+  "msg": [
+   "OPENNLP-679", 
+   "Added two methods that return Map and SortedMap. Test includes the sortedMap call to get the last key."
+  ], 
+  "revision_id": "1590852"
+ }, 
+ {
+  "author": "kkolinko", 
+  "date": "2014-04-29T00:26:46.786805Z", 
+  "msg": [
+   "votes and proposal"
+  ], 
+  "revision_id": "1590851"
+ }, 
+ {
+  "author": "camille", 
+  "date": "2014-04-29T00:23:58.214963Z", 
+  "msg": [
+   "ZOOKEEPER-1910. RemoveWatches wrongly removes the watcher if multiple watches", 
+   "exists on a path (Rakesh R via camille)"
+  ], 
+  "revision_id": "1590850"
+ }, 
+ {
+  "author": "dag", 
+  "date": "2014-04-29T00:23:52.467459Z", 
+  "msg": [
+   "DERBY-532 Support deferrable constraints", 
+   "Deferred foreign key constraint. Patch derby-532-fk-7.", 
+   "The approach taken for deferring foreign keys is similar to that taken", 
+   "for the other constraints: when we detect a violation inserting or", 
+   "updating the referring table, and when detecting a violation when", 
+   "deleting or updating the referenced table (only when we have ON DELETE", 
+   "(or UPDATE) NO ACTION), we save the key in a temporary table instead", 
+   "of throwing an exception. At check time, typically on commit, we", 
+   "revisit first the supporting index of referencing table to see if", 
+   "there might still be a problem. If that key is (still) present, we", 
+   "must also check the corresponding index in the referenced table. If", 
+   "that is found, all is good. Otherwise we throw.", 
+   "Patch details:", 
+   "M       java/engine/org/apache/derby/iapi/sql/conn/LanguageConnectionContext.java", 
+   "M       java/engine/org/apache/derby/impl/sql/conn/GenericLanguageConnectionContext.java", 
+   "Move logic related to constraints checking to", 
+   "DeferredConstraintsMemory.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/DeferredConstraintsMemory.java", 
+   "New logic from LanguageConnectionContext; added logic for the case of", 
+   "foreign key constraints violation memory and checking. Make old \"if\"s", 
+   "on object type object oriented: new interface methods in", 
+   "ValidationInfo: possiblyValidateOnReturn and validateConstraint which", 
+   "are implemented differently for each constraint type.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/InsertResultSet.java", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/UpdateResultSet.java", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/ConstraintConstantAction.java", 
+   "More fk info to bulk insert; smaller refactorings.", 
+   "M       java/engine/org/apache/derby/iapi/sql/dictionary/ReferencedKeyConstraintDescriptor.java", 
+   "Change the method hasNonSelfReferencingFK to getNonSelfReferencingFK;", 
+   "we need to get at them, see AlterTableConstantAction for truncate.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/AlterTableConstantAction.java", 
+   "Refactored logic to DeferredConstraintsMemory#compressOrTruncate.", 
+   "Allow truncate (if deferred and NO_ACTION constraints only) of", 
+   "deferenced table.", 
+   "M       java/engine/org/apache/derby/iapi/types/SQLBoolean.java", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/IndexChanger.java", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/ProjectRestrictResultSet.java", 
+   "Minor refactorings.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/FKInfo.java", 
+   "Extended with information about deferred constraints; conglomerate ids and constrain ids.", 
+   "M       java/engine/org/apache/derby/impl/sql/compile/DMLModStatementNode.java", 
+   "More information collection to support extended FKInfo, see above.", 
+   "M       java/engine/org/apache/derby/impl/sql/compile/TableElementList.java", 
+   "Extra predicates to avoid logic for unique and primary key constraints to inferere with", 
+   "deferred foreign keys.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/CreateConstraintConstantAction.java", 
+   "Remove foreign keys as \"not supported\", minor refactorings.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/DeleteResultSet.java", 
+   "Added arguments, refactorings.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/ForeignKeyRIChecker.java", 
+   "This is where we actually defer when we see a fk violation at insert/update of referencing table.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/GenericRIChecker.java", 
+   "Minor interface changes: new member variable: lcc", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/RIBulkChecker.java", 
+   "This is where we actually defer when we see a fk violation at bulk insert", 
+   "into referencing table.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/RISetChecker.java", 
+   "Minor interface changes; added parameters.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/ReferencedKeyRIChecker.java", 
+   "This is where we actually defer when we see a fk violation at delete or update of", 
+   "a row in the referenced table.", 
+   "M       java/engine/org/apache/derby/impl/sql/execute/SetConstraintsConstantAction.java", 
+   "Make SET CONSTRAINTS work also for foreign keys.", 
+   "M       java/shared/org/apache/derby/shared/common/reference/SQLState.java", 
+   "M       java/engine/org/apache/derby/loc/messages.xml", 
+   "New error messages.", 
+   "M       java/testing/org/apache/derbyTesting/functionTests/tests/lang/ConstraintCharacteristicsTest.java", 
+   "Extended existing deferrable constraints to also work for foreign constraints.", 
+   "A       java/testing/org/apache/derbyTesting/functionTests/tests/lang/ForeignKeysDeferrableTest.java", 
+   "New tests only for foreign key constraints.", 
+   "M       java/testing/org/apache/derbyTesting/functionTests/tests/upgradeTests/Changes10_11.java", 
+   "Remove asserts for not implemented on deferrable foreign key", 
+   "constraints, check basic sanity iff hard upgraded.", 
+   "M       java/testing/org/apache/derbyTesting/junit/BaseJDBCTestCase.java", 
+   "Added assertCommitError; minor changes to support fk testing."
+  ], 
+  "revision_id": "1590849"
+ }
+]

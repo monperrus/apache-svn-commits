@@ -1,0 +1,113 @@
+[
+ {
+  "author": "jim", 
+  "date": "2015-03-05T20:36:29.398705Z", 
+  "msg": [
+   "Some fluff"
+  ], 
+  "revision_id": "1664478"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2015-03-05T20:36:19.408198Z", 
+  "msg": [
+   "Javadoc refactoring in an attempt to clarify the usage of ParameterBuilder."
+  ], 
+  "revision_id": "1664477"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-03-05T20:34:35.817569Z", 
+  "msg": [
+   "Remove a db transaction on opening wc.db, and at the same time", 
+   "also verify if the sqlite_stat1 table exists on opening a db", 
+   "from svn_wc__db_wcroot_parse_local_abspath().", 
+   "If the table exists we try to add the table, but ignore", 
+   "errors to avoid problems when the database is read only", 
+   "(This last part will need verification on other platforms)", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_HAVE_STAT1_TABLE): New statement.", 
+   "* subversion/libsvn_wc/wc.h", 
+   "(SVN_WC__ENSURE_STAT1_TABLE): New define.", 
+   "* subversion/libsvn_wc/wc_db_wcroot.c", 
+   "(svn_wc__db_pdh_create_wcroot): Only read format from db when requested", 
+   "by caller, instead of always when we open the db.", 
+   "(verify_stats_table,", 
+   "fetch_db_info): New function.", 
+   "(svn_wc__db_wcroot_parse_local_abspath): Update caller."
+  ], 
+  "revision_id": "1664476"
+ }, 
+ {
+  "author": "ylavic", 
+  "date": "2015-03-05T20:31:21.061208Z", 
+  "msg": [
+   "apr_skiplist: merge r1597797,r1597803,r1605104,r1611023,r1611107,r1611110,", 
+   "r1611117,r1611120,r1611125,r1611184,r1611193,r1611466,", 
+   "r1611515,r1611517,r1664406,r1664447,r1664451,r1664471", 
+   "from trunk", 
+   "r1597797 | jim | 2014-05-27 16:20:29 +0200 (Tue, 27 May 2014) | 2 lines", 
+   "apr_skiplist_add()... idea from yann", 
+   "r1597803 | jim | 2014-05-27 17:14:44 +0200 (Tue, 27 May 2014) | 2 lines", 
+   "update docco", 
+   "r1605104 | jim | 2014-06-24 17:05:26 +0200 (Tue, 24 Jun 2014) | 2 lines", 
+   "missing proto", 
+   "r1611023 | ylavic | 2014-07-16 16:32:05 +0200 (Wed, 16 Jul 2014) | 5 lines", 
+   "Three fixes:", 
+   "- double size increment in insert_compare(),", 
+   "- multiple apr_skiplist_free() called on the same value in remove_compare(),", 
+   "- return 0 instead of NULL for void*.", 
+   "r1611107 | ylavic | 2014-07-16 19:38:03 +0200 (Wed, 16 Jul 2014) | 6 lines", 
+   "We do not garantee zero-ed memory for apr_skiplist_alloc(), neither in", 
+   "the description, nor in the code for reused chunks.", 
+   "So always allocate raw memory and don't rely on zero-ed one after internal", 
+   "calls to apr_skiplist_alloc().", 
+   "r1611110 | ylavic | 2014-07-16 19:42:22 +0200 (Wed, 16 Jul 2014) | 1 line", 
+   "Improve skiplist tests.", 
+   "r1611117 | ylavic | 2014-07-16 19:59:50 +0200 (Wed, 16 Jul 2014) | 3 lines", 
+   "Use apr_skiplist_add() instead of apr_skiplist_insert() to merge skiplists", 
+   "since doublons need to be merged too.", 
+   "r1611120 | ylavic | 2014-07-16 20:10:33 +0200 (Wed, 16 Jul 2014) | 3 lines", 
+   "Call free() on the skiplist structure in apr_skiplist_destroy() if it was", 
+   "apr_skiplist_init()ialized without a pool (ie. malloc()ed).", 
+   "r1611125 | ylavic | 2014-07-16 20:21:33 +0200 (Wed, 16 Jul 2014) | 3 lines", 
+   "Let apr_skiplist_find_compare() handle given NULL iterator, and be safe", 
+   "from NULL returns.", 
+   "r1611184 | ylavic | 2014-07-16 22:53:11 +0200 (Wed, 16 Jul 2014) | 4 lines", 
+   "Reuse the skiplist's stack needed by insert_compare() by growing it with adds.", 
+   "Rename the \"replace\" argument as \"add\" (negating the boolean) to avoid confusion", 
+   "since the skiplist never replaces any element (add or preserve semantic).", 
+   "r1611193 | ylavic | 2014-07-16 23:16:06 +0200 (Wed, 16 Jul 2014) | 4 lines", 
+   "Don't grow the skiplist's height if the element is finally not inserted (preserve semantic).", 
+   "Do this by moving the top node creation after insertion occured, and linking to the just", 
+   "inserted node(s).", 
+   "r1611466 | ylavic | 2014-07-17 22:26:30 +0200 (Thu, 17 Jul 2014) | 5 lines", 
+   "Follow up to r1611193: update the inserted node's top while looping should we", 
+   "have to create more than one top node (eg. preheight > 0).", 
+   "(the check on p != NULL can be omited since it can't be here).", 
+   "r1611515 | ylavic | 2014-07-18 01:58:02 +0200 (Fri, 18 Jul 2014) | 3 lines", 
+   "Provide apr_skiplist_size/height/preheight() to get the corresponding values", 
+   "in O(1), and apr_skiplist_set_preheight() to configure preheight mode.", 
+   "r1611517 | ylavic | 2014-07-18 02:25:24 +0200 (Fri, 18 Jul 2014) | 2 lines", 
+   "Follow up to r1611515: remove useless <limits.h> inclusion (for unused INT_MAX).", 
+   "r1664406 | jim | 2015-03-05 17:51:39 +0100 (Thu, 05 Mar 2015) | 3 lines", 
+   "FIX: Skiplists should allow for dups by default. Also, when added, dups", 
+   "are added *after* each other, not before", 
+   "r1664447 | ylavic | 2015-03-05 19:31:45 +0100 (Thu, 05 Mar 2015) | 1 line", 
+   "skiplist: Follow up to r1664406: use insert() in apr_skiplist_merge and optimize test in insert_compare().", 
+   "r1664451 | ylavic | 2015-03-05 19:42:35 +0100 (Thu, 05 Mar 2015) | 1 line", 
+   "skiplist: Follow up to r1664406+r1664447: Better optimize test in insert_compare() and keep find_compare() in sync.", 
+   "r1664471 | ylavic | 2015-03-05 21:00:25 +0100 (Thu, 05 Mar 2015) | 1 line", 
+   "skiplist: improve duplicates ordering test."
+  ], 
+  "revision_id": "1664475"
+ }, 
+ {
+  "author": "burn", 
+  "date": "2015-03-05T20:30:26.775347Z", 
+  "msg": [
+   "UIMA-4271 Restore the information-only specification option in the spec"
+  ], 
+  "revision_id": "1664474"
+ }
+]

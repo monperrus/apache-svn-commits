@@ -1,0 +1,84 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-09-25T10:22:33.032142Z", 
+  "msg": [
+   "As per convention, iteration pools shall be named \"iterpool\".", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(svn_fs_fs__p2l_index_append): s/iter_pool/iterpool/g.", 
+   "* subversion/libsvn_fs_x/index.c", 
+   "(svn_fs_x__p2l_index_create): Same.", 
+   "* tools/dev/fsfs-access-map.c", 
+   "(parse_file): Same."
+  ], 
+  "revision_id": "1627498"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-09-25T10:08:24.588843Z", 
+  "msg": [
+   "Switch FSFS index API functions that could actually use two different pool", 
+   "parameters to the two-pool paradigm.", 
+   "Although almost all current callers will pass the same (temporary) pool to", 
+   "both parameters, this patch improves consistency, readability and", 
+   "documentation.", 
+   "* subversion/libsvn_fs_fs/index.h", 
+   "(svn_fs_fs__p2l_index_lookup,", 
+   "svn_fs_fs__p2l_entry_lookup,", 
+   "svn_fs_fs__l2p_get_max_ids): Accept two pools instead of one.", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(p2l_index_lookup): The POOL parameter is actually a SCRATCH_POOL. All", 
+   "results are flat data stored in the pre-allocated", 
+   "*ENTRIES result.", 
+   "(svn_fs_fs__l2p_get_max_ids,", 
+   "svn_fs_fs__p2l_index_lookup): Only the result array needs to be allocated", 
+   "in the RESULT_POOL. It contains flat data", 
+   "and no pointers.", 
+   "(svn_fs_fs__p2l_entry_lookup): Use the SCRATCH_POOL with function calls", 
+   "only require a temporary pool.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(svn_fs_fs__check_rep,", 
+   "block_read): Update caller by passing the same pool to both parameters.", 
+   "That pool is already for temporaries only.", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(pack_range,", 
+   "append_revision): Same.", 
+   "(pack_log_addressed): Update caller, actually providing different pools.", 
+   "* subversion/libsvn_fs_fs/verify.c", 
+   "(compare_l2p_to_p2l_index): Same.", 
+   "(compare_p2l_to_l2p_index,", 
+   "compare_p2l_to_rev): Update caller by passing the same temporary pool", 
+   "to both parameters.", 
+   "* subversion/svnfsfs/dump-index-cmd.c", 
+   "(dump_index): Same.", 
+   "* subversion/svnfsfs/stats-cmd.c", 
+   "(read_log_rev_or_packfile): Same."
+  ], 
+  "revision_id": "1627497"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2014-09-25T09:56:14.306744Z", 
+  "msg": [
+   "get smoke tester properly parsing versions from TestBackCompat"
+  ], 
+  "revision_id": "1627496"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2014-09-25T09:41:18.071451Z", 
+  "msg": [
+   "Adding some more crypto provider tests"
+  ], 
+  "revision_id": "1627495"
+ }, 
+ {
+  "author": "mreutegg", 
+  "date": "2014-09-25T09:34:34.481035Z", 
+  "msg": [
+   "OAK-1768: DocumentNodeBuilder.setChildNode() runs OOM with large tree", 
+   "Merge revisions 1623827,1624993,1627470 from trunk"
+  ], 
+  "revision_id": "1627494"
+ }
+]

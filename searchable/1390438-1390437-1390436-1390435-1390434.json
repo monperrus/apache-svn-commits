@@ -1,0 +1,112 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2012-09-26T12:38:59.048552Z", 
+  "msg": [
+   "Merge second batch of changes from the 10Gb branch. These add the", 
+   "svn-bench tool.", 
+   "Revisions 1389662,1389867,1390017"
+  ], 
+  "revision_id": "1390438"
+ }, 
+ {
+  "author": "uschindler", 
+  "date": "2012-09-26T12:37:21.204562Z", 
+  "msg": [
+   "Merged revision(s) 1390436 from lucene/dev/trunk:", 
+   "LUCENE-4436: When building source distribution, changes-to-html uses wrong script and wrong CHANGES.txt"
+  ], 
+  "revision_id": "1390437"
+ }, 
+ {
+  "author": "uschindler", 
+  "date": "2012-09-26T12:35:25.895712Z", 
+  "msg": [
+   "LUCENE-4436: When building source distribution, changes-to-html uses wrong script and wrong CHANGES.txt"
+  ], 
+  "revision_id": "1390436"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-09-26T12:28:26.201745Z", 
+  "msg": [
+   "Merge first batch of changes from the 10Gb branch. These are all", 
+   "internal optimizations, i.e. no UI or public API changes.", 
+   "This comprises the following change sets:", 
+   "* Make membuffer cache keep more of the \"important\" objects.", 
+   "The /trunk code has flaws and inefficiencies that prevent", 
+   "the cache from keeping as much data as it could.", 
+   "[subversion/libsvn_subr/cache-membuffer.c]", 
+   "r1388810: improve cache retention rate in overload situations.", 
+   "r1390407: fix a membuffer cache effectiveness issue. The", 
+   "lower part of the group index was always identical", 
+   "to the cache segment index. I.e. most groups would", 
+   "not be used at all causing the used ones to overflow", 
+   "quickly.", 
+   "* Add a 1st level cache for DAG nodes that can just hand out", 
+   "the nodes without the need to (de-)serialize, copy or sync data.", 
+   "The actual implementation can be found here:", 
+   "[subversion/libsvn_fs_fs/fs.h", 
+   "subversion/libsvn_fs_fs/tree.h", 
+   "subversion/libsvn_fs_fs/caching.c", 
+   "subversion/libsvn_fs_fs/tree.c]", 
+   "r1388654: Implement a 1st level cache for DAG nodes as they are", 
+   "the most frequently accessed data object in FSFS.", 
+   "Also, access to them tends to have high locality.", 
+   "r1388801: Make 1st level DAG node cache more effective. We may", 
+   "attempt lookups with *any* non-empty path.", 
+   "Supporting changes and additions:", 
+   "[subversion/tests/libsvn_fs/fs-test.c", 
+   "subversion/include/private/svn_fs_util.h", 
+   "subversion/libsvn_fs_util/fs-util.c", 
+   "subversion/libsvn_fs_fs/tree.c]", 
+   "r1388636: Fix a pool usage issue in fs-test.", 
+   "r1388644: Introduce a new utility method that determines whether", 
+   "svn_fs__canonicalize_abspath must be called for a given", 
+   "path.", 
+   "r1389276: prevent unnecessary canonicalization.", 
+   "* Checkout, export and update often send deltas against empty bases.", 
+   "Provide an optimized implementation for that case and invoke it", 
+   "from the generic window_handler().", 
+   "[subversion/libsvn_delta/svndiff.c]", 
+   "r1388394: provide optimized version of window_handler for the", 
+   "frequent case of an empty source window.", 
+   "r1388805: make the optimized code path for deltas against empty", 
+   "source stream handle all headers and write them with a", 
+   "single call to the output stream.", 
+   "* Speed up the reporting of properties in similar cases.", 
+   "[subversion/libsvn_repos/reporter.c]", 
+   "r1388795: When reporting changed properties against an empty", 
+   "source or a source with no properties,  there is no", 
+   "need for calculating a diff between both lists.", 
+   "Also, reduce general computational overhead.", 
+   "* Speed up cache access by using fixed-size keys.", 
+   "[subversion/libsvn_fs_fs/fs.h", 
+   "subversion/libsvn_fs_fs/caching.c", 
+   "subversion/libsvn_fs_fs/fs_fs.c]", 
+   "r1388720: instead of variable length keys use fixed length structs", 
+   "as keys for the revprop and fulltext caches.  Those keys", 
+   "don't require intermediate strings to be constructed and", 
+   "are faster to process on the cache side.", 
+   "* Introduce a node property cache (similar to any other cache", 
+   "in FSFS).", 
+   "[subversion/libsvn_fs_fs/fs.h", 
+   "subversion/libsvn_fs_fs/caching.c", 
+   "subversion/libsvn_fs_fs/fs_fs.c]", 
+   "r1388789: Cache node properties in their parsed state instead", 
+   "of just the plain full-text. temp_(de-)serialization", 
+   "is much faster then parsing from a generic stream.", 
+   "* [subversion/libsvn_fs_fs/fs_fs.c]", 
+   "r1388639: minor optimization."
+  ], 
+  "revision_id": "1390435"
+ }, 
+ {
+  "author": "alg", 
+  "date": "2012-09-26T12:26:49.842639Z", 
+  "msg": [
+   "#119750# corrected opacity import for SC comment shapes and their shadow visualisation"
+  ], 
+  "revision_id": "1390434"
+ }
+]

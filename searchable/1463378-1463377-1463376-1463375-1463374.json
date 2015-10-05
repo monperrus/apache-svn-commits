@@ -1,0 +1,79 @@
+[
+ {
+  "author": "mamta", 
+  "date": "2013-04-02T04:28:23.090167Z", 
+  "msg": [
+   "DERBY-6045 (in list multi-probe by primary key not chosen on tables with >256 rows)", 
+   "Changes for DERBY-3790 (Investigate if request for update statistics can be skipped for certain kind of indexes, one instance may be unique indexes based on one column.) caused Derby to use table scan rather than index scan since we do not generate stats for single column unique index. As part of that change, we forgot to make code changes in optimizer to compensate for missing stats for such indexes. As found in DERBY-6045 (in list multi-probe by primary key not chosen on tables with >256 rows), even though we do not keep the statistics for single-column unique indexes, we should improve the selectivity of such an index when the index is being considered by the optimizer.", 
+   "Making the relevant code changes now allows us to enable the tests in InListMultiProbeTest.java since they will now run correctly by picking up index scan rather than table scan.", 
+   "Additionally, one test in refActions1.sql does not have order by to it and there are only 3 rows in the table. Without the changes for DERBY-6045 we were using index scan for it but now it uses table scan which is giving the rows in different order. I have added order by to the query so plan selection does not change order of the rows. The reason behind table scan might be that with only 3 rows in the table, it is cheaper to do table sccan rather than index scan."
+  ], 
+  "revision_id": "1463378"
+ }, 
+ {
+  "author": "hadrian", 
+  "date": "2013-04-02T04:12:47.132565Z", 
+  "msg": [
+   "CS fixes in preparation of 2.11.0 release"
+  ], 
+  "revision_id": "1463377"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2013-04-02T04:01:18.558137Z", 
+  "msg": [
+   "Fixed the CS error of CxfEndpointBeanTest.java"
+  ], 
+  "revision_id": "1463376"
+ }, 
+ {
+  "author": "dbrosius", 
+  "date": "2013-04-02T03:59:29.697211Z", 
+  "msg": [
+   "add javadoc plugin to pom"
+  ], 
+  "revision_id": "1463375"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2013-04-02T03:57:54.283910Z", 
+  "msg": [
+   "Remove the ability of svn_repos_authz_read2() to handle repos-relative URLs.", 
+   "This cleans up a case where it was impossible to canonicalize the paths", 
+   "being passed into it and also ends up removing the need to pass repos_root", 
+   "into it.  If callers want to support repos-relative URLs then they should", 
+   "resolve them into absolute file URLs and canonicalize them prior to calling", 
+   "svn_repos_authz_read2().", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_authz_read2): Remove repos_root argument and adjust documentation", 
+   "to account for no longer accepting repos-root URLs.  Also change \"a file\"", 
+   "in the documented formats for path to a dirent to be more precise.", 
+   "* subversion/libsvn_repos/authz.c", 
+   "(authz_retrieve_config_repo, svn_repos__authz_read, svn_repos_authz_read2):", 
+   "Remove repos_root parameter and support for repos-relative URLs in path.", 
+   "* subversion/libsvn_repos/deprecated.c", 
+   "(svn_repos_authz_read): Adjust call of svn_repos__authz_read().", 
+   "* subversion/libsvn_repos/repos.h", 
+   "(svn_repos_authz_read): Adjust declaration and documentation to match the", 
+   "removal of repos_root and support for repos-relative URLs.", 
+   "* subversion/mod_authz_svn/mod_authz_svn.c", 
+   "(canonicalize_access_file): Adjust comment about why we are not canonicalizing", 
+   "here.", 
+   "(get_access_conf): When access_file is a repos-relative URL resolve and", 
+   "canonicalize it before calling svn_repos_authz_read2().", 
+   "* subversion/svnserve/serve.c", 
+   "(canonicalize_access_file): Change access_file to an arginout and return", 
+   "an svn_error_t so that we can resolve and canonicalize repos-relative", 
+   "urls.", 
+   "(load_authz_config): Adjust calls to canonicalize_access_file() due to", 
+   "above changes.", 
+   "* subversion/tests/libsvn_repos/repos-test.c", 
+   "(in_repo_authz, in_repo_groups_authz): Remove repos-relative URL tests", 
+   "and convert still needed tests that were using repos-relative URls to", 
+   "absolute URLs.", 
+   "* tools/server-side/svnauthz.c", 
+   "(get_authz): Fix call to svn_repos_authz_read2() to match above changes."
+  ], 
+  "revision_id": "1463374"
+ }
+]

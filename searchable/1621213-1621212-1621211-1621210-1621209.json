@@ -1,0 +1,84 @@
+[
+ {
+  "author": "jhyde", 
+  "date": "2014-08-28T21:52:14.566789Z", 
+  "msg": [
+   "Simple site."
+  ], 
+  "revision_id": "1621213"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-08-28T21:47:50.972184Z", 
+  "msg": [
+   "NO-JIRA: brokertest.py: don't use AMQP 1.0 if not available, ignore connection close teardown errors."
+  ], 
+  "revision_id": "1621212"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-08-28T21:47:44.365389Z", 
+  "msg": [
+   "QPID-5975: HA extra/missing messages when running qpid-txtest2 in a loop with failover.", 
+   "This is partly not-a-bug, there is a client error handling issue that has been", 
+   "corrected.", 
+   "qpid-txtest2 initializes a queue with messages at the start and drains the", 
+   "queues at the end. These operations are *not transactional*. Therefore", 
+   "duplicates are expected if there is a failover during initialization or", 
+   "draining. When duplicates were observed, there was indeed a failover at one of", 
+   "these times.", 
+   "Making these operations transactional is not enough to pass, now we see the test", 
+   "fail with \"no messages to fetch\". This is explained as follows:", 
+   "If there is a failover during a transaction, TransactionAborted is raised. The", 
+   "client assumes the transaction was rolled back and re-plays it. However, if the", 
+   "failover occurs at a critical point *after* the client has sent commit", 
+   "but *before* it has received a response, then the the client *does not know*", 
+   "whether the transaction was committed or rolled-back on the new primary.", 
+   "Re-playing in this case can duplicate the transaction. Each transaction moves", 
+   "messages from one queue to another so as long as transactions are atomic the", 
+   "total number of messages will not change. However, if transactions are", 
+   "duplicated, a transactional session may try to move more messages than exist on", 
+   "the queue, hence \"no messages to fetch\". For example if thread 1 moves N", 
+   "messages from q1 to q2, and thread 2 tries to move N+M messages back, then", 
+   "thread 2 will fail.", 
+   "This problem has been corrected as follows: C++ and python clients now raise the", 
+   "following exceptions:", 
+   "- TransactionAborted: The transaction has definitely been rolled back due to a", 
+   "connection failure before commit or a broker error (e.g. a store error) during commit.", 
+   "It can safely be replayed.", 
+   "- TransactionUnknown: The transaction outcome is unknown because the connection", 
+   "failed at the critical time. There's no simple automatic way to know what", 
+   "happened without examining the state of the broker queues.", 
+   "Unfortunately With this fix qpid-txtest2 is no longer useful test for TX", 
+   "failover because it regularly raises TransactionUnknown and there's not much we", 
+   "can do with that.", 
+   "A better test of TX atomicity with failover is to run a pair of", 
+   "qpid-send/qpid-receive with fail-over and verify that the number of", 
+   "enqueues/dequeues and message depth are a multiple of the transaction size. See", 
+   "the JIRA for such a test. (Note these test also sometimes raise", 
+   "TransactionUnknown but it doesn't matter since all we are checking is that", 
+   "messages go on and off the queues in multiple of the TX size.)  )", 
+   "Note: the original bug also reported seeing missing messages from", 
+   "qpid-txtest2. I don't have a good explanation for that but since the", 
+   "qpid-send/receive test shows that transactions are atomic I am going to let that", 
+   "go for now."
+  ], 
+  "revision_id": "1621211"
+ }, 
+ {
+  "author": "centic", 
+  "date": "2014-08-28T21:43:37.452015Z", 
+  "msg": [
+   "Update changelog for Bug 56730"
+  ], 
+  "revision_id": "1621210"
+ }, 
+ {
+  "author": "centic", 
+  "date": "2014-08-28T21:41:30.565188Z", 
+  "msg": [
+   "Bug 56730: Fix exporting XML if schema contains ref-elements"
+  ], 
+  "revision_id": "1621209"
+ }
+]

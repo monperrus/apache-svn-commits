@@ -1,0 +1,102 @@
+[
+ {
+  "author": "chetanm", 
+  "date": "2015-05-21T16:15:38.384997Z", 
+  "msg": [
+   "Fix the corrupted xml which probably got checked in with conflicts in http://svn.apache.org/r1680711"
+  ], 
+  "revision_id": "1680918"
+ }, 
+ {
+  "author": "ylavic", 
+  "date": "2015-05-21T16:11:41.945107Z", 
+  "msg": [
+   "Merge r1653997 from trunk.", 
+   "r1653997 | ylavic | 2015-01-22 19:37:06 +0100 (Thu, 22 Jan 2015) | 7 lines", 
+   "mod_ssl: Fix merge problem with SSLProtocol that made SSLProtocol ALL ignored", 
+   "in virtualhost context (new version of r1653906 reverted by r1653993).", 
+   "Submitted By: Michael Kaufmann <apache-bugzilla michael-kaufmann.ch>", 
+   "Committed/modified By: ylavic", 
+   "Reviewed by: ylavic, wrowe, rjung", 
+   "Backported by: ylavic"
+  ], 
+  "revision_id": "1680917"
+ }, 
+ {
+  "author": "ylavic", 
+  "date": "2015-05-21T16:05:51.457848Z", 
+  "msg": [
+   "Merge r1526168, r1527291, r1527295, r1563420, r1588851, r1666363, r1679470", 
+   "r1526168 | kbrand | 2013-09-25 14:52:35 +0200 (Wed, 25 Sep 2013) | 21 lines", 
+   "Streamline ephemeral key handling:", 
+   "- drop support for ephemeral RSA keys (only allowed/needed", 
+   "for export ciphers)", 
+   "- drop pTmpKeys from the per-process SSLModConfigRec, and remove", 
+   "the temp key generation at startup (unnecessary for DHE/ECDHE)", 
+   "- unconditionally disable null and export-grade ciphers by always", 
+   "prepending \"!aNULL:!eNULL:!EXP:\" to any cipher suite string", 
+   "- do not configure per-connection SSL_tmp_*_callbacks, as it is", 
+   "sufficient to set them for the SSL_CTX", 
+   "- set default curve for ECDHE at startup, obviating the need", 
+   "for a per-handshake callback, for the time being (and also", 
+   "configure SSL_OP_SINGLE_ECDH_USE, previously left out)", 
+   "For additional background, see", 
+   "https://mail-archives.apache.org/mod_mbox/httpd-dev/201309.mbox/%3C52358ED1.2070704@velox.ch%3E", 
+   "r1527291 | kbrand | 2013-09-29 11:36:31 +0200 (Sun, 29 Sep 2013) | 9 lines", 
+   "Follow-up fixes for r1526168:", 
+   "- drop SSL_TMP_KEY_* constants from ssl_private.h, too", 
+   "- make sure we also disable aNULL, eNULL and EXP ciphers", 
+   "for per-directory SSLCipherSuite directives", 
+   "- apply the same treatment to SSLProxyCipherSuite", 
+   "r1527295 | kbrand | 2013-09-29 12:35:46 +0200 (Sun, 29 Sep 2013) | 20 lines", 
+   "Improve ephemeral key handling (companion to r1526168):", 
+   "- allow to configure custom DHE or ECDHE parameters via the", 
+   "SSLCertificateFile directive, and adapt its documentation", 
+   "accordingly (addresses PR 49559)", 
+   "- add standardized DH parameters from RFCs 2409 and 3526,", 
+   "use them based on the length of the certificate's RSA/DSA key,", 
+   "and add a FAQ entry for clients which limit DH support", 
+   "to 1024 bits (such as Java 7 and earlier)", 
+   "- move ssl_dh_GetParamFromFile() from ssl_engine_dh.c to", 
+   "ssl_util_ssl.c, and add ssl_ec_GetParamFromFile()", 
+   "- drop ssl_engine_dh.c from mod_ssl", 
+   "For the standardized DH parameters, OpenSSL version 0.9.8a", 
+   "or later is required, which was therefore made a new minimum", 
+   "requirement in r1527294.", 
+   "r1563420 | kbrand | 2014-02-01 15:04:23 +0100 (Sat, 01 Feb 2014) | 3 lines", 
+   "enable auto curve selection for ephemeral ECDH keys", 
+   "when compiled against OpenSSL 1.0.2 or later", 
+   "r1588851 | kbrand | 2014-04-21 08:39:24 +0200 (Mon, 21 Apr 2014) | 3 lines", 
+   "ssl_callback_TmpDH: for OpenSSL 1.0.2 and later, set the current cert to the", 
+   "one actually used for the connection before calling SSL_get_privatekey(ssl)", 
+   "r1666363 | jkaluza | 2015-03-13 08:32:46 +0100 (Fri, 13 Mar 2015) | 4 lines", 
+   "* mod_ssl: fix small memory leak in ssl_init_server_certs when ECDH is used.", 
+   "SSL_CTX_set_tmp_ecdh increases reference count, so we have to call EC_KEY_free,", 
+   "otherwise eckey will not be freed.", 
+   "r1679470 | ylavic | 2015-05-15 00:38:20 +0200 (Fri, 15 May 2015) | 5 lines", 
+   "mod_ssl: follow up to r1527291.", 
+   "Always prepend \"!aNULL:!eNULL:\" to SSL_DEFAULT_CIPHER_LIST (default for", 
+   "SSL[Proxy]CipherSuite) since we support OpenSSL versions where this was", 
+   "not yet included by default.", 
+   "Reviewed by: ylavic, wrowe, rjung", 
+   "Backported by: ylavic"
+  ], 
+  "revision_id": "1680916"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2015-05-21T15:52:29.460386Z", 
+  "msg": [
+   "FELIX-4060 : Implement HTTP Whiteboard Service (RFC-189). Clean up code, add some javadocs"
+  ], 
+  "revision_id": "1680915"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-05-21T15:45:01.990614Z", 
+  "msg": [
+   "Thread safety for windowSize"
+  ], 
+  "revision_id": "1680914"
+ }
+]

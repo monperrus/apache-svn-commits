@@ -1,0 +1,87 @@
+[
+ {
+  "author": "danielsh", 
+  "date": "2013-07-02T20:28:07.364014Z", 
+  "msg": [
+   "backport.pl: Allow the entry summary to start with a 'word:'.", 
+   "* tools/dist/backport.pl", 
+   "(parse_entry): Don't try to parse the first line as a header."
+  ], 
+  "revision_id": "1499098"
+ }, 
+ {
+  "author": "reto", 
+  "date": "2013-07-02T20:26:38.285231Z", 
+  "msg": [
+   "CLEREZZA-468: deprecated methods that take AST-Sparql query"
+  ], 
+  "revision_id": "1499097"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-07-02T20:22:26.769651Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(svn_wc__db_update_moved_away_conflict_victim): Pre-emptively guard", 
+   "against NULL deref in case either or both old_version and new_version", 
+   "are NULL. Found by code inspection, not sure if a crash can be triggered.", 
+   "See also r1499095 and issue #4388."
+  ], 
+  "revision_id": "1499096"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-07-02T20:19:10.352365Z", 
+  "msg": [
+   "Fix issue #4388, crash during tree conflict resolution.", 
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(svn_wc__db_resolve_delete_raise_moved_away): Don't deref old_version", 
+   "unconditionally, as it can be NULL."
+  ], 
+  "revision_id": "1499095"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-07-02T20:16:17.640154Z", 
+  "msg": [
+   "Tweak JavaHL's ISVNReporter interface and implementation so that", 
+   "finishReport returns the target revision of the edit drive -- since", 
+   "Ev2 doesn't give us that information.", 
+   "[in subversion/bindings/javahl/src/org/apache/subversion/javahl]", 
+   "* ISVNReporter.java (ISVNReporter.finishReport): Change the method interface", 
+   "and update the docstring.", 
+   "* remote/StateReporter.java (ISVNReporter.finishReport): Likewise.", 
+   "* callback/RemoteStatus.java", 
+   "(RemoteStatus.modifiedDirectory, RemoteStatus.modifiedFile", 
+   "RemoteStatus.modifiedSymlink, RemoteStatus.deleted): Remove the 'revision'", 
+   "argument since it contains information that the API consumer already has.", 
+   "* (remote/StatusEditor.java): Update all calls of RemoteStatus.", 
+   "[in subversion/bindings/javahl/native]", 
+   "* EditorProxy.h (EditorProxyCallbacks): Put the whole svn_delta__extra_baton", 
+   "into the proxy callbacks structure.", 
+   "(EditorProxy.m_extra_baton): Removed; replaced with ...", 
+   "(EditorProxy.m_proxy_callbacks): ... this new private member.", 
+   "* EditorProxy.cpp (null_extra_baton): Removed.", 
+   "(EditorProxy::EditorProxy): Initialize m_proxy_callbacks.", 
+   "Update initialisation to use the new member.", 
+   "* StateReporter.h (StateReporter::finishReport): Update prototype.", 
+   "(StateReporter::m_target_revision): New data member.", 
+   "* StateReporter.cpp (StateReporter::StateReporter): Initialize the new mameber.", 
+   "(StateReporter::finishReport): Update prototype and return the value of", 
+   "m_target_revision to the caller.", 
+   "* RemoteSession.cpp (template_status_editor_callbacks):", 
+   "Renamed from status_editor_callbacks and updated initialiser.", 
+   "(RemoteSession::status): Make a copy of the template proxy callbacks", 
+   "and store the address of the reporter's target revision into the", 
+   "callbacks' m_extra_baton member.", 
+   "(status_target_revision_func): Interpret the baton as a pointer to", 
+   "an svn_revnum_t and update its value.", 
+   "[In subversion/bindings/javahl/tests/org/apache/subversion/javahl]", 
+   "* SVNRemoteTests.java (SVNRemoteTests.RemoteStatusReceiver):", 
+   "Remove all mention of the revision argument.", 
+   "(SVNRemoteTests.testSimpleStatus, SVNRemoteTests.testPropchangeStaus):", 
+   "Check the value returned from ISVNReporter.finishReport."
+  ], 
+  "revision_id": "1499094"
+ }
+]

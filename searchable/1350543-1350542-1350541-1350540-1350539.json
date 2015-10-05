@@ -1,0 +1,69 @@
+[
+ {
+  "author": "hdu", 
+  "date": "2012-06-15T09:03:30.084103Z", 
+  "msg": [
+   "#c705641# make sure neither pContent nor pAlpha BitmapAccesses are leaked"
+  ], 
+  "revision_id": "1350543"
+ }, 
+ {
+  "author": "alexparvulescu", 
+  "date": "2012-06-15T09:00:31.236707Z", 
+  "msg": [
+   "JCR-3343 ClusterNode's updateCommited method throws NPE - patch contributed by Mete Atamel"
+  ], 
+  "revision_id": "1350542"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-06-15T08:55:40.484980Z", 
+  "msg": [
+   "Fix a problem with trying to fetch the Location: header when checking", 
+   "out a node. The code was examining HANDLER->DONE before it would", 
+   "extract the Location: header, but that was simply wrong. The Location:", 
+   "header is always set before an ra_serf response handler is invoked, so", 
+   "there is no need to check DONE. Further, when the DONE flag gets set,", 
+   "the response handler might never get called(!).", 
+   "However, the handle_checkout() response handler is really just a cover", 
+   "for expect_empty_body() with an \"override\" to capture the Location:", 
+   "header. But the core ra_serf response processing *already* captures", 
+   "the Location: header whenever it is present.", 
+   "So... this is run synchronously, we can just examine the handler's", 
+   "LOCATION field after the request completes. And we can use", 
+   "expect_empty_body() directly.", 
+   "* subversion/libsvn_ra_serf/commit.c:", 
+   "(checkout_context_t): not needed. removed.", 
+   "(create_checkout_body): the baton is now the activity_url.", 
+   "(handle_checkout): not needed. removed.", 
+   "(checkout_node): no longer set up a checkout_context_t, and just", 
+   "pass the activity_url as the BODY_DELEGATE_BATON. go ahead and use", 
+   "svn_ra_serf__expect_empty_body for the response handler. examine", 
+   "HANDLER.LOCATION after the request completes."
+  ], 
+  "revision_id": "1350541"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2012-06-15T08:54:15.619242Z", 
+  "msg": [
+   "Further reduce memory pressure by forcing the xmlctx's scratch_pool to be", 
+   "cleared as soon as we are done with the XML parser.", 
+   "* subversion/libsvn_ra_serf/xml.c", 
+   "(svn_ra_serf__xml_context_destroy): Implement.", 
+   "* subversion/libsvn_ra_serf/ra_serf.h", 
+   "(svn_ra_serf__xml_context_destroy): Declare.", 
+   "* subversion/libsvn_ra_serf/util.c", 
+   "(expat_response_handler): Explicitly destroy the xmlctx too."
+  ], 
+  "revision_id": "1350540"
+ }, 
+ {
+  "author": "hdu", 
+  "date": "2012-06-15T08:52:13.274661Z", 
+  "msg": [
+   "#c705663# fix a memory leak in TextConversion_zh::getCharConversion()"
+  ], 
+  "revision_id": "1350539"
+ }
+]

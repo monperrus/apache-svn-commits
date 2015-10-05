@@ -1,0 +1,89 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-04-06T22:11:46.423445Z", 
+  "msg": [
+   "[master] Fix bug of closed region transitioning from CLOSED to CLOSING", 
+   "Summary:", 
+   "Fixed the situation of a transtion from CLOSED to CLOSING in znode for a region.", 
+   "This happens when Master sends another Close Region RPC right before the Region Server closes the region.", 
+   "The message gets there right after the close happens, and the regionserver changes the state from CLOSE to CLOSING.", 
+   "Fixed this by ignoring any close region requests that are marked as already closed", 
+   "Test Plan: mvn -Dtest=TestHRegionDoubleClose test", 
+   "Reviewers: madhuvaidya, pkhemani, kranganathan, mbautin", 
+   "Reviewed By: kranganathan", 
+   "CC: kranganathan, hbase-eng@, kannan, mbautin", 
+   "Differential Revision: https://phabricator.fb.com/D435024", 
+   "Task ID: 982325"
+  ], 
+  "revision_id": "1310608"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-04-06T22:11:17.628588Z", 
+  "msg": [
+   "[master] Assignment plan improvement and region assignment verification report", 
+   "Summary:", 
+   "The previous diff D407485, Integrate the favoredNodes into the new assignment manager, enabled the Master to assign regions based on the assignment plan. This diff is to improvement the assignment plan and to provide a tool to verify the region assignment.", 
+   "1) Improvement the assignment plan for the new created tables:", 
+   "Each new created table has one assignment domain. Currently each new table will have its own assignment domain by shuffling all the region servers based on the table name.", 
+   "The assignment domain will be easy to extend for multi tenancy.", 
+   "The primary region server is placed in the round robin way, fairly across different racks and hosts. Also the secondary and tertiary region server will be placed by some randomness. The randomness can make sure that the regions, shared with the same primary region server, have a very high probability to run with different secondary region server and tertiary region server.", 
+   "2) Improvement the assignment plan for the existing tables:", 
+   "The region placement tool can take a snapshot for the current region assignment situation by scanning META and also can get a locality report from the file system. Based on these two information, the tool can place the primary region server for EACH TABLE to achieve the maximum table level locality, the minimum region movement and slot-based balancing.", 
+   "In addition, the tool use the same way to place the secondary and tertiary region server as the new created table case.", 
+   "3) Region assignment verification report", 
+   "The region placement tool can also generate the region assignment report for each table. Here is the sample report from my dev cluster.", 
+   "Test Plan:", 
+   "1) run all the unit tests", 
+   "2) tested on dev cluster", 
+   "3) tested on migrate002 cluster", 
+   "Reviewers: kannan, kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D438425"
+  ], 
+  "revision_id": "1310607"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-04-06T22:10:45.538520Z", 
+  "msg": [
+   "[HBASE-5355] [89-fb] Compressed RPC's for HBase", 
+   "Summary:", 
+   "Needed by a lot of folks who want to do large batch inserts and large remote", 
+   "cluster reads where network is the bottleneck. This is done at the RPC layer.", 
+   "Does the following:", 
+   "- Configuration to control of RPC's are compressed (set \"hbase.rpc.compression\"", 
+   "to compression type, eg - \"gz\")", 
+   "- Version is bumped from 3 to 4, but is fully backward compatible. If", 
+   "compression is set to none (default), the the older version number is used.", 
+   "- Adds a compression type field to each Call object on both the client and", 
+   "server side", 
+   "Test Plan:", 
+   "Wrote a unit test and ran all the unit tests.", 
+   "Reviewers: kannan, todd, stack, pkhemani", 
+   "Reviewed By: kannan", 
+   "CC: nzhang, nspiegelberg, mbautin, Liyin, gqchen, dhruba, khemani, Karthik,", 
+   "Kannan", 
+   "Differential Revision: https://reviews.facebook.net/D1671"
+  ], 
+  "revision_id": "1310606"
+ }, 
+ {
+  "author": "tboehme", 
+  "date": "2012-04-06T22:06:48.541800Z", 
+  "msg": [
+   "second change-set from PDFBOX-1199; moved decryption initialization into prepareForDecryption method which allows decryption of single objects"
+  ], 
+  "revision_id": "1310605"
+ }, 
+ {
+  "author": "cumminsh", 
+  "date": "2012-04-06T21:56:41.816805Z", 
+  "msg": [
+   "Updating JNDI module to 1.0.0-SNAPSHOT, and updating dependencies"
+  ], 
+  "revision_id": "1310604"
+ }
+]

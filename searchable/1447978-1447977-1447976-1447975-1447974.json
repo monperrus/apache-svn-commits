@@ -1,0 +1,71 @@
+[
+ {
+  "author": "rwhitcomb", 
+  "date": "2013-02-20T00:16:39.708845Z", 
+  "msg": [
+   "Part of PIVOT-861:  Lingering memory leak of ListenerList$Node objects when continuosly", 
+   "creating and destroying windows or buttons (from BXMLSerializer).", 
+   "It seemed like the basic problem was every time you use a ButtonRenderer, there is a", 
+   "call to ImageView.setIcon which takes the old image out of the ImageViewSkin listener", 
+   "list and puts the new one in, ending up creating a huge number of ListenerList$Node", 
+   "objects for every add to these lists.", 
+   "So, I rewrote the whole of ListenerList to use a small array for these lists instead", 
+   "of a real linked list.  Empirically the lists don't usually grow very big, so the", 
+   "default size of 5 works well except for a handful of cases, and then the largest", 
+   "seen was 25.", 
+   "The result is that I don't see any long-term memory leak at all in the test applications", 
+   "and the overall memory thrashing seems less because we're creating far fewer of these", 
+   "little Node objects (just to add and remove a reference in a small list).", 
+   "Also reverted the last changes to ButtonData.java and Image.java to take out the", 
+   "earlier workaround that wasn't quite working.", 
+   "This is a merge of revision 1447977 from branches/2.0.x to trunk."
+  ], 
+  "revision_id": "1447978"
+ }, 
+ {
+  "author": "rwhitcomb", 
+  "date": "2013-02-20T00:13:32.950593Z", 
+  "msg": [
+   "Part of PIVOT-861:  Lingering memory leak of ListenerList$Node objects when continuosly", 
+   "creating and destroying windows or buttons (from BXMLSerializer).", 
+   "It seemed like the basic problem was every time you use a ButtonRenderer, there is a", 
+   "call to ImageView.setIcon which takes the old image out of the ImageViewSkin listener", 
+   "list and puts the new one in, ending up creating a huge number of ListenerList$Node", 
+   "objects for every add to these lists.", 
+   "So, I rewrote the whole of ListenerList to use a small array for these lists instead", 
+   "of a real linked list.  Empirically the lists don't usually grow very big, so the", 
+   "default size of 5 works well except for a handful of cases, and then the largest", 
+   "seen was 25.", 
+   "The result is that I don't see any long-term memory leak at all in the test applications", 
+   "and the overall memory thrashing seems less because we're creating far fewer of these", 
+   "little Node objects (just to add and remove a reference in a small list).", 
+   "Also reverted the last changes to ButtonData.java and Image.java to take out the", 
+   "earlier workaround that wasn't quite working."
+  ], 
+  "revision_id": "1447977"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2013-02-20T00:10:35.052499Z", 
+  "msg": [
+   "avoid to make cdi deployment fail because of too early usage of ear parents beans"
+  ], 
+  "revision_id": "1447976"
+ }, 
+ {
+  "author": "virag", 
+  "date": "2013-02-20T00:03:20.763392Z", 
+  "msg": [
+   "Amending release-log.txt"
+  ], 
+  "revision_id": "1447975"
+ }, 
+ {
+  "author": "cutting", 
+  "date": "2013-02-19T23:54:21.561134Z", 
+  "msg": [
+   "Tagging 1.7.4-rc0."
+  ], 
+  "revision_id": "1447974"
+ }
+]

@@ -1,0 +1,83 @@
+[
+ {
+  "author": "cmpilato", 
+  "date": "2013-04-09T19:13:42.402840Z", 
+  "msg": [
+   "Finish issue #4346 (\"svn_auth_cleanup_walk() API and friends needs a", 
+   "rethink\").", 
+   "Reenvision the svn_auth_cleanup_walk() function and plumbing as a", 
+   "generic config-based credential walker that includes the ability to", 
+   "trigger a deletion.  This seems better match for the extent and", 
+   "limitations of the implementation, which is but a mere convenience", 
+   "wrapper around the management of Subversion's config-based auth store", 
+   "and was never remotely related to \"providers\" or even \"the auth", 
+   "subsystem\" in a meaningful way.  Morever, by associating this logic", 
+   "with a specific auth store (our config-based stuff), we can introduce", 
+   "new auth stores (e.g., an encrypted store) without being tied to this", 
+   "API.", 
+   "(Don't hate me, rhuijben.)", 
+   "* subversion/include/svn_auth.h", 
+   "(svn_auth_cleanup_func_t, svn_auth_cleanup_walk): Removed.", 
+   "(svn_auth_forget_credentials): New function.", 
+   "* subversion/include/svn_config.h", 
+   "(svn_config_auth_walk_func_t): Was svn_auth_cleanup_func_t(),", 
+   "but trades the disinteresting 'provider' parameter for a 'hash'", 
+   "parameter.", 
+   "(svn_config_walk_auth_data): Was svn_auth.h:svn_auth_cleanup_walk(),", 
+   "but drops the 'auth_baton' parameter in favor of 'config_dir' to", 
+   "avoid the pretense that the auth_baton's registered providers even", 
+   "matter.  Also, provides all auth data via the callback now (which", 
+   "is not strictly \"cleanup\" focused.", 
+   "* subversion/libsvn_subr/config_auth.c", 
+   "(svn_config_walk_auth_data): New function, a merge of", 
+   "svn_auth_cleanup_walk() and svn_auth__simple_cleanup_walk(), but", 
+   "which accepts a 'config_dir' instead of an 'auth_baton'.", 
+   "* subversion/libsvn_subr/simple_providers.c", 
+   "(svn_auth__simple_cleanup_walk): Merged into svn_config_cleanup_auth_data().", 
+   "* subversion/libsvn_subr/auth.h", 
+   "(svn_auth__simple_cleanup_walk): Removed unused prototype.", 
+   "* subversion/libsvn_subr/auth.c", 
+   "(make_cache_key): New helper.", 
+   "(svn_auth_first_credentials): Use make_cache_key().", 
+   "(svn_auth_forget_credentials): New function.", 
+   "(svn_auth_cleanup_walk): Merged into svn_config_cleanup_auth_data().", 
+   "* subversion/tests/libsvn_subr/auth-test.c", 
+   "(cleanup_callback): Adjust to new prototype.  Call", 
+   "svn_auth_forget_credentials(), too.", 
+   "(test_auth_clear): Add some comments, and track API changes."
+  ], 
+  "revision_id": "1466183"
+ }, 
+ {
+  "author": "jailletc36", 
+  "date": "2013-04-09T19:12:44.495015Z", 
+  "msg": [
+   "align"
+  ], 
+  "revision_id": "1466182"
+ }, 
+ {
+  "author": "suresh", 
+  "date": "2013-04-09T19:09:01.856052Z", 
+  "msg": [
+   "HDFS-4669. Merge change 1466176 from trunk"
+  ], 
+  "revision_id": "1466181"
+ }, 
+ {
+  "author": "jaimin", 
+  "date": "2013-04-09T19:05:36.394959Z", 
+  "msg": [
+   "AMBARI-1765. Enable the Ganglia rrd files to be configurable when Ganglia is selected as service. (jaimin)"
+  ], 
+  "revision_id": "1466180"
+ }, 
+ {
+  "author": "jailletc36", 
+  "date": "2013-04-09T19:04:59.342212Z", 
+  "msg": [
+   "Align comments in examples"
+  ], 
+  "revision_id": "1466179"
+ }
+]

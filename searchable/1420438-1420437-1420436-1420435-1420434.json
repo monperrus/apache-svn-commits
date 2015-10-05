@@ -1,0 +1,62 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2012-12-11T21:50:03.597743Z", 
+  "msg": [
+   "QPID-4481: HA replication of propagated bindings can lead to incorrect configuration", 
+   "When using dynamic federation between two independent HA broker clusters, it is", 
+   "possible under certain failover scenarios for the propagated bindings on the", 
+   "source broker to become out-of-sync with the true state of bindings on the", 
+   "destination broker.", 
+   "How reproducible:", 
+   "Often -- race condition between re-establishment of federated link and the deletion of a binding on the destination broker", 
+   "Steps to Reproduce:", 
+   "1. Start a stand-alone broker (route destination) and an HA broker (route source w/ primary and backup)", 
+   "2. Configure a dynamic federated route between a destination broker and a source broker.  The dynamic federation needs to utilize an existing, non-auto-delete queue on the source broker.", 
+   "3. Subscribe to an auto-delete queue on the destination broker and bind the auto-delete queue to the exchange configured for the dynamic federation", 
+   "4. Kill the primary source broker", 
+   "5. Kill the subscription to the auto-delete queue on the destination broker", 
+   "6. Promote the backup source broker to primary", 
+   "Actual results:", 
+   "With the loss of the client subscription to the auto-delete queue, the binding will be removed.  If the binding is removed prior to the re-establishment of the federated link to the source broker, the unbind command will not propagate.  Since the backup source broker had previously replicated the propagated binding, the binding will incorrectly remain on the source broker.", 
+   "Expected results:", 
+   "Propagated bindings should not be replicated from the primary to backups since they are transient and will be recreated when the route is re-established.)))"
+  ], 
+  "revision_id": "1420438"
+ }, 
+ {
+  "author": "rfscholte", 
+  "date": "2012-12-11T21:49:49.554686Z", 
+  "msg": [
+   "CMS commit to maven by rfscholte"
+  ], 
+  "revision_id": "1420437"
+ }, 
+ {
+  "author": "rfscholte", 
+  "date": "2012-12-11T21:49:08.173117Z", 
+  "msg": [
+   "Remove unused imports"
+  ], 
+  "revision_id": "1420436"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2012-12-11T21:47:18.350336Z", 
+  "msg": [
+   "Micro improvement to the autogen-time build system.", 
+   "* build/transform_sql.py", 
+   "(extract_token_map): Account for hypothetical MAP_MAP_FOO macro names."
+  ], 
+  "revision_id": "1420435"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2012-12-11T21:45:21.287089Z", 
+  "msg": [
+   "copy'n'paste side effects", 
+   "dropped Apache prefix, no needs to specify it everywhere, especially in commit messages"
+  ], 
+  "revision_id": "1420434"
+ }
+]

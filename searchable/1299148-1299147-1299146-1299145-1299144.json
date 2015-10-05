@@ -1,0 +1,94 @@
+[
+ {
+  "author": "jmclean", 
+  "date": "2012-03-10T03:04:58.429034Z", 
+  "msg": [
+   "Added support for Japanese postcode symbol and full width numbers.", 
+   "Added invalid format error than is generated if the format is empty or contains an invalid character."
+  ], 
+  "revision_id": "1299148"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-03-10T02:27:05.013713Z", 
+  "msg": [
+   "[jira] [HBASE-5292] Prevent counting getSize on compactions", 
+   "Author: Zhiqiu Kong", 
+   "Summary:", 
+   "Added two separate metrics for both get() and next(). This is done by", 
+   "refactoring on internal next() API. To be more specific, only Get.get()", 
+   "and ResultScanner.next() passes the metric name (\"getsize\" and", 
+   "\"nextsize\" repectively) to", 
+   "HRegion::RegionScanner::next(List<KeyValue>, String)", 
+   "This will eventually hit StoreScanner()::next((List<KeyValue>,", 
+   "int, String) where the metrics are counted.", 
+   "And their call paths are:", 
+   "1) Get", 
+   "HTable::get(final Get get)", 
+   "=> HRegionServer::get(byte [] regionName, Get get)", 
+   "=> HRegion::get(final Get get, final Integer lockid)", 
+   "=> HRegion::get(final Get get)      [pass METRIC_GETSIZE to the", 
+   "callee]", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, String", 
+   "metric)", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, int limit,", 
+   "String metric)", 
+   "=> HRegion::RegionScanner::nextInternal(int limit, String metric)", 
+   "=> KeyValueHeap::next(List<KeyValue> result, int limit, String", 
+   "metric)", 
+   "=> StoreScanner::next(List<KeyValue> outResult, int limit, String", 
+   "metric)", 
+   "2) Next", 
+   "HTable::ClientScanner::next()", 
+   "=> ScannerCallable::call()", 
+   "=> HRegionServer::next(long scannerId)", 
+   "=> HRegionServer::next(final long scannerId, int nbRows)  [pass", 
+   "METRIC_NEXTSIZE to the callee]", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, String", 
+   "metric)", 
+   "=> HRegion::RegionScanner::next(List<KeyValue> outResults, int limit,", 
+   "String metric)", 
+   "=> HRegion::RegionScanner::nextInternal(int limit, String metric)", 
+   "=> KeyValueHeap::next(List<KeyValue> result, int limit, String", 
+   "metric)", 
+   "=> StoreScanner::next(List<KeyValue> outResult, int limit, String", 
+   "metric)", 
+   "Test Plan:", 
+   "1. Passed unit tests.", 
+   "2. Created a testcase TestRegionServerMetrics::testGetNextSize to", 
+   "guarantee:", 
+   "* Get/Next contributes to getsize/nextsize metrics", 
+   "* Both getsize/nextsize are per Column Family", 
+   "* Flush/compaction won't affect these two metrics", 
+   "Reviewed By: mbautin", 
+   "Reviewers: Kannan, mbautin, Liyin, JIRA", 
+   "CC: Kannan, mbautin, Liyin, zhiqiu", 
+   "Differential Revision: https://reviews.facebook.net/D1617"
+  ], 
+  "revision_id": "1299147"
+ }, 
+ {
+  "author": "szetszwo", 
+  "date": "2012-03-10T02:06:00.067452Z", 
+  "msg": [
+   "Merge r1299139 and r1299144 from trunk for HDFS-3056."
+  ], 
+  "revision_id": "1299146"
+ }, 
+ {
+  "author": "simonetripodi", 
+  "date": "2012-03-10T02:01:49.988297Z", 
+  "msg": [
+   "used generic types extensions  when used as arguments"
+  ], 
+  "revision_id": "1299145"
+ }, 
+ {
+  "author": "szetszwo", 
+  "date": "2012-03-10T01:58:29.495372Z", 
+  "msg": [
+   "HDFS-3056: add the new file for the previous commit."
+  ], 
+  "revision_id": "1299144"
+ }
+]

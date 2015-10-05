@@ -1,0 +1,49 @@
+[
+ {
+  "author": "mduerig", 
+  "date": "2014-02-06T14:30:05.959014Z", 
+  "msg": [
+   "OAK-1338: Implement QueryStat from Jackrabbit API", 
+   "Implement repository statistics: observation count, duration and average"
+  ], 
+  "revision_id": "1565278"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2014-02-06T14:29:46.588638Z", 
+  "msg": [
+   "OAK-1338: Implement QueryStat from Jackrabbit API", 
+   "Implement repository statistics: query count and query duration"
+  ], 
+  "revision_id": "1565277"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2014-02-06T14:29:28.699740Z", 
+  "msg": [
+   "OAK-1338: Implement QueryStat from Jackrabbit API", 
+   "Implement repository statistics: session read and write statistics"
+  ], 
+  "revision_id": "1565276"
+ }, 
+ {
+  "author": "stevehay", 
+  "date": "2014-02-06T14:29:23.001285Z", 
+  "msg": [
+   "Fix t/apache/subprocess.t on Windows, using httpd-2.4.x.", 
+   "This test fails every time for me, but not with httpd-2.2.x, which I don't understand. Debugging, if you start up the server, then add a break point in APR's read_with_timeout() (in readwrite.c) and walk through the function each time it is hit then the test passes. Without debugging it puts a \"APR::PerlIO::read: (70007) The timeout specified has expired\" error in the error_log and fails all tests.", 
+   "Presumably it is trying to read from the process spawned in subprocess.pm before the pipe is ready to be read from, and the delay in manually debugging fixes that. The comments in read_data() in subprocess.pm note that a delay is indeed required, and is achieved by select() in the non-PerlIO case (which I imagine nobody uses now anyway) or a apr_wait_for_io_or_timeout() call from apr_file_read() in the PerlIO case.", 
+   "However, whilst that remark is true of the *nix implementation of apr_file_read() (in file_io/unix/readwrite.c), it is not true of the Win32 version (in file_io/win32/readwrite.c).", 
+   "Thus, adding a short sleep() fixes it on Win32. What I don't understand is why this wasn't necessary with httpd-2.2.x. The file_io/win32/readwrite.c file is identical in the two versions I'm using (httpd-2.4.6 vs httpd-2.2.25; apr-1.4.8 in both)."
+  ], 
+  "revision_id": "1565275"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2014-02-06T14:29:22.812964Z", 
+  "msg": [
+   "JENA-633.  Safe fix; further optimizations may be possible"
+  ], 
+  "revision_id": "1565274"
+ }
+]

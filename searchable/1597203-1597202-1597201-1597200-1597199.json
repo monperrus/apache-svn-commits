@@ -1,0 +1,81 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-05-23T22:33:53.182253Z", 
+  "msg": [
+   "Some FSX code cleanup and stream handling fixes.", 
+   "The stream handling issue lies in the difference between the delta", 
+   "stream being created and the raw output stream. We checksum the input", 
+   "into the delta stream and close it once the delta is complete. After", 
+   "that, we add the \"ENDREP\" sequence to the raw stream.  This did not", 
+   "surface as an error before since writing to a closed file stream is", 
+   "not being prevented.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(rep_write_contents): Get rid of FSFS remnants as we always write", 
+   "deltififed data.", 
+   "(rep_write_get_baton): Don't close the output stream automatically", 
+   "because we need to add the footer after the", 
+   "plaintext has already been fully deltified.", 
+   "(rep_write_contents_close): Again, we always deltify in FSX.  Also,", 
+   "we now need to close the raw stream explicitly.", 
+   "(write_container_delta_rep): Close the raw rep stream explicitly.", 
+   "(write_final_changed_path_info): Update function docstring."
+  ], 
+  "revision_id": "1597203"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-05-23T22:09:23.700042Z", 
+  "msg": [
+   "Sync'ing FSX with FSFS:", 
+   "Make FSX indexes precisely track the rev / pack file size such", 
+   "added data is always detected even if the block sizes change.", 
+   "This does not merge specific revisions.", 
+   "* index.c", 
+   "(p2l_header_t): Add member for rev / pack file size.", 
+   "(svn_fs_x__p2l_index_create): Store the original file size", 
+   "in our index file.", 
+   "(get_p2l_header): Load that info again.", 
+   "(p2l_get_max_offset_func,", 
+   "svn_fs_x__p2l_get_max_offset): Use the precise file size", 
+   "instead of a multiple of the block size."
+  ], 
+  "revision_id": "1597202"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2014-05-23T22:04:49.992744Z", 
+  "msg": [
+   "[MSHARED-336] fixed typo"
+  ], 
+  "revision_id": "1597201"
+ }, 
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-23T22:02:39.051179Z", 
+  "msg": [
+   "Safely close JNDI Context."
+  ], 
+  "revision_id": "1597200"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-05-23T22:00:48.437383Z", 
+  "msg": [
+   "Sync'ing FSX with FSFS:", 
+   "Porting documentation and iterpool usage improvments.", 
+   "There are no specific revision that were merged by this.", 
+   "* subversion/libsvn_fs_x/index.c", 
+   "(encode_uint,", 
+   "encode_int,", 
+   "encode_l2p_page,", 
+   "l2p_page_table_access_func,", 
+   "get_l2p_page_table): Update function docstring.", 
+   "(prefetch_l2p_pages): Ditto. Also, clear iterpools at loop start.", 
+   "(l2p_index_lookup): Clear iterpools at loop start.", 
+   "(svn_fs_x__l2p_get_max_ids): Update commentary.", 
+   "(svn_fs_x__p2l_index_create): Same and clear iterpools at loop start."
+  ], 
+  "revision_id": "1597199"
+ }
+]

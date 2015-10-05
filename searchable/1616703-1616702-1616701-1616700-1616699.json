@@ -1,0 +1,62 @@
+[
+ {
+  "author": "aconway", 
+  "date": "2014-08-08T09:24:03.071132Z", 
+  "msg": [
+   "QPID-5974: HA qpid-txtest2 can bring down a cluster (JERR_MAP_LOCKED))", 
+   "Problem: transactional dequeues can be sent via two paths as part of the transaction and", 
+   "via the normal queue replication. If journal is involved this can result result in store errors", 
+   "if the normal replication path attempts to dequeue before the transaction.", 
+   "Solution: this is also the case for enqueues, and we already have code in place to skip replication", 
+   "of tx enqueues via the normal route. Copied the same logic for dequeues."
+  ], 
+  "revision_id": "1616703"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-08-08T09:23:54.495503Z", 
+  "msg": [
+   "QPID-5973: HA cluster state may get stuck in recovering", 
+   "A backup queue is considered \"ready\" when all messages up to the first guarded", 
+   "position have either been replicated and acknowledged or dequeued.", 
+   "Previously this was implemented by waiting for the replicationg subscription to", 
+   "advance to the first guarded position and wating for all expected acks. However", 
+   "if messages are dequeued out-of-order (which happens with transactions) there", 
+   "can be a gap at the tail of the queue. The replicating subscription will not", 
+   "advance past this gap because it only advances when there are messages to", 
+   "consume. This resulted in backups stuck in catch-up. The recovering primary has", 
+   "a time-out for backups that never re-connect, but if they connect sucessfully", 
+   "and don't disconnect, the primary assumes they will become ready and waits -", 
+   "causing the primary to be stuck in \"recovering\".", 
+   "The fixes is to notify a replicating subscription if it becomes \"stopped\"", 
+   "because there are no more messages available on the queue. This implies that", 
+   "either it is at the tail OR there are no more messags until the tail. Either way", 
+   "we should consider this \"ready\" from the point of view of HA catch-up."
+  ], 
+  "revision_id": "1616702"
+ }, 
+ {
+  "author": "bdelacretaz", 
+  "date": "2014-08-08T09:13:56.335024Z", 
+  "msg": [
+   "Add (minimal) Sling Query docs"
+  ], 
+  "revision_id": "1616701"
+ }, 
+ {
+  "author": "rombert", 
+  "date": "2014-08-08T09:10:00.926978Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "1616700"
+ }, 
+ {
+  "author": "rombert", 
+  "date": "2014-08-08T09:09:57.453236Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag org.apache.sling.query-2.0.0"
+  ], 
+  "revision_id": "1616699"
+ }
+]

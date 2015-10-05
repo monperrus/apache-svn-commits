@@ -1,0 +1,90 @@
+[
+ {
+  "author": "szetszwo", 
+  "date": "2012-03-23T01:32:33.552982Z", 
+  "msg": [
+   "HDFS-3127. Do not throw exceptions when FSImage.restoreStorageDirs() failes. Contributed by Brandon Li"
+  ], 
+  "revision_id": "1304158"
+ }, 
+ {
+  "author": "bsullivan", 
+  "date": "2012-03-23T01:11:01.423598Z", 
+  "msg": [
+   "TRINIDAD-2248 Change component templating scheme to generate superclasses of templated components rather than the templated components themselves", 
+   "Add support for the features as listed in the JIRA:", 
+   "he current component templating scheme works as follows:", 
+   "For a component with fully qualified name <package name>.<component name>", 
+   "Look in the parallel java-templates directory tree for the file <package name>.<component name>Template.java", 
+   "if it exists, merge the contents of <package name>.<component name>Template.java with the generated class artifacts to create the actual component source file <package name>.<component name>.java.", 
+   "On the surface, this seems fine however it has a major impact on supportability because", 
+   "1) The <package name>.<component name>Template.java files often can not be included in the IDE projects.", 
+   "2) Debugging of the Template files (which is where all of the interesting code is) must be done against the flattened file, which is non-obvious and a pain, while the actual fixes need to be done against the Template files", 
+   "3) Each Template file fix requires that the generate-components portion of the build be re-executed to reflatten the component", 
+   "Developers have tried to work around the first issue in various ways:", 
+   "1) They make the Template extend the superclass of the component to be generated, so that the inherited methods are present (this superclass is ignored when merging)", 
+   "2) They manually add abstract implementations of any of the artifacts generated from metadata, using the bizarre /**/ prefix on the lines to indicate to the merging code that the artifact should be ignored when merging (to avoid conflicts with the merged functions.", 
+   "Even with the hacks, which are a pain to use, more complicated usages with inner classes, still can't be supported.", 
+   "The proposal is to use real inheritance instead. The old behavior would still be supported for backwards compatibility. In the new proposal we:", 
+   "Look in the parallel java-templates directory tree for the file <package name>.<component name>.java", 
+   "if it exists, generate a new package private abstract class file with the name <package name>.Partial<component name>.java containing the generated class artifacts.", 
+   "The result is that rather that the generated partial class contains all of the generated logic and all of the real logic is contained in the component developer's class, extending the partial class. The developers class is in every way a real class suitable for inclusion in the source control system.", 
+   "To convert an old <component name>Template.java file to a new <component name>.java file, the developer:", 
+   "1) Renames the source file", 
+   "2) Changes the old extends and implements to extend just the Partial class", 
+   "3) Adds the constructors of the form:", 
+   "/**", 
+   "* Construct an instance of the <component name>", 
+   "*/", 
+   "public <component name>()", 
+   "{", 
+   "super();", 
+   "}", 
+   "/**", 
+   "* Construct an instance of the <component name>", 
+   "*/", 
+   "protected <component name>(", 
+   "String rendererType", 
+   ")", 
+   "{", 
+   "super(rendererType);", 
+   "}", 
+   "4) Deletes any abstract functions added to make the old scheme kind of work (these are often preceeded with /**/)", 
+   "5) If you add your own private property keys, you need to create your own type and then lock the TYPE yourself. For example:", 
+   "public static final FacesBean.Type TYPE = new FacesBean.Type(PartialUIXRegion.TYPE);", 
+   "private static final PropertyKey _VIEW_ID_INDEX_MAP_KEY =TYPE.registerKey(", 
+   "\"oracle.adf.view.rich.component.fragment.UIXRegion.viewIdToIndexMap\", Map.class, null, 0,", 
+   "PropertyKey.Mutable.OFTEN);", 
+   "static", 
+   "{", 
+   "TYPE.lock();", 
+   "}", 
+   "6) Removes any no longer needed imports"
+  ], 
+  "revision_id": "1304157"
+ }, 
+ {
+  "author": "mfranklin", 
+  "date": "2012-03-23T01:08:47.919228Z", 
+  "msg": [
+   "Reorganization of project to move rave-shindig and split out components (Fixes RAVE-524)"
+  ], 
+  "revision_id": "1304156"
+ }, 
+ {
+  "author": "daijy", 
+  "date": "2012-03-23T01:06:29.663148Z", 
+  "msg": [
+   "PIG-2442: Multiple Stores in pig streaming causes infinite waiting"
+  ], 
+  "revision_id": "1304155"
+ }, 
+ {
+  "author": "daijy", 
+  "date": "2012-03-23T01:05:39.304942Z", 
+  "msg": [
+   "PIG-2442: Multiple Stores in pig streaming causes infinite waiting"
+  ], 
+  "revision_id": "1304154"
+ }
+]

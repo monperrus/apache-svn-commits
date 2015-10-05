@@ -1,0 +1,120 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:22.507132Z", 
+  "msg": [
+   "[master] Fast fail META and ROOT during rack reboots. Do not wait for 10 mins", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Having .META. unavailable during rack failures can block the", 
+   "client threads trying to fetch information from meta.", 
+   "In case of a rack reboot. we will not wait for 10 minutes for these", 
+   "servers.", 
+   "Test Plan:", 
+   "MR unit tests.", 
+   "Deploy to dev cluster, and kill the rack with .META. or ROOT.", 
+   "- verify that the recovery takes off immediately", 
+   "kill a normal rack.", 
+   "- verify that we do still wait for 10 mins.", 
+   "Reviewers: kannan, kranganathan, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D544346"
+  ], 
+  "revision_id": "1459463"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:18.805673Z", 
+  "msg": [
+   "[HBASE-7532] Enable the FavoredNodes for the HFileOutputFormat", 
+   "Author: manukranthk", 
+   "Summary: HFileOutputFormat has a writer embedded but it is not configured to use the FavoredNodes. This revision is to add that support to the HFileOutputFormat while it is used as an OutputFormat either the Mapper or the Reducer for a MapReduce task.", 
+   "Test Plan: Unit Testing.", 
+   "Reviewers: liyintang, kannan", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, astewart", 
+   "Differential Revision: https://phabricator.fb.com/D675950", 
+   "Task ID: 1964673"
+  ], 
+  "revision_id": "1459462"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:10.662085Z", 
+  "msg": [
+   "[0.89-fb] [master] Fix the order of handling MSG_REPORT_EXITING", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Before this fix, we process all the region closes, before marking", 
+   "the RS as dead. This causes an issue where all the transient region", 
+   "assignments are placed on the exiting server (if it happens to be the", 
+   "primary). This would not happen, if the server were in the list", 
+   "of dead servers.", 
+   "But, because we add the server to the list of dead servers, after", 
+   "processing the region closes, the server seems \"alive and active\"", 
+   "during the assignment process. Fixing the order, so that the", 
+   "region will be assigned to a different RS, (considering the exiting", 
+   "RS as dead.)", 
+   "Test Plan:", 
+   "test suite. only failure TestHRegionCloseRetry, also fails", 
+   "without the diff", 
+   "Push to TSH025 master and make sure that the regions are not assigned", 
+   "back to the exiting server.", 
+   "4 /tmp/2013-02-06_14_39_23_hbase-trunk_fixRSExitingOrder-mrFailures  Failed on", 
+   "MR:  TestHRegionClose TestHRegionCloseRetry TestRegionServerMetrics", 
+   "TestThriftServer", 
+   "1 /tmp/2013-02-06_14_39_23_hbase-trunk_fixRSExitingOrder-localFailures  Failed", 
+   "on Local:  TestHRegionCloseRetry", 
+   "mv target/surefire-reports", 
+   "mr_unit/2013-02-06_14_39_23_hbase-trunk_fixRSExitingOrder", 
+   "Reviewers: liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D701100"
+  ], 
+  "revision_id": "1459461"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:07.570834Z", 
+  "msg": [
+   "[89-fb] [HBASE-7509] Export quorum metrics from HRegionServer", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "DFSClient metrics are disbled to save CPU usage.", 
+   "This diff will expoet the required quorum Read Metrics", 
+   "from HRegionServer", 
+   "Test Plan:", 
+   "deploy to dev cluster and ensure that the", 
+   "metrics are seen via ODS counter", 
+   "part of the output from hbasedev131.ash3:", 
+   "\"hadoop.regionserver_quorumreadsdone\": 23,", 
+   "\"hadoop.regionserver_quorumreadsexecutedincurthread\": 0,", 
+   "\"hadoop.regionserver_quorumreadwins\": 0,", 
+   "Reviewers: liyintang, rshroff", 
+   "Reviewed By: rshroff", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D697700"
+  ], 
+  "revision_id": "1459460"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-21T18:53:03.869561Z", 
+  "msg": [
+   "[HBASE-7276] Fix TestRegionServerMetrics failing test one more time", 
+   "Author: adela", 
+   "Summary:", 
+   "Can't see how we get negative numbers there. I am putting the", 
+   "test case in a separate class let's see if that will fix the problem", 
+   "Test Plan: tested on my machine", 
+   "Reviewers: liyintang, rshroff, manukranthk", 
+   "Reviewed By: rshroff", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D695499", 
+   "Task ID: 1981461"
+  ], 
+  "revision_id": "1459459"
+ }
+]

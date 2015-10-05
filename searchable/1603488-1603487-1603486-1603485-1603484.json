@@ -1,0 +1,101 @@
+[
+ {
+  "author": "tilman", 
+  "date": "2014-06-18T15:34:12.145979Z", 
+  "msg": [
+   "PDFBOX-2146: remove unused imports"
+  ], 
+  "revision_id": "1603488"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-06-18T15:33:31.770215Z", 
+  "msg": [
+   "Following up on r1603485, simplify the 'current' contents parsing within the", 
+   "transaction commit.  See http://svn.haxx.se/dev/archive-2014-06/0053.shtml", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(get_next_revision_ids): Remove this function.", 
+   "(commit_body): Use the new svn_fs_fs__read_current() function when", 
+   "obtaining the youngest revision and, possibly, the (next-node-id", 
+   "next-copy-id) values instead of doing the same in two separate calls.", 
+   "Explicitly update the youngest revision cache, because this is what", 
+   "the svn_fs_fs__youngest_rev() function does underneath and we have", 
+   "just switched to using a parse-only utility function."
+  ], 
+  "revision_id": "1603487"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-06-18T15:32:26.016876Z", 
+  "msg": [
+   "Following up on r1603485, remove the svn_fs_fs__find_max_ids() shortcut,", 
+   "because the hotcopy code no longer depends on the recovery routines.", 
+   "See http://svn.haxx.se/dev/archive-2014-06/0053.shtml", 
+   "* subversion/libsvn_fs_fs/recovery.h", 
+   "(svn_fs_fs__find_max_ids): Remove this declaration.", 
+   "* subversion/libsvn_fs_fs/recovery.c", 
+   "(svn_fs_fs__find_max_ids): Inline this ...", 
+   "(recover_body): ...here."
+  ], 
+  "revision_id": "1603486"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-06-18T15:31:01.383966Z", 
+  "msg": [
+   "Do not corrupt the destination 'db/current' contents when hotcopying old FSFS", 
+   "filesystems.  Currently we use the \"hotcopy-and-recover\" approach for that.", 
+   "When we need to finalize the operation by writing appropriate values into the", 
+   "'db/current' file in the destination, we only know the revision number, but", 
+   "for old filesystems we also have to know the (next-node-id, next-copy-id)", 
+   "values.  They exist in the source 'db/current' file, but for some reasons", 
+   "we currently do not read them and only read the youngest revision number.", 
+   "Instead of doing that, we attempt to *recover* them from the destination", 
+   "and this approach is broken:", 
+   "* Proper next-node-id and next-copy-id recovery requires a full", 
+   "revision-by-revision scan, otherwise there is no guarantee that you are", 
+   "not going to miss something.  This is essentially what happens now: we", 
+   "attempt to recover the ids based solely on the youngest revision and", 
+   "sometimes miss the highest ones.  As a consequence, the content of the", 
+   "destination 'db/current' (which should point to the *unused* ids) will", 
+   "clash with something that is already committed to the repository.", 
+   "* You do not want to run a full recovery scan in order for the backup (!)", 
+   "to work, especially for the --incremental case.  Even more, depending on", 
+   "the recovery code in the hotcopy implementation seems quite illogical.", 
+   "Fix this by atomically reading the (youngest revision, next-node-id,", 
+   "next-copy-id) tuple from the source and writing it to destination when", 
+   "everything is done.  We do not do any kind of checkpointing for old FSFS", 
+   "filesystems, so it is just a read-once and write-once approach.", 
+   "See http://svn.haxx.se/dev/archive-2014-06/0053.shtml", 
+   "* subversion/libsvn_fs_fs/util.c", 
+   "(svn_fs_fs__read_current): New function.", 
+   "* subversion/libsvn_fs_fs/util.c", 
+   "(svn_fs_fs__read_current): New function.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_body): Use the new svn_fs_fs__read_current() helper for the source", 
+   "filesystem.  Split the revision copying logic for old and new formats.", 
+   "Whenever we encounter a new format filesystem, just stick to the existing", 
+   "approach.  For old (1 or 2) formats, use the new hotcopy_revisions_old()", 
+   "shortcut and do not think about the necessity to copy packed files or to", 
+   "checkpoint the results.  The revision copying logic for new formats now", 
+   "resides ...", 
+   "(hotcopy_revisions): ...in this new function.", 
+   "(hotcopy_revisions_old): New function, containing the revision copying", 
+   "logic for old formats.", 
+   "(hotcopy_update_current): Only handle the new filesystem formats and ...", 
+   "(hotcopy_update_current_old): ...move the support for old formats in this", 
+   "new function.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(fsfs_hotcopy_old_with_id_changes): Remove XFail marker."
+  ], 
+  "revision_id": "1603485"
+ }, 
+ {
+  "author": "jpountz", 
+  "date": "2014-06-18T15:29:54.957870Z", 
+  "msg": [
+   "LUCENE-5773: Test SegmentReader.ramBytesUsed."
+  ], 
+  "revision_id": "1603484"
+ }
+]

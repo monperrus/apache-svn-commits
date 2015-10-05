@@ -1,0 +1,85 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-04-26T04:18:11.648881Z", 
+  "msg": [
+   "On the 1.10-cache-improvements branch:", 
+   "Get rid of the redundant INFO_PREFIX element.  We now have the full", 
+   "prefix string at our disposal.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(PREFIX_TAIL_LEN): This is now only needed when debugging the cache.", 
+   "(store_key_part): Copy the PREFIX_TAIL from the full prefix.", 
+   "(DEBUG_CACHE_MEMBUFFER_INIT_TAG): One parameter less to provide.", 
+   "(get_prefix_tail): Not needed anymore.", 
+   "(svn_membuffer_cache_t): Remove redundant data element.", 
+   "(svn_membuffer_cache_get_info): Report the full prefix as cache ID.", 
+   "(svn_cache__create_membuffer_cache): Update constructor."
+  ], 
+  "revision_id": "1676083"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-04-26T04:01:07.416881Z", 
+  "msg": [
+   "On the 1.10-cache-improvements branch:", 
+   "Fix a couple of long-standing docstring copy'n'pastos. No functional change.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(membuffer_cache_set_internal,", 
+   "membuffer_cache_get_internal): Reference to correct function in docstring."
+  ], 
+  "revision_id": "1676082"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-04-26T03:57:08.783310Z", 
+  "msg": [
+   "On the 1.10-cache-improvements branch:", 
+   "Actually construct, store and compare the full key.  The code now has", 
+   "a few inefficiencies and redundancies.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(full_key_t): Add a buffer for the full key.", 
+   "(find_entry): Compare the full key to ensure we've got an actual hit.", 
+   "(membuffer_cache_set_internal,", 
+   "membuffer_cache_set_partial_internal): Store the full key in front", 
+   "of the cached item.", 
+   "(combine_key): Combine the KEY with the prefix to form the full key.", 
+   "(svn_cache__create_membuffer_cache): Initialize the full prefix prefix", 
+   "and full combined key."
+  ], 
+  "revision_id": "1676081"
+ }, 
+ {
+  "author": "elecharny", 
+  "date": "2015-04-26T03:52:36.845561Z", 
+  "msg": [
+   "Correctly return referals even if the '+' parameter is nt provided for searches (DIRSERVER-2057)"
+  ], 
+  "revision_id": "1676080"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-04-26T02:31:33.970559Z", 
+  "msg": [
+   "On the 1.10-cache-improvements branch:", 
+   "Add the key size to each cache entry and offset the item data access by", 
+   "that amount of bytes.", 
+   "Right now, the key lengh is always 0 and we don't actually compare the", 
+   "full keys since we don't have them, yet.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(entry_key_t): Add KEY_LEN element.", 
+   "(find_entry): Prepare for full key comparison.", 
+   "(membuffer_cache_set_internal,", 
+   "membuffer_cache_get_internal,", 
+   "membuffer_cache_get_partial_internal,", 
+   "membuffer_cache_set_partial_internal): Differentiate between entry SIZE", 
+   "and ITEM_SIZE.  Offset the item", 
+   "storage by the space needed for", 
+   "the full key.", 
+   "(svn_cache__create_membuffer_cache): Ensure NUL-init of all fields. Always", 
+   "have the LAST_ACCESS sub-strcut since", 
+   "the struct length test is no longer", 
+   "reliable."
+  ], 
+  "revision_id": "1676079"
+ }
+]

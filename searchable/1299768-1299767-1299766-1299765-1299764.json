@@ -1,0 +1,60 @@
+[
+ {
+  "author": "jasha", 
+  "date": "2012-03-12T18:13:37.436913Z", 
+  "msg": [
+   "RAVE-492 Add ability to import w3c widgets using the \"add widget\" page. Patch made by Paul Sharples (psharples)."
+  ], 
+  "revision_id": "1299768"
+ }, 
+ {
+  "author": "andys", 
+  "date": "2012-03-12T18:10:35.655982Z", 
+  "msg": [
+   "Checkpoint: fixed bogus version range bug", 
+   "During skin pregeneration, StableNameUtils.ApplicationNameExtractor was sometimes seeing bogus version ranges - ie. we had cases where our matched version range had start version > end version.", 
+   "This was due to incorrect behavior that I previously implemented in AgentAtRuleMatcher.getVersionsForApplication(). This method returned all versions for the application, whereas during name generation we only want to consider versions/version ranges that contain the current agent's version.", 
+   "So, for example, given the following @agent rule:", 
+   "@agent ie (version:8), ie (version:7)  { ... }", 
+   "In cases where the actual agent version is 7, AgentAtRuleMatcher.getVersionsForApplication() would return entries for both 7 and 8.  This led to the following sequence during stable name generation.", 
+   "Initially version range:", 
+   "start: MIN_VERSION", 
+   "end: MAX_VERSION", 
+   "After adding agent version 8:", 
+   "start: 8", 
+   "end: 8", 
+   "After then adding agent version 7:", 
+   "start: 8", 
+   "end: 7    (since 7 < 8)", 
+   "To avoid this, I have broken out AgentAtRuleMatcher.getVersionsForApplication() into two methods:", 
+   "1. getAllVersionsForApplication(Application agentApplication): Returns all versions (eg. 7 and 8 in the above example).  This is used by AgentVariantExtractor to determine which versions to attempt to pregenerate.  (We want to pregenerate both 7 and 8, so need to return all versions.)", 
+   "2. getMatchingVersionsForApplication(Application agentApplication, Version agentVersion): Only returns versions that match the specified agent version.  This is used by StableNameUtils.ApplicationNameExtractor when producing style sheet file names.  (We only want to take matching versions into consideration when producing file names, so only return 7.)", 
+   "I have more refactoring to do in this area, eg. I don't think we actually want to expose these two accessors at all.  But wanted to check this in  now since this issue is subtly annoying."
+  ], 
+  "revision_id": "1299767"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2012-03-12T18:10:24.212652Z", 
+  "msg": [
+   "Tidy POM <url>"
+  ], 
+  "revision_id": "1299766"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2012-03-12T18:04:26.703654Z", 
+  "msg": [
+   "[maven-release-plugin] prepare for next development iteration"
+  ], 
+  "revision_id": "1299765"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2012-03-12T18:04:23.049347Z", 
+  "msg": [
+   "[maven-release-plugin]  copy for tag jena-fuseki-0.2.1-incubating-RC-1"
+  ], 
+  "revision_id": "1299764"
+ }
+]

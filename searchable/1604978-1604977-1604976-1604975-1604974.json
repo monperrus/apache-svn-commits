@@ -1,0 +1,79 @@
+[
+ {
+  "author": "kschenk", 
+  "date": "2014-06-24T00:30:18.908623Z", 
+  "msg": [
+   "Local property file for gl download"
+  ], 
+  "revision_id": "1604978"
+ }, 
+ {
+  "author": "kschenk", 
+  "date": "2014-06-24T00:29:52.361659Z", 
+  "msg": [
+   "Update to direct download back to gl download area"
+  ], 
+  "revision_id": "1604977"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-06-24T00:24:22.503598Z", 
+  "msg": [
+   "Remove encryptConditionFields from the condition objects; now, the", 
+   "encryption/decryption happens at the jdbc layer, when values are set", 
+   "into a PreparedStatement, or fetched from a ResultSet.", 
+   "This means that conditions are no longer munged to contain the encrypted", 
+   "value, and entities are no longer updated to temporarily contain the", 
+   "encrypted value.  In all cases, the value of a field in memory will be", 
+   "unecncrypted.", 
+   "This fixes the following code patterns:", 
+   "person = delegator.create(\"Person\", [partyId: \"my-party\"]);", 
+   "person.socialSecurityNumber = \"1234\";", 
+   "person.store();", 
+   "// this fails, the encrypted value is stored inside entity", 
+   "assertEquals(\"1234\", person.socialSecurityNumber);", 
+   "currentValue = person.socialSecurityNumber", 
+   "person.store();", 
+   "// this fails, the field is doubly-encrypted", 
+   "assertEquals(currentValue, person.socialSecurityNumber);", 
+   "origCondition = EntityCondition.makeCondition(", 
+   "\"socialSecurityNumber\",", 
+   "EntityOperator.EQUALS,", 
+   "\"1234\"", 
+   ");", 
+   "list = delegator.findList(\"Person\", origCondition);", 
+   "newCondition = EntityCondition.makeCondition(", 
+   "\"socialSecurityNumber\",", 
+   "EntityOperator.EQUALS,", 
+   "\"1234\"", 
+   ");", 
+   "// this fails, because the condition is updated in-place, with the", 
+   "// encrypted field value.", 
+   "assertEquals(origCondition, newCondition);"
+  ], 
+  "revision_id": "1604976"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-06-24T00:24:08.296806Z", 
+  "msg": [
+   "Condition objects are now immutable.  This removed more uses of", 
+   "javolution classes, namely, all the factory support code is now gone."
+  ], 
+  "revision_id": "1604975"
+ }, 
+ {
+  "author": "doogie", 
+  "date": "2014-06-24T00:24:01.441601Z", 
+  "msg": [
+   "Restructured so that the built-up object is a wrapper around the actual", 
+   "condition; this allows the wrapped value to be changed, as the builder", 
+   "api is used, and will make it possible for the actual condition object", 
+   "to be made final.", 
+   "To allow for this wrapper to be passed to the delegator, it extends", 
+   "EntityCondition, and delegates all calls to the contained condition", 
+   "object."
+  ], 
+  "revision_id": "1604974"
+ }
+]

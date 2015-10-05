@@ -1,0 +1,92 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-26T10:47:08.166716Z", 
+  "msg": [
+   "Following up on r1662412, add test assertion.", 
+   "* subversion/tests/libsvn_wc/entries-compat.c", 
+   "(test_stubs): Add another assertion, this time validating that", 
+   "the non stub is really from the subdir."
+  ], 
+  "revision_id": "1662413"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-02-26T10:39:49.125524Z", 
+  "msg": [
+   "Fix the most acute problems in the regression in the entries compatibility", 
+   "code that made it impossible to read the 'parent stubs' of nodes when there", 
+   "is an obstructing working copy. This fixes the status/entry run in the", 
+   "revert test that didn't work with entries, and a case in the entries", 
+   "compatibility tests that only happened to work, just because the child", 
+   "directory was similar to what was recorded in the ancestor.", 
+   "This makes entries.c include the private wc_db api, which is ugly.", 
+   "But I think it is a better solution than using sqlite directly,", 
+   "and hardcoding wc_id 1 as we did before.", 
+   "There are still a few remaining cases where we read info from the", 
+   "obstructing working copy, but these don't affect the creation", 
+   "of the stub fields.", 
+   "* subversion/libsvn_wc/entries.c", 
+   "(SVN_WC__I_AM_WC_DB): Define.", 
+   "(includes): Add wc_db_private.h", 
+   "(get_info_for_deleted,", 
+   "read_one_entry): Add wcroot, relpath arguments as alternate", 
+   "for the still passed db, abspath. Use wc_db internal", 
+   "functions where available to be able to read below obstruction", 
+   "when reading from the parent dir.", 
+   "(read_entries_new): Pass wcroot, dir_relpath.", 
+   "(read_entry_pair): Rename to...", 
+   "(read_entry_pair_txn): ... this and pass wcroot, dir_relpath.", 
+   "(read_entry_pair): New wrapper function. Obtaining wcroot and lock.", 
+   "(read_entries): Rename wcroot_* arguments to dir_* as wcroot isn't", 
+   "the right name in wc-ng. Obtain wcroot instance and use wc_db lock", 
+   "around call.", 
+   "(svn_wc__entries_read_internal): Remove sqlite level lock, as read", 
+   "entries obtains a better lock itself.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(scan_deletion_txn): Rename to..", 
+   "(scan_deletion): ... this.", 
+   "(svn_wc__db_scan_deletion_internal): New function.", 
+   "(svn_wc__db_scan_deletion): Update caller.", 
+   "(get_info_for_copy,", 
+   "db_read_repos_info,", 
+   "relocate_txn): Update caller.", 
+   "(svn_wc__db_scan_addition_internal): New function.", 
+   "* subversion/libsvn_wc/wc_db_private.h", 
+   "(svn_wc__db_scan_addition_internal,", 
+   "svn_wc__db_scan_deletion_internal): New function.", 
+   "* subversion/tests/cmdline/revert_tests.py", 
+   "(revert_obstructing_wc): Expect status to work normally.", 
+   "* subversion/tests/libsvn_wc/entries-compat.c", 
+   "(test_stubs): Add assertion that would have failed before this patch."
+  ], 
+  "revision_id": "1662412"
+ }, 
+ {
+  "author": "jpountz", 
+  "date": "2015-02-26T10:38:34.776616Z", 
+  "msg": [
+   "LUCENE-6293: Fixed TimSorter bug."
+  ], 
+  "revision_id": "1662411"
+ }, 
+ {
+  "author": "jpountz", 
+  "date": "2015-02-26T10:28:33.362298Z", 
+  "msg": [
+   "LUCENE-6293: Fixed TimSorter bug."
+  ], 
+  "revision_id": "1662410"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2015-02-26T10:18:23.110659Z", 
+  "msg": [
+   "On the 'move-tracking-2' branch: Rename some identifiers for clarity and brevity.", 
+   "* subversion/svnmover/svnmover.c", 
+   "(action_t): New typedef for what was 'struct action'. Rename its 'path' field to", 
+   "'relpath'."
+  ], 
+  "revision_id": "1662409"
+ }
+]

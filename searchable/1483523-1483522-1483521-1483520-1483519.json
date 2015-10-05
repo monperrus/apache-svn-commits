@@ -1,0 +1,93 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-05-16T19:20:19.996818Z", 
+  "msg": [
+   "[HBASE-8185] Adding ClientLocalScanner which opens the RegionScanner and reads data from HFiles directly from the client.", 
+   "Author: manukranthk", 
+   "Summary:", 
+   "This diff adds ReadOnlyStore and ClientLocalScanner to do Client side scanning.", 
+   "ReadOnlyStore : Provides a read only abstraction over Store.", 
+   "ClientLocalScanner : Provides a ResultScanner which opens ReadOnlyStores and reads data from HFiles directly from the client side using the RegionScanner interface. The code tries to bypass the HRegionServer and provide a way to read using the RegionScanner.", 
+   "Test Plan: Unit Testing.", 
+   "Reviewers: liyintang, rshroff, aaiyer, adela, shaneh", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D750884", 
+   "Task ID: 2103689"
+  ], 
+  "revision_id": "1483523"
+ }, 
+ {
+  "author": "tross", 
+  "date": "2013-05-16T19:20:18.782090Z", 
+  "msg": [
+   "NO-JIRA - Fixed \"may be used uninitialized\" warning on old (RHEL5) compilers."
+  ], 
+  "revision_id": "1483522"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-05-16T19:20:14.949681Z", 
+  "msg": [
+   "[HBASE-8500] Minor Changes in RollingRestart + a basic wrapper around the utility", 
+   "Author: rshroff", 
+   "Summary:", 
+   "Made small changes in RollingRestart class to be able to remotely", 
+   "restart a region server.", 
+   "The change also adds a very basic wrapper(groovy script) around the RollingRestart utility", 
+   "to perform the RR for all/selected region servers in the cluster.", 
+   "Test Plan: tested it multiple times on TSH025", 
+   "Reviewers: aaiyer, liyintang, paultuckfield", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D807373", 
+   "Task ID: 2229110"
+  ], 
+  "revision_id": "1483521"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-05-16T19:20:12.690569Z", 
+  "msg": [
+   "[HBASE-8524] [0.89-fb] Fix indefinite wait() in HBaseClient", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "HBaseClient threads wait() indefinitely on the Connection to get", 
+   "a response from the server. However, if the server does not respond", 
+   "(for whatever reasons) the client could be waiting forever.", 
+   "Moreover, it will be difficult to guarantee rpcTimeout settings if", 
+   "we wait forever.", 
+   "Changing the indefinite wait to a loop of timed waits; Bailing out", 
+   "if we wait for longer than the rpcTimeout.", 
+   "Test Plan:", 
+   "mvn tests", 
+   "TBD:", 
+   "try to get this on ods and re-pro with TF", 
+   "Reviewers: liyintang, rshroff, shaneh", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, mbm, mycnyc", 
+   "Differential Revision: https://phabricator.fb.com/D806604", 
+   "Task ID: 2362485"
+  ], 
+  "revision_id": "1483520"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-05-16T19:20:10.746037Z", 
+  "msg": [
+   "[HBASE-8114][89-fb] Adding time spent before RPC interrupted logging", 
+   "Author: adela", 
+   "Summary:", 
+   "When the client closes the connection, we stop the execution of", 
+   "the get RPC. We should also print how much time we spent executing", 
+   "before we interrupted.", 
+   "Test Plan: push on one machine on tsh25", 
+   "Reviewers: liyintang, rshroff, manukranthk", 
+   "Reviewed By: rshroff", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D801065"
+  ], 
+  "revision_id": "1483519"
+ }
+]

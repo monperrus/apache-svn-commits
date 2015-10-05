@@ -1,0 +1,68 @@
+[
+ {
+  "author": "alexparvulescu", 
+  "date": "2015-03-11T15:14:29.468935Z", 
+  "msg": [
+   "OAK-2605: Support for additional encodings needed in ReversedLinesFileReader", 
+   "- added license headers"
+  ], 
+  "revision_id": "1665898"
+ }, 
+ {
+  "author": "tommaso", 
+  "date": "2015-03-11T15:13:06.585157Z", 
+  "msg": [
+   "OAK-2607 - fixed usage of usedProperties and ignoredProperties"
+  ], 
+  "revision_id": "1665897"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-03-11T15:05:27.501631Z", 
+  "msg": [
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_compare_ids,", 
+   "svn_fs_check_related): Remove the silly \"may become deprecated\" note", 
+   "and say what we actually want.  Add a @see."
+  ], 
+  "revision_id": "1665896"
+ }, 
+ {
+  "author": "tommaso", 
+  "date": "2015-03-11T15:03:27.300595Z", 
+  "msg": [
+   "OAK-2602 - removed ping calls, backported to branch 1.0"
+  ], 
+  "revision_id": "1665895"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-03-11T15:03:17.493981Z", 
+  "msg": [
+   "Fix the noderev relatedness check for FSFS and FSX when both noderevs / IDs", 
+   "belong to different transactions.  Provide a test case for it.", 
+   "Due to a misread of the 1.8.x logic, the new code in 1.9 reported noderevs", 
+   "from different txns as \"unrelated\".  The actual problem that exists in FSFS", 
+   "is that node-IDs that just got created (as added w/o history) in a txn have", 
+   "only a txn-local ID.  Hence, they may clash between txns.  OTOH, uncommitted", 
+   "new nodes from different txns cannot be related.  So, the relation check", 
+   "can be implemented for all possible cases in FSFS but requires extra logic.", 
+   "BDB did the right thing from the start.  FSX had code added to mimic FSFS'", 
+   "restriction and that code can simply be removed.", 
+   "Found by: julianfoad", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(svn_fs_fs__id_check_related): Use a more obvious check for the", 
+   "\"same tmp node-ID but different txn\" case.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_node_relation): Re-implement the logic for nodes from different txns.", 
+   "* subversion/libsvn_fs_x/fs_id.c", 
+   "(id_compare): Remove the \"different txns implies unrelated nodes\" block.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(x_node_relation): Same.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(check_txn_related): New test, inspired by check_txn_related.", 
+   "(test_funcs): Register the new test."
+  ], 
+  "revision_id": "1665894"
+ }
+]

@@ -1,0 +1,65 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-01-14T01:28:46.942904Z", 
+  "msg": [
+   "Fix pool usage issues in FSX verification code.", 
+   "* subversion/libsvn_fs_x/verify.c", 
+   "(compare_p2l_to_l2p_index): Nested loops require seperate iterpools.", 
+   "Clean those pools properly.", 
+   "(compare_p2l_to_rev): Within a loop, use the ITERPOOL for temporaries."
+  ], 
+  "revision_id": "1651548"
+ }, 
+ {
+  "author": "hashutosh", 
+  "date": "2015-01-14T01:27:42.004356Z", 
+  "msg": [
+   "HIVE-9278 : Cached expression feature broken in one case (Navis via Ashutosh Chauhan)"
+  ], 
+  "revision_id": "1651547"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-14T01:09:09.966520Z", 
+  "msg": [
+   "Make the next non-trivial function in FSX/cached_data.h comply to the", 
+   "two pool paradigm.  Although the signature does not change, getting", 
+   "the pool usage right has a knock-on effect down the call stack.", 
+   "* subversion/libsvn_fs_x/cached_data.h", 
+   "(svn_fs_x__get_file_delta_stream): The implementation has no use for", 
+   "a scratch pool.  So, POOL becomes", 
+   "the RESULT_POOL.", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(rep_read_baton): For clarity, rename POOL for temps to SCRATCH_POOL.", 
+   "(build_rep_list): Switch to using two pools. This is not strictly", 
+   "necessary but ITERPOOL should be subpool of SCRATCH_POOL.", 
+   "(rep_read_get_baton): POOL is a pure RESULT_POOL, even though subpools", 
+   "will *later* be used for temporaries.", 
+   "(get_combined_window,", 
+   "rep_read_contents_close,", 
+   "get_contents_from_windows,", 
+   "get_contents_from_fulltext", 
+   "skip_contents): Update struct access.", 
+   "(rep_read_contents): Same. Add a scratch pool to the sub-function call.", 
+   "(svn_fs_x__get_contents): Only a RESULT_POOL is needed."
+  ], 
+  "revision_id": "1651546"
+ }, 
+ {
+  "author": "sarowe", 
+  "date": "2015-01-14T00:46:43.715323Z", 
+  "msg": [
+   "Get Maven compilation working again: example->server; don't need javax.servlet:javax.servlet-api test dep in solr/core/ivy.xml, since it's already included as a compile-scope dep via solr/server/ivy.xml"
+  ], 
+  "revision_id": "1651545"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2015-01-14T00:31:46.740625Z", 
+  "msg": [
+   "Fix up Maven warning - cannot have two copies of build helper in main build"
+  ], 
+  "revision_id": "1651544"
+ }
+]

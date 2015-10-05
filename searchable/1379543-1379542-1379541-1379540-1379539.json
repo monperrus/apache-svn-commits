@@ -1,0 +1,102 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-08-31T18:30:42.225051Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-6605] Allow bulk load to go past failures.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Bulk load currently fails immediately whenever one file in the", 
+   "bulk load directory is not successfully bulk loaded.", 
+   "Allow for this behavior to be controlled through a conf change", 
+   "Test Plan: test out manually on dev cluster", 
+   "Reviewers: madhuvaidya, kannan, kranganathan", 
+   "Reviewed By: kannan", 
+   "CC: ruifang, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D548896", 
+   "Task ID: 660885"
+  ], 
+  "revision_id": "1379543"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-31T18:30:18.843991Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-6680]  Separate serverName and workerName for SplitLogWorkers", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "With regards to Prakash's comments on the original diff", 
+   "https://phabricator.fb.com/D560200", 
+   "1) move worker id logic inside splitLogWorker", 
+   "2) change SplitLogManager to rely on the serverName instead of workerName to", 
+   "handle server failures.", 
+   "Test Plan:", 
+   "additional testing:", 
+   "- deploy to dev cluster", 
+   "- initiate split logs by killing RS", 
+   "- Kill another RS during split logs and verify that the master handles the", 
+   "event correctly.", 
+   "Reviewers: kannan, pkhemani, kranganathan", 
+   "Reviewed By: pkhemani", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D561386"
+  ], 
+  "revision_id": "1379542"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-31T18:29:54.007120Z", 
+  "msg": [
+   "[jira] [HBASE-6681] [89-fb] Propagate RegionOverloadedException to the Thrift client", 
+   "Author: mbautin", 
+   "Summary: To correctly propagate RegionOverloadedException (added in HBASE-6423) to the Thrift client we need to make it a Thrift exception. One way to do that is to inherit from IOError and add the desired client-side delay in milliseconds to IOError.", 
+   "Test Plan: Run a Thrift-based load test with small memstore that would result in blocking writes and verify that IOErrors indicating that the regionserver has been overloaded are being propagated to the client.", 
+   "Reviewers: aaiyer, kranganathan, nzhang", 
+   "Reviewed By: aaiyer", 
+   "Differential Revision: https://reviews.facebook.net/D4983"
+  ], 
+  "revision_id": "1379541"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-31T18:29:28.991912Z", 
+  "msg": [
+   "support for bin/hadoop classpath bin/hbase classpath", 
+   "Author: pkhemani", 
+   "Summary: as in title", 
+   "Test Plan: ran changed bin/hadoop and bin/hbase scripts in the source directories and that worked fine.", 
+   "Reviewers: mbautin, sdong", 
+   "Reviewed By: mbautin", 
+   "CC: hbase-eng@, hdfs-dev@, pritam", 
+   "Differential Revision: https://phabricator.fb.com/D559998", 
+   "Task ID: 1409831"
+  ], 
+  "revision_id": "1379540"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-08-31T18:29:05.357613Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-6680] Allow multiple SplitLogWorkers per RS", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Currently SplitLogs is the slowest part of the pipeline in", 
+   "processing dead servers. Based on rough back of envelop calculations,", 
+   "for rack switch reboot, it takes about 2-3 rounds of log assignments ( 20 *", 
+   "8 logs / (80 - delta) remaining servers) to get through this phase.", 
+   "One low hanging fruit is to increase the #threads for split logs in each RS.", 
+   "Setting the default to 3, because 2 may be cutting it too close.", 
+   "Test Plan:", 
+   "run MR tests.", 
+   "- only failure (TestMasterTransitions) fails on master as well.", 
+   "push to dev cluster. kil one RS. Check master logs for split log messages.", 
+   "output shows multiple threads per RS working in parallel to grab and process logs.", 
+   "Reviewers: kannan, kranganathan, avf", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D560200", 
+   "Task ID: 1417129"
+  ], 
+  "revision_id": "1379539"
+ }
+]

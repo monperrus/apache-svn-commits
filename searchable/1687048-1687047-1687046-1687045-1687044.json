@@ -1,0 +1,83 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-06-23T13:03:05.830035Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "Fix the DEBUG run.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(commit_body): We need to flush (not fsync) the APR file buffers before", 
+   "checking the revision contents through an independent", 
+   "FS instance."
+  ], 
+  "revision_id": "1687048"
+ }, 
+ {
+  "author": "mreutegg", 
+  "date": "2015-06-23T13:02:10.562746Z", 
+  "msg": [
+   "OAK-936: Site checkin for project Oak Documentation-1.4-SNAPSHOT", 
+   "Restore oak-mongo-js"
+  ], 
+  "revision_id": "1687047"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-06-23T13:00:46.703897Z", 
+  "msg": [
+   "On the svn-mergeinfo-normalizer branch:", 
+   "Fix the build broken by the latest catch-up merge.", 
+   "* tools/client-side/svn-mergeinfo-normalizer/svn-mergeinfo-normalizer.c", 
+   "(sub_main): Provide an additional parameter."
+  ], 
+  "revision_id": "1687046"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-06-23T12:55:43.390864Z", 
+  "msg": [
+   "On the svn-mergeinfo-normalizer branch:", 
+   "Catch up with /trunk up to r1687042."
+  ], 
+  "revision_id": "1687045"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-06-23T12:54:00.144015Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "Piggy-back the txn-id allocation onto the FSX commit, such that the next", 
+   "txn with the same svn_fs_t instance can be started with no additional fsync.", 
+   "Operations like 'svnadmin load' will commit a sequence of revisions through", 
+   "the same svn_fs_t instance.  Per revision, a new transaction is being", 
+   "created, which involves bumping 'txn-current', in turn requiring 2 fsyncs.", 
+   "This patch pre-allocates a new txn-ID during commit such that those fsync", 
+   "calls can be executed as part of the 'current' bump.  Hence, the marginal", 
+   "costs of adding a revision is then down to the 2 fsync delays needed for", 
+   "the commit.", 
+   "Because bumping 'txn-current' requires the aquisition of txn-current-lock,", 
+   "we need to revise the locking order.  txn-current-lock will now be taken", 
+   "out inside the commit body, i.e. *after* the write-lock.  The lock order", 
+   "did not matter in the past as those locks were unrelated.  However, the", 
+   "\"with-all-locks\" function used a different ordering that what we need now", 
+   "and we have to change that ordering consistently.", 
+   "* subversion/libsvn_fs_x/fs.h", 
+   "(svn_fs_x__shared_data_t): Revise the lock ordering documentation and", 
+   "reorder declarations accordingly to minimize", 
+   "the chance of confusion.", 
+   "(svn_fs_x__data_t): Add a field for the pre-allocated txn-id.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(lock_id_t,", 
+   "init_lock_baton): Declarations and switch-cases to reflect the new lock", 
+   "order.  Not necessary but keeps things less confusing.", 
+   "(svn_fs_x__with_all_locks): Actually change the lock acquisition order.", 
+   "(create_txn_dir): Don't bump the 'txn-current' if there is already a", 
+   "pre-allocated txn-id that we can just use.", 
+   "(bump_ids_baton_t,", 
+   "bump_ids): Factored out from commit_body and adding the pre-allocation", 
+   "of a txn-id.", 
+   "(commit_body): Execute the id bumps while holding the txn-current-lock."
+  ], 
+  "revision_id": "1687044"
+ }
+]

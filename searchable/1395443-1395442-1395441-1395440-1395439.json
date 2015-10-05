@@ -1,0 +1,76 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2012-10-08T02:56:27.445674Z", 
+  "msg": [
+   "Another svn log -g optimization.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(get_combined_mergeinfo_changes): merge info changes rarely,", 
+   "checking for equal info is very quick"
+  ], 
+  "revision_id": "1395443"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-10-08T02:54:14.580233Z", 
+  "msg": [
+   "When running \"svn log -g\", we will fetch the list of changed paths", 
+   "(at least) twice for each revision.  To prevent that, add the list", 
+   "as an additional parameter to the relevant functions and let them", 
+   "request the list only if it isn't already available through the", 
+   "new parameter.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(detect_changed,", 
+   "fs_mergeinfo_changed,", 
+   "get_combined_mergeinfo_changes,", 
+   "fill_log_entry,", 
+   "send_log): add optional refetched_changes parameter", 
+   "(do_logs): use the above to fetch the changed path lists only once", 
+   "(svn_repos_get_logs4): update other callers"
+  ], 
+  "revision_id": "1395442"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2012-10-08T02:53:44.032741Z", 
+  "msg": [
+   "create JSF 2.1 module"
+  ], 
+  "revision_id": "1395441"
+ }, 
+ {
+  "author": "lu4242", 
+  "date": "2012-10-08T02:52:26.013838Z", 
+  "msg": [
+   "create JSF 2.1 module"
+  ], 
+  "revision_id": "1395440"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-10-08T02:37:36.419548Z", 
+  "msg": [
+   "During \"svn log -g\",  we will call get_mergeinfo_for_path multiple times", 
+   "for each change in each revision.  Instead of parsing and pre-processing", 
+   "the merge info each time,  we once more introduce a cache for the fully", 
+   "processed svn_mergeinfo_t object.  That cache will only be used when", 
+   "fulltext caching has been enabled.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): declare new caches", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches): initialize new caches", 
+   "* subversion/libsvn_fs_fs/temp_serializer.h", 
+   "(svn_fs_fs__serialize_mergeinfo,", 
+   "svn_fs_fs__deserialize_mergeinfo): declare new (de-)serializers", 
+   "* subversion/libsvn_fs_fs/temp_serializer.c", 
+   "(mergeinfo_data_t): declare temporary structure for serialization", 
+   "(svn_fs_fs__serialize_mergeinfo,", 
+   "svn_fs_fs__deserialize_mergeinfo): implement new (de-)serializers", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(mergeinfo_cache_key): new utility", 
+   "(get_mergeinfo_for_path_internal): renamed from get_mergeinfo_for_path", 
+   "(get_mergeinfo_for_path): caching wrapper around the actual function"
+  ], 
+  "revision_id": "1395439"
+ }
+]

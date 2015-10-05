@@ -1,0 +1,84 @@
+[
+ {
+  "author": "britter", 
+  "date": "2013-02-24T21:13:25.043689Z", 
+  "msg": [
+   "Remove clirr plugin configuration. It is already defined in latest parent pom."
+  ], 
+  "revision_id": "1449548"
+ }, 
+ {
+  "author": "britter", 
+  "date": "2013-02-24T21:03:16.457346Z", 
+  "msg": [
+   "Switch developer email addresses to explicit format as discussed on the ML (http://markmail.org/message/aqlgo4bqsjtzevtm)"
+  ], 
+  "revision_id": "1449547"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-02-24T20:36:40.044799Z", 
+  "msg": [
+   "Allow workqueue items to queue the recording of timestamps and sizes", 
+   "until we already have a db write transaction open to mark the current", 
+   "item as completed.", 
+   "This saves at least 5% of every checkout on my testruns, which run on", 
+   "a ramdrive. On harddisks or network drives the difference would be much", 
+   "larger. (Assuming a very fast and/or local repository).", 
+   "* subversion/libsvn_wc/workqueue.c", 
+   "(work_item_baton_t): Add typedef.", 
+   "(work_item_dispatch): Add argument to all workqueue functions.", 
+   "(get_and_record_fileinfo): Change into prototype of function later", 
+   "in the file. Take baton instead of db argument.", 
+   "(run_base_remove,", 
+   "run_file_commit,", 
+   "run_postupgrade): Update arguments.", 
+   "(run_file_install): Update arguments. Update caller.", 
+   "(run_file_remove,", 
+   "run_dir_remove,", 
+   "run_file_move,", 
+   "run_file_copy_translated,", 
+   "run_dir_install,", 
+   "run_sync_file_flags,", 
+   "run_prej_install): Update arguments.", 
+   "(run_record_fileinfo): Update arguments. Update caller.", 
+   "(run_set_text_conflict_markers,", 
+   "run_set_property_conflict_marker): Update arguments.", 
+   "(dispatch_work_item): Update caller.", 
+   "(svn_wc__wq_run): Create baton. Check if we should call the normal or the", 
+   "extended svn_wc__db_wq_fetch_next. Update caller.", 
+   "(get_and_record_fileinfo): New function."
+  ], 
+  "revision_id": "1449546"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-02-24T20:26:42.301616Z", 
+  "msg": [
+   "Add a special variant of svn_wc__db_wq_fetch_next() which not only retrieves", 
+   "the next workqueue item, but also records the timestamp and size of one or", 
+   "more files.", 
+   "A second commit will start using this from the workqueue for the install wq", 
+   "items, to combine the two most common db transactions during update and", 
+   "checkout.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(record_baton_t): Remove struct.", 
+   "(db_record_fileinfo): Use arguments for record values.", 
+   "(svn_wc__db_global_record_fileinfo): Update caller.", 
+   "(set_props_txn): Update caller.", 
+   "(wq_record): New function.", 
+   "(svn_wc__db_wq_record_and_fetch_next): New function.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_wq_record_and_fetch_next): New function"
+  ], 
+  "revision_id": "1449545"
+ }, 
+ {
+  "author": "suresh", 
+  "date": "2013-02-24T20:21:45.230666Z", 
+  "msg": [
+   "HADOOP-9279. Merging change r1449543 from trunk"
+  ], 
+  "revision_id": "1449544"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "mbautin", 
+  "date": "2012-09-22T12:51:08.809808Z", 
+  "msg": [
+   "[jira] [HBASE-6619] [89-fb] Do no unregister and re-register interest ops in RPC", 
+   "Author: michalgr", 
+   "Summary:", 
+   "Improvements in how we are dealing with incoming requests. Right now we are using deserialization pool. Every tame we get read event on a selector in listener, we deregister read operation and pass descriptor to deserialization pool. Then some thread (one of #CPUs + 1) reads some bytes, then registers read interest again and wake ups listener.", 
+   "My changes introduce pool of Reader threads. Those threads have their own selectors and they do not have to register/deregister anything all the time.", 
+   "This patch also delays parsing of incoming request. RawCalls are queued, and then parsed in Handler thread that gets it.", 
+   "Test Plan:", 
+   "Unit tests, 4 fails:", 
+   "TestDistributedLogSplitAtStartup", 
+   "TestSplitLogWorker", 
+   "TestDistributedLogSplitting", 
+   "TestLogSplitOnMasterFailover", 
+   "All 4 fail without these changes.", 
+   "Impact on performance can be seen here: https://our.intern.facebook.com/intern/wiki/index.php/HBase/PerfExperiments/HBase-versus-Hypertable", 
+   "Reviewers: kranganathan", 
+   "Reviewed By: kranganathan", 
+   "CC: JIRA, Kannan, aaiyer, avf, mbautin, Liyin, gqchen", 
+   "Differential Revision: https://reviews.facebook.net/D5283"
+  ], 
+  "revision_id": "1388798"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-09-22T12:50:43.248487Z", 
+  "msg": [
+   "[HBASE-6857] [0.89-fb] Instrument how long flushes hold the update lock", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Seen some coorelation between slow operations and", 
+   "an occassional memstore flush.", 
+   "See how long we block updates during a flush.", 
+   "Test Plan: push and look for stats", 
+   "Reviewers: kranganathan, kannan", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D581115"
+  ], 
+  "revision_id": "1388797"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-09-22T12:50:16.276394Z", 
+  "msg": [
+   "[HBASE-6840] [0.89-fb] SplitLogManager should reassign tasks even on a clean RS shutdown.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "SplitLogManager does not reassign tasks if the regionserver does a clean", 
+   "shutdown. We should reassign the task even if there is a clean shutdown.", 
+   "This is a problem if the shutting down RS is the 3rd splitlog worker. Master", 
+   "just sits there in a loop waiting for the task to finish, as the timeout", 
+   "will not reassign the task any further.", 
+   "Test Plan: Run unit tests", 
+   "Reviewers: pkhemani, kannan, kranganathan, liyintang", 
+   "Reviewed By: pkhemani", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D578411"
+  ], 
+  "revision_id": "1388796"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-09-22T12:47:07.414286Z", 
+  "msg": [
+   "On the 10Gb branch: When reporting changed properties against", 
+   "an empty source or a source with no properties,  there is no", 
+   "need for calculating a diff between both lists.  Also, reduce", 
+   "general computational overhead.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(report_baton_t): store repos UUID here", 
+   "(delta_proplists): tune; don't deltify against empty list", 
+   "(svn_repos_begin_report3): init baton's UUID member"
+  ], 
+  "revision_id": "1388795"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2012-09-22T12:41:22.123742Z", 
+  "msg": [
+   "merge r1388788, so we are testing we can actually read 4.0-alpha indexes"
+  ], 
+  "revision_id": "1388794"
+ }
+]

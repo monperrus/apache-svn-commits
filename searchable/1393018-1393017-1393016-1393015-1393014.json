@@ -1,0 +1,93 @@
+[
+ {
+  "author": "angela", 
+  "date": "2012-10-02T16:34:44.227422Z", 
+  "msg": [
+   "javadoc, @code tags"
+  ], 
+  "revision_id": "1393018"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2012-10-02T16:34:27.190437Z", 
+  "msg": [
+   "MRUNIT-130: Download page does not point to KEYS; no hashes in download area; must not advertise snapshot builds"
+  ], 
+  "revision_id": "1393017"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2012-10-02T16:33:44.291423Z", 
+  "msg": [
+   "MRUNIT-130: Download page does not point to KEYS; no hashes in download area; must not advertise snapshot builds"
+  ], 
+  "revision_id": "1393016"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-10-02T16:30:39.602377Z", 
+  "msg": [
+   "Forbid WC->WC moves of mixed-revision subtrees by default.", 
+   "The reasoning behind this is that conflicts involving mixed-revision moves", 
+   "are harder to resolve than conflicts involving single-revision moves.", 
+   "Subversion does not yet support interactive resolution of tree conflicts,", 
+   "and it is not yet clear whether this feature will be available in 1.8.", 
+   "We will need to handle mixed-revision moves as part of interactive tree", 
+   "conflict resolution eventually, but until that is the case refusing to", 
+   "create mixed-revision moves will help users avoid unnecessary conflicts", 
+   "that need to be resolved manually.", 
+   "The API is fully backwards compatible and will allow mixed-revision moves", 
+   "by default unless a new-in-1.8 interface is used.", 
+   "The --allow-mixed-revision option has been added to 'svn move' to allow", 
+   "scripts written for Subversion <= 1.7 to run with minor modifications.", 
+   "The same was done for 'svn merge' in 1.7 and nobody complained, so this", 
+   "approach seems viable.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__move2): Declare. Successor of svn_wc_move(), made private since", 
+   "we've been slowly moving libsvn_wc APIs into the private API space since", 
+   "the inception of wc-ng (the equivalent API functions at the libsvn_client", 
+   "interface remain public).", 
+   "* subversion/include/svn_client.h", 
+   "(svn_client_move7): Declare.", 
+   "(svn_client_move6): Deprecate.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_WC_MIXED_REVISIONS): New error code.", 
+   "* subversion/include/svn_wc.h", 
+   "(svn_wc_move): Deprecate.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(do_wc_to_wc_moves_with_locks1,", 
+   "do_wc_to_wc_moves_with_locks2): Add allow_mixed_revisions parameter and", 
+   "call svn_wc__move2().", 
+   "(do_wc_to_wc_moves, try_copy): Add allow_mixed_revisions parameter.", 
+   "(svn_client_copy6): Allow try_copy() to use mixed-revisions (this is", 
+   "actually a no-op since is_move is FALSE).", 
+   "(svn_client_move7): Bumped version of svn_client_move6(), with a new", 
+   "allow_mixed_revisions parameter.", 
+   "* subversion/libsvn_client/deprecated.c", 
+   "(svn_client_move6): Implement as wrapper around svn_client_move7().", 
+   "* subversion/libsvn_wc/copy.c", 
+   "(copy_versioned_dir): Add allow_mixed_revisions parameter. If this parameter", 
+   "is FALSE, reject attempts to move mixed-revision subtrees.", 
+   "(copy_or_move): Add allow_mixed_revisions parameter.", 
+   "(svn_wc_copy3): Allow copy_or_move() to use mixed revisions.", 
+   "(svn_wc__move2): Bumped version of svn_wc_move(), and moved into the", 
+   "private API namespace. Add allow_mixed_revisions parameter.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_move): Reimplement as wrapper around svn_wc__move2().", 
+   "* subversion/svn/main.c", 
+   "(svn_cl__cmd_table): Document new behaviour in 'svn help move' and add the", 
+   "--allow-mixed-revisions option to 'svn move'.", 
+   "* subversion/svn/move-cmd.c", 
+   "(svn_cl__move): Call svn_client_move7()."
+  ], 
+  "revision_id": "1393015"
+ }, 
+ {
+  "author": "schultz", 
+  "date": "2012-10-02T16:29:15.158152Z", 
+  "msg": [
+   "Reverted r1381635 for further discussion."
+  ], 
+  "revision_id": "1393014"
+ }
+]

@@ -1,0 +1,95 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-08-21T14:35:05.516945Z", 
+  "msg": [
+   "[Reverted in r1619769]", 
+   "Enforce the \"everybody or nobody\" restriction on revprop caching, i.e.", 
+   "either all processes (usually servers) or none must use revprop caching.", 
+   "This patch makes sure that the first process to use revprop caching will", 
+   "create the revprop generation file before even reading and caching any", 
+   "revprops - instead of auto-creating it upon the first write.  Then this", 
+   "file is being used as an indicator that the repo has been accessed at", 
+   "least once using revprop caching.  FS instances without that feature", 
+   "enabled will then be banned from writing any revprops.", 
+   "To make this workable, applications that may write revprops but are not", 
+   "servers themselves (the latter having explicit revprop caching options)", 
+   "need to engage the revprop caching infrastructure automatically if the", 
+   "repo that they are accessing requires it.  svnadmin, svnlook and ra_local", 
+   "enable this new mode.", 
+   "* subversion/include/svn_fs.h", 
+   "(SVN_FS_CONFIG_FSFS_CACHE_REVPROPS): Document that there is now yet", 
+   "another mode.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(fs_fs_data_t): Add the flag allowing on-demand activation of revprop", 
+   "caching.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__initialize_revprop_caches): Declare new function to init", 
+   "the revprop caches only.", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(read_config): Handle the new revprop caching mode.", 
+   "(cache_key_prefix): Common functionality factored out from", 
+   "svn_fs_fs__initialize_caches.", 
+   "(svn_fs_fs__initialize_revprop_caches): Implement, mainly taking out", 
+   "of ...", 
+   "(svn_fs_fs__initialize_caches): ... this.  Update after refactoring.", 
+   "* subversion/libsvn_fs_fs/revprops.c", 
+   "(init_generation_baton_t,", 
+   "init_revprop_generation_file): New code to create the revprop generation", 
+   "file before the first cached revprop", 
+   "access (read or write).", 
+   "(read_revprop_generation_file): Trigger auto-creation of that file.", 
+   "(enforce_consistent_caching): New function containing the actual", 
+   "cache settings consistency check.", 
+   "(svn_fs_fs__set_revision_proplist): Trigger the new check to make sure", 
+   "we don't modify revprops w/o telling", 
+   "caching applications.", 
+   "* subversion/libsvn_ra_local/split_url.c", 
+   "(svn_ra_local__split_URL): Set \"enable revprop caching on demand\" feature", 
+   "instead of \"no revprop caching\" on open repos.", 
+   "* subversion/svnadmin/svnadmin.c", 
+   "(open_repos): Use the same mode here.", 
+   "* subversion/svnlook/svnlook.c", 
+   "(get_ctxt_baton): And here.", 
+   "* subversion/tests/libsvn_fs_fs/fs-fs-pack-test.c", 
+   "(enforce_consistent_revprop_caching): New test covering the new mode as", 
+   "well as new the consistency check.", 
+   "(test_funcs): Register new test."
+  ], 
+  "revision_id": "1619413"
+ }, 
+ {
+  "author": "alexparvulescu", 
+  "date": "2014-08-21T14:34:25.133898Z", 
+  "msg": [
+   "OAK-2045 Long running JCR session prevent live cleanup in Segment FileStore", 
+   "- disabling the test for now, it fails on certain setups"
+  ], 
+  "revision_id": "1619412"
+ }, 
+ {
+  "author": "alexparvulescu", 
+  "date": "2014-08-21T14:32:01.452382Z", 
+  "msg": [
+   "OAK-2019 Compact only if needed", 
+   "- patch by Jukka with minor additions"
+  ], 
+  "revision_id": "1619411"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2014-08-21T14:25:14.713678Z", 
+  "msg": [
+   "fix test bug: an ancient codec might fail earlier on addDocument"
+  ], 
+  "revision_id": "1619410"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2014-08-21T14:22:14.434290Z", 
+  "msg": [
+   "Javadoc 8 fixes."
+  ], 
+  "revision_id": "1619409"
+ }
+]

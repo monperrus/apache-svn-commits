@@ -1,0 +1,65 @@
+[
+ {
+  "author": "minfrin", 
+  "date": "2015-03-04T17:13:12.879707Z", 
+  "msg": [
+   "Remove the --parents option that causes rpmbuild on CentOS7 to break.", 
+   "Reported by \u6cb3\u672c\u548c\u5f66 kohmoto iris eonet ne jp."
+  ], 
+  "revision_id": "1664073"
+ }, 
+ {
+  "author": "minfrin", 
+  "date": "2015-03-04T17:12:25.120203Z", 
+  "msg": [
+   "Remove the --parents option that causes rpmbuild on CentOS7 to break.", 
+   "Reported by \u6cb3\u672c\u548c\u5f66 kohmoto iris eonet ne jp."
+  ], 
+  "revision_id": "1664072"
+ }, 
+ {
+  "author": "ylavic", 
+  "date": "2015-03-04T16:58:01.962855Z", 
+  "msg": [
+   "core: If explicitly configured, use the KeepaliveTimeout value of the", 
+   "virtual host which handled the latest request on the connection, or by", 
+   "default the one of the first virtual host bound to the same IP:port.", 
+   "For non-async MPMs, use either r->server's or c->base_server's value in", 
+   "ap_process_http_sync_connection() depending on a new server_rec's flag", 
+   "called keep_alive_timeout_set and determined at config time.", 
+   "For event MPM, use a queue per timeout value, chaining the queues per", 
+   "type (keepalive wrt KeepAliveTimeout, write completion wrt to Timeout)", 
+   "so that maintenance can be done on all the queues from the head, and such", 
+   "that insertions/maintenance remain in O(1).", 
+   "A server config is created and pointing to the queue of each vhost at", 
+   "post_config time, hence the config can be associated to the connection", 
+   "state (cs) at post_read_request time (keep_alive_timeout_set is used to", 
+   "determine r->server vs c->base_server here), and we can simply insert", 
+   "with TO_QUEUE_INSERT(cs->sc->q, cs).  PR56226.", 
+   "While at it, since each queue now embeds it own timeout and hence the", 
+   "expiration_time of the cs has changed to a queue_timestamp (the time it", 
+   "was queued), we can detect clock skews and expire entries immediatly if", 
+   "the system is set (eg. far) in the past during runtime and we want to", 
+   "avoid waiting for (eg.) centuries before the current logic kills them.", 
+   "Any entry which is registered above now + q->timeout is concerned, and", 
+   "is now cleaned from the queue when encountered.  PR57374."
+  ], 
+  "revision_id": "1664071"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2015-03-04T16:51:45.638811Z", 
+  "msg": [
+   "checkPassivationScope after having validated injection points to get right exception during deployment"
+  ], 
+  "revision_id": "1664070"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2015-03-04T16:48:51.078547Z", 
+  "msg": [
+   "red color if no description available"
+  ], 
+  "revision_id": "1664069"
+ }
+]

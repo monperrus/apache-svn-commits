@@ -1,0 +1,54 @@
+[
+ {
+  "author": "mamta", 
+  "date": "2013-06-28T18:23:24.997171Z", 
+  "msg": [
+   "DERBY-5680( indexStat daemon processing tables over and over even when there are no changes in the tables )", 
+   "Backporting the 3 commits that went in for DERBY-5680 to 10.8. The 3 commits were 1340549, 1341622, 1341629. The first two commits were easy to backport using svn merge command but the third commit 1341629 ran into conflicts. For that backport, hand made the changes since there were not too many changes.", 
+   "The changes for this jira has added a new property derby.storage.indexStats.debug.keepDisposableStats. The intention of the property is that if the property is set to true, we do not delete the orphaned/disposable stats. If the property is set to false, the orphaned/disposable stats will get dropped by the index stats daemon. Currently known reasons for orphaned/disposable stats are", 
+   "1)DERBY-5681(When a foreign key constraint on a table is dropped, the associated statistics row for the conglomerate is not removed). Fix for this has been backported all the way to 10.3", 
+   "2)DERBY-3790(Investigate if request for update statistics can be skipped for certain kind of indexes, one instance may be unique indexes based on one column.) Fix for this is in 10.9 and higher", 
+   "A junit test was added for this new property but it went in as part of DERBY-3790. The name of the junit test is store.KeepDisposableStatsPropertyTest. Had to make changes to this test to backport it to 10.8 but without the fix for DEBRY-3790 and with the absence of drop statistics procedure, the test really does not make much sense for 10.8 codeline. The test uses drop statistics procedure and it is mainly testing DERBY-3790 to make sure that the orphaned stats are being deleted or left behind based on whether the property is set to true or false. But since we do not have drop statistics procedure and we do not have DERBY-3790 fixed in 10.8, we can't really meaningfully run the KeepDisposableStatsPropertyTest in 10.8. In any case, I have changed the test so that atleast it will not fail in 10.8 but it is not able to truly test the property. May be we can test this property through upgrade suite where we will create orphaned stats because of DERBY-5681 on older releases and we will find that when the property is set to true, even after upgrade, we will have orphaned stats but when property is set to false, after upgrade, orphaned stats are deleted."
+  ], 
+  "revision_id": "1497868"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2013-06-28T18:19:52.755644Z", 
+  "msg": [
+   "rpluem, trawick, wrowe agree 1.5.2 would be fine for 2.2 releases"
+  ], 
+  "revision_id": "1497867"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-06-28T18:18:17.863075Z", 
+  "msg": [
+   "[HBASE-8808] Adding a knob to turn off jacoco", 
+   "Author: manukranthk", 
+   "Summary: Adding a skip parameter to skip the jacoco execution.", 
+   "Test Plan: mvn clean -Dtest=TestSplitLogManager -Dmaven.test.failure.ignore=true -Dhbase.skip-jacoco=true package : No site folder generated.", 
+   "Reviewers: rshroff", 
+   "Reviewed By: rshroff", 
+   "Differential Revision: https://phabricator.fb.com/D866904", 
+   "Task ID: 2541032"
+  ], 
+  "revision_id": "1497866"
+ }, 
+ {
+  "author": "bdelacretaz", 
+  "date": "2013-06-28T18:11:06.407864Z", 
+  "msg": [
+   "SLING-2822 - RequestStatusRuleBuilder added, checks the status of Sling requests"
+  ], 
+  "revision_id": "1497865"
+ }, 
+ {
+  "author": "desruisseaux", 
+  "date": "2013-06-28T18:09:56.676048Z", 
+  "msg": [
+   "Merge from the JDK6 branch."
+  ], 
+  "revision_id": "1497864"
+ }
+]

@@ -1,0 +1,81 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-06-12T18:35:53.310864Z", 
+  "msg": [
+   "[HBASE-8714] Add sync_file_range(WAIT) option to flush and compactions.", 
+   "Author: pritam", 
+   "Summary:", 
+   "The idea here is that we don't want runaway compactions and", 
+   "flushes to write faster than disk to OS/raid cache and then hit the", 
+   "disks hard on a writeback. For this purpose we invoke a", 
+   "sync_file_range(WAIT) every megabyte which forces the regionserver to wait", 
+   "until the amount of data that it has written hasn't been persisted to", 
+   "disk.", 
+   "Test Plan:", 
+   "1) All unit tests.", 
+   "2) Simple unit test added to trigger option.", 
+   "Reviewers: liyintang, rshroff, paultuckfield, aaiyer, sdong", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@, hdfs-dev@", 
+   "Differential Revision: https://phabricator.fb.com/D839449", 
+   "Task ID: 2233461"
+  ], 
+  "revision_id": "1492338"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-06-12T18:35:47.434891Z", 
+  "msg": [
+   "[0.89-fb] [master] Allow regionServerReport to run with shorter RPC timeouts.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Our RS Expiry/Heartbeat mechanism relies on waiting 20 sec", 
+   "before declaring a RS to be dead. The rationale behind this", 
+   "is to give the RS 20 consecutive attempts before considering it", 
+   "dead.", 
+   "However, if the RPC timeout is set to 60 sec (by default); it is possible", 
+   "that one regionserverReport takes up to 60 sec (to fail), and that", 
+   "single failed call can cause the RS to expire.", 
+   "We should shorten the RPC timeout for the regionserver report to ensure", 
+   "we give the RS multiple chances before shooting it down.", 
+   "2) Also including a bug fix around the instrumentation to log regionserver", 
+   "reports. If the call to master.regionserverReport is unsuccessful; we should", 
+   "preserve the old behavior and let the exception out. Specifically, the rest", 
+   "of the code that follows the rsReport should only be executed, if the report", 
+   "was successful.", 
+   "Test Plan: unit tests", 
+   "Reviewers: rshroff, manukranthk", 
+   "Reviewed By: manukranthk", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D840170"
+  ], 
+  "revision_id": "1492337"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2013-06-12T18:34:53.199395Z", 
+  "msg": [
+   "Better name"
+  ], 
+  "revision_id": "1492336"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2013-06-12T18:31:47.167590Z", 
+  "msg": [
+   "Blocking revisions 1492327,1492328 via  git from", 
+   "https://svn.apache.org/repos/asf/cxf/branches/2.7.x-fixes"
+  ], 
+  "revision_id": "1492335"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2013-06-12T18:31:42.848087Z", 
+  "msg": [
+   "Recording revisions 1492324,1492325 via  git from", 
+   "https://svn.apache.org/repos/asf/cxf/branches/2.7.x-fixes"
+  ], 
+  "revision_id": "1492334"
+ }
+]

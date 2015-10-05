@@ -1,0 +1,72 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2015-06-23T14:23:47.878664Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "* subversion/libsvn_fs_x/batch_fsync.c", 
+   "(svn_fs_x__batch_fsync_init): Fix a compiler warning."
+  ], 
+  "revision_id": "1687073"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2015-06-23T14:21:39.660547Z", 
+  "msg": [
+   "Fixing a bug when not encrypting the symmetric encryption key"
+  ], 
+  "revision_id": "1687072"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-06-23T14:21:31.191852Z", 
+  "msg": [
+   "Rework the initialization step in svn_fs_fs__hotcopy() in order to only", 
+   "have a single call to hotcopy_create_empty_dest() and to emphasize how", 
+   "an incremental hotcopy fallbacks to non-incremental mode if there is no", 
+   "destination filesystem.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(svn_fs_fs__hotcopy): Check whether db/format exists in the destination", 
+   "as the very first step of the incremental hotcopy.  If it doesn't exist,", 
+   "emphasize that we are performing a fallback to the non-incremental mode", 
+   "by setting INCREMENTAL to FALSE.  In the case of the fallback, passing", 
+   "this value (FALSE) to lower levels, apart from being logical, allows us", 
+   "to skip certain logic that's only required in a true incremental mode,", 
+   "such as removing unnecessary non-packed revision files after replacing", 
+   "them with a packed shard."
+  ], 
+  "revision_id": "1687071"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-06-23T14:14:36.325155Z", 
+  "msg": [
+   "Following up on r1686554, revert the remaining parts of r1589284.  As we no", 
+   "longer lock the db/pack-lock in the source repository when hotcopying it,", 
+   "other relevant changes from r1589284 are no longer necessary.  Doing so", 
+   "prevents making the non-incremental hotcopy destination openable through", 
+   "svn_fs_open2() until hotcopy finishes, and that's consistent with how", 
+   "svn_repos_hotcopy3() currently works.", 
+   "This changeset restores the hotcopy initialization code to its state in", 
+   "/branches/1.8.x.  Please note that doing so is going to reintroduce a slight", 
+   "problem \u2014 in 1.8.x hotcopy initialization used to share fs_fs_shared_data_t", 
+   "instances between the source and the destination.  We actually have a better", 
+   "way of initializing the shared data (that doesn't reuse it and also doesn't", 
+   "require writing db/format prior to the moment when a non-incremental hotcopy", 
+   "is complete), and I am going to implement it in the following commits.", 
+   "Discussion can be found in http://svn.haxx.se/dev/archive-2015-06/0168.shtml", 
+   "(Subject: \"Re: FSFS7: 'svnadmin hotcopy' requires write access to the", 
+   "source\") and in http://svn.haxx.se/dev/archive-2014-07/0124.shtml", 
+   "(Subject: \"Re: svn commit: r1589284 - [...]\")."
+  ], 
+  "revision_id": "1687070"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2015-06-23T14:12:41.179963Z", 
+  "msg": [
+   "* branches/1.7.x/STATUS: Approve the r1674455 and VS2012-15 backport branches."
+  ], 
+  "revision_id": "1687069"
+ }
+]

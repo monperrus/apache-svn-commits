@@ -1,0 +1,117 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2013-08-18T12:15:01.441611Z", 
+  "msg": [
+   "On the log-addressing branch:  For low-overhead checksumming,", 
+   "add standard FNV-1a and a faster modified version of that to", 
+   "the list of checksum kinds supported with svn_checksum_t.", 
+   "We will use this new checksum to secure parts of FSFS (and", 
+   "later FSX) that are not directly covered by MD5/SHA1 content", 
+   "checksums.  That will help to localize corruptions much quicker", 
+   "and more accurately but it will not eliminate the need to run", 
+   "a full content verification.", 
+   "* subversion/include/svn_checksum.h", 
+   "(svn_checksum_kind_t): add new checksum types", 
+   "* subversion/include/private/svn_subr_private.h", 
+   "(svn_checksum__from_digest_fnv1a_32,", 
+   "svn_checksum__from_digest_fnv1a_32x4): new ultility API", 
+   "(svn__fnv1a_32,", 
+   "svn__fnv1a_32x4): APIs directly create checksums", 
+   "* subversion/libsvn_subr/fnv1a.h", 
+   "(): new file", 
+   "(svn_fnv1a_32__context_t,", 
+   "svn_fnv1a_32__context_create,", 
+   "svn_fnv1a_32__update,", 
+   "svn_fnv1a_32__finalize): declare lib-private API to calculate", 
+   "FNV-1a iteratively", 
+   "(svn_fnv1a_32x4__context_t,", 
+   "svn_fnv1a_32x4__context_create,", 
+   "svn_fnv1a_32x4__update,", 
+   "svn_fnv1a_32x4__finalize): declare lib-private API to calculate", 
+   "modified FNV-1a iteratively", 
+   "* subversion/libsvn_subr/fnv1a.c", 
+   "(): new file", 
+   "(FNV1_PRIME_32,", 
+   "FNV1_BASE_32): FNV1 constants", 
+   "(fnv1a_32): FNV-1a core algorithm", 
+   "(SCALING,", 
+   "fnv1a_32x4,", 
+   "finalize_fnv1a_32x4): modified FNV-1a core algorithm", 
+   "(svn__fnv1a_32,", 
+   "svn__fnv1a_32x4): expose API to directly calculate checksums", 
+   "(svn_fnv1a_32__context_t): define stream context structure", 
+   "(svn_fnv1a_32__context_create,", 
+   "svn_fnv1a_32__update,", 
+   "svn_fnv1a_32__finalize): implement", 
+   "(svn_fnv1a_32x4__context_t): define stream context structure", 
+   "(svn_fnv1a_32x4__context_create,", 
+   "svn_fnv1a_32x4__update,", 
+   "svn_fnv1a_32x4__finalize): implement", 
+   "* subversion/libsvn_subr/checksum.c", 
+   "(fnv1a_32_empty_string_digest_array,", 
+   "fnv1a_32x4_empty_string_digest_array): new constants", 
+   "(empty_string_digests,", 
+   "digest_sizes): add entries for the new checksums", 
+   "(svn_checksum__from_digest_fnv1a_32,", 
+   "svn_checksum__from_digest_fnv1a_32x4): implement new constructors", 
+   "(DIGESTSIZE,", 
+   "validate_kind,", 
+   "svn_checksum_create,", 
+   "svn_checksum__from_digest_fnv1a_32,", 
+   "svn_checksum__from_digest_fnv1a_32x4,", 
+   "svn_checksum_match,", 
+   "svn_checksum_to_cstring_display,", 
+   "svn_checksum_to_cstring,", 
+   "svn_checksum_serialize,", 
+   "svn_checksum_dup,", 
+   "svn_checksum_empty_checksum,", 
+   "svn_checksum_is_empty_checksum): support the new checksum kinds by simply", 
+   "extending ranges and switch statements", 
+   "(svn_checksum,", 
+   "svn_checksum_ctx_create,", 
+   "svn_checksum_update,", 
+   "svn_checksum_final): support the new checksum kinds by calling the new", 
+   "private fnv1a* functions", 
+   "* subversion/tests/libsvn_subr/checksum-test.c", 
+   "(test_checksum_parse): add tests for fnv1a*", 
+   "(test_checksum_empty,", 
+   "zero_match,", 
+   "zero_cross_match): cover new checksum kinds by simply extending", 
+   "the loop ranges"
+  ], 
+  "revision_id": "1515088"
+ }, 
+ {
+  "author": "ebourg", 
+  "date": "2013-08-18T11:31:17.695226Z", 
+  "msg": [
+   "Replaced StringBuffers with StringBuilders"
+  ], 
+  "revision_id": "1515087"
+ }, 
+ {
+  "author": "ebourg", 
+  "date": "2013-08-18T11:25:52.785403Z", 
+  "msg": [
+   "Upgrade target/source level to 1.5"
+  ], 
+  "revision_id": "1515086"
+ }, 
+ {
+  "author": "danielsh", 
+  "date": "2013-08-18T11:13:43.137120Z", 
+  "msg": [
+   "Revert r1501049,r1501371 due to concerns raised on dev@."
+  ], 
+  "revision_id": "1515085"
+ }, 
+ {
+  "author": "bodewig", 
+  "date": "2013-08-18T11:04:54.623027Z", 
+  "msg": [
+   "don't need verbose output anymore"
+  ], 
+  "revision_id": "1515084"
+ }
+]

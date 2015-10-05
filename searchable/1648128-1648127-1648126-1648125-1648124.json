@@ -1,0 +1,92 @@
+[
+ {
+  "author": "ravimagham", 
+  "date": "2014-12-27T23:30:11.334129Z", 
+  "msg": [
+   "phoenix_mr_1.changes"
+  ], 
+  "revision_id": "1648128"
+ }, 
+ {
+  "author": "ravimagham", 
+  "date": "2014-12-27T23:25:57.112524Z", 
+  "msg": [
+   "phoenix_mr_1.changes"
+  ], 
+  "revision_id": "1648127"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-27T23:23:12.220747Z", 
+  "msg": [
+   "On the fsx-id branch:", 
+   "* subversion/libsvn_fs_x/id.h", 
+   "(svn_fs_x__get_txn_id,", 
+   "svn_fs_x__change_set_by_txn): Use our fancy typedefs instead of plain i64."
+  ], 
+  "revision_id": "1648126"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-27T23:20:50.640707Z", 
+  "msg": [
+   "On the fsx-id branch: Some code cleanup.", 
+   "* subversion/libsvn_fs_x/dag.h", 
+   "(svn_fs_x__dag_get_fs_id): Remove.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(svn_fs_x__dag_get_fs_id): Remove.", 
+   "* subversion/libsvn_fs_x/tree.h", 
+   "(svn_fs_x__node_id): Remove from header.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(svn_fs_x__node_id): Rename to ...", 
+   "(x_node_id): ... this.  Construct the FS API ID here.", 
+   "(root_vtable): Update function reference."
+  ], 
+  "revision_id": "1648125"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-27T23:06:12.597093Z", 
+  "msg": [
+   "On the fsx-id branch:  Teach FSX's svn_fs_id_t implementation to work", 
+   "with only the noderev-ID as data.  An encapsulated context object gives", 
+   "access to the underlying repository if API requests cannot be fed from", 
+   "the noderev-ID alone.", 
+   "Having a separate context object that can be shared e.g. between all", 
+   "items in a collection such as a directory, keeps the ID construction", 
+   "cheap.  It also keeps the FS and access management overhead to a minimum.", 
+   "The context object itself is designed to keep construction cheap and", 
+   "access moderately cheap as long as you don't access the ID object after", 
+   "you closed the FS.", 
+   "Also, we discourage the access to the FS ID objects now on /trunk.", 
+   "The few situations where we still use it, the caller will also access", 
+   "the data \"behind\" the ID if two IDs are not the same (e.g. tree delta).", 
+   "So, we are effectively priming the caches but don't introduce extra", 
+   "disk accesses.", 
+   "* subversion/libsvn_fs_x/fs_id.h", 
+   "(svn_fs_x__id_context_t,", 
+   "svn_fs_x__id_create_context): New context support.", 
+   "(svn_fs_x__id_create): Replace the node-ID with a context object.", 
+   "* subversion/libsvn_fs_x/fs_id.c", 
+   "(fs_x__id_t): Update & document.", 
+   "(svn_fs_x__id_context_t): Define & document its state machine.", 
+   "(owner_cleanup,", 
+   "fs_cleanup,", 
+   "get_fs,", 
+   "get_aux_pool,", 
+   "get_noderev): New context management functions.", 
+   "(id_unparse): There is only one element to unparse now.", 
+   "(id_compare): Read the node-IDs from the repo.", 
+   "(svn_fs_x__id_create_context): New.", 
+   "(svn_fs_x__id_create): Update constructor.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(svn_fs_x__dag_get_fs_id): Update caller.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(x_dir_entries,", 
+   "construct_fs_path_change,", 
+   "x_paths_changed): Update ID construction and provide it with a shared", 
+   "context for all ID objects in the same collection."
+  ], 
+  "revision_id": "1648124"
+ }
+]

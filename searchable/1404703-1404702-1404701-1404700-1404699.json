@@ -1,0 +1,77 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2012-11-01T18:12:22.895073Z", 
+  "msg": [
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(update_moved_away_subtree): Rename local variables child_relpath and", 
+   "child_moved_to_relpath to child_src_relpath and child_dst_relpath,", 
+   "respectively. No functional change."
+  ], 
+  "revision_id": "1404703"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2012-11-01T18:11:40.332526Z", 
+  "msg": [
+   "OAK-418: Reduce/avoid re-resolving the underlying tree instances on every access in Item/Property/NodeDelegate"
+  ], 
+  "revision_id": "1404702"
+ }, 
+ {
+  "author": "ggregory", 
+  "date": "2012-11-01T18:10:04.308894Z", 
+  "msg": [
+   "Allow custom ANSI mappings for Levels using a STYLE options: STYLE can be one of Default or Logback."
+  ], 
+  "revision_id": "1404701"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2012-11-01T18:09:08.922020Z", 
+  "msg": [
+   "[CXF-4572] Support a negotiation for the GZIP"
+  ], 
+  "revision_id": "1404700"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-11-01T18:06:08.394993Z", 
+  "msg": [
+   "Remove a redundant and wrong scan_addition call from the move-update editor.", 
+   "Before this commit, the editor driver was obtaining the copyfrom revision", 
+   "of a moved-away file with scan_addition, which won't return the correct", 
+   "result for files which were replaced after being moved. Instead, assume", 
+   "the revision of the move op-root, which will be correct unless the user", 
+   "runs 'svn move --allow-mixed-revisions'. This is fine since we're currently", 
+   "working under the assumption that only single-rev move tree-conflicts will", 
+   "be resolvable automatically in Subversion 1.8.", 
+   "The driver also verified whether the file does exist in the move destination", 
+   "as per scan_addition(), which is a redundant check since the file must be", 
+   "part of the move by definition.", 
+   "Also, change the receiver's assumption that paths are relative to the move", 
+   "destination op-root. Make it expect paths relative to the wcroot instead.", 
+   "(Only one receiver has been partly implemented so far so it is trivial", 
+   "to make this change as part of this commit.)", 
+   "* subversion/libsvn_wc/wc_db_update_move.c", 
+   "(tc_editor_alter_file): Expect a destination relpath which is relative", 
+   "to the wcroot abspath, rather than relative to the move destination", 
+   "op-root. Convert from read_info() to read_info_internal(), using a", 
+   "wcroot and relpath pair instead of a db and an abspath.", 
+   "Also move the moved_to_abspath local variable into a tighter scope.", 
+   "(update_moved_away_file): Rename moved_to_relpath parameter to dst_relpath.", 
+   "Add move_dst_op_root_revision parameter which corresponds to the copyfrom", 
+   "revision used when the move was performed (i.e. from before the update),", 
+   "and communicate that revision number to the receiver.", 
+   "Don't call scan_addition() and read_info() on the move destination file,", 
+   "as explained above.", 
+   "(update_moved_away_dir): Parameters change as for update_moved_away_file().", 
+   "This function is currently a no-op so nothing really changes here.", 
+   "(update_moved_away_subtree): Rename moved_to_relpath parameter to dst_relpath.", 
+   "Add move_dst_op_root_revision parameter and pass it through.", 
+   "(drive_tree_conflict_editor): Provide the pre-update revision of the move", 
+   "op-root to update_moved_away_file() and update_moved_away_subtree()."
+  ], 
+  "revision_id": "1404699"
+ }
+]

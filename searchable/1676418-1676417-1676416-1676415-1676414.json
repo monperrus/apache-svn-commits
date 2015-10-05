@@ -1,0 +1,55 @@
+[
+ {
+  "author": "cziegeler", 
+  "date": "2015-04-28T06:53:37.330658Z", 
+  "msg": [
+   "Add excludes for rat"
+  ], 
+  "revision_id": "1676418"
+ }, 
+ {
+  "author": "jkaluza", 
+  "date": "2015-04-28T06:51:12.067319Z", 
+  "msg": [
+   "Initialize interp->refcnt to 1 in modperl_interp_select.", 
+   "Reasoning:", 
+   "1. All calls of MP_INTERPa do not increment interp->refcnt, so refcnt", 
+   "used to be 0 before this commit. But there is always matching", 
+   "MP_INTERP_PUTBACK, which calls modperl_interp_unselect which decreases", 
+   "the refcnt, so it was possible to get negative refcnt or crash with", 
+   "threaded MPMs, because reference counting has been broken.", 
+   "2. modperl_interp_select increases the refcount if it finds the PerlInterp in", 
+   "ccfg, so it makes sense to increase it (it means set to 1) during", 
+   "initialization too. Otherwise the refcnt would be incremented for the caller", 
+   "in some cases, but wouldn't be in other.", 
+   "This commit fixes the crash seen on worker MPM when PerlInterp has been used", 
+   "by two threads and the first one freed PerlInterp during", 
+   "modperl_interp_unselect."
+  ], 
+  "revision_id": "1676417"
+ }, 
+ {
+  "author": "pescetti", 
+  "date": "2015-04-28T06:45:56.913501Z", 
+  "msg": [
+   "Minor fixes and clarifications. Step-by-step instructions for Windows."
+  ], 
+  "revision_id": "1676416"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2015-04-28T06:41:42.447570Z", 
+  "msg": [
+   "Add missing licence headers"
+  ], 
+  "revision_id": "1676415"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2015-04-28T06:39:02.189493Z", 
+  "msg": [
+   "Add missing licence headers"
+  ], 
+  "revision_id": "1676414"
+ }
+]

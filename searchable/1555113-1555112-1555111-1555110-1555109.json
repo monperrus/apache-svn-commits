@@ -1,0 +1,89 @@
+[
+ {
+  "author": "cziegeler", 
+  "date": "2014-01-03T14:46:22.752866Z", 
+  "msg": [
+   "SLING-3306 : Job consumer configuration is distributed in a cluster"
+  ], 
+  "revision_id": "1555113"
+ }, 
+ {
+  "author": "hdu", 
+  "date": "2014-01-03T14:44:44.325417Z", 
+  "msg": [
+   "updated \"rejuvenate\" branch to trunk (as of 2014/01/03, r1555095)"
+  ], 
+  "revision_id": "1555112"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2014-01-03T14:38:53.329677Z", 
+  "msg": [
+   "updated assembly plugin to ensure right permissions"
+  ], 
+  "revision_id": "1555111"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2014-01-03T14:38:42.056932Z", 
+  "msg": [
+   "add missing input"
+  ], 
+  "revision_id": "1555110"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-01-03T14:34:41.872495Z", 
+  "msg": [
+   "Refine the FSFS f7 pack heuristics away from the container-centric", 
+   "order used by FSX.  The changes only affect the order of text reps", 
+   "and noderevs; changed paths lists and properties remain as are.", 
+   "Sort nodes and the associated reps in ascending path order (used to", 
+   "be descending order) since this is the \"natural\" traversal order for", 
+   "directories and it puts parent folders in front of their children.", 
+   "Tweak the key for \"trunk\" and \"branch\" such that they appear before", 
+   "any other node.  Now, trunk is the easiest to reconstructand branches", 
+   "are quicker to access than tags or user-defined paths like \"vendor\".", 
+   "Skip-deltas implicitly use a concept of \"roundness\":  In the non-", 
+   "linear sections, we always deltify against the rep of the node whose", 
+   "predecessor count has one more 0 LSBs, e.g. x1B0->x1A0->x180->x100->0.", 
+   "Thus, the \"roundest\" node found for each path is the one most", 
+   "likely to be referenced by deltas in future pack files.  Keeping them", 
+   "in one section of the pack file will make that section a hot spot for", 
+   "\"foreign\" references.", 
+   "Finally, don't concatenate all noderevs for a given path but put the", 
+   "noderevs immediately in front of their respective representations,", 
+   "so the noderev->rep access is less likely to cross a block boundary.", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(path_order_t): Also store the predecessor count as an indicator", 
+   "for \"roundness\".", 
+   "(pack_context_t): Use separate containers for noderev->rep and", 
+   "rep->delta base rep references.", 
+   "(initialize_pack_context,", 
+   "reset_pack_context): Construct and clean new containers as well.", 
+   "(copy_rep_to_temp): Write to the right container.", 
+   "(tweak_path_for_ordering): New path meddling function.", 
+   "(copy_node_to_temp): Write to the right container, provide the", 
+   "extra path_order_t member and use the tweaked", 
+   "path as sort key.", 
+   "(compare_path_order): Yield an ascending path order now.", 
+   "(compare_references,", 
+   "compare_ref_to_item): Replaced by ...", 
+   "(compare_references_to,", 
+   "compare_references_from,", 
+   "compare_ref_to_item_to,", 
+   "compare_ref_to_item_from): ... these two variants with basically the", 
+   "same logic.", 
+   "(sort_reps): Implement the roundness heuristics and resolve the", 
+   "delta chains, which used to be done in select_reps().", 
+   "(find_first_reference,", 
+   "is_reference_match): Use to the right container.", 
+   "(store_item): Factored out from ...", 
+   "(store_items): ... this one.", 
+   "(select_reps): Drop.", 
+   "(copy_reps_from_temp): Copy nodes in exactly the order suggested", 
+   "by sort_reps()."
+  ], 
+  "revision_id": "1555109"
+ }
+]

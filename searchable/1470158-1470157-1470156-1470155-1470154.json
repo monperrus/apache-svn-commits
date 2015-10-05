@@ -1,0 +1,59 @@
+[
+ {
+  "author": "humbedooh", 
+  "date": "2013-04-20T12:38:32.548202Z", 
+  "msg": [
+   "fix typos, expand on how r:flush works"
+  ], 
+  "revision_id": "1470158"
+ }, 
+ {
+  "author": "fuankg", 
+  "date": "2013-04-20T12:32:08.839319Z", 
+  "msg": [
+   "Fixed r.started value to return seconds."
+  ], 
+  "revision_id": "1470157"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2013-04-20T12:26:05.706587Z", 
+  "msg": [
+   "Use a mutex to control read/write for IVM values, so we can reuse the existing structures without running into race conditions.", 
+   "This should get rid of the need to have MaxConnectionsPerChild set to > 0.", 
+   "If a new value is set and is a string, we either use the existing varbuf or grow it accordingly."
+  ], 
+  "revision_id": "1470156"
+ }, 
+ {
+  "author": "humbedooh", 
+  "date": "2013-04-20T11:20:22.601369Z", 
+  "msg": [
+   "use ap_varbuf instead of allocating new strings each time we override an old one.", 
+   "This uses leaks less memory, but it's still not perfect (but it's a start - maybe I need to use a mutex for this, to override the original object without running into race conditions)"
+  ], 
+  "revision_id": "1470155"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-04-20T11:12:35.229498Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1470151\"", 
+   "------------------------------------------------------------------------", 
+   "r1470151 | jleroux | 2013-04-20 12:57:34 +0200 (sam., 20 avr. 2013) | 14 lines", 
+   "A patch from Nicolas Malin for \"merge three maps with map-to-map\" https://issues.apache.org/jira/browse/OFBIZ-5152", 
+   "To merge two or more maps on one map with <map-to-map> element on mini-lang doesn't work.", 
+   "example :", 
+   "<call-service service-name=\"accReport-header\" in-map-name=\"headerMap\">", 
+   "<result-to-field result-name=\"jrParameters\" />", 
+   "</call-service>", 
+   "<map-to-map map=\"reportParameters\" to-map=\"jrParameters\"/>", 
+   "<map-to-map map=\"parameters\" to-map=\"jrParameters\"/>", 
+   "This doesn't work because the map-to-map method doesn't accept to merge an existing to-map and the <map-to-map map=\"parameters\" to-map=\"jrParameters\"/> has been ignored", 
+   "The patch move the map merge function to run it when a map is given.", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1470154"
+ }
+]

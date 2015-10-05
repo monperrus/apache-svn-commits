@@ -1,0 +1,91 @@
+[
+ {
+  "author": "crossley", 
+  "date": "2013-11-01T00:31:32.208128Z", 
+  "msg": [
+   "mrql has a release."
+  ], 
+  "revision_id": "1537778"
+ }, 
+ {
+  "author": "stevehay", 
+  "date": "2013-11-01T00:31:21.383232Z", 
+  "msg": [
+   "Merged revision(s) 1243509 from perl/modperl/branches/threading:", 
+   "Improve interpreter management", 
+   "The goal of this change is to detect earlier cases when a perl interpreter", 
+   "may be used by multiple threads simultaneously. This is done partly by", 
+   "wrapping the interpreter allocation functions into preprocessor macros", 
+   "to provide consistent trace messages and more important to reset aTHX to", 
+   "NULL when the interpreter is put back.", 
+   "Currently interpreter are pulled from the pool and set as context via", 
+   "PERL_SET_CONTEXT. But when an interpreter is put back to the pool the", 
+   "context is not reset to NULL. In an ideal world this should not be", 
+   "necessary because the interpreter will not be used again. But for", 
+   "debugging it's quite useful to put NULL in the perl context upon", 
+   "putting back the interpreter. Thus, the program will segfault if the", 
+   "thread wants to use an interpreter that already has been declared as", 
+   "free.", 
+   "That way a few errors where found and hopefully fixed:", 
+   "* modperl_filter_f_cleanup() frees the perl-level filter context but was", 
+   "called after the interpreter has already been put back.", 
+   "* similar situation in request time config MERGE operations. They also", 
+   "register a cleanup handler that uses the  perl interpreter. But they", 
+   "do not make sure that the interpreter is bound to the request at least", 
+   "up to the time the cleanup is invoked.", 
+   "Currently available macros include:", 
+   "* MP_dINTERP", 
+   "declares the variables aTHX (my_perl) and interp", 
+   "* MP_INTERPa(r, c, s)", 
+   "selects an interpreter via modperl_interp_select and assigns aTHX and", 
+   "interp", 
+   "* MP_dINTERPa(r, c, s)", 
+   "combination of MP_dINTERP and MP_INTERPa", 
+   "* MP_INTERP_POOLa(p, s)", 
+   "like MP_INTERPa but calls modperl_interp_pool_select", 
+   "* MP_dINTERP_POOLa(p, s)", 
+   "combination of MP_dINTERP and MP_INTERP_POOLa", 
+   "* MP_INTERP_PUTBACK(interp, thx)", 
+   "puts the interpreter back via modperl_interp_unselect and assigns NULL", 
+   "to aTHX", 
+   "* MP_INTERP_REFCNT_inc(interp)", 
+   "increments interp->refcnt", 
+   "* MP_INTERP_REFCNT_dec(interp)", 
+   "alias for MP_INTERP_PUTBACK(interp, NULL)", 
+   "* MP_ASSERT_CONTEXT(thx)", 
+   "checks for PERL_GET_CONTEXT==thx", 
+   "The same set of macros/functions is now also used for pre-runtime stuff.", 
+   "However, this part is not yet finished.", 
+   "........"
+  ], 
+  "revision_id": "1537777"
+ }, 
+ {
+  "author": "marvin", 
+  "date": "2013-11-01T00:30:09.968080Z", 
+  "msg": [
+   "Store the roster of active shepherds in a JSON file."
+  ], 
+  "revision_id": "1537776"
+ }, 
+ {
+  "author": "stevehay", 
+  "date": "2013-11-01T00:21:04.228405Z", 
+  "msg": [
+   "Merged revision(s) 1242858 from perl/modperl/branches/threading:", 
+   "- introduce a few preprocessor macros aiming at a more robust interpreter", 
+   "handling (not finished yet).", 
+   "- deleting some cruft from ancient perl versions.", 
+   "........"
+  ], 
+  "revision_id": "1537775"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2013-11-01T00:15:56.241298Z", 
+  "msg": [
+   "added markup"
+  ], 
+  "revision_id": "1537774"
+ }
+]

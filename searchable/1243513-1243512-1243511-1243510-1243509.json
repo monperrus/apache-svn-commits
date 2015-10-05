@@ -1,0 +1,87 @@
+[
+ {
+  "author": "olamy", 
+  "date": "2012-02-13T13:55:42.277680Z", 
+  "msg": [
+   "add missing i18n"
+  ], 
+  "revision_id": "1243513"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-02-13T13:55:09.453068Z", 
+  "msg": [
+   "[MRM-1576] rewrite proxies connector page", 
+   "add sortable knockout binding."
+  ], 
+  "revision_id": "1243512"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-02-13T13:54:39.343332Z", 
+  "msg": [
+   "[MRM-1576] rewrite proxies connector page", 
+   "order with drag&drop"
+  ], 
+  "revision_id": "1243511"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2012-02-13T13:54:04.020546Z", 
+  "msg": [
+   "modified flag to false after add"
+  ], 
+  "revision_id": "1243510"
+ }, 
+ {
+  "author": "torsten", 
+  "date": "2012-02-13T13:53:50.851100Z", 
+  "msg": [
+   "Improve interpreter management", 
+   "The goal of this change is to detect earlier cases when a perl interpreter", 
+   "may be used by multiple threads simultaneously. This is done partly by", 
+   "wrapping the interpreter allocation functions into preprocessor macros", 
+   "to provide consistent trace messages and more important to reset aTHX to", 
+   "NULL when the interpreter is put back.", 
+   "Currently interpreter are pulled from the pool and set as context via", 
+   "PERL_SET_CONTEXT. But when an interpreter is put back to the pool the", 
+   "context is not reset to NULL. In an ideal world this should not be", 
+   "necessary because the interpreter will not be used again. But for", 
+   "debugging it's quite useful to put NULL in the perl context upon", 
+   "putting back the interpreter. Thus, the program will segfault if the", 
+   "thread wants to use an interpreter that already has been declared as", 
+   "free.", 
+   "That way a few errors where found and hopefully fixed:", 
+   "* modperl_filter_f_cleanup() frees the perl-level filter context but was", 
+   "called after the interpreter has already been put back.", 
+   "* similar situation in request time config MERGE operations. They also", 
+   "register a cleanup handler that uses the  perl interpreter. But they", 
+   "do not make sure that the interpreter is bound to the request at least", 
+   "up to the time the cleanup is invoked.", 
+   "Currently available macros include:", 
+   "* MP_dINTERP", 
+   "declares the variables aTHX (my_perl) and interp", 
+   "* MP_INTERPa(r, c, s)", 
+   "selects an interpreter via modperl_interp_select and assigns aTHX and", 
+   "interp", 
+   "* MP_dINTERPa(r, c, s)", 
+   "combination of MP_dINTERP and MP_INTERPa", 
+   "* MP_INTERP_POOLa(p, s)", 
+   "like MP_INTERPa but calls modperl_interp_pool_select", 
+   "* MP_dINTERP_POOLa(p, s)", 
+   "combination of MP_dINTERP and MP_INTERP_POOLa", 
+   "* MP_INTERP_PUTBACK(interp, thx)", 
+   "puts the interpreter back via modperl_interp_unselect and assigns NULL", 
+   "to aTHX", 
+   "* MP_INTERP_REFCNT_inc(interp)", 
+   "increments interp->refcnt", 
+   "* MP_INTERP_REFCNT_dec(interp)", 
+   "alias for MP_INTERP_PUTBACK(interp, NULL)", 
+   "* MP_ASSERT_CONTEXT(thx)", 
+   "checks for PERL_GET_CONTEXT==thx", 
+   "The same set of macros/functions is now also used for pre-runtime stuff.", 
+   "However, this part is not yet finished."
+  ], 
+  "revision_id": "1243509"
+ }
+]

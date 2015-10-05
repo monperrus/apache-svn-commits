@@ -1,0 +1,83 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-08-03T22:47:07.040706Z", 
+  "msg": [
+   "On the authzperf branch:  Speed up authz-aware 'svn log' by sorting the", 
+   "paths before checking them.  This lets the recent O(1) authz lookup", 
+   "optimization for sibbling paths kick in.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(check_changed_path): Factored out loop content of ...", 
+   "(detect_changed): ... this. Use sorted iteration when applying authz."
+  ], 
+  "revision_id": "1615458"
+ }, 
+ {
+  "author": "dblevins", 
+  "date": "2014-08-03T22:42:17.310723Z", 
+  "msg": [
+   "old joke -- yanked"
+  ], 
+  "revision_id": "1615457"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-08-03T22:11:13.153608Z", 
+  "msg": [
+   "On the authzperf branch:  Implement O(1) lookup for sibbling paths.", 
+   "The idea is to simply remember the parent path of a lookup in the", 
+   "lookup state.  The associated nodes are already available in that", 
+   "struct and the access rights can be added easily.  Storing and", 
+   "checking that info is pretty cheap while a tree walk is relatively", 
+   "expensive.", 
+   "* subversion/libsvn_repos/authz.c", 
+   "(lookup_state_t): Add members to remember the path and rights for", 
+   "the parent of the last lookup.", 
+   "(create_lookup_state): Update constructor.", 
+   "(init_lockup_state): Implement the parent path matching test in", 
+   "the state initialization code.", 
+   "(lookup): Remember the parent path lookup results.", 
+   "(get_filtered_tree): If we have a path to walk try to reuse data", 
+   "from previous lookups.", 
+   "(svn_repos_authz_check_access): Update caller."
+  ], 
+  "revision_id": "1615456"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-08-03T21:35:49.407739Z", 
+  "msg": [
+   "On the authzperf branch:", 
+   "* subversion/libsvn_repos/authz.c", 
+   "(lookup): Fix a typo and get rid of a redundant shortcut test."
+  ], 
+  "revision_id": "1615455"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-08-03T21:34:11.159582Z", 
+  "msg": [
+   "On the authzpref branch:  Factor out the rights members of our structs", 
+   "into a separate struct.  This will also simplify future code.", 
+   "* subversion/libsvn_repos/authz.c", 
+   "(limited_rights_t,", 
+   "has_local_rule,", 
+   "combine_access,", 
+   "combine_right_limits): The new data structure and a few trivial", 
+   "utility functions.", 
+   "(node_t): Instantiate the new sub-structure instead of having", 
+   "individual members.", 
+   "(create_node,", 
+   "insert_path): Update node initialization code.", 
+   "(finalize_tree): Use the new aux functions to combine rights.", 
+   "(create_user_authz): Update struct access.", 
+   "(lookup_state_t): Instantiate the new sub-structure instead of having", 
+   "individual members.", 
+   "(init_lockup_state,", 
+   "add_next_node,", 
+   "lookup): Update and simplify using the new aux. functions.", 
+   "(svn_repos_authz_check_access): Update struct access."
+  ], 
+  "revision_id": "1615454"
+ }
+]

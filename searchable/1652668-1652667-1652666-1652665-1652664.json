@@ -1,0 +1,73 @@
+[
+ {
+  "author": "jani", 
+  "date": "2015-01-17T20:38:42.661724Z", 
+  "msg": [
+   "first version of committer"
+  ], 
+  "revision_id": "1652668"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-17T20:35:30.132609Z", 
+  "msg": [
+   "Eliminate svn_fs_x__rev_get_root by merging it with its only remaining caller.", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(svn_fs_x__rev_get_root): Remove.", 
+   "* subversion/libsvn_fs_x/cached_data.h", 
+   "(svn_fs_x__rev_get_root): Same.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(svn_fs_x__create_txn): Explicitly check the base revision for validity.", 
+   "Construct the root noderev ID directly."
+  ], 
+  "revision_id": "1652667"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-17T20:33:25.803752Z", 
+  "msg": [
+   "Since r1652664, the only caller of svn_fs_x__dag_revision_root uses", 
+   "pre-checked revision numbers, we can simplify its code and the pool", 
+   "parameter becomes a pure result pool.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(svn_fs_x__dag_revision_root): Directly construct the root noderev ID.", 
+   "The POOL is a pure RESULT_POOL.", 
+   "* subversion/libsvn_fs_x/dag.h", 
+   "(svn_fs_x__dag_revision_root): Sync declaration with the implementation."
+  ], 
+  "revision_id": "1652666"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2015-01-17T20:28:18.457984Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1652627\"", 
+   "------------------------------------------------------------------------", 
+   "r1652627 | mridulpathak | 2015-01-17 16:46:01 +0100 (sam. 17 janv. 2015) | 1 ligne", 
+   "[OFBIZ-3433] eCommerce main store front error returned when attempt is made to \"Sign Up For Contact List\" - as reported by Ruth. Not a service level bug but a UI issue. Email is a required input parameter in \"signUpForContactList\" service. Sign up form does have a field for email but has no label which is confusing to user, neither it is displayed as a required field. Applied patch from the issue to fix UI. Thanks Ruth for reporting the issue.", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1652665"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-01-17T20:25:48.456811Z", 
+  "msg": [
+   "Make FSX revision roots lightweight objects.", 
+   "The DAG node for the revision's root directory is easy to construct,", 
+   "relatively large and rarely used.  Therefore, don't store it in the", 
+   "svn_fs_root_t but construct it on demand.  This patch covers all code", 
+   "that would previously access svn_fs_root_t's FSAP_DATA.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(make_revision_root): We won't need the ROOT_DIR DAG node.", 
+   "(svn_fs_x__revision_root): Update caller.  Make sure we reject calls", 
+   "for invalid / non-existent revisions.", 
+   "(root_node): Construct the DAG node instead of taking it from ROOT.", 
+   "(x_node_id): Directly construct revision root IDs.", 
+   "(make_revision_root): Don't store the root node; leave FSAP_DATA NULL.", 
+   "(svn_fs_x__verify_root): Call common function to get the root node."
+  ], 
+  "revision_id": "1652664"
+ }
+]

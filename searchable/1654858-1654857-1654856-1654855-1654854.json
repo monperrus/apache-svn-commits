@@ -1,0 +1,85 @@
+[
+ {
+  "author": "markrmiller", 
+  "date": "2015-01-26T18:30:45.509503Z", 
+  "msg": [
+   "SOLR-6500: Refactor FileFetcher in SnapPuller, add debug logging."
+  ], 
+  "revision_id": "1654858"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2015-01-26T18:28:33.747417Z", 
+  "msg": [
+   "Implement dump/load cross-checking in the test suite.", 
+   "After every Python test in the test suite, dump the created repository (if", 
+   "any) with svnadmin and with svnrdump and compare the two. Load each dump", 
+   "with the other tool to check that they can load each other's dumps and", 
+   "interpret them the same way. Run each dump through a no-op svndumpfilter", 
+   "command and check it doesn't change the dumpfile significantly.", 
+   "If cross-checking fails, raise a test failure in the normal way, as if the", 
+   "cross-checking were part of the test.", 
+   "A few tests deliberately create a broken repository. Adjust those tests", 
+   "either to delete or to repair the repository before exiting, so that we do", 
+   "not try to run this cross-checking on a broken repository.", 
+   "Motivation: Cross-checking reveals bugs and inconsistencies between the", 
+   "different dump/load tools. The test suite by its nature provides a good", 
+   "selection of interesting repository contents.", 
+   "### TODO:", 
+   "- Put back the dumpfile parser's ability to check for well-formed dumpfile", 
+   "contents, which has been temporarily stripped out here in order to", 
+   "achieve more generic parsing, as some dump/load tests rely on that.", 
+   "- Bypass authz when dumping with svnrdump, otherwise a partial dump is", 
+   "obtained for tests using authz, making those tests fail.", 
+   "- Make optional -- enabled by a configure option?", 
+   "Ideas for improvement:", 
+   "- Improve the logic for finding repositories created by a test: detect", 
+   "when a test created a repository even if the sandbox is not marked as", 
+   "'built'; detect when a test created additional repositories.", 
+   "- Implement the same cross-checking for the C tests.", 
+   "* subversion/tests/cmdline/svntest/sandbox.py", 
+   "(Sandbox.__init__): Remember the current working directory.", 
+   "(Sandbox.verify_repo,", 
+   "Sandbox.verify): New methods implementing dump/load cross-checking.", 
+   "* subversion/tests/cmdline/svntest/testcase.py", 
+   "(FunctionTestCase.run): Call the sandbox's verify method afterwards.", 
+   "* subversion/tests/cmdline/svntest/verify.py", 
+   "(DumpParser): Improve the parsing of headers, fixing bugs and making it", 
+   "more generic. Don't store the number of blank lines, for now, because at", 
+   "the moment these often differ between svnadmin and svnrdump.", 
+   "(compare_dump_files): Add new options: 'ignore uuid',", 
+   "'expect_content_length_always', 'ignore_empty_prop_sections'.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(fsfs_recover_handle_missing_revs_or_revprops_file): Restore the", 
+   "repository to a non-corrupt state, to avoid failing to dump.", 
+   "(verify_keep_going,", 
+   "verify_invalid_path_changes,", 
+   "verify_quickly): Remove the corrupt repository, to avoid failing to dump."
+  ], 
+  "revision_id": "1654857"
+ }, 
+ {
+  "author": "ekoifman", 
+  "date": "2015-01-26T18:22:17.157975Z", 
+  "msg": [
+   "HIVE-9361 - Intermittent NPE in SessionHiveMetaStoreClient.alterTempTable"
+  ], 
+  "revision_id": "1654856"
+ }, 
+ {
+  "author": "ekoifman", 
+  "date": "2015-01-26T18:22:13.757364Z", 
+  "msg": [
+   "HIVE-9361 - Intermittent NPE in SessionHiveMetaStoreClient.alterTempTable"
+  ], 
+  "revision_id": "1654855"
+ }, 
+ {
+  "author": "ekoifman", 
+  "date": "2015-01-26T18:22:03.241004Z", 
+  "msg": [
+   "HIVE-9361 - Intermittent NPE in SessionHiveMetaStoreClient.alterTempTable"
+  ], 
+  "revision_id": "1654854"
+ }
+]

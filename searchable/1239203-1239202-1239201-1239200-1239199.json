@@ -1,0 +1,84 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2012-02-01T16:58:50.595437Z", 
+  "msg": [
+   "For issue #2487, \"mod_dav_svn and locales fail to play nicely together\",", 
+   "add a new configuration option which allows Subversion libraries called", 
+   "from mod_dav_svn to process UTF-8 strings, instead of just ASCII strings.", 
+   "Because httpd is not locale-aware, we cannot assume that a native character", 
+   "set other than ASCII is present in the environment that mod_dav_svn runs in.", 
+   "UTF-8 is backward compatible to ASCII, and all paths within Subversion", 
+   "repositories are already encoded in UTF-8. Thus, we can safely allow UTF-8", 
+   "without running into character set conversion issues in code called from", 
+   "mod_dav_svn.", 
+   "Basic testing shows that httpd is prepared to tolerate non-ASCII characters,", 
+   "even though it doesn't seem to interpret them. E.g. it logs such characters", 
+   "as hex codes preceded by a backslash.", 
+   "The new configuration option is called SVNUseUTF8 and can be set to", 
+   "\"On\" or \"Off\" (the default is \"Off\"). It is a global option that takes", 
+   "effect for all repository locations defined in the configuration file.", 
+   "When the option is \"On\", files that contain UTF-8 characters in their", 
+   "names can be processed by the pre-lock hook, hooks are able to write", 
+   "UTF-8 characters to stdout and stderr, and filesystem paths to Subversion", 
+   "repositories may contain UTF-8 characters.", 
+   "* subversion/mod_dav_svn/mod_dav_svn.c", 
+   "(server_conf_t): Add use_utf8 boolean.", 
+   "(init): Initialise the native character set of Subversion's UTF-8", 
+   "conversion routines to either ASCII (default) or UTF-8.", 
+   "(SVNUseUTF8_cmd): New option command processor.", 
+   "(cmds): Add new \"SVNUseUTF8\" option.", 
+   "* subversion/include/svn_utf.h", 
+   "(svn_utf_initialize2): Declare. Includes the ablity to force the native", 
+   "character set to UTF-8, regardless of locale.", 
+   "(svn_utf_initialize): Deprecate.", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_utf_initialize): Re-implement as wrapper around svn_utf_initialize2().", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(svn_cmdline_init): Update funtion call to svn_utf_initialize2(), keeping", 
+   "the native character set based on the current locale.", 
+   "* subversion/libsvn_subr/utf.c", 
+   "(svn_utf_initialize2): New.", 
+   "(assume_native_charset_is_utf8): New global boolean variable. Defaults", 
+   "to FALSE, and may be set to TRUE by svn_utf_initialize2() (which, like", 
+   "its predecessor, is documented to not be thread-safe).", 
+   "(get_ntou_xlate_handle_node, get_uton_xlate_handle_node): If the native", 
+   "character set has been forced to UTF-8, use SVN_APR_UTF8_CHARSET instead", 
+   "of SVN_APR_LOCALE_CHARSET."
+  ], 
+  "revision_id": "1239203"
+ }, 
+ {
+  "author": "rjung", 
+  "date": "2012-02-01T16:50:15.764252Z", 
+  "msg": [
+   "Fix download file name for apr-iconv 1.2.1", 
+   "windows sources (suffix -r2 was missing)."
+  ], 
+  "revision_id": "1239202"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2012-02-01T16:48:04.343272Z", 
+  "msg": [
+   "adding UpdateChecker -> need to be added in the startup"
+  ], 
+  "revision_id": "1239201"
+ }, 
+ {
+  "author": "arist", 
+  "date": "2012-02-01T16:44:57.537174Z", 
+  "msg": [
+   "Update headers to Alv2 headers"
+  ], 
+  "revision_id": "1239200"
+ }, 
+ {
+  "author": "lahiru", 
+  "date": "2012-02-01T16:39:12.840129Z", 
+  "msg": [
+   "Setting an xml element in to output node rather setting misleading XmlElement.toString value."
+  ], 
+  "revision_id": "1239199"
+ }
+]

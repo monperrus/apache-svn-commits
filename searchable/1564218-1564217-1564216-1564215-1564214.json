@@ -1,0 +1,61 @@
+[
+ {
+  "author": "kwright", 
+  "date": "2014-02-04T06:53:39.124835Z", 
+  "msg": [
+   "Tag MCF 1.5 RC7"
+  ], 
+  "revision_id": "1564218"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-02-04T06:41:25.254507Z", 
+  "msg": [
+   "Drop the cache-instance private pool we used for tempoary allocations", 
+   "and would clean periodically.", 
+   "It is simply no longer needed as we get an external scratch pool passed", 
+   "in and the temp. allocations may actually be significant if the object", 
+   "to serialize is large and complex.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(svn_membuffer_cache_t): Remove private pool and associated usage counter.", 
+   "(svn_membuffer_cache_set): Simply use the scratch_pool during serialization", 
+   "and remove all private pool code.", 
+   "(svn_cache__create_membuffer_cache): Drop obsolete init code."
+  ], 
+  "revision_id": "1564217"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-02-04T06:17:48.980147Z", 
+  "msg": [
+   "* STATUS: suggest r1564215 for backport"
+  ], 
+  "revision_id": "1564216"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-02-04T06:05:43.462651Z", 
+  "msg": [
+   "Tighten pool usage in our standard reporter.", 
+   "For not so obvious reasons, the pool passed to delta_dirs can take", 
+   "a long time to get clean up eventually.  As a result, I got dynamic", 
+   "peaks in memory usage of a whopping 20GB when running extreme tests", 
+   "like 'svn-bench null-export' on the full kde.org repository.", 
+   "With this fix, the peak is reduced to 100MB which is reaonably", 
+   "\"streamy\" and will be reduced further by following commits.", 
+   "* subversion/libsvn_repos/reporter.c", 
+   "(delta_dirs): Rename the existing subpool to iterpool.", 
+   "Create a subpool for all other allocations in this", 
+   "function and clean that up asap."
+  ], 
+  "revision_id": "1564215"
+ }, 
+ {
+  "author": "jwills", 
+  "date": "2014-02-04T06:01:32.597895Z", 
+  "msg": [
+   "One-liner: add docs for crunch.tmp.dir config parameter"
+  ], 
+  "revision_id": "1564214"
+ }
+]

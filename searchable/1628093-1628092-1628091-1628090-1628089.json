@@ -1,0 +1,87 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-09-28T17:56:01.598166Z", 
+  "msg": [
+   "Support FSFS format 7 commits in load balanced mixed-architecture clusters.", 
+   "At least theoretically, machines with different endianess or off_t sizes", 
+   "might access the same repository on e.g. an iSCSI SAN.  Then the machine", 
+   "performing a commit may have a different architecture from the one building", 
+   "up the transaction.  To allow that, even the intermediate (proto-) index", 
+   "format within those transactions must be platform-independent.", 
+   "Instead of writing the records as blobs, we store each member individually", 
+   "as an unsigned 64 bit integer in little endian order.  Limiting all values", 
+   "to non-negative (with a special handling of SVN_INVALID_REVNUM) makes", 
+   "conversions from and to the in-memory types well-defined.  We only need", 
+   "to check for overflows - e.g. in case one machine's apr_off_t is too short.", 
+   "All functions reading from or writing to the proto index files must use", 
+   "the new converting reader and writer functions instead of reading plain", 
+   "blobs themselves.", 
+   "Finally, update the FSFS structure documentation.", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(off_t_max): Define this new APR_OFF_T_MAX surrogate.", 
+   "(P2L_PROTO_INDEX_ENTRY_SIZE): Define this record size constant to allow", 
+   "for random file access. Only needed for the", 
+   "P2L proto-index.", 
+   "(write_uint64_to_proto_index,", 
+   "read_uint64_from_proto_index): New code to read and write individual", 
+   "numbers to/from the proto-index file in", 
+   "a platform neutral fixed length format.", 
+   "(read_uint32_from_proto_index,", 
+   "read_off_t_from_proto_index): Convenience wrappers around the previous.", 
+   "(write_entry_to_proto_index): Rename to ...", 
+   "(write_l2p_entry_to_proto_index): ... this for clarity.  Use the new", 
+   "function to write proto index file.", 
+   "(read_l2p_entry_from_proto_index): New function to read the proto index.", 
+   "(svn_fs_fs__l2p_proto_index_add_revision,", 
+   "svn_fs_fs__l2p_proto_index_add_entry): Update callers after rename.", 
+   "(svn_fs_fs__l2p_index_append,", 
+   "l2p_proto_index_lookup): Call the new reader function instead of reading", 
+   "a plain blob directly from the proto index.", 
+   "(svn_fs_fs__p2l_proto_index_add_entry): Write all struct elements", 
+   "individually, check before", 
+   "converting them to uint64.", 
+   "(read_p2l_entry_from_proto_index): New inverse function to the above.", 
+   "(svn_fs_fs__p2l_proto_index_next_offset): Call the new reader function", 
+   "and update the offset calculation.", 
+   "(svn_fs_fs__p2l_index_append): Call the new reader function.", 
+   "* subversion/libsvn_fs_fs/structure-indexes", 
+   "(Design): Add a section about the general proto-index formatting.", 
+   "(Log-to-phys index,", 
+   "Phys-to-log index): Update the proto-index file format descriptions."
+  ], 
+  "revision_id": "1628093"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2014-09-28T17:52:13.218410Z", 
+  "msg": [
+   "[MASSEMBLY-712] Add symlink support by updating plexus archiver"
+  ], 
+  "revision_id": "1628092"
+ }, 
+ {
+  "author": "thejas", 
+  "date": "2014-09-28T17:44:01.476153Z", 
+  "msg": [
+   "HIVE-8277 : IP address string in HS2, metastore have a \"/\" prefix (Thejas Nair, reviewed by Vaibhav Gumashta)"
+  ], 
+  "revision_id": "1628091"
+ }, 
+ {
+  "author": "thejas", 
+  "date": "2014-09-28T17:42:27.630721Z", 
+  "msg": [
+   "HIVE-8277 : IP address string in HS2, metastore have a \"/\" prefix (Thejas Nair, reviewed by Vaibhav Gumashta)"
+  ], 
+  "revision_id": "1628090"
+ }, 
+ {
+  "author": "krosenvold", 
+  "date": "2014-09-28T17:19:55.241103Z", 
+  "msg": [
+   "Archiver 2.6.1, now also with jdk5 compatibility..."
+  ], 
+  "revision_id": "1628089"
+ }
+]

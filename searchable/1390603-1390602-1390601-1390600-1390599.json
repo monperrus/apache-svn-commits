@@ -1,0 +1,63 @@
+[
+ {
+  "author": "dkulp", 
+  "date": "2012-09-26T17:05:24.926870Z", 
+  "msg": [
+   "Merged revisions 1390598 via  git cherry-pick from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r1390598 | dkulp | 2012-09-26 12:54:20 -0400 (Wed, 26 Sep 2012) | 2 lines", 
+   "If using something other than Basic auth, create a AuthorizationPolicy object based on what we CAN retrieve from the HTTP Request", 
+   "........"
+  ], 
+  "revision_id": "1390603"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2012-09-26T17:03:22.957531Z", 
+  "msg": [
+   "If we have a principal, even for basic auth, record it."
+  ], 
+  "revision_id": "1390602"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-09-26T16:56:58.518811Z", 
+  "msg": [
+   "Some clients, e.g. our JAVA tests, indirectly allocate DAG nodes in pools", 
+   "that live longer than the corresponding FS pool.  These nodes become invalid", 
+   "as soon as the FS gets destroyed, so it is fine to invalidate them together", 
+   "with the FS.", 
+   "However, those pools will hold a locks on the DAG cache and will try to", 
+   "release these locks long after the cache got destroyed.  Therefore, we must", 
+   "keep a list of all locking pools and revoke their locks unconditionally if", 
+   "the cache gets destroyed.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(cache_lock_t): new data type", 
+   "(fs_fs_dag_cache_t): use the new type to indicate the presense of locks", 
+   "(unlock_cache): rewrite", 
+   "(unregister_locks): new destructor for our cache", 
+   "(svn_fs_fs__create_dag_cache): register destructor", 
+   "(lock_cache): rewrite", 
+   "(auto_clear_dag_cache): update", 
+   "(dag_node_cache_get): clarify node lifetime in docstring"
+  ], 
+  "revision_id": "1390601"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2012-09-26T16:56:17.518015Z", 
+  "msg": [
+   "If the Basic auth stuff is not valid, but a principal was provided, use it."
+  ], 
+  "revision_id": "1390600"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2012-09-26T16:55:56.013373Z", 
+  "msg": [
+   "A slightly different alternative to ConcurrentLinkedQueue. This one is also largely GC free and has similar performance to the Stack version."
+  ], 
+  "revision_id": "1390599"
+ }
+]

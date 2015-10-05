@@ -1,0 +1,82 @@
+[
+ {
+  "author": "rmuir", 
+  "date": "2014-05-14T18:23:31.070899Z", 
+  "msg": [
+   "LUCENE-5671: upgrade ICU to fix concurrency bug"
+  ], 
+  "revision_id": "1594663"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-05-14T18:18:28.681955Z", 
+  "msg": [
+   "[HBASE-2000] load coprocessors from jar published in hdfs", 
+   "Author: adela", 
+   "Summary: on online configuration change - load jars from hdfs for coprocessors", 
+   "Test Plan: added TestClassLoading, also ran TestHRegionObserverBypassCoprocessor and made sure it passes", 
+   "Reviewers: daviddeng", 
+   "Reviewed By: daviddeng", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D1308323", 
+   "Task ID: 4171555"
+  ], 
+  "revision_id": "1594662"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-05-14T18:18:24.580028Z", 
+  "msg": [
+   "[HBASE-8500] Fix Rolling Restart to handle scenarios where RegionServer and Master are using different versions of HRegionInfo", 
+   "Author: rshroff", 
+   "Summary:", 
+   "During the table schema change, we update the META region and then", 
+   "restart the regions one by one in a throttled manner. Incase we fail during", 
+   "this time, the Master and the RegionServer have different HRegionInfo versions", 
+   "of the same object.", 
+   "This causes confusion and failures on the Master side to not reassign the", 
+   "Region back to the favored node and also on the RollingRestart side, where it fails", 
+   "to lookup the favored nodes for this region.", 
+   "The fix is on the RollingRestart side, to do a serial scan in case the get() fails.", 
+   "Test Plan: test on t043, rolling restart o/p https://phabricator.fb.com/P10344177", 
+   "Reviewers: aaiyer, liyintang, manukranthk", 
+   "Reviewed By: manukranthk", 
+   "CC: hbase-dev@, manukranthk, daviddeng", 
+   "Differential Revision: https://phabricator.fb.com/D1327052", 
+   "Task ID: 4311266"
+  ], 
+  "revision_id": "1594661"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2014-05-14T18:18:21.445741Z", 
+  "msg": [
+   "[HBASE-10343] Fix TestHRegionSeqidTransition", 
+   "Author: rshroff", 
+   "Summary:", 
+   "The test would fail whenever the 2/3 region servers which are stopped", 
+   "has the ROOT region server. The reason it fails it because of timeout in", 
+   "relocating the ROOT region server. The locateMetaInRoot is suppose to", 
+   "try to locate the META region, but in case the ROOT is moved, it takes", 
+   "some time, until PFFE kicks in for that server, where is rediscovers the", 
+   "root location. The flow is correct, it's just that the PFFE threshold is", 
+   "60 secs, which might cause the test case to timeout in some cases.", 
+   "The fix is reducing the threshold, so that PFFE kicks in faster.", 
+   "Test Plan: run it 25 times. It should pass", 
+   "Reviewers: manukranthk, everyoung, liyintang, daviddeng", 
+   "Reviewed By: manukranthk", 
+   "CC: hbase-dev@", 
+   "Differential Revision: https://phabricator.fb.com/D1316334", 
+   "Task ID: 4237582"
+  ], 
+  "revision_id": "1594660"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2014-05-14T18:14:05.590513Z", 
+  "msg": [
+   "simplifying TomEEInjectionEnricher and avoiding NPE in OpenEJBEnricher"
+  ], 
+  "revision_id": "1594659"
+ }
+]

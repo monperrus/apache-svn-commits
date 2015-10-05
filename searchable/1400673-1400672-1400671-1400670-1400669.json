@@ -1,0 +1,64 @@
+[
+ {
+  "author": "tn", 
+  "date": "2012-10-21T16:32:30.501356Z", 
+  "msg": [
+   "Fix checkstyle warnings, added missing javadoc."
+  ], 
+  "revision_id": "1400673"
+ }, 
+ {
+  "author": "rfscholte", 
+  "date": "2012-10-21T16:23:35.272807Z", 
+  "msg": [
+   "remove unnecessary cast"
+  ], 
+  "revision_id": "1400672"
+ }, 
+ {
+  "author": "tn", 
+  "date": "2012-10-21T16:22:50.364019Z", 
+  "msg": [
+   "[MATH-778] Allow unlimited input values for Dfp#multiply."
+  ], 
+  "revision_id": "1400671"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-10-21T16:16:17.556410Z", 
+  "msg": [
+   "Fix a bug introduced in r1393252: ensure_data_insertable may drop old", 
+   "entries from the same bucket. Because we always add new entries at the", 
+   "end of the bucket, we can select that entry only *after* the number of", 
+   "used (surviving) entries is known.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(membuffer_cache_set_partial_internal): select entry after dropping others"
+  ], 
+  "revision_id": "1400670"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-10-21T16:07:36.235316Z", 
+  "msg": [
+   "Fix a hole in the recovery code after a revprop writer got killed.", 
+   "The situation that gets fixed here is:", 
+   "- the atomic replacement of the revprop got delayed for more than", 
+   "the 10s timeout", 
+   "- some reader already bumped the generation after that timeout", 
+   "- the the replacement eventually went through after that", 
+   "- the writer got killed before it could bump the revprop geneneration", 
+   "once more", 
+   "=> revprop caches don't get invalidated after the write", 
+   "Now, me make sure to bump the revprop generation after a timeout", 
+   "only when the writing process actually finished or got terminated.", 
+   "We do that by grabbing the global write lock.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(revprop_generation_fixup_t): new baton type", 
+   "(revprop_generation_fixup): new function that bumps the revprop", 
+   "generation after a failed / interrupted write", 
+   "(read_revprop_generation): make sure we do the fixup only when the", 
+   "original writer no longer exists"
+  ], 
+  "revision_id": "1400669"
+ }
+]

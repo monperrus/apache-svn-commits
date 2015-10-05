@@ -1,0 +1,90 @@
+[
+ {
+  "author": "benh", 
+  "date": "2012-10-26T22:07:15.160836Z", 
+  "msg": [
+   "Added more path::join variants.", 
+   "Review: https://reviews.apache.org/r/7716"
+  ], 
+  "revision_id": "1402693"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2012-10-26T22:07:13.341785Z", 
+  "msg": [
+   "Refactored strings::join to be more Pythonic.", 
+   "Review: https://reviews.apache.org/r/7715"
+  ], 
+  "revision_id": "1402692"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2012-10-26T22:07:11.539479Z", 
+  "msg": [
+   "Added a gtest Environment for doing better setup for our tests.", 
+   "Review: https://reviews.apache.org/r/7714"
+  ], 
+  "revision_id": "1402691"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2012-10-26T22:07:09.531098Z", 
+  "msg": [
+   "Refactored and simplified the ZooKeeper test fixture(s) and tests. In", 
+   "particular:", 
+   "(a) Eliminated the verbose logging coming from the", 
+   "AllocatorZooKeeperTest tests that was causing a lot of output when", 
+   "the tests ran.", 
+   "(b) Made sure all the ZooKeeper clients are properly shutdown in the", 
+   "AllocatorZooKeeperTest tests (this was mainly just invoking", 
+   "MasterDetector::destroy on all created detectors).", 
+   "(c) Renamed ZooKeeperServer to ZooKeeperServerTest so as not to", 
+   "conflate it with the Java class", 
+   "org.apache.zookeeper.server.ZooKeeperServer.", 
+   "(d) Added an AssertZKGet helper to get better error messages.", 
+   "Updated BaseZooKeeperTest fixture to shutdown embedeed JVM after the", 
+   "tests have completed.", 
+   "Review: https://reviews.apache.org/r/7713"
+  ], 
+  "revision_id": "1402690"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2012-10-26T22:07:06.466161Z", 
+  "msg": [
+   "Refactored the cgroups tests so that they can run in a multitude of", 
+   "environments. See each bullet below.", 
+   "* Added new test fixtures:", 
+   "(1) CgroupsNoHierarchyTest for running tests where we need to create", 
+   "a hierarchy (and thus, most likely, no existing hierarchy can", 
+   "exist because it will already have the cpu and or memory", 
+   "subsystem attached).", 
+   "(2) CgroupsAnyHierarchyTest and subclasses", 
+   "CgroupsAnyHierarchyWithCpuMemoryTest and", 
+   "CgroupsAnyHierarchyWithCpuMemoryFreezerTest for running tests", 
+   "with any hierarchy provided it has necessary subsystems", 
+   "attached.", 
+   "* Renamed cgroups (from \"prof\", \"stu\", etc. to \"mesos_test\") and", 
+   "removed nested cgroups by default. The rename was done because we", 
+   "might run tests inside of an existing hierarchy and we want to avoid", 
+   "name clashes. The nested cgroups were removed in favor of a test", 
+   "that explicitly tries to create nested cgroups (since some older", 
+   "kernels with particular subsystems attached have a hard time with", 
+   "this, and we'd like to detect that case explicitly).", 
+   "* Created an explicit test for nested cgroups (see above).", 
+   "* Updated the \"write control\" test to use a forked process rather than", 
+   "the test process (to be more conservative in the presence of errors)", 
+   "* Updated the \"listen event\" (i.e., \"oom\") test to check for the", 
+   "proper control first (memory.oom_control).", 
+   "* Updated the failure mechanism of forked (children) processes to use", 
+   "'abort' rather than 'ASSERT_*' and 'FAIL' in order to make test", 
+   "output more readable upon failures.", 
+   "* Updated the notify mechanism from forked (children) processes to", 
+   "parent processes to correctly distinguish a closed pipe from a value", 
+   "written (to catch more instances of when the test is actually", 
+   "failing).", 
+   "Review: https://reviews.apache.org/r/7622"
+  ], 
+  "revision_id": "1402689"
+ }
+]

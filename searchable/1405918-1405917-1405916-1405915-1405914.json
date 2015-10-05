@@ -1,0 +1,97 @@
+[
+ {
+  "author": "veithen", 
+  "date": "2012-11-05T18:50:32.425912Z", 
+  "msg": [
+   "Moved SimpleAxisServer and JettyAxisServer to axis-rt-compat. They are superseded by StandaloneAxisServer."
+  ], 
+  "revision_id": "1405918"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-05T18:44:18.637212Z", 
+  "msg": [
+   "[HBASE-6968 ] Improve HLog group commits throughput", 
+   "Author: hkuang", 
+   "Summary:", 
+   "This is an initial diff that tries to allow log entry append while syncing log entries to HDFS. It introduces a double list buffer where", 
+   "1. currentlist is for log entries to be appended", 
+   "2. synclist contains log entries to be synced to hdfs.", 
+   "With this, each put RPC only adds the log entry to the currentlist under appendlock, while log entry serialization, write, and sync are done in group with updatelock by the sync thread.", 
+   "I still need to run benchmark and plan to add a metrics for group commit size.", 
+   "Test Plan: existing unit tests", 
+   "Reviewers: kannan, kranganathan, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, sdong, aaiyer, liyintang", 
+   "Differential Revision: https://phabricator.fb.com/D558495"
+  ], 
+  "revision_id": "1405917"
+ }, 
+ {
+  "author": "oheger", 
+  "date": "2012-11-05T18:43:48.379322Z", 
+  "msg": [
+   "Added support for immutable subsets."
+  ], 
+  "revision_id": "1405916"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-05T18:43:46.615710Z", 
+  "msg": [
+   "[jira] [HBASE-7031] [89-fb] Add startRow/endRow to TableInputFormat", 
+   "Author: pritam", 
+   "Summary: We are still using", 
+   "org.apache.hadoop.hbase.mapred.TableInputFormat (as opposed to", 
+   "org.apache.hadoop.hbase.mapreduce.TableInputFormat) for", 
+   "Hadoop Streaming integration. We need to add startRow/endRow", 
+   "support to TableIn", 
+   "Test Plan:", 
+   "- Run a streaming map-reduce job using TableInputFormat", 
+   "with startRow and endRow specified.", 
+   "- Verify that only the requested range of rows is", 
+   "included in the output.", 
+   "Reviewers: Kannan, Karthik, JIRA, mbautin,", 
+   "aaiyer, Liyin", 
+   "Reviewed By: Liyin", 
+   "CC: tjackson", 
+   "Differential Revision: https://reviews.facebook.net/D6129"
+  ], 
+  "revision_id": "1405915"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2012-11-05T18:43:12.893995Z", 
+  "msg": [
+   "[HBASE-6857] [0.89-fb] Add cumulative metrics to keep track of slow operations", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Currently we use time varying metrics. This does not give us", 
+   "useful information upon checking the ODS graphs, becaus on the", 
+   "average these values are pretty low -- 0, or 1.", 
+   "changing this to be cumulative, so we can keep track of trends.", 
+   "Test Plan:", 
+   "built and pushed to my dev cluster", 
+   "noted that the metrics do show up on jmx", 
+   "a part of the output on one of the RS:", 
+   "\"hadoop.regionserver_rpc_slowresponse.all.cumulative\": 8068,", 
+   "\"hadoop.regionserver_rpc_slowresponse.avgtime\": 27,", 
+   "\"hadoop.regionserver_rpc_slowresponse.close.cumulative\": 1,", 
+   "\"hadoop.regionserver_rpc_slowresponse.delete.cumulative\": 4,", 
+   "\"hadoop.regionserver_rpc_slowresponse.get.cumulative\": 4039,", 
+   "\"hadoop.regionserver_rpc_slowresponse.getclosestrowbefore.cumulative\": 3,", 
+   "\"hadoop.regionserver_rpc_slowresponse.maxtime\": 909,", 
+   "\"hadoop.regionserver_rpc_slowresponse.mintime\": 2,", 
+   "\"hadoop.regionserver_rpc_slowresponse.multiput.cumulative\": 3957,", 
+   "\"hadoop.regionserver_rpc_slowresponse.next.cumulative\": 50,", 
+   "\"hadoop.regionserver_rpc_slowresponse.numops\": 56,", 
+   "\"hadoop.regionserver_rpc_slowresponse.openscanner.cumulative\": 3,", 
+   "\"hadoop.regionserver_rpc_slowresponse.put.cumulative\": 27,", 
+   "Reviewers: kannan, kranganathan, liyintang", 
+   "Reviewed By: kannan", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D615641"
+  ], 
+  "revision_id": "1405914"
+ }
+]

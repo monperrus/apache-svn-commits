@@ -1,0 +1,89 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2014-06-25T23:40:08.323003Z", 
+  "msg": [
+   "Drop the workaround for concurrent 'hotcopy' and 'pack' race, because it is", 
+   "broken in at least one common scenario.  The workaround only applies to FSFS", 
+   "formats 4-6, because in FSFS 7 these operations are always serialized via the", 
+   "new 'pack-lock' file.  Prior to this changeset, we were trying to be smart in", 
+   "this racy situation and tried the following (see hotcopy_revisions()):", 
+   "- Say, at some point we are done with copying packed shards and are now", 
+   "copying the unpacked revisions one-by-one.", 
+   "- We know the source path for the unpacked revision file", 
+   "(e.g. /db/revs/1/358).", 
+   "- Whenever an attempt to copy that revision file raises an ENOENT error,", 
+   "we assume that this happened due to a concurrent pack.  In this case we", 
+   "determine the pack location for this revision (/db/revs/1.pack/) and", 
+   "copy it (and only it!) instead.", 
+   "The last step is not good enough, because it might actually render the backup", 
+   "destination unusable and painful to recover.  For instance, imagine running", 
+   "'hotcopy' for a fully unpacked source repository with several shards:", 
+   "[ unpacked ]    [ unpacked ]      [ always unpacked ]", 
+   "0             1000             2000                     2537 (youngest)", 
+   "(min-unpacked-rev)", 
+   "Now, somewhere in the middle of copying the second shard, we invoke a", 
+   "concurrent pack.  The hotcopy has a workaround for that.  So it says: \"Aha,", 
+   "this revision I was about to copy got packed in the source.  Fine, just copy", 
+   "the corresponding (second!) packed shard.\"  When this hotcopy operation", 
+   "finishes, the destination would look like this ...", 
+   "[ unpacked !!! ]    [ packed ]      [ always unpacked ]", 
+   "0                 1000           2000                     2537 (youngest)", 
+   "(min-unpacked-rev)", 
+   "...and this repository is broken, because it contains unpacked revisions", 
+   "in the [0, min-unpacked-rev) range.  It is unusable, cannot be automatically", 
+   "recovered and that is definitely not something one would like to see as a", 
+   "data backup.", 
+   "A general solution to this problem would probably mean copying everything", 
+   "from the start in some cases.  However, having a possibility of a retry loop", 
+   "in a backup routine seems to be worse than exiting with an ENOENT error", 
+   "(\"E720003: Can't open file 'db\\revs\\1\\358' ...\").  In the latter case, the", 
+   "hotcopy destination is still valid, just not up-to-date and one can run the", 
+   "incremental hotcopy after the packing is done.  As an another alternative, we", 
+   "could tweak the existing workaround and only permit it for the *last* packed", 
+   "shard, which should be safe to copy.  However, this would look like we are", 
+   "trying to solve an edge case of an edge case.", 
+   "I chose to entirely drop this code.  Backup routine that fails in an edge", 
+   "case (without wreaking havoc) is a better choice compared to a backup routine", 
+   "that might work in an edge case, but also might produce broken backups.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_revisions): Do not attempt to workaround a possible scenario of", 
+   "concurrent packing.  Rework the existing comment in order to preserve the", 
+   "information about the possible race condition and justify why we no", 
+   "longer try to handle it."
+  ], 
+  "revision_id": "1605633"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-06-25T22:54:52.587585Z", 
+  "msg": [
+   "Added 2 variables to pre-select Chinese (simplified) in the new language select box"
+  ], 
+  "revision_id": "1605632"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-06-25T22:51:02.984878Z", 
+  "msg": [
+   "Exchanged code for green download box with function call to separate file, updated code when JavaScript is disabled, deleted no longer needed code"
+  ], 
+  "revision_id": "1605631"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2014-06-25T22:49:46.794530Z", 
+  "msg": [
+   "Fix job save"
+  ], 
+  "revision_id": "1605630"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-06-25T22:48:04.311272Z", 
+  "msg": [
+   "Added strings to translate"
+  ], 
+  "revision_id": "1605629"
+ }
+]

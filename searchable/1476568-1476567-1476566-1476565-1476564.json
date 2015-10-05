@@ -1,0 +1,76 @@
+[
+ {
+  "author": "kkolinko", 
+  "date": "2013-04-27T13:21:30.097584Z", 
+  "msg": [
+   "Correct ordering of changelog items"
+  ], 
+  "revision_id": "1476568"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-04-27T13:13:26.737021Z", 
+  "msg": [
+   "On the cache-server branch: implement a hybrid caching strategy.", 
+   "Split the cache buffer into two sub-buffers, called \"levels\" and apply", 
+   "different insertion / eviction strategies to them.  Insert always into", 
+   "L1 and make L1 accept all entries small enough to fit into the buffer.", 
+   "So, there is \"perfect\" short-term caching.", 
+   "Data evicted from L1 cyclic buffer will be \"promoted\" to L2.  Here, we", 
+   "will only accept entries whose insertion does not cost us more hits", 
+   "than the item to be inserted already accumulated.  Combined with aging", 
+   "existing entries, this provides a modified LFU semantics.  Being able", 
+   "to use past hit counts accumulated in L1, we can now make a much better", 
+   "guess which items should be cached and which could be dropped.", 
+   "Note that lookup speed is not affected by the introduction of cache", 
+   "levels.  Insertion, however, costs about twice as much now.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(): extend global docstring explaining", 
+   "(entry_t): update doc strings", 
+   "(cache_level_t): new data struct, mostly former svn_membuffer_t members", 
+   "(svn_membuffer_t): replace entry chain etc. by 2 cache_level_t instances", 
+   "(get_cache_level): new utility method", 
+   "(chain_entry,", 
+   "unchain_entry): factored out from drop_entry and insert_entry", 
+   "(drop_entry,", 
+   "insert_entry): call the above;", 
+   "modify the cache level instead of cache struct", 
+   "(move_entry): modify the cache level instead of cache struct", 
+   "(promote_entry): new utility method", 
+   "(ensure_data_insertable): duplicate and rename to ...", 
+   "(ensure_data_insertable_l2,", 
+   "ensure_data_insertable_l1): ... these; implement specific strategies", 
+   "(svn_cache__membuffer_cache_create,", 
+   "membuffer_cache_set_internal,", 
+   "membuffer_cache_set_partial_internal,", 
+   "svn_membuffer_get_segment_info): update"
+  ], 
+  "revision_id": "1476567"
+ }, 
+ {
+  "author": "olamy", 
+  "date": "2013-04-27T12:53:19.818363Z", 
+  "msg": [
+   "add some  debug"
+  ], 
+  "revision_id": "1476566"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-04-27T12:51:57.600148Z", 
+  "msg": [
+   "On the cache-server branch: remove some debug code", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(find_entry): we don't need the printf() output anymore"
+  ], 
+  "revision_id": "1476565"
+ }, 
+ {
+  "author": "tn", 
+  "date": "2013-04-27T12:40:02.995554Z", 
+  "msg": [
+   "Add findbugs exclude filters for ObjectArrayIterator and UnmodifiableBidiMap."
+  ], 
+  "revision_id": "1476564"
+ }
+]

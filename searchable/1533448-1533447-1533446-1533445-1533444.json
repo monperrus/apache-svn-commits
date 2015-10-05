@@ -1,0 +1,81 @@
+[
+ {
+  "author": "jim", 
+  "date": "2013-10-18T13:38:15.168920Z", 
+  "msg": [
+   "Merge r1529559, r1531505 from trunk:", 
+   "Fix PR 55397: dav_resource->uri treated as an unparsed uri.", 
+   "The change made for PR 54611 caused this field to be treated as", 
+   "unescaped.  mod_dav_svn however, provided escaped URIs.  Essentially", 
+   "breaking support for paths with non-URI safe characters in SVN.", 
+   "Adjust the code so that dav_resource->uri is assumed to be escaped and", 
+   "adjust mod_dav_fs so that it uses escaped URIs in this field.", 
+   "* modules/dav/fs/repos.c", 
+   "(dav_fs_get_resource): Use the unparsed_uri to contruct the resource uri.", 
+   "* modules/dav/main/mod_dav.c", 
+   "(dav_xml_escape_uri): Do not uri escape, just handle xml escaping.", 
+   "(dav_created): Assume that locn if provided is escaped.", 
+   "(dav_method_copymove, dav_method_bind): Use the unparsed_uri on the request", 
+   "when calling dav_created() to adjust to locn assuming it is escaped.", 
+   "* modules/dav/main/mod_dav.h", 
+   "(dav_resource): Document that uri is escaped.", 
+   "Followup to r1529559: mod_dav_fs: Fix encoding of hrefs in PROPFIND response.", 
+   "Previous commit missed encoding the names of the children of the PROPFIND", 
+   "request when the depth wasn't 0.", 
+   "* modules/dav/fs/repos.c", 
+   "(dav_fs_append_uri): New function", 
+   "(dav_fs_walker): Use dav_fs_append_uri() and adjust length calculations to", 
+   "use the encoded length.", 
+   "Submitted by: breser", 
+   "Reviewed/backported by: jim"
+  ], 
+  "revision_id": "1533448"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2013-10-18T13:36:21.286448Z", 
+  "msg": [
+   "Merge r1528718 from trunk:", 
+   "mod_dav: Fix PR 55306.", 
+   "Makes mod_dav no longer require that the lock token be provided when the", 
+   "source of a COPY is locked.  The prior behavior was in violating of", 
+   "RFC 4918 which says that the lock token is only required on resources", 
+   "that may be modified by the method.", 
+   "* modules/dav/main/mod_dav.h", 
+   "(DAV_VALIDATE_NO_MODIFY): New flag to be passed to dav_validate_* functions.", 
+   "* modules/dav/main/mod_dav.c", 
+   "(dav_method_copymove): Use the new flag when calling dav_validate_request()", 
+   "on the COPY source.", 
+   "* modules/dav/main/util.c", 
+   "(dav_validate_resource_state): Use the flag to decide to ignore if the lock", 
+   "token is not provided.", 
+   "Submitted by: breser", 
+   "Reviewed/backported by: jim"
+  ], 
+  "revision_id": "1533447"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2013-10-18T13:33:21.380418Z", 
+  "msg": [
+   "promote"
+  ], 
+  "revision_id": "1533446"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2013-10-18T13:33:02.030047Z", 
+  "msg": [
+   "votes"
+  ], 
+  "revision_id": "1533445"
+ }, 
+ {
+  "author": "rpluem", 
+  "date": "2013-10-18T13:30:52.700053Z", 
+  "msg": [
+   "* Fix logical flaw introduced in r1531340. We checked for the opposite."
+  ], 
+  "revision_id": "1533444"
+ }
+]

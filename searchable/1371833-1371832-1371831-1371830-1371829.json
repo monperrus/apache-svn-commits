@@ -1,0 +1,116 @@
+[
+ {
+  "author": "pburba", 
+  "date": "2012-08-10T22:30:18.121144Z", 
+  "msg": [
+   "On the inheritable-props branch: Sync with ^/subversion/trunk through", 
+   "r1371831."
+  ], 
+  "revision_id": "1371833"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2012-08-10T22:28:24.208055Z", 
+  "msg": [
+   "Remove a comment in merge_tests.py 78 that has been wrong since the change", 
+   "made in r871974 (\"Fix issue #3067, 'subtrees that don't exist at the start", 
+   "or end of a merge range shouldn't break the merge'\").", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(dont_merge_revs_into_subtree_that_predate_it): Remove a comment."
+  ], 
+  "revision_id": "1371832"
+ }, 
+ {
+  "author": "pburba", 
+  "date": "2012-08-10T22:18:59.189601Z", 
+  "msg": [
+   "On the inheritable-props branch: Atomically update cached iprops with", 
+   "work queue items during update/switch editor drives.  Remove the temporary", 
+   "svn_client__update_inheritable_props API.", 
+   "* subversion/include/private/svn_wc_private.h", 
+   "(svn_wc__cache_iprops): Deleted, no callers.", 
+   "(svn_wc__get_update_editor,", 
+   "svn_wc__get_switch_editor): Add argument", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__update_inheritable_props): Delete.", 
+   "(svn_client__get_inheritable_props): New.", 
+   "* subversion/libsvn_client/iprops.c", 
+   "(need_to_cache_iprops): Gracefully handle the case where we ask about a", 
+   "non-existant path.", 
+   "(svn_client__update_inheritable_props): Delete.", 
+   "(svn_client__get_inheritable_props):", 
+   "* subversion/libsvn_client/switch.c (switch_internal):", 
+   "* subversion/libsvn_client/update.c (update_internal):", 
+   "Grab inheritable properties from the repository", 
+   "for each WC root in the update target and pass these iprops to", 
+   "svn_wc__get_[update|switch]_editor so it can set the iprops along with", 
+   "the rest of the columns in the NODES table during the editor drive", 
+   "callbacks.  Also remove the call to the now defunct", 
+   "svn_client__update_inheritable_props.", 
+   "* subversion/libsvn_wc/deprecated.c", 
+   "(svn_wc_get_update_editor4): Update call to svn_wc__get_update_editor.", 
+   "(svn_wc_get_switch_editor4): Update call to svn_wc__get_switch_editor.", 
+   "* subversion/libsvn_wc/externals.c", 
+   "(close_edit): Update call to svn_wc__db_op_bump_revisions_post_update.", 
+   "* subversion/libsvn_wc/update_editor.c", 
+   "(edit_baton): Add a new member to stash the set of iprops for all", 
+   "working copy roots in the update target.", 
+   "(close_directory): Pass along any iprops to", 
+   "svn_wc__db_base_add_directory.", 
+   "(close_edit): Pass along hash of WC root iprops to", 
+   "svn_wc__db_op_bump_revisions_post_update.", 
+   "(make_editor,", 
+   "svn_wc__get_update_editor,", 
+   "svn_wc__get_switch_editor):", 
+   "Add new argument corresponding to new edit baton member.", 
+   "(svn_wc__get_update_editor):", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_INSERT_NODE): Add inherited props parameter.", 
+   "(STMT_INSERT_IPROP): Rename to...", 
+   "(STMT_UPDATE_IPROP): ...this and remove op_depth parameter, op_depth", 
+   "is always zero for this statement.", 
+   "* subversion/libsvn_wc/wc_db.c", 
+   "(insert_base_baton_t): Add a new member to stash base node's iprops.", 
+   "(insert_base_node): Bind iprops.", 
+   "(svn_wc__db_base_add_directory): Add new argument corresponding to new", 
+   "iprops.", 
+   "(svn_wc__db_cache_iprops): Deleted, no longer used by any callers.", 
+   "(db_op_set_rev_and_repos_relpath): Renamed to...", 
+   "(db_op_set_rev_repos_relpath_iprops): ...this.  Now handles setting iprops", 
+   "too.", 
+   "(bump_node_revision): Add an optional hash of iprops argument from which", 
+   "to set the node's inherited properties.", 
+   "(bump_revisions_baton_t): New hash of iprops member.", 
+   "(bump_revisions_post_update): Pass hash of iprops to bump_node_revision().", 
+   "(svn_wc__db_op_bump_revisions_post_update): Add an optional hash of iprops", 
+   "argument from which to set the node's inherited properties.", 
+   "* subversion/libsvn_wc/wc_db.h", 
+   "(svn_wc__db_base_add_directory): Add new argument corresponding to new", 
+   "iprops.", 
+   "(svn_wc__db_cache_iprops): Deleted, no longer used by any callers.", 
+   "(svn_wc__db_op_bump_revisions_post_update): Add an optional hash of iprops", 
+   "argument from which to set the node's inherited properties.", 
+   "* subversion/tests/libsvn_wc/db-test.c (test_inserting_nodes):", 
+   "* subversion/tests/libsvn_wc/op-depth-test.c (svn_wc__db_base_add_directory):", 
+   "Update calls to svn_wc__db_base_add_directory."
+  ], 
+  "revision_id": "1371831"
+ }, 
+ {
+  "author": "benh", 
+  "date": "2012-08-10T22:00:19.188645Z", 
+  "msg": [
+   "Factored garbage collection out of slave/executors directories into a", 
+   "GarbageCollector abstraction (https://reviews.apache.org/r/6476)."
+  ], 
+  "revision_id": "1371830"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2012-08-10T21:57:14.580160Z", 
+  "msg": [
+   "moved scm publish url configuration to distributionManagement.site.url"
+  ], 
+  "revision_id": "1371829"
+ }
+]

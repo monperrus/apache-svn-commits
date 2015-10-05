@@ -1,0 +1,115 @@
+[
+ {
+  "author": "brane", 
+  "date": "2015-06-29T17:48:10.736144Z", 
+  "msg": [
+   "Follow up to r1687769: Implement semantics equivalent to the new", 
+   "svn_repos_verify_fs3 in JavaHL.", 
+   "[in subversion/bindings/javahl]", 
+   "* src/org/apache/subversion/javahl/callback/ReposVerifyCallback.java", 
+   "(ReposVerifyCallback): New callback interface.", 
+   "* src/org/apache/subversion/javahl/ISVNRepos.java", 
+   "(ISVNRepos.verify): Add the verification callback and update the", 
+   "documentation of both versions of this method.", 
+   "* src/org/apache/subversion/javahl/SVNRepos.java", 
+   "(ISVNRepos.verify): Update native method signature and wrapper", 
+   "method implementation.", 
+   "* src/org/apache/subversion/javahl/ReposNotifyInformation.java", 
+   "(ReposNotifyInformation): Update serial version UID after 1.9 API change.", 
+   "* native/ReposVerifyCallback.h,", 
+   "native/ReposVerifyCallback.cpp: New files.", 
+   "* native/JNIUtil.h", 
+   "(JNIUtil::createClientException): New.", 
+   "(JNIUtil::wrappedCreateClientException): Renamed from wrappedHandleSVNError", 
+   "and changed the the return type.", 
+   "* native/JNIUtil.cpp", 
+   "(JNIUtil::wrappedCreateClientException): Return the created exception", 
+   "instead of throwing it.", 
+   "(JNIUtil::createClientException): Implement.", 
+   "(JNIUtil::handleSVNError): Reimplement to call createClientException.", 
+   "* native/SVNRepos.h: Include ReposVerifyCallback.h.", 
+   "(SVNRepos::Verify): Add the repository verification callback.", 
+   "* native/SVNRepos.cpp: Do not include ReposNotifyCallback.h.", 
+   "(SVNRepos::Verify): Use the repository verification callback.", 
+   "* native/org_apache_subversion_javahl_SVNRepos.cpp", 
+   "(Java_org_apache_subversion_javahl_SVNRepos_verify): Add the", 
+   "repository verification callback and update the implementation.", 
+   "* tests/org/apache/subversion/javahl/SVNReposTests.java", 
+   "(SVNReposTests.testVerify): Tweak repository creation.", 
+   "(SVNReposTests.VerifyCallback, SVNReposTests.trytobreakrepo): New helpers.", 
+   "(SVNReposTests.testVerifyBrokenRepo,", 
+   "SVNReposTests.testVerifyBrokenRepo_KeepGoing): New test cases."
+  ], 
+  "revision_id": "1688273"
+ }, 
+ {
+  "author": "jahewson", 
+  "date": "2015-06-29T17:44:25.342837Z", 
+  "msg": [
+   "PDFBOX-2842: Handle missing FontName"
+  ], 
+  "revision_id": "1688272"
+ }, 
+ {
+  "author": "andy", 
+  "date": "2015-06-29T17:41:25.964674Z", 
+  "msg": [
+   "Correct version"
+  ], 
+  "revision_id": "1688271"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-06-29T17:34:28.510875Z", 
+  "msg": [
+   "Add a notification if an svn_fs_pack call is a no-op.  Use that to warn", 
+   "users if they try to pack a non-sharded FSFS repo.", 
+   "Extending the svn_fs_pack_notify_action_t enum seems to be the only way", 
+   "to implement this without bumping the svn_fs_pack API:  We can't use the", 
+   "warning function because the svn_fs_t instance is created temporarily", 
+   "inside the API function such that the user can't set warning function.", 
+   "No-op packs are not an error condition either, therefore returning an", 
+   "svn_error_t would be inappropriate.", 
+   "To get the most milage out of this feature, we also notify if there is", 
+   "no complete shard that can be packed.  'svnadmin pack' does not report", 
+   "that condition to minimize UI changes.  Other API users might be interested", 
+   "in that information, though.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_pack_notify_action_t): Add notification for no-op \"action\".", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_notify_action_t): Same in outer API layer.", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(pack_body): Notify if there was no shard to be packed.", 
+   "(svn_fs_fs__pack): Same.  Also warn if the repo is non-sharded.", 
+   "* subversion/libsvn_repos/fs-wrap.c", 
+   "(pack_notify_func): Translate the new notification as well.", 
+   "* subversion/svnadmin/svnadmin.c", 
+   "(repos_notify_handler): Print a warning if the repo is non-sharded.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(fsfs_pack_non_sharded): New test case.", 
+   "(test_list): Register the new test."
+  ], 
+  "revision_id": "1688270"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-06-29T17:32:28.814808Z", 
+  "msg": [
+   "On the svn-mergeinfo-normalizer branch:", 
+   "Add progress info to the log fetcher and centralize stats output calls.", 
+   "All sub-commands now show the same stats & process info when fetching", 
+   "w/c or log data, unless when invoked with the --quiet option.", 
+   "* tools/client-side/svn-mergeinfo-normalizer/log.c", 
+   "(svn_min__log_t): Make the --quiet option available to the callback.", 
+   "(log_entry_receiver): If not in quiet mode, print a '.' every 1000 revs.", 
+   "(svn_min__log): If not in quiet mode, show the operation start and", 
+   "final stats.", 
+   "* tools/client-side/svn-mergeinfo-normalizer/wc_mergeinfo.c", 
+   "(svn_min__read_mergeinfo): Same.", 
+   "* tools/client-side/svn-mergeinfo-normalizer/analyze-cmd.c", 
+   "(svn_min__analyze): UI output is already handled by the w/c reader", 
+   "and log fetcher functions."
+  ], 
+  "revision_id": "1688269"
+ }
+]

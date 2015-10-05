@@ -1,0 +1,99 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-04-27T13:45:49.731005Z", 
+  "msg": [
+   "Fix excessive memory usage during 'svn log -g' with FSFS / FSX.", 
+   "The root cause is that in --include-merges mode, we recursively", 
+   "call do_log() such that outer iteration are suddenly long-lived.", 
+   "In turn, DAG nodes used temporarily in some sub-function are kept", 
+   "along with a lock on the DAG node cache.  The inability to garbage", 
+   "collect that cache results in hundreds of MB dynamic memory usage", 
+   "for some repos.", 
+   "This patch revs two history related FS API functions to using the", 
+   "two-pool paradigm.  It allows all DAG nodes to be released early", 
+   "because they are all temporaries used inside those functions.", 
+   "Implement API bump in all backends, update the callers and tighten", 
+   "pool usage where appropriate.", 
+   "* subversion/include/svn_fs.h", 
+   "(svn_fs_node_history2): New, two-pool version of ...", 
+   "(svn_fs_node_history): ... this now deprecated API.", 
+   "(svn_fs_history_prev2): New, two-pool version of ...", 
+   "(svn_fs_history_prev): ... this now deprecated API.", 
+   "* subversion/libsvn_fs/fs-loader.h", 
+   "(root_vtable_t,", 
+   "history_vtable_t): Make the vtable entries match the bumped API.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(svn_fs_node_history2): Implement new API as vtable call.", 
+   "(svn_fs_node_history): Call the bumped vtable entry directly.", 
+   "(svn_fs_history_prev2): Implement new API as vtable call.", 
+   "(svn_fs_history_prev): Call the bumped vtable entry directly.", 
+   "* subversion/libsvn_fs_base/tree.c", 
+   "(base_node_history): Update implementation and use the SCRATCH_POOL", 
+   "for the one temporary that we have.", 
+   "(base_history_prev): Update signature and always use the RESULT_POOL", 
+   "as there are no easy to identify temporaries.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(fs_node_history): Update implementation and use the SCRATCH_POOL", 
+   "for the one temporary that we have.", 
+   "(fs_history_prev): Update implementation and laverage the already", 
+   "existing two-pool capability of history_prev().", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(x_node_history,", 
+   "fs_history_prev): Do the same in FSX as we did for FSFS.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(detect_changed): Bump API calls with no extra benefit.", 
+   "(get_history): Switch to two-pool paradigm and call the bumped API", 
+   "with those separate pools.  Use the SCRATCH_POOL in", 
+   "authentication.", 
+   "(check_history): Switch to two-pool paradigm and call the bumped API", 
+   "with those separate pools.", 
+   "(get_path_histories): Use the ITERPOOL as scratch pool for called funcs.", 
+   "(do_logs): Use a separate iteration pool for the inner loop such that", 
+   "we may clean it up right after check_history and before", 
+   "going into do_log recursion.", 
+   "* subversion/libsvn_repos/rev_hunt.c", 
+   "(svn_repos_history2,", 
+   "check_ancestry_of_peg_path): Bump API calls and use the pool that", 
+   "will be cleaned up next as scratch.", 
+   "(find_interesting_revisions): Bump API calls with no extra benefit.", 
+   "(get_file_revs_backwards): Bump API calls and use the pool that", 
+   "will be cleaned up next as scratch."
+  ], 
+  "revision_id": "1590393"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-27T13:38:36.932489Z", 
+  "msg": [
+   "[MPLUGIN-262] fixed mojo deprecation too"
+  ], 
+  "revision_id": "1590392"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-27T13:33:10.357343Z", 
+  "msg": [
+   "added contributor"
+  ], 
+  "revision_id": "1590391"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-27T13:32:42.220911Z", 
+  "msg": [
+   "[MPLUGIN-262] generated HelpMojo doesn't display default values and user properties.", 
+   "Submitted by: Slawomir Jaranowski", 
+   "applied with format fixes and check of expected output"
+  ], 
+  "revision_id": "1590390"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-27T13:17:05.549800Z", 
+  "msg": [
+   "[MPLUGIN-262] prepare more precise checks of help output"
+  ], 
+  "revision_id": "1590389"
+ }
+]

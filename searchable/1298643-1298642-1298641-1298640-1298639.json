@@ -1,0 +1,87 @@
+[
+ {
+  "author": "lu4242", 
+  "date": "2012-03-08T23:00:07.530151Z", 
+  "msg": [
+   "MYFACES-3495 [perf] do not store default validationGroups for bean validation"
+  ], 
+  "revision_id": "1298643"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2012-03-08T22:57:02.070480Z", 
+  "msg": [
+   "removed unused items"
+  ], 
+  "revision_id": "1298642"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-03-08T22:55:49.139752Z", 
+  "msg": [
+   "[jira] [HBASE-5074] Support checksums in HBase block cache", 
+   "Author: Dhruba", 
+   "Summary:", 
+   "HFile is enhanced to store a checksum for each block. HDFS checksum verification", 
+   "is avoided while reading data into the block cache. On a checksum verification", 
+   "failure, we retry the file system read request with hdfs checksums switched on", 
+   "(thanks Todd).", 
+   "I have a benchmark that shows that it reduces iops on the disk by about 40%. In", 
+   "this experiment, the entire memory on the regionserver is allocated to the", 
+   "regionserver's jvm and the OS buffer cache size is negligible. I also measured", 
+   "negligible (<5%) additional cpu usage while using hbase-level checksums.", 
+   "The salient points of this patch:", 
+   "1. Each hfile's trailer used to have a 4 byte version number. I enhanced this so", 
+   "that these 4 bytes can be interpreted as a (major version number, minor", 
+   "version). Pre-existing hfiles have a minor version of 0. The new hfile format", 
+   "has a minor version of 1 (thanks Mikhail). The hfile major version remains", 
+   "unchanged at 2. The reason I did not introduce a new major version number is", 
+   "because the code changes needed to store/read checksums do not differ much from", 
+   "existing V2 writers/readers.", 
+   "2. Introduced a HFileSystem object which is a encapsulates the FileSystem", 
+   "objects needed to access data from hfiles and hlogs.  HDFS FileSystem objects", 
+   "already had the ability to switch off checksum verifications for reads.", 
+   "3. The majority of the code changes are located in hbase.io.hfie package. The", 
+   "retry of a read on an initial checksum failure occurs inside the hbase.io.hfile", 
+   "package itself.  The code changes to hbase.regionserver package are minor.", 
+   "4. The format of a hfileblock is the header followed by the data followed by the", 
+   "checksum(s). Each 16 K (configurable) size of data has a 4 byte checksum.  The", 
+   "hfileblock header has two additional fields: a 4 byte value to store the", 
+   "bytesPerChecksum and a 4 byte value to store the size of the user data", 
+   "(excluding the checksum data). This is well explained in the associated", 
+   "javadocs.", 
+   "5. I added a test to test backward compatibility. I will be writing more unit", 
+   "tests that triggers checksum verification failures aggressively. I have left a", 
+   "few redundant log messages in the code (just for easier debugging) and will", 
+   "remove them in later stage of this patch. I will also be adding metrics on", 
+   "number of checksum verification failures/success in a later version of this", 
+   "diff.", 
+   "6. By default, hbase-level checksums are switched on and hdfs level checksums", 
+   "are switched off for hfile-reads. No changes to Hlog code path here.", 
+   "Test Plan: The default setting is to switch on hbase checksums for hfile-reads,", 
+   "thus all existing tests actually validate the new code pieces. I will be writing", 
+   "more unit tests for triggering checksum verification failures.", 
+   "Reviewers: mbautin", 
+   "Reviewed By: mbautin", 
+   "CC: JIRA, tedyu, mbautin, dhruba, todd, stack", 
+   "Differential Revision: https://reviews.facebook.net/D1521"
+  ], 
+  "revision_id": "1298641"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2012-03-08T22:55:43.204661Z", 
+  "msg": [
+   "removed unused import"
+  ], 
+  "revision_id": "1298640"
+ }, 
+ {
+  "author": "hboutemy", 
+  "date": "2012-03-08T22:55:22.368869Z", 
+  "msg": [
+   "algorithm simplifications"
+  ], 
+  "revision_id": "1298639"
+ }
+]

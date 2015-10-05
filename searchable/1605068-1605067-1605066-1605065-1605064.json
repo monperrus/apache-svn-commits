@@ -1,0 +1,85 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-06-24T12:42:01.497945Z", 
+  "msg": [
+   "Switching an FSFS txn internal function to the two-pool paradigm.", 
+   "This is in preparation of a low-level API change.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(rep_write_baton): Document what these pools are for by naming", 
+   "them appropriately.", 
+   "(rep_write_cleanup,", 
+   "rep_write_get_baton): Update baton users.", 
+   "(get_shared_rep): Switch to two-pool paradigm and use the new", 
+   "scratch pool wherever possible.", 
+   "(rep_write_contents_close): Update as caller and baton user.", 
+   "(write_container_rep,", 
+   "write_container_delta_rep): Update callers."
+  ], 
+  "revision_id": "1605068"
+ }, 
+ {
+  "author": "covener", 
+  "date": "2014-06-24T12:34:52.152778Z", 
+  "msg": [
+   "followup to r1604350, move the c->sbh assignment to immediately before the", 
+   "socket is added to the timeout queue. Technically not needed because we hold", 
+   "the lock on the timeout queue, but more consistent with other blocks that", 
+   "leave the thread.", 
+   "Submitted By: Edward Lu <Chaosed0 gmail com>", 
+   "Committed By: covener"
+  ], 
+  "revision_id": "1605067"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2014-06-24T12:31:32.918562Z", 
+  "msg": [
+   "Handle decompression for messages split across multiple frames."
+  ], 
+  "revision_id": "1605066"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-24T12:23:24.856346Z", 
+  "msg": [
+   "In FSFS, transaction layer, rename a few pool arguments of single pool", 
+   "functions in accordance to the two-pool paradigm.", 
+   "This is not systematic, yet, but to reduce the size of following patches.", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(store_sha1_rep_mapping", 
+   "write_container_rep,", 
+   "write_container_delta_rep): Pools for temporaries shall be SCRATCH_POOLs."
+  ], 
+  "revision_id": "1605065"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-24T12:16:09.770904Z", 
+  "msg": [
+   "Reduce the memory consumption of the FSFS ID parser.", 
+   "In the past, fs_fs__id_t would contain string elements and therefore,", 
+   "the incoming data got copied before being chopped and processed.  Since", 
+   "1.9 uses integers only, no copy is required anymore.", 
+   "The incoming data is usually writable and disposable as well so we process", 
+   "it directly.  Only one caller doesn't already provide a writable buffer.", 
+   "* subversion/libsvn_fs_fs/id.h", 
+   "(svn_fs_fs__id_parse): Mark incoming DATA buffer as mutable and drop the", 
+   "unnecessary LENGTH argument.", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(svn_fs_fs__id_parse): Don't duplicate DATA, process it directly.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(read_dir_entries): Update caller.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(svn_fs_fs__get_node_origin): This is the only caller that needs to", 
+   "duplicate the DATA buffer.  It's only", 
+   "invoked for very old repo formats.", 
+   "* subversion/libsvn_fs_fs/low_level.c", 
+   "(read_change,", 
+   "svn_fs_fs__read_noderev): Update caller.", 
+   "* subversion/libsvn_fs_fs/recovery.c", 
+   "(recover_find_max_ids): Same."
+  ], 
+  "revision_id": "1605064"
+ }
+]

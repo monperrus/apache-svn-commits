@@ -1,0 +1,65 @@
+[
+ {
+  "author": "kschenk", 
+  "date": "2014-02-13T18:34:13.248625Z", 
+  "msg": [
+   "Modified index page."
+  ], 
+  "revision_id": "1567998"
+ }, 
+ {
+  "author": "gertv", 
+  "date": "2014-02-13T18:33:40.385241Z", 
+  "msg": [
+   "Copy global interceptor and auditor implementation into a branch before cleaning up"
+  ], 
+  "revision_id": "1567997"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-02-13T18:24:17.514898Z", 
+  "msg": [
+   "In the membuffer cache code, we update hit counters without further", 
+   "synchronization as they are mere hints.  However, that can cause", 
+   "64 bit underflows in the global hit counters which will make all", 
+   "entry hit counters appear to be very small in comparison, i.e.", 
+   "entries get evicted sooner than they should.", 
+   "We fix this by simply switching to signed global counters which", 
+   "compare nicely to unsigned values of less precision. This allows", 
+   "us to keep the lock-free racy code without introducing a bias", 
+   "(e.g. by saturating at 0 upon underflow).", 
+   "Once at it, fix the local <-> global hit counter inconsistency", 
+   "that occurs when the entry hit counter exceeds 4G - which might", 
+   "happen for certain root objects.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(svn_membuffer_t): Switch to signed counters as those work", 
+   "nicely with our comparison / eviction logic", 
+   "even if we underflow to negative values.", 
+   "(increment_hit_counters): New utility function handling the", 
+   "potential 32 bit counter overflow.", 
+   "(membuffer_cache_get_internal,", 
+   "membuffer_cache_has_key_internal,", 
+   "membuffer_cache_get_partial_internal,", 
+   "membuffer_cache_set_partial_internal): Call the new utility.", 
+   "Found by: vitalif{_AT_}yourcmc.ru"
+  ], 
+  "revision_id": "1567996"
+ }, 
+ {
+  "author": "kpreisser", 
+  "date": "2014-02-13T18:21:53.117609Z", 
+  "msg": [
+   "Merged revision(s) 1567993 from tomcat/trunk:", 
+   "Log close code and reason when the Websocket connection is closed."
+  ], 
+  "revision_id": "1567995"
+ }, 
+ {
+  "author": "cnauroth", 
+  "date": "2014-02-13T18:21:46.109924Z", 
+  "msg": [
+   "Merge trunk to HDFS-4685."
+  ], 
+  "revision_id": "1567994"
+ }
+]

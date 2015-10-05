@@ -1,0 +1,58 @@
+[
+ {
+  "author": "vishwanathk", 
+  "date": "2012-05-14T01:07:16.478172Z", 
+  "msg": [
+   "OPENEJB-1609 Remove duplicate module entry"
+  ], 
+  "revision_id": "1338018"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2012-05-14T01:02:56.928409Z", 
+  "msg": [
+   "DERBY-4115 Provide a way to drop statistics information", 
+   "The details of all the changes in this commit are listed below.", 
+   "1)Added a new routine SYSCS_DROP_STATISTICS, with public access similar to SYSCS_UPDATE_STATISTICS. This happens in DataDictionaryImpl, where SYSCS_DROP_STATISTICS is added to the list of public access procedures in sysUtilProceduresWithPublicAccess", 
+   "2)The new stored procedure implementation is similar to update statistics, ie allow the routine to go through ALTER TABLE where permission/privilege checking, table/schema/index name validations happen automatically and we implement the routine logic through extension of ALTER TABLE syntax. This new syntax for ALTER TABLE syntax(same as we did for update statistics) is an internal syntax only and won't be available to an end user directly.", 
+   "3)This commit changes sqlgrammar.jj to recognize the following internal syntaxes for ALTER TABLE", 
+   "a)ALTER TABLE tablename ALL DROP STATISTICS", 
+   "The existing(corresponding syntax) for update statistics is as follows", 
+   "ALTER TABLE tablename ALL UPDATE STATISTICS", 
+   "b)ALTER TABLE tablename STATISTICS DROP indexname", 
+   "The existing(corresponding syntax) for update statistics is as follows", 
+   "ALTER TABLE tablename UPDATE STATISTICS indexname", 
+   "Notice the two syntaxes for index level statistics are different for drop vs update.(the reason for the syntax difference is explained above)", 
+   "4)After the statistics are dropped, we send invalidation signal to dependent statements so they would get recompiled when they are executed next time. This will make sure that they pick the correct plan given the statistics for the table.", 
+   "5)The commit takes care of some of the test failures(expected failures because of the addition of a new system procedure).", 
+   "6)The commit adds basic upgrade test for the new procedure. This test ensures that drop statistics procedure is available only after hard upgrade.", 
+   "7)While writing the upgrade tests, I found that a meaningful test for drop statistics could only be written for Derby releases 10.5 and higher. We have found that when constraints end up sharing same backing index, Derby won't create statistics for them. This is issue DERBY-5702. But if we run update statistics on that constraint, we will be able to get the statistics for such a constraint. Later, when the constraint is dropped, because of DERBY-5681, the statistics row for such a constraint(one that shares it's backing index with another constraint) is never dropped. We can use drop statistics procedure introduced in this jira to take care of such hanging indexes. But since update statistics procedure is only available in 10.5 and higher, I couldn't demonstrate use of drop statistics to drop hanging statistics rows."
+  ], 
+  "revision_id": "1338017"
+ }, 
+ {
+  "author": "tomaz", 
+  "date": "2012-05-14T00:55:17.511162Z", 
+  "msg": [
+   "Add JIRA ticket number to the change log."
+  ], 
+  "revision_id": "1338016"
+ }, 
+ {
+  "author": "vishwanathk", 
+  "date": "2012-05-14T00:52:55.653668Z", 
+  "msg": [
+   "OPENEJB-1609 Remove .iml file"
+  ], 
+  "revision_id": "1338015"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2012-05-14T00:46:07.791655Z", 
+  "msg": [
+   "Follow Mentor changes in podlings.xml file.", 
+   "Other status pages get older."
+  ], 
+  "revision_id": "1338014"
+ }
+]

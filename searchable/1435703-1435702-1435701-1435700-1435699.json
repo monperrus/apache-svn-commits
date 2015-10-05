@@ -1,0 +1,57 @@
+[
+ {
+  "author": "veithen", 
+  "date": "2013-01-19T21:09:08.389879Z", 
+  "msg": [
+   "Removed unused constant."
+  ], 
+  "revision_id": "1435703"
+ }, 
+ {
+  "author": "bvahdat", 
+  "date": "2013-01-19T21:07:23.883373Z", 
+  "msg": [
+   "Merged revisions 1435700 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/camel/trunk", 
+   "........", 
+   "r1435700 | bvahdat | 2013-01-19 22:01:43 +0100 (Sa, 19 Jan 2013) | 1 line", 
+   "Concatenated the two ObjectHelperTest classes into the one being inside the right package (org.apache.camel.util).", 
+   "........"
+  ], 
+  "revision_id": "1435702"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2013-01-19T21:05:23.709930Z", 
+  "msg": [
+   "A patch from Martin Kreidenweis  \"Delegator creation fails with new ExecutionPool on trunk\" https://issues.apache.org/jira/browse/OFBIZ-4335", 
+   "The problem is that the wrong class loader is used for the \"ofbiz-config-*\" threads (NativeLibClassLoader instead of CachedClassLoader). This happens when the threads are created by the static code in ExecutionPool.java when it is executed before the ClassLoaderContainer.init() initializes the CachedClassLoader.", 
+   "This also causes other problems like: The local resolution of XML Schema files won't work any more because it's also using the wrong classloader, which can't find the XSD files:", 
+   "[java] 2011-07-21 12:21:45,333 (ofbiz-config-0) [                 UtilXml:1022:WARN ] [UtilXml.LocalResolver.resolveEntity] could not find LOCAL DTD/Schema with publicId [null] and the file/resource is [service-eca.xsd]", 
+   "You can trigger this behavior in current ofbiz trunk by setting an expire time for the properties cache in cache.properties", 
+   "properties.UtilPropertiesResourceCache.expireTime=10000", 
+   "The Debug.log() statements in the ContainerLoader then load the logging configuration properties file and cache it. If an expire time is set, the ExecutionPool is used and creates the \"ofbiz-config-*\" threads too early.", 
+   "By not pre-starting the \"ofbiz-config-*\" threads in the static code (patch above), the threads are then created later on, when the \"main\" thread classloader has become the CachedClassLoader and everythings starts working again.", 
+   "jleroux:", 
+   "* I don't see any issues, but performance, to not start the whole core threads. This is BTW the default behaviour. So I'd recommend to use it for GLOBAL_EXECUTOR.", 
+   "* I also removed the useless deprecated methods"
+  ], 
+  "revision_id": "1435701"
+ }, 
+ {
+  "author": "bvahdat", 
+  "date": "2013-01-19T21:01:43.740740Z", 
+  "msg": [
+   "Concatenated the two ObjectHelperTest classes into the one being inside the right package (org.apache.camel.util)."
+  ], 
+  "revision_id": "1435700"
+ }, 
+ {
+  "author": "veithen", 
+  "date": "2013-01-19T20:58:51.520075Z", 
+  "msg": [
+   "Removed a unit test for a trivial scenario that is already covered elsewhere."
+  ], 
+  "revision_id": "1435699"
+ }
+]

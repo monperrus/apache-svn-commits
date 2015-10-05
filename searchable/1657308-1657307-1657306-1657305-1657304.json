@@ -1,0 +1,79 @@
+[
+ {
+  "author": "julianfoad", 
+  "date": "2015-02-04T16:33:33.737602Z", 
+  "msg": [
+   "Remove the 'dump-load-cross-check' branch after reintegrating it in r1657307."
+  ], 
+  "revision_id": "1657308"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2015-02-04T16:32:47.199020Z", 
+  "msg": [
+   "Reintegrate the 'dump-load-cross-check' branch: implement optional dump/load", 
+   "cross-checking in the test suite.", 
+   "This is activated by passing 'DUMP_LOAD_CROSS_CHECK=1' to 'make check' and", 
+   "friends, or by passing '--dump-load-cross-check' to the Python tests.", 
+   "Remaining items mentioned in the BRANCH-README file were:", 
+   "TODO:", 
+   "- Fix FAIL: svnmucc_tests.py 2: a no-op content-change is reported", 
+   "differently in different cases. (Fix it how? I'd prefer to make the", 
+   "output of a no-op change the same as a no-change.)", 
+   "Ideas for improvement:", 
+   "- Improve the logic for finding repositories created by a test: detect", 
+   "when a test created a repository even if the sandbox is not marked as", 
+   "'built'; detect when a test created additional repositories.", 
+   "- Implement the same cross-checking for the C tests."
+  ], 
+  "revision_id": "1657307"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2015-02-04T16:29:16.696967Z", 
+  "msg": [
+   "Don't use errors for control flow when checking authorization on paths in", 
+   "the log entry emitter.", 
+   "Instead of allowing the corresponding helper, detect_changed(), to return two", 
+   "specific errors (SVN_ERR_AUTHZ_UNREADABLE, SVN_ERR_AUTHZ_PARTIALLY_READABLE)", 
+   "while still initializing the output, make it only error out when something is", 
+   "really wrong.  Encountering an unreadable / partially readable set of paths", 
+   "isn't exactly wrong in the context of this helper.  So, instead of returning", 
+   "an error and discarding it right after that on the calling site, we teach the", 
+   "detect_changed() function to indicate the resulting access level via a new", 
+   "argument.", 
+   "This change is mostly aimed at making the code simpler.  However, it should", 
+   "also protect us from a theoretically possible misbehavior.  Given that the", 
+   "authorization callback passed to svn_repos_get_logs4() can be arbitrary, we", 
+   "cannot really assume that it doesn't return SVN_ERR_AUTHZ_UNREADABLE or", 
+   "SVN_ERR_AUTHZ_PARTIALLY_READABLE that had special treatment prior to this", 
+   "changeset.  (Existing mod_dav_svn and svnserve callbacks do not, but this", 
+   "API is public.)  This situation would result in us silently discarding an", 
+   "error that happened during the authorization check.", 
+   "* subversion/libsvn_repos/log.c", 
+   "(detect_changed): Instead of returning errors when seeing a completely", 
+   "unreadable or partially readable set of paths, indicate this via a new", 
+   "out parameter, ACCESS_LEVEL.  Update the docstring.", 
+   "(fill_log_entry): Don't check for specific error codes here, and do not", 
+   "discard any errors returned by detect_changed().  Upon success, simply", 
+   "examine the resulting access level."
+  ], 
+  "revision_id": "1657306"
+ }, 
+ {
+  "author": "brenninc", 
+  "date": "2015-02-04T16:28:57.025032Z", 
+  "msg": [
+   "fixed bullets"
+  ], 
+  "revision_id": "1657305"
+ }, 
+ {
+  "author": "brenninc", 
+  "date": "2015-02-04T16:28:37.459693Z", 
+  "msg": [
+   "added Service testing"
+  ], 
+  "revision_id": "1657304"
+ }
+]

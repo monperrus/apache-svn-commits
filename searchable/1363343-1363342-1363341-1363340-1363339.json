@@ -1,0 +1,58 @@
+[
+ {
+  "author": "suat", 
+  "date": "2012-07-19T14:06:30.519471Z", 
+  "msg": [
+   "Initial version of the default implementation of the SemanticIndex interface which is defined in STANBOL-499.", 
+   "SemanticIndex is one part of the 2-layered structure of Contenthub. The other part is the Store which is defined in STANBOL-498.", 
+   "Default implementation of the SemanticIndex interface (LDPathSemanticIndex) is based on the LDPath language. A new LDPathSemanticIndex can be created by providing name, description and LDPath values. In the scope of LDPathSemanticIndex the provided LDPath program is used in two ways which will be explained later in this log.", 
+   "Each instance of this implementation checks the changes in the Store at regular intervals in a separate thread and the interval length is configurable. After processing the changes in the Store, the last revision is stored persistently. In this way, when the index is restarted it will check the the changes as of the latest persisted revision. However, when the LDPath is changed the LDPathSemanticIndex will index the ContentItems from scratch. In this period the index will be REINDEXING state, and during this period, it does not allow other index or remove operations. After reindexing is completed, the state of the index will be ACTIVE.", 
+   "LDPath usages in LDPathSemanticIndex", 
+   "====================================", 
+   "a) It is used to configure the underlying Solr core. With an LDPath the index fields are determined and Solr specific properties such as \"multiValued\", \"termVectors\" can be configured.", 
+   "b) When indexing of a ContentItem is in progress, each named entity contained in the enhancements of the ContentItem will be queried through the Entityhub. Then, the values obtained from Entityhub will be indexed along with the actual content as additional metadata. And the additional metadata will be completely compatible with the underlying Solr core.", 
+   "This ability to create customized indexes allows compatibility with different domains or use-cases.", 
+   "Creating,Retrieving LDPathSemanticIndex instances", 
+   "=================================================", 
+   "{stanbol_host}/index endpoint can be used to retrieve already registered SemanticIndexes. An LDPathSemantic index can be created through the RESTful service i.e {stanbol_host}/index/ldpath or through the Felix Web Console by configuring a \"Apache Stanbol Contenthub LDPath Based Semantic Index\".", 
+   "Each instance of LDPathSemanticIndex is registered as an OSGi component. So, they can be obtained through ServiceTracker/@Reference. Name(Semantic-Index-Name) and description(Semantic-Index-Name) properties can be used to retrieve specific instances of LDPathSemanticIndex from OSGi environment. Also, the SemanticIndexManager service, provides retrieval of indexes according to their names and EndpointTypes.", 
+   "Search over the LDPathSemanticIndex", 
+   "===================================", 
+   "The previous search functionality of the Contenthub has not changed. They are wrapped under two types of endpoints: 1) RESTful endpoints 2) OSGi based Java endpoints. There are two RESTful endpoints which are SOLR and CONTENTHUB. SOLR endpoint can be used to query the actual underlying Solr core. CONTENTHUB endpoint offers a search option of which results contain additional information in addition to the resultant documents. Those additional information are facets regarding the resultant documents and related keywords about the original query term. This endpoint is more experimental one which is open to changes."
+  ], 
+  "revision_id": "1363343"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2012-07-19T14:05:04.248934Z", 
+  "msg": [
+   "tweak test methods"
+  ], 
+  "revision_id": "1363342"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2012-07-19T14:04:16.948845Z", 
+  "msg": [
+   "catch throwable for tests (assert fails) - not just exception"
+  ], 
+  "revision_id": "1363341"
+ }, 
+ {
+  "author": "markrmiller", 
+  "date": "2012-07-19T14:03:26.743968Z", 
+  "msg": [
+   "don't treat 404 special and lost the http response code"
+  ], 
+  "revision_id": "1363340"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2012-07-19T14:01:41.456255Z", 
+  "msg": [
+   "Recording revisions 1363334 via  git from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk"
+  ], 
+  "revision_id": "1363339"
+ }
+]

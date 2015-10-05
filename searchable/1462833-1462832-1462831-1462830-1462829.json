@@ -1,0 +1,94 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-03-30T18:19:29.829982Z", 
+  "msg": [
+   "[0.89-fb] [HBASE-8228] Enable finer profiling for how long it takes to create a memstore snapshot. -- TEMPORARY DIFF", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "We do not intend to have this diff around for a while. Will be reverted after getting the info we need to track the outliers.", 
+   "Test Plan: push to titan025 and get the data to understand this.", 
+   "Reviewers: liyintang, rshroff", 
+   "Reviewed By: rshroff", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D756977", 
+   "Task ID: 2237950"
+  ], 
+  "revision_id": "1462833"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-30T18:19:04.479633Z", 
+  "msg": [
+   "[HBASE-8223] Fixes race condition between append and close in HLog", 
+   "Author: rshroff", 
+   "Summary:", 
+   "The RegionServer was performing a shutdown as it got", 
+   "YouAreDeadException. It closed the HLog and was waiting to close all the", 
+   "regions where it got stuck.", 
+   "The reason region close is stuck because it's trying to obtain a lock", 
+   "which is occupied by the put op, which in turn is waiting for append to", 
+   "HLog to complete.", 
+   "There is race condition here is between append/sync and HLog.close()", 
+   "work flow.", 
+   "Scenario:", 
+   "Thread 1 => doing the append", 
+   "Thread 2 => doing HregionServer shutdown", 
+   "Timeline:", 
+   "t1> 1: Verifies that LogSyncer is not shutting down and HLog is not", 
+   "closed and calls sync()", 
+   "t2> 2: HRegionServer issued HLog.close()", 
+   "t3> 2: In HLog.close(), it joins the LogSyncer thread, which signals all", 
+   "the threads waiting on syncDone and exits.", 
+   "t4> 1: In sync, it sees that the sync has not complete until its txd,", 
+   "hence adds itself to the syncDone.await queue.", 
+   "Note: at t4, it does not check whether the LogSyncer Thread is alive or", 
+   "not, which caused this hang.", 
+   "The fix is to check whether the LogSyncer thread is closing or not", 
+   "before going to await for the sync to finish.", 
+   "Test Plan: mr", 
+   "Reviewers: liyintang, aaiyer", 
+   "Reviewed By: aaiyer", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D756413", 
+   "Task ID: 2222578"
+  ], 
+  "revision_id": "1462832"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-03-30T18:18:38.150045Z", 
+  "msg": [
+   "[HBASE-8221] [0.89-fb] Ensure that we flush/close the regions before RS stops answering requests", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Ensure that we will first close the regions, and then stop taking", 
+   "client requests.", 
+   "This will reduce the number of errors seen by the client.", 
+   "Test Plan:", 
+   "MR unit tests", 
+   "TestHRegionCloseRetry is the only test that fails.", 
+   "Reviewers: kannan, liyintang, kranganathan, rshroff", 
+   "Reviewed By: rshroff", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D729486"
+  ], 
+  "revision_id": "1462831"
+ }, 
+ {
+  "author": "chas", 
+  "date": "2013-03-30T18:16:52.627480Z", 
+  "msg": [
+   "add developer to pom"
+  ], 
+  "revision_id": "1462830"
+ }, 
+ {
+  "author": "chas", 
+  "date": "2013-03-30T18:10:10.612505Z", 
+  "msg": [
+   "fix scm links in component source control"
+  ], 
+  "revision_id": "1462829"
+ }
+]

@@ -1,0 +1,71 @@
+[
+ {
+  "author": "centic", 
+  "date": "2014-01-20T19:55:44.794888Z", 
+  "msg": [
+   "Fix pattern for license check failure"
+  ], 
+  "revision_id": "1559818"
+ }, 
+ {
+  "author": "tn", 
+  "date": "2014-01-20T19:48:25.421204Z", 
+  "msg": [
+   "Update beanutils version."
+  ], 
+  "revision_id": "1559817"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2014-01-20T19:45:09.601635Z", 
+  "msg": [
+   "OAK-411: Validator for node type management", 
+   "Avoid full content scan for node type updates that make no actual changes.", 
+   "Also add more detailed toString() methods to the type templates."
+  ], 
+  "revision_id": "1559816"
+ }, 
+ {
+  "author": "jukka", 
+  "date": "2014-01-20T19:43:53.278621Z", 
+  "msg": [
+   "OAK-12: Implement a test suite for the MicroKernel", 
+   "Don't swallow the root cause of ClientServerFixture startup errors"
+  ], 
+  "revision_id": "1559815"
+ }, 
+ {
+  "author": "jleroux", 
+  "date": "2014-01-20T19:38:45.257150Z", 
+  "msg": [
+   "A patch from Michael Ende for \"SimpleMethod parameters doesnt work with prefix\" https://issues.apache.org/jira/browse/OFBIZ-5371", 
+   "I experienced some problems when a form submitted parameters with prefix directly to a SimpleMethod (through the controller request).", 
+   "In this case the prefix is not stripped from the parameter name. The patch updates the method ModelService.java:makePrefixMap().", 
+   "The idea of the prefixMap is:", 
+   "If you have some fields like packageweight_1(value=55), packageweight_2(value=65) ... in a form and in a service you need a map called packageweight with the following key values", 
+   "packageweight{1=55;2=56;...}", 
+   "The Problem is that the function makePrefixMap doesn't replace the Prefix.", 
+   "For Example:", 
+   "On the \"Complete\" button of the Facility->Shipment screen we call an event and not the completePack service directly.", 
+   "The event checks some user rights and after that he call the completePack service. If we call the service from an event there throws an NumberFormatException because the packeweight-PrefixMap contains the prefixes.", 
+   "This is my event description:", 
+   "<simple-method method-name=\"completePackCheckPermission\"", 
+   "short-description=\"Check if this user has permission to create a picklist role\"", 
+   "login-required=\"true\">", 
+   "<check-permission permission=\"LOGISTICS_CREATE\">", 
+   "<alt-permission permission=\"LOGISTICS_ADMIN\"/>", 
+   "<fail-property resource=\"EcommerceLogisticsErrorUiLabels\" property=\"NoPermissionForUsage\" />", 
+   "</check-permission>", 
+   "<check-errors />", 
+   "<session-to-field field=\"packingSession\"/>", 
+   "<set field=\"parameters.packingSession\" from-field=\"packingSession\"/>", 
+   "<set-service-fields service-name=\"completePack\" to-map=\"serviceParameters\"", 
+   "map=\"parameters\" />", 
+   "<call-service service-name=\"completePack\" in-map-name=\"serviceParameters\" />", 
+   "<return />", 
+   "</simple-method>", 
+   "jleroux: I'm not quite sure there are no side-effects, but I was not able to find one. So I will wait some time before backporting..."
+  ], 
+  "revision_id": "1559814"
+ }
+]

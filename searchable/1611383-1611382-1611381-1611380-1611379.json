@@ -1,0 +1,72 @@
+[
+ {
+  "author": "lewismc", 
+  "date": "2014-07-17T15:06:55.030407Z", 
+  "msg": [
+   "CMS commit to oodt by lewismc"
+  ], 
+  "revision_id": "1611383"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-07-17T15:05:34.718608Z", 
+  "msg": [
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(set_changed_path_list): Remove obsolete comment. No functional change."
+  ], 
+  "revision_id": "1611382"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-07-17T15:05:01.658017Z", 
+  "msg": [
+   "Follow-up to r1611380: fix build.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(read_lock_cache): Add missing #endif."
+  ], 
+  "revision_id": "1611381"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-07-17T15:00:33.738794Z", 
+  "msg": [
+   "Work around for the poor performance of APR reader / writer locks on Windows.", 
+   "Basically, fall back to 1.7 code on Win32 by using a simple mutex.", 
+   "This resulted in a 35% increase in throughput for a 'null-export' over", 
+   "ra_serf from hot SVN caches with revprop caching enabled.  OTOH, this may", 
+   "cost us some scalability with ra_svn on high-speed (>1Gb) networks.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(USE_SIMPLE_MUTEX): New flag.  Set depending on whether we need to fall", 
+   "back to a simple locking scheme.", 
+   "(svn_membuffer_t): Select lock type at compile time.", 
+   "(read_lock_cache,", 
+   "write_lock_cache,", 
+   "force_write_lock_cache,", 
+   "unlock_cache): Use the simple mutex lock when selected.", 
+   "(svn_cache__membuffer_cache_create): Initialize the correct lock type and", 
+   "disable the counter_mutex if redundant."
+  ], 
+  "revision_id": "1611380"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-07-17T14:50:49.791486Z", 
+  "msg": [
+   "Fix Windows redo loop oddity for named atomics.  As it turns out, the redo", 
+   "loops for file creation and locking don't play very well with files that", 
+   "get / got deleted.  This is the root cause for the bad ra_serf performance", 
+   "when revprop caching has been enabled.", 
+   "With this patch, we simply use the same lock file scheme as for e.g. lock", 
+   "files in FSFS, i.e. we auto-create an empty lock file and keep it.", 
+   "* subversion/libsvn_subr/named_atomic.c", 
+   "(mutex_t): Don't keep the lock file open while not holding the lock,", 
+   "i.e. the mutex is simply the file name and the pool that", 
+   "will contain the actual file lock.", 
+   "(lock): Auto-create and lock the file as we do in e.g. FSFS.", 
+   "(unlock): Simple pool cleanup now released the lock file.", 
+   "(delete_lock_file): Drop.", 
+   "(svn_atomic_namespace__create): Update mutex initialization code."
+  ], 
+  "revision_id": "1611379"
+ }
+]

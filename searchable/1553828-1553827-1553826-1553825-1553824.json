@@ -1,0 +1,86 @@
+[
+ {
+  "author": "ggregory", 
+  "date": "2013-12-28T14:14:02.178349Z", 
+  "msg": [
+   "- Add PMD report.", 
+   "- findbugs-maven-plugin 2.5.2 -> 2.5.3.", 
+   "- cobertura-maven-plugin 2.0 -> 2.6."
+  ], 
+  "revision_id": "1553828"
+ }, 
+ {
+  "author": "bphillips", 
+  "date": "2013-12-28T14:08:48.998934Z", 
+  "msg": [
+   "Fix issue where if parameter name is greater then max parameter name length a log error is written when devMode is false - see:  https://issues.apache.org/jira/browse/WW-4264"
+  ], 
+  "revision_id": "1553827"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2013-12-28T14:06:07.175660Z", 
+  "msg": [
+   "Move control of caching and linking options from the Context to the WebResourceRoot to enable them to by changed while the web application is running."
+  ], 
+  "revision_id": "1553826"
+ }, 
+ {
+  "author": "kbrand", 
+  "date": "2013-12-28T13:28:05.233574Z", 
+  "msg": [
+   "update transformation"
+  ], 
+  "revision_id": "1553825"
+ }, 
+ {
+  "author": "kbrand", 
+  "date": "2013-12-28T13:24:17.516598Z", 
+  "msg": [
+   "Remove the hardcoded algorithm-type dependency for the SSLCertificateFile", 
+   "and SSLCertificateKeyFile directives, and deprecate SSLCertificateChainFile", 
+   "Splitting the patch into smaller pieces turned out to be infeasible,", 
+   "unfortunately, due to the heavily intertwined code in ssl_engine_config.c,", 
+   "ssl_engine_init.c and ssl_engine_pphrase.c, which all depends on the", 
+   "modssl_pk_server_t data structure. For better comprehensibility,", 
+   "a detailed listing of the changes follows:", 
+   "ssl_private.h", 
+   "- drop the X509 certs and EVP_PKEY keys arrays from modssl_pk_server_t", 
+   "- use apr_array_header_t for cert_files and key_files", 
+   "- drop tPublicCert from SSLModConfigRec", 
+   "- drop the ssl_algo_t struct and the SSL_ALGO_* and SSL_AIDX_* constants", 
+   "ssl_engine_config.c", 
+   "- change to apr_array_header_t for SSLCertificate[Key]File", 
+   "- drop ssl_cmd_check_aidx_max, i.e. allow an arbitrary number of certs", 
+   "and keys (in theory; currently OpenSSL does not support more than", 
+   "one cert/key per algorithm type)", 
+   "- add deprecation warning for SSLCertificateChainFile", 
+   "ssl_engine_init.c", 
+   "- configure server certs/keys in ssl_init_server_certs (no longer via", 
+   "ssl_pphrase_Handle in ssl_init_Module)", 
+   "- in ssl_init_server_certs, read in certificates and keys with standard", 
+   "OpenSSL API functions (SSL_CTX_use_*_file), and only fall back to", 
+   "ssl_load_encrypted_pkey when encountering an encrypted private key", 
+   "- drop ssl_server_import_cert, ssl_server_import_key, ssl_init_server_check,", 
+   "and ssl_init_ctx_cleanup_server", 
+   "- move the \"problematic re-initialization\" check to ssl_init_server_ctx", 
+   "ssl_engine_pphrase.c", 
+   "- use servername:port:index as the key identifier, instead of the", 
+   "previously used servername:port:algorithm", 
+   "- ssl_pphrase_Handle overhaul: remove all cert/public-key handling,", 
+   "make it only load a single (encrypted) private key, and rename", 
+   "to ssl_load_encrypted_pkey", 
+   "- in the passphrase prompt message, show the private key file name", 
+   "instead of the vhost id and the algorithm name", 
+   "- do no longer supply the algorithm name as an argument to \"exec\"-type", 
+   "passphrase prompting programs", 
+   "ssl_util.c", 
+   "- drop ssl_util_algotypeof, ssl_util_algotypestr, ssl_asn1_keystr,", 
+   "and ssl_asn1_table_keyfmt", 
+   "ssl_util_ssl.{c,h}", 
+   "- drop SSL_read_X509", 
+   "- constify the filename arg for SSL_read_PrivateKey"
+  ], 
+  "revision_id": "1553824"
+ }
+]

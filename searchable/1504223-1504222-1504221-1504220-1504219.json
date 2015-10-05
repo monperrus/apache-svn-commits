@@ -1,0 +1,111 @@
+[
+ {
+  "author": "liyin", 
+  "date": "2013-07-17T18:22:08.861665Z", 
+  "msg": [
+   "[HBASE-8942] [0.89-fb] fix write outliers caused by errors in DFSClient.read()", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Remove unnecessary locking around getScanners(). We only need", 
+   "locking around the part where we get the list of store files, and the", 
+   "scanner to memstore.", 
+   "Opening the store files, and seeking the scanners can be done outside", 
+   "the lock. This is how it is implemented in", 
+   "getScanners(boolean cacheBlocks, boolean isCompaction, ScanQueryMatcher matcher)", 
+   "getScanner() seems to add one more layer of unnecessary lock.readLock().", 
+   "This is unnecessary and causes outliers, if for some reason opening the", 
+   "store files takes a long time.", 
+   "Test Plan: run unit tests", 
+   "Reviewers: liyintang, rshroff", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D883650", 
+   "Task ID: 2603194"
+  ], 
+  "revision_id": "1504223"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-07-17T18:22:07.060958Z", 
+  "msg": [
+   "[master]Add tool to update assignment plan stored in json file", 
+   "Author: fan", 
+   "Summary: Add tool to update assignment plan stored in json file", 
+   "Test Plan:", 
+   "Added a unit test to reconstruct an assignment plan from json string of current plan.", 
+   "I tested download and upload functions in shadow cluster 52 through following steps:", 
+   "1. Download current assignment plan.", 
+   "2. Modify the plan and upload it.", 
+   "3. Download new plan and diff with original one, only changes from last step should exist.", 
+   "4. Upload original plan.", 
+   "3. Download current plan and diff with original one, they should be the same.", 
+   "The test steps have been passed.", 
+   "Reviewers: liyintang, adela", 
+   "Reviewed By: adela", 
+   "CC: security-diffs@lists, hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D879881", 
+   "Task ID: 2547614"
+  ], 
+  "revision_id": "1504222"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-07-17T18:22:04.292738Z", 
+  "msg": [
+   "[HBASE-8936] Fixing ZKSlipLog#Counters", 
+   "Author: manukranthk", 
+   "Summary: Enlist the counters in the reset function and set them to 0 individually.", 
+   "Test Plan:", 
+   "This change was supposed to make the following test to pass with jacoco turned on:", 
+   "mvn clean -Dtest=TestSplitLogManager package", 
+   "The test for this would be to ensure that this test case passes without InvalidClassCastException.", 
+   "Reviewers: liyintang, rshroff", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D879552", 
+   "Task ID: 2572298"
+  ], 
+  "revision_id": "1504221"
+ }, 
+ {
+  "author": "liyin", 
+  "date": "2013-07-17T18:22:02.354734Z", 
+  "msg": [
+   "[HBASE-8906] Adds progress reporting for TableRecordReader (only for HexString format)", 
+   "Author: rshroff", 
+   "Summary:", 
+   "Following is an attempt to report the progress for HBase MR jobs. The", 
+   "current progress works only for HexString formatted rows. The changes are as", 
+   "follows:", 
+   "1. A new HexStringTableRecordReader which is responsible for reporting", 
+   "progress.", 
+   "2. The class expects the JobConf to give the length of the hex string", 
+   "row(default 8).", 
+   "3. In case it runs into an error while reporting progress, it will fall", 
+   "back to the older way and report 0%.", 
+   "The assumption here is that the row keys are evenly distributed over the", 
+   "scan range.", 
+   "There are config knobs provided to enable/disable this change.", 
+   "Test Plan:", 
+   "tests with the posts_eaf table on SH004.", 
+   "1. Full table scan", 
+   "2. scan from {, random-row}", 
+   "3. scan from {randow-row}", 
+   "Reviewers: manukranthk, liyintang", 
+   "Reviewed By: liyintang", 
+   "CC: hbase-eng@, chaoyc, csliu", 
+   "Differential Revision: https://phabricator.fb.com/D868805", 
+   "Task ID: 231191"
+  ], 
+  "revision_id": "1504220"
+ }, 
+ {
+  "author": "aadamchik", 
+  "date": "2013-07-17T18:22:01.053602Z", 
+  "msg": [
+   "CAY-1846  Reworking of callback mapping", 
+   "java-style method naming"
+  ], 
+  "revision_id": "1504219"
+ }
+]

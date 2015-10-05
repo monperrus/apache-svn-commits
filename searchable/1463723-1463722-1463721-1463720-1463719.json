@@ -1,0 +1,105 @@
+[
+ {
+  "author": "jbonofre", 
+  "date": "2013-04-02T19:58:15.955600Z", 
+  "msg": [
+   "[SMX4-1428] Create OSGi bundle for opensaml 2.5.3"
+  ], 
+  "revision_id": "1463723"
+ }, 
+ {
+  "author": "rvesse", 
+  "date": "2013-04-02T19:57:06.874219Z", 
+  "msg": [
+   "Fix up some tests to account for the fact that TDB normalizes integer numerics to xsd:integer internally"
+  ], 
+  "revision_id": "1463722"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2013-04-02T19:53:43.335019Z", 
+  "msg": [
+   "Fix some sleep-for-timestamps code: avoid missing some cases where we need", 
+   "to sleep -- especially error cases -- and avoid sleeping in some cases where", 
+   "we don't need to.  Simplify the code by using a consistent pattern: make the", 
+   "decision of whether to sleep at the lowest level possible (ideally in the WC", 
+   "layer, but not yet), and do the sleep at the highest level possible", 
+   "(immediately below the libsvn_client API).", 
+   "Currently we sleep before releasing the WC write lock in some places, and", 
+   "after releasing it in other places.  We should pick one and be consistent.", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__update_internal,", 
+   "svn_client__checkout_internal,", 
+   "svn_client__switch_internal,", 
+   "svn_client__handle_externals): Document that the 'sleep' output is set", 
+   "even if the function returns an error, and don't let it be NULL.", 
+   "(svn_client__export_externals): Remove the unused and unneeded 'sleep'", 
+   "output parameter.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Rely on the caller to sleep even if we", 
+   "throw an error. Don't always sleep on success, only if we actually", 
+   "update the WC.", 
+   "(svn_client_checkout3): Handle the sleep here.", 
+   "* subversion/libsvn_client/commit.c", 
+   "(svn_client_commit6): Sleep, if needed, even if there is an error during", 
+   "the post-commit 'bumping' of the WC.", 
+   "* subversion/libsvn_client/copy.c", 
+   "(do_wc_to_wc_copies_with_write_lock,", 
+   "do_wc_to_wc_moves,", 
+   "repos_to_wc_copy_single): Return a flag instead of sleeping here. A", 
+   "multi-target repos-to-WC copy will now only sleep once, not once per", 
+   "target.", 
+   "(do_wc_to_wc_copies,", 
+   "repos_to_wc_copy_locked,", 
+   "repos_to_wc_copy,", 
+   "try_copy): Pass the flag through.", 
+   "(svn_client_copy6,", 
+   "svn_client_move7): Handle the sleep here.", 
+   "* subversion/libsvn_client/export.c", 
+   "(export_directory): Remove the unneeded 'sleep' variable.", 
+   "* subversion/libsvn_client/externals.c", 
+   "(svn_client__export_externals): Remove the unused and unneeded 'sleep'", 
+   "output parameter.", 
+   "* subversion/libsvn_client/revert.c", 
+   "(svn_client_revert2): Sleep even when returning an error. It was missing", 
+   "the case where, after reverting at least one target, a subsequent target", 
+   "fails.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(switch_internal): Rely on the caller to sleep even if we throw an error.", 
+   "It missed the case where externals handling fails. Don't require a sleep", 
+   "if we're using commit times as the WC timestamps.", 
+   "(svn_client_switch3): Handle the sleep here.", 
+   "* subversion/libsvn_client/update.c", 
+   "(update_internal): Rely on the caller to sleep even if we throw an error.", 
+   "It missed the case where externals handling fails. Don't require a sleep", 
+   "if we're using commit times as the WC timestamps. This is also used by", 
+   "checkout, so these changes affect checkout as well.", 
+   "(svn_client_update4): Handle the sleep here in all cases. It missed the", 
+   "case where, after updating at least one target, a subsequent target", 
+   "fails."
+  ], 
+  "revision_id": "1463721"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2013-04-02T19:50:22.089541Z", 
+  "msg": [
+   "[SMX4-1427] Create OSGi bundle for openws 1.4.4"
+  ], 
+  "revision_id": "1463720"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2013-04-02T19:46:12.561871Z", 
+  "msg": [
+   "Fix non-peg merge compatibility wrapper in JavaHL.", 
+   "[in subversion/bindings/javahl/src/org/apache/subversion/javahl]", 
+   "* SVNClient.java (SVNClient.merge): Fix silly typo in order of parameters in", 
+   "wrapped call to native method.", 
+   "* ISVNClient.java: Whitespace change, no functional difference.", 
+   "* subversion/bindings/javahl/native/SVNClient.h (SVNClient::merge):", 
+   "Remove extraneous overload declaration."
+  ], 
+  "revision_id": "1463719"
+ }
+]

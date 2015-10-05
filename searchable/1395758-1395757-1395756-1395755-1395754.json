@@ -1,0 +1,64 @@
+[
+ {
+  "author": "donaldp", 
+  "date": "2012-10-08T20:31:24.125430Z", 
+  "msg": [
+   "Continue to update the RVMs required to run the tests in the CI. The old ubuntu LTS is tricky to get all the dependencies lined up."
+  ], 
+  "revision_id": "1395758"
+ }, 
+ {
+  "author": "donaldp", 
+  "date": "2012-10-08T20:30:24.201036Z", 
+  "msg": [
+   "Disable the \"gem update --system\" step in all-in-one package process until we can figure out why it does not work in the CI"
+  ], 
+  "revision_id": "1395757"
+ }, 
+ {
+  "author": "tommaso", 
+  "date": "2012-10-08T20:27:03.759128Z", 
+  "msg": [
+   "[HAMA-651] - fixed format"
+  ], 
+  "revision_id": "1395756"
+ }, 
+ {
+  "author": "dblevins", 
+  "date": "2012-10-08T20:22:16.602883Z", 
+  "msg": [
+   "s/OpenJPA/Apache OpenJPA/"
+  ], 
+  "revision_id": "1395755"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-10-08T20:21:30.841235Z", 
+  "msg": [
+   "Fix adding symlinks pointing at working copy roots to version control,", 
+   "which had been broken since r1395027.", 
+   "Fixes special_tests 23, \"externals as symlink targets\", which adds", 
+   "a symlink pointing at an external. This test failed because the", 
+   "symlink path itself was cached as WC root when adding the symlink", 
+   "to the external's parent WC. The code then tried a propset on the", 
+   "symlink path to set the svn:special prop and was redirected at the", 
+   "external working copy which it didn't have a lock for.", 
+   "We can fix this by never caching a symlink itself as a WC root but", 
+   "caching the directory the symlink points to as a WC root instead.", 
+   "* subversion/libsvn_wc/wc_db_wcroot.c", 
+   "(read_link_target): New helper function to calculate the absolute path", 
+   "of a symlink target.", 
+   "(svn_wc__db_wcroot_parse_local_abspath): When retrying the scan through a", 
+   "symlink, resolve the symlink and scan up from the link target, rather", 
+   "than treating the symlink itself as a directory. If the symlink points", 
+   "at a WC root, this prevents the symlink itself from being added to the", 
+   "WC root cache -- the cache should only contain directories anyway.", 
+   "* subversion/tests/cmdline/special_tests.py", 
+   "(symlink_to_wc_basic): When operating on a WC through a symlink, we'll", 
+   "now see the resolved symlink target path as Working Copy Root path", 
+   "in 'svn info' output. Adjust test expectations accordingly. This test", 
+   "was expecting to see the symlink itself as WC root path."
+  ], 
+  "revision_id": "1395754"
+ }
+]

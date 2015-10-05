@@ -1,0 +1,56 @@
+[
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-21T03:49:59.598847Z", 
+  "msg": [
+   "Refactor test to use InitialLoggerContext.", 
+   "- Removed * static import on Level.", 
+   "- Made Expected a static inner class.", 
+   "- Assertion statement clarifications."
+  ], 
+  "revision_id": "1596453"
+ }, 
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-21T03:37:11.660794Z", 
+  "msg": [
+   "Make clear() return this for easier chaining in tests."
+  ], 
+  "revision_id": "1596452"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2014-05-21T03:36:59.380478Z", 
+  "msg": [
+   "DERBY-6547(testDERBY5120NumRowsInSydependsForTrigger fails when the starting version of the upgrade trajectory is 10.10.2.0)", 
+   "10.10, 10.9 and 10.8 jars started failing in upgrade suite(in testDERBY5120NumRowsInSydependsForTrigger) after following was backported into those codelines", 
+   "*****", 
+   "DERBY-6383(Update trigger defined on one column fires on update of other columns)", 
+   "Backporting following 2 revisions from trunk to 10.10. Had to hand do the changes because of conflicts during svn merge.", 
+   "1537593, 1538854", 
+   "*****", 
+   "The reason behind the failure is actually how testDERBY5120NumRowsInSydependsForTrigger test was written and not a code regression.", 
+   "The test creates a trigger which is supposed to fire on a specific column", 
+   "create trigger ATDC_TAB1_TRG1 after update of C11 on ATDC_TAB1 REFERENCING old_table as old", 
+   "for each statement MODE DB2SQL insert into ATDC_BKUP1 select * from old", 
+   "But later on it the test, it is expecting the trigger to fire on update of non-trigger column of the table. This was fine before DERBY-6383 was backported because w/o the fix for DERBY-6383, triggers would fire on update of any column on the table(DERBY-6383 - Update trigger defined on one column fires on update of other columns). But after those codelines got the fix for DERBY-6383 as part of the backport, the trigger correctly won't fire any more on non-trigger columns and that started the test failure. I have fixed the test to update the trigger column in order to fire the trigger and now the test behaves correctly. I will backport this test fix upto 10.8 codelines which is how far DERBY-6383 got backported to."
+  ], 
+  "revision_id": "1596451"
+ }, 
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-21T03:32:37.976410Z", 
+  "msg": [
+   "Add convenience method to InitialLoggerContext to get a ListAppender (and throw an exception if one isn't found by that name)."
+  ], 
+  "revision_id": "1596450"
+ }, 
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-21T03:12:33.710321Z", 
+  "msg": [
+   "Add hamcrest-all to log4j-core test dependencies."
+  ], 
+  "revision_id": "1596449"
+ }
+]

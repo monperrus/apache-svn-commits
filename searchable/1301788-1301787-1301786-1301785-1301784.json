@@ -1,0 +1,108 @@
+[
+ {
+  "author": "olamy", 
+  "date": "2012-03-16T22:07:20.048132Z", 
+  "msg": [
+   "add debug log"
+  ], 
+  "revision_id": "1301788"
+ }, 
+ {
+  "author": "julien", 
+  "date": "2012-03-16T22:06:42.773216Z", 
+  "msg": [
+   "PIG-2573: Automagically setting parallelism based on input file size does not work with HCatalog (traviscrawford via julien)"
+  ], 
+  "revision_id": "1301787"
+ }, 
+ {
+  "author": "daijy", 
+  "date": "2012-03-16T22:05:35.349724Z", 
+  "msg": [
+   "Fix TestPigServer.testRegisterRemoteMacro failure caused by PIG-2565"
+  ], 
+  "revision_id": "1301786"
+ }, 
+ {
+  "author": "daijy", 
+  "date": "2012-03-16T22:05:19.526230Z", 
+  "msg": [
+   "Fix TestPigServer.testRegisterRemoteMacro failure caused by PIG-2565"
+  ], 
+  "revision_id": "1301785"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-03-16T22:05:01.254412Z", 
+  "msg": [
+   "[master] Master's RS monitor", 
+   "Summary:", 
+   "Master will kill a region server if it fails to send heartbeats for long enough. This is the fast way to kill a stuck region server.", 
+   "If master finds too many nodes have become inaccessible in the same rack then it doesn't fast-kill them. It waits for the rack to recover. If the rack doesn't recover then the zk based RS expiry will kick in.", 
+   "Two new config params introduced", 
+   "conf.getInt(\"hbase.region.server.max.early.expired.per.rack\", 1);", 
+   "conf.getInt(\"hbase.region.server.inactivity.short.timeout\", 10000);", 
+   "Test Plan:", 
+   "verfied that machines are being correctly grouped into racks", 
+   "===", 
+   "single server test", 
+   "master quickly recognized the unresponsive server but didn't kill it immediately", 
+   "2012-03-05 15:43:05,487 DEBUG org.apache.hadoop.hbase.master.ServerManager: Server serverName=<hostname>,60020,1330990313077, load=(requests=0, regions=11, usedHeap=153, maxHeap=23987) timed out. Will wait 9988ms for others in rack before expiring it", 
+   "Master expires the servers after 10s", 
+   "2012-03-05 15:43:15,493 WARN org.apache.hadoop.hbase.master.ServerManager: Expiring Server serverName=<hostname>,60020,1330990313077, load=(requests=0, regions=11, usedHeap=153, maxHeap=23987) because of missed load reports", 
+   "restore connectivity to the sever. the region sever receives a STOP directive from the master", 
+   "012-03-05 15:44:21,990 WARN org.apache.hadoop.hbase.regionserver.HRegionServer: Attempt=6", 
+   "java.net.SocketTimeoutException: 5000 millis timeout while waiting for channel to be ready for connect. ch : java.nio.channels.SocketChannel[connection-pending remote=/10.30.253.200:60000]", 
+   "at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:213)", 
+   "at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:406)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseClient$Connection.setupIOstreams(HBaseClient.java:310)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseClient.getConnection(HBaseClient.java:867)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseClient.call(HBaseClient.java:734)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseRPC$Invoker.invoke(HBaseRPC.java:262)", 
+   "at $Proxy0.regionServerReport(Unknown Source)", 
+   "at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:527)", 
+   "at java.lang.Thread.run(Thread.java:619)", 
+   "2012-03-05 15:44:26,000 INFO org.apache.hadoop.hbase.regionserver.HRegionServer: MSG_REGIONSERVER_STOP", 
+   "===", 
+   "Three servers one 1 rack failing test. increased zk session to to 5 mins.", 
+   "master detects too many servers dead and doesn't do anything. zk nodes have not expired.", 
+   "2012-03-05 15:58:35,984 INFO", 
+   "org.apache.hadoop.hbase.master.ServerManager: Too many servers count=3 timed out in rack /<rack>. . Timed out Servers = [serverName=<hostname>,60020,1330990278361, load=(requests=0, regions=11, usedHeap=149, maxHeap=23987), serverName=<hostname>,60020,1330991115760, load=(requests=0, regions=12, usedHeap=67, maxHeap=23987), serverName=<hostname>,60020,1330990235580, load=(requests=0, regions=11, usedHeap=149, maxHeap=23987)]. Not expiring these servers, hoping for rack to become accessible", 
+   "2012-03-05 15:58:40,987 INFO", 
+   "org.apache.hadoop.hbase.master.ServerManager: Too many servers count=3 timed out in rack /<rack>. . Timed out Servers = [serverName=<hostname>,60020,1330990278361, load=(requests=0, regions=11, usedHeap=149, maxHeap=23987), serverName=<hostname>,60020,1330991115760, load=(requests=0, regions=12, usedHeap=67, maxHeap=23987), serverName=<hostname>,60020,1330990235580, load=(requests=0, regions=11, usedHeap=149, maxHeap=23987)]. Not expiring these servers, hoping for rack to become accessible", 
+   "2012-03-05 15:58:45,583 INFO org.apache.hadoop.hbase.master.ServerManager: 89 region servers, 0 dead, average load 11.55056179775281", 
+   "I restore connectivity to all these severs. Notice that the last server to become accessible is not killed.", 
+   "2012-03-05 15:59:16,006 DEBUG org.apache.hadoop.hbase.master.ServerManager: Server serverName=<hostname>,60020,1330990278361, load=(requests=0, regions=11, usedHeap=149, maxHeap=23987) timed out. Will wait 9940ms for others in rack before expiring it", 
+   "2012-03-05 15:XX:XX DEBUG org.apache.hadoop.hbase.master.ServerManager: Restarted receiving reports from server <hostname>,60020,1330990278361, load=(", 
+   "The region servers keep trying to send reports but they don't die", 
+   "012-03-05 15:40:46,607 WARN org.apache.hadoop.hbase.regionserver.HRegionServer: Attempt=58", 
+   "java.net.ConnectException: Connection refused", 
+   "at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)", 
+   "at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:574)", 
+   "at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)", 
+   "at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:406)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseClient$Connection.setupIOstreams(HBaseClient.java:310)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseClient.getConnection(HBaseClient.java:867)", 
+   "a       at org.apache.hadoop.hbase.ipc.HBaseClient.call(HBaseClient.java:734)", 
+   "at org.apache.hadoop.hbase.ipc.HBaseRPC$Invoker.invoke(HBaseRPC.java:262)", 
+   "at $Proxy0.regionServerReport(Unknown Source)", 
+   "at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:527)", 
+   "at java.lang.Thread.run(Thread.java:619)", 
+   "2012-03-05 15:41:37,063 DEBUG org.apache.hadoop.hbase.io.hfile.LruBlockCache: Cache Stats: Sizes: Total=118.06349MB (123798544), Free=14274.287MB (14967674864), Max=14392.351MB (15091473408), Counts: Blocks=0, Access=22, Hit=0, Miss=22, cachingAccesses=0, cachingHits=0, Evictions=0, Evicted=0, Ratios: Hit Ratio=0.0%, Miss Ratio=100.0%, Evicted/Run=NaN", 
+   "===", 
+   "servers expiring on 2 racks. 3 servers each. one rack has 5 min zk session expiry and another has 1 min.", 
+   "012-03-05 16:24:52,487 INFO", 
+   "org.apache.hadoop.hbase.master.ServerManager: Too many servers count=3 timed out in rack /<rack>. . Timed out Servers = [serverName=<hostname>,60020,1330990278361, load=(requests=0, regions=11, usedHeap=156, maxHeap=23987), serverName=<hostname>,60020,1330991115760, load=(requests=0, regions=12, usedHeap=78, maxHeap=23987), serverName=<hostname>,60020,1330990235580, load=(requests=0, regions=11, usedHeap=156, maxHeap=23987)]. Not expiring these servers, hoping for rack to become accessible", 
+   "2012-03-05 16:24:57,491 INFO", 
+   "org.apache.hadoop.hbase.master.ServerManager: Too many servers count=3 timed out in rack /<rack>. . Timed out Servers = [serverName=<hostname>,60020,1330985785026, load=(requests=0, regions=11, usedHeap=161, maxHeap=23987), serverName=<hostname>,60020,1330142550846, load=(requests=0, regions=11, usedHeap=4992, maxHeap=23987), serverName=<hostname>,60020,1330140718667, load=(requests=0, regions=11, usedHeap=13599, maxHeap=23987)]. Not expiring these servers, hoping for rack to become accessible", 
+   "One node's zk expired. This had 5 min zk session to!!", 
+   "2012-03-05 16:25:03,005 INFO org.apache.hadoop.hbase.master.ServerManager: <hostname>,60020,1330991115760 znode expired", 
+   "otherwise everything looks OK", 
+   "Reviewers: kannan, liyintang, kranganathan, rthiessen", 
+   "Reviewed By: kannan", 
+   "CC: kranganathan", 
+   "Differential Revision: https://phabricator.fb.com/D420784"
+  ], 
+  "revision_id": "1301784"
+ }
+]

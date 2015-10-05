@@ -1,0 +1,65 @@
+[
+ {
+  "author": "jleroux", 
+  "date": "2013-10-18T18:20:15.544568Z", 
+  "msg": [
+   "\"Applied fix from trunk for revision: 1524361\"", 
+   "------------------------------------------------------------------------", 
+   "r1524361 | jleroux | 2013-09-18 12:49:54 +0200 (mer. 18 sept. 2013) | 31 lignes", 
+   "A slightly modified patch from Leon for \"ConcurrentModificationException when cancelling an order\" https://issues.apache.org/jira/browse/OFBIZ-5194", 
+   "Leon:", 
+   "Thanks for resolve this bug. But it introduce a small flaw: all cancelled items is filtered out from order item list.", 
+   "The filter condition before this patch is : (\"Y\".equals(orderItem.get(\"isPromo\")) && \"ITEM_CANCELLED\".equals(orderItem.get(\"statusId\"))); \u2013 means filter out the item that is promo \"AND\" cancelled.", 
+   "That of patch is : ! ((item.isPromo == null || item.isPromo == 'N') && !(item.statusId.equals('ITEM_CANCELLED'))) \u2013 means filter outer the item that is promo \"OR\" cancelled.", 
+   "Theses two is not equivalent. After this patch, all cancelled items are filter out, no matter it's promo or not.", 
+   "jleroux:", 
+   "What we had before the change:", 
+   "get cancelled promo items", 
+   "remove them from the list of items", 
+   "So we got all items but cancelled promo items", 
+   "What we have now:", 
+   "Get non-promo items AND non-cancelled items (or as said Scott \"get all non-promo items that aren't cancelled\")", 
+   "What you suggest:", 
+   "Get non-promo items OR non-cancelled items (if re-phrase what you suggest: get all non-promo items and add to them all the non-cancelled ones, so including the non-cancelled promo ones)", 
+   "Your sentence \"After this patch, all cancelled items are filter out, no matter it's promo or not.\" is almost right. Because we not only miss the cancelled non-promo but also the promo not cancelled", 
+   "To re-prhase myself: Currently we miss the promo items which are not cancelled and the non-promo items which are cancelled", 
+   "Pfew... the exclusive reasoning is here quite easier than the inclusive one!", 
+   "I removed the useless parentheses around the cancelled proposition", 
+   "------------------------------------------------------------------------", 
+   "?\\026"
+  ], 
+  "revision_id": "1533578"
+ }, 
+ {
+  "author": "cnauroth", 
+  "date": "2013-10-18T18:20:02.573756Z", 
+  "msg": [
+   "HDFS-5365. Merging change r1533575 from branch-2 to branch-2.2"
+  ], 
+  "revision_id": "1533577"
+ }, 
+ {
+  "author": "sergeyb", 
+  "date": "2013-10-18T18:15:45.598642Z", 
+  "msg": [
+   "[CXF-5337] Relaxing HttpCondiit to allow DELETE with bodies"
+  ], 
+  "revision_id": "1533576"
+ }, 
+ {
+  "author": "cnauroth", 
+  "date": "2013-10-18T18:15:19.816108Z", 
+  "msg": [
+   "HDFS-5365. Merging change r1533574 from trunk to branch-2."
+  ], 
+  "revision_id": "1533575"
+ }, 
+ {
+  "author": "cnauroth", 
+  "date": "2013-10-18T18:13:55.859676Z", 
+  "msg": [
+   "HDFS-5365. Move attribution to 2.2.1 in CHANGES.txt."
+  ], 
+  "revision_id": "1533574"
+ }
+]

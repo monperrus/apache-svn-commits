@@ -1,0 +1,101 @@
+[
+ {
+  "author": "dag", 
+  "date": "2013-04-06T05:47:58.521777Z", 
+  "msg": [
+   "DERBY-6125 Code clean up in client driver.", 
+   "Patch derby-6125-05-d; details:", 
+   "** ClientXid", 
+   "- reworked ClientXid#equals to find favor with FindBugs: now tests for null and wrong type.", 
+   "The old version would get classcastexception if a wrong type object was compared.", 
+   "- made ClientXid#getData clone the result - it is a byte array", 
+   "** Section", 
+   "- clone bytes in Section#setPKGNAMCBytes to avoid having a package private variable", 
+   "wriable from outside the package (it's an array).", 
+   "- make Section#getPKGNAMCBytes return a clone", 
+   "** Sqlca", 
+   "- removed unnecessary a priori allocation to Sqlca#sqlErrd_.", 
+   "- made Sqlca#sqlWarn_ private", 
+   "- changed #getSqlWarn to return String since all its uses need a String anyway.", 
+   "- made Sqlca#getSqlErrd private", 
+   "- simplified implementation of Sqlca#getSqlWarn", 
+   "- made Sqlca#rowsetRowCount_ private", 
+   "- made Sqlca#containsSqlcax_ private", 
+   "- made Sqlca#sqlErrmcMessages_ private", 
+   "- removed argument sqlErrpBytes from Sqlca#setContainsSqlcax (only called once; with null).", 
+   "- removed argument sqlErrpBytes from Sqlca#resetRowsetSqlca  (only called with null).", 
+   "- introduced Sqlca#getReturnValue in Statement#completeExecute instead", 
+   "of allowing access to sqlca.getSqlErrd()[0]", 
+   "- removed unused Sqlca#sqlErrmcCcsid_", 
+   "- introduced public String Sqlca#formatSqlErrd as replacement for", 
+   "direct access to Sqlca#sqlErrd_.", 
+   "** NetSqlca", 
+   "- made NetSqlca#setSqlwarnBytes package private", 
+   "- made NetSqlca#setSqlerrmcBytes package private and removed its", 
+   "argument sqlErrmcCcsid", 
+   "- made NetSqlca#setSqlerrd package private", 
+   "- removed unnecessary test for BIG_ENDIAN in NetSqlca#getRowCount: the", 
+   "protocol always uses big endian (SignedBinary.BIG_ENDIAN = 1 is final).", 
+   "- removed unnecessary type argument to NetSqlca#getRowCount now that endian test is no longer done", 
+   "** Statement", 
+   "- made Statement#materialStatement_ private; new accessors", 
+   "** NetConnection", 
+   "- removed unnecessary default NetConnection finalizer", 
+   "** NetXAConnection", 
+   "- removed potentially harmful finalizer in NetXAConnection: it calls a", 
+   "finalizer for another class (NetConnection). FindBugs advice on this", 
+   "(quote):", 
+   "\"If a connected set of objects beings finalizable, then the VM will", 
+   "invoke the finalize method on all the finalizable object, possibly", 
+   "at the same time in different threads. Thus, it is a particularly", 
+   "bad idea, in the finalize method for a class X, invoke finalize on", 
+   "objects referenced by X, because they may already be getting", 
+   "finalized in a separate thread. \"", 
+   "It also neglected to call super.finalize()...", 
+   "** Typdef", 
+   "- made Typdef#FdocaSimpleDataArray private", 
+   "- removed unused TypDef#getByteOrder", 
+   "- made Typdef#environmentTables_ private", 
+   "** SqlException", 
+   "- made SqlException#SQLExceptionFactory package private (was protected)", 
+   "** EncryptionManager", 
+   "- removed unused methods EncryptionManager#setInitVector and #setSecKey", 
+   "** NetXACallInfo", 
+   "- removed unused NetXACallInfo#getCorrelatorToken"
+  ], 
+  "revision_id": "1465193"
+ }, 
+ {
+  "author": "acmurthy", 
+  "date": "2013-04-06T05:36:47.027876Z", 
+  "msg": [
+   "Merge -c 1465173 from branch-1 to branch-1.2 to fix MAPREDUCE-5129. Allow tags to JobHistory for deeper analytics. Contributed by Billie Rinaldi."
+  ], 
+  "revision_id": "1465192"
+ }, 
+ {
+  "author": "acmurthy", 
+  "date": "2013-04-06T05:34:58.971515Z", 
+  "msg": [
+   "MAPREDUCE-5129. Allow tags to JobHistory for deeper analytics. Contributed by Billie Rinaldi."
+  ], 
+  "revision_id": "1465191"
+ }, 
+ {
+  "author": "jailletc36", 
+  "date": "2013-04-06T05:34:07.421671Z", 
+  "msg": [
+   "Make the \"default\" parameter of the \"ErrorDocument \" option case insensitive.", 
+   "PR 54419 reported by Tianyin Xu [tixu cs ucsd edu]"
+  ], 
+  "revision_id": "1465190"
+ }, 
+ {
+  "author": "acmurthy", 
+  "date": "2013-04-06T05:33:41.565763Z", 
+  "msg": [
+   "Merge -c 1465188 from trunk to branch-2 to fix MAPREDUCE-5129. Allow tags to JobHistory for deeper analytics. Contributed by Billie Rinaldi."
+  ], 
+  "revision_id": "1465189"
+ }
+]

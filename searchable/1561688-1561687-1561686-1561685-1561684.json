@@ -1,0 +1,108 @@
+[
+ {
+  "author": "rhuijben", 
+  "date": "2014-01-27T14:16:08.823324Z", 
+  "msg": [
+   "Following up on r1561387, which was (temporarily) reverted in r1561424 extend", 
+   "the existing stream api with an optional incomplete read function to allow", 
+   "using the stream api as was intended by r1561387.", 
+   "After discussion on irc we came with the idea of revving svn_stream_read()", 
+   "to two separate functions: one with full read semantics (like before) and one", 
+   "with the new possibly incomplete read support.", 
+   "This patch currently provides a default implementation of the incomplete read", 
+   "with a forced complete read. Brane suggests that it might be better to just", 
+   "return an error for requested incomplete reads. I commit this version under", 
+   "the assumption that it is very easy to change this later in a separate patch.", 
+   "* subversion/include/svn_io.h", 
+   "(svn_stream_t): Tweak documentation.", 
+   "(svn_stream_set_read2): New function.", 
+   "(svn_stream_set_read): Deprecate function.", 
+   "(svn_stream_read_full): New function.", 
+   "(svn_stream_read2): New function.", 
+   "(svn_stream_read): Deprecate function.", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_stream_set_read): New function.", 
+   "(svn_stream_read): New function.", 
+   "(md5_stream_baton,", 
+   "read_handler_md5): Move here from stream.c. Update caller.", 
+   "(read_full_handler_md5): New function.", 
+   "(skip_handler_md5,", 
+   "write_handler_md5,", 
+   "close_handler_md5): Move here from stream.c.", 
+   "(svn_stream_checksummed): Move here. Update caller.", 
+   "* subversion/libsvn_subr/stream.c", 
+   "(svn_stream_t): Add callback.", 
+   "(skip_default_handler): Update prototype.", 
+   "(svn_stream_set_read): Rename to...", 
+   "(svn_stream_set_read2): ... this and set both callbacks.", 
+   "(svn_stream_read2): New function.", 
+   "(svn_stream_read): Rename to...", 
+   "(svn_stream_read_full): ... this. Update used callback.", 
+   "(svn_stream_skip): Pass full read callback.", 
+   "(stream_readline_bytewise,", 
+   "stream_readline_chunky,", 
+   "svn_stream_copy3,", 
+   "svn_stream_contents_same2): Update caller.", 
+   "(skip_default_handler): Rename argument to auto-document behavior.", 
+   "(svn_stream_empty): Pass same read handler for both apis.", 
+   "(read_handler_disown): Update caller.", 
+   "(read_full_handler_disown): New function.", 
+   "(svn_stream_disown): Update caller.", 
+   "(read_handler_apr): New function. Rename the old function", 
+   "with this name to ...", 
+   "(read_full_handler_apr): ... this.", 
+   "(svn_stream_from_aprfile2): Update caller.", 
+   "(read_handler_checksum): New function. Rename the old function", 
+   "with this name to ...", 
+   "(read_full_handler_checksum): ... this.", 
+   "(close_handler_checksum): Update caller.", 
+   "(svn_stream_checksummed2): Update caller.", 
+   "(md5_stream_baton,", 
+   "read_handler_md5,", 
+   "skip_handler_md5,", 
+   "write_handler_md5,", 
+   "close_handler_md5,", 
+   "svn_stream_checksummed): Move to deprecated.c", 
+   "(svn_stringbuf_from_stream,", 
+   "svn_stream_from_stringbuf,", 
+   "svn_stream_from_string,", 
+   "svn_string_from_stream): Update caller.", 
+   "(read_handler_lazyopen): Update caller.", 
+   "(read_full_handler_lazyopen): New function.", 
+   "(svn_stream_lazyopen_create): Update caller."
+  ], 
+  "revision_id": "1561688"
+ }, 
+ {
+  "author": "joern", 
+  "date": "2014-01-27T14:15:34.403372Z", 
+  "msg": [
+   "OPENNLP-642 Removed iterations and cutoff parameter"
+  ], 
+  "revision_id": "1561687"
+ }, 
+ {
+  "author": "ghuber", 
+  "date": "2014-01-27T14:15:26.146865Z", 
+  "msg": [
+   "See ROL-1795, sync with previous mods for ssl switching"
+  ], 
+  "revision_id": "1561686"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2014-01-27T14:15:06.027209Z", 
+  "msg": [
+   "HTTPASYNC-64: race conditions in async caching module"
+  ], 
+  "revision_id": "1561685"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2014-01-27T14:14:37.113788Z", 
+  "msg": [
+   "Upgraded HttpClient dependency to version 4.3.2 (caching module is still at 4.3.1 due to HTTPCLIENT-1450)"
+  ], 
+  "revision_id": "1561684"
+ }
+]

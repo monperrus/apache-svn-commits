@@ -1,0 +1,116 @@
+[
+ {
+  "author": "degenaro", 
+  "date": "2013-07-24T13:59:56.395023Z", 
+  "msg": [
+   "UIMA-3109 DUCC webserver (WS) fails to display init failures unless Job is capped"
+  ], 
+  "revision_id": "1506558"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2013-07-24T13:59:34.067853Z", 
+  "msg": [
+   "HIVE-4883: TestHadoop20SAuthBridge tests fail sometimes because of race condition (Thejas Nair via Brock Noland)"
+  ], 
+  "revision_id": "1506557"
+ }, 
+ {
+  "author": "aadamchik", 
+  "date": "2013-07-24T13:59:31.995446Z", 
+  "msg": [
+   "CAY-1695  Unexpected null value in bidirectional one-to-one prefetch", 
+   "redoing the algorithm... tracking snapshot versions is flaky"
+  ], 
+  "revision_id": "1506556"
+ }, 
+ {
+  "author": "brock", 
+  "date": "2013-07-24T13:52:43.769963Z", 
+  "msg": [
+   "HIVE-4876: Beeling help text do not contain -f and -e parameters (Jarek Jarcec Cecho via Brock Noland)"
+  ], 
+  "revision_id": "1506555"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2013-07-24T13:50:17.414852Z", 
+  "msg": [
+   "Revert the last few remaining pieces of r850307 (aka r10233), which made the", 
+   "swig bindings on Windows link the 'core' library as central component from", 
+   "every other swig library.", 
+   "In the few months after this commit (read: somewhere in 2004) most of this", 
+   "change was tweaked and partially reverted, but some magic was left.", 
+   "Since this didn't work out as planned (as looked at 9 years later), hacks", 
+   "were applied to work around all this. E.g some bindings forced a shared", 
+   "library and then used explicit dll exporting/importing on Windows to get", 
+   "things working.", 
+   "This patch makes the bindings all use a proper shared library on Windows,", 
+   "with the function exporting handled via the standard header file system we", 
+   "use in other places.", 
+   "* build.conf", 
+   "(swig_core): Remove keyword that hasn't been used for at least 8 years.", 
+   "(libsvn_swig_py,", 
+   "libsvn_swig_perl,", 
+   "libsvn_swig_ruby): Add svn-exports.", 
+   "* build/generator/gen_base.py", 
+   "(TargetLib.disable_shared): New function.", 
+   "(TargetSWIG.__init__): Remove include_runtime initialization.", 
+   "(TargetSWIGLib.disable_shared): New function.", 
+   "* build/generator/gen_win.py", 
+   "(get_install_targets): Call disable_shared instead of doing half its work locally.", 
+   "(get_def_file): Remove disable_shared check.", 
+   "(get_linked_win_depends): Remove disable_shared check.", 
+   "* subversion/bindings/swig/core.i", 
+   "(const void *value): Update caller.", 
+   "(SWIGPERL init): Remove circular dependency hack.", 
+   "* subversion/bindings/swig/include/svn_types.swg", 
+   "(SWIGTYPE **OUTPARAM,", 
+   "POINTER_TYPES,", 
+   "CALLABLE_CALLBACK,", 
+   "PY_AS_VOID): Update caller.", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.c", 
+   "(svn_swig_pl_bind_current_pool_fns): Remove", 
+   "SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK hack.", 
+   "* subversion/bindings/swig/perl/libsvn_swig_perl/swigutil_pl.h", 
+   "(svn_swig_pl_bind_current_pool_fns): Remove", 
+   "SVN_AVOID_CIRCULAR_LINKAGE_AT_ALL_COSTS_HACK hack.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.c", 
+   "(svn_swig_py_get_pool_arg,", 
+   "svn_swig_py_get_parent_pool): Update caller.", 
+   "(svn_swig_NewPointerObj): Rename to ...", 
+   "(svn_swig_py_new_pointer_obj): ... this.", 
+   "(svn_swig_NewPointerObjString): Rename to ...", 
+   "(svn_swig_NewPointerObjString): ... this. Update caller.", 
+   "(svn_swig_ConvertPtr): Rename to ...", 
+   "(svn_swig_py_convert_ptr): ... this.", 
+   "(svn_swig_ConvertPtrString): Update caller.", 
+   "(svn_swig_MustGetPtr): Rename to ...", 
+   "(svn_swig_py_must_get_ptr): ... this.", 
+   "(make_ob_pool): Update caller.", 
+   "(convert_to_swigtype): Update caller.", 
+   "(DECLARE_SWIG_CONSTRUCTOR): Update caller.", 
+   "(svn_swig_py_struct_ptr_hash_from_dict): Update caller.", 
+   "(svn_swig_py_unwrap_struct_ptr): Update caller.", 
+   "(svn_swig_py_convert_txdelta_op_c_array): Update caller.", 
+   "(swig_py_ra_reporter2): Make static.", 
+   "(svn_swig_py_get_ra_reporter2): New function.", 
+   "* subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.h", 
+   "(SVN_SWIG_SWIGUTIL_EXPORT): Remove definition and all usages.", 
+   "(svn_swig_NewPointerObj): Rename to ...", 
+   "(svn_swig_py_new_pointer_obj): ... this.", 
+   "(svn_swig_ConvertPtr): Rename to ...", 
+   "(svn_swig_py_convert_ptr): ... this.", 
+   "(svn_swig_MustGetPtr): Rename to ...", 
+   "(svn_swig_py_must_get_ptr): ... this.", 
+   "(svn_swig_py_get_ra_reporter2): New function.", 
+   "* subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.h", 
+   "(SVN_RB_SWIG_SWIGUTIL_EXPORT): Remove definition and all usages.", 
+   "* subversion/bindings/swig/svn_ra.i", 
+   "(const svn_ra_reporter2_t *reporter, void *report_baton): Update caller.", 
+   "* win-tests.py", 
+   "('perl'): Copy libsvn_swig_perl to $PATH instead of _Core."
+  ], 
+  "revision_id": "1506554"
+ }
+]

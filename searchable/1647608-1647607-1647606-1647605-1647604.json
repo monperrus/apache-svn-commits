@@ -1,0 +1,104 @@
+[
+ {
+  "author": "kwright", 
+  "date": "2014-12-23T16:34:20.178647Z", 
+  "msg": [
+   "More work related to CONNECTORS-1128"
+  ], 
+  "revision_id": "1647608"
+ }, 
+ {
+  "author": "fschumacher", 
+  "date": "2014-12-23T16:23:16.231728Z", 
+  "msg": [
+   "Bug 57394: When constructing an instance using ClassTools#construct(String, int),", 
+   "the int parameter was not used, but the default constructor was used instead.", 
+   "Added a few test cases to test the methods of ClassTools and correct the unused parameter.", 
+   "The only place in jmeter, where this method was called is in the JMeter class itself and", 
+   "is used, when the property \"mirror.server.port\" is set to a value greater than zero.", 
+   "Without this patch that value would be ignored.", 
+   "Bugzilla Id: 57394"
+  ], 
+  "revision_id": "1647607"
+ }, 
+ {
+  "author": "adrianc", 
+  "date": "2014-12-23T16:21:14.345789Z", 
+  "msg": [
+   "Fixed a bug in UtilDateTime.java where SimpleDateFormat instances were not initialized with the locale."
+  ], 
+  "revision_id": "1647606"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-12-23T16:10:57.012685Z", 
+  "msg": [
+   "On the fsx-id branch:  Begin using our own dirent type within FSX.", 
+   "There a number of reasons to do this:", 
+   "- Decouple the implementation from the interface definition.", 
+   "- Allow for getting rid of the svn_fs_id_t member within the struct", 
+   "while most times we would only need the dirents within FSX itself.", 
+   "- Reduce the typical size of a dirent from 88 to 48 bytes under 64 bits.", 
+   "Compared to FSFS' 120 bytes, this grows RAM / cache capacity 2.5x.", 
+   "- Eliminate ID construction and conversion overhead.", 
+   "This patch will simply introduce dirent_t as a copy of svn_fs_dirent_t", 
+   "and use it throughout FSX.  Convert at the interface.  Most of it is", 
+   "one giant search & replace spree.", 
+   "* subversion/libsvn_fs_x/fs.h", 
+   "(fs_x_data_t): Update commentary.", 
+   "(dirent_t): New struct, copied from svn_fs_dirent_t.", 
+   "* subversion/libsvn_fs_x/cached_data.h", 
+   "(svn_fs_x__find_dir_entry,", 
+   "svn_fs_x__rep_contents_dir_entry): s/svn_fs_dirent_t/dirent_t/g", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(sorted,", 
+   "compare_dirent_name,", 
+   "read_dir_entries,", 
+   "get_dir_contents,", 
+   "svn_fs_x__find_dir_entry,", 
+   "svn_fs_x__rep_contents_dir_entry): Same.", 
+   "* subversion/libsvn_fs_x/temp_serializer.h", 
+   "(svn_fs_x__extract_dir_entry,", 
+   "replace_baton_t,", 
+   "svn_fs_x__replace_dir_entry): Same.", 
+   "* subversion/libsvn_fs_x/temp_serializer.c", 
+   "(dir_data_t,", 
+   "serialize_dir_entry,", 
+   "serialize_dir,", 
+   "deserialize_dir,", 
+   "find_entry,", 
+   "svn_fs_x__extract_dir_entry,", 
+   "slowly_replace_dir_entry,", 
+   "svn_fs_x__replace_dir_entry): Same.", 
+   "* subversion/libsvn_fs_x/dag.h", 
+   "(svn_fs_x__dag_dir_entries,", 
+   "svn_fs_x__dag_dir_entry): Same.", 
+   "* subversion/libsvn_fs_x/dag.c", 
+   "(dir_entry_id_from_node,", 
+   "svn_fs_x__dag_dir_entry,", 
+   "svn_fs_x__dag_delete,", 
+   "svn_fs_x__dag_delete_if_mutable): Same.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(unparse_dir_entry,", 
+   "unparse_dir_entries,", 
+   "svn_fs_x__set_entry,", 
+   "write_directory_to_stream,", 
+   "write_final_rev): Same.", 
+   "* subversion/libsvn_fs_x/tree.c", 
+   "(compare_dir_structure,", 
+   "merge): Same.", 
+   "(x_dir_entries): Convert from the internal dirent type to the FS API type.", 
+   "(crawl_directory_dag_for_mergeinfo,", 
+   "verify_node): s/svn_fs_dirent_t/dirent_t/g"
+  ], 
+  "revision_id": "1647605"
+ }, 
+ {
+  "author": "rmannibucau", 
+  "date": "2014-12-23T16:07:23.387280Z", 
+  "msg": [
+   "raw type for ProcessInjectionPoint event"
+  ], 
+  "revision_id": "1647604"
+ }
+]

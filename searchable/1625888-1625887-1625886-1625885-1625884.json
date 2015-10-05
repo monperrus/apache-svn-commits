@@ -1,0 +1,47 @@
+[
+ {
+  "author": "sijie", 
+  "date": "2014-09-18T04:57:17.590104Z", 
+  "msg": [
+   "BOOKKEEPER-782: Use builder pattern for Cookie (rakeshr via sijie)"
+  ], 
+  "revision_id": "1625888"
+ }, 
+ {
+  "author": "olli", 
+  "date": "2014-09-18T04:54:47.499101Z", 
+  "msg": [
+   "move TOC"
+  ], 
+  "revision_id": "1625887"
+ }, 
+ {
+  "author": "sijie", 
+  "date": "2014-09-18T04:53:21.889538Z", 
+  "msg": [
+   "BOOKKEEPER-784: BookKeeperCloseTest#testLedgerCheck is failing intermittently (ivank via sijie)"
+  ], 
+  "revision_id": "1625886"
+ }, 
+ {
+  "author": "sijie", 
+  "date": "2014-09-18T04:47:22.606079Z", 
+  "msg": [
+   "BOOKKEEPER-785: Fix javadoc warnings in trunk (ivank via sijie)"
+  ], 
+  "revision_id": "1625885"
+ }, 
+ {
+  "author": "mamta", 
+  "date": "2014-09-18T03:52:34.173672Z", 
+  "msg": [
+   "DERBY-6414(Incorrect handling when using an UPDATE to SET an identity column to DEFAULT)", 
+   "I have created DERBY-6742 for JDBC part of this feature so we can generate auto generated resultset for an update statement updating generated columns. This implementation is supported through Statement.RETURN_GENERATED_KEYS flag.", 
+   "Junit tests for this feature are in GeneratedColumnsTest.java. Upgrade tests are in Changes10_12.java. Upgrade test shows that a soft upgrade from pre-10.11 will not support update of generated columns using DEFAULT but 10.11 to trunk soft upgrade will allow it. This is because starting 10.11, we have started using sequence generator to create unique ids. If we want to support updating of idetity columns for pre-10.11 releases, we will need to maintain the code for old way of generating unique ids. In order to avoid that, this feature is available to only 10.11 db during soft upgrade.", 
+   "For UPDATE of identity column to work in the MERGE sql, we need to make changes to MERGE code(DERBY-6743). MERGE already has required code for insert putting DEFAULT in generated columns. Implementation needs to be added for update putting DEFAULT in generated columns in case of MERGE. In the mean time, I have renamed existing junit test test_015_bug_6414 to atest_015_bug_6414 in MergeStatementTest.java so we do not run into failures.", 
+   "Some detail about the part of the implementation that was tricky for DERBY-6414.", 
+   "The existing code was originally written to handle inserting values in identity columns using DEFAULT. In case of insert, InsertResultSet uses ColumnDescriptors in resultDescription to find the type of the generated columns. This data structure holds the column descriptors of all the columns in the table. All the columns are in this data structure because even though INSERT statement may not explicitly assign a value to each and every column in the table, all the columns end up getting some value in them through an INSERT statement. The code in InsertResultSet.initializeAIcache method relies on availability of all the columns type information. But in case of Update, resultDescription does not include all the columns in the table. It only has the columns being touched by the Update statement(the rest of the columns in the table will retain their original values), and for each of those touched columns, it has a duplicate entry in resultDescription in order to have before and after values for the changed column values. This difference in array content of resultDescription requires us to have separate implementation of initializeAIcache method for insert and update."
+  ], 
+  "revision_id": "1625884"
+ }
+]

@@ -1,0 +1,86 @@
+[
+ {
+  "author": "kotkov", 
+  "date": "2015-03-03T16:43:39.720879Z", 
+  "msg": [
+   "Don't expose internal transaction properties like 'svn:check-locks' through", 
+   "the public FS API and error out on attempts to change them.", 
+   "When creating a transaction, a caller can specify one or multiple flags like", 
+   "SVN_FS_TXN_CHECK_LOCKS.  These flags affect how the transaction behaves", 
+   "when being prepared or committed.  For example, a caller can tell us that", 
+   "she/he doesn't want the back end to perform on-the-fly lock checking or might", 
+   "want to specify the final 'svn:date' value for the transaction.  We want to", 
+   "persist these flags even if a transaction is reopened \u2014 that's why we map", 
+   "them into a set of internal transaction properties, set these properties when", 
+   "a transaction is created, and drop them just before the commit.", 
+   "Prior to this changeset these internal properties were a part of what our", 
+   "FS API returns, and we also allowed changing them (while being particularly", 
+   "picky about 'svn:client-date', as any attempts to change it were silently", 
+   "discarded).  Instead of that, now we filter out *all* internal transaction", 
+   "properties in functions like svn_fs_txn_prop() or svn_fs_txn_proplist(), and", 
+   "we also forbid changing them with svn_fs_change_txn_prop() / _txn_props().", 
+   "We don't need this ourselves, and we no longer allow arbitrary FS API", 
+   "callers to mess with our private implementation details.  Furthermore, this", 
+   "makes the property setters do what they were told to do or fail.  This is a", 
+   "better choice compared to silently stripping out 'svn:client-date' changes", 
+   "and saying that everything went fine.  As a caller, I'd expect a successful", 
+   "call to mean that the requested changes were applied without any problems,", 
+   "and that's the behavior we get with this patch.", 
+   "See related discussion in http://svn.haxx.se/dev/archive-2015-03/0003.shtml", 
+   "Subject: [RFC/PATCH] Modifying internal FS transaction properties", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(is_internal_txn_prop): New helper function.", 
+   "(svn_fs_txn_prop, svn_fs_txn_proplist): Do not return internal txn", 
+   "properties to the caller.", 
+   "(svn_fs_change_txn_prop): Error out on attempts to change internal txn", 
+   "properties.", 
+   "(svn_fs_change_txn_props): Error out on attempts to change internal", 
+   "txn properties.  Instead of silently skipping 'svn:client-date' changes,", 
+   "we now use \"all-or-nothing\" approach and can drop the property filtering", 
+   "code.", 
+   "* subversion/tests/libsvn_fs/fs-test.c", 
+   "(commit_timestamp): Don't test what happens if we try to alter the", 
+   "'svn:client-date' property here.  This (and other possible scenarios)", 
+   "should now be covered by ...", 
+   "(test_internal_txn_props): ...this new test.", 
+   "(test_funcs): Reference new test.", 
+   "* subversion/tests/cmdline/svnlook_tests.py", 
+   "(test_txn_flag): Adjust the test expectation, as we no longer leak", 
+   "internal svn:check-locks values for the transactions."
+  ], 
+  "revision_id": "1663738"
+ }, 
+ {
+  "author": "uschindler", 
+  "date": "2015-03-03T16:37:08.732945Z", 
+  "msg": [
+   "Fix incorrect Jetty versions in CHANGES.txt"
+  ], 
+  "revision_id": "1663737"
+ }, 
+ {
+  "author": "uschindler", 
+  "date": "2015-03-03T16:33:58.747476Z", 
+  "msg": [
+   "SOLR-7184: Update Jetty"
+  ], 
+  "revision_id": "1663736"
+ }, 
+ {
+  "author": "sriksun", 
+  "date": "2015-03-03T16:30:48.183553Z", 
+  "msg": [
+   "FALCON-1057 recipes.twiki should be renamed Recipes.twiki for consistency and to fix a dead. Contributed by Aaron Dossett"
+  ], 
+  "revision_id": "1663735"
+ }, 
+ {
+  "author": "mduerig", 
+  "date": "2015-03-03T16:29:43.959793Z", 
+  "msg": [
+   "OAK-2552: Implement MBean monitoring garbage collection", 
+   "Merged revision 1663730"
+  ], 
+  "revision_id": "1663734"
+ }
+]

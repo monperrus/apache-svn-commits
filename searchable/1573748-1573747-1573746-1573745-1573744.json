@@ -1,0 +1,98 @@
+[
+ {
+  "author": "mattsicker", 
+  "date": "2014-03-03T21:07:30.732662Z", 
+  "msg": [
+   "Added myself to developer list."
+  ], 
+  "revision_id": "1573748"
+ }, 
+ {
+  "author": "danhaywood", 
+  "date": "2014-03-03T21:06:07.986858Z", 
+  "msg": [
+   "docs page"
+  ], 
+  "revision_id": "1573747"
+ }, 
+ {
+  "author": "danhaywood", 
+  "date": "2014-03-03T21:03:56.188080Z", 
+  "msg": [
+   "regular case"
+  ], 
+  "revision_id": "1573746"
+ }, 
+ {
+  "author": "marcus", 
+  "date": "2014-03-03T21:01:20.021255Z", 
+  "msg": [
+   "Fixed broken width for colored boxes"
+  ], 
+  "revision_id": "1573745"
+ }, 
+ {
+  "author": "kotkov", 
+  "date": "2014-03-03T20:50:09.344293Z", 
+  "msg": [
+   "Fix a regression in the way recover and hotcopy behave for old FSFS format 1/2", 
+   "repositories described in http://svn.haxx.se/dev/archive-2014-01/0089.shtml", 
+   "and http://svn.haxx.se/dev/archive-2014-01/0160.shtml", 
+   "In brief, the problem lies in the way the node ids recovery code makes", 
+   "assumptions about the current state of the db/current file.  Namely, the", 
+   "svn_fs_fs__find_max_ids() wrapper introduced in r1503742 behaves like this:", 
+   "svn_fs_fs__find_max_ids()", 
+   "svn_fs_fs__rev_get_root()", 
+   "svn_fs_fs__ensure_revision_exists()", 
+   "...", 
+   "(checks the presence of the revision by reading", 
+   "the most recent db/current file)", 
+   "This last assumption renders the recovery procedure useless for old", 
+   "repositories.  The core of the recovery lies in the ability to recreate the", 
+   "db/current file (which can be missing, out-of-date or even broken) from the", 
+   "latest revision in the repository.  Thus, requiring the db/current contents", 
+   "to be valid and up-to-date in order to be able to run the recovery does not", 
+   "really make sense.  Moreover, it messes up the hotcopy process, which uses", 
+   "the same recovery code when updating db/current.  In order to update the", 
+   "db/current, we need to know the node ids.  In order to get these node ids,", 
+   "we run the recovery, which assumes that the db/current file is up-to-date", 
+   "(thus creating a cyclic dependency).", 
+   "This changeset fixes the root cause of the problem by restoring the 1.8.x way", 
+   "of bootstrapping the node ids recovery.  We need to know the root offset in", 
+   "the revision file, so this can be achieved by parsing the revision file", 
+   "trailer without assuming (and even knowing) something about db/current.", 
+   "Since r1560643, we have two regression tests ensuring that recover and hotcopy", 
+   "work for old repositories.  However, this changeset fixes another use case", 
+   "(recovery with missing or invalid db/current) and it would be nice to have a", 
+   "test checking it.  I splitted the existing recover_fsfs() test into two parts", 
+   "(for the new and the --compatible-version=1.3 repositories) with the second", 
+   "part actually being the new regression test.", 
+   "Finally, with the root cause fixed, we can now drop the first hunk of", 
+   "r1561427, which is a hotcopy-wide workaround for the erroneous", 
+   "ensure_revision_exists() assumption.  It works by prestamping the db/current", 
+   "with a valid revnum and fake node ids (0) in order to be able to execute", 
+   "the \"real\" node ids recovery.  This is no longer required.", 
+   "See http://svn.haxx.se/dev/archive-2014-01/0160.shtml", 
+   "* subversion/libsvn_fs_fs/recovery.c", 
+   "(recover_get_root_offset): New helper function used to retrieve the root", 
+   "node-id offset for non-packed revision files (given a revision number).", 
+   "(svn_fs_fs__find_max_ids): Use recover_get_root_offset() to get the root", 
+   "offset for the node ids recovery.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_update_current): Do not touch the db/current file before calling", 
+   "svn_fs_fs__find_max_ids().", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(recover_fsfs): Move the core of this test into...", 
+   "(corrupt_and_recover_db_current): ...this new helper receiving the minor", 
+   "version of the server being tested.", 
+   "(fsfs_recover_db_current):", 
+   "New test.  Calls corrupt_and_recover_db_current() with the default server", 
+   "minor version.  This is effectively the same test as recover_fsfs() was.", 
+   "(fsfs_recover_old_db_current):", 
+   "New test.  Calls corrupt_and_recover_db_current() with the server minor", 
+   "version set to 3.", 
+   "(test_list): Add references to new tests in place of the old one."
+  ], 
+  "revision_id": "1573744"
+ }
+]

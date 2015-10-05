@@ -1,0 +1,105 @@
+[
+ {
+  "author": "mikemccand", 
+  "date": "2015-02-28T15:26:35.211166Z", 
+  "msg": [
+   "make SimpleText's checkIntegrity more robust so it's not fooled if you index the string END"
+  ], 
+  "revision_id": "1662948"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-28T15:24:05.065857Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "Tighten svn_fs_x__revision_file_t's memory usage.", 
+   "Since we use 64kB read buffers, we should release that memory as soon as", 
+   "the revision file object gets closed, which we often do explicitly.  To", 
+   "that end, give the structure a private sub-pool that it will use for all", 
+   "file, stream and other allocations.  Clear that upon close.", 
+   "Once at it, make the structure self-contained such that we don't need to", 
+   "pass as many auxilliary parameters to internal functions.", 
+   "* subversion/libsvn_fs_x/rev_file.c", 
+   "(svn_fs_x__revision_file_t): Add FS to make the struct self-contained.", 
+   "Explain that the POOL is now private.", 
+   "(create_revision_file): Update constructor.", 
+   "(open_pack_or_rev_file): Take all essential parameters from the FILE", 
+   "and make sure all objects get allocated from", 
+   "its private POOL.", 
+   "(svn_fs_x__rev_file_open,", 
+   "svn_fs_x__rev_file_open_writable): Update callers.", 
+   "(svn_fs_x__close_revision_file): Release memory asap."
+  ], 
+  "revision_id": "1662947"
+ }, 
+ {
+  "author": "schor", 
+  "date": "2015-02-28T15:08:27.480922Z", 
+  "msg": [
+   "[UIMA-4267] Remove now unused method after previous fix."
+  ], 
+  "revision_id": "1662946"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-28T14:44:00.192665Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "Unify naming or FSX revision file API functions.", 
+   "Make them all start with svn_fs_x__rev_file_ .", 
+   "* subversion/libsvn_fs_x/rev_file.h", 
+   "(svn_fs_x__open_pack_or_rev_file,", 
+   "svn_fs_x__open_pack_or_rev_file_writable,", 
+   "svn_fs_x__open_proto_rev_file,", 
+   "svn_fs_x__wrap_temp_rev_file): Rename to ...", 
+   "(svn_fs_x__rev_file_open,", 
+   "svn_fs_x__rev_file_open_writable,", 
+   "svn_fs_x__rev_file_open_proto_rev,", 
+   "svn_fs_x__rev_file_wrap_temp): ... these.", 
+   "* subversion/libsvn_fs_x/rev_file.c", 
+   "(svn_fs_x__open_pack_or_rev_file,", 
+   "svn_fs_x__open_pack_or_rev_file_writable): Rename to ...", 
+   "(svn_fs_x__rev_file_open,", 
+   "svn_fs_x__rev_file_open_writable): ... these.", 
+   "(svn_fs_x__open_proto_rev_file): Rename to ...", 
+   "(svn_fs_x__rev_file_open_proto_rev): ... this and update function call.", 
+   "(svn_fs_x__wrap_temp_rev_file): Rename to ...", 
+   "(svn_fs_x__rev_file_wrap_temp): ... this.", 
+   "* subversion/libsvn_fs_x/cached_data.c", 
+   "(open_and_seek_revision,", 
+   "open_and_seek_transaction,", 
+   "get_node_revision_body,", 
+   "svn_fs_x__get_mergeinfo_count,", 
+   "auto_open_shared_file,", 
+   "svn_fs_x__check_rep,", 
+   "svn_fs_x__get_changes): Update callers.", 
+   "* subversion/libsvn_fs_x/fs_x.c", 
+   "(write_revision_zero): Same.", 
+   "* subversion/libsvn_fs_x/index.c", 
+   "(svn_fs_x__l2p_get_max_ids): Same.", 
+   "* subversion/libsvn_fs_x/pack.c", 
+   "(write_reps_containers,", 
+   "pack_range,", 
+   "append_revision): Same.", 
+   "* subversion/libsvn_fs_x/verify.c", 
+   "(verify_index_checksums,", 
+   "compare_l2p_to_p2l_index,", 
+   "compare_p2l_to_l2p_index,", 
+   "compare_p2l_to_rev): Same."
+  ], 
+  "revision_id": "1662945"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2015-02-28T14:35:24.554410Z", 
+  "msg": [
+   "On the fsx-1.10 branch:", 
+   "Don't misuse error objects for control flow during FSX recovery.", 
+   "* subversion/libsvn_fs_x/recovery.c", 
+   "(revision_file_exists): New utility to check for rev file presence.", 
+   "(recover_get_largest_revision): Use the new util instead of deciphering", 
+   "the errors when trying to open rev files."
+  ], 
+  "revision_id": "1662944"
+ }
+]

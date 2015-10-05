@@ -1,0 +1,102 @@
+[
+ {
+  "author": "christef", 
+  "date": "2013-08-08T16:36:46.278108Z", 
+  "msg": [
+   "CMS commit to ooo-site by christef"
+  ], 
+  "revision_id": "1511858"
+ }, 
+ {
+  "author": "james-masanz", 
+  "date": "2013-08-08T16:35:51.888954Z", 
+  "msg": [
+   "tests run within Eclipse but fail at build time! So, like in 3.0, use skipTests for now"
+  ], 
+  "revision_id": "1511857"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2013-08-08T16:33:13.604125Z", 
+  "msg": [
+   "On the log-addressing branch:  Enable log->phys address translation.", 
+   "That means svn_fs_fs__item_offset is now routed through l2p index lookup.", 
+   "Data read code needs to adapt for the lack of the \"revision header\"", 
+   "in logical addressing mode.  Instead, root node and changed paths list", 
+   "have fixed logical addresses (item_index) now.", 
+   "The main change is to the transaction handling as this has to write", 
+   "to the proto-index file whenever we add an item to the proto-rev file,", 
+   "i.e. when it's being assigned to its final offset.  For that, we simply", 
+   "divert the assignment of offsets to a new allocate_item_index() function", 
+   "and call the new store_l2p_index_entry() in other places.", 
+   "One critical point is the transition between physical and logical", 
+   "addressing mode.  The switch-over point is known in advance and all", 
+   "transactions based on the last phys. addressing revision will use", 
+   "logical addressing.  Transactions that based on older revisions", 
+   "use physical addressing and cannot be committed beyond the switch-", 
+   "over point (cause SVN_ERR_FS_TXN_ADDRESSING_MODE_OUT_OF_DATE).", 
+   "Packing will not work until the reverse index (phys->log) is available.", 
+   "Verififaction and hotcopying need code changes well.", 
+   "Also, dbg_log_access() is not updated in this commit as the code would", 
+   "be transient.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_FS_TXN_ADDRESSING_MODE_OUT_OF_DATE): define new error code", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_TXN_ITEM_INDEX): define yet another file name", 
+   "* subversion/libsvn_fs_fs/util.h", 
+   "(svn_fs_fs__item_offset): remove declaration here", 
+   "(svn_fs_fs__path_txn_item_index): declare yet another file name getter", 
+   "* subversion/libsvn_fs_fs/util.c", 
+   "(svn_fs_fs__item_offset): remove code here", 
+   "(svn_fs_fs__path_txn_item_index): implement", 
+   "* subversion/libsvn_fs_fs/index.h", 
+   "(svn_fs_fs__item_offset): declare here instead of utils.h", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(svn_fs_fs__item_offset): re-implement using index lookup where needed", 
+   "* subversion/libsvn_fs_fs/id.h", 
+   "(svn_fs_fs__id_create_root): declare new ID constructor using the", 
+   "fact that the root has a fixed ID", 
+   "* subversion/libsvn_fs_fs/id.c", 
+   "(svn_fs_fs__id_create_root): implement it", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(SVN_FS_FS__ITEM_TYPE_ANY_REP,", 
+   "SVN_FS_FS__ITEM_TYPE_NODEREV,", 
+   "SVN_FS_FS__ITEM_TYPE_CHANGES): remove here as index.h defines these", 
+   "(svn_fs_fs__rev_get_root,", 
+   "svn_fs_fs__get_changes): use fixed addresses in in log addressing mode", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(write_revision_zero): use different r0 templates in log addressing mode", 
+   "* subversion/libsvn_fs_fs/transaction.c", 
+   "(store_l2p_index_entry,", 
+   "allocate_item_index): new generic item_index handling functions that", 
+   "work for log and phys addressing alike", 
+   "(rep_write_contents_close): call the new helpers", 
+   "(write_hash_rep,", 
+   "write_hash_delta_rep): ditto; also take the item type as parameter", 
+   "as a preparation for later changes", 
+   "(write_final_rev): update caller; write addressing mode-dependent parts", 
+   "(write_final_changed_path_info): write l2p index entry as well,", 
+   "requires extra parameter", 
+   "(commit_body): update caller;", 
+   "ensure correct addressing mode switch-over;", 
+   "write addressing mode-dependent parts"
+  ], 
+  "revision_id": "1511856"
+ }, 
+ {
+  "author": "gpetracek", 
+  "date": "2013-08-08T16:30:08.739365Z", 
+  "msg": [
+   "WINK-404 cleanup of tests which depend on the system"
+  ], 
+  "revision_id": "1511855"
+ }, 
+ {
+  "author": "nkeywal", 
+  "date": "2013-08-08T16:27:40.362416Z", 
+  "msg": [
+   "HBASE-9156  2000ms timeout for some client calls"
+  ], 
+  "revision_id": "1511854"
+ }
+]

@@ -1,0 +1,111 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-05-23T23:02:27.001415Z", 
+  "msg": [
+   "Fine-tune 'svnfsfs stats' output.", 
+   "* tools/server-side/svnfsfs/stats-cmd.c", 
+   "(print_extensions_by_changes): Use the full space to the left for", 
+   "(potentially long) file extensions.", 
+   "Don't call representations changes.", 
+   "(print_extensions_by_nodes,", 
+   "print_extensions_by_reps,", 
+   "print_stats): Allow for longer file extensions here as well."
+  ], 
+  "revision_id": "1597213"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-05-23T22:56:22.789876Z", 
+  "msg": [
+   "Sync'ing FSX with FSFS:", 
+   "Port the low-level checksum support including verification and tests.", 
+   "This is not a simple merge but mainly a \"guided reimplementation\",", 
+   "taking the FSFS code as a blueprint but applying similar changes in", 
+   "more places (as we have more item types in FSX) and accounting for", 
+   "all the low-level differences.", 
+   "As utility code, add private svn_checksum__* APIs to wrap streams", 
+   "with a convenient checksum calculator.", 
+   "Record the following revisions as affectively having been merged", 
+   "from FSFS to FSX: r1573371,1588812,1588899,1588906.", 
+   "* subversion/libsvn_fs_x", 
+   "(): Updated mergeinfo.", 
+   "* subversion/include/private/svn_subr_private.h", 
+   "(svn_checksum__wrap_write_stream,", 
+   "svn_checksum__wrap_write_stream_fnv1a_32x4): Declare new private API;", 
+   "only the second one is currently in use.", 
+   "* subversion/libsvn_subr/checksum.c", 
+   "(stream_baton_t,", 
+   "write_handler,", 
+   "close_handler,", 
+   "wrap_write_stream): Implement generic checksumming stream wrapper.", 
+   "(svn_checksum__wrap_write_stream,", 
+   "close_handler_fnv1a_32x4,", 
+   "svn_checksum__wrap_write_stream_fnv1a_32x4): Implement new private", 
+   "APIs on top of it.", 
+   "* subversion/libsvn_fs_x/index.h", 
+   "(svn_fs_x__p2l_entry_t): Attach a checksum to every item.", 
+   "* subversion/libsvn_fs_x/index.c", 
+   "(svn_fs_x__p2l_index_create): Store the checksums.", 
+   "(read_entry): Read them again.", 
+   "(p2l_index_lookup): Explicitly init the checksum for the dynamically", 
+   "created \"past-end-of-file\" dummy entry.", 
+   "* subversion/libsvn_fs_x/fs_x.c", 
+   "(write_revision_zero): Update index P2L file template for r0.", 
+   "* subversion/libsvn_fs_x/transaction.c", 
+   "(rep_write_baton): Hold the new low-level checksum.", 
+   "(rep_write_get_baton): Wrap the raw rep stream with a checksum calculator.", 
+   "(rep_write_contents_close): Store the checksum in the proto index entry.", 
+   "(write_container_delta_rep): Wrap the raw rep stream with a checksum", 
+   "calculator and tell it to write directly", 
+   "to the proto index entry.", 
+   "(write_final_rev): Calculate checksums for noderevs as well as ...", 
+   "(write_final_changed_path_info): ... for changed paths lists.", 
+   "* subversion/libsvn_fs_x/pack.c", 
+   "(auto_pad_block): Explicitly initialize checksums for unused ranges.", 
+   "(write_nodes_container,", 
+   "write_reps_container,", 
+   "write_changes_container): Calculate and store the low-level checksums.", 
+   "* subversion/libsvn_fs_x/verify.c", 
+   "(STREAM_THRESHOLD,", 
+   "expect_buffer_nul,", 
+   "read_all_nul,", 
+   "expected_checksum,", 
+   "expected_buffered_checksum,", 
+   "expected_streamed_checksum,", 
+   "compare_p2l_to_rev): New low-level checksum checking code taken", 
+   "over from FSFS.", 
+   "(verify_index_consistency): Execute the new verification step as well.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(verify_quickly): Enable for FSX as well."
+  ], 
+  "revision_id": "1597212"
+ }, 
+ {
+  "author": "mattsicker", 
+  "date": "2014-05-23T22:54:56.864962Z", 
+  "msg": [
+   "Add type conversion classes.", 
+   "- Interface for conversion.", 
+   "- Singleton utility class containing basic converters and a registry.", 
+   "- Will be used for plugin type conversion."
+  ], 
+  "revision_id": "1597211"
+ }, 
+ {
+  "author": "sandy", 
+  "date": "2014-05-23T22:53:17.375932Z", 
+  "msg": [
+   "YARN-2073. Fair Scheduler: Add a utilization threshold to prevent preempting resources when cluster is free (Karthik Kambatla via Sandy Ryza)"
+  ], 
+  "revision_id": "1597210"
+ }, 
+ {
+  "author": "sandy", 
+  "date": "2014-05-23T22:52:46.534217Z", 
+  "msg": [
+   "YARN-2073. Fair Scheduler: Add a utilization threshold to prevent preempting resources when cluster is free (Karthik Kambatla via Sandy Ryza)"
+  ], 
+  "revision_id": "1597209"
+ }
+]

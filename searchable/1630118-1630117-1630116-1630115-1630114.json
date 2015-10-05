@@ -1,0 +1,101 @@
+[
+ {
+  "author": "khmarbaise", 
+  "date": "2014-10-08T14:22:55.241866Z", 
+  "msg": [
+   "[MSHADE-179]", 
+   "- Fixed rest of RAT issues"
+  ], 
+  "revision_id": "1630118"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2014-10-08T14:22:40.469896Z", 
+  "msg": [
+   "For non-interactive mode, allow fine-grained control over which SSL", 
+   "certificate failures are considered fatal and which may be ignored.", 
+   "The --trust-server-cert option only accepts certificates signed by an", 
+   "unknown CA, and rejects certificates which fail for other reasons.", 
+   "However, in practice, people run into broken SSL configurations that", 
+   "trigger other failure conditions such as hostname/CN mismatch, expired", 
+   "certs, etc. Sometimes they are not in a position to fix the problem themselves", 
+   "and can't get work done (writing scripts) since SVN refuses to operate.", 
+   "This topic is one of the most discussed issues in the #svn IRC channel.", 
+   "Somewhat less so on the users@ mailing lists, though it also occurs there.", 
+   "There is no real reason to prefer one kind of failure condition over", 
+   "any other. An invalid cert is an invalid cert, regardless of why it fails", 
+   "validation. Ultimately, it is up to users to waive trust in SSL when it", 
+   "gets in the way in a particular situation. We should not be making this", 
+   "decision for them.", 
+   "Deprecate the --trust-server-cert option and add the following new options", 
+   "to 'svn', exposing all possible failure modes the underlying API can handle:", 
+   "--trust-unknown-ca       : with --non-interactive, accept SSL server", 
+   "certificates from unknown certificate authorities", 
+   "--trust-cn-mismatch      : with --non-interactive, accept SSL server", 
+   "certificates even if the server hostname does not", 
+   "match the certificate's common name attribute", 
+   "--trust-expired          : with --non-interactive, accept expired SSL server", 
+   "certificates", 
+   "--trust-not-yet-valid    : with --non-interactive, accept SSL server", 
+   "certificates from the future", 
+   "--trust-other-failure    : with --non-interactive, accept SSL server", 
+   "certificates with failures other than the above", 
+   "* subversion/include/svn_cmdline.h", 
+   "(svn_cmdline_create_auth_baton2): Declare and document new parameters.", 
+   "(svn_cmdline_create_auth_baton): Deprecate.", 
+   "* subversion/libsvn_subr/cmdline.c", 
+   "(trust_server_cert_non_interactive_baton): New baton.", 
+   "(ssl_trust_unknown_server_cert): Rename to ...", 
+   "(trust_server_cert_non_interactive): .. this and implement generic", 
+   "validation failure checks according to flags passed in baton.", 
+   "(svn_cmdline_create_auth_baton): Move to libsvn_subr/deprecated.c.", 
+   "(svn_cmdline_create_auth_baton2): Implement new revision of this API with", 
+   "new options trust_server_cert_unknown_ca, trust_server_cert_cn_mismatch,", 
+   "trust_server_cert_expired, trust_server_cert_not_yet_valid, and", 
+   "trust_server_cert_other_failure.", 
+   "* subversion/libsvn_subr/deprecated.c", 
+   "(svn_cmdline_create_auth_baton): Implement as wrapper around", 
+   "svn_cmdline_create_auth_baton2.", 
+   "* subversion/svn/cl.h", 
+   "(svn_cl__opt_state_t): Add new options trust_server_cert_unknown_ca,", 
+   "trust_server_cert_cn_mismatch, trust_server_cert_expired,", 
+   "trust_server_cert_not_yet_valid, and trust_server_cert_other_failure.", 
+   ".", 
+   "* subversion/svn/svn.c", 
+   "(svn_cl__longopt_t): Add new options opt_trust_server_cert_unknown_ca,", 
+   "opt_trust_server_cert_cn_mismatch, opt_trust_server_cert_expired,", 
+   "opt_trust_server_cert_not_yet_valid, opt_trust_server_cert_other_failure.", 
+   "(svn_cl__options): Add options and help text for --trust-unknown-ca,", 
+   "--trust-cn-mismatch, --trust-expired, --trust-not-yet-valid, and", 
+   "--trust-other-failure.", 
+   "(svn_cl__global_options): Add the new options here.", 
+   "(sub_main): Process new options and use svn_cmdline_create_auth_baton2().", 
+   "* subversion/tests/cmdline/getopt_tests_data/svn_help_log_switch_stdout:", 
+   "Adjust expected output."
+  ], 
+  "revision_id": "1630117"
+ }, 
+ {
+  "author": "axb", 
+  "date": "2014-10-08T14:19:40.161361Z", 
+  "msg": [], 
+  "revision_id": "1630116"
+ }, 
+ {
+  "author": "khmarbaise", 
+  "date": "2014-10-08T14:17:11.905626Z", 
+  "msg": [
+   "[MSHADE-180]", 
+   "- Upgrade plexus-utils from 3.0.15 to 3.0.18"
+  ], 
+  "revision_id": "1630115"
+ }, 
+ {
+  "author": "kwright", 
+  "date": "2014-10-08T14:11:41.191491Z", 
+  "msg": [
+   "Update jira connector"
+  ], 
+  "revision_id": "1630114"
+ }
+]

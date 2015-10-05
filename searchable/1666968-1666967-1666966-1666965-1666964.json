@@ -1,0 +1,68 @@
+[
+ {
+  "author": "markt", 
+  "date": "2015-03-16T11:38:29.015493Z", 
+  "msg": [
+   "Use the correct capitalisation."
+  ], 
+  "revision_id": "1666968"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-03-16T11:37:51.778173Z", 
+  "msg": [
+   "Use the correct capitalisation."
+  ], 
+  "revision_id": "1666967"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-03-16T11:37:13.090266Z", 
+  "msg": [
+   "Use correct capitalisation."
+  ], 
+  "revision_id": "1666966"
+ }, 
+ {
+  "author": "rhuijben", 
+  "date": "2015-03-16T11:30:04.841769Z", 
+  "msg": [
+   "Reduce the perceived very slow operation of svn log URL via mod_dav on", 
+   "large result sets that return not that much data, by flushing the", 
+   "httpd output cache a few times for the 'first few log results'.", 
+   "Usually httpd tries to produce data 8 KByte at a time, but depending on", 
+   "the type of log request this may be every few hundred revisions and", 
+   "in not that uncommon cases on svn.apache.org only after 5-30 seconds.", 
+   "This patch explicitly flushes the caching after 1,2,4,8,16,...2048", 
+   "results, so the log handling will appear to be streamy as expected,", 
+   "while it falls back to the original handling when retrieving very", 
+   "many/all revisions.", 
+   "In theory this makes the log report a bit slower, because flushes cost", 
+   "a bit performance... but in general you (and some operations like", 
+   "'svn merge') just want the first result (or first few results) as fast", 
+   "as possible. (And in many cases ^C or SVN_ERR_CEASE_INVOCATION, the", 
+   "remaining results).", 
+   "This patch should reduce the initial delay before the first result of:", 
+   "$ svn log ^/subversion/branches/1.8.x -q", 
+   "which is currently about 10 seconds for me, to less than a second.", 
+   "See the '1.9.x JavaHL: long initial delay when performing a log' thread", 
+   "for an even worse example.", 
+   "This minor fix migh just fix one of the reasons why many users call", 
+   "Subversion slow, and prefer a local repository.", 
+   "* subversion/mod_dav_svn/reports/log.c", 
+   "(log_receiver_baton): Add two variables.", 
+   "(log_receiver): Add explicit flush code on every 2^x for x 0..11 revisions.", 
+   "(dav_svn__log_report): Update baton init."
+  ], 
+  "revision_id": "1666965"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2015-03-16T11:27:03.380733Z", 
+  "msg": [
+   "Follow up to r1664875.", 
+   "Don't depend on class in option WebSocket module for unit tests."
+  ], 
+  "revision_id": "1666964"
+ }
+]

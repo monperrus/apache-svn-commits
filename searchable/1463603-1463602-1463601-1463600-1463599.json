@@ -1,0 +1,66 @@
+[
+ {
+  "author": "elecharny", 
+  "date": "2013-04-02T15:44:39.009762Z", 
+  "msg": [
+   "Added the RevisionName class, and a comparator and its tests"
+  ], 
+  "revision_id": "1463603"
+ }, 
+ {
+  "author": "nslater", 
+  "date": "2013-04-02T15:43:22.603015Z", 
+  "msg": [
+   "Update to 1.2.2 release"
+  ], 
+  "revision_id": "1463602"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2013-04-02T15:43:15.441603Z", 
+  "msg": [
+   "Fix WC upgrades from old formats that didn't yet have a NODES table to", 
+   "format 31 and beyond.", 
+   "Format 31 introduced a new column in NODES, called inherited_props. When an", 
+   "svn client which uses format 31 or greater is used to upgrade a pre-NODES WC,", 
+   "this new column will be created as part of the CREATE TABLE statement which", 
+   "creates the NODES table.", 
+   "The format 31 upgrade code would unconditionally attempt to add a new", 
+   "inherited_props column, which raises an error if the column already exists.", 
+   "To fix this, check whether the inherited_props column exists before", 
+   "attempting to create the column. Unfortunately this has to be done", 
+   "from C as there doesn't seem to be a way of executing an ALTER TABLE", 
+   "statement based on the result of a PRAGMA table_info() statement.", 
+   "(If somebody knows a better way of doing this, I welcome any suggestions.)", 
+   "* subversion/libsvn_wc/wc-metadata.sql", 
+   "(STMT_UPGRADE_TO_31): Split this query into two parts, ...", 
+   "(STMT_UPGRADE_TO_31_ALTER_TABLE): ... this one, which creates the new", 
+   "column and can be skipped if needed, and ...", 
+   "(STMT_UPGRADE_TO_31_FINALIZE): ... this one, which runs other upgrade", 
+   "statements which are idempotent.", 
+   "* subversion/libsvn_wc/wc-queries.sql", 
+   "(STMT_PRAGMA_TABLE_INFO_NODES): New statement which returns info about", 
+   "the NODES table, such as the names of existing columns.", 
+   "* subversion/libsvn_wc/upgrade.c", 
+   "(bump_to_31): Check if the inherited_props column exists before running", 
+   "the SQL statement which attempts to create it."
+  ], 
+  "revision_id": "1463601"
+ }, 
+ {
+  "author": "dkulp", 
+  "date": "2013-04-02T15:42:04.035554Z", 
+  "msg": [
+   "Update to make things work if woodstox isn't found and insecure parsing is turned on."
+  ], 
+  "revision_id": "1463600"
+ }, 
+ {
+  "author": "ivank", 
+  "date": "2013-04-02T15:38:49.333470Z", 
+  "msg": [
+   "BOOKKEEPER-595: Crash of inprocess autorecovery daemon should not take down the bookie (ivank)"
+  ], 
+  "revision_id": "1463599"
+ }
+]

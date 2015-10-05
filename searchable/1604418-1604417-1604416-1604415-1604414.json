@@ -1,0 +1,88 @@
+[
+ {
+  "author": "rpopma", 
+  "date": "2014-06-21T15:10:00.086091Z", 
+  "msg": [
+   "show error details when configuration is invalid"
+  ], 
+  "revision_id": "1604418"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-21T15:03:29.550839Z", 
+  "msg": [
+   "In preparation of having a single file containing rev data and indexes,", 
+   "unify revision_file_t initialization:  Always open the rev file instead", 
+   "of just initializing it and opening it upon demand.", 
+   "* subversion/libsvn_fs_fs/rev_file.h", 
+   "(svn_fs_fs__init_revision_file): Drop.", 
+   "* subversion/libsvn_fs_fs/rev_file.c", 
+   "(svn_fs_fs__init_revision_file): Rename to ..", 
+   "(init_revision_file): .. this as it's no longer an API.", 
+   "(svn_fs_fs__open_pack_or_rev_file): Update caller.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(dbg_log_access): Use \"open pack file\" instead of plain init", 
+   "followed by later auto-open.  Update all", 
+   "references to REV_FILE.", 
+   "(svn_fs_fs__check_rep): Same.", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(svn_fs_fs__l2p_get_max_ids): Same.", 
+   "* subversion/libsvn_fs_fs/verify.c", 
+   "(compare_l2p_to_p2l_index,", 
+   "compare_p2l_to_l2p_index): Same."
+  ], 
+  "revision_id": "1604417"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-21T15:02:12.669688Z", 
+  "msg": [
+   "In preparation of having a single file containing rev data and indexes,", 
+   "teach our index data stream to use only a sub-section of a given file.", 
+   "However, don't expose that ability, yet.", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(svn_fs_fs__packed_number_stream_t): Add members to select the offset", 
+   "range that the stream covers.", 
+   "(packed_stream_read): Limit to the upper end of the stream.", 
+   "(packed_stream_open): Set the range for the stream data to the full", 
+   "index file, for now.", 
+   "(packed_stream_seek,", 
+   "packed_stream_offset): Use / report stream offsets relative to the", 
+   "beginning of the stream instead of the under-", 
+   "lying file.  That will ensure identical content", 
+   "for the indexes before and after combining", 
+   "them with the data file."
+  ], 
+  "revision_id": "1604416"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-21T14:59:26.840202Z", 
+  "msg": [
+   "Unify svnadmin verify --keep-going check for all FSFS formats.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(verify_keep_going): Corrupt at the beginning of the rep file", 
+   "instead of appending to it.  We now get", 
+   "the same error messages for all formats."
+  ], 
+  "revision_id": "1604415"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-06-21T14:58:04.811949Z", 
+  "msg": [
+   "Fix the performance regression of packed vs. non-packed repos in 1.9 if", 
+   "revprop caching has been disabled.", 
+   "The 1.9 default \"compress packed revprops\" added about 1ms CPU delay", 
+   "before the requested revision properties can be accessed.  With revprop", 
+   "caching enabled, this easily pays off by not having to read multiple", 
+   "revprop pack files per shard (10ms each for HDD-backed repos).  Without", 
+   "revprop caching, disk-cached non-compressed revprops will be faster.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(read_config): Default to not compressing packed revprops.", 
+   "(write_config): Update FSFS config template to reflect the new /", 
+   "restored default."
+  ], 
+  "revision_id": "1604414"
+ }
+]

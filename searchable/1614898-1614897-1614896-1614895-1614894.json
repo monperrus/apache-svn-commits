@@ -1,0 +1,70 @@
+[
+ {
+  "author": "bdelacretaz", 
+  "date": "2014-07-31T14:04:30.512667Z", 
+  "msg": [
+   "SLING-3763 - guard against reuse of the renderers"
+  ], 
+  "revision_id": "1614898"
+ }, 
+ {
+  "author": "bdelacretaz", 
+  "date": "2014-07-31T14:03:53.134696Z", 
+  "msg": [
+   "Ignore MultipleOsgiConsoleTest by default"
+  ], 
+  "revision_id": "1614897"
+ }, 
+ {
+  "author": "thomasm", 
+  "date": "2014-07-31T14:02:18.052589Z", 
+  "msg": [
+   "Oak 1.0.4 release notes"
+  ], 
+  "revision_id": "1614896"
+ }, 
+ {
+  "author": "aconway", 
+  "date": "2014-07-31T13:55:11.051180Z", 
+  "msg": [
+   "QPID-5942: qpid HA cluster may end-up in joining state after HA primary is killed", 
+   "There are two issues here, both related to the fact that rgmanager sees qpidd", 
+   "and qpidd-primary as two separate services.", 
+   "1. The service start/stop scripts can be called concurrently. This can lead to", 
+   "running a qpidd process who's pid is not in the pidfile. rgmanager cannot", 
+   "detect or kill this qpidd and cannot start another qpidd because of the lock", 
+   "on the qpidd data directory.", 
+   "2. rgmanager sees a primary failure as two failures: qpidd and qpidd-primary,", 
+   "and will then try to stop and start both services. The order of these actions", 
+   "is not defined and can lead to rgmanager killing a service it has just", 
+   "started.", 
+   "This patch makes two major changes to the init scripts:", 
+   "1. Uses flock to lock the sensitive stop/start part of the scripts to ensure", 
+   "they are not executed concurrently.", 
+   "2. On \"stop\" the scripts check if a running qpidd is primary or not. \"qpidd stop\"", 
+   "is a no-op if the running broker is primary, \"qpidd-primary stop\" is a no op", 
+   "if it is not. This ensures that a broker will be stopped by the same stream", 
+   "of service actions that started it.", 
+   "Minor changes in this patch:", 
+   "- better logging of broker start-up and shut-down sequence.", 
+   "- qpid-ha heartbeat use half of timeout option.", 
+   "- add missing timeouts in qpid-ha.", 
+   "Notes:", 
+   "This changes the behavior of 'clusvcadm -d <qpidd-service>' on the primary node.", 
+   "Previously this would have stopped the qpidd service on that node, killed the", 
+   "qpidd process and relocated the primary service. Now this will stop the qpidd", 
+   "service (as far as rgmanager is concerned) but will not kill qpidd or relocate", 
+   "the primary service. When the primary is relocated the qpidd service wil not be", 
+   "able to re-start on that node until it is re-enabled with 'clusvcadm -e'."
+  ], 
+  "revision_id": "1614895"
+ }, 
+ {
+  "author": "ilgrosso", 
+  "date": "2014-07-31T13:55:09.845394Z", 
+  "msg": [
+   "[SYNCOPE-535] Merge from 1_2_X"
+  ], 
+  "revision_id": "1614894"
+ }
+]

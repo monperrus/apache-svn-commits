@@ -1,0 +1,98 @@
+[
+ {
+  "author": "pmouawad", 
+  "date": "2012-12-20T22:36:01.752841Z", 
+  "msg": [
+   "Fill New and Noteworthy section"
+  ], 
+  "revision_id": "1424738"
+ }, 
+ {
+  "author": "suresh", 
+  "date": "2012-12-20T22:32:23.367897Z", 
+  "msg": [
+   "HDFS-4320. Merge 1424734 from branch-1"
+  ], 
+  "revision_id": "1424737"
+ }, 
+ {
+  "author": "cmpilato", 
+  "date": "2012-12-20T22:30:03.354563Z", 
+  "msg": [
+   "On the 'issue-4116-dev' branch:  Check in a whopper of a change to", 
+   "svnrdump's dump_editor which, unfortunately, doesn't really work all", 
+   "the time.", 
+   "(I'm working on this branch because I've made so many incremental", 
+   "changes without committing that this is the nasty result.  Now I'm", 
+   "losing track of what does and doesn't work.  Ugh.)", 
+   "* subversion/svnrdump/dump_editor.c", 
+   "(struct dir_baton): Add some fields: 'props', 'deleted_props',", 
+   "'dump_props' and 'dump_newlines'.", 
+   "(struct file_baton): Add some fields: 'pool', 'props',", 
+   "'deleted_props', 'is_copy', 'copyfrom_path', 'copyfrom_rev',", 
+   "action, 'dump_text', and 'dump_props'.", 
+   "(struct dump_edit_baton): Remove 'props', 'deleted_props',", 
+   "'propstring', 'dump_text', 'dump_props', and 'dump_newlines'.  Add", 
+   "'pending_kind' and 'pending_baton'.", 
+   "(make_dir_baton): Use stricter type for 'parent_dir_baton' (renaming", 
+   "to 'pb').  Also, init the new 'props' and 'deleted_props' fields.", 
+   "(make_file_baton): New helper function.", 
+   "(do_dump_props): Lose 'dump_data_too' parameter and handling -- just", 
+   "let the NULL-ness of the return variable indicate whether data", 
+   "should be dumped or return in that variable.", 
+   "(dump_node): Lose the 'kind' parameter in favor of directory and", 
+   "file baton parameters (both of which may be NULL -- the deletion", 
+   "case), but at least one of which must be.  Rework this function in", 
+   "light of the new locations of the dump_props flags, etc.", 
+   "(dump_pending): Now consult the edit baton's 'pending_baton' and", 
+   "'pending_kind' variables to know if something is pending and of", 
+   "what kind it is.  This allows the handling of pending file batons", 
+   "too, now.", 
+   "(open_root): Don't init property hashes and such -- make_dir_baton()", 
+   "does that now.  Update calls to dump_node().  When converting an", 
+   "open_root() into an add of the top-level directory, stash the dir", 
+   "baton in the pending area.", 
+   "(deleted_entry): Update call to dump_pending(), and rework a comment", 
+   "for clarity.", 
+   "(add_directory): Call dump_pending() before making the new baton.", 
+   "Update call to dump_node().  Stash the dir baton in the pending", 
+   "area.", 
+   "(open_directory): Update call to dump_pending().", 
+   "(close_directory): Try to figure out what to do in light of the fact", 
+   "that the handling of this directory could have been interrupted at", 
+   "any point between its open and its closure.  Updates call(s) to", 
+   "dump_node().", 
+   "(add_file, open_file): Use make_file_baton() to create the file", 
+   "baton.  Update call to dump_pending().  Don't actually dump the", 
+   "node here -- rather, squirrel away the necessary bits to do so", 
+   "later (in close_file()) in the file baton.", 
+   "(change_dir_prop): Handle any pending batons, and track changes in", 
+   "locations of property hashes, flags, etc.", 
+   "(change_file_prop): Track changes in locations of property hashes,", 
+   "flags, etc.", 
+   "(apply_textdelta): Minor debugging/comment tweaks, and track the new", 
+   "location of the 'dump_text' flag.", 
+   "(close_file): Actually dump the file node, now that we know all that", 
+   "we need to know about it.", 
+   "(svn_rdump__get_dump_editor): Initialize the new 'pending_kind'", 
+   "baton member to NULL."
+  ], 
+  "revision_id": "1424736"
+ }, 
+ {
+  "author": "pent", 
+  "date": "2012-12-20T22:29:00.193989Z", 
+  "msg": [
+   "Updated baselines"
+  ], 
+  "revision_id": "1424735"
+ }, 
+ {
+  "author": "suresh", 
+  "date": "2012-12-20T22:20:10.906169Z", 
+  "msg": [
+   "HDFS-4320. Add a separate configuration for namenode rpc address instead of using fs.default.name. Contributed by Mostafa Elhemali."
+  ], 
+  "revision_id": "1424734"
+ }
+]

@@ -1,0 +1,60 @@
+[
+ {
+  "author": "hboutemy", 
+  "date": "2014-04-13T10:03:55.583416Z", 
+  "msg": [
+   "simplified configuration: values are either inherited or default values"
+  ], 
+  "revision_id": "1586948"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-13T09:45:03.332079Z", 
+  "msg": [
+   "Using error objects to control the control flow in non-errorneous", 
+   "cases is bad style. Moreover, it is very expensive as the condition", 
+   "occurs frequently and the error objects carry their own pools,", 
+   "created from a thread-safe root pool. The localization of error", 
+   "messages makes things even worse.", 
+   "dag_open should not return an error to open_path if the dirent", 
+   "cannot be found, pass a NULL node back instead.  This eliminates", 
+   "about 50% of all transitional error objects during log-y operations.", 
+   "As there are only 2 callers of dag_open, they are easy to adapt.", 
+   "This also slightly improves MT scalability of the FSFS DAG traversal", 
+   "code as the global pool allocator uses a process-wide mutex.", 
+   "* subversion/libsvn_fs_fs/dag.h", 
+   "(svn_fs_fs__dag_clone_root): Document the new error behavior.", 
+   "* subversion/libsvn_fs_fs/dag.c", 
+   "(svn_fs_fs__dag_clone_child): This caller actually wants an error,", 
+   "thus we create it here.", 
+   "(svn_fs_fs__dag_open): Return NULL if entry cannot be found.", 
+   "* subversion/libsvn_fs_fs/tree.c", 
+   "(open_path): Replace error meddling with a check for NULL."
+  ], 
+  "revision_id": "1586947"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2014-04-13T09:23:10.104859Z", 
+  "msg": [
+   "don't processEvents during rollback"
+  ], 
+  "revision_id": "1586946"
+ }, 
+ {
+  "author": "mikemccand", 
+  "date": "2014-04-13T09:22:56.784655Z", 
+  "msg": [
+   "don't processEvents during rollback; prevent possible deadlock during IW.rollback"
+  ], 
+  "revision_id": "1586945"
+ }, 
+ {
+  "author": "rgodfrey", 
+  "date": "2014-04-13T09:22:31.002343Z", 
+  "msg": [
+   "QPID-5687 : [Java Broker] change to explicitly use the port in a connection url, and avoid the issue of differing vhosts in the test config and initial config (revert last commit 1586942 and modify correct file instead)"
+  ], 
+  "revision_id": "1586944"
+ }
+]

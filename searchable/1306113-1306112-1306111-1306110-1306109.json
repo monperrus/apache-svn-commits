@@ -1,0 +1,79 @@
+[
+ {
+  "author": "rmuir", 
+  "date": "2012-03-28T02:06:53.357000Z", 
+  "msg": [
+   "LUCENE-3930: nuke uima jars"
+  ], 
+  "revision_id": "1306113"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2012-03-28T02:05:10.699961Z", 
+  "msg": [
+   "Merged revisions 1306110 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/branches/2.5.x-fixes", 
+   "................", 
+   "r1306110 | ningjiang | 2012-03-28 09:47:21 +0800 (Wed, 28 Mar 2012) | 9 lines", 
+   "Merged revisions 1306102 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r1306102 | ningjiang | 2012-03-28 09:32:19 +0800 (Wed, 28 Mar 2012) | 1 line", 
+   "CXF-4211 Set the importing of 'net.sf.ehcache' to be optional", 
+   "........", 
+   "................"
+  ], 
+  "revision_id": "1306112"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2012-03-28T01:51:54.407586Z", 
+  "msg": [
+   "Fix a problem in the svn protocol's get_dir() functionality. The tuple", 
+   "specification allowed for a NULL created-date, but the client would", 
+   "segfault with that input (via svn_time_from_string).", 
+   "This is related to the work in r1296628 and r1305964. I believe this", 
+   "\"happened to work\" until r1296628. Before that revision, the value", 
+   "((time_t) -1) was stored into svn_dirent_t.time which is an apr_time_t", 
+   "(a 64-bit value, compared to time_t's typical 32 bits). This likely", 
+   "caused a later check to think a time was present, and for a time", 
+   "string to be generated (thus: never NULL).", 
+   "So... when a created-date is missing, we fill in the epoch date.", 
+   "Hopefully, the client will translate this back to 0, and consider the", 
+   "date \"missing\". As a precaution, the client will also check for NULL", 
+   "to avoid malicious servers passing NULL in the tuple.", 
+   "Note: I took a brief look at the 1.6.x client, and this failure is", 
+   "present. Thus, we must pass non-NULL for compatibility purposes, to", 
+   "avoid older clients from segfaulting.", 
+   "* subversion/libsvn_ra_svn/client.c:", 
+   "(ra_svn_get_dir): beware a NULL CDATE value. add commentary.", 
+   "* subversion/svnserve/serve.c:", 
+   "(get_dir): tighten the scope of a bunch of variables for clarity.", 
+   "use actual variables rather than a structure (ie. nix ENTRY). use", 
+   "the new MISSING_DATE localvar when created-date is missing. leave", 
+   "commentary for future readers."
+  ], 
+  "revision_id": "1306111"
+ }, 
+ {
+  "author": "ningjiang", 
+  "date": "2012-03-28T01:47:21.592839Z", 
+  "msg": [
+   "Merged revisions 1306102 via svnmerge from", 
+   "https://svn.apache.org/repos/asf/cxf/trunk", 
+   "........", 
+   "r1306102 | ningjiang | 2012-03-28 09:32:19 +0800 (Wed, 28 Mar 2012) | 1 line", 
+   "CXF-4211 Set the importing of 'net.sf.ehcache' to be optional", 
+   "........"
+  ], 
+  "revision_id": "1306110"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2012-03-28T01:44:39.009953Z", 
+  "msg": [
+   "LUCENE-3930: svn:ignore .jar"
+  ], 
+  "revision_id": "1306109"
+ }
+]

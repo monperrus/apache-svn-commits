@@ -1,0 +1,119 @@
+[
+ {
+  "author": "stack", 
+  "date": "2013-03-20T19:36:46.313421Z", 
+  "msg": [
+   "HBASE-7905 Add passing of optional cell blocks over rpc"
+  ], 
+  "revision_id": "1459013"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2013-03-20T19:33:59.403904Z", 
+  "msg": [
+   "Fix issue #4316 \"Merge errors out after resolving conflicts\".", 
+   "In the libsvn_client merge code, if conflicts are raised while merging one", 
+   "of the revision ranges, then after that revision range call the conflict", 
+   "resolution callback for each of those conflicts, and then continue with the", 
+   "rest of the merge if all of those conflicts were resolved.", 
+   "Notifications are changed.  Previously, for a text or property conflict,", 
+   "merge called the conflict resolution callback before notifying, and avoided", 
+   "notifying a 'conflict' status if the resolver resolved it.  Thus, a merge", 
+   "with '--accept=mine-full' or a similar option would not notify any text or", 
+   "prop conflicts.  Now it will notify with a 'C' (conflict) status for each", 
+   "path on which a conflict is raised, and later on reaching the end of a", 
+   "revision range it will call the resolver which may resolve them and send a", 
+   "'Resolved conflicts on ...' notification for each path.", 
+   "If any conflicts are resolved in this way before the merge completes, the", 
+   "Summary of Conflicts will be extended to report both the number of remaining", 
+   "conflicts and the number of resolved conflicts.  An example follows:", 
+   "$ svn merge ^/A wc/A2 --accept=mf", 
+   "--- Merging r2 through r4 into 'wc/A2':", 
+   "C   wc/A2/B", 
+   "C   wc/A2/mu", 
+   "--- Recording mergeinfo for merge of r2 through r4 into 'wc/A2':", 
+   "U   wc/A2", 
+   "Resolved conflicted state of 'wc/A2/B'", 
+   "Resolved conflicted state of 'wc/A2/mu'", 
+   "--- Merging r10 through r11 into 'wc/A2':", 
+   "U   wc/A2/B", 
+   "U   wc/A2/mu", 
+   "--- Recording mergeinfo for merge of r10 through r11 into 'wc/A2':", 
+   "G   wc/A2", 
+   "Summary of conflicts:", 
+   "Property conflicts: 0 remaining (and 2 already resolved)", 
+   "* subversion/libsvn_client/merge.c", 
+   "(merge_file_changed,", 
+   "merge_dir_changed,", 
+   "merge_dir_added): If there is a conflict, don't call the resolver, just", 
+   "record the conflict.", 
+   "(single_range_conflict_report_t,", 
+   "single_range_conflict_report_create): New conflict reporting structure,", 
+   "containing also the remaining range to be merged.", 
+   "(conflict_report_t,", 
+   "conflict_report_create,", 
+   "conflict_report_dup,", 
+   "make_merge_conflict_error): Store a merge_source_t instead of just a", 
+   "revision range.", 
+   "(subrange_source): Add an assertion.", 
+   "(do_file_merge,", 
+   "do_mergeinfo_unaware_dir_merge,", 
+   "do_mergeinfo_aware_dir_merge,", 
+   "do_directory_merge): Use the new kind of conflict report structure.", 
+   "(resolve_conflicts): New function.", 
+   "(do_merge): After merging a revision range, do conflict resolution and", 
+   "continue with the rest of the merge until it is all done.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Always install the requested conflict resolver before", 
+   "doing the merge, and never run svn_cl__resolve_postponed_conflicts()", 
+   "after the merge.", 
+   "* subversion/svn/notify.c", 
+   "(notify_baton): Add fields to track which paths have been notified as in", 
+   "conflict and how many conflicts have been notified as resolved.", 
+   "(store_path): New function.", 
+   "(svn_cl__notifier_reset_conflict_stats,", 
+   "svn_cl__get_notifier): Adjust accordingly.", 
+   "(svn_cl__notifier_print_conflict_stats): If any conflicts are logged as", 
+   "resolved, extend the relevant summary line to say so.", 
+   "(notify): On receiving a 'conflict' notification, keep track of the path.", 
+   "On receiving a 'resolved' notification, remove the resolved path from", 
+   "the hashes of text-, prop- and/or tree-conflicted paths.", 
+   "* subversion/tests/cmdline/merge_tests.py", 
+   "(expected_merge_output,", 
+   "svn_merge,", 
+   "expected_merge_output2,", 
+   "expected_out_and_err): Add support for the new notification format.", 
+   "(merge_two_edits_to_same_prop,", 
+   "merge_automatic_conflict_resolution): Tweak expectations.", 
+   "(conflicted_split_merge_with_resolve): New test.", 
+   "(test_list): Add the new test.", 
+   "* subversion/tests/cmdline/svntest/main.py", 
+   "(summary_of_conflicts): Add support for the new notification format."
+  ], 
+  "revision_id": "1459012"
+ }, 
+ {
+  "author": "kturner", 
+  "date": "2013-03-20T19:29:51.069556Z", 
+  "msg": [
+   "ACCUMULO-1039 Added info about table creation and versioning iterator to docs."
+  ], 
+  "revision_id": "1459011"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2013-03-20T19:27:44.600927Z", 
+  "msg": [
+   "Add test case used to investigate Base64 decoder performance"
+  ], 
+  "revision_id": "1459010"
+ }, 
+ {
+  "author": "nwellnhof", 
+  "date": "2013-03-20T19:25:52.450277Z", 
+  "msg": [
+   "Change Apache Lucy VP"
+  ], 
+  "revision_id": "1459009"
+ }
+]

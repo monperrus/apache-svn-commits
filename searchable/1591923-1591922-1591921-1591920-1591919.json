@@ -1,0 +1,120 @@
+[
+ {
+  "author": "rmuir", 
+  "date": "2014-05-02T14:14:28.756873Z", 
+  "msg": [
+   "add more iterable testing to TestIndexWriter"
+  ], 
+  "revision_id": "1591923"
+ }, 
+ {
+  "author": "lofwyr", 
+  "date": "2014-05-02T14:10:22.570794Z", 
+  "msg": [
+   "TOBAGO-1392: Allow different position for paging arrows in sheet"
+  ], 
+  "revision_id": "1591922"
+ }, 
+ {
+  "author": "rmuir", 
+  "date": "2014-05-02T14:08:21.736165Z", 
+  "msg": [
+   "add more iterable testing to TestIndexWriter"
+  ], 
+  "revision_id": "1591921"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2014-05-02T14:08:17.366908Z", 
+  "msg": [
+   "SLING-3405 : SLING2094Test and ServerSideScriptsTest fail with java 8: JSP compiler does not find java.util.Arrays or java.lang.CharSequence"
+  ], 
+  "revision_id": "1591920"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-05-02T14:07:40.112545Z", 
+  "msg": [
+   "APR mutexes don't support recursive locking on all platforms.", 
+   "As a result, trying to take out the same lock twice in the", 
+   "same thread will cause a lock up under e.g. Linux.  This patch", 
+   "adds an option to svn_mutex__t that detects recursive locking", 
+   "attempts in most cases and returns a proper error.", 
+   "The idea is simply to store the thread ID of the lock OWNER", 
+   "along the actual mutex object.  If that matches the current", 
+   "thread's ID, there is a violation.  As the current thread", 
+   "cannot race with itself and because any other thread uses a", 
+   "different thread ID, setting and comparing this aux. info can", 
+   "be done safely.", 
+   "Also, we may allow for false negatives here since we only try", 
+   "to detect code sequences that are already illegal in the first", 
+   "place.  We also don't make that check mandatory as access to", 
+   "thread IDs and their comparison may be somewhat expensive on", 
+   "some systems - which would impair the futex-like behavior that", 
+   "we assume in some places like the caches.", 
+   "A more detailed description has been added to the source code.", 
+   "A FSFS-based test is added as that has been the origin of the", 
+   "feature request.", 
+   "Current users will be updated as follows.  FS level locks and", 
+   "library / module initialization will enable recursion detection.", 
+   "Potentially runtime critical, internal use disables it.", 
+   "* subversion/include/svn_error_codes.h", 
+   "(SVN_ERR_RECURSIVE_LOCK): Define a new error code for invalid", 
+   "locking schemes.", 
+   "* subversion/include/private/svn_mutex.h", 
+   "(svn_mutex__t): Our mutex is now a struct as we add aux.", 
+   "data to it.", 
+   "(svn_mutex__init): Add the CHECKED option.", 
+   "* subversion/libsvn_subr/mutex.c", 
+   "(svn_mutex__t): Define the mutex structure and and document", 
+   "the aux. data extensively.", 
+   "(svn_mutex__init): Update constructor.", 
+   "(svn_mutex__lock): Optionally, check for recursive locking attempts", 
+   "and update the associtated aux. data.", 
+   "(svn_mutex__unlock): Optionally, update the aux. data for recursive", 
+   "lock detection.", 
+   "* subversion/tests/libsvn_fs_fs/fs-fs-pack-test.c", 
+   "(never_reached,", 
+   "lock_again): Callback functions required by the new test.", 
+   "(recursive_locking): New test expecting an SVN_ERR_RECURSIVE_LOCK.", 
+   "(test_funcs): Register the new test.", 
+   "* subversion/libsvn_fs_base/bdb/env.c", 
+   "(bdb_init_cb): Initialization code should detect recursions.", 
+   "* subversion/libsvn_fs/fs-loader.c", 
+   "(synchronized_initialize): Same.", 
+   "* subversion/libsvn_subr/dso.c", 
+   "(svn_dso_initialize2): Same.", 
+   "* subversion/libsvn_fs_fs/fs.c", 
+   "(fs_serialized_init): FS-level locks shall detect recursion do aid", 
+   "API users.", 
+   "* subversion/libsvn_fs_x/fs.c", 
+   "(x_serialized_init): Same.", 
+   "* subversion/libsvn_ra_svn/cyrus_auth.c", 
+   "(sasl_mutex_alloc_cb_internal,", 
+   "svn_ra_svn__sasl_common_init): Internal, potentially tightly used", 
+   "mutexes shall not suffer the overhead.", 
+   "* subversion/libsvn_subr/cache-inprocess.c", 
+   "(svn_cache__create_inprocess): Same.", 
+   "* subversion/libsvn_subr/cache-membuffer.c", 
+   "(svn_cache__membuffer_cache_create,", 
+   "svn_cache__create_membuffer_cache): Same.", 
+   "* subversion/libsvn_subr/file.c", 
+   "(init_handle_pool): Same.", 
+   "* subversion/libsvn_subr/named_atomic.c", 
+   "(init_thread_mutex): Same.", 
+   "* subversion/libsvn_subr/object_pool.c", 
+   "(svn_object_pool__create): Same.", 
+   "* subversion/libsvn_subr/root_pools.c", 
+   "(svn_root_pools__create): Same.", 
+   "* subversion/libsvn_subr/utf.c", 
+   "(svn_utf_initialize2): Same.", 
+   "* subversion/svnserve/logger.c", 
+   "(logger__create_for_stderr,", 
+   "logger__create): Same.", 
+   "* subversion/tests/svn_test_main.c", 
+   "(svn_test_main): For best test coverage, we enable recursion detection", 
+   "in our test suite main app."
+  ], 
+  "revision_id": "1591919"
+ }
+]

@@ -1,0 +1,92 @@
+[
+ {
+  "author": "hossman", 
+  "date": "2012-03-08T19:18:55.382666Z", 
+  "msg": [
+   "fix typo"
+  ], 
+  "revision_id": "1298523"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-03-08T19:18:13.368808Z", 
+  "msg": [
+   "* publish/download/download.html: Ooops, forgot to update the big yellow box."
+  ], 
+  "revision_id": "1298522"
+ }, 
+ {
+  "author": "tabish", 
+  "date": "2012-03-08T19:16:40.654798Z", 
+  "msg": [
+   "fix for: https://issues.apache.org/jira/browse/AMQNET-372"
+  ], 
+  "revision_id": "1298521"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-03-08T19:14:01.451571Z", 
+  "msg": [
+   "Open revprop caching (re-)implementation branch."
+  ], 
+  "revision_id": "1298520"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2012-03-08T19:12:37.936288Z", 
+  "msg": [
+   "Reverse merged revision(s) 1297211, 1296610, 1296604 from subversion/trunk:", 
+   "Follow-up to r1296610:", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(increment_revprop_generation): Use the correct printf format.", 
+   "........", 
+   "Follow-up to r1296604: Fix build.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(increment_revprop_generation): put declaration at the begin of the block", 
+   "........", 
+   "Certain operations, e.g. svn ls -v, will contain timestamp and author", 
+   "information from many different revisions.  A list of all projects", 
+   "in the root of the wordpress repository will open, read and close", 
+   ">75.000 revision property files (3 reads for each list entry)", 
+   "This commit implements revprop caching.  It will be activated as", 
+   "part of the full-text caching option.", 
+   "Since revprops may be written by other threads or processes, we", 
+   "need to track the revprop changes.  A new special file contains a", 
+   "counter that will be increased each time revision properties get", 
+   "rewritten.", 
+   "This counter is internally called \"revprop generation\" and will be", 
+   "read upon the first revprop access for given fs_t.  Later changes", 
+   "may remain invisible for that fs_t.  This behavior is in line with", 
+   "our revprop handling in other parts of FS_FS.  If a revprop gets", 
+   "rewritten, the fs_t doing the write will use the new generation", 
+   "from that point on and will thus see all caches up to and including", 
+   "its own.", 
+   "Since the revprop generation becomes part of the cache key, each", 
+   "fs_t will only see revprops from its generation.  It may also", 
+   "create new cache entries tagged with that generation, i.e. those", 
+   "would appear to be outdated for newer fs_t.  But that will simply", 
+   "cause a benign false negative upon lookup.  No fs_t will see", 
+   "data that got replaced before that fs_t was created.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_REVPROP_GEN): declare name of new special file", 
+   "(fs_fs_data_t): add member to hold that file's content;", 
+   "add new cache for revprops", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(svn_fs_fs__initialize_caches): initialize revprop cache", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(path_revprop_generation): path constructor for new special file", 
+   "(check_file_buffer_numeric): new, more generic utility function", 
+   "(check_format_file_buffer_numeric): call the new utility", 
+   "(read_revprop_generation, check_revprop_generation,", 
+   "increment_revprop_generation): new functions to read & write", 
+   "the revprop generation from / to our new special file", 
+   "(set_revision_proplist): if we change existing revprops, increment", 
+   "the revprop generation", 
+   "(revision_proplist): use and populate the revprop cache", 
+   "(svn_fs_fs__create): initialize our new special file", 
+   "(hotcopy_create_empty_dest): hotcopy the new special file", 
+   "........"
+  ], 
+  "revision_id": "1298519"
+ }
+]

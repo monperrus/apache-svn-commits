@@ -1,0 +1,75 @@
+[
+ {
+  "author": "james-masanz", 
+  "date": "2012-10-31T04:09:53.674480Z", 
+  "msg": [
+   "CTAKES-75  Housekeeping - Update README, LICENSE"
+  ], 
+  "revision_id": "1403968"
+ }, 
+ {
+  "author": "svn-role", 
+  "date": "2012-10-31T04:00:11.835198Z", 
+  "msg": [
+   "Merge r1403583 from trunk:", 
+   "* r1403583", 
+   "In ra_serf, treat marshaled errors with 0 error codes the same as", 
+   "errors with no provided error code.", 
+   "Justifications:", 
+   "Fixes the cause of a client-side hang in ra_serf's handling of", 
+   "Subversion's custom XML error tags.", 
+   "Votes:", 
+   "+1: cmpilato, danielsh, rhuijben"
+  ], 
+  "revision_id": "1403967"
+ }, 
+ {
+  "author": "svn-role", 
+  "date": "2012-10-31T04:00:07.923662Z", 
+  "msg": [
+   "Remove the '1.7.x-r1399174' branch, reintegrated in r1403965."
+  ], 
+  "revision_id": "1403966"
+ }, 
+ {
+  "author": "svn-role", 
+  "date": "2012-10-31T03:59:51.769320Z", 
+  "msg": [
+   "Reintegrate the 1.7.x-r1399174 branch:", 
+   "* r1399174", 
+   "Fix a diff parser bug that prevents some patch files from being applied.", 
+   "Justification:", 
+   "Prevents users from applying certain patches with 'svn patch', see", 
+   "http://svn.haxx.se/users/archive-2012-10/0081.shtml", 
+   "Branch:", 
+   "^/subversion/branches/1.7.x-r1399174", 
+   "Votes:", 
+   "+1: stsp, steveking, rhuijben"
+  ], 
+  "revision_id": "1403965"
+ }, 
+ {
+  "author": "breser", 
+  "date": "2012-10-31T03:53:40.350611Z", 
+  "msg": [
+   "Make fs_fs properly cleanup after a failed transmission of a representation.", 
+   "In particular it's valid for a client to resend a failed PUT via DAV and", 
+   "continue with the activity/transaction (e.g. after a read error).  However,", 
+   "fs_fs would never remove its being_written flag and would leave the partial", 
+   "representation in the protorevfile.", 
+   "This particular problem is not seen by our client implementation since", 
+   "upon the first error we stop sending the commit and DELETE the", 
+   "activity/transaction.", 
+   "Resolve the problem by setting a pool cleanup function to detect when this", 
+   "occurs and truncate the protorevfile to remove the broken representation and", 
+   "remove our lock/being_written flag.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(rep_write_cleanup): New function to revert a rep that wasn't not completed.", 
+   "(rep_write_get_baton): Set the rep_write_cleanup callback to the baton pool.", 
+   "(rep_write_contents_close): Remove the rep_write_cleanup once the rep has", 
+   "successfully been written to the file but before we add the node.", 
+   "Reviewed by: philip"
+  ], 
+  "revision_id": "1403964"
+ }
+]

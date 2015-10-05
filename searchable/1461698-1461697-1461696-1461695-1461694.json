@@ -1,0 +1,102 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2013-03-27T16:29:56.114031Z", 
+  "msg": [
+   "Add tests to try and break createNumber exponent handling"
+  ], 
+  "revision_id": "1461698"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2013-03-27T16:29:25.066329Z", 
+  "msg": [
+   "Document why double exponent (e and E) seems to work even though the index will be wrong"
+  ], 
+  "revision_id": "1461697"
+ }, 
+ {
+  "author": "julianfoad", 
+  "date": "2013-03-27T16:28:24.073170Z", 
+  "msg": [
+   "Make 'update' and 'switch' libsvn_client APIs delay calling the conflict", 
+   "resolver for each conflicted path until the whole update is complete, like", 
+   "r1459012 did for merge.  Previously, the APIs called the callback as soon as", 
+   "each conflict is raised, and 'svn' used a work-around.", 
+   "Rationale:", 
+   "- Avoids the possibility of a network timeout if the resolver callback", 
+   "takes a long time, for example when doing interactive resolution.", 
+   "- Means that all changes have been received. This is important when", 
+   "resolving a tree conflict that involves a copy or move, because the", 
+   "resolver (code or human) may need to look at or modify another path.", 
+   "- Makes all subcommands work the same way. Eliminates the code in", 
+   "'svn' that implements a 'postpone' callback.", 
+   "- Makes this way of working available to all clients. Makes no difference", 
+   "to a client that does not want to use it, such as a GUI.", 
+   "This changes the notifications printed by 'svn' in the case of pre-specified", 
+   "resolution (--accept=xxx), in the same way as described in r1459012 for", 
+   "'merge'. It now prints a notification with status 'C' for each conflicted", 
+   "path, and then later a 'Resolved ...' line for each conflicted path. The", 
+   "Summary of Conflicts now reports both the number of remaining conflicts and", 
+   "the number of resolved conflicts.", 
+   "* subversion/libsvn_client/client.h", 
+   "subversion/libsvn_client/resolved.c", 
+   "(svn_client__resolve_conflicts): New function, moved and renamed from", 
+   "resolve_conflicts() in merge.c, with the list-of-paths parameter changed", 
+   "to a simple hash and the 'resolved' output made optional.", 
+   "* subversion/libsvn_client/merge.c", 
+   "(resolve_conflicts): Move to resolved.c: svn_client__resolve_conflicts().", 
+   "(do_merge): Track the change of resolve_conflicts().", 
+   "* subversion/libsvn_client/update.c", 
+   "(record_conflict): New function.", 
+   "(update_internal): Don't use the resolver callback in the client context,", 
+   "but instead use a local one that just remembers the conflicted paths.", 
+   "(svn_client__update_internal): Call the resolver on the conflicted paths", 
+   "before returning.", 
+   "* subversion/libsvn_client/switch.c", 
+   "(record_conflict,", 
+   "switch_internal,", 
+   "svn_client__switch_internal): Same as in update.c.", 
+   "* subversion/svn/cl.h,", 
+   "subversion/svn/conflict-callbacks.c", 
+   "(svn_cl__conflict_func_postpone,", 
+   "svn_cl__get_conflict_func_postpone_baton,", 
+   "get_postponed_conflicted_paths,", 
+   "svn_cl__resolve_postponed_conflicts): Delete.", 
+   "* subversion/svn/svn.c", 
+   "(sub_main): Install the proper conflict handler instead of the 'postpone'", 
+   "handler.", 
+   "* subversion/svn/merge-cmd.c", 
+   "(svn_cl__merge): Don't install the conflict handler here, as we've now", 
+   "done it in 'svn'.", 
+   "* subversion/svn/update-cmd.c", 
+   "(svn_cl__update): Remove a comment that said we were using the 'postpone'", 
+   "handler. Don't resolve conflicts after the operation.", 
+   "* subversion/svn/switch-cmd.c", 
+   "(svn_cl__switch): Same.", 
+   "* subversion/tests/cmdline/update_tests.py", 
+   "(update_output_with_conflicts,", 
+   "update_output_with_conflicts_resolved): Adjust to expect the new", 
+   "placement of the 'Resolved conflicts ...' line and the new form of the", 
+   "summary of conflicts."
+  ], 
+  "revision_id": "1461696"
+ }, 
+ {
+  "author": "philip", 
+  "date": "2013-03-27T16:27:51.080146Z", 
+  "msg": [
+   "* subversion/include/svn_io.h", 
+   "(svn_io_unlock_open_file): Tweak documentation."
+  ], 
+  "revision_id": "1461695"
+ }, 
+ {
+  "author": "mcucchiara", 
+  "date": "2013-03-27T16:25:56.065127Z", 
+  "msg": [
+   "WW-4030 - Blank, Convention and Starter archetype contains a wrong path"
+  ], 
+  "revision_id": "1461694"
+ }
+]

@@ -1,0 +1,75 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-03-07T21:35:54.636873Z", 
+  "msg": [
+   "Enable FSFS format 7 repositories to be packed without completely", 
+   "blocking commits.  We simply introduce a separate lock file for", 
+   "'svnadmin pack' and take out the global write lock for packing", 
+   "revprops and switching the shard to \"packed\" state.", 
+   "Most of the run time is spent building the revision pack file", 
+   "and does not require any synchronization with writers.", 
+   "Packing large shards no longer causes noticable delays to committers.", 
+   "This is important for format 7 because the data reorganization may", 
+   "involes significantly more I/O than the append-only process used", 
+   "with previous formats.  We can now pack during 'svnadmin load'", 
+   "without delaying the process.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(PATH_PACK_LOCK_FILE): Declare the new lock file name.", 
+   "(SVN_FS_FS__MIN_PACK_LOCK_FORMAT): Define when that is available.", 
+   "* subversion/libsvn_fs_fs/fs_fs.h", 
+   "(svn_fs_fs__get_lock_on_filesystem): Publish previously static function.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(get_lock_on_filesystem): Rename to ...", 
+   "(svn_fs_fs__get_lock_on_filesystem): ... this.", 
+   "(with_some_lock_file): Update caller.", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(pack_baton): Extend by adding all previous parameters of the pack_*", 
+   "functions as members.  All pack_* function now use the", 
+   "baton for their parameter passing.", 
+   "(synced_pack_shard): Extracted from pack_shard; handles the revprop", 
+   "packing and shard pack switch-over.  This will", 
+   "be executed while holding the global write lock.", 
+   "(pack_shard): Wraps the above and adds the parts that don't require", 
+   "the global write lock such as packing the rev data.", 
+   "(pack_body): Use the baton to pass parameters along.", 
+   "(svn_fs_fs__pack): When available, acquire only the pack-lock.", 
+   "* subversion/libsvn_fs_fs/structure", 
+   "(Layout of the FS directory): Document the new lock file and update", 
+   "the doc for the global write-lock."
+  ], 
+  "revision_id": "1575418"
+ }, 
+ {
+  "author": "kasha", 
+  "date": "2014-03-07T21:34:51.732218Z", 
+  "msg": [
+   "YARN-1774. FS: Submitting to non-leaf queue throws NPE. (Anubhav Dhoot and Karthik Kambatla via kasha)"
+  ], 
+  "revision_id": "1575417"
+ }, 
+ {
+  "author": "pderop", 
+  "date": "2014-03-07T21:34:50.477530Z", 
+  "msg": [
+   "added isInstantiated()"
+  ], 
+  "revision_id": "1575416"
+ }, 
+ {
+  "author": "kasha", 
+  "date": "2014-03-07T21:34:19.009994Z", 
+  "msg": [
+   "YARN-1774. FS: Submitting to non-leaf queue throws NPE. (Anubhav Dhoot and Karthik Kambatla via kasha)"
+  ], 
+  "revision_id": "1575415"
+ }, 
+ {
+  "author": "pderop", 
+  "date": "2014-03-07T21:34:17.413321Z", 
+  "msg": [
+   "added isInstantiated()"
+  ], 
+  "revision_id": "1575414"
+ }
+]

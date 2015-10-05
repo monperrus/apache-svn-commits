@@ -1,0 +1,82 @@
+[
+ {
+  "author": "ilgrosso", 
+  "date": "2012-10-18T12:51:33.217087Z", 
+  "msg": [
+   "[SYNCOPE-224] Workflow initialization is now called by reflection + added a 'noopworkflow' build profile"
+  ], 
+  "revision_id": "1399638"
+ }, 
+ {
+  "author": "fmeschbe", 
+  "date": "2012-10-18T12:50:41.214041Z", 
+  "msg": [
+   "Apply our formatting rules (particularly with respect to opening braces)"
+  ], 
+  "revision_id": "1399637"
+ }, 
+ {
+  "author": "mbautin", 
+  "date": "2012-10-18T12:50:25.407754Z", 
+  "msg": [
+   "[0.89-fb] [master] Faster region assignments on cluster start up.", 
+   "Author: aaiyer", 
+   "Summary:", 
+   "Neptune seems to wait for 1 min to assign regions.  This is because", 
+   "we may have to wait for 1 min for the root/meta scanner to kick in.The first \"initialChore()\" does nothing.", 
+   "We will now force this to happen once the root region is assigned, so", 
+   "no more wait time.", 
+   "Test Plan:", 
+   "push to dev cluster and ensure that the assignments happen", 
+   "immediately", 
+   "Before, on the DL:", 
+   "Mon Oct 15 16:15:34 PDT 2012 Starting master on hbasectrl049.ash3.facebook.com", 
+   "ulimit -n 131070", 
+   "2012-10-15 16:15:35,419 INFO org.apache.hadoop.hbase.master.HMaster: vmName=Java HotSpot(TM) 64-Bit Server VM, vmVendor=Sun Microsystems Inc., vmVersion=14.0-b16", 
+   "2012-10-15 16:15:52,266 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region -ROOT-,,0.70236052 to hbase785.ash3.facebook.com,60020,1350342951149", 
+   "2012-10-15 16:16:36,302 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region .META.,,1.1028785192 to hbase876.ash3.facebook.com,60020,1350342952955", 
+   "2012-10-15 16:16:36,827 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region MailBox_cell5_v1,008253c7,1312525731978.16bdfc0d71605295f5273f081a27ddf5. to hbase788.ash3.facebook.com,60020,1350342951539", 
+   "2012-10-15 16:16:36,929 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region MailBox_cell5_v1,005d1745,1312599894588.741e963357e1ed21adc32445a8e51ccc. to hbase861.ash3.facebook.com,60020,1350342954660", 
+   "2012-10-15 16:16:36,940 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region MailBox_cell5_v1,00f2094d,1312598270719.403925907768ea37b3d3ea81945378a2. to hbase803.ash3.facebook.com,60020,1350342952550", 
+   "2012-10-15 16:16:36,957 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region MailBox_cell5_v1,004a7904,1312599894588.20f71255cbf222cee51a684525c3d2ac. to hbase789.ash3.facebook.com,60020,1350342951574", 
+   "After, on the test cluster:", 
+   "Tue Oct 16 16:22:25 PDT 2012 Starting master on hbasedev130.ash3.facebook.com", 
+   "ulimit -n 131070", 
+   "2012-10-16 16:22:25,771 INFO org.apache.hadoop.hbase.master.HMaster: vmName=Java HotSpot(TM) 64-Bit Server VM, vmVendor=Sun Microsystems Inc., vmVersion=14.0-b16", 
+   "...", 
+   "2012-10-16 16:22:27,114 DEBUG org.apache.hadoop.hbase.master.RegionManager: Going to trigger a metaScan for -ROOT-", 
+   "2012-10-16 16:22:27,114 DEBUG org.apache.hadoop.hbase.master.RegionManager: Going to trigger a metaScan for .META.", 
+   "...", 
+   "2012-10-16 16:22:28,577 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region -ROOT-,,0.70236052 to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:29,589 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region .META.,,1.1028785192 to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:30,600 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region loadtest,33333333,1349891869575.e1283ad5fe96556684fffe7d9631029b. to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:30,603 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region loadtest,66666666,1349891869575.21b97af031e2d6e1a162415d9c0e8aeb. to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:30,606 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region loadtest,22222222,1349891869575.18902646605c1c2768d8f16a45b3a1b7. to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:30,609 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region loadtest,,1349891869571.91848c59776aa07e60f416cd1eaaa5ca. to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "2012-10-16 16:22:30,612 INFO org.apache.hadoop.hbase.master.RegionManager: Assigning region loadtest,cccccccc,1349891869575.6a33bb7710b0ce6b085e0d54da3e8aa8. to hbasedev131.ash3.facebook.com,60020,1350429747463", 
+   "Reviewers: kannan, mbautin", 
+   "Reviewed By: mbautin", 
+   "CC: hbase-eng@", 
+   "Differential Revision: https://phabricator.fb.com/D602655"
+  ], 
+  "revision_id": "1399636"
+ }, 
+ {
+  "author": "fmeschbe", 
+  "date": "2012-10-18T12:48:27.718600Z", 
+  "msg": [
+   "FELIX-3167 Support new Password type for attributes", 
+   "- export the MetaType API as version 1.2 (from the OSGi R 4.3 Compendium library)", 
+   "- import ServiceTracker instead of embedding it"
+  ], 
+  "revision_id": "1399635"
+ }, 
+ {
+  "author": "bvahdat", 
+  "date": "2012-10-18T12:44:41.125949Z", 
+  "msg": [
+   "Polished"
+  ], 
+  "revision_id": "1399634"
+ }
+]

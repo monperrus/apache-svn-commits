@@ -1,0 +1,89 @@
+[
+ {
+  "author": "robbie", 
+  "date": "2014-04-29T15:55:18.946020Z", 
+  "msg": [
+   "QPID-5048: create a 'maven' sub tree and make qpid-parent a module in it", 
+   "This will serve as a shared trunk/tags/branches area for any common qpid maven build components"
+  ], 
+  "revision_id": "1591008"
+ }, 
+ {
+  "author": "robweir", 
+  "date": "2014-04-29T15:51:48.338824Z", 
+  "msg": [
+   "patch by Tal Daniel"
+  ], 
+  "revision_id": "1591007"
+ }, 
+ {
+  "author": "mcpierce", 
+  "date": "2014-04-29T15:46:34.798196Z", 
+  "msg": [
+   "QPID-5732: Perl examples getting the wrong cmdline arguments", 
+   "The hello_world and map_receiver examples had a one-off error when", 
+   "getting command line arguments. This patch points them back to the", 
+   "correct arguments.", 
+   "Contributed by Zdenek Kraus <zkraus@redhat.com>"
+  ], 
+  "revision_id": "1591006"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-29T15:45:58.222114Z", 
+  "msg": [
+   "Improve memory usage pattern when reading from and writing to the FSFS", 
+   "fulltext cache.  Avoid allocating large buffers while reading from the", 
+   "cache and attempt to reduce memory / address space fragmentation when", 
+   "reconstructing fulltexts for later caching.", 
+   "Both are handled by the svn_fs_fs__get_contents function; the cache", 
+   "update is an optional side effect of that reader.", 
+   "To keep memory consumption low for as long as we can read from cache,", 
+   "don't fetch the whole fulltext at once.  Instead use a partial getter to", 
+   "read the respective next block as part of the normal stream processing.", 
+   "The reapeated cache addressing overhead is relatively low as the block", 
+   "size is typically 100kB.  We delay the constrution of the representation", 
+   "list and optional fulltext buffer until we get a cache miss (ideally", 
+   "never happens once we had a hit).  In case of a miss, we re-read the", 
+   "whole data from the window stream and pick up behind the last delivered", 
+   "location.", 
+   "If we want to cache large fulltexts, we need buffers of adequate size.", 
+   "As they are per reading client, there can be many of them them.  The", 
+   "best we can do here (except for using code from the thunder branch) is", 
+   "to allocate memory segments that are a power of two long.  This should", 
+   "help the OS to keep fragmentation in check. YMMV.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(rep_read_baton): Store REP as we will delay its evaluation.  Also,", 
+   "add tracking info for delivery from fulltext cache.", 
+   "(rep_read_get_baton): Initialize the new baton members but leave the", 
+   "bits that we will only need once the fulltext", 
+   "cache lookup fails.", 
+   "(rep_read_contents_close):", 
+   "(get_contents): Rename to ...", 
+   "(get_contents_from_windows): ... this for clarity.", 
+   "(fulltext_baton_t,", 
+   "get_fulltext_partial,", 
+   "get_contents_from_fulltext): New equivalent to the above but getting", 
+   "its data from the fulltext cache.", 
+   "(optimimal_allocation_size,", 
+   "skip_contents): Handle the switch-over from (failed) cache lookup", 
+   "to reading from window stream.  This includes the", 
+   "delayed BATON initialization and heuristics of the", 
+   "optional fulltext buffer allocation.", 
+   "(rep_read_contents): Try reading from fulltext cache first (if available)", 
+   "and fall back to normal window reading as needed.", 
+   "(svn_fs_fs__get_contents): Always use the rep_read_contents-based stream.", 
+   "Only decide whether or not to use fulltext", 
+   "caching with it for this particular REP."
+  ], 
+  "revision_id": "1591005"
+ }, 
+ {
+  "author": "stevel", 
+  "date": "2014-04-29T15:39:05.778291Z", 
+  "msg": [
+   "creating initial slider SVN repository"
+  ], 
+  "revision_id": "1591004"
+ }
+]

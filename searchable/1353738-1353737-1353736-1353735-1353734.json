@@ -1,0 +1,71 @@
+[
+ {
+  "author": "stsp", 
+  "date": "2012-06-25T20:50:17.640896Z", 
+  "msg": [
+   "* subversion/libsvn_client/switch.c", 
+   "(switch_internal): Stop fiddling with the caller-provided client context.", 
+   "We were setting the conflict callback fields to NULL in case conflicts", 
+   "should be resolved post-switch. We aren't supposed to change the context", 
+   "on behalf of the caller. And there really is no need to do so since we can", 
+   "pass NULL conflict callbacks to svn_wc__get_switch_editor() instead.", 
+   "Suggested by: gstein"
+  ], 
+  "revision_id": "1353738"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2012-06-25T20:49:57.224194Z", 
+  "msg": [
+   "trivial change to generate site build"
+  ], 
+  "revision_id": "1353737"
+ }, 
+ {
+  "author": "jacopoc", 
+  "date": "2012-06-25T20:49:01.759742Z", 
+  "msg": [
+   "Reverting a local unwanted change that I committed in rev. 1353686; thanks to Jacques for the review."
+  ], 
+  "revision_id": "1353736"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2012-06-25T20:47:20.035820Z", 
+  "msg": [
+   "trivial change to generate site build"
+  ], 
+  "revision_id": "1353735"
+ }, 
+ {
+  "author": "stsp", 
+  "date": "2012-06-25T20:39:33.876704Z", 
+  "msg": [
+   "To force postponing of conflict resolution during update, we were setting", 
+   "the caller-provided conflict callback pointers in the client context to NULL.", 
+   "This approach is bad because the library isn't supposed to fiddle with the", 
+   "client context passed in. Not to mention we failed to restore the context", 
+   "upon return...", 
+   "Instead, add separate conflict callback parameters to update_internal(),", 
+   "which allows us to pass NULL for those parameters if conflict resolution is", 
+   "to be postponed during updates.", 
+   "Suggested by: gstein", 
+   "* subversion/libsvn_client/client.h", 
+   "(svn_client__update_internal): Declare CONFLICT_FUNC2 and CONFLICT_BATON2", 
+   "parameters.", 
+   "* subversion/libsvn_client/update.c", 
+   "(svn_client__update_internal, update_internal): Add CONFLICT_FUNC2 and", 
+   "CONFLICT_BATON2 parameters. Invoke the callback provided via parameters", 
+   "during update, instead of invoking callbacks provided in the client context.", 
+   "(svn_client_update4): As before, for 1.7 and above API users, do not invoke", 
+   "the conflict resolution callback during the update operation but invoke it", 
+   "during a separate conflict resolution step instead. Stop changing fields in", 
+   "the caller-provided client context.", 
+   "* subversion/libsvn_client/checkout.c", 
+   "(svn_client__checkout_internal): Adjust svn_client__update_internal() caller,", 
+   "passing the conflict callbacks from the context itself (i.e. no behaviour", 
+   "change here)."
+  ], 
+  "revision_id": "1353734"
+ }
+]

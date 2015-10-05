@@ -1,0 +1,97 @@
+[
+ {
+  "author": "jacopoc", 
+  "date": "2014-08-22T16:30:41.089378Z", 
+  "msg": [
+   "Small simplification: thread safety is now implemented using a static initialization rather than an AtomicReference."
+  ], 
+  "revision_id": "1619858"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-08-22T16:18:06.698662Z", 
+  "msg": [
+   "On the revprop-caching-ng branch:  Replace the SHM objects by an open", 
+   "file handle to the revprops generation file allowing modifications from", 
+   "different machines.  Re-enable the feature.", 
+   "To clean up the code, we bind the existence of the revprop-generation", 
+   "file to repo format 7.  It gets created with the repo and auto-inserted /", 
+   "replaced by 'svnadmin upgrade'.  With older formats, we will not try to", 
+   "use the new infrastructure anymore.", 
+   "This patch does not address the fact that generation bumps are no longer", 
+   "atomic.  Apart from that, the functionality is the same as until recently", 
+   "on trunk with the single machine limitation removed.", 
+   "* subversion/libsvn_fs_fs/fs.h", 
+   "(SVN_FS_FS__MIN_REVPROP_CACHING_FORMAT): New feature availability limit.", 
+   "(fs_fs_data_t): Replace SHM objects with a single file handle.", 
+   "* subversion/libsvn_fs_fs/revprops.h", 
+   "(svn_fs_fs__write_revprop_generation_file,", 
+   "svn_fs_fs__cleanup_revprop_namespace): Replaced by ...", 
+   "(svn_fs_fs__reset_revprop_generation_file): ... this new function.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(upgrade_body,", 
+   "svn_fs_fs__create): Call the new reset function to cleanup and auto-", 
+   "create the generation file.", 
+   "* subversion/libsvn_fs_fs/hotcopy.c", 
+   "(hotcopy_body): Ensure that the target has a valid generation file.", 
+   "* subversion/libsvn_fs_fs/recovery.c", 
+   "(recover_body): Same for the repo being recovered.", 
+   "* subversion/libsvn_fs_fs/caching.c", 
+   "(read_config): Re-enable the revprop cache feature. But we have only", 
+   "\"on\" and \"off\" now.  \"on\" does not mean that we will", 
+   "actually use the cache instance for the repo at hand.", 
+   "* subversion/libsvn_fs_fs/revprops.c", 
+   "(Revprop caching management): Add a docstring TODO for later.", 
+   "(read_revprop_generation_file,", 
+   "svn_fs_fs__write_revprop_generation_file,", 
+   "ensure_revprop_namespace,", 
+   "svn_fs_fs__cleanup_revprop_namespace,", 
+   "ensure_revprop_generation,", 
+   "ensure_revprop_timeout): Remove this old code. Some similarly named", 
+   "functions may be found in the next block.", 
+   "(ensure_revprop_generation,", 
+   "read_revprop_generation_file,", 
+   "write_revprop_generation_file,", 
+   "svn_fs_fs__reset_revprop_generation_file): New code to open, read,", 
+   "write and auto-create the", 
+   "generation file.", 
+   "(has_revprop_cache): File-based now and not supported by all formats.", 
+   "(revprop_generation_fixup_t,", 
+   "revprop_generation_fixup,", 
+   "read_revprop_generation): Use file timestamps now for crash timeout", 
+   "detection and update recovery code.", 
+   "(begin_revprop_change,", 
+   "end_revprop_change): Update the generation bump logic to simple calls", 
+   "of the file read / writer functions and leverage", 
+   "the fact that we hold the write lock.  No retries", 
+   "required at this level and the generation value", 
+   "is predictable after the first read.", 
+   "(switch_to_new_revprop): Update caller."
+  ], 
+  "revision_id": "1619857"
+ }, 
+ {
+  "author": "jbonofre", 
+  "date": "2014-08-22T16:14:54.313617Z", 
+  "msg": [
+   "[SMX4-1813] Include AWS files in the aws-java-sdk 1.8.3 bundle"
+  ], 
+  "revision_id": "1619856"
+ }, 
+ {
+  "author": "tilman", 
+  "date": "2014-08-22T16:11:12.299172Z", 
+  "msg": [
+   "PDFBOX-2277: revert previous commit (except cleanup)"
+  ], 
+  "revision_id": "1619855"
+ }, 
+ {
+  "author": "macbean", 
+  "date": "2014-08-22T16:08:07.154088Z", 
+  "msg": [
+   "QPID-6034: [Java Broker] Refactor Port UI to use metadata service rather than hard-coding a list of protocols/transports etc"
+  ], 
+  "revision_id": "1619854"
+ }
+]

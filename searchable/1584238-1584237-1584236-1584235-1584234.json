@@ -1,0 +1,77 @@
+[
+ {
+  "author": "sebb", 
+  "date": "2014-04-03T01:05:33.982337Z", 
+  "msg": [
+   "Standardise on static final rather than final static"
+  ], 
+  "revision_id": "1584238"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2014-04-03T01:03:28.124646Z", 
+  "msg": [
+   "Tidy up - no need to share StringBuffer"
+  ], 
+  "revision_id": "1584237"
+ }, 
+ {
+  "author": "sebb", 
+  "date": "2014-04-03T01:00:33.369937Z", 
+  "msg": [
+   "StringBuffer => StringBuilder"
+  ], 
+  "revision_id": "1584236"
+ }, 
+ {
+  "author": "stefan2", 
+  "date": "2014-04-03T00:59:46.563362Z", 
+  "msg": [
+   "Teach the p2l index to efficiently return the entries for arbitrary ranges", 
+   "of offsets in the rev / pack file.", 
+   "This allows us to use a much larger page sizes in these indexes than the", 
+   "block read size, which in turn reduces the size of the page table for very", 
+   "large rev / pack files.  1MB pages take about 8k to describe on disk which", 
+   "is still well within the 64kB default read block size.  At the same time,", 
+   "the page table of a 1TB rev file will fit into the default cache size.", 
+   "* subversion/libsvn_fs_fs/index.h", 
+   "(svn_fs_fs__p2l_index_lookup): Change signature to accept an offset range", 
+   "instead of a single offset implying a range.", 
+   "* subversion/libsvn_fs_fs/index.c", 
+   "(compare_start_p2l_entry,", 
+   "append_p2l_entries,", 
+   "struct p2l_entries_baton_t", 
+   "p2l_entries_func): New functions and data types to extract only the", 
+   "requested sub-set of the respective p2l page entries.", 
+   "(p2l_index_lookup): Add ability to extract only a sub-range of the", 
+   "respective page.  Also take care of misaligned ranges", 
+   "at the end of the file.", 
+   "(svn_fs_fs__p2l_index_lookup): Iteratively gather data from individual", 
+   "index pages until the full range got", 
+   "covered.", 
+   "(svn_fs_fs__p2l_entry_lookup): Update to signature change.", 
+   "* subversion/libsvn_fs_fs/cached_data.c", 
+   "(block_read): Request item descriptions for the current read block.", 
+   "* subversion/libsvn_fs_fs/fs_fs.c", 
+   "(read_config): Use 1MB pages in p2l index by default.", 
+   "(write_config): Update fsfs.conf template.", 
+   "* subversion/libsvn_fs_fs/pack.c", 
+   "(pack_range,", 
+   "append_revision): Read index data in index page granularity.", 
+   "* subversion/libsvn_fs_fs/verify.c", 
+   "(compare_p2l_to_l2p_index,", 
+   "compare_p2l_to_rev): Same.", 
+   "* tools/server-side/fsfs-stats.c", 
+   "(read_log_rev_or_packfile): Same."
+  ], 
+  "revision_id": "1584235"
+ }, 
+ {
+  "author": "atm", 
+  "date": "2014-04-03T00:57:00.115915Z", 
+  "msg": [
+   "Move MAPREDUCE-5014 to the right section now that it's been merged to branch-2."
+  ], 
+  "revision_id": "1584234"
+ }
+]

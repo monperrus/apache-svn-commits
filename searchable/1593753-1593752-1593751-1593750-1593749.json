@@ -1,0 +1,78 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-05-11T02:43:06.025926Z", 
+  "msg": [
+   "Add --metadata-only option to 'svnadmin verify'.  This allows for very", 
+   "fast detection of external corruption with a decent confidence level.", 
+   "It does not render full verification redundant but aids the sysadmin", 
+   "in their triage during an emergency.", 
+   "For repositories with logical addressing, the metadata check already", 
+   "verifies all rev file contents against the low-level checksums stored", 
+   "in the index files.  If any data gets modified by forces outside SVN", 
+   "(catastrophic server failure etc), the chance of detection is very high.", 
+   "OTOH, that check is basically a linear read at full disk speed providing", 
+   "feedback 100 to 1000 times faster than a full verification.", 
+   "The implementation is simple as we simply need to skip the per-revision", 
+   "checks and only run the global checks. For BDB, this is still a complete", 
+   "verification; for old FSFS repos, only the rep cache gets verified", 
+   "which gives very little test coverage.", 
+   "* subversion/include/svn_repos.h", 
+   "(svn_repos_verify_fs3): Add new option flag. API had already been bumped.", 
+   "* subversion/libsvn_repos/dump.c", 
+   "(svn_repos_verify_fs3): Don't call verify_one_revision() when we only", 
+   "want to verify the metadata.", 
+   "* subversion/libsvn_repos/deprecated.c", 
+   "(svn_repos_verify_fs2): Legacy code won't use the new feature.", 
+   "* subversion/svnadmin/svnadmin.c", 
+   "(svnadmin__cmdline_options_t): Declare new option.", 
+   "(options): Add UI description of the new option.", 
+   "(cmd_table): Add new option to 'svnadmin verify'.", 
+   "(svnadmin_opt_state): Add an entry for the new option.", 
+   "(subcommand_verify): Pass new option to repo API.", 
+   "(sub_main): Pass the new CL option on to the command subroutine.", 
+   "* subversion/tests/cmdline/svnadmin_tests.py", 
+   "(verify_metadata_only): New test verifying that the new option", 
+   "does not cause verification failures.", 
+   "verify_quickly): New test using the new option to detect external", 
+   "corruption in repos with log. addressing.", 
+   "(test_list): Register new tests."
+  ], 
+  "revision_id": "1593753"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-05-11T00:16:03.185735Z", 
+  "msg": [
+   "YARN-1962. Changed Timeline Service client configuration to be off by default given the non-readiness of the feature yet. Contributed by Mohammad Kamrul Islam.", 
+   "svn merge --ignore-ancestry -c 1593750 ../../trunk/"
+  ], 
+  "revision_id": "1593752"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-05-11T00:15:48.186513Z", 
+  "msg": [
+   "YARN-1962. Changed Timeline Service client configuration to be off by default given the non-readiness of the feature yet. Contributed by Mohammad Kamrul Islam.", 
+   "svn merge --ignore-ancestry -c 1593750 ../../trunk/"
+  ], 
+  "revision_id": "1593751"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-05-11T00:15:12.595448Z", 
+  "msg": [
+   "YARN-1962. Changed Timeline Service client configuration to be off by default given the non-readiness of the feature yet. Contributed by Mohammad Kamrul Islam."
+  ], 
+  "revision_id": "1593750"
+ }, 
+ {
+  "author": "vinodkv", 
+  "date": "2014-05-11T00:05:31.249837Z", 
+  "msg": [
+   "YARN-1982. Renamed the daemon name to be TimelineServer instead of History Server and deprecated the old usage. Contributed by Zhijie Shen.", 
+   "svn merge --ignore-ancestry -c 1593748 ../../trunk"
+  ], 
+  "revision_id": "1593749"
+ }
+]

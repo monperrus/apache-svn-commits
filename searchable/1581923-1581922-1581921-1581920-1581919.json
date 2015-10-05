@@ -1,0 +1,65 @@
+[
+ {
+  "author": "stefan2", 
+  "date": "2014-03-26T16:44:46.914708Z", 
+  "msg": [
+   "Simplify svnserve object pool usage:  Since we can't reuse open", 
+   "repository instances ATM, drop the repository pool.  Instead make", 
+   "the repository an object with connection lifetime (still created", 
+   "lazily).", 
+   "* subversion/svnserve/server.h", 
+   "(serve_params_t): Replace repos pool with the config hash that", 
+   "we will need to open any repos directly.", 
+   "* subversion/svnserve/svnserve.c", 
+   "(sub_main): FS_CONFIG is now part of the PARAMS struct and we", 
+   "don't have a REPOS_POOL anymore.", 
+   "* subversion/svnserve/serve.c", 
+   "(reset_repos): We don't temporarily release repositories anymore,", 
+   "thus we can drop this pool cleanup callback.", 
+   "(find_repos): Replace the REPOS_POOL with a FS_CONFIG hash such", 
+   "that we may call svn_repos_open2() directly.  Also,", 
+   "all return objects have the same lifetime now, hence", 
+   "only one pool is required.", 
+   "(construct_server_baton): Update caller. Be sure to give repository-", 
+   "related objects the same lifetime as the", 
+   "connection.", 
+   "(reopen_repos): No longer used.", 
+   "(serve_interruptable): No re-initialization of connections required", 
+   "anymore."
+  ], 
+  "revision_id": "1581923"
+ }, 
+ {
+  "author": "axb", 
+  "date": "2014-03-26T16:40:50.230090Z", 
+  "msg": [
+   "AHBL is closing down. disabling early enough. (Axb-2014-03-28)"
+  ], 
+  "revision_id": "1581922"
+ }, 
+ {
+  "author": "coheigea", 
+  "date": "2014-03-26T16:39:30.998601Z", 
+  "msg": [
+   "Configure whether to return a \"safe\" error message or not depending if we are the initiator or not"
+  ], 
+  "revision_id": "1581921"
+ }, 
+ {
+  "author": "gavincornwell", 
+  "date": "2014-03-26T16:38:48.276826Z", 
+  "msg": [
+   "Made the recently added files public so they get included in the build output.", 
+   "Fixed a bug with progress reporting. When the bytesExpected is provided you would see output such as 301/2 i.e. the written bytes was much higher than the expected bytes."
+  ], 
+  "revision_id": "1581920"
+ }, 
+ {
+  "author": "kschenk", 
+  "date": "2014-03-26T16:37:59.379902Z", 
+  "msg": [
+   "Renamed to bypass CMS."
+  ], 
+  "revision_id": "1581919"
+ }
+]
