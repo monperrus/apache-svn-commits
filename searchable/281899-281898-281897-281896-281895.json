@@ -1,0 +1,79 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-05-12T15:55:25.000000Z", 
+  "msg": [
+   "Added SessionFacade - its role is to shield servlets from tomcat internals, and", 
+   "prevent access to the internal state.", 
+   "The implementation is a bit complex - the \"internal\" object is an implementation", 
+   "of HttpSession too, but it is generated from an external package that we don't control,", 
+   "and it's good to be a bit paranoid about security.", 
+   "( The input/output streams  are the last \"unsafe\" objects exposed by tomcat, will", 
+   "be fixed soon )"
+  ], 
+  "revision_id": "281899"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-12T15:26:40.000000Z", 
+  "msg": [
+   "- moved the code that sets the session manager from DefaultCM setter to sessionInterceptor.", 
+   "All session-related stuff is in one place.", 
+   "- Propagate distributable from web.xml to the SessionManager.", 
+   "- renamed createSession to getNewSession. SessionManager should use a pool and recycle.", 
+   "Added released() notification - when the serlvet is done with a session object.", 
+   "- remove setContext() and all dependencies between SessionManager and tomcat ( the reverse", 
+   "is false - tomcat depends on SM ). That means SessionManager can be implemented on top of", 
+   "other packages that have no common architecture with tocmat.", 
+   "-  addes start/stop to SessionManager, SessionInterceptor will manage the communication", 
+   "and lifecycle of SM, in sync with the associated Context", 
+   "- re-aranged the code in StandardManager, removed un-used methods. It still need some work,", 
+   "but it's better."
+  ], 
+  "revision_id": "281898"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-12T06:15:24.000000Z", 
+  "msg": [
+   "- Finally moved SessionManager to Context level, as requested (and agreed) long time ago.", 
+   "- Removed StandardSessionManager - now StandardManager can implement SessionManager, it", 
+   "no longer have the big impedance problem ( both are now at context level )", 
+   "- Made all the changes related with that.", 
+   "Note that Session management is more or less orthogonal to the main function of", 
+   "executing requests.  There is no reason to have too tight coupling between", 
+   "those components.", 
+   "It should be easy to plug in other module ( like the one from JServ or Catalina ),", 
+   "the interface SessionManager have _nothing_ specific to tomcat.", 
+   "We need some hooks for re-loading - whatever Jon adds is fine ( probably it will not", 
+   "be specific to tomcat ).", 
+   "Next: documentation, beautify the code, keep only the essential."
+  ], 
+  "revision_id": "281897"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-12T02:32:02.000000Z", 
+  "msg": [
+   "- Removed ServerSession - it wasn't used in a while, StandardSession has more functionality.", 
+   "- Removed dependencies on tomcat/catalina, removed tomcat/catalina. The package was an", 
+   "early attempt to keep the 2 projects in sync - now it's outdated and too confusing.", 
+   "Right now the session management in tomcat is implemented in StandardSession and", 
+   "StandardManager. The link between tomcat and those 2 objects is SessionManager.", 
+   "SessionManager will become a per/Context object ( as requested and agreed few months", 
+   "ago ).", 
+   "- Reaper still exist in util - it's usefull in itself, will me made a general util."
+  ], 
+  "revision_id": "281896"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-12T02:24:41.000000Z", 
+  "msg": [
+   "- Removed ajp23 - it is not used, better code is needed.", 
+   "- Few experiments with per/thread versus pool-based reuse. I'll clean up", 
+   "soon, maybe with a common solution for all protocols."
+  ], 
+  "revision_id": "281895"
+ }
+]

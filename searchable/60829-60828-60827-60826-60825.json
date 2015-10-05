@@ -1,0 +1,70 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-12-01T07:01:28.000000Z", 
+  "msg": [
+   "Make the export generation a bit quieter."
+  ], 
+  "revision_id": "60829"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-12-01T06:55:41.000000Z", 
+  "msg": [
+   "Add a CHANGES log and make sure that apr.exports is removed when", 
+   "make distclean is used."
+  ], 
+  "revision_id": "60828"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-12-01T06:37:45.000000Z", 
+  "msg": [
+   "This is basically a small header re-org, it doesn't really change anything,", 
+   "just how we report it.  There are two classes of changes, both of which", 
+   "are required by the script that generates the export list.", 
+   "1)  Always specify what we have instead of what we don't have.  This", 
+   "just means that I changed a #if !APR_HAS_XLATE to #if APR_HAS_XLATE", 
+   "It is easier for the exports script if all of APR is specified the", 
+   "same way.", 
+   "2)  Wrap functions that aren't actually defined with APR_NOT_DONE_YET.", 
+   "This class of changes comes about because we have some functions", 
+   "that have prototypes in the headers, but no implementation.  I just", 
+   "put #if APR_NOT_DONE_YET and #endif around those prototypes so that", 
+   "our exports script doesn't try to link against them.  There is a", 
+   "comment explaining this in the code, and this can be removed once", 
+   "the functions actually exist."
+  ], 
+  "revision_id": "60827"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-12-01T06:32:00.000000Z", 
+  "msg": [
+   "Fix a small bug in the export code.  This allows us to nest multiple", 
+   "macros.  There is a small bug in this code, because we report the wrong", 
+   "macro in the end tag.  For example:", 
+   "APR_HAS_XLATE", 
+   "apr_xlate_conv_buffer", 
+   "APR_NOT_DONE_YET", 
+   "apr_xlate_conv_char", 
+   "/APR_NOT_DONE_YET", 
+   "/APR_NOT_DONE_YET", 
+   "This is minorly annoying, but not horrible.  We generally use the amount", 
+   "of indentation and the number of macros found to match things up.", 
+   "Hopefully we can fix this later."
+  ], 
+  "revision_id": "60826"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-12-01T06:27:16.000000Z", 
+  "msg": [
+   "Change POOL_DEBUG into APR_POOL_DEBUG.  This allows us to detect the macro", 
+   "when we scan the APR header files to generate the export list.  If we", 
+   "use POOL_DEBUG, then we can't determine when the debug functions are", 
+   "available and when they aren't."
+  ], 
+  "revision_id": "60825"
+ }
+]

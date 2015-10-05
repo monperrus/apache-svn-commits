@@ -1,0 +1,109 @@
+[
+ {
+  "author": "sppatel", 
+  "date": "2006-01-09T18:32:49.179566Z", 
+  "msg": [
+   "allow each plugin and feature to be version seperately"
+  ], 
+  "revision_id": "367354"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2006-01-09T18:25:55.419472Z", 
+  "msg": [
+   "changes ...", 
+   "o made all operations add request controls to LdapContext before issuing", 
+   "any commands against the apacheds JNDI LDAP provider: this is to allow", 
+   "the LDAP provider to alter its behavoir based on the presence of request", 
+   "controls", 
+   "o made all protocol operations now set the Context.REFERRAL property in the", 
+   "environment before making JNDI calls on the ApacheDS JNDI Provider", 
+   "o deleting unused HandlerUtil class (junk that got accidentally committed)", 
+   "o removed search through a collection for a particular control now that we", 
+   "use a Map as returned by getControls() on a request", 
+   "o added logger to unbind handler", 
+   "o started using control's CONTROL_OID constant rather than replicating the use", 
+   "of the control's OID string", 
+   "o added a new ManageDsaIT control but have not rigged in the processing logic", 
+   "yet ... will add this as I finish off referral support"
+  ], 
+  "revision_id": "367353"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2006-01-09T18:23:46.751599Z", 
+  "msg": [
+   "fix for DERBY-298.  committing change for \u00b7\u00b9ystein Gr\u00b1\u00b1\u00b1vlen", 
+   "The attached patch fixes the bug by setting the logEnd after recovery to the beginning of the new empty log file instead of the end of the previous file.", 
+   "The patch contains changes to the following files:", 
+   "M java/engine/org/apache/derby/impl/store/raw/log/FileLogger.java", 
+   "- At the end of the redo scan, if the scan stopped in a file succeeding the file of the last log record, update logEnd to this position.", 
+   "- Change assert to allow logEnd to be in a newer file than that of the last log record.", 
+   "M java/engine/org/apache/derby/impl/store/raw/log/Scan.java", 
+   "- Introduced new variable newFileStart which will only have a valid LogInstant value when the scan is at the header of the file.", 
+   "- When a new file is entered, set newFileStart to the first possible LogInstant of this file (end of header).", 
+   "- When a log record is encountered, set newFileStart to INVALID_LOG_INSTANT.", 
+   "- Changed getLogRecordEnd() to return newFileStart if that is valid (i.e., scan is at the start of a file)", 
+   "- Removed comment about not starting to write to the new empty log file, since that is not true anymore.", 
+   "A java/testing/org/apache/derbyTesting/functionTests/tests/store/RecoveryAfterBackup_app.properties", 
+   "- Test properties", 
+   "M java/testing/org/apache/derbyTesting/functionTests/tests/store/copyfiles.ant", 
+   "- Added new property files", 
+   "A java/testing/org/apache/derbyTesting/functionTests/tests/store/RecoveryAfterBackupSetup_app.properties", 
+   "- Test properties.", 
+   "- useextdirs=true needed so the backup is placed somewhere the next test can find it.", 
+   "A java/testing/org/apache/derbyTesting/functionTests/tests/store/RecoveryAfterBackup.java", 
+   "- Test that is supposed to be run after RecoveryAfterBackupSetup.java.", 
+   "- Does recovery, updates the database, shutdowns the database, and does roll-forward restore.", 
+   "- Checks that updates made after recovery is reflected in the database after roll-forward restore.", 
+   "A java/testing/org/apache/derbyTesting/functionTests/tests/store/RecoveryAfterBackupSetup.java", 
+   "- Test that does the preparation for the RecoveryAfterBackup test.", 
+   "- Inserts a few records, makes a backup, and stops without shutting down.", 
+   "M java/testing/org/apache/derbyTesting/functionTests/harness/RunTest.java", 
+   "- For tests where the database is not deleted at the end of the test, do not delete the external directories either.", 
+   "- This is necessary to be able to access the backup in suceeding tests.", 
+   "A java/testing/org/apache/derbyTesting/functionTests/master/RecoveryAfterBackupSetup.out", 
+   "- Test output", 
+   "A java/testing/org/apache/derbyTesting/functionTests/master/RecoveryAfterBackup.out", 
+   "- Test output", 
+   "MM java/testing/org/apache/derbyTesting/functionTests/suites/storerecovery.runall", 
+   "- Added tests to storerecovery suite.", 
+   "- Changed property eol-style.", 
+   "The recently attached patch (derby-298a.diff) addresses Suresh's", 
+   "review comments. The only major change from the previous patch is in", 
+   "java/engine/org/apache/derby/impl/store/raw/log/Scan.java. The changes", 
+   "to this file compared to the current head of trunk are:", 
+   "- When a new log file is entered, check that the header of this", 
+   "file refers to the end of the last log record of the previous log", 
+   "file. If not, stop the scan.", 
+   "- If the header was consistent, update knowGoodLogEnd to the first", 
+   "possible LogInstant of this file (end of header).", 
+   "- close() no longer reset knownGoodLogEnd since it is needed by", 
+   "FileLogger after the scan is closed.", 
+   "- Changed comment of getLogRecordEnd() to reflect that it can be", 
+   "used after the scan is closed, and that it at that time may", 
+   "return the start of an empty log file.", 
+   "- Removed comment about not starting to write to the new empty log", 
+   "file, since that is not true anymore.", 
+   "In addition, the property files for the tests have been updated so", 
+   "they are run without the security manager."
+  ], 
+  "revision_id": "367352"
+ }, 
+ {
+  "author": "jgmyers", 
+  "date": "2006-01-09T18:23:25.142999Z", 
+  "msg": [
+   "Bug 4636: Adjust test to deal with charset normalization"
+  ], 
+  "revision_id": "367351"
+ }, 
+ {
+  "author": "chestnut", 
+  "date": "2006-01-09T18:12:29.851598Z", 
+  "msg": [
+   "fixes ability to delete trash, was getting an error that the sitetree wasn't locked"
+  ], 
+  "revision_id": "367350"
+ }
+]

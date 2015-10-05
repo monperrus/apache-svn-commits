@@ -1,0 +1,105 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2003-12-26T15:18:49.000000Z", 
+  "msg": [
+   "The first item here seemed like a very simple change", 
+   "to make - however once I did it all-tests wouldn't", 
+   "run, and I gradually teased out all the other stuff", 
+   "as a part of this process.  The \"executive summary\"", 
+   "is that we weren't, and still aren't, handling", 
+   "typing and array serialization very well in some", 
+   "cases, although it's much better now.", 
+   "* Respect the setting of the \"send_type_attr\" property", 
+   "when serializing.  We used to always turn off xsi", 
+   "types when in non-encoded mode.  Now instead we", 
+   "merely default to no type attributes when literal,", 
+   "allowing the property setting, if any, to", 
+   "override.", 
+   "* Make sure property parent chains actually work.  On", 
+   "the client, doing a getProperty() on a MessageContext", 
+   "gets you MC -> Service -> Call -> Engine properties.", 
+   "On the server, it's MC -> Service -> Engine.", 
+   "* SerializationContext now writes xsi:type onto an", 
+   "element if the \"writeXmlType\" variable is filled in", 
+   "when startElement() gets called.  It used to just", 
+   "throw the type value into the active Attributes", 
+   "object, which caused problems when that Attributes", 
+   "object was shared (which happened when serializing", 
+   "maxOccurs-style collections with the ArraySerializer;", 
+   "we'd end up with an attribute value \"foo:bar\" which", 
+   "would get written on each element, but the namespace", 
+   "declaration for \"foo\" would only be on the first", 
+   "one, producing invalid XML (!))", 
+   "* Rationalize property handling in SerializationContext", 
+   "utilizing the property parent hierarchy.", 
+   "* TypeMapping.getXmlType() now knows whether or not it", 
+   "is being used in a SOAP-encoded context, and if not,", 
+   "never returns SOAP_ARRAY for random arrays.", 
+   "* ArraySerializerFactory gets a constructor which tells", 
+   "the serializer which java type and XML type it is", 
+   "being configured for.  This allows this information", 
+   "to pass through to the ArraySerializer itself.", 
+   "* Remove the part of ArraySerializer that checks the", 
+   "name of the serialized element against a parameter", 
+   "in the current operation - we're not always", 
+   "serializing a parameter, so this is the wrong place", 
+   "for this.", 
+   "* Respect the default config for sendXsiTypes when", 
+   "serializing arrays, and pass type info down to", 
+   "SerializationContext.serialize() for members.", 
+   "* Add an accessor to get the current SOAP_ARRAY type", 
+   "from a SOAPConstants.", 
+   "* Do a better job convert()ing to OctetStream.", 
+   "* de-main()-ify a couple of junit tests (we used to", 
+   "like putting main()s on there, but since you can", 
+   "easily run the tests with junit.textui.TestRunner", 
+   "anyway, removing it makes test debugging inside", 
+   "IDEs much nicer)", 
+   "* Allow Exceptions thrown by various tests to bubble", 
+   "up to the surface so we can see what actually went", 
+   "wrong.", 
+   "* Exclude wsdl/adaptive test from the build and reopen", 
+   "bug #18056.  We need to figure out a better way of", 
+   "dealing with this.  I set up a framework for it by", 
+   "adding an \"arrayTypeQNames\" Set to SymbolTable, and", 
+   "checking against the set when figuring out if", 
+   "something is a SOAP array in SchemaUtils - didn't", 
+   "quite get it working though."
+  ], 
+  "revision_id": "250169"
+ }, 
+ {
+  "author": "ias", 
+  "date": "2003-12-26T13:52:06.000000Z", 
+  "msg": [
+   "Initial check-in: Axis J2ME XML as an implementation of JSR-172 J2ME Web Services XML spec"
+  ], 
+  "revision_id": "250168"
+ }, 
+ {
+  "author": "ias", 
+  "date": "2003-12-26T13:51:43.000000Z", 
+  "msg": [
+   "Initial check-in: Axis J2ME RPC as an implementation of JSR-172 J2ME Web Services RPC spec"
+  ], 
+  "revision_id": "250167"
+ }, 
+ {
+  "author": "sanjaya", 
+  "date": "2003-12-24T14:07:42.000000Z", 
+  "msg": [
+   "instruction to use two versions of wsdd for apache1.3 and apache 2.0"
+  ], 
+  "revision_id": "250166"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-12-24T14:02:11.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag", 
+   "'Release-2003_10_26-bugfixes_branch-before-1-0sec'."
+  ], 
+  "revision_id": "250165"
+ }
+]

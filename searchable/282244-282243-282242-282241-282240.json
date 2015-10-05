@@ -1,0 +1,69 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-08-02T13:53:16.000000Z", 
+  "msg": [
+   "Missed one ServletWrapper, thanks  Tom Klaasen <Tom.Klaasen@the-ecorp.com>", 
+   "Submitted by:\t Tom Klaasen <Tom.Klaasen@the-ecorp.com>"
+  ], 
+  "revision_id": "282244"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-02T03:50:32.000000Z", 
+  "msg": [
+   "Moved ServletWrapper to facade, simplified Handler.init ( SW overrides this", 
+   "anyway).", 
+   "This will allow us to later remove FacadeManager and simplify facade/core", 
+   "communication."
+  ], 
+  "revision_id": "282243"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-02T02:17:30.000000Z", 
+  "msg": [
+   "Replaced ServletWrapper with Handler ( step 1 )", 
+   "Other changes ( related - part of SW -> H ):", 
+   "- mappings without a servlet will throw an exception - make sure web.xml", 
+   "is valid ( tomcat had a workaround, but other containers may not)", 
+   "- remove addServlet( String, String ) - we may have different implementations", 
+   "of Handler ( like JspServlet) and it's better to give more control( plus it", 
+   "had all the jsp paths inside ).", 
+   "- in Context.reload(), we'll call sw.reload() instead of guessing if the", 
+   "handler can reload. This simplifies both Context and Handler ( fewer", 
+   "interdeps )", 
+   "Unrelated changes ( sorry about that ):", 
+   "- fixed the bug related with writer/stream use ( Response, ResponseImpl,", 
+   "HttpServletFacade )"
+  ], 
+  "revision_id": "282242"
+ }, 
+ {
+  "author": "jiricka", 
+  "date": "2000-07-31T13:46:08.000000Z", 
+  "msg": [
+   "Bugfix: a packaged tag library can not be specified in web.xml.", 
+   "This was not consistent with JSP 1.1 spec errata issues 8 and 9. Now the algorithm is closer to what is suggested in the errata:", 
+   "First the TLD_URI is resolved and then it is checked whether this URI represents a .tld file or a .jar file. In case of a jar file, META-INF/taglib.tld entry is used."
+  ], 
+  "revision_id": "282241"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-07-31T02:35:17.000000Z", 
+  "msg": [
+   "ByteBuffer was an experiment to improve in/out systems in tomcat. It is not used", 
+   "in tomcat3.2, but can be enabled and shows some decent improvements.", 
+   "On the other side I think it is too dificult to use, and I will roll it back until I find", 
+   "a better solution.", 
+   "I did a re-write of BufferedServletOutputStream, keeping only the buffering", 
+   "code in OutputBuffer and moving all tomcat-state management code in ContextManager", 
+   "and Response. This will allow alternative implementations of OutputStreams ( so", 
+   "far BSOS was the only one ).", 
+   "BufferedServletOutputStream is no longer used - it will stay around until we make sure there are", 
+   "no people needing it."
+  ], 
+  "revision_id": "282240"
+ }
+]

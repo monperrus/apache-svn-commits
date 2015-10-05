@@ -1,0 +1,55 @@
+[
+ {
+  "author": "randyk", 
+  "date": "2004-07-24T03:43:41.000000Z", 
+  "msg": [
+   "fix previous fix to use the correct 'blib' for @INC. Also adjust to insert", 
+   "a tab in the Makefile target."
+  ], 
+  "revision_id": "104359"
+ }, 
+ {
+  "author": "randyk", 
+  "date": "2004-07-24T02:51:50.000000Z", 
+  "msg": [
+   "Win32 prefers a different syntax for running the tests from the", 
+   "command line."
+  ], 
+  "revision_id": "104358"
+ }, 
+ {
+  "author": "randyk", 
+  "date": "2004-07-23T23:52:14.000000Z", 
+  "msg": [
+   "Submitted by:\tMarkus Wichitill <mawic () gmx ! de>", 
+   "Reviewed by:\trandyk", 
+   "with the removal of APR_DELONCLOSE in apreq_file_mktemp, and instead", 
+   "register a pool cleanup to delete the temp file, we no longer need", 
+   "to open temp files on Win32 using \":APR\"."
+  ], 
+  "revision_id": "104357"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-23T17:49:14.000000Z", 
+  "msg": [
+   "The apr_pools.c implementation of run_cleanups makes it unsafe to remove other pool cleanups within a cleanup handler.  So we drop apr_file_close and register our cleanup before calling apr_file_mktemp, so it'll actually run last."
+  ], 
+  "revision_id": "104356"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-23T17:22:54.000000Z", 
+  "msg": [
+   "Drop APR_DELONCLOSE from apreq_file_mktemp implementation and install", 
+   "apreq_file_cleanup. When passed to apr_file_open on Win32, APR_DELONCLOSE", 
+   "sets the FILE_SHARED_DELETE flag, which is, unfortunately, a property that", 
+   "is preserved across NTFS \"hard\" links.  This breaks apps that link()", 
+   "the temp file to a permanent location, and subsequently expect to open it", 
+   "without FILE_SHARED_DELETE before the original tempfile is closed+deleted.", 
+   "In fact, even Apache::Upload does this, so it is a common enough event that", 
+   "the apreq_file_cleanup workaround is necessary."
+  ], 
+  "revision_id": "104355"
+ }
+]

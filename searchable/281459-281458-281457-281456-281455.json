@@ -1,0 +1,85 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-02-03T23:41:29.000000Z", 
+  "msg": [
+   "- Removed IncludedResponse. The only use was to prevent setting headers, but it's", 
+   "much simpler to just set a flag ( like protocol ) to prevent sending any flags.", 
+   "In the current design even that is not needed - after the headers are sent, no", 
+   "change will matter for the client."
+  ], 
+  "revision_id": "281459"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-03T23:05:28.000000Z", 
+  "msg": [
+   "- Added back ApacheConfig - it will generate the apache configuration file.", 
+   "XXX need to update the docs, the only config for apache is to Include tomcat-apache.conf", 
+   "( probably that can also be automated !)", 
+   "- Updated Ajp12 to make use of the context and user informations from mod_jserv.", 
+   "Problems: mod_jserv will not send the context if setHandler is used ( zone", 
+   "works only for prefix mounts ).", 
+   "PathTranslated is broken ( for 2.2 servlet API).", 
+   "- As a result, Authentication works now in Apache + tomcat, with Apache dealing with user", 
+   "authentication and authorization. ( not integrated into automatic config, you need to", 
+   "set it up in apache.conf )."
+  ], 
+  "revision_id": "281458"
+ }, 
+ {
+  "author": "akv", 
+  "date": "2000-02-03T07:13:41.000000Z", 
+  "msg": [
+   "Fixed dist and build targets"
+  ], 
+  "revision_id": "281457"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-03T07:11:55.000000Z", 
+  "msg": [
+   "- Changed the names of handler methods in request and context interceptors ( removed the", 
+   "handle* prefix )", 
+   "- Added a base class for request/context interceptors", 
+   "- Major change in loadOnStartup - Context is no longer involved, all the code", 
+   "is in LoadOnStartupInterceptor. The \"loadOnStartup\" property is part of", 
+   "ServletWrapper, instead of keeping a hashtable mapping SW to loadOnStartup.", 
+   "- Fixed Request.getPathTranslated() - it used to return the path for the current request instead", 
+   "of the translated pathInfo", 
+   "- removed read() and write() methods from Request/Response - they belong to Stream.", 
+   "Request/ResponseImpl still have the methods (overriden by adapters), in order to simplify", 
+   "adapters ( they just have to extend Request/ResponseImpl, no need to deal with Streams if", 
+   "they don't need to)", 
+   "- getRealPath() - code was redundant, and no need for URLs ( since real path works only", 
+   "for \"normal\" file-system based contexts)", 
+   "- removed getServletsByPath(), and fixed containsJSP ( the only method using it) to", 
+   "return when the first JSP is found.", 
+   "- removed getServletsByClassName. It was a private and un-used method. Can be implemented", 
+   "outside context if anyone needs it.", 
+   "- removed empty ( and unused ) methods from ContextManager", 
+   "- removed Request.getParametersCopy(), replaced it with equivalent code in RDispatcher", 
+   "- removed ResolvedServlet from Request - not used anywhere, can be added if we find a user", 
+   "( and if we find what it does :-). Same for ResourceName. Same for ServletBase", 
+   "- Added few more comments ( surprise !)", 
+   "- Fixed HttpResponseAdapter to send multiple headers.", 
+   "- Changed tomcat.sh to load all jars in tomcat/lib", 
+   "Sorry for the number/length of the changes, but I was offline and most", 
+   "of them are related ( cleanup, reorg ). The target is to document/clean Request, Response,", 
+   "Context and ContextManager."
+  ], 
+  "revision_id": "281456"
+ }, 
+ {
+  "author": "mandar", 
+  "date": "2000-02-03T02:57:45.000000Z", 
+  "msg": [
+   "Supporting other encodings and setting the headers.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "281455"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "mandar", 
+  "date": "2000-02-03T02:13:13.000000Z", 
+  "msg": [
+   "1) To support multiple encodings (and not just the default),", 
+   "we scan the JSP file for a contentType directive. If one", 
+   "is found then we initialize the JspReader with the", 
+   "encoding present in the directive.", 
+   "This is inefficient as it needs a two-pass parser, but", 
+   "solves the bigger problem of multiple encodings (Japanese", 
+   "and others).", 
+   "2) While fixing this problem, I noticed that the \"Content-Type\"", 
+   ", \"Content-Length\" and \"Content-Language\" HTTP headers", 
+   "were not set.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "281454"
+ }, 
+ {
+  "author": "mandar", 
+  "date": "2000-02-02T23:30:39.000000Z", 
+  "msg": [
+   "Any type of tag properties can be set (not just Strings).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "281453"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-01T22:53:32.000000Z", 
+  "msg": [
+   "Request simplifications ( still far from Catalina Request, but a bit closer)", 
+   "- updatePaths moved in Mapper, where it belongs", 
+   "- conversion from string to int done in Facade, no need in Request", 
+   "- Moved String2Date from HeaderField to RequestUtil, that avoid creating 1 calendar", 
+   "per header ( >5% in OptimizeIt)", 
+   "- removed getRequestDispather from Request, it was just an indirection from Facade."
+  ], 
+  "revision_id": "281452"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-01T21:39:40.000000Z", 
+  "msg": [
+   "- Removed \"error\" methods from Response interface, the methods are just", 
+   "re-directs to the Error servlet ( the code is in ResponseFacade)", 
+   "- Removed \"systemCookies\" - the only system cookie was the session id,", 
+   "and it's simpler to use the session id property ( usefull for URL rewriting", 
+   "too). SessionInterceptor is now responsable for setting the header ( in", 
+   "\"beforeBody\" ) - that allow non-cookie based session managers to work", 
+   "without hardcoded cookie code in Request."
+  ], 
+  "revision_id": "281451"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-01T07:37:40.000000Z", 
+  "msg": [
+   "Big changes in Response.java - removed all \"extra\" methods, removed most", 
+   "of the XXX code in ResponseImpl.", 
+   "Craig, please take a loog at Response, we should try to use few common", 
+   "interfaces between Catalina and main - most of the methods in response are", 
+   "needed (IMHO), and probably you'll need to add them when you'll be close", 
+   "to a working Catalina to support full 2.2 ( buffering, etc) and for connectors.", 
+   "As part of the changes, the fixHeaders() moved to an interceptor and will be", 
+   "customizable ( since Apache sets it's own Server and Date header) and \"custom\"", 
+   "code can add special headers. The \"beforeBody\" method is used to give", 
+   "interceptors the chance to alter headers/state before being sent to user,", 
+   "and will always  be called before the first write to the Writer.", 
+   "All error processing code is now in DefaultErrorPage servlet ( used to be", 
+   "in ResponseImpl and ResponseWrapper). It's still hardcoded, but it's easy to", 
+   "replace it ( to add better/different reporting styles).", 
+   "Also changed the names of RequestInterceptor methods to reflect what happens", 
+   "at each stage - still need to figure an efficient way to set interceptors only", 
+   "for a number of \"stages\". Still need to add authenticate() and authorize()", 
+   "methods ( similar with Apache, IIS, NSAPI )"
+  ], 
+  "revision_id": "281450"
+ }
+]

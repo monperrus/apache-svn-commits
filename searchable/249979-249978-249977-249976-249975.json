@@ -1,0 +1,84 @@
+[
+ {
+  "author": "dims", 
+  "date": "2003-11-29T16:12:05.000000Z", 
+  "msg": [
+   "Fix for Bug 19330 - Empty String deserialization + fix", 
+   "from dhauver@vecna.com (Dave Hauver)"
+  ], 
+  "revision_id": "249979"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2003-11-29T05:15:03.000000Z", 
+  "msg": [
+   "Fix bug 22999.", 
+   "Pass metadata down to getValueAsString for attributes, so we serialize", 
+   "them correctly.", 
+   "Also fix up TestEncoding so it works with older versions of junit."
+  ], 
+  "revision_id": "249978"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2003-11-28T23:39:13.000000Z", 
+  "msg": [
+   "Fix a number of inconsistencies/issues in the type mapping", 
+   "system.", 
+   "* Refactor TypeMappingDelegate.  Now it does NOT inherit from", 
+   "TypeMappingImpl, but just implements TypeMapping.  Since the", 
+   "whole point of the delegate class is just to act as a proxy", 
+   "for a \"real\" typemapping in order to keep chains updated in", 
+   "the face of changes, it doesn't make sense for it to have", 
+   "all the \"real\" functionality.  Now this is explicit, which", 
+   "should make debugging easier in the future.", 
+   "* Refactor getXMLType() up to TypeMapping interface.", 
+   "* Instead of putting the soap encoding typedefs into the default", 
+   "type mapping, put them (and only them) into the default SOAP", 
+   "type mappings, which delegate to the \"raw\" default type mapping.", 
+   "This cleans up a lot of weird problems we were having mixing up", 
+   "soap encoded types with schema types.", 
+   "* Fix type mapping chaining bug in register() - now we actually", 
+   "have the new mapping delegate to the old one, which makes the", 
+   "scoping work.", 
+   "* When checking for serializers or looking up QNames by class,", 
+   "walk the delegate chain *before* doing the funky array-checking", 
+   "logic.  This enables explicit mappings of, say, \"int[]\", to", 
+   "override the default abstract array processing.", 
+   "* DefaultTypeMappings used to throw exceptions if they were", 
+   "modified after initialization - but I don't think this really", 
+   "makes sense - you should be able to change the defaults.  So the", 
+   "exception throwing has been commented out for now.", 
+   "* Comment out testEncodedArrayConversion in TestSerializedRPC.", 
+   "In this context, there is no way that <arg0>string</arg0> could", 
+   "schema-validate against the service (since it's using SOAP-encoded", 
+   "arrays and thus must have child elements).", 
+   "* Comment out calls to getNillableQName() in wsdl.symbolTable.Utils.", 
+   "This prevents changing the schema types to potentially incompatible", 
+   "ones (I don't believe SOAP processors are required to understand", 
+   "the soapenc types, therefore we can't replace the schema ones,", 
+   "esp. in a doc/lit environment).", 
+   "* Change ordering of schema types to make sure 2001 schema is", 
+   "registered last (this means class->XSD mappings will by default", 
+   "return 2001 versions)"
+  ], 
+  "revision_id": "249977"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2003-11-28T17:08:13.000000Z", 
+  "msg": [
+   "Fix for Bug 19214 - WSDL2Java ignores <xs:annotation> comments", 
+   "from \"Hawkins, Peter\" <HawkinsP-C@BATTELLE.ORG>"
+  ], 
+  "revision_id": "249976"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2003-11-28T16:03:45.000000Z", 
+  "msg": [
+   "Added a sample commons-logging.properties and a comment in simplelog.properties."
+  ], 
+  "revision_id": "249975"
+ }
+]

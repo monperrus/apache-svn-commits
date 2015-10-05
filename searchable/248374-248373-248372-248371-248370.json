@@ -1,0 +1,82 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-10-07T03:49:39.000000Z", 
+  "msg": [
+   "Complex doc/lit test code framework (still needs implementing)"
+  ], 
+  "revision_id": "248374"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-10-07T03:42:28.000000Z", 
+  "msg": [
+   "Add test code for complex RPC and simple doc lit", 
+   "Fix componentsReady() logic a bit more."
+  ], 
+  "revision_id": "248373"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-10-07T02:23:29.000000Z", 
+  "msg": [
+   "* In AxisFault, treat faultCode as a QName all the time, with a", 
+   "different accessor (setFaultCodeAsString()) for two reasons;", 
+   "clarity, and so as not to confuse a deserializer treating a", 
+   "fault as a bean.", 
+   "* To deserialize faults as beans, we're currently enabling", 
+   "setters on the fault classes.  This is prohibited by JAX-RPC,", 
+   "so we should see if this breaks the TCK.  To deal with this", 
+   "(IMO incorrect) restriction, we'll have to do some funky", 
+   "tricks with understanding the order of the parameters in the", 
+   "fault's constructor, and only construct the object after", 
+   "all the values are assembled.  Will do this work later if", 
+   "necessary.", 
+   "* Bulletproof OperationDesc.getFaultByQName()", 
+   "* Fix the framework architecture for deserializing pieces of", 
+   "\"containers\" like beans/arrays/maps/faults.  We now support", 
+   "a concept of \"active child deserializers\" in the base", 
+   "DeserializerImpl class.  Each time a Deserializer gets a", 
+   "child deserializer, it adds the child to the list of active", 
+   "children and adds a CallbackTarget so that it will be", 
+   "notified when the child's value has been deserialized.", 
+   "We now use this mechanism to keep track of when a structured", 
+   "entity is actually complete, so the valueComplete()/callback", 
+   "system actually works.  The Array, Bean, Map, and Vector", 
+   "deserializers have been changed to fit.", 
+   "To make this work cleanly, we no longer overload the Callback", 
+   "setValue() method in the individual Deserializers (ArrayDeser,", 
+   "etc).  Now the DeserializerTarget uses the setChildValue()", 
+   "method to cleanly separate the propagation of actual values", 
+   "from the framework-managed structural completion code.", 
+   "This allows faults with multi-ref data to be correctly", 
+   "deserialized, cleans up the deserializers to use a common", 
+   "pattern, and should correct various problems we were", 
+   "having with streaming deserialization.", 
+   "* inout.wsdl was syntactically incorrect wrt faults, as are", 
+   "several other of our test WSDLs.", 
+   "* ComprehensiveTypes.wsdl was also incorrect, and it also", 
+   "mixes rpc/encoded with rpc/literal (elemWComplex uses", 
+   "<part element=\"\">).  Fix the fault part now, figure out", 
+   "what we're going to do about the rpc/lit part later.", 
+   "We now pass the complexRpcEnc fault test.  ComplexDocLit next."
+  ], 
+  "revision_id": "248372"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-10-07T00:34:03.000000Z", 
+  "msg": [
+   "Merge docs and sample buildfile fix from the HEAD to r1.0"
+  ], 
+  "revision_id": "248371"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-10-06T03:33:45.000000Z", 
+  "msg": [
+   "redirect"
+  ], 
+  "revision_id": "248370"
+ }
+]

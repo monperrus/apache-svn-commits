@@ -1,0 +1,79 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-05-02T19:58:41.000000Z", 
+  "msg": [
+   "- Moved the date format from CookieTool to HttpDate, it's better to have", 
+   "all of them in one place", 
+   "- moved getBytes from HttpDate to MimeHeaderField, it's easier to understand", 
+   "it.", 
+   "I found HttpDate a bit difficult to read - I would prefer to keep static", 
+   "helper methods for date formating separated from the actual date storage.", 
+   "JDK1.1+ is using the same aproach - the format/parse code is separated", 
+   "from the actual date representation.", 
+   "The date code seems to be very expensive, according to perf. tests - another", 
+   "argument to do the change when some time will be available."
+  ], 
+  "revision_id": "281869"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-02T19:19:23.000000Z", 
+  "msg": [
+   "- removed CookieUtil - not used, replaced by CookieTools.", 
+   "- Fixed MaxAge to Max-Age, thanks to \"Peter Johnson\" <peter.johnson@lutris.com>", 
+   "- Removed some of the useless object creation. We now use static fileds for", 
+   "everything that is static ( no need to create a get GMT timezone for", 
+   "every request, no need to create a HttpDate instance which creates a new", 
+   "Calendar which create a new Date, use StringBuffer instead of String, etc).", 
+   "Right now the only objects that are created are a StringBuffer and a Date.", 
+   "It is possible to avoid both by keeping a per/Request instance that will", 
+   "be reused ( since all processing happens in the request thread - at least what", 
+   "is happening in tomcat, the servlet may create threads but that doesn't affect", 
+   "us).", 
+   "- added few more comments", 
+   "Submitted by:   \"Peter Johnson\" <peter.johnson@lutris.com>"
+  ], 
+  "revision_id": "281868"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-01T23:25:44.000000Z", 
+  "msg": [
+   "Small change to the \"notes\" - the note is similar with attributes, but with", 
+   "faster access time ( indexed array access versus String-keyed Hashtables).", 
+   "We can also keep attributes visible from servlets separated from internal", 
+   "attributes."
+  ], 
+  "revision_id": "281867"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-01T23:23:47.000000Z", 
+  "msg": [
+   "- added absPath - that remove multiple redundant ( and expensive ) computations", 
+   "of the absolute context path.", 
+   "- added more docs", 
+   "- clean up getResources and getRealPath. The old code was based on a wrong", 
+   "assumption - the spec doesn't allow getResource or getRealPath to cross", 
+   "web app boundaries, so the code is much simpler and faster.", 
+   "XXX We still need to abstract that - maybe using a callback - in order to", 
+   "support non-file-based contexts."
+  ], 
+  "revision_id": "281866"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-01T23:19:57.000000Z", 
+  "msg": [
+   "- use PoolConnector by default. It's much faster, and allow object reuse.", 
+   "The code is much more efficient - but that also means it is more complex.", 
+   "We need to test it a lot - multi-pocessor, various OSes, etc.", 
+   "- Use the new mapper. Security doesn't work - but it didn't worked too well", 
+   "anyway. I'll add the access control code ( finding web resource collection", 
+   "and security constraints from pattern matching ) - including checking the", 
+   "method and transport."
+  ], 
+  "revision_id": "281865"
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "author": "nd", 
+  "date": "2005-06-29T22:19:59.809393Z", 
+  "msg": [
+   "`build all`"
+  ], 
+  "revision_id": "202449"
+ }, 
+ {
+  "author": "rich", 
+  "date": "2005-06-29T22:18:59.508977Z", 
+  "msg": [
+   "Resolution for http://issues.apache.org/jira/browse/BEEHIVE-400 : Nice to have a way to inheriate all its JSPs members when inheriating a pageflow", 
+   "This follows a thread on beehive-dev.  The basic idea is that you have a base page flow A and derived page flow B, and B sets inheritLocalPaths=true in its @Jpf.Controller.  If you go through any @Jpf.Forward or @Jpf.SimpleAction that's comes from A, and if the referenced path is local (doesn't start with '/'), then the path will be relative to A.  *The page is still run in the context of B -- B is not destroyed, and a separate instance of A is not created.*", 
+   "There is a full test of this at netui/test/webapps/drt/coreWeb/pageFlowCore/inheritLocalPaths, but here's an example:", 
+   "/base/BaseController.jpf:", 
+   "---", 
+   "@Jpf.Controller(", 
+   "simpleActions={", 
+   "@Jpf.SimpleAction(name=\"simple1\", path=\"base_simple1.jsp\"),", 
+   "@Jpf.SimpleAction(name=\"simple2\", path=\"base_simple2.jsp\")", 
+   "}", 
+   ")", 
+   "public class BaseController", 
+   "{", 
+   "@Jpf.Action(", 
+   "forwards={", 
+   "@Jpf.Forward(name=\"complex1\", path=\"base_complex1.jsp\")", 
+   "}", 
+   ")", 
+   "public Forward complex1()", 
+   "{", 
+   "...", 
+   "}", 
+   "@Jpf.Action(", 
+   "forwards={", 
+   "@Jpf.Forward(name=\"complex2\", path=\"base_complex2.jsp\")", 
+   "}", 
+   ")", 
+   "public Forward complex2()", 
+   "{", 
+   "...", 
+   "}", 
+   "}", 
+   "/derived/DerivedController.jpf:", 
+   "---", 
+   "@Jpf.Controller(", 
+   "simpleActions={", 
+   "@Jpf.SimpleAction(name=\"simple2\", path=\"derived_simple2.jsp\")", 
+   "},", 
+   "inheritLocalPaths=true", 
+   ")", 
+   "public class BaseController", 
+   "{", 
+   "@Jpf.Action(", 
+   "forwards={", 
+   "@Jpf.Forward(name=\"complex2\", path=\"derived_complex2.jsp\")", 
+   "}", 
+   ")", 
+   "public Forward complex2()", 
+   "{", 
+   "...", 
+   "}", 
+   "}", 
+   "Here's a table of actions/destinations (all actions being raised in the context of /derived):", 
+   "simple1       /base/base_simple1.jsp", 
+   "complex1      /base/base_complex1.jsp", 
+   "simple2       /derived/derived_simple2.jsp", 
+   "complex2      /derived/derived_complex2.jsp", 
+   "tests: bvt in netui (WinXP)", 
+   "BB: self (linux)"
+  ], 
+  "revision_id": "202448"
+ }, 
+ {
+  "author": "schof", 
+  "date": "2005-06-29T22:17:38.617058Z", 
+  "msg": [
+   "no longer needed; replaced with build.default.properties"
+  ], 
+  "revision_id": "202447"
+ }, 
+ {
+  "author": "schof", 
+  "date": "2005-06-29T22:16:39.954962Z", 
+  "msg": [
+   "improvements to library determination"
+  ], 
+  "revision_id": "202446"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2005-06-29T22:16:17.583558Z", 
+  "msg": [
+   "adjust revision references"
+  ], 
+  "revision_id": "202445"
+ }
+]

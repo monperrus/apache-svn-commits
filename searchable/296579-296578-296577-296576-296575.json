@@ -1,0 +1,68 @@
+[
+ {
+  "author": "billbarker", 
+  "date": "2002-03-19T06:20:55.000000Z", 
+  "msg": [
+   "Even better.  Don't send the ACK twice.", 
+   "This in effect means that the ACK is only sent on the primary request, and not on any sub-requests (including error handling)."
+  ], 
+  "revision_id": "296579"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2002-03-19T06:06:18.000000Z", 
+  "msg": [
+   "Don't stop the processing if the response is already committed.", 
+   "Letting the IllegalStateException through was preventing error handling from working if e.g. the servlet throws an exception after the response is committed.  This in turn prevents the useful stack trace from showing up on development servers.  Under normal use, the response should never be committed at this point on the primary request."
+  ], 
+  "revision_id": "296578"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-03-19T05:31:57.000000Z", 
+  "msg": [
+   "Some 'featurism' removed. In jk1 there is a single workers.properties. The", 
+   "current code supports multiple files - but that will prevent ( or make", 
+   "extremely difficult ) writeable configs ( where ajp14 sets properties,", 
+   "and mod_jk saves them so on start apache will not need a running tomcat ).", 
+   "Backward compatibility can be added later, if anyone really needs it -", 
+   "I think it's far better to focus on a consistent and clean config", 
+   "format.", 
+   "I removed most of the 'backward compat' code - now the same patterns", 
+   "are used everywhere, with no exceptions.", 
+   "That means:", 
+   "workersProperties -> config.file", 
+   "logLevel -> logger.level", 
+   "logFile -> logger.file", 
+   "( etc ).", 
+   "On startup, jk will define few objects like 'config', 'workerEnv', 'logger',", 
+   "etc. In addition, now objects will be automatically created on the first", 
+   "reference.", 
+   "This is almost identical with the mechanism used in server.xml.", 
+   "The major difference is that this is primarily intended to be", 
+   "generated and read/write."
+  ], 
+  "revision_id": "296577"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-03-19T04:55:57.000000Z", 
+  "msg": [
+   "Finally got the apache1.3 to start ( still has few problems, but it's close ).", 
+   "Cleaned up the code, removed all the tricks and apache specific code -", 
+   "the apache1.3 connector can be used as a base for iis/nes.", 
+   "The apache2.0 will remain a bit more complicated, i.e. will support", 
+   "<location> and other apache specific options."
+  ], 
+  "revision_id": "296576"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-03-19T04:53:40.000000Z", 
+  "msg": [
+   "- logger.file property will set the file and open it ( and close the previous one).", 
+   "- fix ending in pstrdup()"
+  ], 
+  "revision_id": "296575"
+ }
+]

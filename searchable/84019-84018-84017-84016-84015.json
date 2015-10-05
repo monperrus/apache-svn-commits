@@ -1,0 +1,72 @@
+[
+ {
+  "author": "martin", 
+  "date": "1999-10-22T09:56:06.000000Z", 
+  "msg": [
+   "Fix my company name (it's Fujitsu-Siemens Computers now)"
+  ], 
+  "revision_id": "84019"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "1999-10-22T05:10:06.000000Z", 
+  "msg": [
+   "Apache for Windows can get caught in a tight loop whild handling CGI requests. Here's how:", 
+   "sendwithtimeout() sets  errno to EINTR on a timeout and returns SOCKET_ERROR (-1) to", 
+   "the caller. The caller reissues sendwithtimeout, which then succeeds. errno is left set to", 
+   "EINTR. Eventually,  another read is attempted on one of the CGI pipes (ap_bgets in mod_cgi,", 
+   "or ap_send_fb_length) which goes down into ap_read. ap_read issues a Win32 ReadFile to read", 
+   "from the pipe. If this read fails, it returns -1 to the caller. If errno", 
+   "is still set to EINTR, the caller will retry the read and so the loop begins.", 
+   "The solution is quite simple. buff.c relies heavily on errno. Anytime Win32 calls are used", 
+   "in code that uses errno, we need to always, ALWAYS explicitly set errno when a Win32 system", 
+   "call fails (via either errno = GetLastError() or errno = WSAGetLastError()). Since Win32", 
+   "does not use EINTR, this problem should not occur.", 
+   "PR: 3599 3971 4245 4430 4758 5171", 
+   "Submitted by:\tThanks to Jim.Patterson@cognos.com who discovered the loopig section of", 
+   "code."
+  ], 
+  "revision_id": "84018"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "1999-10-21T20:46:32.000000Z", 
+  "msg": [
+   "Apache port to Netware 5", 
+   "Submitted by:\tMike Gardiner", 
+   "Reviewed by:\tBill Stoddard"
+  ], 
+  "revision_id": "84017"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "1999-10-21T18:28:14.000000Z", 
+  "msg": [
+   "This patch fixes EBCDIC conversion for Apache 1.3.9 on platforms that", 
+   "support mmap.  Currently, ap_checkconv() is called only if mmap is not", 
+   "supported, or if mmap fails.  This results in mangled .gif's and .jpg's", 
+   "etc. because EBCDIC-ASCII conversion is done by default when", 
+   "CHARSET_EBCDIC is defined.", 
+   "Note: I suspect all this will radically change when EBCDIC support is", 
+   "done in an IOL. However, I think it is valuable to put this patch into", 
+   "Apache 2.0 as a reminder since it is just a code move rather than new code.", 
+   "Submitted by:\tGreg Ames", 
+   "Reviewed by:\tBill Stoddard"
+  ], 
+  "revision_id": "84016"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "1999-10-21T18:23:39.000000Z", 
+  "msg": [
+   "This patch fixes EBCDIC conversion for Apache 1.3.9 on platforms that", 
+   "support mmap.  Currently, ap_checkconv() is called only if mmap is not", 
+   "supported, or if mmap fails.  This results in mangled .gif's and .jpg's", 
+   "etc. because EBCDIC-ASCII conversion is done by default when", 
+   "CHARSET_EBCDIC is defined.", 
+   "Submitted by:\tGreg Ames", 
+   "Reviewed by:\tBill Stoddard"
+  ], 
+  "revision_id": "84015"
+ }
+]

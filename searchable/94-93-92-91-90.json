@@ -1,0 +1,117 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-08T12:04:23.605665Z", 
+  "msg": [
+   "Add a first draft of a readline() utility function.", 
+   "* gen2/buckets/buckets.c:", 
+   "(find_crlf): helper function to locate a CRLF", 
+   "(serf_util_readline): initial implementation"
+  ], 
+  "revision_id": "94"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-08T09:39:11.933244Z", 
+  "msg": [
+   "add information on the bucket read functions"
+  ], 
+  "revision_id": "93"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-07T12:40:18.768304Z", 
+  "msg": [
+   "Get some gimpy functionality going. The serf_get program will now deliver", 
+   "a (broken) request to the web server, then abort() when it gets a", 
+   "response (which is a 400 (Bad Request) because there is no Host header).", 
+   "* gen2/Makefile:", 
+   "- also compile the serf_get.c file", 
+   "- add a rule for linking serf_get", 
+   "* gen2/serf.h:", 
+   "(serf_response_acceptor_t): pass a request object rather than a", 
+   "connection. lose the response pool, since it can be recovered from the", 
+   "request object.", 
+   "(serf_request_get_pool): constify the request param", 
+   "(serf_request_get_alloc): constify the request param", 
+   "* gen2/test/serf_get.c:", 
+   "- use #if 0 to eliminate large hunks of old-style serf code", 
+   "(closed_connection): make this static to avoid a compile warning", 
+   "(accept_response): make static. update params. add abort()", 
+   "(handle_response): make static. add abort().", 
+   "(main): make 'url' a structure on the stack rather than the heap. create", 
+   "an apr_sockaddr_t for passing to the connection creation. stop", 
+   "creating an allocator (the request holds one for us). create a request", 
+   "object. build the request bucket in the allocator specified by the", 
+   "request. switch to use serf_request_deliver(). keep looping on", 
+   "serf_context_run(). adjust error messages to print out what it was", 
+   "trying to do at the time.", 
+   "* gen2/context.c:", 
+   "(update_pollset): zero out the descriptor before using.", 
+   "(open_connections): toss unused 'desc' variable. watch out for", 
+   "EINPROGRESS from the connect() call, as we expect.", 
+   "(write_to_connection): put the bucket read status into a new variable.", 
+   "we have to examine it later for bucket destruction -- we don't want to", 
+   "toss the bucket until we've already used the data.", 
+   "(read_from_connection): adjust params to the acceptor", 
+   "(serf_connection_create): put the new connection into the context.", 
+   "(serf_connection_request_create): implement", 
+   "(serf_request_deliver): implement", 
+   "(serf_request_get_pool): constify the request param", 
+   "(serf_request_get_alloc): constify the request param", 
+   "* gen2/buckets/buckets.c:", 
+   "(serf_bucket_allocator_get_pool): add and implement", 
+   "(serf_bucket_mem_alloc): we don't pre-allocate a block, so watch out for", 
+   "a NULL 'blocks' field.", 
+   "* gen2/buckets/aggregate_buckets.c:", 
+   "(aggregate_context_t): add a 'done' field", 
+   "(serf_bucket_aggregate_create, serf_bucket_aggregate_become): zero out", 
+   "the new 'done' field.", 
+   "(serf_bucket_aggregate_append): implement. this is actually used :-)", 
+   "(serf_aggregate_read): toss any 'done' bucket we find. move fully-read", 
+   "buckets over to 'done' rather than deleting them (which kills the", 
+   "storage we were about to return). loop until we get a non-zero-len", 
+   "return from the head bucket. just toss any zero-len buckets.", 
+   "* gen2/buckets/request_buckets.c:", 
+   "(serialize_data): watch out for a NULL body bucket.", 
+   "* gen2/buckets/simple_buckets.c:", 
+   "(serf_simple_read): return APR_EOF when we've read all the data."
+  ], 
+  "revision_id": "92"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-07T09:55:58.870647Z", 
+  "msg": [
+   "Make the buckets respect SERF_READ_ALL_AVAIL. Fix some length handling in", 
+   "some peek functions.", 
+   "* gen2/STATUS: remove a todo line", 
+   "* gen2/buckets/file_buckets.c:", 
+   "(serf_file_read): remove unused 'status' variable. check for", 
+   "SERF_READ_ALL_AVAIL. leave comment about peek_status usage.", 
+   "(serf_file_peek): remove unused 'status' variable. adjust handling of", 
+   "the *len value.", 
+   "* gen2/buckets/simple_buckets.c:", 
+   "(serf_simple_read): check for SERF_READ_ALL_AVAIL.", 
+   "(serf_simple_peek): do not read *len; it is not an input param", 
+   "* gen2/buckets/mmap_buckets.c:", 
+   "(serf_mmap_read): check for SERF_READ_ALL_AVAIL."
+  ], 
+  "revision_id": "91"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-05T03:11:10.260862Z", 
+  "msg": [
+   "Problems noted by Garrett Rooney <rooneg@electricjellyfish.net>.", 
+   "* serf.h:", 
+   "(serf_request_get_alloc): return a pointer to a serf_bucket_alloc_t, as", 
+   "you can't return the structure since it's only forward declared, and", 
+   "we only have a pointer anyway.", 
+   "* context.c:", 
+   "(serf_request_deliver): remove return, this function returns void.", 
+   "(serf_request_get_alloc): adjust for change to prototype."
+  ], 
+  "revision_id": "90"
+ }
+]

@@ -1,0 +1,70 @@
+[
+ {
+  "author": "dreid", 
+  "date": "2001-06-05T09:15:07.000000Z", 
+  "msg": [
+   "Fix a silly typo and add support for apr_lock_sms_create to BeOS."
+  ], 
+  "revision_id": "61699"
+ }, 
+ {
+  "author": "dreid", 
+  "date": "2001-06-05T08:15:37.000000Z", 
+  "msg": [
+   "OK, this basically adds a function that allows us to create", 
+   "apr_lock_t's using an apr_sms_t for the memory.  It's a very small first", 
+   "step, and at present is only intended to be used internally in APR,", 
+   "hence the position of the function definitions in the locks.h file.", 
+   "Given that we don't want to duplicate code where we don't have to, I've", 
+   "added some macros that allow us to do memory allocations regardless of", 
+   "whether we have a pool or sms.  This also highlighted that we haven't", 
+   "yet managed to change our member names from cntxt to pool everywhere!", 
+   "The surprise comes in just how far reaching the apr_pool_t goes.", 
+   "As apr_lock.h uses ap_sms_t and apr_sms.h uses apr_lock_t I've moved", 
+   "the tyepdef's into apr.h.in, but this may be bogus...", 
+   "Hopefully this will allow us to get locking into sms and so start", 
+   "moving forward again, and at the same time it starts to throw up", 
+   "the problems for changing our memory system throughout APR."
+  ], 
+  "revision_id": "61698"
+ }, 
+ {
+  "author": "dreid", 
+  "date": "2001-06-05T07:56:08.000000Z", 
+  "msg": [
+   "Greg wanted the TODO file removed, Greg has the TODO file removed."
+  ], 
+  "revision_id": "61697"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2001-06-04T23:26:55.000000Z", 
+  "msg": [
+   "It is satisfactory for the current memory system itself to be tracking.", 
+   "So the real typo which the previous patch was meant to fix was just a missing", 
+   "semicolon, not a truncated line.  =-)", 
+   "Submitted by:\tSander Striker <striker@samba-tng.org>"
+  ], 
+  "revision_id": "61696"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2001-06-04T23:09:36.000000Z", 
+  "msg": [
+   "* Remove the unnecessary parameter checks and the extra error codes that", 
+   "went along with them.  The APR policy is to segfault on a NULL parameter", 
+   "rather than silently returning some error code that the caller might", 
+   "not check anyway.", 
+   "* Also remove lots of unnecessary assertions (where the code would have", 
+   "segfaulted anyway, even without an explicit assert).  I've tried to be", 
+   "sure that every one I removed will result in a virtually immediate", 
+   "segfault anyway.  Ones that don't are the ones that are tricky to debug.", 
+   "If I've removed too many, say so and I'll put them back.", 
+   "* Fix a misnamed APR_MEMORY_ASSERT -> APR_ASSERT_MEMORY, which was causing", 
+   "apr_assert_memory() never to be compiled.  Also fix a syntax error in that", 
+   "function that's been there since rev 1.1 of apr_sms.c, which no one's", 
+   "ever noticed because they never compiled it before."
+  ], 
+  "revision_id": "61695"
+ }
+]

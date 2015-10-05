@@ -1,0 +1,72 @@
+[
+ {
+  "author": "minchau", 
+  "date": "2003-08-13T05:53:41.000000Z", 
+  "msg": [
+   "PR: bugzilla 18907", 
+   "Submitted by:\tBrian MinchauPatch has just been applied to main branch of CVS.", 
+   "Now ToStream.writeUTF16Surrogate(char c, char ch[], int i, int end)", 
+   "return nothing rather than the \"i+1\" that it had always returned,", 
+   "which was a bit confusing.", 
+   "This routine always processed 2 input characters and always returned \"i+1\" so why bother?", 
+   "There was no error in returning \"i+1\" because the situation in which this routine was called were always in a loop:", 
+   "for (int i=start; i < end; i++) { ... }", 
+   "so \"i\" was always incremented before going on to the next iteration. Any i++; after calling writeUTF16Surrogate() now means that 2 input characters have been processed, so there is no bug here (never was).  The code is just clearer now.", 
+   "A bug has been fixed in ToStream.accumDefaultEscape() which used to mis-count how many input characters that it processed."
+  ], 
+  "revision_id": "337609"
+ }, 
+ {
+  "author": "minchau", 
+  "date": "2003-08-12T23:55:24.000000Z", 
+  "msg": [
+   "PR: bugzilla 21309", 
+   "Submitted by:\tBrian Minchau", 
+   "Utils.classForName(String classname) still throws a ClassNotFoundException rather than", 
+   "return null, but it doesn't cache the classname/null combination anymore if the classname", 
+   "is not loaded."
+  ], 
+  "revision_id": "337608"
+ }, 
+ {
+  "author": "minchau", 
+  "date": "2003-08-12T23:04:30.000000Z", 
+  "msg": [
+   "PR: bugzilla 19972", 
+   "Submitted by:\tWilliam Lee (william.lee@cognos.com)", 
+   "Reviewed by:\tBrian Minchau and Gordon Chui", 
+   "The code loops over elements in a Vector, incrementing the index j.", 
+   "Some elements should not be processed so they were removed from the Vector.", 
+   "The removal of element \"j\" shifted all higher elements down and made the", 
+   "Vector 1 shorter.  So removal of an element and incrementing \"j\" actually caused", 
+   "elements to be skipped.", 
+   "It is not quite clear why the element is being removed from the Vector rather", 
+   "than just skipped over. For safety sake an iteration over the loop either removes an", 
+   "element, or increments \"j\", but not both in the same iteration."
+  ], 
+  "revision_id": "337607"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-08-12T20:19:40.000000Z", 
+  "msg": [
+   "Fix bytecode generation problem for extension method calls via", 
+   "interfaces for bugzilla 22115."
+  ], 
+  "revision_id": "337606"
+ }, 
+ {
+  "author": "minchau", 
+  "date": "2003-08-12T19:59:42.000000Z", 
+  "msg": [
+   "PR: bugzilla 19591", 
+   "Submitted by:\tGordon Chiu", 
+   "Reviewed by:\tBrian Minchau", 
+   "Fixes a few methods in the ToStream serializer so that it outputs the DOCTYPE", 
+   "sooner and in the correct location.  Thanks to Bruno Dumon for the nice test case", 
+   "and thanks to Gordon Chiu for the fix.", 
+   "- Brian Minchau"
+  ], 
+  "revision_id": "337605"
+ }
+]

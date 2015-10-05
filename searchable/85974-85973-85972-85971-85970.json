@@ -1,0 +1,64 @@
+[
+ {
+  "author": "trawick", 
+  "date": "2000-08-02T01:01:12.000000Z", 
+  "msg": [
+   "Use the AP_INIT_FLAG() macro to clean up a maintainer-mode warning."
+  ], 
+  "revision_id": "85974"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-08-02T00:56:28.000000Z", 
+  "msg": [
+   "-DMPMT_PTHREAD is no longer needed."
+  ], 
+  "revision_id": "85973"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-01T20:25:56.000000Z", 
+  "msg": [
+   "This serves requests again, although it still doesn't forward requests off", 
+   "to the correct socket yet."
+  ], 
+  "revision_id": "85972"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-01T18:58:19.000000Z", 
+  "msg": [
+   "Complete redesign of this MPM.  This is almost working now.", 
+   "HOW IT WORKS:", 
+   "In the config file, the sysadmin specified:", 
+   "ChildPerUserID  uid gid num_processes", 
+   "and in each virtual host:", 
+   "AssignUserID  uid gid", 
+   "The MPM creates a unix domain socket for each uid/gid pair, and if any", 
+   "child processes are left over, one for the default user and group", 
+   "specified in the main config.", 
+   "When a child process is started, it looks at what it's user id and group", 
+   "id are supposed to be.  It then inserts the correct socket into it's", 
+   "listen array, and switches to the uid and gid specified.", 
+   "When a request comes in, whichever child gets the request looks at which", 
+   "child process it is actually for, and if it isn't for the current", 
+   "process, the request gets forwarded through the unix domain socket to the", 
+   "correct child process.  From there, processing continues normally.", 
+   "Currently, no requests are forwarded, but everything seems to be working."
+  ], 
+  "revision_id": "85971"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-01T17:36:13.000000Z", 
+  "msg": [
+   "Add a NO_DETACH environment variable to all MPMs that understand", 
+   "ONE_PROCESS.  This allows Apache to start up without detaching from", 
+   "the controlling terminal, but also not going into single process mode.", 
+   "The main purpose of this patch is to make it very easy to debug the", 
+   "child process startup code.", 
+   "PR:\t2144"
+  ], 
+  "revision_id": "85970"
+ }
+]

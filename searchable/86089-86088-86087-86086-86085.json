@@ -1,0 +1,56 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-08-17T00:50:34.000000Z", 
+  "msg": [
+   "Make ap_add_filter use a LIFO stack instead of a FIFO queue to add filters", 
+   "to the filter stack.  This makes the chunking filter work.  Without this,", 
+   "the core_filter is installed in the insert_filters hook, when we get", 
+   "to the ap_send_http_headers function, we insert the chunking filter, but", 
+   "it has been installed after the core_filter.  This means the chunk_filter", 
+   "is never called.", 
+   "This reverses this.  The core_filter is installed in the insert_filters", 
+   "hook, and we put the chunk_filter in during ap_send_http_headers.  This", 
+   "time, the chunking filter is installed before the core_filter, and it", 
+   "gets called correctly."
+  ], 
+  "revision_id": "86089"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-16T21:29:34.000000Z", 
+  "msg": [
+   "prevent zero-length-content brigades from entering the filter chain"
+  ], 
+  "revision_id": "86088"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-16T20:42:39.000000Z", 
+  "msg": [
+   "some notes about filter fixes"
+  ], 
+  "revision_id": "86087"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-16T20:39:57.000000Z", 
+  "msg": [
+   "fix timing of the EOS bucket delivery", 
+   "fix ap_rputc()", 
+   "note some problems with subrequest finalization and ap_rflush()"
+  ], 
+  "revision_id": "86086"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-16T19:28:27.000000Z", 
+  "msg": [
+   "Ryan's recent, suggested patch in this area pointed out that we were", 
+   "missing the needed comparison on the request. this allows subrequests to", 
+   "insert filters properly (by stopping the scan before transitioning to", 
+   "the parent request's filters)"
+  ], 
+  "revision_id": "86085"
+ }
+]

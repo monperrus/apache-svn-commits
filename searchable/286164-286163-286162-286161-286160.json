@@ -1,0 +1,67 @@
+[
+ {
+  "author": "remm", 
+  "date": "2001-06-19T02:20:32.000000Z", 
+  "msg": [
+   "- Stopping and starting any of the Catalina components is broken at the moment,", 
+   "because the component is not reinitialized.", 
+   "- This fixes the problem (at least partially) for a Context.", 
+   "- I think this code should be moved to the container itself. I suggest adding", 
+   "either a new Container.recycle() method or a new Lifecycle.recycle() method."
+  ], 
+  "revision_id": "286164"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-06-19T02:14:48.000000Z", 
+  "msg": [
+   "- Normalize the work directory path.", 
+   "- Use the new Webapp class loader instead of standard class loader.", 
+   "Note : This is a one line change."
+  ], 
+  "revision_id": "286163"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-06-19T02:12:49.000000Z", 
+  "msg": [
+   "- New classloader implementation, used for web applications only.", 
+   "- Extends URLClassLoader (to preserve maximum compatibility).", 
+   "- Does not require dynamic bindings to work.", 
+   "- Supports reloading of classes in /WEB-INF/classes.", 
+   "- Supports reloading of JARs. This is untested, and is only a convinience", 
+   "feature (for example, when you forgot a JAR required by a webapp). In many", 
+   "cases, a stop / start of the context (which destroys it and recreates it from", 
+   "scratch) will be needed to avoid getting JVM linkage errors and class casts.", 
+   "- Improved efficiency a lot : no more double tracking of the classes and", 
+   "resources, unified loaded resources repository (classes + resources).", 
+   "- Fixed lookup path : first classes repository, then JARs. It was impossible", 
+   "to control the order of the repositories by directly using URLClassLoader.", 
+   "- To the outside world (if getURLs() is called), it appears as a file-based", 
+   "URLClassLoader.", 
+   "- All the JARs in /WEB-INF/lib are extracted and copied to the work directory,", 
+   "even if the resources are filesystem based. Otherwise, it is not possible to", 
+   "actually manipulate the JARs which are in the webapp while they're open, at", 
+   "least under Windows. This operation is relatively fast anyway.", 
+   "- Tested with the examples webapp, Slide and Jasper.", 
+   "- Note : Jasper reloading of the classes may still be broken."
+  ], 
+  "revision_id": "286162"
+ }, 
+ {
+  "author": "amyroh", 
+  "date": "2001-06-19T01:06:21.000000Z", 
+  "msg": [
+   "Add to handle jdk1.3 dependency for CGI."
+  ], 
+  "revision_id": "286161"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-06-18T23:28:39.000000Z", 
+  "msg": [
+   "- Skip leftover bytes before closing the socket."
+  ], 
+  "revision_id": "286160"
+ }
+]

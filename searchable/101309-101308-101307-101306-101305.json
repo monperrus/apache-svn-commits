@@ -1,0 +1,64 @@
+[
+ {
+  "author": "joes", 
+  "date": "2003-09-25T15:27:10.000000Z", 
+  "msg": [
+   "Bump version numbers, prepping for 1.3 RC"
+  ], 
+  "revision_id": "101309"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2003-09-24T11:44:54.000000Z", 
+  "msg": [
+   "vote for the cookie identification fix"
+  ], 
+  "revision_id": "101308"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2003-09-23T22:44:08.000000Z", 
+  "msg": [
+   "propose backport"
+  ], 
+  "revision_id": "101307"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2003-09-23T22:40:23.000000Z", 
+  "msg": [
+   "The problem that this patch solves is one where cookie names are mis-identified", 
+   "by mod_usertrack. This is because of the use of strstr() in spot_cookie() the", 
+   "original mod_usertrack.c to find the name of the cookie. strstr(), by virtue of", 
+   "looking for a substring instead of an exact match, can mis-identify the cookie", 
+   "\"MyID\" as the cookie \"ID\" or \"My\". So, if you were looking for the value of the", 
+   "cookie \"ID\", but only the cookie \"MyID\" was returned by the browser,", 
+   "mod_usertrack.c would return the value of the \"MyID\" cookie in place of the", 
+   "\"ID\" you were looking for.", 
+   "Even more seriously, because strstr is invoked before the cookie name is", 
+   "separated from its cookie value, a cookie and value like", 
+   "\"myCookie=thisisnotIDeal\" will be a false positive if you told mod_usertrack", 
+   "the cookie name was ID. Furthermore, using this example, \"eal\" will get logged", 
+   "as the value of the cookie; now that strstr has incorrectly identified the", 
+   "substring \"ID\" as the cookie name, the following \"e\" (assumed to be the \"=\"", 
+   "sign) gets discarded, and the remaining content used as the value of", 
+   "the cookie.", 
+   "Replacing the strstr() with a more robust regex match fixes this problem.", 
+   "PR:    16661", 
+   "Submitted by:   Manni Wood <manniwood@planet-save.com>"
+  ], 
+  "revision_id": "101306"
+ }, 
+ {
+  "author": "stas", 
+  "date": "2003-09-22T22:03:31.000000Z", 
+  "msg": [
+   "avoid 'undefined ... in m//' message", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "101305"
+ }
+]

@@ -1,0 +1,57 @@
+[
+ {
+  "author": "sppatel", 
+  "date": "2005-10-06T18:17:54.115060Z", 
+  "msg": [
+   "add src page"
+  ], 
+  "revision_id": "306824"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2005-10-06T18:14:46.199935Z", 
+  "msg": [], 
+  "revision_id": "306823"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2005-10-06T18:06:47.067910Z", 
+  "msg": [
+   "committing on behalf of: Sunitha Kambhampati", 
+   "1. adds changes to not do materialization of the stream at normalization", 
+   "- fix bug in ReaderToUTF8Stream.read(b[],,) to allow for correct reads", 
+   "- changes to SQLClob to not materialize stream", 
+   "- per sql standard, truncation of clobs is allowed for trailing blanks and this is the behavior of clobs in", 
+   "derby today. Keep information about truncation information along with the stream. The truncation checking logic", 
+   "is pushed to the stream(ReaderToUTF8Stream) and thus will be enforced only when the stream is read.", 
+   "- With these changes, the stream will be read only once, driven by store layer. This is efficient.", 
+   "Earlier, the stream would be converted to char array which involves the char to derby specific utf8 encoding, and then back from utf8encoding to char as part of the materialization and once again at the store layer, the char is converted to derby specific utf8encoding.", 
+   "Also note, no changes have been made to existing behavior of streams for char,varchar and long varchar. This fix includes changes only for clobs.", 
+   "2. Test changes", 
+   "- added new test for clobs in characterStreams.java", 
+   "- added new test for clob truncation in streamingColumn.java", 
+   "Note, also made changes to disable logStatmentText=true (derby595 and also disabling streamTest5).", 
+   "- added tests to test for insert,select,update of 2G clob and blobs, as part of the largedata suite. This test LobLimits.java will not run as part of derbyall because it needs considerable amount of disk space and also takes long time to run.I have added extra tests for blobs although it is not related to this fix and as a result have found some issues that will need to be looked into. In LobLimits.java, some tests are therefore currently disabled.", 
+   "- there are existing stream tests that run as part of derbyall ( ex blobclob4BLOB.java,resultsetStream.java) that will test for clobs streaming but may not be able to catch if clobs are being materialized or not, which is why it is important to run the largedata/LobLimits at some intervals to ensure that no regression has occurred.", 
+   "Ran derbyall on jdk142/win2k ok."
+  ], 
+  "revision_id": "306822"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2005-10-06T18:06:34.398035Z", 
+  "msg": [
+   "o adding some more guides and a little script to create a summary page", 
+   "of the guides."
+  ], 
+  "revision_id": "306821"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-10-06T18:00:11.052752Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "306820"
+ }
+]

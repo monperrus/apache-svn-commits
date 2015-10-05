@@ -1,0 +1,118 @@
+[
+ {
+  "author": "butek", 
+  "date": "2002-07-30T13:01:36.000000Z", 
+  "msg": [
+   "Sheesh!  I need a boolean logic refresher course!  NOW Call.getProperty", 
+   "and Call.removeProperty will correctly flag invalid properties."
+  ], 
+  "revision_id": "247604"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-30T06:16:04.000000Z", 
+  "msg": [
+   "Several changes which came up while investigating a problem", 
+   "serializing <sequence>s in the correct order.", 
+   "* Fixed sequence test", 
+   "Sequence test now tests the actual XML produced, instead of", 
+   "going through a deserialization test with a custom class which", 
+   "was obscuring the actual generated class produced by WSDL2Java.", 
+   "There is also a possible test here which confirms that the schema", 
+   "generated from our generated Java classes still has the right", 
+   "<sequence> declaration, but since that wasn't being done, the", 
+   "roundtripping through Java2WSDL again didn't make sense to me.", 
+   "End result, test is much simpler now and actually tests what it", 
+   "seems to be intending to.  (and has a readme.txt)", 
+   "* Revamped BeanPropertyDescriptor for cleanliness and shrinkage", 
+   "The old version of this class was repeating a lot of work which is", 
+   "done for us automatically by the bean framework itself.  For", 
+   "instance, keeping track of indexed properties - this just works", 
+   "via the standard PropertyDescriptor class, so this new version", 
+   "takes advantage of that fact and simply wraps the PD.", 
+   "One might wonder why we need this class at all if it's just", 
+   "a wrapper - two answers.  First, we do some cool stuff with array", 
+   "maintenance, and second, we use this same interface to deal with", 
+   "publically accessible fields, something that standard PD's can't", 
+   "do.  Speaking of which...", 
+   "* Deal with Fields with an explicit subclass of BPD", 
+   "This removes the need for a lot of if statements and cleans", 
+   "up the code a good deal.  Now we just make sure to create", 
+   "a FieldPropertyDescriptor where we used to use the Field", 
+   "constructor of the BeanPropertyDescriptor.  Now the vtable", 
+   "does our branching for us with no conditionals.", 
+   "* BeanUtils vastly simplified", 
+   "This I'd really appreciate comments on.  I pulled out the", 
+   "code that does the \"manual\" run through the introspected", 
+   "methods of our target class, and instead just start with", 
+   "the PropertyDescriptors returned by the Introspector,", 
+   "adding only the public Fields.", 
+   "As I understand it the purpose of the code that was there", 
+   "before was to try to order the generated descriptor", 
+   "in something close to the order that things are defined", 
+   "in the... Java source, perhaps?  I don't think there's", 
+   "any guarantee that a given compiler will order things", 
+   "in any particular way, so I don't see the point of", 
+   "bothering.", 
+   "All tests pass fine without this code, but if people", 
+   "can explain to me why what it did was useful, I'll be", 
+   "happy to put it back.", 
+   "* BeanDeserializer only uses indexed BPT when appropriate", 
+   "We now only use the indexed version of the BeanPropertyTarget", 
+   "when the deserializer found for a given QName is NOT the", 
+   "ArrayDeserializer.  If we have the ArrayDeserializer, we know", 
+   "this is a SOAP array, which will have an outer \"wrapper\"", 
+   "element, and whose value will be a single array object (i.e.", 
+   "a String []).  In this case, we want to use the normal", 
+   "BPT because the value which will be set is for the array", 
+   "field, not the items of the array.", 
+   "NOTE: This will likely fail with arrays of arrays, we should", 
+   "a) think about that, and b) write a test for it.", 
+   "* Remove some try/catch blocks in test cases, so that we can", 
+   "see the actual failures as they happen.", 
+   "TODO : I plan to change the TestCase-generating framework, as", 
+   "discussed before, to stop putting in the try/catch blocks", 
+   "around everything.  Tests should let most Exceptions bubble", 
+   "up through.", 
+   "* Various bits of cleanup", 
+   "NOTES: we don't have enough tests.  There should be a", 
+   "grueling regression test for the BPD/BeanUtils related", 
+   "classes, amongst other things.  There is also some more", 
+   "potential refactoring of BeanPropertyDescriptor /", 
+   "FieldDesc / Target which might make sense to lean things", 
+   "down even more.", 
+   "I'm going to stop writing now before the checkin comments", 
+   "get longer than the diffs... :)"
+  ], 
+  "revision_id": "247603"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-07-29T21:30:01.000000Z", 
+  "msg": [
+   "Fix for bug 8578 - Wsdl2Java does not reject invalid types in 1999 Schema", 
+   "http://nagoya.apache.org/bugzilla/show_bug.cgi?id=8578", 
+   "Register schema specific types in the respective SchemaVersion classes.", 
+   "Print a more helpful error message when encountering timeInstant and dateTime", 
+   "schema types in the wrong version namespace."
+  ], 
+  "revision_id": "247602"
+ }, 
+ {
+  "author": "seibert", 
+  "date": "2002-07-29T21:24:16.000000Z", 
+  "msg": [
+   "Added \"General\" stanza for explanation or the newly formed xmls/ path and its", 
+   "contents"
+  ], 
+  "revision_id": "247601"
+ }, 
+ {
+  "author": "seibert", 
+  "date": "2002-07-29T20:46:16.000000Z", 
+  "msg": [
+   "Fixed \"RFC\" -> \"RPC\" typo"
+  ], 
+  "revision_id": "247600"
+ }
+]

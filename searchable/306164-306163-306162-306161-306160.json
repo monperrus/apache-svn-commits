@@ -1,0 +1,65 @@
+[
+ {
+  "author": "luehe", 
+  "date": "2005-03-30T20:27:22.000000Z", 
+  "msg": [
+   "Do not add taglib to cache if it's already there, i.e., if the cache", 
+   "already contains a taglib with the given uri.", 
+   "This is consistent with how this is handled in the \"standard\" syntax case."
+  ], 
+  "revision_id": "306164"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2005-03-29T21:45:42.000000Z", 
+  "msg": [
+   "Fix bug 18477 by porting and extending fix for bug 28147 from TC5.", 
+   "- Based on a patch submitted by Daniel Collins."
+  ], 
+  "revision_id": "306163"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2005-03-29T21:43:37.000000Z", 
+  "msg": [
+   "Extend fix for bug 28147 to cover the other instances (identified in bug 18477)", 
+   "where symbolic links can cause problems for pre-compilation in JspC.", 
+   "- Based on a patch submitted by Daniel Collins."
+  ], 
+  "revision_id": "306162"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2005-03-29T18:33:21.000000Z", 
+  "msg": [
+   "Simplified the loading of class resources in JasperLoader.", 
+   "There is no reason for it to use \"different\" classloaders depending on", 
+   "whether security is on (classloader returned by", 
+   "Thread.currentThread().getContextClassLoader()) or off (\"parent\"", 
+   "classloader).", 
+   "I think we have been using \"different\" classloaders for historical", 
+   "reasons, because JspC.java didn't use to set thread context", 
+   "classloader until the fix for Bugzilla 20155 required it to do so.", 
+   "Instead, we should use \"parent\" classloader consistently, which always", 
+   "corresponds to the URLClassLoader with access to WEB-INF/lib[classes]:", 
+   "1. In JspC.java, we construct URLClassLoader and set it as the parent", 
+   "of JasperLoader.", 
+   "2. When invoked from JspServlet, we acquire the context classloader", 
+   "(which corresponds to WebappClassLoader) inside the constructor of", 
+   "JspRuntimeContext (no need for doing this inside a privileged block", 
+   "there) and set it as the parent of JasperLoader.", 
+   "Ran all TCKs and jsp-examples with and without security enabled.", 
+   "Let me know if you see anything wrong."
+  ], 
+  "revision_id": "306161"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2005-03-25T02:42:23.000000Z", 
+  "msg": [
+   "Fix for Bugzilla 34034 (\"Jasper didn't respect external entities\")", 
+   "based on patch by <william.barker@wilshire.com>"
+  ], 
+  "revision_id": "306160"
+ }
+]

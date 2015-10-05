@@ -1,0 +1,76 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2001-06-19T21:52:09.000000Z", 
+  "msg": [
+   "Nasty hack.  The issue is that extensions are", 
+   "building their xpaths on the fly, so they don't really", 
+   "have a chance to fix up their index lookup for the", 
+   "variable stack (this problem caught me a bit by", 
+   "surprise).  The variable stack itself no longer has", 
+   "any qname information... it's a straight index lookup", 
+   "to the variable value.  In order to work around this", 
+   "problem in the short term, I test whether", 
+   "fixupVariables has been called, and, if it hasn't, I", 
+   "take the current prefixResolver, *which must be", 
+   "set to the extension element* (it wasn't in the", 
+   "Redirect extension), test if it is a", 
+   "ElemTemplateElement (bad because we're not", 
+   "supposed to be coupled with the xalan package", 
+   "in xpath), and look at the previous sibling and", 
+   "ancestor previous siblings for a ElemVariable.", 
+   "For each ElemVariable, I can then compare the", 
+   "qname, and, if a match, get the index from that", 
+   "element.  Right now it doesn't do anything special", 
+   "for global variables, and so errors can occur in", 
+   "this case if you have imports and includes and", 
+   "the like.  The hack is good enough right now to", 
+   "get fop codegen to work correctly.  I'll do some", 
+   "more work on this next week, or someone else", 
+   "can, and I'll try and figure out a way to do this", 
+   "without the visibility to xalan."
+  ], 
+  "revision_id": "335034"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-06-19T21:46:30.000000Z", 
+  "msg": [
+   "Add iterRaw accessor."
+  ], 
+  "revision_id": "335033"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-06-19T21:43:50.000000Z", 
+  "msg": [
+   "Fix strange clone of contained iterators."
+  ], 
+  "revision_id": "335032"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-06-19T21:41:50.000000Z", 
+  "msg": [
+   "Pass the extension element as the prefix resolve, instead of whatever", 
+   "is pushed on the XPathContext stack.  The Variable hack needs this", 
+   "to work correctly.", 
+   "Comment out patch that makes the filename relative to the current", 
+   "output URL.  Just to make fop codegen work.  This will need to", 
+   "be commented back in, once we can get fop to change their", 
+   "stylesheets."
+  ], 
+  "revision_id": "335031"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-06-19T21:38:03.000000Z", 
+  "msg": [
+   "Set the base URL of the source.  If the systemID is not set in the", 
+   "Source object, try and use the URL of the stylesheet.  If that is", 
+   "null also, use the user.dir property.  Part of the fop codegen", 
+   "fix."
+  ], 
+  "revision_id": "335030"
+ }
+]

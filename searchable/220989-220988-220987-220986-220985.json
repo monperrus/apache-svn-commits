@@ -1,0 +1,83 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2003-01-31T00:56:26.000000Z", 
+  "msg": [
+   "* src/java/org/apache/turbine/services/session/TurbineSessionService.java", 
+   "getSessionsForUser(User): Rewrote to avoid unnecessary object", 
+   "instantiation and duplicate interation introduced by my refactoring", 
+   "of getActiveSessions() (had a merge conflict with Quinton).", 
+   "Switched from using Vector to ArrayList for returning results", 
+   "(reasoning as per my change to getActiveUsers() in CVS revision", 
+   "1.5), and chose better variable name.", 
+   "Replaced \"Service initilization methods\" marker with something that", 
+   "JavaDoc won't get confused about."
+  ], 
+  "revision_id": "220989"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2003-01-31T00:20:53.000000Z", 
+  "msg": [
+   "* src/java/org/apache/turbine/services/session/SessionListener.java", 
+   "Removed imports obviated by removal of static \"log\" field.", 
+   "Added <listener> and <listener-class> web.xml examples and @since", 
+   "tag to header JavaDoc.", 
+   "log: Removed unused member.", 
+   "* src/java/org/apache/turbine/services/session/SessionService.java", 
+   "Added @since tag to header JavaDoc.", 
+   "getUserFromSession(HttpSession), getSession(String): Added JavaDoc,", 
+   "and removed redundant public declarations (implicit in a Java", 
+   "interface) for consistancy.", 
+   "* src/java/org/apache/turbine/services/session/TurbineSessionService.java", 
+   "Improved header JavaDoc.", 
+   "activeSessions: Changed from HashMap to Hashtable for thread-safety.", 
+   "getActiveSessions(): Now returns a copy of the active sessions,", 
+   "rather than a handle to the Collection view of the values of the", 
+   "actual Map used to store the active sessions.", 
+   "getActiveUsers(): Changed Collection implementation used to record", 
+   "active users from the slow, synchronized Vector to the faster,", 
+   "un-sync'd ArrayList (pre-allocated to a reasonable storage space).", 
+   "Quinton, I couldn't see how the synchronization would be beneficial", 
+   "when each calling thread gets its own copy.  If your caller needs a", 
+   "synchronized Collection, wrap the return value using", 
+   "Collections.synchronizedCollection().", 
+   "As the Iterators returned by the Collection-view methods of most Map", 
+   "implementations are fail-fast, a ConcurrentModificationException", 
+   "could've been thrown if activeSessions was modified during", 
+   "iteration!  This bug is likely to show up only under high", 
+   "concurrency.  Synchronized on activeSessions while iterating to", 
+   "prevent this possibility.", 
+   "getUserFromSession(HttpSession), getSession(String): Added JavaDoc.", 
+   "isUserLoggedIn(User), getActiveUsers(): Removed unnecessary local", 
+   "variables."
+  ], 
+  "revision_id": "220988"
+ }, 
+ {
+  "author": "quintonm", 
+  "date": "2003-01-30T23:01:38.000000Z", 
+  "msg": [
+   "added recent fix of TTWS41"
+  ], 
+  "revision_id": "220987"
+ }, 
+ {
+  "author": "quintonm", 
+  "date": "2003-01-30T22:56:58.000000Z", 
+  "msg": [
+   "misc javadoc corrections"
+  ], 
+  "revision_id": "220986"
+ }, 
+ {
+  "author": "quintonm", 
+  "date": "2003-01-30T22:56:37.000000Z", 
+  "msg": [
+   "- organized imports", 
+   "- Primary key is now set on user object after", 
+   "the insert.  this was a fix for TTWS41"
+  ], 
+  "revision_id": "220985"
+ }
+]

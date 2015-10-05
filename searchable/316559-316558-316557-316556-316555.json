@@ -1,0 +1,63 @@
+[
+ {
+  "author": "lehors", 
+  "date": "2000-11-09T22:36:57.000000Z", 
+  "msg": [
+   "implemented support for attribute value normalization by querying", 
+   "the grammar to get the attribute type"
+  ], 
+  "revision_id": "316559"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-11-09T22:35:56.000000Z", 
+  "msg": [
+   "added registration of DTDGrammar to the GrammarPool"
+  ], 
+  "revision_id": "316558"
+ }, 
+ {
+  "author": "ericye", 
+  "date": "2000-11-09T22:14:01.000000Z", 
+  "msg": [
+   "getAttributeDeclIndex"
+  ], 
+  "revision_id": "316557"
+ }, 
+ {
+  "author": "jeffreyr", 
+  "date": "2000-11-09T21:51:36.000000Z", 
+  "msg": [
+   "Fixed hang if we have the case where we find a multibyte UTF8 character outside the [#x10000-#x10FFFF]", 
+   "valid range. Even tough we check to see if the value was a valid UTF8 we failed to check if the", 
+   "value was within the allowed range.", 
+   "The loop was on the XMLDocumentScanner dispatch method, in the SCANNER_STATE_CONTENT case, after", 
+   "calling the scanContent method from the from the entity Reader we got a CONTENT_RESULT_INVALID_CHAR", 
+   "state because we did a preliminary check to se if the value was outside the [#x10000-#x10FFFF]", 
+   "later on the case of CONTENT_RESULT_INVALID_CHAR  we call the Entity Reader lookingAtValidChar. This", 
+   "check will return a valid (true) and then it will restore the scanner state an go into an infinite", 
+   "loop within the dispatch method.", 
+   "The solution was check at the lookingAtValidChar the same range test [#x10000-#x10FFFF] so we", 
+   "return a value of false and bailout of the loop.", 
+   "The first check at scanContent should have been to check for UTF8 character validation and then", 
+   "the lookingAtValidChar check should be just for XML UTF8 character allowed range.", 
+   "So we may want to revisit UTF8Reader.", 
+   "The testcase used to verify this problem is:", 
+   "xmltest/not-wf/sa/170.xml:", 
+   "<doc>abcd</doc>", 
+   "where a=0xf7", 
+   "b=0x80", 
+   "c=0x80", 
+   "d=0x80"
+  ], 
+  "revision_id": "316556"
+ }, 
+ {
+  "author": "ericye", 
+  "date": "2000-11-09T18:20:29.000000Z", 
+  "msg": [
+   "reset fRootElement"
+  ], 
+  "revision_id": "316555"
+ }
+]

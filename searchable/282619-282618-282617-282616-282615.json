@@ -1,0 +1,70 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2000-11-09T14:11:27.000000Z", 
+  "msg": [
+   "Since exceptions are now being propagated, changes were need to", 
+   "properly handle exceptions thrown during initialization.", 
+   "Probably need to review how much is going in the log due to exception", 
+   "propagation.  It might be a bit much."
+  ], 
+  "revision_id": "282619"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-11-09T14:07:14.000000Z", 
+  "msg": [
+   "Since exceptions are now being propagated, changes were need to", 
+   "properly handle exceptions thrown during initialization.", 
+   "Additional changes include:", 
+   "The servlet instance is now release if an exception is thrown during", 
+   "initialization.  I think the spec requires this.", 
+   "Handling has been added for UnavailableExceptions thrown during the", 
+   "request procession.  Previously they were ignored.  The servlet should", 
+   "become unavailable for the appropriate amount of time (this needs some", 
+   "testing).  However, permanently UnavailableExceptions don't yet destroy", 
+   "the servlet as called for in the spec.  I think the synchronization of servlet", 
+   "destruction needs some review before doing this to insure we don't deadlock.", 
+   "For simplification, stillUnavailable() was replaced with servletAvailable(), which", 
+   "throws an appropriate exception rather than return a boolean.  Also,", 
+   "handleUnavailable was removed since the handling has been moved to", 
+   "ContextManager's handleError() method. and handleNotFound was removed", 
+   "since it wasn't used anywhere."
+  ], 
+  "revision_id": "282618"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-11-09T13:40:48.000000Z", 
+  "msg": [
+   "Moved UnavailableException handling from ServletWrapper to", 
+   "ContextManger's handleError method.", 
+   "This allows UnavailableExceptions to be handled by a call to handleErro()", 
+   "from Handler's service() method, along with other exceptions.  This is cleaner", 
+   "than trying to keep handling for UnavailableExceptions local to", 
+   "ServletWrapper when exceptions are being propagated."
+  ], 
+  "revision_id": "282617"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-11-09T13:31:35.000000Z", 
+  "msg": [
+   "Adding a property to indicate if error handling has been performed.", 
+   "Since Handler and ServletWrapper will be propagating exceptions, we", 
+   "need a way to determine if the exception has been handled at a higher", 
+   "level."
+  ], 
+  "revision_id": "282616"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-11-09T13:27:36.000000Z", 
+  "msg": [
+   "Since ServletWrapper's service() method can now throw exceptions, we", 
+   "need to catch these exceptions in include() so the request can be restored.", 
+   "Then rethrow the exception."
+  ], 
+  "revision_id": "282615"
+ }
+]

@@ -1,0 +1,85 @@
+[
+ {
+  "author": "rhoegg", 
+  "date": "2003-01-24T01:45:29.000000Z", 
+  "msg": [
+   "PR:16343", 
+   "Fixed documentation error as reported in Bugzilla."
+  ], 
+  "revision_id": "233834"
+ }, 
+ {
+  "author": "mpoeschl", 
+  "date": "2003-01-18T13:40:03.000000Z", 
+  "msg": [
+   "Update to MinML 1.7"
+  ], 
+  "revision_id": "233833"
+ }, 
+ {
+  "author": "aevers", 
+  "date": "2002-12-05T08:49:24.000000Z", 
+  "msg": [
+   "Major refactoring of client code to separate XML-RPC and HTTP layers. It is", 
+   "now possible to implement XML-RPC over an arbitrary (but HTTP-like) transport", 
+   "by implementing XmlRpcTransport.", 
+   "Refactor XmlRpcRequest to implement XmlRpcServerRequest and XmlRpcClientRequest", 
+   "interfaces. This allows custom implementations of these interfaces that", 
+   "provide more efficient storage, particularly on the client side.", 
+   "Refactor client threading and worker code along the lines of the work done", 
+   "on the server code."
+  ], 
+  "revision_id": "233832"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-12-04T23:21:46.000000Z", 
+  "msg": [
+   "A patch from Ed Tellman <ECT@dolby.com>:", 
+   "\"...XmlRpcClient seems to be about twice as fast as", 
+   "XmlRpcClientLite.  Perhaps the documentation could be modified to", 
+   "indicate that you should try both and use the one that works best in", 
+   "your environment.\""
+  ], 
+  "revision_id": "233831"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-12-03T17:22:26.000000Z", 
+  "msg": [
+   "Applied patch by Ed Tellman <ECT@dolby.com>.  Here's what Ed has to", 
+   "say about the change:", 
+   "\"I am using Windows 2000, jdk 1.4.1.", 
+   "I wrote a simple performance test which repeatedly makes an XML-RPC", 
+   "call, to see how many calls I could make each second.", 
+   "I was surprised to find that in my system enabling HTTP keep alive", 
+   "dramatically reduced the performance, instead of improving it as I", 
+   "expected.  I did a bit of experimenting, and found that setting the", 
+   "TCP no-delay option on the socket helped quite a bit.  After I did", 
+   "this, the performance with keep alive was about twice as good as the", 
+   "performance without it.\"", 
+   "Ed suggests that we provide a global flag to gate the toggling of the", 
+   "TCP_NODELAY socket option, but we'll hold off on that until someone", 
+   "actually voices a need for such a flag.  Apache httpd 2.0 also sets", 
+   "this socket option, relying on APR to determine whether the underlying", 
+   "platform's TCP stack supports it.  XML-RPC will go out on a limb and", 
+   "rely on Java to do the Right Thing (cross your fingers, folks!).", 
+   "In case you're curious, here's a reasonably good description of", 
+   "TCP_NODELAY from CVS revision 1.102 of httpd-2.0/server/mpm_common.c:", 
+   "\"The Nagle algorithm says that we should delay sending partial", 
+   "packets in hopes of getting more data.  We don't want to do", 
+   "this; we are not telnet.  There are bad interactions between", 
+   "persistent connections and Nagle's algorithm that have very severe", 
+   "performance penalties.  (Failing to disable Nagle is not much of a", 
+   "problem with simple HTTP.)", 
+   "In spite of these problems, failure here is not a shooting offense.\"", 
+   "A comment in /usr/include/netinet/tcp.h on my RedHat 7.3 box speaks", 
+   "similarly of TCP_NODELAY:", 
+   "\"Don't delay send to coalesce packets.\"", 
+   "Considering that things still work okay with Nagle's algorithm active,", 
+   "I've added handling of SocketException around setting of the", 
+   "TCP_NODELAY flag which reports the error and keeps on chuggin'."
+  ], 
+  "revision_id": "233830"
+ }
+]

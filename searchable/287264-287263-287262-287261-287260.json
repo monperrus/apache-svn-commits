@@ -1,0 +1,70 @@
+[
+ {
+  "author": "glenn", 
+  "date": "2001-12-27T12:33:07.000000Z", 
+  "msg": [
+   "Remove the System.exit() I added"
+  ], 
+  "revision_id": "287264"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-12-26T11:00:55.000000Z", 
+  "msg": [
+   "Something changed recently causes the catalina java", 
+   "process to hang at this point on shutdown unless there is an", 
+   "explicit System.exit().  Could this have something to do with", 
+   "the STM changes?", 
+   "Moved the removeShutdownHook() call after server.stop() to ensure", 
+   "that server.stop() doesn't get called a second time by the", 
+   "CatalinaShutdownHook."
+  ], 
+  "revision_id": "287263"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-12-26T02:20:34.000000Z", 
+  "msg": [
+   "I tested using the DbcpDataSourceFactory and it failed to", 
+   "work due to three different commons jar files being located", 
+   "in server/lib instead of common/lib.", 
+   "Changed the build so that commons-dbcp.jar, commons-pool.jar,", 
+   "and commons-collections.jar are located in common/lib.", 
+   "After relocating the above jar files, the DbcpDataSourceFactory", 
+   "worked fine and the application which used it appeared to have", 
+   "less latency when accessing the db. :-)"
+  ], 
+  "revision_id": "287262"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-12-26T02:15:43.000000Z", 
+  "msg": [
+   "Forgot to cast a Throwable when rethrowing"
+  ], 
+  "revision_id": "287261"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-12-26T01:23:49.000000Z", 
+  "msg": [
+   "JVM Temporary Directory (java.io.tmpdir property) security patch", 
+   "----------------------------------------------------------------", 
+   "The java.io.File.createTempFile() methods use the property", 
+   "java.io.tmpdir for the location of the directory where the JVM", 
+   "places temporary files.  If this property doesn't exist,", 
+   "/tmp or /var/tmp gets used on unix systems or c:\\\\temp on WIN32 systems.", 
+   "This default directory is the same directory that all applications", 
+   "can use for temporary files.  Sharing the same system temporary", 
+   "directory between Tomcat and other applications could be a security", 
+   "risk if sensitive data is stored there by other applications.", 
+   "If you run Tomcat with the SecurityManager enabled you would have to", 
+   "grant Tomcat a FilePermission with read, write, and delete for the", 
+   "temporary directory.", 
+   "This series of patches enables the use of a temporary directory", 
+   "located at $CATALINA_BASE/temp so that Tomcat's use of the temporary", 
+   "directory is isolated from the rest of the system."
+  ], 
+  "revision_id": "287260"
+ }
+]

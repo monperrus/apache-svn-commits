@@ -1,0 +1,70 @@
+[
+ {
+  "author": "olegk", 
+  "date": "2003-02-06T16:08:05.000000Z", 
+  "msg": [
+   "- Bogus warning in EntityEnclosingMethod removed", 
+   "Contributed by Oleg Kalnichevski"
+  ], 
+  "revision_id": "134084"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2003-02-06T15:51:57.000000Z", 
+  "msg": [
+   "- fixes \"Expect: 100-continue\" related bug triggered when authenticating against HTTP/1.0 server", 
+   "1. -> PUT /file HTTP/1.1", 
+   "\ufffd\ufffd\ufffd\ufffd contains Expect: 100-continue header but disregarded as the server", 
+   "\ufffd\ufffd\ufffd\ufffd needs authentication information", 
+   "2. <- HTTP/1.0 401 Unauthorized", 
+   "\ufffd\ufffd\ufffd\ufffd switches isHttp11 flag", 
+   "3. Now it tries on loop 2", 
+   "\ufffd\ufffd\ufffd\ufffd -> PUT /file HTTP/1.0 with authorization header", 
+   "\ufffd\ufffd\ufffd\ufffd still contains Expect header, although a warning message about", 
+   "\ufffd\ufffd\ufffd\ufffd HTTP/1.0 not supporting Expect is written out", 
+   "4. 3 second timeout occurs, Expect header is removed and body is supposed", 
+   "\ufffd\ufffd\ufffd\ufffd to be sent", 
+   "5. The body is not sent through writeRemainingRequestBody() as", 
+   "\ufffd\ufffd\ufffd\ufffd statusLine exists and statusCode is currently 401, and continue", 
+   "\ufffd\ufffd\ufffd\ufffd has not been received.", 
+   "6. isRetryNeeded is checked, which causes processAuthenticationResponse", 
+   "\ufffd\ufffd\ufffd\ufffd to find it has already authenticated to this realm (although it", 
+   "\ufffd\ufffd\ufffd\ufffd never got a chance to check it out), and so the request is not", 
+   "\ufffd\ufffd\ufffd\ufffd retried. [A retry with the request now (without Expect header and", 
+   "\ufffd\ufffd\ufffd\ufffd correct authorization) would work.]", 
+   "7. 401 Unauthorized is returned as the status.", 
+   "Bug reported by Rob Owen", 
+   "Contributed by Oleg Kalnichevski"
+  ], 
+  "revision_id": "134083"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2003-02-04T21:22:07.000000Z", 
+  "msg": [
+   "- Cookie#Cookie(String, String, String, String, int, boolean) constructor corrected to accept -1 MaxAge value (cookie never expires)", 
+   "Contributed by Oleg Kalnichevski"
+  ], 
+  "revision_id": "134082"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2003-02-04T20:16:24.000000Z", 
+  "msg": [
+   "- fixes the problem with Cookie#Cookie(String, String, String, String, int, boolean) constructor accepting negative \"max-age\" values", 
+   "Contributed by Oleg Kalnichevski"
+  ], 
+  "revision_id": "134081"
+ }, 
+ {
+  "author": "olegk", 
+  "date": "2003-02-03T21:21:19.000000Z", 
+  "msg": [
+   "- fixes the problem with request content-encoding not taken into account when url-enconding parameters in POST method", 
+   "- adds test case to ensure appropriate encoding of non-ascii characters such as German umlauts in POST method parameters", 
+   "Problem reported by Mathis Thomas", 
+   "Contributed by Oleg Kalnichevski"
+  ], 
+  "revision_id": "134080"
+ }
+]

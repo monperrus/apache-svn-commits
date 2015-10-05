@@ -1,0 +1,99 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2000-06-12T21:49:57.000000Z", 
+  "msg": [
+   "This change should address all remaining service control issues.", 
+   "1) The code path is cleaned up, and much more Win32 code is moved", 
+   "into #ifdef WIN32 blocks.  This should only affect OS2/Netware,", 
+   "or other rare multithreaded beasts.", 
+   "2) A significant amount of Win32 service and console code is moved", 
+   "to os/win32/services.c from http_main.c", 
+   "3) The create_process() no longer passes -n or -k arguments, leaving", 
+   "the child processes free to do their real work.", 
+   "4) Move Win9x service control (-k args) to follow the WinNT path.", 
+   "All except to actually -k start or -k restart (from stopped state.)", 
+   "Win9x can -k shutdown even when the pid file is whacked by starting", 
+   "console Apache.", 
+   "5) Emulate service engine under Win9x by traversing the list of hidden", 
+   "ApacheService windows for the specified service.  Prevents starting", 
+   "two copies of a Win9x service, and allows positive confirmation of", 
+   "Win9x service shutdown.", 
+   "6) Best of all, -k restart -really- restarts the server gracefully,", 
+   "even in the case of windows NT services.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "85554"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-12T21:47:17.000000Z", 
+  "msg": [
+   "Clean up a big chunk of ap_config.h.  This basically stops ap_config.h from", 
+   "including any files.  Because of this change, other files must include", 
+   "their own headers.  I also cleaned up a couple of other bugs in some", 
+   "modules because I had to compile them all.", 
+   "I expect this to break multiple platforms, but this will be fixed over time.", 
+   "The massive configure cleanup is almost done.  I will go through the files", 
+   "one more time after this commit."
+  ], 
+  "revision_id": "85553"
+ }, 
+ {
+  "author": "chuck", 
+  "date": "2000-06-12T21:41:58.000000Z", 
+  "msg": [
+   "New mod_proxy/mod_cache (file cache) for 2.0. This uses a caching API so", 
+   "that shared mem, LDAP servers, DBs, etc. can also be used for proxy", 
+   "caching. The caching API is very young, and subject to change as APR changes.", 
+   "proxy_cache.c from the proxy subdir is no longer used.", 
+   "Build with --enable-modules=proxy,cache", 
+   "Lightly tested on Linux, no warranties expressed or implied yet.", 
+   "Still to do:", 
+   "strerror(), waitpid(), stat() cleanups", 
+   "address issues marked by @@@FIXME", 
+   "add HTTP/1.1", 
+   "This should be considered a *reference* proxy implementation for 2.0. What", 
+   "actually ends up shipping with 2.0 is likely going to be rather different as", 
+   "the redesign evolves. This may end up being the 2.0 backwards compatibility", 
+   "workalike.", 
+   "Modified to work with today's conf/build/layout scheme", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:\tSam Magnuson", 
+   "Reviewed by:\tChuck Murcko"
+  ], 
+  "revision_id": "85552"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-06-12T21:39:57.000000Z", 
+  "msg": [
+   "Fix logging of errors creating the httpd.pid file.", 
+   "perror() was converted to ap_log_error(), which will interpret the", 
+   "specified APR error code properly.", 
+   "The existing ap_log_error() call was changed so that the message is", 
+   "formatted properly.  Note that this call is made from the mpm after", 
+   "we detach from the foreground process, so it can only appear in the", 
+   "log."
+  ], 
+  "revision_id": "85551"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-06-12T21:08:25.000000Z", 
+  "msg": [
+   "Back out ap_set_default_perms().  Remove old logic to play with umask", 
+   "around the creation of the httpd.pid file.  Pass explicit permissions to", 
+   "ap_open(), omitting write-ability except by the owning user.  As always,", 
+   "we end up with rw-r--r-- for the permissions unless the umask is something", 
+   "unusual.", 
+   "Note that the OS/2 and Win32 implementations of ap_open() ignore the", 
+   "permissions parameter altogether."
+  ], 
+  "revision_id": "85550"
+ }
+]

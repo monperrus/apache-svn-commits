@@ -1,0 +1,69 @@
+[
+ {
+  "author": "lmartin", 
+  "date": "2001-01-15T23:15:29.000000Z", 
+  "msg": [
+   "New symbols to support CR version of complexType"
+  ], 
+  "revision_id": "316779"
+ }, 
+ {
+  "author": "lmartin", 
+  "date": "2001-01-15T23:13:25.000000Z", 
+  "msg": [
+   "complexType changes to support CR.  protected under CR_IMPL flag"
+  ], 
+  "revision_id": "316778"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2001-01-12T14:28:35.000000Z", 
+  "msg": [
+   "Add CR Schema comments related to simpleTypes", 
+   "Implement J.8:  default values for minOccurs and maxOccurs"
+  ], 
+  "revision_id": "316777"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2001-01-12T00:10:26.000000Z", 
+  "msg": [
+   "This commit brinds yet another optimization to this DOM implementation.", 
+   "The whole idea is to try and avoid to always creating a Text node to hold", 
+   "the value of an attribute. The DOM spec requires it, so we still have", 
+   "to do it in case getFirstChild() is called for instance. The reason", 
+   "attribute values are stored as a list of nodes is so that they can carry", 
+   "more than a simple string. They can also contain EntityReference nodes.", 
+   "However, most of the times people only have a single string that they", 
+   "only set and get through Element.set/getAttribute or Attr.set/getValue.", 
+   "In this new version, the Attr node has a value pointer which can either", 
+   "be the String directly or a pointer to the first ChildNode. A flag tells", 
+   "which one it currently is.", 
+   "Note that while we try to stick with the direct String as much as possible", 
+   "once we've switched to a node there is no going back. This is because we", 
+   "have no way to know whether the application keeps referring to the node", 
+   "we once returned.", 
+   "The gain in memory varies on the density of attributes in the document.", 
+   "But in the tests I've run I've seen up to 12% of memory gain. And the good", 
+   "thing is that it also leads to a slight gain in speed because we allocate", 
+   "fewer objects! I mean, that's until we have to actually create the node...", 
+   "To avoid too much duplicated code, I got rid of ParentNode and renamed", 
+   "ChildAndParentNode, which I never really liked, to ParentNode for", 
+   "simplicity, this doesn't make much of a difference in memory usage because", 
+   "there are only very objects that are only a Parent. This is only true now", 
+   "because AttrImpl now inherits directly from NodeImpl and has its own", 
+   "implementation of the ParentNode's node behavior. So there is still some", 
+   "duplicated code there."
+  ], 
+  "revision_id": "316776"
+ }, 
+ {
+  "author": "andyc", 
+  "date": "2001-01-11T08:38:11.000000Z", 
+  "msg": [
+   "Merged DFA patch from Xerces1 into Xerces2.", 
+   "Submitted by:\tAkihiko TOZAWA <ATOZAWA@jp.ibm.com>"
+  ], 
+  "revision_id": "316775"
+ }
+]

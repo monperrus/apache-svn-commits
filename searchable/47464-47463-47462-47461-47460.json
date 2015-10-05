@@ -1,0 +1,45 @@
+[
+ {
+  "author": "rich", 
+  "date": "2004-09-29T05:44:48.186702Z", 
+  "msg": [
+   "- Fixed a concurrency bug, where a page flow's destroy() callback (which calls the user's onDestroy() and does internal uninitialization of things like Control member fields) could overlap the execution of an action method triggered by another request.  The problem was the lack of synchronization on destroy().  It is unsafe to synchronize FlowController.destroy() because it is invoked from a session binding listener; depending on the Servlet container, the session itself may be locked, and this risks a deadlock in the situation where in another request thread our framework synchronizes on the page flow instance and then invokes user code that may (directly or indirectly) synchronize on the session.  Our solution is synchronization on the page flow instance *surrounding* any call that will remove/replace the instance in the session.  It's OK to trigger the session binding listener while the page flow is locked.  Bottom line: we always synchronize on the page flow instance before synchronizing on the session, and never allow it to go the other direction.", 
+   "- Fixed another concurrency issue that occured when a page flow was requested while another of the same type was being destroyed.  A new instance of the page flow was (correctly) created, but because the previous one had not yet fully uninitialized, the new one was trying to initialize Controls with IDs that overlapped those from the old instance (being destroyed).  The fix for this was simply to ensure that the Control IDs are always instance-specific, instead of being merely specific to the page flow and Control types.", 
+   "DRT: netui (WinXP)", 
+   "BB: self (linux)"
+  ], 
+  "revision_id": "47464"
+ }, 
+ {
+  "author": "niclas", 
+  "date": "2004-09-29T05:28:18.847218Z", 
+  "msg": [
+   "Applying patch provided by Peter Neubauer, to allow forking of tests."
+  ], 
+  "revision_id": "47463"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-09-29T05:25:17.876419Z", 
+  "msg": [
+   "added POJO for NF registry and added more docs"
+  ], 
+  "revision_id": "47462"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-09-29T05:18:56.651672Z", 
+  "msg": [
+   "fixed so lookup is on MRU name - MRU does not have an OID"
+  ], 
+  "revision_id": "47461"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-09-29T05:15:41.166470Z", 
+  "msg": [
+   "reverted back to using object arrays instead of lists"
+  ], 
+  "revision_id": "47460"
+ }
+]

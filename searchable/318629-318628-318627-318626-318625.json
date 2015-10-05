@@ -1,0 +1,61 @@
+[
+ {
+  "author": "elena", 
+  "date": "2002-08-15T20:43:57.000000Z", 
+  "msg": [
+   "Bug fix in namespace alg. Added setNamespace method to allow turning on namespace", 
+   "support from XMLSerializer (temporary solution -- in long term users should move using DOMWriter)"
+  ], 
+  "revision_id": "318629"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2002-08-15T17:51:22.000000Z", 
+  "msg": [
+   "Bug fix: http://nagoya.apache.org/bugzilla/show_bug.cgi?id=9664.", 
+   "The problem is reproducable when load-external-dtd feature is false and document has", 
+   "a doctype (no internal DTD).", 
+   "In this case we *forget* to send endDTD() call for SAX users. SAX has fewer events --", 
+   "startDTD and endDTD -- where XNI also has doctypeDecl call. So in the pipeline we", 
+   "send doctypeDecl event and in SAX we convert it to startDTD(). That means that in SAX", 
+   "if we receive XNI startDTD call we ignore it. That also means that in the current code if we", 
+   "don't need to load external DTD we will never send XNI startDTD()/endDTD calls. This will", 
+   "cause problem in SAX since it already received startDTD() call (==doctypeDecl()) and it needs to receive endDTD() call.", 
+   "The patch forces XNI pipeline to send startDTD()/endDTD() calls in this case."
+  ], 
+  "revision_id": "318628"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-08-15T16:35:13.000000Z", 
+  "msg": [
+   "Fixing an error introduced by my earlier commits."
+  ], 
+  "revision_id": "318627"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-08-14T22:51:09.000000Z", 
+  "msg": [
+   "1. Removed the SymbolTable parameter of NamespaceSupport#reset().", 
+   "2. Call NamespaceSupport#reset() in XSDocumentInfo, after a new", 
+   "NamespaceSupport object is created.", 
+   "3. Don't need to declare \"xml\" prefix in XSDocumentInfo, because they are", 
+   "already in every NamespaceSupport object."
+  ], 
+  "revision_id": "318626"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-08-14T22:49:28.000000Z", 
+  "msg": [
+   "1. Fixing an obvious typo. The condition to resize an array should be if it too", 
+   "*small\". So '<' should be used instead of '>'.", 
+   "2. The \"fixed\" size of an SchemaNamespaceSupport should be 3:", 
+   "- an empty context (which all NamespaceSupport objects have);", 
+   "- an context for \"xml\" and \"xmlns\" decls (ditto);", 
+   "- an context for global namespace decls on <xs:schema>."
+  ], 
+  "revision_id": "318625"
+ }
+]

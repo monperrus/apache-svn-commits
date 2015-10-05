@@ -1,0 +1,85 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2000-06-10T19:05:10.000000Z", 
+  "msg": [
+   "In sendError(), call response.resetBuffer() instead of response.reset()", 
+   "so that any headers and cookies that were set prior to the servlet's call", 
+   "to sendError() or sendRedirect() are preserved."
+  ], 
+  "revision_id": "281989"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-10T18:54:50.000000Z", 
+  "msg": [
+   "- moved SessionSerializer to tomcat/session", 
+   "- removed dependencies between SessionSerializer and tomcat internals.", 
+   "- use ClassLoader instead of ServletLoader ( which is tomcat specific )", 
+   "- added handleReload to SessionManager", 
+   "The idea is to keep the Session code independent of the servlet engine implementation.", 
+   "We not only want \"plugable\" session manager, but we also want that the session", 
+   "plugin is reuseable in ( and from)  other serlvet engines. It seems NES, JRun and", 
+   "probably other engines provide this feature.", 
+   "SessionManager represent the requirements of tomcat ( what tomcat needs from a", 
+   "session manager ). The session code should be absolutely independent of tomcat", 
+   "( it shouldn't use any tomcat class). SessionManager implements the \"Adapter\" pattern -", 
+   "it allows you to plug external session code into tomcat. It should be easy to", 
+   "make adapters for other \"session plugins\" ( assuming they are also independent of", 
+   "engine internals).", 
+   "( the reverse is also true - it should be trivial to use our session managers in", 
+   "other engines - by creating an adapter to their plugin interface )", 
+   "( maybe someone can clean up the session code in Catalina - but it's not a big", 
+   "priority, and it seem they have too many internal dependencies.", 
+   ")", 
+   "- remove NoInvokerServlet - if invoker is disabled, servlet/* will be mapped", 
+   "to whatever web.xml wants - it's a mistake to override this."
+  ], 
+  "revision_id": "281988"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-10T17:54:30.000000Z", 
+  "msg": [
+   "- moved class loader initialization in a separate interceptor.", 
+   "- same for policy-based access. Each interceptor should have a clear ( and simple )", 
+   "function, and implement the adapter pattern for one (independent) subsystem.", 
+   "- moved web.dtd inside tomcat/resources. We'll try to follow the same pattern as jasper", 
+   "and other projects, and keep all respources there.", 
+   "- in web.xml reading: use the resource instead of file for dtd.", 
+   "- also, the defaults are set in code, instead of the conf/web.xml. We can also", 
+   "use the web.xml file to override the defaults, but it's probably better to consolidate", 
+   "configurations in server.xml ( or APIs ), conf/web.xml is confusing and creates too many", 
+   "problems.", 
+   "- BTW, check out the startup time for tomcat :-))", 
+   "- few changes in Permissions and ProtectionDomanin - use Object instead of strong type,", 
+   "this helps in JDK1.1 case.", 
+   "- added a special attribute to pass the PD to jsp.", 
+   "- various fixes", 
+   "- added parent loader to the \"plugeable loader\" interface", 
+   "- small improvements in ServletWrapper. Most of the code will be factored out soon.", 
+   "Support for jsp init parameters is close :-)", 
+   "- changed the variable name in MimeMap to defaultMap", 
+   "- in XmlMapper, allow publicId mapping to both files and resources.", 
+   "Sorry for having all the changes at the same time ( J1 )"
+  ], 
+  "revision_id": "281987"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-10T17:09:05.000000Z", 
+  "msg": [
+   "Remove the old loader - all the functionality is integrated in AdaptiveClassLoader."
+  ], 
+  "revision_id": "281986"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2000-06-10T14:36:12.000000Z", 
+  "msg": [
+   "Simple JDBC Realm, Adapted from code contributed to Catalina", 
+   "by Carson McDonald"
+  ], 
+  "revision_id": "281985"
+ }
+]

@@ -1,0 +1,67 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-10-04T20:18:08.000000Z", 
+  "msg": [
+   "getRequestURI returns an encoded request. Fix is slightly modified from what", 
+   "Bill Barker sent, I was thinking to do some optimizations ( avoid use of Writer, and", 
+   "do the encoding directly in the buffer), but given that this happens only", 
+   "when it's needed - it should be ok. Probably for 3.3.1 we can do this ( and", 
+   "the date formating which is another hotspot ).", 
+   "Note that we do not encode contextPath. This is against the spec, but I think", 
+   "we should leave it this way:", 
+   "- that's how it was in 3.1, 3.2, etc", 
+   "- 4.0 is also broken ( well, it returns 404 if I try any encoded char in the context", 
+   "path )", 
+   "- it can raise a large number of bugs, if users expect the contextPath to be unique", 
+   "( with encoding - there are many ways you can encode a string, without", 
+   "even considering charsets ).", 
+   "- it would be very hard to write an app that is consistent between 3.3 and 3.2", 
+   "( which most people use ).", 
+   "I don't know how other containers are doing this, but I suspect most will", 
+   "return the context path decoded - if you can find one that is not decoding the", 
+   "CP - we can reconsider this."
+  ], 
+  "revision_id": "284244"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2001-10-04T02:20:04.000000Z", 
+  "msg": [
+   "Remove validity checks from where the spec doesn't require them.", 
+   "This fixes Bug #3920 submitted by Alessandro Polverini polverini@explo-it.com"
+  ], 
+  "revision_id": "284243"
+ }, 
+ {
+  "author": "mmanders", 
+  "date": "2001-10-03T22:13:45.000000Z", 
+  "msg": [
+   "Fix Bug #3944 request.getRemoteAddr() alays returning 127.0.0.1", 
+   "Bug report from Alessandro Polverini", 
+   "Since the base Request object set remoteAddr and remoteHost to defaults,", 
+   "the checks around setting them off of the real request always succeed so the", 
+   "real values are never used.  Added calls to recycle these in the constructor.", 
+   "This still allows for delayed setting, since the calls to set the values can be", 
+   "expensive."
+  ], 
+  "revision_id": "284242"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2001-10-03T05:38:44.000000Z", 
+  "msg": [
+   "Add a check for \"INTEGRAL\" transport-guarantee.", 
+   "This gets us in line with the \"recommended\" behavior in the servlet spec (that INTEGRAL should imply SSL)."
+  ], 
+  "revision_id": "284241"
+ }, 
+ {
+  "author": "bojan", 
+  "date": "2001-10-02T21:53:10.000000Z", 
+  "msg": [
+   "SingleThreadModel fix from Mats L\ufffdfkvist"
+  ], 
+  "revision_id": "284240"
+ }
+]

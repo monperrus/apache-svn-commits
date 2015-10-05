@@ -1,0 +1,80 @@
+[
+ {
+  "author": "martin", 
+  "date": "1998-02-27T15:26:05.000000Z", 
+  "msg": [
+   "Dean, this 'make depend' stuff was a great job"
+  ], 
+  "revision_id": "80339"
+ }, 
+ {
+  "author": "martin", 
+  "date": "1998-02-27T15:19:55.000000Z", 
+  "msg": [
+   "Reflect Year-1998 reality"
+  ], 
+  "revision_id": "80338"
+ }, 
+ {
+  "author": "martin", 
+  "date": "1998-02-27T15:15:28.000000Z", 
+  "msg": [
+   "For testing purposes, I added a new source called main/util_uri.c;", 
+   "It contains a routine parse_uri_components_regex() and friends which", 
+   "tries to break an URI into its parts. These parts are stored in a new", 
+   "uri_components structure within each request_rec and are therefore", 
+   "available to all routines which act on a request.", 
+   "Additionally, an unparse routine is supplied which re-assembles the", 
+   "URI components back to an URI, optionally hiding the username:password@", 
+   "part from ftp proxy requests, and other useful routines.", 
+   "Within the structure, you find on a ready-for-use basis:", 
+   "scheme;     /* scheme (\"http\"/\"ftp\"/...) */", 
+   "hostinfo;   /* combined [user[:password]@]host[:port] */", 
+   "user;       /* user name, as in http://user:passwd@host:port/ */", 
+   "password;   /* password, as in http://user:passwd@host:port/ */", 
+   "hostname;   /* hostname from URI (or from Host: header) */", 
+   "port_str;   /* port string (integer representation is in \"port\") */", 
+   "path;       /* the request path (or \"/\" if only scheme://host was given) */", 
+   "query;      /* Everything after a '?' in the path, if present */", 
+   "fragment;   /* Trailing \"#fragment\" string, if present */", 
+   "plus flags to indicate whether the strings have valid values.", 
+   "This is meant to serve as the platform for *BIG* savings in", 
+   "code complexity for the proxy module (and maybe the vhost logic).", 
+   "NOTE: This code is enabled only if the WITH_UTIL_URI define is set;", 
+   "currently this is not enabled by default.  [Martin Kraemer]", 
+   "Reviewed by: Dean Gaudet (on a previous occasion)"
+  ], 
+  "revision_id": "80337"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1998-02-27T14:55:02.000000Z", 
+  "msg": [
+   "Document the now achieved equality of possible meta-construct", 
+   "expansions in mod_rewrite rulesets."
+  ], 
+  "revision_id": "80336"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1998-02-27T14:47:46.000000Z", 
+  "msg": [
+   "It's unbelievable, it's unbelievable...", 
+   "We have three locations where one can construct a string in rewriting rules by", 
+   "expanding $N, %N, %{NAME} and ${map:key}:", 
+   "- RewriteCond <Location-1>  ...", 
+   "- RewriteRule ...           <Location-2> ...", 
+   "- RewriteRule ...           ...          [..,E=NAME:<Location-3>,...]", 
+   "And just after I've added exact comments of what we expand in each location, I", 
+   "discovered that they are expanded totally inconsequent. For <Location-3> the", 
+   "%{NAME} and ${map:key} constructs were not expanded (ok, perhaps not really a", 
+   "%major drawback) and for <Location-1> the ${map:key} construct was not", 
+   "%expanded while for <Location-2> all are expanded. At least the missing", 
+   "${map:key} expansion for <Location-1> is horrible because this way we", 
+   "unnesessarily restricted the usefulness of RewriteCond dramatically.", 
+   "Perhaps I should add more source comments to mod_rewrite.c", 
+   "to discover that it then can even can cook a cake now.... ;-)"
+  ], 
+  "revision_id": "80335"
+ }
+]

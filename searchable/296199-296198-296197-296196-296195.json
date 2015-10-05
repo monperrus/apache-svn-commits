@@ -1,0 +1,92 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-12-31T19:15:12.000000Z", 
+  "msg": [
+   "Added getBool ( needed in few places ).", 
+   "Fixed the multi-value properties. The original code used some", 
+   "hardocded properties names ( path, env ) and a special hack to", 
+   "concatenate and split them. The new code is much simpler ( since", 
+   "it now supports multi-values in the table, like apr_table ).", 
+   "This has an effect on configuration - it's no longer needed", 
+   "to have all the values on the same line with ',', you can just", 
+   "use one line per value."
+  ], 
+  "revision_id": "296199"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-31T19:09:59.000000Z", 
+  "msg": [
+   "JkServlet will be the main entry point into Jk2. It'll use the normal", 
+   "web.xml to get the config data, do initial config and call a", 
+   "second servlet, specific to each container.", 
+   "The container-specific servlet will use specific methods to access the", 
+   "containers internals ( attribute for 3.3, extend internal servlet in 4.x).", 
+   "It should work like the other 'special' servlets ( the admin in 3.3,", 
+   "manager in 4.x ).", 
+   "It seems the 4.0 problem can be resolved by just copying the", 
+   "jars in lib/server ( while keeping the 'trusted' webapp ). In 4.1", 
+   "or 3.3 it should work as any other 'trusted' webapp.", 
+   "I haven't played yet with the new manager, but any deploy tool that", 
+   "supports web.xml editing should be useable to configure jk.", 
+   "JkMain is used to test the current code."
+  ], 
+  "revision_id": "296198"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-31T19:04:59.000000Z", 
+  "msg": [
+   "Nothing inside yet, just the skeleton. This will have the native", 
+   "methods coresponding to the JNI code, needed to implement pipes,", 
+   "signals, etc."
+  ], 
+  "revision_id": "296197"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-31T19:03:53.000000Z", 
+  "msg": [
+   "The 'interafaces', coresponding to jk2/include ( on the C side ).", 
+   "I tried to keep everything as simple as possible, most are abstract", 
+   "classes. In common we'll have the different implementations."
+  ], 
+  "revision_id": "296196"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-31T19:02:01.000000Z", 
+  "msg": [
+   "\"New\" jk. The code is cut&pasted from the old jk, with a bit of cleanup", 
+   "and reorganization to match the object model on the C side.", 
+   "The most significant change is the removal of String from MsgAjp ( which", 
+   "is the old AjpPacket ). Jk doesn't have enough knowledge to deal with", 
+   "strings - the higher layer ( the connector ) should do the byte-char", 
+   "conversion, we just marshal byte[], int.", 
+   "The main reason is that charset encoding is hard to detect at the packet", 
+   "level ( it can be in the Session, or extracted from headers, or", 
+   "set by user in 2.3 ). The old code was not working well with different", 
+   "charsets.", 
+   "The second reason is performance - doing String.getBytes() proved to be", 
+   "very inefficient. The connector should use C2B or B2C or JDK1.4", 
+   "to do the conversion.", 
+   "You may notice ChannelSocket, which now does send/receive the messages", 
+   "( part of the old Ajp13 object ). The intention is to add other channels,", 
+   "using different transports ( unix sockets, etc ).", 
+   "Msg abstracts the encoding, and again we may have a different impl.", 
+   "in future ( but less likely, the current ajp13 encoding seems fine,", 
+   "maybe we can experiment with alignment or CDR ).", 
+   "Endpoint represents the point to point connection between java and c sides,", 
+   "it's very 'light' on the java side ( only generic notes ). In future we", 
+   "should simplify the C endpoint too.", 
+   "Worker is the link to the higher layer ( tomcatXX ). It is no longer the", 
+   "factory for endpoint, etc - the endpoint/channel/msg are now a bit", 
+   "more independent ( i.e. in java ), to avoid duplicating code.", 
+   "Of course, nothing is final :-) It kind of works now, but needs more testing,", 
+   "and the objects are certain to change when we'll have the first", 
+   "'alternative' transport."
+  ], 
+  "revision_id": "296195"
+ }
+]

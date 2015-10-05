@@ -1,0 +1,93 @@
+[
+ {
+  "author": "brekke", 
+  "date": "2002-04-29T03:55:32.000000Z", 
+  "msg": [
+   "Patch/Description provided by Steve Cohen:", 
+   "This code implements Daniel's suggested for a Parser implementation that", 
+   "is less wasteful of memory since it saves only the original listing and", 
+   "creates more expensive FTPFile instances on an as needed basis only.  It", 
+   "supports paged and single file iteration through the list using iterator-like", 
+   "hasNext() - next() syntax.  The next() methods can return either one or", 
+   "many entries.  Iteration is bidirectional.  There are hasPrevious() and", 
+   "previous() methods as well.  It should be possible, using this system to", 
+   "create attractive, efficient, paged GUI displays of FTP directories.", 
+   "It also features a revised version of Daniel's DefaultFTPFileLister that", 
+   "uses regular expressions, as well as revised versions of Winston Ojeda's", 
+   "VMS, OS2, and NT parsers that make more use of regular expressions and", 
+   "in some cases, recover more information than the originals did.  However", 
+   "these implementations were skeletal and they are still not complete.  I think", 
+   "they are also rather old and I would be highly surprised if OS2 and NT", 
+   "FTP servers have not been released in a Y2K compliant way in the past couple", 
+   "of years.  Someone more experienced with these systems should have a look", 
+   "at these parsers and see if they can't be improved.  I'm quite sure they can.", 
+   "My design of this subsystem decouples the parsing aspect from the listing", 
+   "aspect.  A single file ENTRY is parsed, not a LIST of files.", 
+   "In order to achieve this design, a new interface, FTPFileEntryParser, has", 
+   "been created to be used in place of FTPFileListParser.  The listing portion", 
+   "is handled by a new FTPFileList class and the iterative aspect has been", 
+   "encapsulated in an FTPFileIterator class.", 
+   "I had a hard time in designing these enhancements, deciding how to lay out", 
+   "the classes.  Support for the new file listing mechanism would require", 
+   "massive changes to FTPClient.  I was very leery of making these because it", 
+   "seemed to me that this would add large doses of confusion to the system, and", 
+   "might well lead to it not being accepted by the community.  This is especially", 
+   "so at this time, when the community process for NetComponents is very much", 
+   "up in the air.", 
+   "Accordingly I decided to make NO changes to FTPClient, and instead to place the", 
+   "new code in a class DERIVED from FTPClient to keep the two systems separable in", 
+   "the minds of users, which would help the emerging NetComponents community decide", 
+   "whether and how to best incorporate the new ideas.  I almost succeeded in this", 
+   "goal - I did have to make the __openDataConnection() method of FTPClient", 
+   "protected instead of private in order to use it with the new derived class.", 
+   "In line with keeping the experimental part of this revision as separate as possible,", 
+   "all of my new code except the change to FTPClient is furthermore placed in", 
+   "a new package com.oroinc.net.ftp.ftp2.  This will probably not be its", 
+   "final home, but it will do for now, again to help the community evaluate", 
+   "these changes.", 
+   "As mentioned above, I have incorporated into this version revised versions", 
+   "of Winston Ojeda's replacement parsers, which work with the FTPFileEntryParser.", 
+   "These derive from a helper class that encapsulates the Regular Expression", 
+   "code in one place, making more possible replacement by a different regex", 
+   "engine sometime in the future, if desired, although the present one seems", 
+   "quite good enough.  I also took the liberty of removing the main() functions", 
+   "in Winston's code for testing and included a JUnit testing apparatus that", 
+   "is reachable from ant."
+  ], 
+  "revision_id": "139299"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2002-04-27T17:33:25.000000Z", 
+  "msg": [
+   "Updated for documentation and site publishing."
+  ], 
+  "revision_id": "139298"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2002-04-13T05:00:51.000000Z", 
+  "msg": [
+   "Minor update to coding specs wrt java docs."
+  ], 
+  "revision_id": "139297"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2002-04-13T04:55:00.000000Z", 
+  "msg": [
+   "Started cleaning up checkstyle reported issues.  Formatting and internal", 
+   "member name changes mostly."
+  ], 
+  "revision_id": "139296"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2002-04-12T04:42:48.000000Z", 
+  "msg": [
+   "First swipe at cleanup of code.  Changed spacing/formatting and import", 
+   "statement cleansing."
+  ], 
+  "revision_id": "139295"
+ }
+]

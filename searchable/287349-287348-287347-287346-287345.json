@@ -1,0 +1,93 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2002-01-20T03:00:57.000000Z", 
+  "msg": [
+   "Initial check-ins to support a database of users and groups that can", 
+   "be edited through the administration application.  Groups are an", 
+   "enhancement over the existing capabilities, and allow users to inherit", 
+   "the roles of all groups that they are members of.", 
+   "* org.apache.catalina.{Group,User,UserDatabase} - Component definitions", 
+   "for groups, users, and the user database itself.", 
+   "* org.apache.catalina.users.Abstract{Group,User} - Convenience", 
+   "base classes for groups and users.", 
+   "* org.apache.catalina.users.Memory{Group,User} - Concrete implementations", 
+   "used with a memory database fed by an enhanced version of the existing", 
+   "\"conf/tomcat-users.xml\" file.", 
+   "* org.apache.catalina.users.MemoryUserDatabase - Concrete implementation", 
+   "of o.a.c.UserDatabase that can load *and store* groups and users in the", 
+   "\"conf/tomcat-users.xml\" file.  See below for revised syntax.", 
+   "* org.apache.catalina.users.MemoryUserDatabaseFactory - JNDI resource", 
+   "factory so that an instance of MemoryUserDatabase can be configured", 
+   "in the global JNDI resources, and then used by an appropriate Realm", 
+   "implementation (see next check-in) as well as being editable.", 
+   "The revised syntax for the tomcat-users.xml file introduces a \"group\"", 
+   "element, and adds a \"groups\" attribute to the \"user\" element.  Groups", 
+   "must be defined first.  An example:", 
+   "<?xml version='1.0'?>", 
+   "<tomcat-users>", 
+   "<group groupname='admins' description='System Administrators'", 
+   "roles='admin'/>", 
+   "<user username='tomcat' password='tomcat'", 
+   "groups='admins' roles='tomcat,manager'/>", 
+   "<user username='role1' password='tomcat' roles='role1'/>", 
+   "<user username='both' password='tomcat'", 
+   "groups='admins'  roles='tomcat,role1'/>", 
+   "</tomcat-users>", 
+   "In this scenario, users 'tomcat' and 'both' inherit the 'admin' role by", 
+   "virtue of the fact that they belong to the \"admins\" group.", 
+   "For backwards compatibility, the file reader accepts either \"name\" or", 
+   "\"username\" on the <user> element, but it always writes \"username\"."
+  ], 
+  "revision_id": "287349"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-01-20T01:40:15.000000Z", 
+  "msg": [
+   "Port from HEAD branch the removal of redundant session attribute", 
+   "unbinding in the writeObject() method.", 
+   "Submitted by:  David Lecomber <dsl@ts.com>"
+  ], 
+  "revision_id": "287348"
+ }, 
+ {
+  "author": "patrickl", 
+  "date": "2002-01-20T00:51:53.000000Z", 
+  "msg": [
+   "Replace all references to the DefaultContext and StandardContext MBeans' \"name\" property with \"path\". This change matches the renaming of the \"name\" property to \"path\" in the mbeans-descriptor.xml file."
+  ], 
+  "revision_id": "287347"
+ }, 
+ {
+  "author": "patrickl", 
+  "date": "2002-01-19T06:08:00.000000Z", 
+  "msg": [
+   "Update documentation to reflect that a newer commons-modeler nightly build is needed to build."
+  ], 
+  "revision_id": "287346"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-01-19T01:58:24.000000Z", 
+  "msg": [
+   "Correct the set of session related events fired at context startup and", 
+   "shutdown time by the StandardManager implementation, as follows:", 
+   "* At Tomcat shutdown (or in the shutdown portion of a", 
+   "context reload), ONLY fire sessionWillPassivate() events", 
+   "to session attributes that implement HttpSessionActivationListener.", 
+   "Previously, a spurious valueUnbound() event was being sent", 
+   "to session attributes that implemented HttpSessionBindingListener.", 
+   "* At Tomcat startup time (or in the reload portion of a", 
+   "context reload), ONLY fire sessionDidActivate() events", 
+   "to session attributes that implement HttpSessionActivationListener.", 
+   "Previously, a spurious sessionCreated() event was sent to", 
+   "registered HttpSessionListener listeners.", 
+   "None of this directly affects the behavior of PersistentManager, as reported", 
+   "in Bugzilla #5895, but that is the next thing to investigate.", 
+   "I consider this bugfix somewhat risky for the 4.0 branch, so I don't", 
+   "think we should necessarily port it."
+  ], 
+  "revision_id": "287345"
+ }
+]

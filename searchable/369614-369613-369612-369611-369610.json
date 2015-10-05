@@ -1,0 +1,65 @@
+[
+ {
+  "author": "thorsten", 
+  "date": "2006-01-17T00:25:00.106548Z", 
+  "msg": [
+   "Removed IMO all related resources, will live FOR-791 open till somebody can verify."
+  ], 
+  "revision_id": "369614"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2006-01-17T00:19:49.073415Z", 
+  "msg": [
+   "Improve the annotated managed beans implementation by adding partial support", 
+   "for <list-entries> elements.  Currently, this works only for lists, but not", 
+   "(as the JSF spec requires) for arrays.  Still no support for <map-entries>", 
+   "elements yet."
+  ], 
+  "revision_id": "369613"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2006-01-17T00:10:58.629232Z", 
+  "msg": [
+   "DERBY-210 - Network Server will leak prepared statements if not explicitly closed by the user until the connection is closed", 
+   "I am uploading a combined patch 'derby-210.diff' which solves the memory leak. As Bryan suggested, I am uploading this patch and will open jira issues for other optimizations. Patch does the following:", 
+   "* Eliminates the below references to PreparedStatement objects by using WeakHashMap instead of LinkedList. When there are no other references to the keys in a WeakHashMap, they will get removed from the map and can thus get garbage-collected. They do not have to wait till the Connection object is collected.", 
+   "- 'openStatements_' in org.apache.derby.client.am.Connection", 
+   "- 'CommitAndRollbackListeners_' in org.apache.derby.client.am.Connection", 
+   "* Removes the list 'RollbackOnlyListeners_' since this is not being used.", 
+   "* Updates the following comment for openStatements_:", 
+   "// Since DERBY prepared statements must be re-prepared after a commit,", 
+   "// then we must traverse this list after a commit and notify statements", 
+   "// that they are now in an un-prepared state.", 
+   "final java.util.LinkedList openStatements_ = new java.util.LinkedList();", 
+   "In the code, I did not see this list being traversed after a commit to re-prepare statements. Also, I think this is not needed since Derby does not require re-prepare of statements after a commit. Currently, this list is used to close all open statements when the originating connection is closed.", 
+   "* Removes all ResultSets from HashTable 'positionedUpdateCursorNameToResultSet_' in SectionManager. Only result sets of positioned update statements were being removed from this hashtable whereas all result sets were added. Because of this, client driver was holding on to result sets and statements even after rs.close() was called.", 
+   "* Adds a test 'derbyStress.java' to jdbcapi suite. This test is based on the repro for this patch. Without this patch, it fails when run with client driver. Kathey had suggested in another mail that tests for client memory leak problems (DERBY-557, DERBY-210) can be added to same test. I did not see an existing test. So I created this new test. If DERBY-557 does not have a test, I think it can be added to this new test.", 
+   "* Excludes the new test from running with jcc because jcc gives out of memory error.", 
+   "* Creates 'derbyStress_app.properties' with following property 'jvmflags=-Xmx64M' to guarantee the test fails on all machines.", 
+   "Successfully ran derbyall with Sun JDK 1.4.2 on Windows XP. Please take a look at this patch.", 
+   "Contributed by Deepa Remesh"
+  ], 
+  "revision_id": "369612"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2006-01-17T00:10:46.031961Z", 
+  "msg": [
+   "fix problem with transient Identity objects"
+  ], 
+  "revision_id": "369611"
+ }, 
+ {
+  "author": "bommel", 
+  "date": "2006-01-16T23:59:53.404325Z", 
+  "msg": [
+   "added missing api javadoc for assembly", 
+   "generate javadoc artifact with profile generate-assembly mvn -Pgenerate-assembly", 
+   "move the commons-collection dependency to imp", 
+   "move the commons-fileupload dependency to tomahawk"
+  ], 
+  "revision_id": "369610"
+ }
+]

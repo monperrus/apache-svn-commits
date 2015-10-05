@@ -1,0 +1,75 @@
+[
+ {
+  "author": "santiagopg", 
+  "date": "2003-01-15T14:43:05.000000Z", 
+  "msg": [
+   "More global changes. Replaced SymbolTable by static and compiler", 
+   "contexts."
+  ], 
+  "revision_id": "337109"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-01-14T21:32:33.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create branch 'xslt20'."
+  ], 
+  "revision_id": "337108"
+ }, 
+ {
+  "author": "ilene", 
+  "date": "2003-01-14T21:32:33.000000Z", 
+  "msg": [
+   "Committing changes in response to bugzilla #12481.", 
+   "Before this commit,  DTMManager.newInstance cached the found class", 
+   "in the cases where the class was identified in jaxp.properties or the class path.", 
+   "There were some problems with this:", 
+   "1. It was not thread-safe because access to the static field foundFactory was", 
+   "not synchronized.", 
+   "2. We weren't caching the class when we defaulted to the fallback class (this", 
+   "was the original issue in the bug report.)", 
+   "3.  We weren't using the AccessController class available in JDK1.2 to control", 
+   "acess to priviliged resources (eg. system properties, files).", 
+   "4. DTMManager would never be specified in jaxp.properties because it's", 
+   "not part of the JAXP specification.", 
+   "5.  We aren't using context class loaders.", 
+   "So, I have made the following changes:", 
+   "1. Taken the FactoryFinder, SecuritySupport and SecuritySupport12 classes", 
+   "from the JAXP subdirectories (in xml-commons) and used them as the basis", 
+   "for the lookup of the DTMManager class.  This gives us the AccessController", 
+   "code.", 
+   "2.  Removed the context class loader support and added a cache for", 
+   "the found class (which gets used if the system property is not set.)", 
+   "If we want context class loader support in the future (which we probably)", 
+   "do, then we will need to revisit this to see if caching the class loader and the", 
+   "class would work.", 
+   "3.  Synchronized access to the found class.", 
+   "4.  Instead of looking in jaxp.properties, look in xalan.properties (a xalan", 
+   "specific configuration file) which can be placed in <$JAVA_HOME>/jre/lib.", 
+   "Possible issues:", 
+   "1. In general, using a cache means that the class will not change,", 
+   "regardless of changes to xalan.properties or the class loader."
+  ], 
+  "revision_id": "337107"
+ }, 
+ {
+  "author": "santiagopg", 
+  "date": "2003-01-13T22:02:59.000000Z", 
+  "msg": [
+   "A number of global changes in preparation for the implementation of", 
+   "the 2.0 specs. Definition of a static context and a compiler", 
+   "context."
+  ], 
+  "revision_id": "337106"
+ }, 
+ {
+  "author": "grchiu", 
+  "date": "2003-01-11T05:44:22.000000Z", 
+  "msg": [
+   "Fixing mispellings in xsltc_performance.xml (bugzilla 15591).", 
+   "Changes will appear when the site is re-generated.", 
+   "Mispellings originally reported by Rob Tougher (robt@robtougher.com)."
+  ], 
+  "revision_id": "337105"
+ }
+]

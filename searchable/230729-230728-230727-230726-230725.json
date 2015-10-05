@@ -1,0 +1,60 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2005-08-08T01:44:46.896510Z", 
+  "msg": [
+   "Backport the fix to handling Connection: close.  The existing code", 
+   "was impossible to follow; the new code sets up p_conn->close correctly,", 
+   "and uses that evaluated value to inject the appropriate choice immediately", 
+   "before passing the request to the backend server."
+  ], 
+  "revision_id": "230729"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2005-08-08T01:39:14.280112Z", 
+  "msg": [
+   "Backport the corrected C-L streamed, v.s. spooled, v.s. T-E: chunked", 
+   "selection logic from httpd trunk/.  This now correctly chooses the", 
+   "most portable mechanism (e.g. C-L) when we can see the entire body,", 
+   "even for chunked bodies from the client, falls back on spool cl when", 
+   "it's necessary, and uses chunked when we have faith in it."
+  ], 
+  "revision_id": "230728"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2005-08-08T01:31:02.679431Z", 
+  "msg": [
+   "Backport the rejection of non-'chunked' values in the transfer", 
+   "encoding; we simply don't know what, exactly to do with them.", 
+   "Backport the reporting of 'both C-L and T-E' when we encounter", 
+   "this edge case, setting the connection up to close down once", 
+   "we finish (perhaps we were victims of a request splitting attack)."
+  ], 
+  "revision_id": "230727"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2005-08-08T01:28:14.743841Z", 
+  "msg": [
+   "Backport the fix to an edge case, it's now possible for a primary", 
+   "request which has a body in spite of what was determined by the", 
+   "header parsing; this would usually be due to an input filter between", 
+   "the client request and mod_proxy.  Add another consideration, and", 
+   "force the C-L determination if we saw bytes in already."
+  ], 
+  "revision_id": "230726"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2005-08-08T01:26:34.400648Z", 
+  "msg": [
+   "Backport the fix to an edge case; it's now much more efficient to", 
+   "entirely skip request body determinations for subrequests, stuff", 
+   "in an EOS and we are off to the races, ready to create a body-less", 
+   "proxied subrequest."
+  ], 
+  "revision_id": "230725"
+ }
+]

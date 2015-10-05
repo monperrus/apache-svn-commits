@@ -1,0 +1,64 @@
+[
+ {
+  "author": "trawick", 
+  "date": "2000-08-30T21:15:33.000000Z", 
+  "msg": [
+   "fix a few bugs and improve error handling:", 
+   "introduce extended error status as a start of more helpful error logging;", 
+   "instead of aborting the process when we get a bucket-straddling char too", 
+   "wide to handle, trace the problem and return an error;", 
+   "when we get to the end of the brigade and we're still waiting for the rest", 
+   "of a character, return an error instead of ignoring the problem;", 
+   "if we get 0 bytes when reading from a pipe, don't fret (segfault); skip", 
+   "over this empty bucket and read the next one;", 
+   "don't set done if send_downstream() returns APR_SUCCESS; set it for the", 
+   "opposite condition; that bug kept us from processing our entire input", 
+   "brigade for brigades that caused lots of output;"
+  ], 
+  "revision_id": "86164"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-08-30T20:47:37.000000Z", 
+  "msg": [
+   "Export ap_configtestonly. Needed for mod_perl on AIX.", 
+   "Submitted By: Paul Reder"
+  ], 
+  "revision_id": "86163"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-08-30T01:09:09.000000Z", 
+  "msg": [
+   "reversing the latest commit; it was vetoed a while back."
+  ], 
+  "revision_id": "86162"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-29T22:16:45.000000Z", 
+  "msg": [
+   "Modify the way filters are added to the server.  Instead of using a FIFO,", 
+   "we use a modified LIFO.  It is modified, because if we add a filter while", 
+   "in the middle of another filter, the added filter gets put in after the", 
+   "current filter.  This requires that the server is smart about which filters", 
+   "are added when.  This should be handled by the HTTP protocol, but we will", 
+   "want to keep and eye on things for a little while.", 
+   "This change is necessary, because currently when we add a filter it goes", 
+   "after the last filter of the same type.  This is broken whenever we want", 
+   "to add a filter that has a dependancy.  Think about the core and chunking", 
+   "filters.  They are of the same type, and core is always added first.  When", 
+   "we go to insert chunking, it gets added, but it is never called."
+  ], 
+  "revision_id": "86161"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-08-29T20:57:29.000000Z", 
+  "msg": [
+   "Filters (and thus ap_pass_brigade()) now return an apr_status_t as their", 
+   "return value."
+  ], 
+  "revision_id": "86160"
+ }
+]

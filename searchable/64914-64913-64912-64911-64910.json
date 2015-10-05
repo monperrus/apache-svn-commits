@@ -1,0 +1,94 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2004-02-21T00:31:49.000000Z", 
+  "msg": [
+   "Fix the generation of the build-outputs.mk file. That file must remain", 
+   "platform independent since it gets included with the tarball, and the", 
+   "tarball is targeted for all platforms.", 
+   "In this new scheme, the build-outputs.mk includes symbols named", 
+   "OBJECTS_<plat> which specifies the necessary object files for each platform.", 
+   "The apr_rules.mk(.in) file then pulls in the right symbol for the configured", 
+   "platform. Since apr-util directly uses apr_rules.mk, then it picks up the", 
+   "same logic with no change.", 
+   "The build.conf was altered to include a set of platform-independent files,", 
+   "and subdirectories which contain per-platform subdirectories. This was", 
+   "needed to help out the logic which selects object files based on whether a", 
+   "platform is present in each source subdir. (and if a platform subdir is not", 
+   "present, then \"parent\" gets used instead; e.g. use 'unix' if 'beos' is not", 
+   "in the subdir)", 
+   "Lastly, configure.in was updated to select the appropriate set of objects", 
+   "for the build.", 
+   "* build.conf:", 
+   "(paths): remove per-platform symbols", 
+   "(platform_dirs): new option to list the dirs which have platform subdirs", 
+   "* configure.in:", 
+   "- define and substitute OBJECTS_PLATFORM to reference the platform", 
+   "specific set of objects, which get defined in build-outputs.mk", 
+   "* build/apr_rules.mk.in:", 
+   "- define OBJECTS in terms of the substituted OBJECTS_PLATFORM symbol", 
+   "* build/gen-build.py:", 
+   "(PLATFORMS): the various platforms found in APR. unused, actually.", 
+   "(MAKE_PLATFORMS): the platforms which use a Makefile, and what default", 
+   "platform should be used if SUBDIR/<platform> is not present.", 
+   "(main): update logic to generate multiple OBJECTS_* symbols. this now", 
+   "includes logic to deal with subdirs which may not have a platform subdir", 
+   "for the platform in question, thus needing to default to another.", 
+   "(write_objects): some code factored out of main() to process a list of", 
+   "source files into dependencies lines in the makefile.", 
+   "(get_files): no more need to substitute for {platform}, and simplified", 
+   "some of the .split() stuff.", 
+   "(get_platform): no longer required. we generate for all platforms."
+  ], 
+  "revision_id": "64914"
+ }, 
+ {
+  "author": "jorton", 
+  "date": "2004-02-20T16:23:04.000000Z", 
+  "msg": [
+   "* build/config.guess, build/config.sub: Update to current GNU config", 
+   "scripts."
+  ], 
+  "revision_id": "64913"
+ }, 
+ {
+  "author": "jorton", 
+  "date": "2004-02-19T09:55:12.000000Z", 
+  "msg": [
+   "* include/apr_file_info.h: Remove misleading @remark about dot/dot-dot", 
+   "entries returned by apr_dir_read(); reported by Philip Martin.", 
+   "* test/testdir.c (test_readdir_onedot, test_readdir_twodot): Remove", 
+   "tests."
+  ], 
+  "revision_id": "64912"
+ }, 
+ {
+  "author": "jorton", 
+  "date": "2004-02-18T10:39:09.000000Z", 
+  "msg": [
+   "Revert to using i386-pc-os2-emx on OS/2 rather than non-standard", 
+   "...-os2_emx; entirely untested:", 
+   "* configure.in, build/apr_hints.m4: Match OS/2 by \"*-os2*\".", 
+   "* build/config.sub, build/config.guess: Remove customisations for", 
+   "*-os2."
+  ], 
+  "revision_id": "64911"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2004-02-18T10:15:58.000000Z", 
+  "msg": [
+   "remove Apache-specific changes for zSeries from APR's config.sub/config.guess", 
+   "potentially affected platforms are", 
+   ". z/OS a.k.a. OS/390 a.k.a. MVS", 
+   "Apache and APR on this OS use a non-standard libtool which includes and", 
+   "forces the use of its own copy of config.sub and config.guess, so there", 
+   "is no immediate breakage", 
+   ". TPF", 
+   "dunno if anybody builds APR there", 
+   ". VM/CMS", 
+   "dunno if anybody builds APR there"
+  ], 
+  "revision_id": "64910"
+ }
+]

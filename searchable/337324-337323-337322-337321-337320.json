@@ -1,0 +1,74 @@
+[
+ {
+  "author": "santiagopg", 
+  "date": "2003-03-12T19:57:09.000000Z", 
+  "msg": [
+   "Use DOM L2 calls to properly handle namespaces (jdk-1_4_2 branch)."
+  ], 
+  "revision_id": "337324"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-03-12T17:44:12.000000Z", 
+  "msg": [
+   "XSLTC_DTM performance work", 
+   "Design a light-weight DOM model (AdaptiveResultTreeImpl) for RTFs with xsl:call-template.", 
+   "AdaptiveResultTreeImpl is a adaptive DOM model for result tree fragments (RTF). It is", 
+   "used in the case where the RTF is likely to be pure text yet it can still be a DOM tree.", 
+   "It is designed for RTFs which have <xsl:call-template> or <xsl:apply-templates> in", 
+   "the contents. Example:", 
+   "<xsl:variable name = \"x\">", 
+   "<xsl:call-template name = \"test\">", 
+   "<xsl:with-param name=\"a\" select=\".\"/>", 
+   "</xsl:call-template>", 
+   "</xsl:variable>", 
+   "In this example the result produced by <xsl:call-template> is likely to be a single", 
+   "Text node. But it can also be a DOM tree. This kind of RTF cannot be modelled by", 
+   "SimpleResultTreeImpl.", 
+   "AdaptiveResultTreeImpl can be considered as a smart switcher between SimpleResultTreeImpl", 
+   "and SAXImpl. It treats the RTF as simple Text and uses the SimpleResultTreeImpl model", 
+   "at the beginning. However, if it receives a call which indicates that this is a DOM tree", 
+   "(e.g. startElement), it will automatically transform itself into a wrapper around a", 
+   "SAXImpl. In this way we can have a light-weight model when the result only contains", 
+   "simple text, while at the same time it still works when the RTF is a DOM tree.", 
+   "All methods in this class are overridden to delegate the action to the wrapped SAXImpl object", 
+   "if it is non-null, or delegate the action to the SimpleResultTreeImpl if there is no", 
+   "wrapped SAXImpl."
+  ], 
+  "revision_id": "337323"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-03-11T16:25:05.000000Z", 
+  "msg": [
+   "XSLTC_DTM performance work", 
+   "Set the namespace feature directly on the XMLReader. SAXParserFactory.setFeature()", 
+   "actually creates a temporary SAXParser to verify that feature. So we end up creating", 
+   "two SAXParsers per document() call in the old code."
+  ], 
+  "revision_id": "337322"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-03-10T21:04:16.000000Z", 
+  "msg": [
+   "XSLTC_DTM performance work", 
+   "Save the values of attribute, namespace, comment and PI nodes", 
+   "in a plain Vector instead of in DTMStringPool. Saving a String", 
+   "in DTMStringPool involves a hash calculation. These values", 
+   "are unlikely to be equal. Saving them in a plain Vector has a", 
+   "lower cost than saving them in DTMStringPool. Only prefixed QNames", 
+   "are saved in DTMStringPool after this change.", 
+   "Need to make changes in a few interfaces to accommadate this change."
+  ], 
+  "revision_id": "337321"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-03-10T18:58:44.000000Z", 
+  "msg": [
+   "Fix a bug that causes id function testcases to fail in trax.sax flavor."
+  ], 
+  "revision_id": "337320"
+ }
+]

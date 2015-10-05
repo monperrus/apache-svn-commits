@@ -1,0 +1,66 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-06-27T15:50:43.000000Z", 
+  "msg": [
+   "First module contains all \"normal\" request processing handlers ( used in ajp13", 
+   "and ajp14 ).", 
+   "Note that this is not finished yet - there are still some public fields we", 
+   "access ( the buffers in Ajp14 are the most important - I'm looking for a", 
+   "simple solution to automate the buffer allocation/release, to avoid future", 
+   "problems with buffers that are still in use )", 
+   "Message sending is also in an early stage, and the servlet I/O needs", 
+   "integration with the MessageBytes."
+  ], 
+  "revision_id": "295509"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-27T15:47:48.000000Z", 
+  "msg": [
+   "First step in modularizing ajp14. All messages will be handled by modules", 
+   "extending this class, Ajp14 will handle the communication channel and", 
+   "Ajp14Packet will handle marshaling.", 
+   "( in future we might merge Ajp14, Jni and other \"channels\" under a common", 
+   "interface that sends/receives blocks of data, and reuse the Ajp14Packet", 
+   "and handlers for processing. This would be interesting in the nio case,", 
+   "where we have are at 1/2 between tcp and jni, by using mmap-ed buffers )"
+  ], 
+  "revision_id": "295508"
+ }, 
+ {
+  "author": "andya", 
+  "date": "2001-06-26T20:04:57.000000Z", 
+  "msg": [
+   "Initial release of pre-packaged registry settings."
+  ], 
+  "revision_id": "295507"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-26T19:52:24.000000Z", 
+  "msg": [
+   "Merged ( copied ) the code from Ajp13 into Ajp14, removed \"extend Ajp13\".", 
+   "The main reason is that we need to keep Ajp13 stable while we want to", 
+   "do some refactoring in Ajp14 - separate the marshaling, add an extension", 
+   "mechanism to be used to implement and add new callbacks, drop Ajp14Packet", 
+   "and start using the ByteChunk.", 
+   "In other words the architecture will change from \"Ajp14 extends Ajp13\" into", 
+   "a AjpMarshaling ( which will work for both ), and AjpCallback ( with", 
+   "\"original\" 13 callbacks plus new ajp14 callbacks ), i.e. composition instead of", 
+   "inheritance."
+  ], 
+  "revision_id": "295506"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-26T19:38:12.000000Z", 
+  "msg": [
+   "Added the jvmRoute ( renamed to tomcatInstanceId ) to the BaseRequest.", 
+   "We expect all implementations to be able to participate in load balancing,", 
+   "and the instanceId ( that identifies one of the workers in the pool ) is", 
+   "common enough ( even if a different scheme is used )."
+  ], 
+  "revision_id": "295505"
+ }
+]

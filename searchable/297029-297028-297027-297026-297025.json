@@ -1,0 +1,71 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-05-02T19:46:17.000000Z", 
+  "msg": [
+   "Changed to use the new proposed attributes.", 
+   "I used tomcatId as a temporary name - instance is a bit too generic.", 
+   "If you have a better sugestion for the name - please let me know !", 
+   "( route is also a bit overloaded )", 
+   "I also started to add 'group' attributes - it'll be used to", 
+   "automatically create lb workers.", 
+   "The current config will have 2 workers, and send all the requests to the", 
+   "unix socket. If that fails, it should fall back to the second worker.", 
+   "The /examples1 should allwasy go to the second worker.", 
+   "( that doesn't work yet - I need to plug in the 'group' magic )."
+  ], 
+  "revision_id": "297029"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2002-05-02T04:19:03.000000Z", 
+  "msg": [
+   "Pass the content-length to the coyoteRequest.", 
+   "We probably have to review other header settings as well.", 
+   "Submitted by: Kevin Seguin <seguin@motive.com>"
+  ], 
+  "revision_id": "297028"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-02T03:18:11.000000Z", 
+  "msg": [
+   "Few fixes"
+  ], 
+  "revision_id": "297027"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-02T03:18:01.000000Z", 
+  "msg": [
+   "Few more features. I think the sending part works fine now ( but we should", 
+   "still do more tunning ).", 
+   "For each tomcat instance we create a shm slot in the scoreboard. The", 
+   "slot is named TOMCAT:host:port ( host:port is used as instance ID ), and", 
+   "contains a ( ajp13-encoded ) structure with informations about the channels", 
+   "( currently the socket and unix channel - jni is special ). It'll also", 
+   "include the groups where the instance belongs, and possibly other", 
+   "informations.", 
+   "If the number of channels is 0, the lb worker is supposed to stop", 
+   "sending new requests to the instance ( but keep forwarding the", 
+   "existing sessions ). That'll implement 'gracefull shutdown'.", 
+   "Still to add:", 
+   "- display ( nicely ) the information in the shm", 
+   "- read info from shm ( like slots owned by apache processes with", 
+   "statistics - in a future release )"
+  ], 
+  "revision_id": "297026"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-02T03:13:05.000000Z", 
+  "msg": [
+   "Added some more debugging code the shm ( now it can dump the content", 
+   "in a file and display some more or less usefull information ).", 
+   "Started to add code to serialize/deserialize a map ( it's very", 
+   "common ).", 
+   "Few more checks, remove few verbose messages."
+  ], 
+  "revision_id": "297025"
+ }
+]

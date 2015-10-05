@@ -1,0 +1,79 @@
+[
+ {
+  "author": "tomj", 
+  "date": "2003-08-11T15:05:25.000000Z", 
+  "msg": [
+   "Fix from Mike Perham [Mike.Perham@webifyinc.com]:", 
+   "I noticed when I generated a doc/lit WSDL from a java class that it included", 
+   "the soapenc ns even though that shouldn't technically ever be referenced.", 
+   "This patch cleans that up.", 
+   "Bug 22301."
+  ], 
+  "revision_id": "249464"
+ }, 
+ {
+  "author": "dug", 
+  "date": "2003-08-11T14:20:23.000000Z", 
+  "msg": [
+   "Use qs. instead of qs:", 
+   "Add default for query strings", 
+   "Add a compat. flag", 
+   "and of course docs", 
+   "Submitted by:  Curtiss Howard - cjhoward@us.ibm.com"
+  ], 
+  "revision_id": "249463"
+ }, 
+ {
+  "author": "ericf", 
+  "date": "2003-08-11T14:06:13.000000Z", 
+  "msg": [
+   "Several fixes to cache implementation (bug 22262):", 
+   "1.  implemented \"null object pattern\" for failed searches so that", 
+   "they don't have to be repeated every time.  those searches are the", 
+   "worst-case scenario for this cache, so it's important that they", 
+   "not be done repeatedly.  In my tests, the previous implementation", 
+   "searched for \"getDeserializer\" methods on java.lang.String,", 
+   "java.lang.Integer, and so forth on *every* WS invocation.", 
+   "2. replaced the algorithm for matching method signatures -> methods.", 
+   "the earlier one was O(n) [n = number of methods]; the new one is", 
+   "O(1) [replaced linear scan over an arraylist with a hashtable]", 
+   "Note that the hash algorithm is optimized for the common case", 
+   "(distinctly named methods); overloaded methods will collide in the", 
+   "table, so searches for them will be O(m) [m = number of overloaded", 
+   "methods with a given name].  This lets the easy cases be as fast", 
+   "as possible and the less-easy cases be fast enough, without making", 
+   "everything be slow.", 
+   "3. fixed inconsistency in calls to containsKey/get.  Previously", 
+   "two different objects (of different types) were being used in these", 
+   "calls, causing the cache to be created but *never* used."
+  ], 
+  "revision_id": "249462"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2003-08-10T00:57:30.000000Z", 
+  "msg": [
+   "The main purpose of this checkin is to move the special handler in SOAPService back to the correct place *before* the pivot point when executing a service.  This makes SOAP 1.1/1.2 semantics much clearer, in that Handlers on the request chain should have already marked all MU headers as processed before you perform the \"meat\" of your service work.", 
+   "Along the way fix a few bugs which were preventing me from building all-tests.", 
+   "* SOAPResponseHandler -> MustUnderstandChecker (since that's what it does),", 
+   "and it executes before the pivot", 
+   "* JWS services are now named for their class name; this prevents an NPE", 
+   "when calling SOAPService.addSession() (since JWS services are now session", 
+   "scoped by default (when did *that* happen?))", 
+   "* Make sure to deploy test/rpc/deploy.wsdd before running the test which", 
+   "uses it in test/functional - NOTE: why is test/rpc there at all?  There", 
+   "aren't any tests in there!", 
+   "* Check for null currentContext in WSDDUndeployment - this was crashing", 
+   "the test/wsdl/jaxrpchandler tests with an NPE."
+  ], 
+  "revision_id": "249461"
+ }, 
+ {
+  "author": "rkellogg", 
+  "date": "2003-08-09T14:12:12.000000Z", 
+  "msg": [
+   "Correct consistency errors with spelling of Axis and Java.  Fixed grammatical errors."
+  ], 
+  "revision_id": "249460"
+ }
+]

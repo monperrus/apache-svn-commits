@@ -1,0 +1,89 @@
+[
+ {
+  "author": "hannes", 
+  "date": "2002-02-01T14:23:45.000000Z", 
+  "msg": [
+   "Reset response StringBuffer before  writing error message.", 
+   "Actually, to put  the responsability to pass an empty string buffer on the caller of the", 
+   "XmlWriter constructor is pretty stupid (and has caused a lot of bugs), because the", 
+   "string buffer is internal to the XmlWriter anyway. The original idea was to reduce", 
+   "object instantiation, but I'm not sure it was worth the trouble...", 
+   "From Chad Ward (cward@arcsight.com):", 
+   "If an exception occurs during the writing of the response, it is possible that there", 
+   "is some could be some residual data in the buffer.  In the exception", 
+   "block a new XmlWriter is created, but the buffer is not cleared.", 
+   "Because the exception is not printed on the server and the stream is", 
+   "not parsable by the console, the exception will be lost."
+  ], 
+  "revision_id": "233639"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-01-26T07:50:42.000000Z", 
+  "msg": [
+   "Timothy Peierls <tim@peierls.net> makes a good point about my merge of", 
+   "his patch:", 
+   "I notice you left the byte[] result as a field rather than make it a", 
+   "local variable. Though it won't make any difference for small", 
+   "responses, it is still a potential memory leak if the responses get", 
+   "very large."
+  ], 
+  "revision_id": "233638"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-01-25T23:47:30.000000Z", 
+  "msg": [
+   "o Improved formatting.", 
+   "o Added debug to start of Worker::execute()."
+  ], 
+  "revision_id": "233637"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-01-25T23:03:58.000000Z", 
+  "msg": [
+   "Merged in ideas from the patch by Timothy Peierls <tim@peierls.net>.", 
+   "Clearing the elements from the Vector instead of the entire Vector:", 
+   "The XmlRpcServer.Worker fields inParams, outParam, result, and", 
+   "strbuf are not being cleared on exit from the execute() method, and", 
+   "I believe they should be. All it takes is to wrap the execute() body", 
+   "with", 
+   "try {", 
+   "...", 
+   "}", 
+   "finally {", 
+   "inParams = null;", 
+   "outParam = null;", 
+   "result = null;", 
+   "strBuf.setLength(0);", 
+   "}", 
+   "and remove the existing else clause that has \"strBuf.setLength(0)\".", 
+   "Even better, if outParam and result were made local variables", 
+   "instead of fields of Worker, you could remove the second and third", 
+   "lines of the finally clause.", 
+   "Why does this matter? Because there is no guarantee that the", 
+   "execute() method will be called again any time soon, or ever. Since", 
+   "there is no size restriction on arguments and results in the XML-RPC", 
+   "spec, you can have arbitrarily large objects hanging around for", 
+   "arbitrarily long intervals, a classic Java memory leak.", 
+   "I saw this happen in practice: The service defined a method to", 
+   "return the state of the entire system (as XML-RPC structs and", 
+   "arrays). Huge chunks of memory that could have been freed up on", 
+   "return were left dangling uselessly until the Worker was next used.", 
+   "Performance noticeably improved when we made a local fix to the", 
+   "Worker class.", 
+   "I asked about this over a year ago, but I think it got lost in the", 
+   "cracks."
+  ], 
+  "revision_id": "233636"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-01-25T22:54:41.000000Z", 
+  "msg": [
+   "Added a comment about Java version requirement of 1.2+."
+  ], 
+  "revision_id": "233635"
+ }
+]

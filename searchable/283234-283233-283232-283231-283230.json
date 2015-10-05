@@ -1,0 +1,66 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-03-02T04:51:42.000000Z", 
+  "msg": [
+   "Same thing - use only Log, and Log.getLog instead of new Log()."
+  ], 
+  "revision_id": "283234"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-02T04:49:34.000000Z", 
+  "msg": [
+   "Stop using Logger or the the Log constructor."
+  ], 
+  "revision_id": "283233"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-02T04:11:52.000000Z", 
+  "msg": [
+   "util/log changes.", 
+   "As proposed, the actual implementation is now in util/qlog, and", 
+   "util/log contains only the base classes.", 
+   "Also, the code was slightly re-organized - the log registery is now", 
+   "part of LogManager ( which is of interest for the LogModule that", 
+   "sets up the loggers ), LogHandler ( which is of interest for the actual", 
+   "logger implementations - for example if you want to write an adapter for", 
+   "log4j ) and Log ( which is the only class used in tomcat, utils, modules ).", 
+   "The 3 classes in util/log are functional ( i.e. if you don't set any LogHandler implementation you just get the messages on System.out ).", 
+   "The normal use is:", 
+   "Log.getLog()", 
+   "log.log(...).", 
+   "Normal code shouldn't deal with anything but Log ( the other 2 are for", 
+   "logger implementations and for configuring the logger ).", 
+   "The code is functionally identical with what we had previously, and", 
+   "AFAIK doesn't have anything but the core functionality we need.", 
+   "BTW, I added few comments about the reasons to have a 2 level logger and notes", 
+   "on security ( i.e. normal code shouldn't be able to change log config )"
+  ], 
+  "revision_id": "283232"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-03-01T18:05:00.000000Z", 
+  "msg": [
+   "Removed the \"trim\" in patch() method to avoid security hole.  A file ending", 
+   "in \".jsp%20\" would not be considered a JSP page, but could still be served,", 
+   "probably statically, if the trailing space is removed.  The sanity and watchdog", 
+   "tests still pass.", 
+   "Submitted by: Kazuhiro Kazama", 
+   "This fixes direct access to Tomcat. The impact on access through mod_jserv", 
+   "and mod_jk still need to be checked."
+  ], 
+  "revision_id": "283231"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-03-01T17:59:03.000000Z", 
+  "msg": [
+   "Added a test to check if a file ending with \".jsp%20\" is served.  It should", 
+   "result in a 404 Not found error."
+  ], 
+  "revision_id": "283230"
+ }
+]

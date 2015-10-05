@@ -1,0 +1,74 @@
+[
+ {
+  "author": "jon", 
+  "date": "2000-06-18T20:14:13.000000Z", 
+  "msg": [
+   "Okay, I've got it - four bugs!", 
+   "1) readObject/writeObject in StandardSession don't serialize", 
+   "thisAccessedTime, so it ends up as 0 after deserialization - the net", 
+   "result of which is the session expires rather shortly after :-(", 
+   "2) My patch for SessionSerializer foolishly assumes that the request", 
+   "triggering the reload has a session itself, so when the session expires", 
+   "SessionSerializer ends up stuffing an invalid session in the current", 
+   "request (hence the isValid failure)", 
+   "3) Similar-ish to (1) readObject in StandardSession doesn't account", 
+   "for the fact that the StringManger field 'sm' will start off as null -", 
+   "the normal initializer doesn't run, hence the NPE when the session is", 
+   "invalid. I've fixed this by setting sm in readObject - is there any", 
+   "reason not to make it static?", 
+   "4) I don't think this one was actually involved in the scenario Jon", 
+   "described, but I also noticed that the backpointer to StandardManager in", 
+   "the sessions doesn't get set after deserialization either.", 
+   "The patch below fixes these issues.", 
+   "--", 
+   "Sean Legassick", 
+   "sean@somacity.com"
+  ], 
+  "revision_id": "282024"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-06-17T01:27:17.000000Z", 
+  "msg": [
+   "Modify DefaultServlet to ask for the absolute path to the document root,", 
+   "rather than the document root itself.", 
+   "I *think* this fixes the problem of wanting to set the document root", 
+   "as a relative path starting with \"../\", without allowing any security", 
+   "issues.  Please help me validate this belief."
+  ], 
+  "revision_id": "282023"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-06-17T00:52:48.000000Z", 
+  "msg": [
+   "Add Swedish locale strings for the org.apache.tomcat.core package.  (I'm", 
+   "not going to *begin* to pretend that I understand them :-).", 
+   "Submitted by:\tBip Thelin <bip.thelin@sf.razorfish.com>"
+  ], 
+  "revision_id": "282022"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-06-17T00:24:45.000000Z", 
+  "msg": [
+   "Use java.security.SecureRandom, instead of java.util.Random, to generate", 
+   "the random part of session identifiers.  This costs you a little bit of", 
+   "startup time on the very first session identifier generated, but creates", 
+   "more cryptographically secure session identifiers than before."
+  ], 
+  "revision_id": "282021"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-16T21:03:39.000000Z", 
+  "msg": [
+   "- another step in ServletWrapper cleanup", 
+   "- added few more debug statements, show the \"required\" roles", 
+   "Important: I tested and most of the \"normal\" code works, but ( as with any change)", 
+   "it may introduce bugs or regressions. Don't panic :-), the code is ( I hope ) easier to", 
+   "fix now."
+  ], 
+  "revision_id": "282020"
+ }
+]

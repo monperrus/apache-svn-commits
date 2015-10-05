@@ -1,0 +1,63 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-08-05T04:38:58.000000Z", 
+  "msg": [
+   "Fix a small name mix-up.  Filters are part of Apache, and should have the", 
+   "ap_ prefix, not apr_"
+  ], 
+  "revision_id": "85994"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-08-04T23:22:57.000000Z", 
+  "msg": [
+   "Fix a config tree problem.", 
+   "The following configuration file demonstrates the problem:", 
+   "<IfModule mod_rewrite.c>", 
+   "RewriteEngine on", 
+   "RewriteMap    quux-map       prg:/tmp/apache-2.0/map.quux.pl", 
+   "RewriteRule   ^/~quux/(.*)$  /~quux/${quux-map:$1}", 
+   "</IfModule>", 
+   "After this config file is parsed, the only statement in the config", 
+   "tree is the last statement in the IfModule container (\"RewriteRule blah", 
+   "blah\").", 
+   "The problem is that when ap_build_config_sub() handles this type of", 
+   "construct, it moves *current to the end of the list before returning.", 
+   "If this construct were the first thing in the file, the caller would", 
+   "set conftree to *current, not realizing that there were list elements", 
+   "before *current.  The caller doesn't have addressability to those list", 
+   "elements.", 
+   "With this change, ap_build_config_sub() sets *conftree before", 
+   "walking *current to the end of the list."
+  ], 
+  "revision_id": "85993"
+ }, 
+ {
+  "author": "rasmus", 
+  "date": "2000-08-04T18:59:04.000000Z", 
+  "msg": [
+   "Prevent a HEAD request from being converted to a GET request on an", 
+   "ErrorDocument redirect.  Also save a couple of cycles by not duping", 
+   "a \"GET\" on top of a \"GET\" so the people who benchmark thousands of", 
+   "ErrorDocument redirects should see a slight improvement now... ;)"
+  ], 
+  "revision_id": "85992"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-04T18:48:07.000000Z", 
+  "msg": [
+   "Update the web site for the new alpha."
+  ], 
+  "revision_id": "85991"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-08-04T18:47:48.000000Z", 
+  "msg": [
+   "Update the web site for the new alpha."
+  ], 
+  "revision_id": "85990"
+ }
+]

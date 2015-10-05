@@ -1,0 +1,80 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2002-06-10T21:34:40.000000Z", 
+  "msg": [
+   "Patch submitted by Ilene_Seelemann@us.ibm.com for Bug 6798:", 
+   "Added a method (handlesNullPrefixes) to the PrefixResolver interface so", 
+   "that the resolver can indicate whether it supports null prefixes.  Then, in the", 
+   "tokenizer, if the prefix is null, and the resolver supports that, it continues", 
+   "processing as if the prefix had a value.  In Lexer.java, methods that have", 
+   "changed are: tokenize, mapNSTokens.", 
+   "In ElemNumber#getCountMatchPattern, pass MyPrefixResolver instance to default", 
+   "psuedo match patterns."
+  ], 
+  "revision_id": "336459"
+ }, 
+ {
+  "author": "santiagopg", 
+  "date": "2002-06-10T21:32:38.000000Z", 
+  "msg": [
+   "Typo."
+  ], 
+  "revision_id": "336458"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-06-10T20:47:44.000000Z", 
+  "msg": [
+   "Patch submitted by Henry_Zongaro@us.ibm.com:", 
+   "To summarize what I did, the Function class and its subclasses have two", 
+   "methods that check the number of arguments:  setArg and", 
+   "checkNumberArgs.  The former checks whether too many arguments are", 
+   "specified, and the latter checks for too few (or too many, redundantly).", 
+   "In the case where there are optional arguments (as in substring), the class", 
+   "for the function (FuncSubstring, in this case) derives from a class that has a", 
+   "fixed number of arguments (Func3Arguments, in this case).  If too few", 
+   "arguments are specified, the FuncSubstring.checkNumberArgs method", 
+   "reports that the function only allows 2 or 3 arguments; if too many arguments", 
+   "are specified, the Function3Arguments.setArg method reports that the", 
+   "function only allows 3 arguments.", 
+   "To fix the problem, I added reportWrongNumberArgs() methods to the", 
+   "Function class and to its subclasses, as appropriate, and I added code to", 
+   "call that from checkNumberArgs and setArg - that way, the correct number", 
+   "of arguments is always reported in the error messages.", 
+   "Alternatively, I could have changed the setArg method in all the classes that", 
+   "have optional arguments to report correctly the number of arguments, but I", 
+   "didn't like the idea of having it redundantly perform the same check that the", 
+   "setArg method of its base class was going to perform just to get a better", 
+   "message out.  A third possibility would be to have setArg call the", 
+   "checkNumberArgs method when it detects too many arguments are", 
+   "specified; that would guarantee that setArg would report the same message,", 
+   "and avoid introducing a new method, as long as checkNumberArgs always", 
+   "checks for both too few and for too many arguments.  A fourth possibility", 
+   "would be to report two different errors:  the minimum number of arguments", 
+   "required in checkNumberArgs and the maximum permitted in setArg.", 
+   "I also noticed that the message produced for FuncSubstring when too few", 
+   "arguments are specified actually indicates that 0 or 1 arguments are required,", 
+   "so I fixed the XPATHErrorResources.properties file.", 
+   "I don't see the NPE that Dave Marston mentions in Bugzilla, so I assume", 
+   "that's been fixed."
+  ], 
+  "revision_id": "336457"
+ }, 
+ {
+  "author": "tmiller", 
+  "date": "2002-06-10T20:35:34.000000Z", 
+  "msg": [
+   "added text case for SAX"
+  ], 
+  "revision_id": "336456"
+ }, 
+ {
+  "author": "mmidy", 
+  "date": "2002-06-10T19:29:38.000000Z", 
+  "msg": [
+   "Use ContextClassLoader - Use full Encoding file package name - Merge new patch from Sergey Ushakov"
+  ], 
+  "revision_id": "336455"
+ }
+]

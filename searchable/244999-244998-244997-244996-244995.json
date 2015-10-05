@@ -1,0 +1,87 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-06-26T21:11:05.000000Z", 
+  "msg": [
+   "Don't clear properties (for now), remove debug statement."
+  ], 
+  "revision_id": "244999"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-06-26T21:01:09.000000Z", 
+  "msg": [
+   "First cut at cleaning up/improving Transports.", 
+   "There are two kinds of \"transport\" at this point, and we might want", 
+   "to name them something different to make it clearer.  The actual", 
+   "Transport object is simply syntactic sugar on the client side to set", 
+   "MessageContext properties (including transportName).  See", 
+   "ServiceCllient for how it's used.  The other kind of Transport is", 
+   "generally a SimpleTargetedChain which lives in the Engine's", 
+   "transportRegistry.  We can deploy this kind of transport now via", 
+   "deployTransport() on the AxisEngine and also via XML/Admin.", 
+   "So basically instead of TRANS_REQUEST and TRANS_RESPONSE", 
+   "in the MessageContext, we now just use transportName to get", 
+   "the combined transport Handler.  On the client, we can just", 
+   "invoke() this guy, as he'll send the message for us, get the response,", 
+   "and run it through any transport-specific response Handlers before", 
+   "invoke() returns.  On the server, we need to peer into the actual", 
+   "SimpleTargetedChain so we can run the request chain first, then", 
+   "the response chain last (after the global and service chains).", 
+   "IMPORTANT - THE TCP TRANSPORT SAMPLE IS CURRENTLY", 
+   "BROKEN.  I will fix this tonight, but I wanted to check this in", 
+   "now because I'm planning on working on it from home later.  As far as", 
+   "I can tell everything else works (except the FileTransport, which has", 
+   "always given me no end of trouble on my machines...).", 
+   "Also made a few little cleanups, copyright changes, etc."
+  ], 
+  "revision_id": "244998"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-06-25T14:31:16.000000Z", 
+  "msg": [
+   "Several changes:", 
+   "* Fix the chain \"forward-reference\" problem by introducing two new", 
+   "Suppliers which keep lists of the names of the chain elements for", 
+   "simple and targeted chains, then build the actual chain objects when", 
+   "getHandler() is called.", 
+   "* Remove the restriction that TargetedChain must use Chains as the", 
+   "request and response handlers.", 
+   "* Change \"input\"->\"request\" and \"output\"->\"response\" in the deployment", 
+   "XML for targeted chains / services.", 
+   "* Add a setEngine() method to SOAPService, which handles maintaining", 
+   "the TypeMappingRegistry relationship for us, and might do other stuff", 
+   "in the future.", 
+   "* Fix potential ClassCastException in SimpleChain.getHandlers()", 
+   "* Increase the Debug level on the supplier messages to avoid overloading", 
+   "the log.", 
+   "* Add main() to the RPC tests for individual running from the command line,", 
+   "and add a serialized RPC test which uses a custom type mapping.", 
+   "Limitations with the \"forward-reference\" solution:", 
+   "* We rely on the registry being passed into Admin being a SupplierRegistry.", 
+   "Right now, this is a good bet, but the design for how this really works", 
+   "wants to be cleaned up, which goes along with a larger conversation", 
+   "about where the various pieces of deployments live (i.e. what's the", 
+   "relationship between engine registries, XML/WSDD files, and Handlers)."
+  ], 
+  "revision_id": "244997"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-06-24T23:12:08.000000Z", 
+  "msg": [
+   "Allow the functional tests output to be redirected to the Ant log"
+  ], 
+  "revision_id": "244996"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-06-24T15:33:00.000000Z", 
+  "msg": [
+   "Fix a timing problem whereby two FileReaders could be active at the same", 
+   "time in back-to-back tests."
+  ], 
+  "revision_id": "244995"
+ }
+]

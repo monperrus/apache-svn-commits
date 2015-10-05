@@ -1,0 +1,96 @@
+[
+ {
+  "author": "alex", 
+  "date": "2000-06-22T23:02:53.000000Z", 
+  "msg": [
+   "Wrapper for Logger. It has a preferred log name to write to; if it", 
+   "can't find a log with that name, it outputs to either System.out or", 
+   "System.err depending on the message's warning level.  Also prepends a", 
+   "descriptive name to each message (usually the toString() of the", 
+   "calling object), so it's easier to identify the source.", 
+   "Intended for use by client classes to make it easy to do reliable,", 
+   "consistent logging behavior, even if you don't necessarily have a", 
+   "context, if you're not in Tomcat, or if you haven't registered any log", 
+   "files yet.  Not intended to supplant Logger, but to allow client", 
+   "objects a consistent bit of code that prepares log messages before", 
+   "they reach logger (and does the right thing if there is no logger)."
+  ], 
+  "revision_id": "282044"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-22T19:49:41.000000Z", 
+  "msg": [
+   "Fixed the authorization - authorize() callback is called to find and verify remote", 
+   "user, authenticate() is used to verify roles.", 
+   "Added a 3-rd parameter to authenticate() to make it easier to implement isUserInRole().", 
+   "- moved the request interceptor handling in Container, it's no longer part of Context.", 
+   "Container will maintain all per/url properties, Context will be used for per/webapp", 
+   "properties.", 
+   "- fixes - re-added the extra file checks,etc", 
+   "- cosmetic changes - 80 chars, consistent naming.", 
+   "- ContextManager deals with callback invocation - moved the doPreServletInit, etc code from", 
+   "Handler.", 
+   "- added get/setRequiredRoles to Request - the property is generic enough, this replace", 
+   "the note. ( notes are used for interceptor-specific notes )", 
+   "- added the callback to getRemoteUser, isUserInRole - delegate this to interceptors", 
+   "- removed (duplicated) exception handling from ResponseImpl - all is part of ContextManager.", 
+   "- in StaticInterceptor - use a note to pass the absolute path, getPathTranslated doesn't", 
+   "work, and we don't want to make the path checks twice."
+  ], 
+  "revision_id": "282043"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-22T00:15:06.000000Z", 
+  "msg": [
+   "Finally a rewrite of DefaultServlet...", 
+   "It had an amazing number of duplicated checks, a lot of complexity.", 
+   "The new code is a normal interceptor and 2 very simple ServletWrappers, one for", 
+   "static files and one for dir lists. The default handler needs informations like", 
+   "the welcome files to operate - so it can't be portable. It is also very inefficient", 
+   "to have too many layers - the new interceptor just uses the internal API,", 
+   "without things like try{ res.getWriter() } catch() { res.getOutputStream() }", 
+   "As a side effect, a number of small fixes, some security checks from DefaultServlet", 
+   "are now integrated in getRealPath() checks ( FileUtil.safePath() ).", 
+   "Also, added code to track the include depth ( with hope that a cleaned  RequestDispatcher", 
+   "will be ready before code freeze )", 
+   "Note that Context.getDefaultServlet() no longer exists ( there is no such requirement in the", 
+   "spec, and that makes standalone more consistent with integrated ), and we use \"null\" as", 
+   "the wrapper for a request that can't be mapped.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282042"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-20T19:22:57.000000Z", 
+  "msg": [
+   "- Invoker: new (clean) code, a lot of improvements and fewer layers.", 
+   "- If you embed tomcat, you can add to the context classpath specific jar files.", 
+   "Probably just including them in lib is better, but it seem some people need that.", 
+   "- moved all the debug/log in BaseInterceptor, no need to duplicate it in all subclasses", 
+   "- removed old servlets ( that are no longer active - the error handler and invoker are", 
+   "rewritten)"
+  ], 
+  "revision_id": "282041"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-20T17:27:43.000000Z", 
+  "msg": [
+   "\"protected\" in JspServlet - as requested by Petr. It's just a workaround, until a better", 
+   "way to plug jasper is implemented. ( right now we have a lot of problems with the", 
+   "loader and with initialization. Probably tomcat 3.3 will have a tomcat-specific", 
+   "interceptor that will resolve all this - but now I don't think we have the time )", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282040"
+ }
+]

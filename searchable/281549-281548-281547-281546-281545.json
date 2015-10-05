@@ -1,0 +1,89 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-02-18T18:14:52.000000Z", 
+  "msg": [
+   "Fixed the logger - we now use it in Context too, and set it up corectly.", 
+   "Changed logger names to small caps, no timestams.", 
+   "Logs from servlet ( via ServletContext.log ) are in a different logger than", 
+   "internal logs ( you'll no longer see \"servet init\" messages.", 
+   "Still a lot of stack traces - will go to a file and it's _important_", 
+   "to see them, it seems we had a lot of hidden problems.", 
+   "It seems most of tomcat tests fail because of GTest and the new error system.", 
+   "The error is reported sooner, and it seems a \"Connection reset\" is sent after", 
+   "that. I don't think it's a bug in tomcat, and I'm still looking for a fix in", 
+   "GTest."
+  ], 
+  "revision_id": "281549"
+ }, 
+ {
+  "author": "shachor", 
+  "date": "2000-02-18T09:40:53.000000Z", 
+  "msg": [
+   "Update the Jserv Apache plugin to handle the new cookie name", 
+   "for the session ID. Also, make it use only a single cookie for the session", 
+   "state instead of cookies that looks like JSESSIONID#ZONEID", 
+   "Jserv can now load balance among Several Tomcat engines.", 
+   "Tested and verified under WinNT."
+  ], 
+  "revision_id": "281548"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-18T00:17:49.000000Z", 
+  "msg": [
+   "Few more errors in error processing.", 
+   "When we merged the error processing in ContextManager we removed few", 
+   "workarounds. For example Request should read the headers if", 
+   "the protocol is >=1.0, even if it doesn't like the URI.", 
+   "It worked before because it used a sendError() which didn't had any effect", 
+   "till after reading the headers. Now sendError() has effect, and we", 
+   "have to use setStatus() and read the headers.", 
+   "Also, we do print stack traces for all internal errors - that is a very", 
+   "important tool in debug, and we shouldn't hide them ! Even if it doesn't", 
+   "look good, if we have a NullPointer we should fix it, not hide it.", 
+   "As a result you'll see many traces when you run tomcat-test ( problems", 
+   "with jsp syntax)."
+  ], 
+  "revision_id": "281547"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-17T23:37:51.000000Z", 
+  "msg": [
+   "Few more cosmetic changes, added few debug lines.", 
+   "It seems we pass all but 3 watchdog tests ( and I'm not sure it's a problem", 
+   "with tomcat or with the tests).", 
+   "We have 6 tomcat-test bugs ( all related with error reporting ).", 
+   "We have some VM-specific problems, it some cases JDK1.2.2/Linux will hang", 
+   "up ( refuse to server connections ) - I'm unable to start the debuger,", 
+   "need a bit of time.", 
+   "We also have a 1.1.8 problem ( IBM vm/Linux ) - I don't know how the", 
+   "local address is read as 1.0.0.127 instead of localhost or at least", 
+   "127.0.0.1."
+  ], 
+  "revision_id": "281546"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-17T21:19:02.000000Z", 
+  "msg": [
+   "BUGFIX: fixed various bugs in error processing, security checking, form-based", 
+   "login.", 
+   "ADDED:", 
+   "- simple user database ( tomcat-users.xml ) - it's very limited, but should", 
+   "work for standalone tomcat - and we want to plug an existing powerfull auth,", 
+   "not to design one ( based on Craig's security code, I simplified it a bit to", 
+   "be able to get it done )", 
+   "- error handler will log  the stack traces.", 
+   "- few more messages and traces if debug is enabled.", 
+   "- Removed an obvious hole - after authentication we'll save a private object", 
+   "in the session, instead of a \"String username\". The only way you can create the", 
+   "Credential is via SecurityCheck, that means a trojan servlet can't influence", 
+   "another application.", 
+   "Also: tested form login, it seems to work - fill bugs in", 
+   "jakarta.apache.org/bugs !!!"
+  ], 
+  "revision_id": "281545"
+ }
+]

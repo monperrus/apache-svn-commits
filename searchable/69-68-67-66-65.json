@@ -1,0 +1,97 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-02T02:47:05.616737Z", 
+  "msg": [
+   "Add a little Makefile to help with validating that these files actually", 
+   "compile. One day, it'll grow up into a build system. Then adjust some", 
+   "files to compile more cleanly.", 
+   "* gen2/Makefile: new makefile for testing", 
+   "* gen2/context.c: include apr_poll.h for the poll descriptor structures", 
+   "* gen2/serf_bucket_types.h: avoid the name 'socket' because it shadows a", 
+   "global function by that name."
+  ], 
+  "revision_id": "69"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-02T02:43:26.561879Z", 
+  "msg": [
+   "Eesh. Forgot this file in the last commit.", 
+   "* gen2/buckets/simple_buckets.c: new bucket implementation"
+  ], 
+  "revision_id": "68"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-01T22:57:40.162026Z", 
+  "msg": [
+   "Add a new SIMPLE bucket for simple memory allocations. Also, some various", 
+   "style and naming nits.", 
+   "* gen2/serf_bucket_types.h:", 
+   "(serf_bucket_type_simple): new bucket type", 
+   "(SERF_BUCKET_IS_SIMPLE): new macro to test for a SIMPLE bucket type", 
+   "(serf_simple_freefunc_t): new function callback type to free a SIMPLE", 
+   "bucket (if necessary).", 
+   "(serf_bucket_simple_create): new creation func for a SIMPLE bucket", 
+   "(SERF_BUCKET_SIMPLE_STRING): helper macro to create a bucket from a", 
+   "string, which requires no special free'ing behavior.", 
+   "(serf_bucket_type_immortal, serf_bucket_type_heap,", 
+   "serf_bucket_type_pool): removed bucket types.", 
+   "(SERF_BUCKET_IS_IMMORTAL, SERF_BUCKET_IS_HEAP, SERF_BUCKET_IS_POOL):", 
+   "removed macros for bucket type checks.", 
+   "* gen2/buckets/buckets.c:", 
+   "- add a comment about another mem optimization step", 
+   "* gen2/buckets/aggregate_buckets.c:", 
+   "(bucket_list_t): add the _t suffix to the typedef. changed all uses.", 
+   "(aggregate_context_t): dropped the serf_ prefix since this is a private", 
+   "type. changed all uses. dropped struct tag in favor of the typedef.", 
+   "(serf_bucket_aggregate_create): renamed local var to ctx.", 
+   "(serf_bucket_aggregate_become): renamed local var to ctx.", 
+   "(serf_bucket_aggregate_prepend): renamed local vars to ctx and new_list.", 
+   "(serf_bucket_aggregate_append): renamed local vars to ctx and new_list.", 
+   "(serf_bucket_aggregate_read_bucket): renamed local var to ctx.", 
+   "* gen2/buckets/request_buckets.c:", 
+   "(request_context_t): dropped the serf_ prefix since this is a private", 
+   "type. changed all uses. dropped struct tag in favor of the typedef.", 
+   "(serf_bucket_request_create): renamed local var to ctx.", 
+   "(serialize_data): renamed local var to ctx. used new", 
+   "SERF_BUCKET_SIMPLE_STRING() macro for the headers bucket."
+  ], 
+  "revision_id": "67"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-01T19:13:14.641262Z", 
+  "msg": [
+   "Prevent an allocation until metadata is actually used.", 
+   "* gen2/buckets/buckets.c:", 
+   "(serf_bucket_create): initialize the metadata field to NULL rather than", 
+   "allocating a second structure.", 
+   "(serf_default_set_metadata): fastpath the deletion of values when no", 
+   "metadata structure or hash table exists. if setting a value, then", 
+   "create the structures as needed.", 
+   "(serf_default_get_metadata): key on the existence of the metadata field", 
+   "itself, rather than the hash table within it.", 
+   "(serf_default_destroy): test for the existence of the metadata before", 
+   "freeing it."
+  ], 
+  "revision_id": "66"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-10-31T19:09:35.112269Z", 
+  "msg": [
+   "Fix a problem with zeroing node->size.", 
+   "* gen2/buckets/buckets.c:", 
+   "(DEBUG_DOUBLE_FREE): new define to enable double-free checking. leaving", 
+   "this off can speed up allocation/freeing by a little bit.", 
+   "(serf_bucket_mem_alloc): if we're looking for double-frees, then the", 
+   "node size was reset before it was placed into the free list. put it", 
+   "back to STANDARD_NODE_SIZE.", 
+   "(serf_bucket_mem_free): only set the size to zero if the double-free", 
+   "checking is enabled. only do the check when enabled."
+  ], 
+  "revision_id": "65"
+ }
+]

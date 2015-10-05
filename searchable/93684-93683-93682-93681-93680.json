@@ -1,0 +1,61 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2002-03-03T06:05:58.000000Z", 
+  "msg": [
+   "I forgot to bump the mmn."
+  ], 
+  "revision_id": "93684"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2002-03-03T06:04:08.000000Z", 
+  "msg": [
+   "This finishes the mod_dir/mod_negotiation bug.  This final part of the", 
+   "solution ensures that we don't lose filters if they are added later than", 
+   "we expect.  The problem could be seen if a connection filter was added", 
+   "after a request-based filter was added in the past.  The problem was that", 
+   "the request-based filters pointed to the first filter in the connection", 
+   "record, so the new connection filter was never called.  Now, all filters", 
+   "are put on their correct filter lists, and we are sure to always update", 
+   "all pointers when adding a filter."
+  ], 
+  "revision_id": "93683"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2002-03-03T02:15:52.000000Z", 
+  "msg": [
+   "Fix the mod_dir/mod_negotiation bug, where redirects and sub requests", 
+   "were not getting the correct filters.  This is done by creating a location", 
+   "in the request rec that holds protocol level filters.  Protocol level", 
+   "filters survive for one request, from the time the request is received", 
+   "from the user to the time the response is sent.  r->output_filters now", 
+   "stores the request level filters, which are only valid for the lifetime", 
+   "of one request_rec.", 
+   "This patch works, but it is not complete.  The second half of the problem", 
+   "is that add_any_filter doesn't check where it puts the filters that it", 
+   "adds, so it is possible for filters to be put on this wrong list, and", 
+   "for filters to be lost completely during request processing.  That half", 
+   "of the fix will be coming in the next day or so.", 
+   "Submitted by:\tWill Rowe, Justin Erenkrantz, Ryan Bloom"
+  ], 
+  "revision_id": "93682"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2002-03-03T01:11:33.000000Z", 
+  "msg": [
+   "pattern match server OU so we can pass tests using different certs"
+  ], 
+  "revision_id": "93681"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2002-03-03T01:10:53.000000Z", 
+  "msg": [
+   "generate some more server certs/keys to test changing and restarting"
+  ], 
+  "revision_id": "93680"
+ }
+]

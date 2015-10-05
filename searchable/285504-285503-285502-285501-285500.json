@@ -1,0 +1,88 @@
+[
+ {
+  "author": "pierred", 
+  "date": "2000-12-22T01:31:03.000000Z", 
+  "msg": [
+   "New JspServlet init parameter for alternate java encoding used when", 
+   "generating Jsp pages servlet source code. The default java", 
+   "encoding used is UTF8. This alternate is set by default", 
+   "to UTF-8.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "285504"
+ }, 
+ {
+  "author": "pierred", 
+  "date": "2000-12-22T01:27:39.000000Z", 
+  "msg": [
+   "Bug fix: bug report #269 -- java.io.UnsupportedEncodingException when processing JSP", 
+   "From the bug report:", 
+   "\"A \"java.io.UnsupportedEncodingException: UTF8\" is thrown when generating", 
+   "the servlet for a JSP file when the Kaffe VM is used. The \"UTF8\" encoding", 
+   "name is hardcoded in the Compiler class as the encoding for the generated", 
+   "servlet source code file. I believe the reason for using \"UTF8\" as opposed", 
+   "to \"UTF-8\" (note the dash) is that this is the only name supported in", 
+   "JDK 1.1. I suggest adding an init parameter to JspServlet for setting", 
+   "the encoding name when \"UTF8\" doesn't work.\"", 
+   "Given that there are several possible representations of Unicode data", 
+   "(UTF-8, UTF-16, UTF-32), and given that the supported encodings vary", 
+   "between different implementations of the Java platform,", 
+   "the best way to tackle this is probably as suggested by Hans.", 
+   "Added new init parameter \"javaEncoding\" for JspServlet.", 
+   "Default value specified in web.xml is \"UTF-8\".", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:\tHans Bergsten ( hans@gefionsoftware.com )", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "285503"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-12-22T00:37:52.000000Z", 
+  "msg": [
+   "Second (and last) round of changes from File.getAbsolutePath() to", 
+   "File.getCanonicalPath().  With these changes, the following assertions can", 
+   "be made:", 
+   "* The URLClassLoader for a web application will never be handed a \"file:\"", 
+   "URL that is not normalized.", 
+   "* The document root directory for a web application will always be", 
+   "normalized.", 
+   "* The URL returned by ServletContext.getResource() will always be", 
+   "normalized.", 
+   "This should clean up the cases where URLClassLoader on some platforms does", 
+   "not deal nicely with unnormalized repositories, and causes classes (or", 
+   "resources) to mysteriously not load, or not load from the correct place.", 
+   "Submitted by:\tStuart Roebuck <stuart.roebuck@adolos.com>"
+  ], 
+  "revision_id": "285502"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-12-22T00:34:36.000000Z", 
+  "msg": [
+   "FileClassLoader has been obsolete for a while -- remove it to avoid", 
+   "any potential confusion."
+  ], 
+  "revision_id": "285501"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-12-21T23:47:20.000000Z", 
+  "msg": [
+   "Modify the bootstrap program to call file.getCanonicalPath() rather than", 
+   "file.getAbsolutePath() when constructing \"file:\" URLs to declare as", 
+   "repositories to URLClassLoader instances.  This will cause occurrences of", 
+   "\"/./\" and \"/../\" to be normalized out of the URLs, which apparently causes", 
+   "problems on some platforms -- although I haven't been able to duplicate it", 
+   "with my simple tests so far.", 
+   "There are other cases where this change needs to be applied, which will be", 
+   "dealt with separately.", 
+   "Submitted by:\tStuart Roebuck <stuart.roebuck@adolos.com>"
+  ], 
+  "revision_id": "285500"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "shachor", 
+  "date": "2000-05-25T14:18:23.000000Z", 
+  "msg": [
+   "Support for reading form data in ajp13 and some bug fixes"
+  ], 
+  "revision_id": "281939"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T23:31:38.000000Z", 
+  "msg": [
+   "Fix Http - forgot to recycle the (recyclable) buffered IS."
+  ], 
+  "revision_id": "281938"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T18:57:10.000000Z", 
+  "msg": [
+   "- MessageString no longer extends MessageBytes. It was nice, but the conversion was out", 
+   "of control.", 
+   "- added MessageChars - it's similar with MessageString and MessageBytes", 
+   "- MimeHeaderFileds will make explicit distinction between the MessageXXX ( it also have", 
+   "to deal with int and date types ).", 
+   "- MessageBytes no longer extends Ascii - Ascii contains general static methods, we", 
+   "just use them.", 
+   "- removed almost all methods that did implicit conversions between char[] and byte[].", 
+   "There are still few, but will go away.", 
+   "- MessageXXX are now \"light\", and almost ready for use"
+  ], 
+  "revision_id": "281937"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T17:19:56.000000Z", 
+  "msg": [
+   "- Removed HttpDate. It was supposed to be an efficient implementation for date", 
+   "conversion, but it wasn't. All static fields are now part of DateTool - you don't need", 
+   "to create SimpleDateFormat objects, just use the static ones.", 
+   "The non-static part of HttpDate consisted in a Calendar used only to store the time,", 
+   "plus code to parse/format it. The code was moved in MimeHeaderField ( 2 methods),", 
+   "and need to be replaced with an efficient version.", 
+   "- Removed code to setDate() with current time - just use setDate( System.currentTimeMillis()).", 
+   "The code is not used in tomcat.", 
+   "- removed toByte conversions from MimeHeader - it was using the default encoding, and", 
+   "we had no control. The conversion have to be consistent with other components.", 
+   "- CookieTool.FieldPosition can't be static - it's changed during parsing", 
+   "- remove (unused) [] getCookies() method from Request. If you use it in your code -", 
+   "there is a simple workaround or it can be added back."
+  ], 
+  "revision_id": "281936"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T16:34:20.000000Z", 
+  "msg": [
+   "Removing hot-spots:", 
+   "- Use memory-efficient methods to access cookies ( count, indexed access instead of", 
+   "creating Cookie[] ). The facade will implement the servlet API method returning", 
+   "[], internally we use the efficient ones.", 
+   "- Another ( not so usefull ) Http adapter optimization: recycle the buffered stream,", 
+   "avoid 2K per request.", 
+   "- Another one: HTTP 0.9 is the only one without protocol, no need to compare.", 
+   "- Temp. change - don't display Date: header in response, I'll put it back after I", 
+   "find a better way to convert date to string ( now the conversion allocates 30% of the GC)", 
+   "-  BTW, lastModified() is now responsible for 60% of allocations ( after removing 30% date),", 
+   "again - disable reloading for performance sites."
+  ], 
+  "revision_id": "281935"
+ }
+]

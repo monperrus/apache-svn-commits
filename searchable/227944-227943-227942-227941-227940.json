@@ -1,0 +1,114 @@
+[
+ {
+  "author": "jmcnally", 
+  "date": "2001-11-11T19:43:14.000000Z", 
+  "msg": [
+   "cleaned up some velocity workarounds that are no longer necessary.", 
+   "1.  replace $strings.concat with new style of concatenation", 
+   "2.  remove some intermediate results storage (velocity parser can now parse these)", 
+   "3.  remove elseif chains with duplicate bodies (velocity allows || in conditionals)", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "227944"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2001-11-11T18:41:31.000000Z", 
+  "msg": [
+   "$database is being set to the model object the string that specifies which db is being targeted is $targetDatabase", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "227943"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2001-11-11T18:31:13.000000Z", 
+  "msg": [
+   "patch by Byron Foster", 
+   "Here is a patch that saves a Torque OM object passed as a parameter", 
+   "to the set method of  another Torque OM object.  Of course the second", 
+   "object's schema table definition contains a foreign key reference to the", 
+   "first OM object.", 
+   "Here is a snippet of code that it creates:", 
+   "public void save(DBConnection dbCon) throws Exception", 
+   "{", 
+   "doPreSave();", 
+   "if (!alreadyInSave)", 
+   "{", 
+   "alreadyInSave = true;", 
+   "if (aQuestionType != null)", 
+   "{", 
+   "aQuestionType.save(dbCon);", 
+   "setQuestionType(aQuestionType);", 
+   "}", 
+   "if (aAccount != null)", 
+   "{", 
+   "aAccount.save(dbCon);", 
+   "setAccount(aAccount);", 
+   "}", 
+   "if (isModified())", 
+   "{", 
+   "if (isNew())", 
+   "{", 
+   "SectionPeer.doInsert((Section)this, dbCon);", 
+   "setNew(false);", 
+   "}", 
+   "else", 
+   "{", 
+   "SectionPeer.doUpdate((Section)this, dbCon);", 
+   "}", 
+   "}", 
+   "So, we first test if a given \"set object\" exists, if so save it,", 
+   "then update the foreign key id reference property with a possible new Id", 
+   "created by the save.  The set object is saved before the containing", 
+   "object is saved since we need to get a foreign key id from a possibly", 
+   "new set object.  When the containing object is saved we want to insure", 
+   "that it contains a foreign key id for the set object.  If these object", 
+   "are not modified, then nothing will be save because the set object id", 
+   "will be compared to the current set object id and they will be found to", 
+   "match.  In this case the modified flag is left as is, and no action is", 
+   "taken.  The alreadyInSave flag prevents any infinite looping.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "227942"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2001-11-11T17:14:20.000000Z", 
+  "msg": [
+   "- cleaning up the initialization routines so that initialization in", 
+   "stand-alone mode follows the same pattern when initialization occurs", 
+   "by the parent application setting Torques configuration.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "227941"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2001-11-10T20:07:41.000000Z", 
+  "msg": [
+   "- in cases where Torque is used by a parent application via:", 
+   "Torque.setConfiguration(c):", 
+   "Torque.init();", 
+   "make sure that the configuration is valid before attempting", 
+   "to initialize Torque.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "227940"
+ }
+]

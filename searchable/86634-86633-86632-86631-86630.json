@@ -1,0 +1,62 @@
+[
+ {
+  "author": "gtrubetskoy", 
+  "date": "2000-10-17T21:55:45.000000Z", 
+  "msg": [
+   "req.status doc updated"
+  ], 
+  "revision_id": "86634"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-17T21:53:41.000000Z", 
+  "msg": [
+   "Add pool buckets to the bucket list.  These buckets are not currently", 
+   "used although I have begun to test them on my machine.  The idea behind", 
+   "these buckets is that data allocated out of a pool and put into a bucket", 
+   "has to survive the death of the pool until the bucket is destroyed.  To", 
+   "accomplish this, we register a cleanup when we create the bucket.  If the", 
+   "pool is cleared, the cleanup converts the bucket to a heap bucket and", 
+   "everything is good.  If the pool isn't cleared, then we kill the cleanup", 
+   "when the bucket is destroyed.", 
+   "With this bucket type, all of the core buckets that were listed have been", 
+   "implemented."
+  ], 
+  "revision_id": "86633"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-10-17T20:43:35.000000Z", 
+  "msg": [
+   "ap_get_client_block() allocates its brigade from r->pool (as it was", 
+   "before today) so that we don't have a growth of these across many", 
+   "pipelined requests.", 
+   "http_filter() uses one brigade per connection which it reads into.", 
+   "As it needs to deliver buckets to the caller, they are removed from", 
+   "its brigade into the caller's brigade.", 
+   "Submitted by:\tRyan Bloom (but anything broken is my fault)"
+  ], 
+  "revision_id": "86632"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-17T18:39:56.000000Z", 
+  "msg": [
+   "Remove brigade_bgets.  Getting the chunk header is now done by getline."
+  ], 
+  "revision_id": "86631"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-10-17T17:53:09.000000Z", 
+  "msg": [
+   "http_filter():", 
+   "get rid of an unnecessary condition where we set ctx->b to NULL;", 
+   "it was already NULL", 
+   "ap_get_client_block():", 
+   "\"fix\" the pool for the brigade used by ap_get_client_block() to", 
+   "save its state; this allows pipelined requests to work"
+  ], 
+  "revision_id": "86630"
+ }
+]

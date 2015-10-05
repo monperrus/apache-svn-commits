@@ -1,0 +1,60 @@
+[
+ {
+  "author": "djencks", 
+  "date": "2005-10-19T00:42:13.526936Z", 
+  "msg": [
+   "Remove references to deleted config.*.list files"
+  ], 
+  "revision_id": "326309"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2005-10-19T00:37:56.468585Z", 
+  "msg": [
+   "DERBY-522 master update  to fix lang/forupdate.sql failure in 10.1", 
+   "Contributed by Army Brown"
+  ], 
+  "revision_id": "326308"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2005-10-19T00:11:30.196041Z", 
+  "msg": [
+   "committing fix for DERBY-500 on behalf of: Sunitha Kambhampati", 
+   "Background :", 
+   "In Derby, when a stream is set as a parameter value, the wrapper stream object used for character data is ReaderToUTF8Stream", 
+   "and for binary data it is RawToBinaryFormatStream.Both these stream objects on read() return data in a format that is used to store the respective datatype value. E.g in case of char, the characters read from the user stream are converted using utf-8 derby specific encoding and read calls return", 
+   "the data as expected by store layer. Beginning 2 bytes either have the utflen or has zeroes, or if it is a long string, then the value is ended with the special marker 0xE0 , 0x00, 0x00. For binary data, the stream data is prepended with 4 zeroes.", 
+   "Problem:", 
+   "once,the stream has been read fully and end of file reached, further read() returns a -1. If a stream is re-read, it returns a -1 which is incorrect data. E.g.in the repro for DERBY-500, the update statement has multiple rows that qualify and since the stream parameter is used; the first row gets updated with the correct value and the stream is drained. For the subsequent rows, the read from the stream parameter value returns -1 and thus is updated with incorrect data.When retrieving the row back, the format of the fields is incorrect and thus the exception.", 
+   "__________", 
+   "This patch", 
+   "1. adds changes to RawToBinaryFormatStream and ReaderToUTF8Stream to throw an EOFException if stream is re-read.", 
+   "If a stream value has been fully read and end of file reached, any further reads on the stream object will result in an EOFException. This seems reasonable and more correct than using incorrect values.", 
+   "Adds a new error message - 'Stream has already been read and end-of-file reached and cannot be re-used.'", 
+   "2. changes to RememberBytesInputStream to keep track of the stream state and not call read on the stream objects once eof is reached.", 
+   "3. Fix a bug in StoredPage.logColumn related to streams. In one particular scenario, column was not being set to RememberBytesInputStream object and thus losing the data that would be read from stream into RememberBytesInputStream.", 
+   "4. adds testcases to store/streamingColumn.java and lang/forbitdata.java", 
+   "Also note", 
+   "- This fix affects cases when a stream is re-used in which case an exception will be thrown.", 
+   "So code that reads the stream once and materializes it will not be affected. E.g. Currently in case of char,varchar,long varchar, streams are materialized and this will work fine as before."
+  ], 
+  "revision_id": "326307"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-10-19T00:08:14.818579Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "326306"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-10-19T00:07:43.282459Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "326305"
+ }
+]

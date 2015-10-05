@@ -1,0 +1,58 @@
+[
+ {
+  "author": "jwoolley", 
+  "date": "2003-01-23T00:58:09.000000Z", 
+  "msg": [
+   "note the patch.  i still need to test it more before i'll +1 it, though", 
+   "the PR reporter says it works okay for him.  in particular, we need to", 
+   "be sure i didn't accidentally introduce any leaks (memory or fd)."
+  ], 
+  "revision_id": "98464"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2003-01-23T00:55:47.000000Z", 
+  "msg": [
+   "Fix a problem whereby multiple MMapFile directives would cause a segfault", 
+   "on startup.", 
+   "mod_file_cache keeps a hash table in the cmd->pool and puts an entry in", 
+   "that hash table for each of its files and mmaps, all of which are opened", 
+   "into cmd->pool.  But it registered a cleanup on cmd->pool that would walk", 
+   "the hash table and close each file and delete each mmap, even though by", 
+   "the time that happened those things would have been done already anyway", 
+   "by the files' and mmaps' own cleanups on cmd->pool.  So it was deleting", 
+   "mmaps that were already cleaned up and closing files that were already", 
+   "cleaned up in all cases.  This has never been valid... amazed it ever", 
+   "worked.  But apparently the true bogosity wasn't revealed until the new", 
+   "mmap cleanup code went into APR.", 
+   "PR: 16313"
+  ], 
+  "revision_id": "98463"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2003-01-22T23:25:37.000000Z", 
+  "msg": [
+   "Add mod_ident to the NetWare build"
+  ], 
+  "revision_id": "98462"
+ }, 
+ {
+  "author": "gregames", 
+  "date": "2003-01-22T21:52:12.000000Z", 
+  "msg": [
+   "clarify how to make the SPEC rc file compatible with the new improved", 
+   "mod_specweb99.c", 
+   "Submitted by: Jason LaVoie [lavoie@NO-SPAM.us.ibm.com]"
+  ], 
+  "revision_id": "98461"
+ }, 
+ {
+  "author": "gregames", 
+  "date": "2003-01-22T21:47:37.000000Z", 
+  "msg": [
+   "fix a compile warning that's been in there a while apparently."
+  ], 
+  "revision_id": "98460"
+ }
+]

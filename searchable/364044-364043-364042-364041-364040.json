@@ -1,0 +1,60 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2004-08-14T23:48:12.000000Z", 
+  "msg": [
+   "merge with branch", 
+   "bug fix, in managed environments a Database#open(...) call should not expect a running JTA-tx."
+  ], 
+  "revision_id": "364044"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-08-14T23:42:37.000000Z", 
+  "msg": [
+   "bug fix, in managed environments a Database#open(...) call should not", 
+   "expect a running JTA-tx."
+  ], 
+  "revision_id": "364043"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-08-14T23:36:51.000000Z", 
+  "msg": [
+   "add new class to build process"
+  ], 
+  "revision_id": "364042"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-08-14T23:31:01.000000Z", 
+  "msg": [
+   "merge with branch"
+  ], 
+  "revision_id": "364041"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-08-14T23:21:27.000000Z", 
+  "msg": [
+   "We are using a lot of objects that have", 
+   "references to other, proxied objects and when looking at the database", 
+   "logs I noticed that these proxies were constantly materialized.", 
+   "Fix by Georg Schneider, avoid proxy materialization on FK assignment", 
+   "<snip>", 
+   "I narrowed down the problem to the method assertFkAssignment(...) in TransactionImpl:", 
+   "if (!ProxyHelper.isProxy(obj) && (ref != null))", 
+   "{", 
+   "Object refInstance = ProxyHelper.getRealObject(ref);", 
+   "The preceeding code checks if the object on which the FKs are set is not", 
+   "a proxy and the reference is not null and then it immediately", 
+   "materializes the proxy, making a proxy useless. Besides the code a few", 
+   "lines down", 
+   "refPkValues = getBroker().serviceBrokerHelper().getKeyValues(refCld,", 
+   "refInstance, false);", 
+   "perfectly handles proxies anyway because getKeyValues(...) in", 
+   "BrokerHelper doesn't materialize if refInstance is a proxy."
+  ], 
+  "revision_id": "364040"
+ }
+]

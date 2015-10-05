@@ -1,0 +1,111 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-29T06:19:20.000000Z", 
+  "msg": [
+   "(Win32) Fixed link error apr_pstrmemdup in flood_socket_keepalive.c.", 
+   "This patch addresses a link error.  The code invoked apr_pstrmemdup()", 
+   "in flood_socket_keepalive.c without including the proper declaration.", 
+   "The compiler generates its own guess, which is incorrect.  The code now", 
+   "includes the file:", 
+   "apr_strings.h", 
+   "so that it picks up the proper declaration of apr_pstrmemdup.", 
+   "Below are examples of the compile-time warning and the", 
+   "link failures that this patch addresses.", 
+   "flood_socket_keepalive.c(407) : warning C4013: 'apr_pstrmemdup'", 
+   "undefined; assuming extern returning int", 
+   "flood_socket_keepalive.obj : error LNK2001: unresolved external", 
+   "symbol _apr_pstrmemdup", 
+   "Submitted by: Phi-Long Tran <ptran@pobox.com>", 
+   "Reviewed by: Justin Erenkrantz"
+  ], 
+  "revision_id": "98529"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-29T06:16:59.000000Z", 
+  "msg": [
+   "Fixed PASSTHROUGH collision in flood_round_robin.c.", 
+   "This patch fixes compile errors in flood_round_robin.c", 
+   "resulting from the Windows header file wingdi.h.  That", 
+   "header file defines PASSTHROUGH, which is the same", 
+   "identifier used as an enumerated constant for type", 
+   "expand_param_e.  The enumerated constants now use a", 
+   "prefix, \"EPE_\", to help make their names more unique.", 
+   "Below are the compile errors this patch addresses:", 
+   "<snip>", 
+   "Submitted by: Phi-Long Tran <ptran@pobox.com>", 
+   "Reviewed by: Justin Erenkrantz"
+  ], 
+  "revision_id": "98528"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-29T06:13:27.000000Z", 
+  "msg": [
+   "Added error handling for failed config-file open.", 
+   "This patch adds error handling to the code that opens the", 
+   "configuration file.  When you specify an argument to the flood", 
+   "program, it attempts to open it to read in configuration", 
+   "information.  Previously, there was no error handling, so", 
+   "the code proceeded to use an invalid file handle when the", 
+   "file open fails.  The code now detects the failure and displays", 
+   "an error message.", 
+   "The standard error and output file-opens were moved earlier", 
+   "in the program in case we need to display error messages", 
+   "to standard error.", 
+   "On Windows, using the invalid file handle results in an", 
+   "access violation.  The program now displays a message like", 
+   "this:", 
+   "Error opening configuration file: The system cannot find", 
+   "the file specified.  .", 
+   "Submitted by: Phi-Long Tran <ptran@pobox.com>", 
+   "Reviewed by: Justin Erenkrantz (minor formatting tweak)"
+  ], 
+  "revision_id": "98527"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-29T06:07:49.000000Z", 
+  "msg": [
+   "Fixed Win32 crash resulting from strtoll() macro.", 
+   "This patch addresses a crash caused by the Win32 implementation", 
+   "of the strtoll() macro in config.h, which is generated from", 
+   "config.h.in.  This patch fixes config.h.in.  The change will", 
+   "affect files using strtoll() on Win32 builds with an \"old enough\"", 
+   "Microsoft Visual C/C++ compiler.", 
+   "The addition operator (\"+\") has higher precedence than the conditional", 
+   "operator (\"a ? b : c\").  The portion of the Win32 implementation of the", 
+   "strtoll() macro in question is below:", 
+   "*(e) = (char*)(p) + ((b) == 10) ? strspn((p), \"0123456789\") : 0", 
+   "The compiler will evaluate the expression like this:", 
+   "*(e) = ( (char*)(p) + ((b) == 10) ) ? strspn((p), \"0123456789\") : 0", 
+   "The code was meant to evaluate like this:", 
+   "*(e) = (char*)(p) + ( ((b) == 10) ? strspn((p), \"0123456789\") : 0 )", 
+   "The code is effectively pointing \"e\" to the first nondigit character", 
+   "starting at where \"p\" points to.  Because of the precendence rules,", 
+   "the invocation of strtoll() in set_seed() in file flood.c effectively", 
+   "compiled to this code:", 
+   "*(e) = strspn((p), \"0123456789\")", 
+   "which yields an invalid address.", 
+   "The above assignment triggers the compiler warning below.", 
+   "flood.c(105) : warning C4047: '=' : 'char *' differs in levels of", 
+   "indirection from 'const unsigned int '", 
+   "The build produces seven occurrences of this warning.  After the", 
+   "code fix, those seven occurrences disappear.", 
+   "When applying this fix, you should rebuild all files to ensure they", 
+   "re-evaluate the corrected strtoll() macro from a newly generated", 
+   "config.h file.", 
+   "Reviewed by: Will Rowe"
+  ], 
+  "revision_id": "98526"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-01-29T05:11:24.000000Z", 
+  "msg": [
+   "Add a patch to be merged back and vote on an obvious patch to be merged back."
+  ], 
+  "revision_id": "98525"
+ }
+]

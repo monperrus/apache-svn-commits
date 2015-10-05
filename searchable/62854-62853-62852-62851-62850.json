@@ -1,0 +1,67 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2002-01-29T06:59:52.000000Z", 
+  "msg": [
+   "Adding this project as a dependency of a WinNT-only project, and adding", 
+   "the LINK option /entry:wmainCRTStartup will create you an APR-ready app.", 
+   "The sad part is, it works only on NT.  See the original checkin message", 
+   "of the misc/win32/apr_app.c code for gory details."
+  ], 
+  "revision_id": "62854"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-01-29T06:50:50.000000Z", 
+  "msg": [
+   "Improve matters on Win32 with time string formats.", 
+   "Submitted by:\tJohn K. Sterling <sterling@covalent.net>CVS: ----------------------------------------------------------------------CVS: PR:CVS:   If this change addresses a PR in the problem report trackingCVS:   database, then enter the PR number(s) here.CVS: Obtained from:CVS:   If this change has been taken from another system, such as NCSA,CVS:   then name the system in this line, otherwise delete it.CVS: Submitted by:CVS:   If this code has been contributed to Apache by someone else; i.e.,CVS:   they sent us a patch or a new module, then include their name/emailCVS:   address here. If this is your work then delete this line.CVS: Reviewed by:CVS:   If we are doing pre-commit code reviews and someone else hasCVS:   reviewed your changes, include their name(s) here.CVS:   If you have not had it reviewed then delete this line.CVS: ----------------------------------------------------------------------"
+  ], 
+  "revision_id": "62853"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-01-29T06:43:22.000000Z", 
+  "msg": [
+   "Not ready for it's own prime time slot in any build - note the purpose", 
+   "and some hints already for folks wondering where this module is going."
+  ], 
+  "revision_id": "62852"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-01-29T06:27:19.000000Z", 
+  "msg": [
+   "Start from the outside in.  This little applet, combined with the", 
+   "/i18n/unix/ucs2_utf8.c both built APR_EXPORT_STATIC and linked to any", 
+   "app with the /entry:wmainCRTStartup flag will produce a Win32 binary", 
+   "with utf-8 symbols, consistent with our API.  However, it will load", 
+   "only on WinNT, making it 'impractical' for a general Apache distro.", 
+   "It is the perfect solution, however, for Mladen's code.", 
+   "For Win9x+WinNT compatable binaries, we need to implement this inside-out", 
+   "as well.  The next chunk of code will build an accessor that will change", 
+   "the args based on GetCommandLineW or env based on GetEnvironmentStringsW.", 
+   "Both of these models will soon grow the intellegence to figure out that", 
+   "they are playing the binary-as-a-service game.  This is the other reason", 
+   "this is so critical, as a Win32 service, your args are also provided by", 
+   "the Service Control Manager (SCM).  So when we implement the daemonize", 
+   "function, we will know we are already a daemon.", 
+   "Finally, the last piece of intellegence to add to these two models are", 
+   "Win32 'signals' with the apr signal API.  The service control manager,", 
+   "console mode and as-a-GUI-window modes all offer the signals that APR", 
+   "is trying to provide."
+  ], 
+  "revision_id": "62851"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-01-29T05:49:21.000000Z", 
+  "msg": [
+   "In respect to Jeff's earlier comments, these fns will never be publicly", 
+   "exported.  However, with some patches I'm working up, they will be bound", 
+   "inside the core executable, so clashes could become possible [inevitable]", 
+   "since they aren't (and should not become) static functions."
+  ], 
+  "revision_id": "62850"
+ }
+]

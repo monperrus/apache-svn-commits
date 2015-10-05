@@ -1,0 +1,103 @@
+[
+ {
+  "author": "rsitze", 
+  "date": "2002-07-03T17:50:36.000000Z", 
+  "msg": [
+   "reorganize pluggable component under org.apache.axis.components.*.", 
+   "Did not create a 'properties' component, but instead created", 
+   "org.apache.axis.AxisProperties.  We can discuss this further if needed,", 
+   "but it just didn't fit as a 'component'."
+  ], 
+  "revision_id": "254514"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-02T22:54:33.000000Z", 
+  "msg": [
+   "This is the fix for defect Bugzilla Defect 10103 (also reported by Sam)", 
+   "Problem:", 
+   "Invoking echo?wsdl resulted in StringHolder and other Holder elements in the", 
+   "generated wsdl file.  Holders should never appear in the wsdl file, they are", 
+   "java artifacts.", 
+   "This problem does not exist if the commandline Java2WSDL is used.", 
+   "Underlying Problem:", 
+   "The deploy.wsdd for echo.wsdd contains a stanza that describes the", 
+   "echoStructAsSimpleTypes operation.  When this is loaded in by the ServiceDesc,", 
+   "the ParameterDesc javaType is not set correctly.", 
+   "This eventually results in the indicated problem.", 
+   "Solution First Try:", 
+   "Fixed bug in ServiceDesc.  Now javaType is set for the case where the ParameterDesc", 
+   "for an OUT parameter is specified via the deploy.wsdd.", 
+   "This fixed the problem, but ran into other problems when running functional-tests.", 
+   "After analyzing ServiceDesc, I realized that the code is not consistent for OUT and INOUT", 
+   "parameters.  Sometimes the javaType is set to the holder and sometimes it is set to", 
+   "the held type for the OUT/INOUT parameters.  Sigh and yuck!", 
+   "Solution Second Try:", 
+   "Made the executive decision that the ParameterDesc javaType (if set) should always be", 
+   "the heldType.  Added code to ParameterDesc.setJavaType to enforce this behaviour.  Changed", 
+   "ServiceDesc to set the javaType appropriately.  Changed RPCProvider as appropriate.  Added", 
+   "extra exception checks in RPCProvider.", 
+   "Even though this seemed like the correct approach, it breaks down for OUT/INOUT arguments", 
+   "that are arrays (i.e. String[] in the comprehensive test).  Under these circumstances it is", 
+   "not possible to locate the holder class from the held java type.  (For arrays the name", 
+   "of the holder is obtained from the name of the parameter qname...for good reason that I won't go into", 
+   "right now.)", 
+   "Solution Third Try:", 
+   "Made the executive decision that the ParameterDesc javaType (if set) should be a Holder if", 
+   "the mode is OUT or INOUT, and should be a non-Holder if the mode is IN.  Changed", 
+   "ParameterDesc.setJavaType() to enforce this decision.  Changed ServiceDesc to set/check the", 
+   "javaType appropriately.  Changed RPCHandler to get the javaType correctly.  Fixed", 
+   "wsdl.toJava.Emitter to write out the held type.", 
+   "This almost worked...except that ParameterDesc is also used to describe the return of", 
+   "an OperationDesc.  This cause problems because the mode is not set correctly (it is set to IN)", 
+   "and the javaType is not correct (if the mode is set to OUT, the javaType should be a holder...but", 
+   "this breaks because the return type is not a holder.)", 
+   "Solution Fourth Try:", 
+   "Made the executive decision that the ParameterDesc javaType should represent the java type in the", 
+   "signature.  This means that there needs to be a way to designate that a ParameterDesc represents", 
+   "a normal OUT parameter (which has a holder for its type) or a return parameter (which also", 
+   "should have a mode=OUT but does not use a holder).", 
+   "Aside:", 
+   "I toyed with adding a new mode to ParameterDesc called RET. But this doesn't seem appropriate when", 
+   "you think that this model is re-used in WSDL2Java and IN/OUT/INOUT are specific wsdl mode settings.", 
+   "(Aside: Re-using models for dissimilar code is not always wise.)", 
+   "So I added an isReturn attribute to ParameterDesc to indicate whether the ParameterDesc represents", 
+   "a normal parameter or return.  Changed the setJavaType to respect this flag when determining", 
+   "whether the argument javaType is acceptable.", 
+   "OperationDesc was changed to set the ParameterDesc for its return appropriately", 
+   "(isReturn=true and mode=OUT).", 
+   "Also:", 
+   "The logging churn caused a minor compile problem in the extensibility test...which is also fixed.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254513"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-07-02T20:15:56.000000Z", 
+  "msg": [
+   "Fix for http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10355.", 
+   "Java2WSDL was matching overloaded operations incorrectly."
+  ], 
+  "revision_id": "254512"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-07-02T18:28:34.000000Z", 
+  "msg": [
+   "Localizing external service interfaces"
+  ], 
+  "revision_id": "254511"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-07-02T18:07:36.000000Z", 
+  "msg": [
+   "Put AxisInternalServices back after beta cut"
+  ], 
+  "revision_id": "254510"
+ }
+]

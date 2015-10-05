@@ -1,0 +1,70 @@
+[
+ {
+  "author": "neilg", 
+  "date": "2002-06-05T21:49:20.000000Z", 
+  "msg": [
+   "fix some wrong IANA names.  Also, and thanks to Glenn Marcy for pointing this out, since the IBM 1140 family does have an IANA name, use it."
+  ], 
+  "revision_id": "318439"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2002-06-05T20:59:13.000000Z", 
+  "msg": [
+   "Rename DOMRevalidationHandler to RevalidationHandler"
+  ], 
+  "revision_id": "318438"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-06-04T16:56:57.000000Z", 
+  "msg": [
+   "Performance patches from Henry Zongaro:", 
+   "\"The parser spends a lot of time in the characters() and handleCharacters()", 
+   "methods of this class doing normalization.  One obvious improvement was", 
+   "in the references to \"fBuffer.append(text.toString())\" - the conversion of", 
+   "text (which is an XMLString) to a String is unnecessary because StringBuffer", 
+   "class has an append method that accepts a char[] with offset and length.", 
+   "In the findSchemaGrammar method, if there are no schema location hints", 
+   "available, the code ends up creating an fXSDDescription.fLocationHints", 
+   "array with zero elements and calls System.arraycopy to copy the empty array", 
+   "to it.  But code elsewhere is able to handle it if that array is null, so I changed", 
+   "it to avoid creating an array with zero elements.\""
+  ], 
+  "revision_id": "318437"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-06-04T16:53:01.000000Z", 
+  "msg": [
+   "A performance patch from Henry Zongaro:", 
+   "\"The various components in the pipeline call \"getProperty\" and \"getFeature\"", 
+   "many times per parse:  18 times for getProperty without the schema validator", 
+   "in the pipeline, 25 with it in the pipeline.  Each time the getProperty and", 
+   "getFeature methods call checkProperty and checkFeature methods,", 
+   "respectively, to determine whether those properties and features are valid.", 
+   "The same properties and features end up being checked a number of times", 
+   "for each parse.", 
+   "I tried changing those methods to only check whether the property or feature", 
+   "was valid when the fProperties.get or fFeatures.get returned a null value,", 
+   "and to assume that it was a valid property or feature, otherwise.\""
+  ], 
+  "revision_id": "318436"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-06-04T16:51:14.000000Z", 
+  "msg": [
+   "A performance patch from Henry Zongaro:", 
+   "\"In most cases, the Hashtable that's used for these Augmentations objects", 
+   "contains only a couple of entries, so I thought that it might be better to", 
+   "have the AugmentationsImpl contain two different inner classes to store", 
+   "the augmentations.  When there are only a few augmentations,", 
+   "the AugmentationsImpl uses a class that contains an array that contains", 
+   "the keys and values; when the number of augmentations exceeds a certain", 
+   "value, it switches to the other inner class which uses a Hashtable.", 
+   "I arbitrarily chose 10, but didn't experiment to find the break-even point.\""
+  ], 
+  "revision_id": "318435"
+ }
+]

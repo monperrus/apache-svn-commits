@@ -1,0 +1,86 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2000-04-25T18:47:42.000000Z", 
+  "msg": [
+   "Stop using a deprecated version of the UnavailableException constructor."
+  ], 
+  "revision_id": "281839"
+ }, 
+ {
+  "author": "mandar", 
+  "date": "2000-04-25T18:28:20.000000Z", 
+  "msg": [
+   "Oops! forgot to change Compiler.java. This might have broken", 
+   "the build."
+  ], 
+  "revision_id": "281838"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-04-25T17:54:33.000000Z", 
+  "msg": [
+   "Initial checkin for virtual host support.", 
+   "It doesn't change almost anything in tomcat, so probably the effect", 
+   "will be minor for the existing code ( it's mostly an experimental plugin).", 
+   "Changes:", 
+   "- added a \"host\" property to Context", 
+   "- In AutoSetup and ApacheConfig generator - deal only with the", 
+   "\"default\" server. Code to auto-config virtual hosts require discussion,", 
+   "apache config with virtual hosts requires more experiments.", 
+   "- In DefaultCMSetter - use the vhost in temp name generation", 
+   "- In ContextManager - the only \"important\" change, deprecate getContext(path)", 
+   "and all the code that assumed ctx path is a key. The code still works,", 
+   "using the default server. After everything is tested and if nobody has", 
+   "dependencies we can remove that.", 
+   "- In SimpleMapper1 - added the code to map based on ServerName.", 
+   "- In Tomcat starter - deal with virtual host definition", 
+   "Few notes:", 
+   "- We can add a VirtualHost object if we really find a need for that.", 
+   "It will be only a convenience object, and I feel it's better to not do it", 
+   "right now. A ContextGroup is a much better concept - but even for that it's", 
+   "better to wait till we have more information on the use cases", 
+   "- ContextManager remains the \"communication center\" - it is not involved", 
+   "in the details of a Context.", 
+   "- The support for vhost ( and context groups, or any other notion ) is part", 
+   "of the mapper interceptor ( any interceptor that is interested in contextMap)", 
+   "- I tried to keep everything as simple as possible, and more important to", 
+   "be able to replace/shortcut the components if a real web server provides the", 
+   "data.", 
+   "- To use vhosts - replace SimpleMapper with SimpleMapper1.", 
+   "- SimpleMapper1 is not complete - there is a lot more work on factoring", 
+   "out the parsing and matching alghoritm and using efficient data structures.", 
+   "The \"cache\" seems very usefull ( i.e. cache last mapping results ), and it", 
+   "seems to be a big difference in using Tree instead of Hashtable.", 
+   "Anyway, I think it's much better than SimpleMapper.", 
+   "- it was a single night of work, there is a lot of space for improvements:-)"
+  ], 
+  "revision_id": "281837"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-04-25T16:56:24.000000Z", 
+  "msg": [
+   "Support the ANT_OPTS environment variable (similar to the support found in", 
+   "the \"bin/tomcat.bat\" and \"bin/tomcat.sh\" scripts in the binary", 
+   "distribution) to allow JVM options -- such as maximum heap size setting --", 
+   "to be customized without modifying the basic scripts.", 
+   "PR: 202"
+  ], 
+  "revision_id": "281836"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-04-25T00:38:11.000000Z", 
+  "msg": [
+   "Correct generation of the \"conf/tomcat-apache.conf\" file to deal with", 
+   "absolute pathnames to the document root.  In addition, all directory paths", 
+   "generated in this file are now quoted.", 
+   "Also, the \"AddType\" directive for JSP pages has been corrected from", 
+   "\"test/jsp\" to \"text/jsp\".", 
+   "PR: 279", 
+   "Submitted by: author@philhanna.com"
+  ], 
+  "revision_id": "281835"
+ }
+]

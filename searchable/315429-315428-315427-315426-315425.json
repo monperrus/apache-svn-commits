@@ -1,0 +1,79 @@
+[
+ {
+  "author": "andyc", 
+  "date": "2000-04-12T16:56:52.000000Z", 
+  "msg": [
+   "When validating a document with an associated DTD *and* namespaces", 
+   "are turned on, the validator sees the root element name specified", 
+   "by the DOCTYPE line and the actual root element as different strings.", 
+   "And since the check was just checking StringPool indexes, it signaled", 
+   "an error.", 
+   "To fix this bug, I changed the test to compare the strings and not", 
+   "their StringPool identifiers. Since this check only happens once,", 
+   "there is no performance consideration.", 
+   "PR: 111"
+  ], 
+  "revision_id": "315429"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-04-10T22:08:11.000000Z", 
+  "msg": [
+   "Pretty major reorganisation of the classes:", 
+   "NodeImpl is now only a base class that can neither be a parent nor a child. It", 
+   "no longer keeps both a reference to its parent, or element in case of an Attr,", 
+   "and a reference to its ownerDocument. Instead, only one or the other is", 
+   "referenced. When the node has no owner (parent/element) it references its", 
+   "ownerDocument and when it has one it only references its owner and relies on it", 
+   "to have a reference to its ownerDocument. A flag is used to indicate which", 
+   "state the node is in.", 
+   "The new class ChildNode inherits from NodeImpl and adds the capability of being", 
+   "a child, that is having siblings.", 
+   "NodeContainer is renamed ParentNode and inherits from NodeImpl and adds the", 
+   "capability of being a parent, that is having children. It now only has a", 
+   "reference to its first child and stores the reference to its last child as the", 
+   "previous sibling of the first child. First child nodes are marked as being", 
+   "first so that their methods getPreviousSibling can hide that trick.", 
+   "The new class ChildAndParentNode inherits from ChildNode and adds the", 
+   "capability of being a parent. Ideally this would be done by inheriting both", 
+   "from ChildNode and ParentNode but in this case it's simply a copy of ParentNode", 
+   "that inherits from ChildNode instead of NodeImpl.", 
+   "NamedNodeMap now simply keeps a dirty flag and no longer a change count since", 
+   "it isn't really needed.", 
+   "NodeImpl no longer keeps a change count, this is only done by parent", 
+   "nodes. This is all what's necessary since only DeepNodeListImpl uses this", 
+   "information and it's only when referring to a parent (a Document or an", 
+   "Element).", 
+   "All states (booleans) attributes have been changed into a bit flag.", 
+   "All this together leads to saving over 11% of memory!", 
+   ":-)"
+  ], 
+  "revision_id": "315428"
+ }, 
+ {
+  "author": "andyc", 
+  "date": "2000-04-10T21:23:29.000000Z", 
+  "msg": [
+   "Truly no-op'd the DEBUG stuff. Wait a slowdown that was!"
+  ], 
+  "revision_id": "315427"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-04-08T01:36:13.000000Z", 
+  "msg": [
+   "a mere reindent, but I just couldn't read that code"
+  ], 
+  "revision_id": "315426"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-04-07T23:21:16.000000Z", 
+  "msg": [
+   "moved value and fInternalSetNodeValue attributes from NodeImpl", 
+   "to CharacterDataImpl which is the only class that really needs them,", 
+   "that way other classes (including AttrImpl and ElementImpl!) are smaller"
+  ], 
+  "revision_id": "315425"
+ }
+]

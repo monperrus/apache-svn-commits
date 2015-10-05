@@ -1,0 +1,64 @@
+[
+ {
+  "author": "dwinterfeldt", 
+  "date": "2001-08-17T17:05:58.000000Z", 
+  "msg": [
+   "Fix for the JavaScript because float and some other words are keywords in Netscape."
+  ], 
+  "revision_id": "48544"
+ }, 
+ {
+  "author": "dwinterfeldt", 
+  "date": "2001-08-17T16:50:32.000000Z", 
+  "msg": [
+   "Updated to use the commons packages.  The unit tests are not working currently."
+  ], 
+  "revision_id": "48543"
+ }, 
+ {
+  "author": "dwinterfeldt", 
+  "date": "2001-08-17T16:47:14.000000Z", 
+  "msg": [
+   "Changed to build.properties.sample so it is setup the same as Struts."
+  ], 
+  "revision_id": "48542"
+ }, 
+ {
+  "author": "dwinterfeldt", 
+  "date": "2001-08-16T16:05:10.000000Z", 
+  "msg": [
+   "Added documentation for using messages (ActionMessages, ActionMessage, and html:messages)."
+  ], 
+  "revision_id": "48541"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-08-16T03:52:09.000000Z", 
+  "msg": [
+   "Add a variation of the existing isTokenValid() method that optinally", 
+   "resets the token in the same, indivisible, operation.  This avoids a", 
+   "potential race condition that bypasses the check made by the transaction", 
+   "token, as follows:", 
+   "* User POSTs a form", 
+   "* Action finds the form valid and starts processing, without resetting", 
+   "the token at this point", 
+   "* User presses STOP and submits again", 
+   "* Action (on a second request thread) also finds the token valid", 
+   "(because the first thread didn't reset it).", 
+   "Note that, even if you call resetThread() immediately after", 
+   "isTokenValid(), there is still a (very small but finite) chance of a race", 
+   "condition with the old version.  To avoid that, you can do a \"test and", 
+   "reset\" atomically by calling:", 
+   "boolean ok = isTokenValid(request, true);", 
+   "Note that if you do this, you'll only be able to call isTokenValid() once,", 
+   "so save the result if you care about it.", 
+   "For backwards compatibility, calling isTokenValid(request) behaves as it", 
+   "did before, which is (in effect) the same as:", 
+   "isTokenValid(request, false);", 
+   "Many thanks to Yuhong Guo for explaining how this could happen, and", 
+   "suggesting a solution!", 
+   "Submitted by:\tYuhong Guo <YGuo@infinet-inc.com"
+  ], 
+  "revision_id": "48540"
+ }
+]

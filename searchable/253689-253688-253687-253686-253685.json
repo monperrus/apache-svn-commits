@@ -1,0 +1,85 @@
+[
+ {
+  "author": "dims", 
+  "date": "2002-03-06T20:39:40.000000Z", 
+  "msg": [
+   "Added a test case for Nested complex return values."
+  ], 
+  "revision_id": "253689"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-06T20:34:17.000000Z", 
+  "msg": [
+   "I got rid of some of the ignorable exceptions from the functional-tests.  I only went", 
+   "after the biggest offender - the multithread test - but this sort of fix should be done", 
+   "everywhere.  Here's the philosophy I followed:", 
+   "- if a catch block is rethrowing the exception, don't log it (it will probably be logged", 
+   "elsewhere)", 
+   "- if a catch block throws a different exception, log the original, but log it as debug, not", 
+   "error; this bit of code is in error, but somebody higher up the call chain may handle it,", 
+   "in which case it is NOT an error.", 
+   "This is a change in philosophy that we might want to discuss."
+  ], 
+  "revision_id": "253688"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-03-06T19:35:50.000000Z", 
+  "msg": [
+   "The type data received off the wire should be used to load a Deserializer.", 
+   "However both the BeanDeserializer and ArrayDeserializer were using", 
+   "the java class type of the property/array element to construct a Deserializer.", 
+   "This works fine if the java class and xml instance data have the same type,", 
+   "but does not work at all if the xml instance data is a derived type.", 
+   "For example consider a Bean with a property Foo that is an Object.", 
+   "The old code would attempt to find a Deserializer for Object when a Foo", 
+   "is received off the wire...and fail.  The new code will now use the xml type information", 
+   "to determine the Deserializer.", 
+   "So I changed the code in the ArrayDeserializer and BeanDeserializer to", 
+   "use the xml instance type information to get the Deserializer for contained items.", 
+   "This change revealed another problem.  If the contained item has an href, there is no", 
+   "type information; thus a generic DeserializerImpl object is used....The href/id", 
+   "processing breaks when the DeserializerImpl has value targets.", 
+   "Here are some of the additional changes that I made:", 
+   "1) Changed the code so that value targets are moved (instead of copied) when", 
+   "deserializer fixups are applied.  This is necessary to ensure that only one", 
+   "set(..) is invoked per value, and that it is invoked on the correct value.", 
+   "This is also a small performance improvement.", 
+   "2) For the case of array elements, if an array element definition does not have", 
+   "a type attribute, its type can be assumed from the array's arrayType setting.", 
+   "Consider the situation where the array has an arrayType of \"Foo[]\", and the", 
+   "first element of the array is an href and does not have a type attribute.", 
+   "The array deserializer will construct a generic DeserializerImpl for", 
+   "the contained array element.  The new setDefaultType(..) method of the", 
+   "DeserializerImpl object will be used to indicate that the \"Foo\" deserializer", 
+   "should be used if the definition of the array element", 
+   "does not have a type attribute.", 
+   "3) Changed the roundtrip test to test this new code.", 
+   "4) Changed BeanSerializer.writeSchema to use a sequence group instead of", 
+   "all group. (Per note from Dave Dunkin)", 
+   "(This problem was reported by Thomas Sandholm on axis-user)"
+  ], 
+  "revision_id": "253687"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-03-06T18:50:51.000000Z", 
+  "msg": [
+   "Changes to get comprehensive tests to work.", 
+   "The code in the deploy and stub writers needs to be", 
+   "in sync.", 
+   "Added appopriate fixes for registering simple types.", 
+   "Added quick fix for registering the anonymous type of an element."
+  ], 
+  "revision_id": "253686"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2002-03-06T16:25:35.000000Z", 
+  "msg": [
+   "Fix for Build Failure. Now \"all-tests\" should work!!!!!!!!!!!!!!!"
+  ], 
+  "revision_id": "253685"
+ }
+]

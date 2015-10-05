@@ -1,0 +1,64 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-07-20T16:14:24.000000Z", 
+  "msg": [
+   "Remove the ap_bucket_new function.  This was basically a case statement", 
+   "around a couple of other functions.  This keeps people from implementing", 
+   "their own bucket types and plugging them into the server.  With this change", 
+   "buckets are created by ap_bucket_foo_create, and modified/used with the", 
+   "function pointers."
+  ], 
+  "revision_id": "60394"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-07-19T17:42:55.000000Z", 
+  "msg": [
+   "Make ap_child_init_lock() work properly... It didn't", 
+   "call ap_unix_child_init_lock() at the right time, so any", 
+   "lock mechanism which had interesting work to do (only flock())", 
+   "was broken.", 
+   "Fix the flock() flavor of ap_unix_child_init_lock().  It expected", 
+   "to create the lock file when it should in fact open the existing", 
+   "one.  It also neglected to return the new ap_lock_t structure to", 
+   "the caller.", 
+   "Improve logging of lock init errors in prefork (I know, prefork is", 
+   "a lame duck, but I used the improved logging in prefork to help", 
+   "debug the problem)."
+  ], 
+  "revision_id": "60393"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-07-19T16:35:48.000000Z", 
+  "msg": [
+   "APR lock fixes: when using SysV sems, flock(), or fcntl(), be sure", 
+   "to repeat the syscall until we stop getting EINTR.  I noticed a", 
+   "related problem at termination (SIGTERM) on FreeBSD when using", 
+   "fcntl().  Apache 1.3 had these new loops too."
+  ], 
+  "revision_id": "60392"
+ }, 
+ {
+  "author": "fanf", 
+  "date": "2000-07-18T23:39:01.000000Z", 
+  "msg": [
+   "Restore the reference to perl's use of DJB's hash function;", 
+   "Fix the name of the chi^2 distribution;", 
+   "Let the compiler decide how to multiply by 33."
+  ], 
+  "revision_id": "60391"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-07-18T15:16:46.000000Z", 
+  "msg": [
+   "ap_sendfile() fix: If the caller passes NULL for the ap_hdtr_t *,", 
+   "set hdtr to the address of one that specifies no headers and trailers.", 
+   "This prevents accessing low core while keeping the following code", 
+   "simpler (no need to check hdtr != NULL later)."
+  ], 
+  "revision_id": "60390"
+ }
+]

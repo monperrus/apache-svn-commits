@@ -1,0 +1,85 @@
+[
+ {
+  "author": "glenn", 
+  "date": "2001-02-18T17:18:40.000000Z", 
+  "msg": [
+   "Update policy for Craig's jasper class loading changes"
+  ], 
+  "revision_id": "285654"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-02-18T03:33:48.000000Z", 
+  "msg": [
+   "Update the documentation on Catalina's class loader hierarchy to reflect the", 
+   "changes recently made in how Jasper is loaded."
+  ], 
+  "revision_id": "285653"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-02-18T02:18:15.000000Z", 
+  "msg": [
+   "Stage 3 of making Jasper work without an XML parser in the \"lib\"", 
+   "directory.  As you can see, it was a little more involved than originally", 
+   "planned.  Notes on what is going on:", 
+   "* A new directory, $CATALINA_HOME/jasper, contains the portions of Jasper", 
+   "that compile new JSP pages -- plus the XML parser that they need.", 
+   "* The jaxp.jar and crimson.jar files have been moved from \"lib\" to", 
+   "\"jasper\", so that they will not show up in the class loader hierarchy", 
+   "as seen by a web app.  Thus, an application that wants to run Xerces", 
+   "(by putting xerces.jar in WEB-INF/lib) should no longer have a problem.", 
+   "* The runtime portions of Jasper (i.e. the code needed by an already", 
+   "compiled JSP page) remains in the \"lib\" directory.  As you can see from", 
+   "the modified build.xml file, the current code organization is really", 
+   "awful - anyone interested in working on a complete overhaul?", 
+   "* Catalina was modified such that, *if and only if* a web application uses", 
+   "JSPs, a class loader that is a child of the web app class loader is", 
+   "created, picking up the contents of the \"jasper\" directory.", 
+   "* All Watchdog 4.0 tests currently pass.  I'm running other tests to", 
+   "make sure I didn't break anything accidentally, and would appreciate", 
+   "it if others did the same."
+  ], 
+  "revision_id": "285652"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-02-16T22:17:08.000000Z", 
+  "msg": [
+   "Stage 2 of making Jasper able to load an XML parser from a different class", 
+   "loader.", 
+   "* Modified TagLibraryInfoImpl (which parses TLDs) to use the new", 
+   "parsing routines instead of the old ones in JspUtil.", 
+   "* Added findChild(\"name\") method to TreeNode, to optimize the very", 
+   "common case where there is only one child with a given name.", 
+   "* Updated TldLocationsCache (which scans web.xml files) to use the", 
+   "new findChild() method.", 
+   "* Deprecated the JspUtils.parseXMLDoc() method since nobody is now", 
+   "using it.", 
+   "Before going on to Stage 3 (parsing JSP pages in XML syntax), it is", 
+   "necessary to go implement the special classloader stuff.  That's next."
+  ], 
+  "revision_id": "285651"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-02-16T07:14:34.000000Z", 
+  "msg": [
+   "Stage 1 in making Jasper not require an XML parser in the shared class", 
+   "loader:", 
+   "* Create a separate class ParserUtils that isolates all references", 
+   "to the JAXP APIs.  Ultimately, this class will be loaded by a", 
+   "separate classloader (child of the webapp classloader) that will", 
+   "effectively isolate the parser itself.", 
+   "* Create a TreeNode class to represent a DOM element, its associated", 
+   "attributes, and the corresponding child elements.", 
+   "* Modify the parsing routines for web.xml and TLD scanning (for <uri>", 
+   "elements) to use the new parsing utillities.", 
+   "Stage 2 will be modifying org.apache.jasper.compiler.TagLibraryInfoImpl", 
+   "to use the new parsing mechanism as well, as it processes TLD files.", 
+   "Stage 3 (the hardest) will be to deal with parsing JSP files that are", 
+   "using the XML syntax."
+  ], 
+  "revision_id": "285650"
+ }
+]

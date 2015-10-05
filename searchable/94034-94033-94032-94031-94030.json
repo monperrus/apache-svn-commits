@@ -1,0 +1,75 @@
+[
+ {
+  "author": "", 
+  "date": "2002-03-20T05:53:59.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create branch 'PCRE'."
+  ], 
+  "revision_id": "94034"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-03-20T05:53:59.000000Z", 
+  "msg": [
+   "Initial revision"
+  ], 
+  "revision_id": "94033"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-03-20T04:29:55.000000Z", 
+  "msg": [
+   "When restarting [always graceful on Win32], we don't repeat pre_mpm", 
+   "(Unix doesn't, we shouldn't either.)  [Ryan Bloom]"
+  ], 
+  "revision_id": "94032"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2002-03-20T03:54:25.000000Z", 
+  "msg": [
+   "Make the listener thread stop accepting new connections and exit", 
+   "cleanly at graceful restart time.  This is a basic requirement of", 
+   "reliable graceful restarts (the kind that won't drop connections).", 
+   "This allows a future fix to make worker threads hang around until", 
+   "they service all connections previously accepted by the listener", 
+   "thread.", 
+   "The old mechanism of doing a dummy connection to wake up the", 
+   "listener thread in each old child process didn't work.  It didn't", 
+   "guarantee that (in the main thread) the byte was read from the pod", 
+   "and global variables were set before the listener thread grabbed", 
+   "the connection.  It didn't guarantee that a child process in the", 
+   "new generation didn't get some of the dummy connections.", 
+   "Rather than burn extra syscalls adding a unique socket or pipe", 
+   "to the poll set (and breaking single listen unserialized accept", 
+   "in the same change), this uses a signal sent from the main thread", 
+   "to the listener thread to break it out of the poll or accept.", 
+   "(We don't worry about breaking it out of the optional mutex because", 
+   "the child process holding the mutex will break out of poll/accept", 
+   "and release the mutex, allowing a child blocked in the mutex to", 
+   "get it.  Eventually all children blocked in the mutex will come", 
+   "out.)", 
+   "Since the listener thread now exits reliably, the main thread", 
+   "joins it.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "94031"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2002-03-20T03:38:07.000000Z", 
+  "msg": [
+   "get the start thread to exit when we have reached termination but", 
+   "it is still trying to create worker threads", 
+   "previously, after a non-graceful restart followed by a terminate", 
+   "you could see a bunch of log messages showing the parent repeatedly", 
+   "sending SIGTERM and finally SIGKILL to one or more children...", 
+   "with this change, the sequence of messages should stop very soon", 
+   "add a comment to start_threads() describing a current problem"
+  ], 
+  "revision_id": "94030"
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2003-11-14T18:16:46.000000Z", 
+  "msg": [
+   "- refactoring of RsIterator handling", 
+   "- prepare for sql-paging support"
+  ], 
+  "revision_id": "363044"
+ }, 
+ {
+  "author": "brianm", 
+  "date": "2003-11-14T15:37:08.000000Z", 
+  "msg": [
+   "Added myself"
+  ], 
+  "revision_id": "363043"
+ }, 
+ {
+  "author": "brianm", 
+  "date": "2003-11-14T15:08:17.000000Z", 
+  "msg": [
+   "Added mention of Druid to the mapping tools."
+  ], 
+  "revision_id": "363042"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-11-13T14:52:40.000000Z", 
+  "msg": [
+   "- remove LoadedObjectsRegistry", 
+   "- remove of LOR fix bug in test cases", 
+   "- remove blank lines in serveral classes", 
+   "Email send to dev-list, why need to", 
+   "remove this class", 
+   "***********************************", 
+   "Hi all,", 
+   "while try to fix an odmg test case I", 
+   "stumble across LoadedObjectRegistry (LOR)used", 
+   "in the odmg-api.", 
+   "A comment in this class says:", 
+   "<snip>", 
+   "* This is a helper class which registers all objects loaded", 
+   "* from database. It is used by ODMG layer to determine the state of", 
+   "* objects: if an object was not loaded from database then it is new.", 
+   "* Note: objects remain registered even after they are deleted. This", 
+   "* is necessary to prevent creation of deleted objects by another", 
+   "* thread, see <a href=\"http://archives.apache.org/eyebrowse/ReadMsg?listId=106&msgNo=1382\">this<a>", 
+   "* for details.", 
+   "*", 
+   "</snip>", 
+   "I read (is this the same message?)", 
+   "http://nagoya.apache.org/eyebrowse/ReadMsg?listName=ojb-user@db.apache.org&msgNo=1382", 
+   "and found", 
+   "http://nagoya.apache.org/eyebrowse/ReadMsg?listName=ojb-user@db.apache.org&msgNo=1453", 
+   "so LoadedObjectRegistry was not needed to solve this problem.", 
+   "<snip>", 
+   "* is necessary to prevent creation of deleted objects by another", 
+   "* thread", 
+   "</snip>", 
+   "I think this problem couldn't be solved by LoadedObjectRegistry.", 
+   "If an application server is used all objects will be serialized", 
+   "and we never will find the \"same\" object in LOR.", 
+   "Or in an clustered environment this will not work too, because", 
+   "LOR is not a distributed service.", 
+   "But if I comment out LOR the test case will be fixed."
+  ], 
+  "revision_id": "363041"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-11-12T18:34:05.000000Z", 
+  "msg": [
+   "fix Issue ID OJB9", 
+   "Reported by Chris Giordano:", 
+   "Modified the Class.forName() method call to use the class loader from the current context of the", 
+   "running thread, the web application's context class loader.  If OJB is installed globally in Tomcat", 
+   "(common/lib directory) but the descriptor classes are located in the web application's context", 
+   "(somecontext/WEB-INF/lib), we believe there is a potential for a ClassNotFoundException to occur.", 
+   "The Class.forName() method as it exists will default to using the class loader that loaded the", 
+   "OJB classes (the common classloader) to locate the descriptor classes. This class loader will", 
+   "delegate up the class loader hierarchy to locate the class which doesn't include the", 
+   "application's context class loader."
+  ], 
+  "revision_id": "363040"
+ }
+]

@@ -1,0 +1,74 @@
+[
+ {
+  "author": "ammulder", 
+  "date": "2003-11-17T15:26:46.000000Z", 
+  "msg": [
+   "Remove synchronization from DeploymentController", 
+   "- the method to do the work is now only ever called from 1 thread, so", 
+   "we don't need to synchronize to prevent overlap", 
+   "- the work methods fire notifications, and it's rumored to be bad to do", 
+   "that while holding the object's monitor", 
+   "Fire the first update messages on a deployment job when the job is first", 
+   "made runnable, instead of when the work is actually started (which", 
+   "might be much later if there was a long deployment in front of it)", 
+   "Take advantage of the deployment notifications to print the server startup", 
+   "message at the end of the initial startup sequence", 
+   "- to do this, we assume that the first run of the DeploymentScanner", 
+   "will not achieve anything, so we wait for the second run.  This", 
+   "appears to be consistent.  It would shave a couple seconds off our", 
+   "startup time if we fixed that.  Perhaps the scanner starts before", 
+   "the relevant deployment planners?"
+  ], 
+  "revision_id": "44559"
+ }, 
+ {
+  "author": "ammulder", 
+  "date": "2003-11-17T10:57:40.000000Z", 
+  "msg": [
+   "New JSR-88 server-side support", 
+   "- ApplicationDeployer is now a GeronimoMBean", 
+   "- ApplicationDeployer is now in kernel", 
+   "- kernel now depends on JSR-88 (which is moved to bootlib)", 
+   "- All deployment goes through JSR-88 ApplicationDeployer (including", 
+   "deployment of services)", 
+   "- Every deployment job gets an ID and status notifications", 
+   "- Deployment jobs can be queued and are handled in the order received", 
+   "- Deployment goals are associated with JSR-88 TargetModuleIDs", 
+   "More work left (though everything deploys and runs as before)", 
+   "- command-line deployer was broken in the last week or so (classpath)", 
+   "- JSR-88 client has to be hooked up to revised server", 
+   "- Need to figure out how to associate modules with ModuleTypes (perhaps", 
+   "include ModuleType in TargetModuleID)", 
+   "- Need to figure out how to get a TargetModuleID from a deployment URL", 
+   "and/or ObjectName (include it in JSR-77 MBean?)"
+  ], 
+  "revision_id": "44558"
+ }, 
+ {
+  "author": "ammulder", 
+  "date": "2003-11-17T10:51:53.000000Z", 
+  "msg": [
+   "Remove the old JSR-88 server side", 
+   "Add the beginning of a JSR-88 ProgressObject implementation", 
+   "- it will need JMX remote notification support"
+  ], 
+  "revision_id": "44557"
+ }, 
+ {
+  "author": "jboynes", 
+  "date": "2003-11-17T08:25:13.000000Z", 
+  "msg": [
+   "Temp fix to work around classloader issue"
+  ], 
+  "revision_id": "44556"
+ }, 
+ {
+  "author": "jboynes", 
+  "date": "2003-11-17T07:33:51.000000Z", 
+  "msg": [
+   "Fix problem with jmx: JNDI resolution using attribute", 
+   "Fix classloader issue with GMB and web container"
+  ], 
+  "revision_id": "44555"
+ }
+]

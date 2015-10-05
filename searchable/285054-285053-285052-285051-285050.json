@@ -1,0 +1,73 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-09T03:20:52.000000Z", 
+  "msg": [
+   "If the request came in on an SSL connection, and if the client presented a", 
+   "certificate chain to authenticate itself, the array of certificates is", 
+   "exposed as a request attribute under key", 
+   "\"javax.servlet.request.X509Certificate\", as required by Section 4.7 of the", 
+   "Servlet 2.3 Specification (Public Draft 1).", 
+   "Also cleaned up a couple of bugs in the way that Valve pipelines were", 
+   "constructed and reported."
+  ], 
+  "revision_id": "285054"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-09T01:55:46.000000Z", 
+  "msg": [
+   "Make the underlying socket visible on a request, so that an SSL", 
+   "authentication module (for running Standalone) can extract the current", 
+   "SSLSession and therefore the peer certificate chain."
+  ], 
+  "revision_id": "285053"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-08T22:45:32.000000Z", 
+  "msg": [
+   "Reflect the changes just checked in for the server socket factory.", 
+   "NOTE:  If you ask createConnection() for a secure connection, it will set up", 
+   "an SSLServerSocketFactory for you, with default values.  To modify the defaults", 
+   "you will need to acquire a reference to this object, and modify its properties,", 
+   "before you start the connector.  Code to do this might look like this:", 
+   "Connector connector = embedded.createConnector(null, 443, true);", 
+   "SSLServerSocketFactory factory =", 
+   "(SSLServerSocketFactory) connector.getFactory();", 
+   "factory.setClientAuth(true);"
+  ], 
+  "revision_id": "285052"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-08T22:29:36.000000Z", 
+  "msg": [
+   "Make configuration of the server socket factory consistent with all the", 
+   "other component configuration that is done in server.xml, by defining a", 
+   "new \"Server/Connector/Factory\" parsing rule.  The default server socket", 
+   "factory returns unadorned java.net.ServerSocket sockets, while the SSL", 
+   "server socket factory can be configured via XML attributes in the usual", 
+   "way."
+  ], 
+  "revision_id": "285051"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-08T18:29:04.000000Z", 
+  "msg": [
+   "Do not include the JSSE jar files in $CATALINA_HOME/server -- due to the", 
+   "way that class loading is implemented in Catalina, JSSE *must* be", 
+   "installed as a system extension (in $JAVA_HOME/jre/lib/ext), as described", 
+   "in the JSSE documentation.", 
+   "You can now enable simultaneous non-SSL and SSL connectors with Tomcat 4.0", 
+   "stand-alone, once you follow the directions in the \"conf/server.xml\" file", 
+   "and uncomment the entry that enables this connector.  The default SSL port", 
+   "is 8443 -- you won't be able to run on port 443 on Unix systems unless you", 
+   "are running as root, which is not a good idea.", 
+   "Next step is to add initial logic that deals with client authentication", 
+   "and certificates."
+  ], 
+  "revision_id": "285050"
+ }
+]

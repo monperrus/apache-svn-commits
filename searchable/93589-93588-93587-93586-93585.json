@@ -1,0 +1,66 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2002-02-27T04:00:47.000000Z", 
+  "msg": [
+   "Clarity on a snowy night in Illinois."
+  ], 
+  "revision_id": "93589"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-02-27T03:55:31.000000Z", 
+  "msg": [
+   "Don't set bytes_sent to be 0 when r->assbackwards since this screws up", 
+   "logging.", 
+   "The content length filter seems to track bytes_sent properly regardless", 
+   "of HTTP version.  The HTTP header filter knows not to send C-L (or any", 
+   "headers) to this client.", 
+   "showstoppers--;", 
+   "(Also fix typo of my last name in CHANGES...)"
+  ], 
+  "revision_id": "93588"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-02-27T03:52:20.000000Z", 
+  "msg": [
+   "Whoh boy that's rough... We sometimes like to answer SIGHUP in the", 
+   "parent process, don't we?", 
+   "This -was- post-fork() in 1.3, but with the massive restructuring,", 
+   "we inadvertantly now whack the parent process."
+  ], 
+  "revision_id": "93587"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2002-02-27T03:33:38.000000Z", 
+  "msg": [
+   "change builtin passphrase prompt to use stdout rather than stderr.", 
+   "and switch to using apr_file api for portability.", 
+   "stderr has already been redirected to the error_log.", 
+   "rather than attempting to temporarily rehook it to the terminal,", 
+   "we print the prompt to stdout before EVP_read_pw_string turns", 
+   "off tty echo.  which is also more portable."
+  ], 
+  "revision_id": "93586"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2002-02-27T03:21:09.000000Z", 
+  "msg": [
+   "changing mod_ssl to do a full startup/teardown on each restart rather", 
+   "than hack to only read passphrase on 1st round startup.  this change:", 
+   "- fixes current segv on restarts (SHARED_MODULE is not defined)", 
+   "- allows LoadModule ssl_module to be added to httpd.conf on restart", 
+   "(was core dumping previously)", 
+   "- allows certs/keys to be changed on restart provided key is not", 
+   "encrypted or SSLPassPhraseDialog is exec.  if key is encrypted and", 
+   "SSLPassPhraseDialog is builtin, existing private keys will be reused", 
+   "on restart (which happens currently for any type of key/dialog).", 
+   "note: mod_ssl currently leaks on restart; leaks more with this change.", 
+   "fixes to come."
+  ], 
+  "revision_id": "93585"
+ }
+]

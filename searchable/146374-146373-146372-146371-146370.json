@@ -1,0 +1,91 @@
+[
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T15:38:48.000000Z", 
+  "msg": [
+   "Made a nubmer of change to the ExpandableDoubleArray.", 
+   "* This class now supports", 
+   "the ability to move the starting index of the internal element array.  This", 
+   "allows one to move the beginning of the element array, and form a sort of", 
+   "\"window\", this will come into play when we want to provide moving", 
+   "averages, or \"rolling\".", 
+   "* Added an addElementRolling(double v) - this will increment the startIndex", 
+   "and add the element to the end of the internal element array", 
+   "* brought the Clover test cases up to 100% for this class", 
+   "Added a class ContractableDoubleArray:", 
+   "* This is an extension of ExpandableDoubleArray - it addes a configuration", 
+   "parameter contractionCriteria.  Essential if the contractionCriteria is", 
+   "2.0f we commit to never having the internal storage array provide more", 
+   "than 2.0 times the storage capacity needed.  Once the internal", 
+   "storage array exceed this measurement, the internal storage array is", 
+   "pruned to the size of the internal element array.", 
+   "Also, my IDE scolded me for some ununsed imports in ListUnivariateImpl, they", 
+   "have been removed."
+  ], 
+  "revision_id": "146374"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T06:33:19.000000Z", 
+  "msg": [
+   "Another change to the stored Univariates.  The calculations are now abstracted", 
+   "into an AbstractStoreUnivariate class which take responsibility for", 
+   "all statistical calculations.  AbstractStoreUnivariate is implemented by", 
+   "two classes:", 
+   "* StoreUnivariateImpl - This class uses a ExpandableDoubleArray for", 
+   "internal storage.  This class is a more efficient class in terms", 
+   "of storage and cycles for users who are interested in gathering statistics", 
+   "not available in the UnivariateImpl implementation.", 
+   "* ListUnivariateImpl - This class is for a situation where a user might", 
+   "wish to maintain a List of numeric objects outside of a StoreUnivariate", 
+   "instance.  We still need to add serious error checking in the absence of", 
+   "1.5's generics, but this implementation will work with any list that", 
+   "contains Number objects - (BigDecimal, BigInteger, Byte, Double, Float,", 
+   "Integer, Long, Short).  This implementation ultimately transforms all", 
+   "numeric objects into double primitives via Number.doubleValue().", 
+   "Becuase AbstractStoreUnivariate does not hold on to any state, a user", 
+   "can add values through the Univariate.addValue() function OR one can", 
+   "directly manipulate the contents of the List directly."
+  ], 
+  "revision_id": "146373"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T05:47:51.000000Z", 
+  "msg": [
+   "Submitted by: Phil S.", 
+   "Reviewed by: Tim O."
+  ], 
+  "revision_id": "146372"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T05:39:01.000000Z", 
+  "msg": [
+   "The following changes were made to the Univariate implementation.  The public", 
+   "interface of Univariate was extracted in an interface of the same name.", 
+   "Univariate, an interface, is now implemented by UnivariateImpl which contains", 
+   "all code originally present in the original Univariate implementation.", 
+   "* StoredUnivariate is an interface which extends Univariate and adds", 
+   "measures not available in the superinterface such as mode, kurtosis, and skew", 
+   "* StoredUnivariateImpl provides an implementation which uses the", 
+   "ExpandableDoubleArray for internal storage.  Calculations are performed", 
+   "on demand *each* time a particular measure is required no state is", 
+   "maintained by this implementation.", 
+   "* Univariate provided methods addValue(int), addValue(float), addValue(long).", 
+   "There functions were removed as no cast is required - all of these", 
+   "assignments are widening conversions - no cast required", 
+   "* Removed the name property from Univariate - property not relevant to", 
+   "univariate statistics"
+  ], 
+  "revision_id": "146371"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T05:19:57.000000Z", 
+  "msg": [
+   "Added an expandable double array, this class simply contains a double[] and takes care of automatic expansion of an internal array when necessary.  Class added with accompanying unit test"
+  ], 
+  "revision_id": "146370"
+ }
+]

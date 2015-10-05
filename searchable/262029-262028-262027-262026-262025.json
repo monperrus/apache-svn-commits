@@ -1,0 +1,103 @@
+[
+ {
+  "author": "neyama", 
+  "date": "2000-11-07T02:05:18.000000Z", 
+  "msg": [
+   "Transport hook extension.", 
+   "------", 
+   "(Figures are omitted. See the archive of the soap-dev mailng list)", 
+   "The Fig.1 illustrates the current message flow between SOAP client", 
+   "and server in the Apache SOAP 2.0 and the Fig.2 shows our proposal.", 
+   "Vertical lines are timelines of functions and horizontal lines are", 
+   "message flows between functions.", 
+   "The proposed change in the Fig.2 is to add XML-in/XML-out hooks", 
+   "(EnvelopeEditors in the chart below) between a network transport and", 
+   "SOAP message handlers where a string format of XML message flows.  The", 
+   "advantage of this hook is flexibility that a programmer can add any", 
+   "functions that modify raw SOAP messages in any sense, such as sign a", 
+   "message, transcode a format with XSLT processor, and so on.  One of", 
+   "the disadvantage of this approach is performance because there is a", 
+   "possibility of calling a XML parser multiple times in each added", 
+   "function.  At this time, we would like to take the flexibility.", 
+   "There is another change proposed in the Fig.2  The current SOAP 2.0", 
+   "implementation invokes a hard-coded XML parser.  We would like to", 
+   "propose to make is replaceable with any other XML parsers.  This gives", 
+   "programmers a freedom of parser choice.  Another advantage is that", 
+   "this may be able to improve perfomance by eliminating multiple parser", 
+   "calls because this is regarded as another kind of XML-in/DOM-out hook", 
+   "and extension can be implemented as a part of parser (liaison)", 
+   "functions."
+  ], 
+  "revision_id": "262029"
+ }, 
+ {
+  "author": "neyama", 
+  "date": "2000-11-07T01:30:09.000000Z", 
+  "msg": [
+   "Bug fix for NullPointerException."
+  ], 
+  "revision_id": "262028"
+ }, 
+ {
+  "author": "neyama", 
+  "date": "2000-11-07T01:26:30.000000Z", 
+  "msg": [
+   "Bug fix for the following NullPointerException:", 
+   "-----------------", 
+   "A NullPointerException is thrown in unmarshalling an XML in which SOAP", 
+   "Body element has \"Id\" attribute. I'm wondering setting an \"Id\"", 
+   "attribute is allowed according to the schema of SOAP, because SOAP Body", 
+   "element allows any attribute.", 
+   "The environment is:", 
+   "Apache SOAP: The latest version in CVS", 
+   "Xerces 1.2.0", 
+   "The reason seems to be that the namespace URI of \"Id\" attribute is null.", 
+   "The exception was as follows:", 
+   "--------- Begin exception", 
+   "Exception in thread \"main\" java.lang.NullPointerException", 
+   "at org.apache.soap.util.xml.QName.setNamespaceURI(QName.java:108)", 
+   "at org.apache.soap.util.xml.QName.<init>(QName.java:102)", 
+   "at org.apache.soap.AttributeHandler.unmarshall(AttributeHandler.java:231)", 
+   "at org.apache.soap.Body.unmarshall(Body.java:183)", 
+   "at org.apache.soap.Envelope.unmarshall(Envelope.java:243)", 
+   "at test.main(test.java:11)", 
+   "--------- End exception", 
+   "The test program that causes the NullPointerException is as follows:", 
+   "--------- Begin test program", 
+   "import java.io.*;", 
+   "import org.w3c.dom.Document ;", 
+   "import org.apache.soap.Envelope ;", 
+   "import org.apache.soap.util.xml.XercesParserLiaison ;", 
+   "public class test {", 
+   "public static void main(String[] args) throws Exception {", 
+   "String xml =\"<s:Envelope xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"><s:Body Id=\\\"body\\\"></s:Body></s:Envelope>\";", 
+   "Document dom = new XercesParserLiaison().read(\"test\", new StringReader(xml)) ;", 
+   "Envelope.unmarshall(dom.getDocumentElement()) ;", 
+   "}", 
+   "}", 
+   "--------- End test program"
+  ], 
+  "revision_id": "262027"
+ }, 
+ {
+  "author": "dug", 
+  "date": "2000-11-07T00:35:02.000000Z", 
+  "msg": [
+   "Added support for Pluggable Providers", 
+   "PR:", 
+   "Reviewed by:\tGlen Daniels"
+  ], 
+  "revision_id": "262026"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2000-10-23T19:55:35.000000Z", 
+  "msg": [
+   "Fix bug : If we got -1 from url.getPort(), remember that all the", 
+   "way through the post() function.  This avoids a problem using the", 
+   "Apache web server.", 
+   "Submitted by : Bhavin Parikh (bhavin_parikh@spectramarketing.com)"
+  ], 
+  "revision_id": "262025"
+ }
+]

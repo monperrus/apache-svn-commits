@@ -1,0 +1,67 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-09-24T18:10:58.000000Z", 
+  "msg": [
+   "Update for the changes in core."
+  ], 
+  "revision_id": "282459"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-24T18:10:17.000000Z", 
+  "msg": [
+   "- RequestUtil - use doRead instead of ServletInputStream -> Request -> doRead", 
+   "- remove dependency on facades from a lot of classes. We still have few,", 
+   "but it starts to look better."
+  ], 
+  "revision_id": "282458"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-24T18:02:05.000000Z", 
+  "msg": [
+   "- Core is now independent of facades, i.e. we have a real layering and", 
+   "module separation !!!", 
+   "- Added deprecate comments to FacadeManager - we know there are better", 
+   "ways to get to the real object from trusted webapps, and the 1-1 relation", 
+   "between Request-RequestFacade, etc have serious security problems.", 
+   "- start to use the recyclable ServerCookie. We still need to add code", 
+   "like in MimeHeaders to enable recycling. The best solution (IMHO) is to", 
+   "transform MimeHeaders in a general-purpose MultiMap ( string -> string[],", 
+   "with most elements having only one value ) and start using it not only", 
+   "for headers, but for cookies and parameters too. Right now normal header", 
+   "processing can be done with 0 GC ( constant memory ), we should extend", 
+   "that to all other request components."
+  ], 
+  "revision_id": "282457"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-24T17:42:27.000000Z", 
+  "msg": [
+   "- Interface change in SessionSerializer - now it have no deps on tomcat,", 
+   "it is just a general tool that changes the class loader of a hashtable.", 
+   "( it can be used to change the loader for attributes too ).", 
+   "- small changes and indentation, preparing for a bigger refactoring of sessions", 
+   "( i.e. follow the same pattern as in the rest of tomcat - the current code", 
+   "is very inefficient and generates a lot of GC )"
+  ], 
+  "revision_id": "282456"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-24T17:33:45.000000Z", 
+  "msg": [
+   "- Added ServerCookie - a recyclable Cookie that will be used internaly.", 
+   "This follow the same pattern of recyclable objects that proved to be so", 
+   "good for performance.", 
+   "- comments to TcpConnectionHandler", 
+   "- added the very comonly called readLine to TcpConnection. This is a general", 
+   "purpose method that was replicated in too many places, and the reason for a", 
+   "lot of mess in internal interfaces ( interceptors needing to call back to", 
+   "upper facade layer just to access this method from ServletInputStream )"
+  ], 
+  "revision_id": "282455"
+ }
+]

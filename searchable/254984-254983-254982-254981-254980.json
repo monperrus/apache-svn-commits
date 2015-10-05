@@ -1,0 +1,113 @@
+[
+ {
+  "author": "scheu", 
+  "date": "2002-08-29T17:50:11.000000Z", 
+  "msg": [
+   "The WSDL2Java emitter generates uncompilable java files if", 
+   "a wsdl:message for a wsdl:fault uses the element attribute (instead of using the type attribute).", 
+   "Apparently this kind of format may be used by .NET.", 
+   "This format is not described by JSR 101, but we do need support some kind of mapping.", 
+   "The approach I took was to map the exception using the type referenced by the element.", 
+   "I also added this case to the comprehensive types test.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254984"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-08-28T22:53:17.000000Z", 
+  "msg": [
+   "Changes are made to cleanup symbolTable.Utils.getNodeTypeRefQName methods.", 
+   "These changes were necessary to fix bug(s) submitted to me by Damian Hagge", 
+   "involving maxOccurs on an element that has an anonymous type.", 
+   "Discussion of changes:", 
+   "org.apache.axis.wsdl.symbolTable.Utils has two methods named getNodeTypeRefQName.", 
+   "The shared names plus convoluted logic has made it difficult to understand", 
+   "the operation of these methods.", 
+   "---------------------------------------------------------------------------", 
+   "The first getNodeTypeRefQName method is changed to", 
+   "public static QName getTypeQName(Node node,", 
+   "BooleanHolder forElement,", 
+   "boolean ignoreMaxOccurs)", 
+   "The purpose of the method is to get the <i>type</i> QName of the specified node.", 
+   "So if the node is:", 
+   "<element name=\"foo\" type=\"bar\" />", 
+   "the QName representing \"bar\" is returned.", 
+   "Likewise it the node is:", 
+   "<element ref=\"bar\" />", 
+   "the QName representing \"bar\" is returned (and the forElement flag is turned", 
+   "on to indicate that the QName is an element not a type).", 
+   "And if the node is", 
+   "<element name=\"bar\">", 
+   "<complexType>", 
+   "...", 
+   "</complexType>", 
+   "then the QName representing the anonymous type is returned.", 
+   "And if the node is", 
+   "<element name=\"foo\" type=\"bar\" maxOccurs=\"unbounded\" />", 
+   "then the QName representing the collection of bar types is returned.", 
+   "(Or you can set ignoreMaxOccurs to get just the component \"bar\" QName.)", 
+   "...The point is...getTypeQName is now a fully functioning routine", 
+   "that returns the QName representing the type of the indicated node.", 
+   "---------------------------------------------------------------", 
+   "The second getNodeTypeRefQName method is changed to:", 
+   "private static QName getTypeQNameFromAttr(Node node,", 
+   "String typeAttrName);", 
+   "NOTE THAT THIS IS NOW PRIVATE!  The getTypeQName() method", 
+   "should always be used.", 
+   "The purpose of this method is simply to get the", 
+   "type QName of the node via the indicated attribute name.", 
+   "So getTypeQNameFromAttr(node, \"ref\") tries to get a type", 
+   "QName by examining the \"ref\" attribute.", 
+   "An invocation of getTypeQNameFromAttr(node, \"type\")", 
+   "tries to get a type QName by examinging the \"type\" attribute.", 
+   "If not successful, the code automatically looks for an", 
+   "anonymous type.", 
+   "----------------------------------------------------------------", 
+   "I then changed all references to get NodeTypeRefQName to use", 
+   "one of the two new methods.  This cleaned up some code.", 
+   "I also needed to clean up the JavaGeneratorFactory.javifyNames", 
+   "code to handle Damian's case.", 
+   "And I cleaned up some code in Utils.getNestedTypes", 
+   "These changes are not as scary as the diff makes them appear :-)", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254983"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-08-28T21:54:19.000000Z", 
+  "msg": [
+   "EngineConfigurationFactoryServlet (indirectly) made *upto* three attempts to locate the /WEB-INF/<server_config_file>, using:", 
+   "1.  ServletContext.getResourceAsStream()  [EngineConfigurationFactoryServlet]", 
+   "2.  FileInputStream() [FileProvider]", 
+   "2.  engine.class.getClassLoader().getResourceAsStream()  [ClassUtils]", 
+   "3.  systemClassLoader.getResourceAsStream() [ClassUtils]", 
+   "2.  engine.class.getResourceAsStream() [ClassUtils]", 
+   "For a Servlet, the ONLY one that makes sense is (1)."
+  ], 
+  "revision_id": "254982"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-08-28T19:53:04.000000Z", 
+  "msg": [
+   "Finish 'addMessages'"
+  ], 
+  "revision_id": "254981"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-08-28T19:45:09.000000Z", 
+  "msg": [
+   "Hook to extend messages (ResourceBundles)"
+  ], 
+  "revision_id": "254980"
+ }
+]

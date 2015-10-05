@@ -1,0 +1,70 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2000-11-22T02:46:29.000000Z", 
+  "msg": [
+   "Complete the WinNT 4.0 compatibility as a service and console app, with", 
+   "proper handling in the parent and child of close window, ctrl+c/break,", 
+   "and logoff/shutdown events, they all work properly.  This will be tested", 
+   "shortly on Win2000, where it is expected to work without incident.  Note", 
+   "that any console event handler in a child or the service parent", 
+   "interfered with these various events, so only the console parent process", 
+   "has a console monitor, while the child process always has a console", 
+   "(without a handler) to execute 16-bit CGI processes.", 
+   "While fighting with this code, added a -z arg in place of the -Z arg for", 
+   "the child process to determine that it is a child of a service.  Since", 
+   "this change ultimately was unneeded in WinNT, it may go away if it offers", 
+   "nothing for the Win9x code path.  Also restructured the service.c file to", 
+   "organize by monitors/children/services and group the atexit() routines,", 
+   "since it gave me a headache.  Once the 9x flow is working correctly, all", 
+   "the various handlers will be documented in service.c, and a new 2.0 patch", 
+   "created from the final result."
+  ], 
+  "revision_id": "87059"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-11-22T00:40:20.000000Z", 
+  "msg": [
+   "Next pass at the content-length filter.  Not perfect quite yet, but", 
+   "getting closer", 
+   "Submitted by:\tGreg Stein"
+  ], 
+  "revision_id": "87058"
+ }, 
+ {
+  "author": "wsanchez", 
+  "date": "2000-11-22T00:38:11.000000Z", 
+  "msg": [
+   "Update Mac OS layout"
+  ], 
+  "revision_id": "87057"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-11-21T21:48:48.000000Z", 
+  "msg": [
+   "Don't use APR_INET6 unless APR_HAVE_INET6 is defined."
+  ], 
+  "revision_id": "87056"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-11-21T20:17:20.000000Z", 
+  "msg": [
+   "Modify the content-length filter to change the criteria used to determine", 
+   "if/when we compute the content-length.  There are just a few cases now:", 
+   "1) We already have all the data", 
+   "2) We don't have all the data and:", 
+   "2a)  This is a 1.1 request but we can't chunk", 
+   "2b)  The is a keep-alive request", 
+   "In the future, we probably want to modify this to not", 
+   "be a keep-alive request.", 
+   "This filter always buffers 9K of data.  The reason is simple, the core will", 
+   "buffer 9K at a time anyway, and there is a chance that we may get the end", 
+   "of the request before we hit 9K.  This increases our chances of being able", 
+   "to send a c-l."
+  ], 
+  "revision_id": "87055"
+ }
+]

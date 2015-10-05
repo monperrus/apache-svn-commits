@@ -1,0 +1,66 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2003-01-10T15:09:00.000000Z", 
+  "msg": [
+   "Any header required by one platform is likely required by them all...", 
+   "if testsuite IPV6 wasn't working, this is probably the reason."
+  ], 
+  "revision_id": "64284"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2003-01-09T16:54:37.000000Z", 
+  "msg": [
+   "Don't require MMX"
+  ], 
+  "revision_id": "64283"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2003-01-09T16:21:53.000000Z", 
+  "msg": [
+   "Since deconstruct() does not actually validate the path, the check is meaningless."
+  ], 
+  "revision_id": "64282"
+ }, 
+ {
+  "author": "sascha", 
+  "date": "2003-01-09T02:48:46.000000Z", 
+  "msg": [
+   "When one does not use the value of the apr_atomic_cas macro,", 
+   "GCC 2.95.3/3.2.1 will happily optimize the assembler statement away (x86).", 
+   "E.g.", 
+   "apr_atomic_t lck = 0;", 
+   "apr_atomic_cas(&lck, 1, 0);", 
+   "printf(\"%d\\n\", lck);", 
+   "will be turned into", 
+   "movl    $0, 4(%esp)", 
+   "movl    $.LC0, (%esp)", 
+   "call    printf", 
+   "Adding `volatile\ufffd to the asm statement fixes that.", 
+   "asm volatile (\"lock; cmpxchgl %1, %2\" ...", 
+   "gcc -O -S produces:", 
+   "movl    $0, %edx", 
+   "movl    $0, -4(%ebp)", 
+   "movl    $1, %ecx", 
+   "movl    %edx, %eax", 
+   "#APP", 
+   "lock; cmpxchgl %ecx, -4(%ebp)", 
+   "#NO_APP", 
+   "movl    -4(%ebp), %eax", 
+   "movl    %eax, 4(%esp)", 
+   "movl    $.LC0, (%esp)", 
+   "call    printf"
+  ], 
+  "revision_id": "64281"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2003-01-08T20:40:27.000000Z", 
+  "msg": [
+   "Add the NetWare file system root string"
+  ], 
+  "revision_id": "64280"
+ }
+]

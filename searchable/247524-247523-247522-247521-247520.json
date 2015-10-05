@@ -1,0 +1,111 @@
+[
+ {
+  "author": "scheu", 
+  "date": "2002-07-18T20:55:11.000000Z", 
+  "msg": [
+   "TCK expects the Service Endpoint Interface (SEI) to match", 
+   "the portType for the Doc/Lit Tests...per the spec.", 
+   "Small change to Axis to always use the portType name as the SEI.", 
+   "Changed the affected tests.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247524"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-18T20:05:36.000000Z", 
+  "msg": [
+   "accidentally removed the UDDIPing test"
+  ], 
+  "revision_id": "247523"
+ }, 
+ {
+  "author": "jgenender", 
+  "date": "2005-08-27T23:56:19.050794Z", 
+  "msg": [
+   "New addition - Apache Directory Server"
+  ], 
+  "revision_id": "247522"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-18T20:00:38.000000Z", 
+  "msg": [
+   "If the element exposed via unwrapping has a maxOccurs=\"unbounded\" attribute,", 
+   "WSDL to java represents the parameter as an array.  The current Axis", 
+   "runtime also serializers the element correctly.  Here is an example", 
+   "from the modified City_BBB.wsdl:", 
+   "Here is the new getAttractions complexType:", 
+   "<xsd:element name=\"getAttractions\">", 
+   "<xsd:complexType>", 
+   "<xsd:sequence>", 
+   "<xsd:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"attname\"", 
+   "type=\"xsd:string\" />", 
+   "</xsd:sequence>", 
+   "</xsd:complexType>", 
+   "</xsd:element>", 
+   "Here is the generated getAttractions method:", 
+   "public test.wsdl.wrapped.Attraction[] getAttractions(java.lang.String[] attname)", 
+   "throws java.rmi.RemoteException;", 
+   "And here is what gets flowed over the wire:", 
+   "<getAttractions xmlns=\"urn:CityBBB\">", 
+   "<attname>Christmas</attname>", 
+   "<attname>Xmas</attname>", 
+   "</getAttractions>", 
+   "PROBLEM:", 
+   "The deserialization of the message and invocation of getAttractions does not work.", 
+   "The deserialization of the return for this case also does not work.", 
+   "This support is required to pass the JAXRPC TCK.", 
+   "SOLUTION:", 
+   "1) Added the getAttractions operation to the wrapped test case (City_BBB.wsdl)", 
+   "2) Fixed a bug in the Skeleton generation code...needed to call setStyle(..) on", 
+   "each OperationDesc.", 
+   "3) Fixed a bug in the Stub generation code...needed to call setReturnType(xmlType, javaType)", 
+   "instead of setReturnType(xmlType) to get the appropriate return class set", 
+   "on the OperationDesc.", 
+   "4) Small change to Call.setReturnType(xmlType, javaType).  The return class was", 
+   "not being set on the OperationDesc correctly.", 
+   "5) Small change to RPCElement so that the operation is always considered if wrapped.", 
+   "Without this change no deserialization will take place for the", 
+   "example above (since numParms==2 and getNumInParms()==1).", 
+   "6) RPCHandler is changed to recognize the special collection qname that is", 
+   "used for elements with maxOccurs=unbounded.  The RPCParam value is deserialized", 
+   "as the proper component type.", 
+   "So for the example above:", 
+   "* two RPCParams will be created.", 
+   "* the values will be the deserialized as Strings.", 
+   "* both RPCParams will have the same qname and ParameterDesc.", 
+   "7) An RPCElement:combineParams method is added to combine the", 
+   "arguments of the same parameter into a container object", 
+   "described by the ParameterDesc.", 
+   "8) RPCProvider is changed to invoke combineParams before", 
+   "obtaining the list of arguments for dispatching.", 
+   "9) Call is changed to invoke combineParams before obtaining", 
+   "the list of return arguments.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247521"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-18T17:38:16.000000Z", 
+  "msg": [
+   "Introduce \"autotyping\" capability.  When switched on (the default for", 
+   "now is off), the type mapping system will automatically use the", 
+   "BeanSerializer/Deserializer (which we should really rename the", 
+   "DefaultSerializer/Deserializer one of these days) for classes which", 
+   "do not have explicit type mappings.", 
+   "With this capability switched on, you can use custom classes with JWS", 
+   "services, for instance, without the need for type mappings.", 
+   "Eventually, this should become interoperable with the GLUE", 
+   "implementation of the same idea."
+  ], 
+  "revision_id": "247520"
+ }
+]

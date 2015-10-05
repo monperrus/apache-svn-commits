@@ -1,0 +1,63 @@
+[
+ {
+  "author": "erodriguez", 
+  "date": "2004-11-09T11:06:35.358473Z", 
+  "msg": [
+   "Basic refactoring of Confounder, removed unused methods."
+  ], 
+  "revision_id": "57014"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-11-09T10:43:08.803110Z", 
+  "msg": [
+   "Changes ...", 
+   "o added extra constructor and feature to prevent vm exit on analyzer", 
+   "o solved bug that shows up in SEDA with multithreaded environment on", 
+   "the encoding visitor; more on this below", 
+   "Notes ...", 
+   "Encountered a really nasty and perplexing bug where it seemed as though the", 
+   "order of output events were being mangled by SEDA.  This infact was not the", 
+   "case.  What was happening?  The encoding visitor was trying to reuse a buffer", 
+   "for Tag and Length bytes of a TLV.  After calling decodeOccurred on the callback", 
+   "it was reusing this buffer causing a race condition that was overwriting these", 
+   "buffers.  Basically the callback would enqueue the buffer handing it off to", 
+   "be flushed to the client by the output manager.  While the output manager was", 
+   "processing or waiting to process the event the encoder was resetting or flushing", 
+   "the buffer to be reused then writing to it.  This basically was overwriting", 
+   "bytes in these buffers before they could be flushed out the door.", 
+   "Lessons learned ...", 
+   "o First too many events are being spewed for just a couple bytes at a time.", 
+   "What a waste!!!", 
+   "o Second I really need to rewrite the ber code, it's way out of control.", 
+   "We got too many copies going on.  We need to eliminate buffer creation", 
+   "and copies.  Alan save me man!", 
+   "o Third Alex should not write code more complex than a Hello world app."
+  ], 
+  "revision_id": "57013"
+ }, 
+ {
+  "author": "hemapani", 
+  "date": "2004-11-09T10:40:38.427283Z", 
+  "msg": [
+   "checked in deepals deployment code."
+  ], 
+  "revision_id": "57012"
+ }, 
+ {
+  "author": "erodriguez", 
+  "date": "2004-11-09T10:31:41.704587Z", 
+  "msg": [
+   "Caught simple bug where changepw error service was not initialized."
+  ], 
+  "revision_id": "57011"
+ }, 
+ {
+  "author": "erodriguez", 
+  "date": "2004-11-09T10:25:07.616665Z", 
+  "msg": [
+   "Moved choosing encryption type to ticket-granting service.  This is a service function, not crypto.  This also eliminated the need to configure the crypto service."
+  ], 
+  "revision_id": "57010"
+ }
+]

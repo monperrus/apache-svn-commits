@@ -1,0 +1,80 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-31T02:00:02.000000Z", 
+  "msg": [
+   "Session/StandardSession:  Implement a new \"notes\" API that is functionally", 
+   "equivalent to session attributes, but available only to internal Catalina", 
+   "components (not applications).  This can be used by event listeners to", 
+   "decorate sessions with arbitrary sets of objects.", 
+   "StandardSession:  Implement property change notification on the \"authType\"", 
+   "and \"principal\" properties, so that event listeners can track changes to", 
+   "these properties (used to cache authentication information and avoid hving", 
+   "to call Realm.authenticate() on every request).", 
+   "FormAuthenticator:  Use the new \"notes\" mechanism, rather than session", 
+   "attributes, to store the objects related to form-based login processing.", 
+   "Also, store additional information so that form based login continues to", 
+   "work even if the \"cache\" property is set to false (which will cause a call", 
+   "to Realm.authenticate() on every request).", 
+   "This is the third of three patches necessary to fix BugTraq #4485977."
+  ], 
+  "revision_id": "286374"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-07-31T00:30:28.000000Z", 
+  "msg": [
+   "- The system policy file is now refreshed in the CL constructor, since it's more", 
+   "likely to succeed here (in getPermissions, it could end up failing a check", 
+   "on SecurityPermission getPolicy). An alternatie would be to wrap inside a", 
+   "PA, but that change should allow it to work without a PA.", 
+   "- If Policy.getPolicy fails, the access control exception is caught and ignored, since", 
+   "the policy reloading feature is optional, and shouldn't break things."
+  ], 
+  "revision_id": "286373"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-30T20:35:49.000000Z", 
+  "msg": [
+   "Enhance InstanceEvent to include \"request\" and \"response\" properties for", 
+   "the BEFORE_FILTER_EVENT, AFTER_FILTER_EVENT, BEFORE_SERVICE_EVENT, and", 
+   "AFTER_SERVICE_EVENT events.  This allows event listeners to access other", 
+   "information relevant to the current request and response being processed", 
+   "when these events occur.", 
+   "This is the second of three patches required for BugTraq #4485977."
+  ], 
+  "revision_id": "286372"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-30T20:04:04.000000Z", 
+  "msg": [
+   "Realm:  Add a new authenticate() method signature that takes a client", 
+   "certificate chain (presumably provided when the CLIENT-CERT login method", 
+   "is selected.", 
+   "RealmBase:  Provide a default implementation of the new authenticate()", 
+   "signature that does the following:", 
+   "* (Optionally, but default=true) Ask the certificate chain to check", 
+   "validity on each included certificate.", 
+   "* Call the getPrincipal() method of the actual implementation class", 
+   "to return a Principal based on the username of the first certificate", 
+   "in the chain (i.e. the client itself).  As a side effect of this change,", 
+   "role lookups for CLIENT-CERT authenticated principals will now work", 
+   "the same as for BASIC, DIGEST, and FORM based authentications.", 
+   "SSLAuthenticator:  Use the new Realm.authenticate() signature in a manner", 
+   "similar to that used by the other Authenticator implementations.", 
+   "This is a partial solution to BugTraq #4485977."
+  ], 
+  "revision_id": "286371"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-30T19:16:25.000000Z", 
+  "msg": [
+   "Check in the infrastructure to begin converting the server configuration", 
+   "reference documents."
+  ], 
+  "revision_id": "286370"
+ }
+]

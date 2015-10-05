@@ -1,0 +1,59 @@
+[
+ {
+  "author": "brett", 
+  "date": "2005-05-11T00:13:35.520548Z", 
+  "msg": [
+   "add apachecon to navigation"
+  ], 
+  "revision_id": "169539"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2005-05-11T00:13:08.000125Z", 
+  "msg": [
+   "committing patch for DERBY-218, relaxed durability option -", 
+   "for ksunithaghm@gmail.com.", 
+   "A little background: Sometime earlier on the list, Dan posted a fix to make derby go faster with relaxed durability with some flags.  The post is at http://article.gmane.org/gmane.comp.apache.db.derby.user/681/match=relaxed+durability", 
+   "This mode is very useful for unit testing or at development time when recoverability is not required.", 
+   "Basically in this mode, syncs are disabled for logs, data writes at checkpoint, page allocation when file is grown; - what this means is that data is not flushed all the way to the disk and in most cases i/o cost is not involved. Note,  code already exists in Derby to do this.", 
+   "So for Derby 218, This  patch addresses the following requirements:  1) Have a single property to enable this relaxed durability mode, so it is easy for users  to enable it.", 
+   "2) Print message to derby.log that this mode is enabled", 
+   "3) A way to report boot errors that may be because of this option being enabled. What this maps to is - have a marker to recognize that database was booted in this mode, and then on subsequent boot; if errors happen during recovery - report a message that it could have happened because of this mode being set.", 
+   "Thanks Suresh for your comments.  I have attached a new patch that takes care of them and as well as the property name change as discussed on the list.", 
+   "So now,", 
+   "1)To enable this no syncs mode, the property setting  is derby.system.durability=test  If it is set to any other value other than test, then this property setting is ignored and the system will default to the usual mode where all syncs happen correctly.", 
+   "2) If database is booted in this mode then the  flag  to indicate this mode is being used is set in log.ctrl file and it will not change after that.Thus there wont be any switching between this mode ( no syncs) to default ( all syncs) mode because we cannot guarantee that the database will be in a consistent state once its booted in this no sync mode..", 
+   "3) This  flag is now written out as part of the log control flags in log.ctrl file instead of using a spare byte."
+  ], 
+  "revision_id": "169538"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2005-05-11T00:05:43.769641Z", 
+  "msg": [
+   "add apachecon to navigation"
+  ], 
+  "revision_id": "169537"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2005-05-11T00:04:35.535711Z", 
+  "msg": [
+   "add apachecon to navigation"
+  ], 
+  "revision_id": "169536"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2005-05-10T23:36:57.154809Z", 
+  "msg": [
+   "Win32-enable, unix threaded-enable the mod_log_forensic module.", 
+   "* adds a get_forensic_id() function, differing between win32,", 
+   "threaded, and non-threaded platforms (threaded and win32", 
+   "platforms get instead an pid:tid:time:seq identifier.)", 
+   "* stop the module config abuse, and simply use r->notes (this", 
+   "requires the 169534 svn patch already applied.)"
+  ], 
+  "revision_id": "169535"
+ }
+]

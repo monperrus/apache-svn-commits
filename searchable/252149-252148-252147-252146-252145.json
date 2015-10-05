@@ -1,0 +1,86 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-15T18:12:40.000000Z", 
+  "msg": [
+   "Though it could still use reworking, this version noticeably increases", 
+   "performance (getting rid of the linear search for each symbol addition)", 
+   "at the cost of maintaining a HashMap in addition to the ArrayList."
+  ], 
+  "revision_id": "252149"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-15T17:42:42.000000Z", 
+  "msg": [
+   "OK, I spoke to soon.", 
+   "The version with the funky bucket/hash code passes the junit tests, but", 
+   "when you hand it a deploy.xml, it ends up overwriting the \"deploy\" symbol", 
+   "with \"option\", which breaks the Admin service.  Don't have time to fully", 
+   "debug this now, so rolling back to my simple String-creation version."
+  ], 
+  "revision_id": "252148"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-15T17:06:16.000000Z", 
+  "msg": [
+   "*** JAMES : Never mind. :)", 
+   "Replace the original symbol-mangling code, which seems to work now.", 
+   "I guess the original problem was actually just the recorder trying to", 
+   "replay the characters event with a start offset greater than zero.  Since", 
+   "we're returning Strings anyway, we always need to start the char buf", 
+   "from zero."
+  ], 
+  "revision_id": "252147"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-15T16:40:16.000000Z", 
+  "msg": [
+   "Revamp parsing code.", 
+   "The DeserializationContext class is now the main \"outer\" SAX handler (what", 
+   "SOAPSAXHandler used to be), and it uses a much cleaner recursive", 
+   "descent style parse, delegating to SOAPHandlers which decide which", 
+   "handlers should be pushed onto a stack.", 
+   "The BodyBuilder/HeaderBuilder/EnvelopeBuilder handlers take care of", 
+   "building up the actual MessageElements inside the SOAPEnvelope.", 
+   "The HeaderBuilder is the place where we could consider adding custom", 
+   "per-Header parse-time behaviour.", 
+   "There is now an \"IDResolver\" interface, which will be used to handle things", 
+   "like MIME attachments and URL references eventually - right now the only", 
+   "concrete implementation is the LocalIDResolver.", 
+   "I switched to James' SAX2EventRecorder class, since it provides a clean", 
+   "interface to a \"master\" SAX recording for the whole message, which we've", 
+   "talked about needing in various scenarios.  It should also perform pretty", 
+   "well, as it builds many less objects than the \"object per event\" model.", 
+   "*** JAMES : I had problems getting the SymbolTable to work, so I diked", 
+   "out the complex string-management code and simply create a new", 
+   "String per symbol - can you take a look at getting the original version to", 
+   "work?  (pitfall warning - I had to change the indexes in the characters", 
+   "event in the replay() method to account for the String, so the start index", 
+   "is always zero at present)", 
+   "MessageElements are now mostly divorced from the actual deserialization", 
+   "process (i.e. they don't have a value member).", 
+   "*** ALL : to handle deserializing HREF/IDs in an efficient way, we should", 
+   "always let the Deserializers \"push\" values to us (via callbacks or FieldTargets", 
+   "or what have you) rather than trying to \"pull\" the value from the Dser at", 
+   "the end of an element.  We might even consider removing the", 
+   "Deserializer.getValue() method entirely, to enforce this model.", 
+   "I'm still not 100% happy with the modularization of the system, but it's better.", 
+   "The code needs more comments and cleanup, but I'm checking it in now so", 
+   "Sam can have something to test with.", 
+   "Anyways, everything works on my machine, so let's see how it flies on yours!"
+  ], 
+  "revision_id": "252146"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-13T05:19:15.000000Z", 
+  "msg": [
+   "Specify root=0 on the target of the href (otherwise it may be", 
+   "interpreted as the first body element, depending on placement)"
+  ], 
+  "revision_id": "252145"
+ }
+]

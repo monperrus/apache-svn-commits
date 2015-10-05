@@ -1,0 +1,63 @@
+[
+ {
+  "author": "trawick", 
+  "date": "2002-04-17T15:45:27.000000Z", 
+  "msg": [
+   "use an independent pool for threads so that when we abandon them", 
+   "during graceless termination the cleanups on pchild won't mess with", 
+   "stuff they are still referencing"
+  ], 
+  "revision_id": "94679"
+ }, 
+ {
+  "author": "bjh", 
+  "date": "2002-04-17T14:55:20.000000Z", 
+  "msg": [
+   "When an exception in a worker thread initiates a child shutdown, get things", 
+   "moving sooner by sending a SIGHUP to the accept thread, breaking it out", 
+   "of its accept/poll."
+  ], 
+  "revision_id": "94678"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2002-04-17T13:06:32.000000Z", 
+  "msg": [
+   "don't call strchr(); we have a safer version -- ap_strchr_c()", 
+   "Submitted by:\tStas Bekman", 
+   "Reviewed by:\tJeff Trawick"
+  ], 
+  "revision_id": "94677"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-04-17T04:09:07.000000Z", 
+  "msg": [
+   "Fix subreqs with non-defined Content-Types being served improperly.", 
+   "If we do not know a C-T for a subreq, we *must* propogate that", 
+   "non-knowledge upwards to the main request.", 
+   "Previously, if you used a DirectoryIndex with a file without a C-T (say", 
+   ".shtml without AddType), the r->content_type will be kept as", 
+   "httpd/unix-directory when we promoted the subreq in mod_dir.  Since there", 
+   "would be no handler on this file, ap_invoke_handler (config.c:355) would", 
+   "set the handler to be httpd/unix-directory (which was the old C-T of the", 
+   "dir).  This would then trigger the handler to become httpd/unix-directory.", 
+   "mod_autoindex would then try to serve the request.  But, the filename", 
+   "was propogated upwards by mod_dir's DirectoryIndex via", 
+   "internal_fast_redirect - it would then return a 403 trying to generate a", 
+   "mod_autoindex page for a file.", 
+   "Now, we will use ap_default_type() which is correct."
+  ], 
+  "revision_id": "94676"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-04-17T03:02:02.000000Z", 
+  "msg": [
+   "Tired of 'foo.h not found' messages in the build.  Checked ms's docs,", 
+   "seems xcopy's /y arg goes all the way back to Win95.  This shouldn't", 
+   "introduce any hassles."
+  ], 
+  "revision_id": "94675"
+ }
+]

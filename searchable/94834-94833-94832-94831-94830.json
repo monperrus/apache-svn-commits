@@ -1,0 +1,63 @@
+[
+ {
+  "author": "slive", 
+  "date": "2002-04-28T16:40:57.000000Z", 
+  "msg": [
+   "Typo fix.", 
+   "Submitted by: Phil Forrest <forrest@physics.auburn.edu>"
+  ], 
+  "revision_id": "94834"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "2002-04-28T09:02:19.000000Z", 
+  "msg": [
+   "kill a warning on Darwin for NONCE_LEN becoming a long int by math."
+  ], 
+  "revision_id": "94833"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-04-28T06:41:35.000000Z", 
+  "msg": [
+   "If a subreq added a filter (say INCLUDES) and the subreq was promoted via", 
+   "fast_redirect, the filter would still point at the subreq - rather than", 
+   "the original r.  So, we must update any filters pointing at rr to be r.", 
+   "This would cause lots of problems with mod_include with mod_dir requests", 
+   "such as seen in PR 7966.  mod_include would be unsetting the headers_out", 
+   "of rr instead of r.  But, we disassociate rr->headers_out and r->headers_out.", 
+   "Therefore, the C-L header in r->headers_out would remain - even though it", 
+   "bears no relation to what we will be outputting - causing problems.", 
+   "This also now permits chunked-encoding of mod_dir/mod_include requests", 
+   "which could never happen before and fixes the content-length problem", 
+   "seen in PR 7966.", 
+   "As hinted at in PR 7966, there is a race condition - if for some reason", 
+   "the server stalls reading an included file (or even better, placing a", 
+   "sleep in the cgi-bin script!), the invalid C-L may get propogated to the", 
+   "client.", 
+   "(Note that internal_internal_redirect has this same code fragment.)", 
+   "PR: 7966"
+  ], 
+  "revision_id": "94832"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-04-28T06:24:53.000000Z", 
+  "msg": [
+   "Simplify this little chunk of code since r is set to f->r earlier."
+  ], 
+  "revision_id": "94831"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-04-28T05:28:18.000000Z", 
+  "msg": [
+   "Moved the recycled pool list from the queue to the queue_info structure.", 
+   "The advantage of doing this is that it enables us to guarantee that the", 
+   "number of ptrans pools in existence at once is no greater than the", 
+   "number of worker threads, and that we'll never have to delete ptrans", 
+   "pools."
+  ], 
+  "revision_id": "94830"
+ }
+]

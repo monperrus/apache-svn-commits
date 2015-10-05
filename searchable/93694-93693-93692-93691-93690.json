@@ -1,0 +1,56 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-03-04T09:20:03.000000Z", 
+  "msg": [
+   "Ensure that net_time filter isn't added on subreqs - we assume that it is", 
+   "added on !r->main requests.  This led to infinite loop/SEGV when dealing", 
+   "with anything that created a subreq.", 
+   "(I don't think core_create_req is a good place for adding this filter.)"
+  ], 
+  "revision_id": "93694"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2002-03-04T05:54:44.000000Z", 
+  "msg": [
+   "Adding the same filters over and over again used to be okay, because", 
+   "we would lose the extra filters.  Now, if a filter is added, it is run.", 
+   "Unfortunately, this can cause an infinite loop, or it can cause request", 
+   "headers to appear twice.  This commit removes two instances in the core", 
+   "where we were inserting filters for a second and third time.  The bug", 
+   "was that error responses were causing infinite loops.", 
+   "This also removes the reset_filters function, which did the exact", 
+   "same thing as add_required_filters.  The two functions were both called", 
+   "in error conditions, which was part of what caused this bug."
+  ], 
+  "revision_id": "93693"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2002-03-04T05:29:04.000000Z", 
+  "msg": [
+   "If we insert a protocol filter before we insert a request filter, we", 
+   "must set the r->output_filter to r->proto_output_filter.  If we don't,", 
+   "then as soon as we insert the request filter, the protocol filter will", 
+   "be removed.  This was causing headers to not be sent on some requests."
+  ], 
+  "revision_id": "93692"
+ }, 
+ {
+  "author": "rbowen", 
+  "date": "2002-03-04T02:55:47.000000Z", 
+  "msg": [
+   "Conversion to xml"
+  ], 
+  "revision_id": "93691"
+ }, 
+ {
+  "author": "rbowen", 
+  "date": "2002-03-04T02:45:22.000000Z", 
+  "msg": [
+   "Conversion to xml"
+  ], 
+  "revision_id": "93690"
+ }
+]

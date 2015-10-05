@@ -1,0 +1,84 @@
+[
+ {
+  "author": "mmerz", 
+  "date": "2005-01-25T17:24:41.417299Z", 
+  "msg": [
+   "Major cleanup on the object model's interfaces:", 
+   "- using IoC to parse information from source files -> clear structure, generic annotation processor and object model", 
+   "- added Java*Info interfaces: that describe how to extract information from Java files (source or class)", 
+   "- added Mirror*Info classes: encapsulate knowledge on how to extract information from source files using the mirror API", 
+   "- removed: AnnotationMetadata, Jsr181Modifiers (functionality moved into new *Info classes, where it should reside)", 
+   "- removed: AnnotationModel"
+  ], 
+  "revision_id": "126394"
+ }, 
+ {
+  "author": "henkp", 
+  "date": "2005-01-25T17:21:38.546909Z", 
+  "msg": [
+   "members += Henk Penning"
+  ], 
+  "revision_id": "126393"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2005-01-25T17:13:34.519804Z", 
+  "msg": [
+   "Fix for multiple EXCSAT's without reset of the connection.", 
+   "contributed by kmarsden@sbcglobal.net", 
+   "There are three kinds of EXCSAT's we might get", 
+   "1) Initial Exchange attributes.   For this we need to initialize the", 
+   "apprequester. Session state is set to ATTEXC (attributes exchanged) then", 
+   "the AR must follow up with ACCSEC and SECCHK to get the connection.", 
+   "2) Send of EXCSAT as ping or manager level adjustment. For this we just", 
+   "ignore the EXCSAT objects that are already set.  JCC doesn't use this,", 
+   "but it is in DRDA.", 
+   "3) Send of EXCSAT for connection reset. (see parseEXCSAT2()) This is", 
+   "treated just like ping and will be followed up", 
+   "by an ACCSEC request if in fact it is a connection reset.", 
+   "If we have already exchanged attributes once just", 
+   "process any new manager levels and return (case 2 and 3 above)", 
+   "Before the XA checkin, 1 and 2 worked.  After the XA checkin 1 and 3", 
+   "worked and with this patch 1, 2, and 3 all work.", 
+   "I had to rearrange the code a bit to do this because in DRDAConnThread,", 
+   "processCommands() the EXCSAT case just called parseDRDAConnection which", 
+   "expected the ACCSEC and SECCHK codepoints in the correct order.", 
+   "As a solution I", 
+   "1) Moved the handling of the ACCSEC and SECCHK codepoints from", 
+   "parseDRDAConnection up to  processCommands().", 
+   "2) Put the security state in the Session object.  The session has", 
+   "4 states.", 
+   "two existed before:", 
+   "INIT \t- initial state", 
+   "ATTEXC  - attributes exchanged", 
+   "(After first EXSAT - ACCSEC required)", 
+   "now there are two new ones:", 
+   "SECACC   - security accessed (After successful ACCSEC - need SECCHK)", 
+   "CHKSEC   - checked security. After successful SECCHK and connection.", 
+   "no more required security codepoits.", 
+   "The session.getRequiredSecurityCodepoint() method is used by", 
+   "process_commands to determine if the next codepoint must be ACCSEC or", 
+   "SECCHK.", 
+   "Also the patch includes the fix Dan suggested for jdk 131 for", 
+   "BrokeredPreparedStatent.getStatement(). But how to call", 
+   "Connection.prepareStatement is still an issue."
+  ], 
+  "revision_id": "126392"
+ }, 
+ {
+  "author": "tripod", 
+  "date": "2005-01-25T16:46:03.516567Z", 
+  "msg": [
+   "- adding versioning configuratuin"
+  ], 
+  "revision_id": "126391"
+ }, 
+ {
+  "author": "sylvain", 
+  "date": "2005-01-25T16:46:01.252602Z", 
+  "msg": [
+   "explain allow-subscribe"
+  ], 
+  "revision_id": "126390"
+ }
+]

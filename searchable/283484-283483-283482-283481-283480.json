@@ -1,0 +1,83 @@
+[
+ {
+  "author": "nacho", 
+  "date": "2001-04-27T21:45:40.000000Z", 
+  "msg": [
+   "JspInterceptor compilation class path was wrong", 
+   "Submitted by William Barker wbarker at wilshire.com"
+  ], 
+  "revision_id": "283484"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-04-27T20:51:47.000000Z", 
+  "msg": [
+   "The last commit accidentally remove a previous thread synchronization fix.", 
+   "The creation of the compiler in doLoadJSP() must be synchronized."
+  ], 
+  "revision_id": "283483"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-04-27T20:30:10.000000Z", 
+  "msg": [
+   "Update code generation for \"largeFile\" option  to explicitly specify", 
+   "java.io package.  Won't compile otherwise."
+  ], 
+  "revision_id": "283482"
+ }, 
+ {
+  "author": "hgomez", 
+  "date": "2001-04-27T09:26:42.000000Z", 
+  "msg": [
+   "A quick and dirty patch to set SSL scheme in ajp12.", 
+   "We check if the web server port was 443 and in that case", 
+   "set the scheme to https", 
+   "I recommand you to use ajp13 instead :)", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "283481"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-04-25T23:29:30.000000Z", 
+  "msg": [
+   "This is a fairly major update.  There were numerous thread synchronization", 
+   "problems involving compiling JSP files.  These problems were most apparent", 
+   "on systems running under load in which page re-compilations might", 
+   "happen while pages are being executed and where new requests arrive while", 
+   "a page compilation is underway.", 
+   "I've made lots of changes so I'll just summarize the major differences", 
+   "here.", 
+   "1) The thread synchronization in doLoadJSP() is quite different.  The", 
+   "comments before that method describe the synchronization model in detail.", 
+   "2) The synchronization in doLoadJSP() is now based on the", 
+   "JspServletWrapper object instead of the JspServlet object.", 
+   "3) The class loading and the object instantiation used to be split between", 
+   "doLoadJSP() and the JspServletWrapper.  They are now combined into a", 
+   "single synchronization block inside doLoadJSP().", 
+   "4) In JspServletWrapper, the data member theServlet was used directly by", 
+   "several methods.  Access to this is now provided only through a", 
+   "synchronized accessor method().  Any method that needs to obtain the", 
+   "servlet must call getServlet() and store the result in a stack variable", 
+   "(or other per-thread storage).  Multiple threads of execution through", 
+   "JspServletWrapper may be executing different servlet classes if a page", 
+   "compilation happened while other requests were being processed.", 
+   "5) When a new JSP implementation class replaces an existing class, the", 
+   "original classes destroy() method should be called so that any", 
+   "jspDestroy() method on the page will be executed.  However, the destroy()", 
+   "method can't be invoked until we know that there are no more requests", 
+   "being processed on that instance.  To support this, the JSP implementation", 
+   "class is wrapped inside a new class called JspCountedServlet.  This class", 
+   "provides simple reference counting in the service() method.  If the", 
+   "classes destroy method is called it flags the class for destruction but", 
+   "does not call the servlet's destroy() method until it determines that the", 
+   "service method has completed on all threads running in the class.", 
+   "PR:  1280"
+  ], 
+  "revision_id": "283480"
+ }
+]

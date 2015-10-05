@@ -1,0 +1,82 @@
+[
+ {
+  "author": "brian", 
+  "date": "1996-11-14T07:35:49.000000Z", 
+  "msg": [
+   "Submitted by:\tAlexei Kosut", 
+   "Here's a patch that provides a number of fixes to chunked", 
+   "transfer-coded input when using get_client_block:", 
+   "1) Correctly works with 1-byte reads (like content-lengthed reads,", 
+   "which was fixed a week or so ago, this was not working.)", 
+   "2) Fix \"footer\" reading. It now just calls get_mime_headers(), which", 
+   "should work. This way, they're accessible to the server, as they", 
+   "should be, though (unfortunately?) mod_cgi calls get_client_block too", 
+   "late to pass it on to the CGI script. Unless anyone knows a way to", 
+   "modify the environment of a child after you've forked it.", 
+   "It also adds a few comments (there was one part it took me five", 
+   "minutes to remember what the heck it was doing... and I wrote it. So I", 
+   "figured I'd better throw in a comment). Anyhow, I think it's important", 
+   "to make this work right, since it's an integral part of HTTP/1.1"
+  ], 
+  "revision_id": "76979"
+ }, 
+ {
+  "author": "brian", 
+  "date": "1996-11-14T07:24:44.000000Z", 
+  "msg": [
+   "Reviewed by:\tBrian Behlendorf", 
+   "Submitted by:\tPaul Eggert <eggert@twinsun.com>", 
+   "Fixes time zone problems.", 
+   "Old behavior:", 
+   "* When the time zone is not an integral multiple of 1 hour,", 
+   "the logs report bogus UTC offsets.  E.g. if the time zone", 
+   "is +0530 the reported UTC offset is +051800.", 
+   "* If !defined(HAS_GMTOFF) && !defined(NO_TIMEZONE), when the", 
+   "daylight-saving offset is not exactly 1 hour, the logs compute the UTC", 
+   "offset incorrectly when daylight saving is in effect.", 
+   "* If !defined(HAS_GMTOFF) && defined(NO_TIMEZONE), the code invokes", 
+   "mktime twice, once on the output of localtime and once on the output", 
+   "of gmtime, and subtracts the results.  This method is incorrect when", 
+   "the time is near a daylight-saving shift boundary.  For example,", 
+   "suppose we are in US Pacific time and the current time is 1996-10-27", 
+   "00:00:00 local time, just before a daylight saving time shift.  The", 
+   "correct UTC offset is -0700, but in this case get_gmtoff incorrectly", 
+   "computes an offset of -0800, because mktime(gmtime(...)) applies", 
+   "mktime to `1996-10-27 07:00:00' (actually a UTC time, not a local", 
+   "time) and the UTC offset as of 1996-10-27 07:00:00 local time is -0800.", 
+   "Here is a patch.  The key idea of the patch, which you'll find at the", 
+   "end, is an idea stolen from INN 1.5b1: assume that we are no more than", 
+   "24 hours away from UTC, which is a reasonable assumption (among other", 
+   "things, Posix requires support only for -2400 through +2400 time", 
+   "zones)"
+  ], 
+  "revision_id": "76978"
+ }, 
+ {
+  "author": "brian", 
+  "date": "1996-11-14T07:13:29.000000Z", 
+  "msg": [
+   "Reviewed by:\tChuck Murcko", 
+   "Submitted by:\tBrian Behlendorf", 
+   "Slight tweak to compress scoreboard bars from 6 to 4."
+  ], 
+  "revision_id": "76977"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "1996-11-12T18:24:35.000000Z", 
+  "msg": [
+   "Fixed test for value of unsigned -1 to be less system-dependent."
+  ], 
+  "revision_id": "76976"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "1996-11-12T18:06:43.000000Z", 
+  "msg": [
+   "I remembered this line of code while in the shower this morning.", 
+   "I think I need a vacation."
+  ], 
+  "revision_id": "76975"
+ }
+]

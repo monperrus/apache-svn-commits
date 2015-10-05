@@ -1,0 +1,80 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-29T08:17:11.000000Z", 
+  "msg": [
+   "Input filtering rewrite.  Consolidate how we handle HTTP input parsing by", 
+   "rearranging and rethinking some things.  The net result is that the HTTP", 
+   "filter is now a request filter and is now only responsible for HTTP things.", 
+   "The core input filter is now responsible for handling all of the dirty work.", 
+   "Highlights:", 
+   "- Removes the dechunk filter and merges it with ap_http_filter (aka HTTP_IN).", 
+   "The dechunk filter was incorrectly handling certain cases (trailers).", 
+   "- Moves ap_http_filter from a connection filter to a request filter", 
+   "to support the consolidation above (it needs header info).", 
+   "- Change support code to allow the http_filter to be a", 
+   "request filter (how the request is setup initially).", 
+   "- Move most of the logic from HTTP_IN to CORE_IN (core_input_filter).", 
+   "HTTP_IN is now only concerned about HTTP things.  The core filter", 
+   "is now responsible for returning data.  It is impossible to", 
+   "consolidate dechunk and http without this because HTTP_IN previously", 
+   "buffered data.  As Greg has suggested, it may make sense to write", 
+   "some brigade functions that handle input (getline).  It should be", 
+   "fairly trivial to add these.  Some of the calls in ap_http_filter", 
+   "could be switched as well.", 
+   "This is the original patch as submitted to dev@httpd on Monday, Sep.", 
+   "24th.  Additional comments and some minor tweaks done after that", 
+   "submission are coming up next.  This should allow people who reviewed", 
+   "the original patch to see what has changed and review them piecemeal.", 
+   "This test passes all current tests in httpd-test.  Please perform", 
+   "chicken sacrifices to verify that this hasn't blown up your favorite", 
+   "input.", 
+   "Reviewed by:\tGreg Stein, Ryan Bloom, and Cliff Woolley (buckets)"
+  ], 
+  "revision_id": "91189"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-29T07:02:33.000000Z", 
+  "msg": [
+   "Fix filtering logic to do the \"right thing\"", 
+   "The previous incarnation of the filter was making some false assumptions", 
+   "about how the lower level filters worked."
+  ], 
+  "revision_id": "91188"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-29T06:54:08.000000Z", 
+  "msg": [
+   "Fix for httpd-test modules/include test #17.", 
+   "If we are *already* a faux URI (i.e. relative file sub req) and we then", 
+   "make a subrequest from that faux URI to a file in the same directory,", 
+   "we'd try to build a URI out of the fake URI which leads to the wrong", 
+   "thing happening somewhere down the line.  So, let's just give this", 
+   "special case a fake URI as well.", 
+   "OtherBill needs to verify this.  He can back it out if he wants.  I", 
+   "don't much care.  It's one line and it seems okay..."
+  ], 
+  "revision_id": "91187"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2001-09-28T19:50:22.000000Z", 
+  "msg": [
+   "Optimize file_walk with the same logic as location_walk.  Fix both to", 
+   "have a bit more legibility, and tighter locality of scope for a smaller", 
+   "number of variables."
+  ], 
+  "revision_id": "91186"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2001-09-28T18:56:21.000000Z", 
+  "msg": [
+   "Split out (soon to be) common code for all _walk functions", 
+   "(no net change to location_walk)."
+  ], 
+  "revision_id": "91185"
+ }
+]

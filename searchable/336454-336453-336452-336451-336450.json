@@ -1,0 +1,57 @@
+[
+ {
+  "author": "dleslie", 
+  "date": "2002-06-10T19:24:42.000000Z", 
+  "msg": [
+   "Updates to Xalan extensions: (1) EXLST function and (2) architectural modifications.", 
+   "This is a merge of the ExtensionEnhancements branch into Main.", 
+   "1. EXSLT function", 
+   "We are well underway in our progress towards providing support for EXSLT extension functionss and elements. The EXSLT function and result elements (see http://www.exslt.org/func/func.html) require some fairly substantial additions.", 
+   "XSLTSchema includes new XSLTElementDefs for a top-level exslt:function element, which, along with other items, may contain an exslt:result element. These definitions specify a new element class and processor for both of these elements, and a new extension handler. I have tested the implementation with the 6 test cases that EXSLT provides (including recursive calls), and it passes these tests.", 
+   "Note: These additions/updates also provide the infrastructure for the XSLT 2.0 stylesheet function.", 
+   "2. Architectural changes", 
+   "During styesheet composition, Stylesheet Root assembles a vector of ExtensionNamespaceSupport objects. This object contains the information required during a transform to instantiate the required ExtensionHandler. If the stylesheet includes no extensions, this vector is null.  I.e.,  it does not include handlers for the default extension namespaces (of which there are currently 7, and which the Xalan currently loads for each transformation).", 
+   "The presence of an extension is detected as follows:", 
+   "Compilation of an expression that contains a FuncExtFunction. StylesheetHandler.createXPath()  uses an XPathVisitor to locate any FuncExtFunctions embedded in the expression.", 
+   "Final composition of a component element  -- ElemExtensionDecl.compose().", 
+   "Final composition of an extension component for which no component exsits -- ElemExtensionCall.compose().", 
+   "Final composition of an exslt:function element -- ElemFunction.compose().", 
+   "During StylesheetRoot.recompose(), any extension namespaces that are not predefined and for which no component or function element exists, are defined as java class (if a java class is found) or java package. In the current implementation, this last stab is made during the transformation, repeatedly if the element or function cannot be processed and is called more than once.", 
+   "At the beginning of each transformation -- transformNode() --  if any extensions exist, TransformerImpl instantiates an ExtensionsTable with a hashtable containing an ExtensionHandler for each of the ExtensionNamespaceSupport objects defined during stylesheet assembly. XPathContext  no longer creates or has any direct knowledge of the ExtensionsTable. The ExtensionsTable does not contain handlers for predefined namespaces that are not being used.", 
+   "TransformerImpl implements the org.apache.xpath.ExtensionsProvider interface. The relevant XPath functions (FuncExtFunction, FuncExtElememntAvailable, and FuncExtFunctionAvailable) call this interface, via XPathContext.getOwnerObject(). The implementation contains 3 methods that call through to the ExtensionsTable, which passes the call on to the appropriate ExtensionHandler.."
+  ], 
+  "revision_id": "336454"
+ }, 
+ {
+  "author": "tmiller", 
+  "date": "2002-06-10T18:59:00.000000Z", 
+  "msg": [
+   "fixed processing instruction call"
+  ], 
+  "revision_id": "336453"
+ }, 
+ {
+  "author": "santiagopg", 
+  "date": "2002-06-10T15:45:59.000000Z", 
+  "msg": [
+   "New class."
+  ], 
+  "revision_id": "336452"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-06-10T13:29:26.000000Z", 
+  "msg": [
+   "Fix bug for optionV."
+  ], 
+  "revision_id": "336451"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-06-08T21:23:00.000000Z", 
+  "msg": [
+   "Moved hard coded strings for StackGuard error message to properties file."
+  ], 
+  "revision_id": "336450"
+ }
+]

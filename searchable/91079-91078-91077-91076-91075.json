@@ -1,0 +1,82 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-19T05:58:09.000000Z", 
+  "msg": [
+   "This patch fixes a nasty bug in the worker MPM where the", 
+   "state of the worker threads was not being reported back to the", 
+   "scoreboard, and eventually all the threads running in the children", 
+   "would be reported as being in the \"C -- closing connection\" state.", 
+   "This would wreak havoc on the idle_server_maintenance() routine. Since", 
+   "these threads would never be counted as idle, the server would", 
+   "spawn children as fast as possible.", 
+   "Submitted by:\tAaron Bannert <aaron@clove.org>", 
+   "Reviewed by:\tJustin Erenkrantz"
+  ], 
+  "revision_id": "91079"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-19T05:52:42.000000Z", 
+  "msg": [
+   "This patch eliminates the wasteful run-time conversion of method names from", 
+   "strings to numbers in places where the methods are known at compile", 
+   "time.", 
+   "(Justin fixed the va_end() call to be correct.)", 
+   "Submitted by:\tBrian Pane <bpane@pacbell.net>", 
+   "Reviewed by:\tJustin Erenkrantz"
+  ], 
+  "revision_id": "91078"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-09-18T23:09:12.000000Z", 
+  "msg": [
+   "Turn the worker MPM's queue into a LIFO.  This may", 
+   "improve cache-hit performance under some conditions.", 
+   "Submitted by:   Aaron Bannert <aaron@clove.org>"
+  ], 
+  "revision_id": "91077"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-09-18T22:13:59.000000Z", 
+  "msg": [
+   "Switch back to SIGUSR1 for graceful restarts on all platforms that", 
+   "support it.  This defines a symbol called AP_SIG_GRACEFUL in", 
+   "ap_config_auto.h which will have the appropriate signal value.  All", 
+   "direct references to SIGWINCH have been replaced with AP_SIG_GRACEFUL.", 
+   "On Linux 2.0, use SIGWINCH instead since SIGUSR1 is used by glibc", 
+   "2.0's user-space threading library to control threads.  All later", 
+   "versions of Linux/glibc don't have this problem.  (Not to mention the", 
+   "security holes in older Linux versions which make it unsuitable for", 
+   "use as a web server.)  If your platform doesn't have SIGUSR1, use the", 
+   "appropriate mojo in configure to define what your graceful restart", 
+   "signal should be.", 
+   "In theory, a configure switch could be added to allow the admin to", 
+   "specify the appropriate signal that should be used.  This is left", 
+   "as an exercise to the reader for now.", 
+   "The docs need to be updated.  Since the signal is now configurable,", 
+   "just saying SIGUSR1 for graceful restart isn't completely true.  Also,", 
+   "the apachectl functionality needs to be moved into httpd - this is", 
+   "what Win32 does and it makes us consistent across platforms.", 
+   "Roy issued a veto against use of SIGWINCH by default, so this should", 
+   "resolve that veto."
+  ], 
+  "revision_id": "91076"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-09-18T21:14:18.000000Z", 
+  "msg": [
+   "Cleanup the worker MPM.  We no longer re-use transaction", 
+   "pools.  This incurs less overhead than shuffling the pools", 
+   "around so that they can be re-used.  Remove one of the", 
+   "queue's condition variables.  We just redefined the API to", 
+   "state that you can't try to add more stuff than you allocated", 
+   "segments for.", 
+   "Submitted by:\t  Aaron Bannert <aaron@clove.org>"
+  ], 
+  "revision_id": "91075"
+ }
+]

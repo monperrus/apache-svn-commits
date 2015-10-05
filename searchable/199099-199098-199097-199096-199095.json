@@ -1,0 +1,84 @@
+[
+ {
+  "author": "billh", 
+  "date": "2000-11-18T16:08:41.000000Z", 
+  "msg": [
+   "Changes: restored canvas blanking on load of new document,", 
+   "set root and document to null on new load.", 
+   "Modified Files:", 
+   "sources/org/apache/batik/apps/svgviewer/ViewerFrame.java", 
+   "sources/org/apache/batik/refimpl/util/JSVGCanvas.java", 
+   "--------------------------------------"
+  ], 
+  "revision_id": "199099"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2000-11-18T07:31:45.000000Z", 
+  "msg": [
+   "Removed usage of FilterRegion and AffineTransformSource.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "199098"
+ }, 
+ {
+  "author": "deweese", 
+  "date": "2000-11-17T21:23:36.000000Z", 
+  "msg": [
+   "Removed diagnostic output from both", 
+   "Removed subclass nastyness from FloodRable (didn't get committed for some reason)."
+  ], 
+  "revision_id": "199097"
+ }, 
+ {
+  "author": "deweese", 
+  "date": "2000-11-17T19:43:24.000000Z", 
+  "msg": [
+   "Added GraphicsUtil.java"
+  ], 
+  "revision_id": "199096"
+ }, 
+ {
+  "author": "deweese", 
+  "date": "2000-11-17T19:40:17.000000Z", 
+  "msg": [
+   "I have just committed a fairly large set of changes.", 
+   "1) Added a new class org.apache.batik.util.awt.image.GraphicsUtil.", 
+   "This class centralizes a bunch of code that had been replicated in", 
+   "several classes scattered throughout the gvt tree.", 
+   "Important methods in GraphicsUtil:", 
+   "public static void drawImage(Graphics2D, RenderedImage)", 
+   "public static void drawImage(Graphics2D, CachableRed)", 
+   "public static void drawImage(Graphics2D, Filter)", 
+   "public static void copyData(BufferedImage, BufferedImage)", 
+   "public static ColorModel coerceData(WritableRaster wr, ColorModel cm,", 
+   "boolean newAlphaPreMult)", 
+   "public static ColorModel coerceColorModel(ColorModel cm,", 
+   "boolean newAlphaPreMult)", 
+   "The biggest change is the drawImage that takes a filter tries to", 
+   "bypass entries in the chain.  This is an important optimization for", 
+   "feMerge, which will be very nessisary when we implement", 
+   "BackgroundEnable.  It also makes much more of the tree available for", 
+   "interactive display.", 
+   "The drawImage for Rendered data now requests tiles from tiled sources", 
+   "and draws them a tile at a time.  Eventually this should be threaded", 
+   "so we are requesting one tile while drawing another but I put this off", 
+   "in mind of our threading freeze.", 
+   "Note that most of our operations are still untiled, but this is a", 
+   "first step in that direction...", 
+   "2) AbstractGraphicsNode now uses drawImage(Graphics2D, Filter) when", 
+   "using 'offscreens'.", 
+   "3) Lots and lots of minor bug fixes.  The switch to requesting tiles", 
+   "as opposed to getData revealed many small bugs.", 
+   "a) Do not subclass ConcreteBufferedImageRed to set it's minX minY,", 
+   "there is now a constructor that allows you to specify minX, minY.", 
+   "Note: In the normal case tileGridOffsetX/Y should equal minX/Y.", 
+   "b) Don't subclass BufferedImage to set it's minX, minY (see a).", 
+   "c) Don't use y where you mean x :)"
+  ], 
+  "revision_id": "199095"
+ }
+]

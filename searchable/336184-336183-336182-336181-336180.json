@@ -1,0 +1,60 @@
+[
+ {
+  "author": "dleslie", 
+  "date": "2002-03-22T14:47:22.000000Z", 
+  "msg": [
+   "The Node identity test in isNodeAfter()", 
+   "(ie., node1 == node2) does not work in some cases,", 
+   "so I added a routine to use DTMNodeProxy equals()", 
+   "if that test fails.", 
+   "This was required to support the new EXSLT", 
+   "leading() and trailing() extension functions."
+  ], 
+  "revision_id": "336184"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-03-22T01:04:45.000000Z", 
+  "msg": [
+   "Redundent Expression Elimination branch merge.", 
+   "Major architectural changes", 
+   "1) Rip out cacheing in all iterators, and move the caching into XNodeSet (actually NodeSequence where the caching is done derives from XObject and XNodeSet derives from NodeSequence).Lots of other changes went into this, including rewriting of some of the xsl:key stuff.", 
+   "2) Implementation of a Visitor mechanism for the stylesheet and xpath components.Each component for an XPath event is passed an ExpressionOwner, which just has a getExpression and setExpression method, which allows us to create a list of these, and then be able to do rewrites.This should be a generally useful mechanism for all sorts of stuff, and should be considered a public API.", 
+   "3) Implementation of deepEquality methods for all XPath components, which allows us to see if two components are equal.", 
+   "4) Implementation of RedundentExprEliminator, which is a derivative from the new XSLTVisitor class, which runs over the stylesheet collecting xpaths within the same scope, and absolute xpaths that are not context dependent.These are then each reduced by walking the list and checking for deep equality (though global paths are always reduced).Reduction takes place by creating variables that have a special namespace and a non-legal local name.Both full and partial path reduction done.", 
+   "Not done yet: Add back in the xsl:key caching that I ripped out (not a big deal).Could be skipped, with some risk.", 
+   "Not done yet: Implement isLast function.With the new stuff, the last() function will be slower, so, since most cases are just checking to see if an item is the last, I want to rewrite foo[last()] patterns to foo[xalan:isLast()].Could be skipped, with some risk.", 
+   "Davanum performance test result: 4x increase in performance.", 
+   "Datapower performance suite results: very slight decrease in overall performance.:-(", 
+   "Smoke test results: All clear when run with Xerces 1."
+  ], 
+  "revision_id": "336183"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-03-22T00:53:08.000000Z", 
+  "msg": [
+   "Merge from redundent expression elemination branch."
+  ], 
+  "revision_id": "336182"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-03-22T00:43:41.000000Z", 
+  "msg": [
+   "Put extra check for getAbsoluteURI(String urlString, String base) for absolute", 
+   "file paths with no protocol... I think one of the last check-in's wiped this out.", 
+   "So now, if the path is the form of \"x:/x\" or \"/x\" then \"file:///\" is added to it.", 
+   "I don't see how this can screw anything up... but I'm sure it will."
+  ], 
+  "revision_id": "336181"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2002-03-22T00:33:04.000000Z", 
+  "msg": [
+   "Properly catch exception from CharInfo constructor, and try again."
+  ], 
+  "revision_id": "336180"
+ }
+]

@@ -1,0 +1,85 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-09-28T03:25:48.000000Z", 
+  "msg": [
+   "Removed FacadeManager.", 
+   "FacadeManager was used to allow the separation of core and facade, and", 
+   "also as a mechanism to access the real Request from a facade.", 
+   "The first use is replaed by normal interceptors - there is no need to use", 
+   "a special mechanism and interceptors provide much more control and power.", 
+   "For the second use we don't actually need the FacadeManager - instead of", 
+   "calling getAttribute() to get FM and then getRealRequest(), we can just", 
+   "get the Request directly from getAttribute() ( and same checking are done)", 
+   "The change also moves WebXmlReader to facade ( since it's specific to", 
+   "servlet2.2 and 2.3 will have a different version )", 
+   "We add the Servlet22Interceptor - still need to add code to support", 
+   "multiple facades at the same time.", 
+   "During this change I also fixed a bug in JspInterceptor and added a number", 
+   "of debug statements.", 
+   "Another related change ( needed to support recycle() of facades ) is", 
+   "the postRequest() callback. postService is called after all servlets, including", 
+   "included - postRequest is a better place to log and clean up after", 
+   "a client transaction ends.", 
+   "Expect a bit of instability after this change - will be fixed during next", 
+   "few days ( and weekend ) . The code is still the same :-)"
+  ], 
+  "revision_id": "282479"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-09-28T02:07:07.000000Z", 
+  "msg": [
+   "Update default response handling to optionally show the offending request.", 
+   "Renamed ContextManager's showStackTraces attribute to showDebugInfo", 
+   "and use it to control showing the offending requests as well as stack traces."
+  ], 
+  "revision_id": "282478"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-27T04:13:30.000000Z", 
+  "msg": [
+   "Fix server.xml reading, thanks Arion Yu <arionyu@stt.com.hk>.", 
+   "Submitted by:  Arion Yu <arionyu@stt.com.hk>"
+  ], 
+  "revision_id": "282477"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-26T05:17:11.000000Z", 
+  "msg": [
+   "As proposed, removed ContextInterceptor and RequestInterceptor.", 
+   "In order to write a tomcat module you need to extend BaseInterceptor. With", 
+   "the new hook mechanism ( and thanks to introspection ) there is no", 
+   "problem with the number of interceptors and no need to have 2 different", 
+   "types.", 
+   "This is not only simpler, but more efficient too ( not very big difference,", 
+   "but for the record).", 
+   "I don't think any external ( i.e. used to integrate tomcat) interceptor", 
+   "is affected, any normal one should already extend BaseInterceptor.", 
+   "We now need to clean up the methods and code dealing with interceptors", 
+   "( 1/2 ), and maybe later on add ContextEvent, ServerEvent, etc for", 
+   "async events - I have them in my workspace but I don't think it's a good", 
+   "idea for 3.3...", 
+   "There is still a big difference between hooks in the critical path", 
+   "and async ( context ) hooks - we can afford to generate new Event", 
+   "objects and throw exceptions for the last ones."
+  ], 
+  "revision_id": "282476"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-26T04:58:28.000000Z", 
+  "msg": [
+   "Removed Constants, moved tomcat version in ContextManager and", 
+   "servlet version in the servlet facade ( I still have to check the", 
+   "part that sets the engine header - I have most of it done).", 
+   "( I sent the proposal some time ago, each module can use it's own", 
+   "constants and have less dependencies on core. After all the only", 
+   "remaining thing in Constants was tomcat version, and that belongs to", 
+   "ContextManager )"
+  ], 
+  "revision_id": "282475"
+ }
+]

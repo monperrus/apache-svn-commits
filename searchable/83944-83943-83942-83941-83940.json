@@ -1,0 +1,67 @@
+[
+ {
+  "author": "martin", 
+  "date": "1999-10-07T21:47:36.000000Z", 
+  "msg": [
+   "ap_listeners must be extern, otherwise you get multiple definitions"
+  ], 
+  "revision_id": "83944"
+ }, 
+ {
+  "author": "bhyde", 
+  "date": "1999-10-07T20:48:26.000000Z", 
+  "msg": [
+   "Well this was thought provoking.", 
+   "Drive out the use of malloc in two places.", 
+   "In listen.c, using the global process pool instead.  That changes the", 
+   "API into listen so that a process is passed in rather than the config", 
+   "pool.  That's all was easy.", 
+   "The pain is propogating a change into all N of the mpm, they", 
+   "are all similar but different in their use of listen.c  There", 
+   "is a lot to dislike about similar but code scattered code.", 
+   "I changed the N setup_listener routines, they now take only", 
+   "the server since they can dig the config and global pool", 
+   "out of there.", 
+   "Free today: ap_setup_prelinked_modules now takes the process so it", 
+   "can allocate it's table in the process's pool rathern than use", 
+   "malloc."
+  ], 
+  "revision_id": "83943"
+ }, 
+ {
+  "author": "bhyde", 
+  "date": "1999-10-07T18:13:17.000000Z", 
+  "msg": [
+   "Add process_rec to the top of {server,connection,request}_rec", 
+   "hierarchy of structs that abstract server activities.  Store some", 
+   "stuff in process_rec (finally a place to have nearly guiltless", 
+   "globals) for example the global and configuration pools.  Put some", 
+   "operations on process_rec in http_main, in particular the", 
+   "destroy_and_exit operation, and the use it to do all the exit calls.", 
+   "Change ap_read_config to operation on this \"object\" rather than on the", 
+   "configuration pool.  Modify server_rec to point to the process, so you", 
+   "can get at it most all the time which should finally allow most of the", 
+   "server's malloc calls to be eliminated.", 
+   "There are no locks in the process struct as yet, put them in as needed.", 
+   "Some of the hooks should take this rather than conf. pool."
+  ], 
+  "revision_id": "83942"
+ }, 
+ {
+  "author": "bhyde", 
+  "date": "1999-10-07T15:36:40.000000Z", 
+  "msg": [
+   "Duh."
+  ], 
+  "revision_id": "83941"
+ }, 
+ {
+  "author": "bhyde", 
+  "date": "1999-10-07T15:33:06.000000Z", 
+  "msg": [
+   "Changed my mind, ptemp maybe \"systolic\" but since it is empty", 
+   "during the entire time the server is serving it's best to destroy it."
+  ], 
+  "revision_id": "83940"
+ }
+]

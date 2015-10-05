@@ -1,0 +1,87 @@
+[
+ {
+  "author": "morgand", 
+  "date": "2002-02-22T05:39:21.000000Z", 
+  "msg": [
+   "Michael's alternative to the removeLRU() method"
+  ], 
+  "revision_id": "130559"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-02-22T04:58:17.000000Z", 
+  "msg": [
+   "Updated my email address."
+  ], 
+  "revision_id": "130558"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-02-22T04:39:53.000000Z", 
+  "msg": [
+   "Fixed the following Bag related problems:", 
+   "- In Bag.java, the statement \"If the bag contains less than i occurences,", 
+   "the item item will be removed from the unique set\" implies that if the bag", 
+   "contains 5 occurences and i is 5, (5 is not less than 5) then the item will", 
+   "not be removed from the unique set, even though there should be no more", 
+   "occurances in the bag.", 
+   "- In AbstractBag.java, the documentation does not specify exactly what a", 
+   "subcless needs to do to extend AbstractBag to make a concrete subclass.", 
+   "- AbstractBag.add(Object,int) has two calls to getCount(o), when only one", 
+   "is necessary.  This wastes a few cycles to perform method invocations, a", 
+   "map lookup, a cast, and a few comparisons.", 
+   "- The AbstractBag.equals(Object) method will incorrectly throw a", 
+   "NullPointerException if a null value is passed.  The Object.equals(Object)", 
+   "API specifies \"For any non-null reference value x, x.equals(null) should", 
+   "return false\".", 
+   "- The AbstractBag.equals(Object) method will only work if the object", 
+   "passed in extends AbstractMap or implements Map.  Neither of these facts", 
+   "is documented, and neither is correct.  The contract for", 
+   "Object.equals(Object) states: \"for any reference values x and y,", 
+   "x.equals(y) should return true if and only if y.equals(x) returns true. \".", 
+   "Returning true when the argument is a Map is incorrect since he reverse", 
+   "(the map checking to see if its equal to the bag) will most certainly be", 
+   "false.  The same can be said for AbstractMap.  A subclass of AbstractMap", 
+   "may add extra data to be stored within the Bag that must also be compared", 
+   "for them to be equal.  The reverse comparison (specialized subclass equals", 
+   "basic abstract bap) will fail.  You can read more about this in a three-", 
+   "year old, but still valid java world article:", 
+   "http://www.javaworld.com/javaworld/jw-01-1999/jw-01-object.html", 
+   "- if AbstractBag.remove(Object,int) is called passing in 0 as the number", 
+   "to remove and specifying an object that exists in the bag, true will be", 
+   "returned from the method. Per the Bag API specification, true should only", 
+   "return when an object is actually removed.  Since no objects are removed,", 
+   "false should be returned instead. Additionally, if a negative number is", 
+   "specified, not only is the object not removed, but object(s) are *added*", 
+   "(well, in the sense that it is equivalent of calling add(o, -i))", 
+   "- the uniqueSet() method returns the set of unique objects, however the", 
+   "set is modifiable.  If the underlying map implementation has the set", 
+   "backed by the map (as per the map contract -- so it should), then elements", 
+   "can be removed from the unique set and have them removed from the", 
+   "underlying map as well.  This causes consistency problems with the Bag", 
+   "since _total will then be incorrect.", 
+   "- in extractList(), getCount(current) is called each time through the", 
+   "inner loop, adding lots of extra overhead.  Reversing the loop (starting", 
+   "at the count and going down to 0) eliminates the excess overhead."
+  ], 
+  "revision_id": "130557"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-02-22T04:16:19.000000Z", 
+  "msg": [
+   "Added documentation, and updating formatting of some documentation", 
+   "(i.e. put \"code\" within <code>...</code>)", 
+   "Added check for a valid capacity argument passed to constructor."
+  ], 
+  "revision_id": "130556"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-02-22T03:17:40.000000Z", 
+  "msg": [
+   "Implement Externalizable in SequencedHashMap"
+  ], 
+  "revision_id": "130555"
+ }
+]

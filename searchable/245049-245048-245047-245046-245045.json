@@ -1,0 +1,87 @@
+[
+ {
+  "author": "rubys", 
+  "date": "2001-07-08T21:55:37.000000Z", 
+  "msg": [
+   "Switch boolean back to using the BooleanDeserializerFactory"
+  ], 
+  "revision_id": "245049"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-08T21:35:20.000000Z", 
+  "msg": [
+   "It helps if the call and output parameter use the same TypeMappingRegistry"
+  ], 
+  "revision_id": "245048"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-08T16:10:48.000000Z", 
+  "msg": [
+   "Base64 should use soap encoding"
+  ], 
+  "revision_id": "245047"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-08T15:09:51.000000Z", 
+  "msg": [
+   "Remove the deletion of a no-longer produced file"
+  ], 
+  "revision_id": "245046"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-08T14:18:40.000000Z", 
+  "msg": [
+   "(Apologies for the size of this checkin, I ended up doing a bit much", 
+   "in parallel)", 
+   "* Store type mappings as XML.  We support two syntaxes right now,", 
+   "one like this (the old <bean> syntax):", 
+   "<beanMappings>", 
+   "<ns:type classname=\"some.bean\" xmlns:ns=\"myNamespace\"/>", 
+   "</beanMappings>", 
+   "and the other like this:", 
+   "<typeMappings>", 
+   "<typeMapping type=\"xsd:string\" classname=\"java.lang.String\"", 
+   "serializer=\"ser.StringSer\" deserializerFactory=\"tst.Factory\"/>", 
+   "</typeMappings>", 
+   "These should probably be condensed into a single <typeMappings> outer", 
+   "element containing <typeMapping> and <beanMapping> elements.", 
+   "We no longer use the typemap-supp.reg file, and a complete engine config", 
+   "is stored in the [client,server]-config.xml file.", 
+   "* Give SOAPServices a serviceDescription field.  This allows us to figure", 
+   "out by parse time whether a service is message-based (i.e. has", 
+   "MsgDispatcher as its pivot) or RPC-based, which lets us build the", 
+   "appropriate MessageElements.", 
+   "* Body-based dispatch now occurs in the BodyFactory inside SOAPSAXHandler", 
+   "instead of in the SOAPBodyElement constructor, because we might need", 
+   "the service to be able to determine which kind of SOAPBodyElement to", 
+   "build (see above).", 
+   "** NOTE : one consequence of this is that we no longer do body-based", 
+   "dispatch OUTSIDE the context of a parse.  I removed the unit test in", 
+   "TestRPC which tested this, on the assumption that it's not going to be", 
+   "a real use-case.  If we want to be able to do this in situations where", 
+   "we just pass a dynamically constructed message into the engine, we", 
+   "should add the code back to the SOAPBodyElement constructor and re-", 
+   "instate the test.", 
+   "* Modify the way ID/HREF works at parse time, decoupling deserialization-", 
+   "based tasks from parsing.  The HREFs will only get resolved at deser", 
+   "time (i.e. when you call getValue() on MessageElement).  This is cleaner", 
+   "for now, and if we move to a \"real\" streaming model where processing", 
+   "happens during the parse, we can consider reinstating the fixup-based", 
+   "model.", 
+   "* Give MessageElement a getValueAsType() method, which will try to", 
+   "deserialize this element as a particular XSD type.  See DebugHandler for", 
+   "an example (note that we no longer use the DebugHeader class by default).", 
+   "* Add an AxisServiceConfig interface which service provider classes can", 
+   "implement to let the engine know about service metadata.  Right now the", 
+   "only method there is getMethods(), which allows a class (a JWS class in", 
+   "particular) to specify which are available for access via SOAP.  Add a", 
+   "modified StockQuoteService JWS to the functional tests, and test the", 
+   "new functionality."
+  ], 
+  "revision_id": "245045"
+ }
+]

@@ -1,0 +1,88 @@
+[
+ {
+  "author": "rich", 
+  "date": "2005-06-13T16:28:38.755254Z", 
+  "msg": [
+   "Added doc for <pageflow-factories> (http://issues.apache.org/jira/browse/BEEHIVE-783), and added missing custom-property entries for all the elements under <pageflow-handlers>.", 
+   "tests: validate in docs/forrest (WinXP)", 
+   "BB: self (linux)"
+  ], 
+  "revision_id": "190419"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-06-13T16:24:14.575991Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "190418"
+ }, 
+ {
+  "author": "rgardler", 
+  "date": "2005-06-13T16:10:07.604682Z", 
+  "msg": [
+   "add Ross Gardlers key for signing the upcoming release"
+  ], 
+  "revision_id": "190417"
+ }, 
+ {
+  "author": "ben", 
+  "date": "2005-06-13T15:24:18.059675Z", 
+  "msg": [
+   "More info."
+  ], 
+  "revision_id": "190416"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2005-06-13T15:18:51.191367Z", 
+  "msg": [
+   "Fix for DERBY-302, committing on behalf of", 
+   "DERBY-302 - Insert on Clob of 500k of data using streams takes long time.", 
+   "It takes 3 mins on a sun jvm1.4.2 and 20 seconds with ibm jvm 1.4.2.", 
+   "The following fix improves the performance of insert into a 500k blob from 20", 
+   "seconds to around 1 second.  Note that by changing just the test program", 
+   "time was reduced from 3 minutes to avg around 20 seconds.", 
+   "Currently in derby,  for an insert on a clob using setCharacterStream what will", 
+   "happen is , the entire stream will be materialized into a char array and sent", 
+   "to store for the insert.  ( we should not have to stream here. I will file", 
+   "another jira issue for this and put in all information I learnt)", 
+   "Given this is how inserts for large clobs are happening, the performance issue", 
+   "analysis is as follows:", 
+   "--  profiler run shows that most time is spent in SQLChar.readExternal which", 
+   "is where the materialization into a char array for the user's input stream", 
+   "happens.  The growth of this array happens gradually till the entire stream", 
+   "is materialized into the array.  Below code snippet shows by how much the", 
+   "array is grown each time when it realizes it has to read more bytes from the", 
+   "stream.", 
+   "The dvd hierarchy for clob is  -  SQLClob ( dvd) extends SQLVarChar", 
+   "extends SQLChar.", 
+   "So in SQLChar.readExternal", 
+   "........", 
+   "int growby = in.available();", 
+   "if(growby < 64)", 
+   "growby = 64", 
+   "and then an allocation and an arraycopy to the new allocated array.", 
+   "--  In the code snippet,  'in' is the wrapper around the user's stream which is", 
+   "ReaderToUTF8Stream.   ReaderToUTF8Stream extends InputStream and does not", 
+   "override available() method . As per the spec, InputStream.available()", 
+   "returns 0.", 
+   "-- Thus each time, the array growth is by 64 bytes which is obviously not", 
+   "performant.  so for a 500k clob insert, this would mean allocation &", 
+   "arraycopy steps happen  ~8000 times.", 
+   "-- The ReaderToUTF8Stream that has the user's stream reads from the stream and", 
+   "does the utf8 conversion and puts it in a 4k array.  I think it is reasonable", 
+   "to have a 32k buffer to store this information for clobs.", 
+   "Although I think there seems to be more possible optimizations in this area,", 
+   "I prefer the incremental approach too :)  so this patch  is a first step", 
+   "towards fixing the insert clob performance in the current system.", 
+   "Fix includes:", 
+   "-- enhanced the way the array was grown to keep the original  64 bytes for", 
+   "char ( seems reasonable given the upper limit for char) but override it to", 
+   "have  4k for varchar and clobs.", 
+   "-- OVERRIDE AVAILABLE() IN READERTOUTF8STREAM TO RETURN A BETTER ESTIMATE OF", 
+   "HOW MANY BYTES CAN BE READ."
+  ], 
+  "revision_id": "190415"
+ }
+]

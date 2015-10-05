@@ -1,0 +1,77 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-14T23:54:51.000000Z", 
+  "msg": [
+   "Update tests from assert() to assertTrue() as introduced in JUnit 3.7,", 
+   "to avoid future conflict with JDK native assertions."
+  ], 
+  "revision_id": "128479"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-21T04:20:21.000000Z", 
+  "msg": [
+   "Collections.EMPTY_MAP was added in JDK 1.3.  Replace it with something", 
+   "that will compile in JDK 1.2 environments.", 
+   "Submitted by:\tKelvin Ho <Kelvin_Ho@cgu.com.au>"
+  ], 
+  "revision_id": "128478"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-20T00:32:24.000000Z", 
+  "msg": [
+   "Throw IllegalArgumentException (instead of returning misleading results)", 
+   "when the \"bean\" or \"name\" arguments to most method calls are null.  Add", 
+   "relevant unit test cases to validate this behavior."
+  ], 
+  "revision_id": "128477"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-07T02:09:02.000000Z", 
+  "msg": [
+   "Make PropertyUtils.getReadMethod() and PropertyUtils.getWriteMethod()", 
+   "smart enough to locate accessible methods in a non-public class that are", 
+   "declared in a public interface implemented (either directly or indirectly)", 
+   "by that class.  Added unit tests to validate the behavior.", 
+   "An example comes from the Crimson parser that is part of JAXP/1.1:", 
+   "// NOTE: CommentNode is *not* public", 
+   "class org.apache.crimson.tree.CommentNode", 
+   "extends org.apache.crimson.tree.DataNode", 
+   "implements org.w3c.dom.Comment;", 
+   "public interface org.w3c.dom.Comment", 
+   "extends org.w3c.dom.CharacterData;", 
+   "public interface org.w3c.dom.CharacterData", 
+   "extends org.w3c.dom.Node;", 
+   "public interface org.w3c.dom.Node;", 
+   "The getNodeName() method is defined in the Node interface, but was not", 
+   "accessible without this patch, because previously PropertyUtils only", 
+   "checked for accessible methods in directly implemented interfaces.  Now,", 
+   "it follows the interface hierarchy and correctly discovers the callable", 
+   "getNodeName() method of the CommentNode class.", 
+   "This bug was reported against the Struts version of PropertyUtils, along", 
+   "with a patch to implement the nesting.", 
+   "PR: Bugzilla #1200", 
+   "Submitted by:\trashiddesai@hotmail.com"
+  ], 
+  "revision_id": "128476"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-07T00:32:33.000000Z", 
+  "msg": [
+   "Make the getReadMethod() and getWriteMethod() methods of PropertyUtils", 
+   "public, because the task they perform is generally useful to apps using", 
+   "reflection even if they don't use the property getting and setting", 
+   "functionality.", 
+   "Add unit tests for the current behavior of getReadMethod() and", 
+   "getWriteMethod() to establish a baseline of correct behavior.  This is in", 
+   "preparation for fixing Bugzilla bug report #1200 reported against Struts,", 
+   "where the introspection performed by these methods does not trace down", 
+   "nested interface \"implements\" chains."
+  ], 
+  "revision_id": "128475"
+ }
+]

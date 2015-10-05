@@ -1,0 +1,60 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-16T06:09:13.000000Z", 
+  "msg": [
+   "Remove SSLLog and SSLLogLevel directives in favor of having mod_ssl use the", 
+   "standard ErrorLog directives."
+  ], 
+  "revision_id": "95129"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-05-16T05:20:46.000000Z", 
+  "msg": [
+   "Only style fixes (tabs, blocks, spelling)."
+  ], 
+  "revision_id": "95128"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-16T05:17:11.000000Z", 
+  "msg": [
+   "Change mod_ssl from using ssl_log() to ap_log_error().", 
+   "The issue is that ssl_log doesn't handle apr_status_t result codes.  This", 
+   "leads to a number of places (esp. with mutexes) where the error codes get", 
+   "lost.  Rather than extending ssl_log further, since mod_ssl is part of", 
+   "our core, migrate to ap_log_error.  This means that mod_ssl no longer", 
+   "does its own logging.", 
+   "Most uses of SSL_ADD_ERRNO are now mapped correctly to apr_status_t values", 
+   "(mainly because the APIs that used to return errnos are now APRized and", 
+   "have apr_status_t codes available).", 
+   "SSL_LOG_TRACE and SSL_LOG_DEBUG were mapped to the APLOG_DEBUG values.", 
+   "mod_ssl prints out a LOT of debugging information, so mod_ssl with LogLevel", 
+   "Debug may not be a good idea - perhaps mod_ssl should be less chatty.", 
+   "Numerous printf type collisions were also resolved.", 
+   "(The ssl logging code itself will be removed in a subsequent commit.)", 
+   "This has been discussed on dev@httpd, but the fact that there isn't", 
+   "much to review besides the mindless changes, I'm going to commit now", 
+   "and rely on CTR if I screwed up anything on the translation."
+  ], 
+  "revision_id": "95127"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-05-16T03:58:59.000000Z", 
+  "msg": [
+   "Feeling more confident in the worker MPM now, so I'm with Brian on", 
+   "this one."
+  ], 
+  "revision_id": "95126"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-05-16T02:56:31.000000Z", 
+  "msg": [
+   "Potential flaw --- use forward slash notation in filenames to awk"
+  ], 
+  "revision_id": "95125"
+ }
+]

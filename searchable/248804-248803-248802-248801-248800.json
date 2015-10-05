@@ -1,0 +1,64 @@
+[
+ {
+  "author": "stevel", 
+  "date": "2003-01-10T06:56:32.000000Z", 
+  "msg": [
+   "Cleanup of exception handling, and some changes to GET handling. We can close a lot of bugreps up with this patch.", 
+   "- Faults get logged to a new org.apache.axis.EXCEPTIONS channel; Faults at debug, Exceptions at info (cos they are signs of interior trouble)", 
+   "- Faults have stack traces stripped from them before they go over the wire, unless the system is configured as a development system", 
+   "- refactored method convertExceptionToAxisFault() turns an exception into a fault", 
+   "- refactored method configureResponseFromAxisFault() sets the status code from a fault", 
+   "- logException is single place where exceptions (not AxisFaults) are logged (for easy override)", 
+   "- GET of .jws now looks for realpath of file existing and extension matching whatever the Constants say it is; raise a 404 if there is no file, else say there is a JWS service there (&added i18n strings)", 
+   "- moved where GET catches exceptions; effect is to include everything inside it in fault and exception catching and processing", 
+   "- reportAvailableServices() new reports trouble to callers because of the previous change. To keep stacks off the wire; when a ConfigException nests an AxisFault, we extract and throw that fault", 
+   "- SOAP GET calls to an endpoint's methods are now marked dont-cache", 
+   "- SOAP GET calls now set the appropriate error codes and return errors in XML format"
+  ], 
+  "revision_id": "248804"
+ }, 
+ {
+  "author": "stevel", 
+  "date": "2003-01-10T06:38:56.000000Z", 
+  "msg": [
+   "making things final"
+  ], 
+  "revision_id": "248803"
+ }, 
+ {
+  "author": "stevel", 
+  "date": "2003-01-10T06:38:06.000000Z", 
+  "msg": [
+   "Changes to httpunit tests", 
+   "1. layout aligned with rests of tests", 
+   "2. build file aligned with rests of tests", 
+   "3. lib file removed; you need httpunit in ant/lib, axis/lib or similar", 
+   "4. tested against httpunit1.5.2", 
+   "5. the compile/test only runs if httpunit.present is set and httpunit.enabled==\"true\".", 
+   "6. added all the tests for GET error codes that are about to go into AxisServlet", 
+   "Result: you can integrate httpunit with the rest of the tests, but only if you set up the lib dirs and enable the test. The reason is that SimpleAxisServer cannot handle the JSP tests, so this suite needs a real webapp server."
+  ], 
+  "revision_id": "248802"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2003-01-10T04:22:37.000000Z", 
+  "msg": [
+   "The Service(String wsdlLocation) constructor wasn't working", 
+   "with filenames.  Since we already do all the work to handle this", 
+   "case in XmlUtils, replace the URL member variable with a String,", 
+   "and let that code do its job.  The getWSDLDocumentLocation()", 
+   "method may want a somewhat better implementation...."
+  ], 
+  "revision_id": "248801"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2003-01-10T04:02:13.000000Z", 
+  "msg": [
+   "Data service was hanging earlier tonight, so add a 60-second timeout", 
+   "to the test case for now."
+  ], 
+  "revision_id": "248800"
+ }
+]

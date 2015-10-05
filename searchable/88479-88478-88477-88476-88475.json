@@ -1,0 +1,85 @@
+[
+ {
+  "author": "martin", 
+  "date": "2001-03-09T10:10:55.000000Z", 
+  "msg": [
+   "I added configurable EBCDIC configuration functionality to http_core.c;", 
+   "because conversion is a base feature, this looked like the only sensible", 
+   "place to me. Other basic features like Resource limits live there too.", 
+   "* make EBCDIC conversion truly configurable. Up to know, there was a", 
+   "hardwired assumption that only files of MIME type text/* (and a few", 
+   "exceptions) could be EBCDIC files; and everything else HAD TO BE", 
+   "binary. This assumption breaks (again and again) for MIME types like", 
+   "application/postscript, model/vrml, application/x-javascript and", 
+   "others, which can never be stored as EBCDIC text files.", 
+   "I now implemented two new directives for defining the conversion", 
+   "based on MIME type or file extension. The conversion can be set for", 
+   "upload and download independently, on or off, for any file.", 
+   "* make EBCDIC conversion symmetric. Up to now, there was no clean way", 
+   "to deal with uploaded content (POST with Content-Type:, PUT with", 
+   "Content-Type:) because a) there was no MIME checker attached to the", 
+   "header-reader, and b) you could not actually define a conversion", 
+   "based on MIME type. Both deficiencies have now been addressed (the", 
+   "ap_checkconv_in() routine is called upon parsing of an uploaded", 
+   "Content-Type: line, and it can set a flag which is different from", 
+   "the download conversion flag. Also, its change is triggered at a", 
+   "different phase in the request handling: the upload conversion", 
+   "is set as soon as a Content-Type: for an uploaded document is", 
+   "detected, but the download conversion is only set when the", 
+   "response is about to be returned). All this was impossible in the", 
+   "past.", 
+   "* unify the EBCDIC tables to be in a single common file", 
+   "src/ap/ap_ebcdic.c (and src/include/ap_ebcdic.h) instead", 
+   "of having redundant copies under src/os/{tpf,bs2000,os390}/ebcdic.{c,h}", 
+   "The common file will have the correct translation table", 
+   "conditionally compiled based on #ifdef TPF/OS390/_OSD_POSIX.", 
+   "Up to now, each EBCDIC had its own copy, cloned and slightly", 
+   "adapted.", 
+   "* Also, put the conversion checker ap_checkconv() to http_core,", 
+   "because is is an essential central cog in the whole conversion", 
+   "clockwork. Until now, three almost incompatible copies were", 
+   "spread throughout the EBCDIC platforms' os.c files.", 
+   "Reviewed by:\t\"David McCreedy\" <mccreedy@us.ibm.com>"
+  ], 
+  "revision_id": "88479"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-03-09T04:36:48.000000Z", 
+  "msg": [
+   "don't try to install expat, since it isn't there anymore."
+  ], 
+  "revision_id": "88478"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-03-08T20:03:37.000000Z", 
+  "msg": [
+   "Always clear the C-L if we are going to try to parse the file.  It is", 
+   "impossible for us to determine if there is going to be an SSI tag in the", 
+   "file until we have actually scanned it all.  By that time, it is likely", 
+   "that the first chunk of data, and the headers have been sent to the client,", 
+   "and it is too late to clear the C-L.  If we are parsing the file, we have", 
+   "to just assume we are going to change the content."
+  ], 
+  "revision_id": "88477"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-03-08T18:20:25.000000Z", 
+  "msg": [
+   "Get us closer to building on Unix.  Not perfect yet, but we no longer", 
+   "should look for expat in srclib."
+  ], 
+  "revision_id": "88476"
+ }, 
+ {
+  "author": "coar", 
+  "date": "2001-03-08T18:11:48.000000Z", 
+  "msg": [
+   "Add -V option to suexec, to list compile-time settings with", 
+   "which it was built.  Only usable by root and the HTTPD_USER."
+  ], 
+  "revision_id": "88475"
+ }
+]

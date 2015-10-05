@@ -1,0 +1,70 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-06-14T20:45:55.000000Z", 
+  "msg": [
+   "Added a check if JspFactory is set, and set it if not.", 
+   "If compiled jsps are used, JspRuntimeContext is not started ( since JspServlet", 
+   "is never invoked, and there is no .jsp to check ), and we need the factory."
+  ], 
+  "revision_id": "304959"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-14T20:44:37.000000Z", 
+  "msg": [
+   "Split the compile() method in generateJava() and generateClass() - JspC only generates", 
+   "java, the compile is a separate step.", 
+   "Also split outdated check, so JspC can check the .java files and regenerate what", 
+   "changes."
+  ], 
+  "revision_id": "304958"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-14T20:43:05.000000Z", 
+  "msg": [
+   "Second stage of braking jasper2.", 
+   "I split some of the huge methods in smaller ( and hopefully cleaner )", 
+   "ones, isolated the CLI processing at the end of the file.", 
+   "The class can be used as an ant task ( as in the javadoc comments ).", 
+   "I also added calls to isOutDated(), so <jasper2> will check if the", 
+   ".java class is newer. Looking for includes is missing for now.", 
+   "Some features are lost: it is no longer possible to compile to webapps", 
+   "at once, and the mangler is identical with the one used by JspServlet.", 
+   "Everything else should work as before ( emphasis on 'should' ). I run", 
+   "few tests and it seems fine."
+  ], 
+  "revision_id": "304957"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-14T20:39:12.000000Z", 
+  "msg": [
+   "Time to break Jasper2...", 
+   "This is the first round of refactoring, eliminating the huge duplication", 
+   "between JspEngineContext and CLContext.", 
+   "JspCompilationContext is now a normal bean, with getters and setters. It", 
+   "can be overriden or used as is, and it includes all the code that used to", 
+   "be in JspEngineContext for mangling.", 
+   "The main purpose of the class is to deal with paths and resources -", 
+   "including mangling, etc.", 
+   "CommandLineContext is no longer needed - we use the same code as in JspEngineContext.", 
+   "I moved some of the extra checks to deal with the lack of RuntimeContext", 
+   "when doing CLI compilation.", 
+   "There are few methods remaining in JspEngineContext - dealing with class", 
+   "loading. The goal is to move them back to the base class, and thus", 
+   "enable JspC to do the same depenency checking as JspServlet.", 
+   "( at the moment JspC can't look for include deps )"
+  ], 
+  "revision_id": "304956"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-06-13T22:56:11.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'TOMCAT_4_1_5'."
+  ], 
+  "revision_id": "304955"
+ }
+]

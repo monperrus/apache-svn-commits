@@ -1,0 +1,69 @@
+[
+ {
+  "author": "roberto", 
+  "date": "2005-03-07T03:15:51.953478Z", 
+  "msg": [
+   "~ Updated DataMapper Test MySql/DataBase.sql for new Documents table"
+  ], 
+  "revision_id": "156379"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-03-07T03:01:49.052573Z", 
+  "msg": [
+   "Now that we've got the starting offset in the segment, move the code", 
+   "that accounts for the offset on document retrieval in there, instead", 
+   "of doing it in the segments code.", 
+   "* src/index/segment.c", 
+   "(lcn_segment_get_document): subtract the offset from the doc and add", 
+   "a check for an invalid document id.", 
+   "* src/index/segments.c", 
+   "(lcn_segments_get_document): don't subtract the offset from the doc."
+  ], 
+  "revision_id": "156378"
+ }, 
+ {
+  "author": "roberto", 
+  "date": "2005-03-07T02:57:28.689506Z", 
+  "msg": [
+   "~ Updated Common NUnit BaseTest.cs for resource loading change made in SVN Rev 156239", 
+   "~ Updated Common NUnit test SqlMaps for relative paths"
+  ], 
+  "revision_id": "156377"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-03-07T02:56:12.924117Z", 
+  "msg": [
+   "Fix the recently found problem with unoptimized indices.  It turns out we", 
+   "were not incrementing the document id by the appropriate amount for segments", 
+   "past the first one.  Each segment is internally numbered starting at 0, but", 
+   "when results that span multiple segments are returned the later ones need to", 
+   "be incremented by the appropriate amount.", 
+   "If I'd been paying attention when writing the index tests I would have seen", 
+   "this problem then, but I was lazy.  Oops.", 
+   "* include/lcn_segment.h", 
+   "(lcn_segment_open): add an offset parameter, update docs.", 
+   "* src/index/segment.c", 
+   "(lcn_segment_t): store the starting offset for the segment.", 
+   "(lcn_segment_open): take offset parameter, store it in the segment.", 
+   "(lcn_segment_term_docs): increment docnums by offset.", 
+   "* src/index/segments.c", 
+   "(lcn_segments_read): move calculation of starting offsets into the", 
+   "first loop, so we can use them when opening the segments.", 
+   "* test/index/segment_test.c", 
+   "(test_segment_term_docs): update call to lcn_segment_open.", 
+   "* test/index/index_test.c", 
+   "(test_index_term_docs_unopt): correct docnums we expect to see."
+  ], 
+  "revision_id": "156376"
+ }, 
+ {
+  "author": "jmitchell", 
+  "date": "2005-03-07T02:55:02.438142Z", 
+  "msg": [
+   "fix project name for el"
+  ], 
+  "revision_id": "156375"
+ }
+]

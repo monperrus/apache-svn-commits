@@ -1,0 +1,110 @@
+[
+ {
+  "author": "rse", 
+  "date": "1999-11-28T13:51:54.000000Z", 
+  "msg": [
+   "Fixed `quad integer' (aka `long long') handling in ap_snprintf.c", 
+   "More details were described in my original posting two weeks ago:", 
+   "-----------------------------------------------------------------------", 
+   "Today (on my birthday ;) I've hacked on and cleaned up snprintf", 
+   "implementations for a forthcoming string library and discovered the following", 
+   "bug in ap_snprintf.  If one tries to print a \"long long\" value which is just a", 
+   "little bit lower than the maximimum \"unsigned long\" (not \"unsigned long", 
+   "long\"!) value, ap_snprintf treats the value as a (signed) \"long\" instead of a", 
+   "\"long long\":", 
+   "| $ cat test.c", 
+   "| #include <stdio.h>", 
+   "| #include \"ap_config.h\"", 
+   "| #include \"ap.h\"", 
+   "|", 
+   "| int main(int argc, char *argv[])", 
+   "| {", 
+   "|     char buf[1024];", 
+   "|", 
+   "|     ap_snprintf(buf, sizeof(buf), \"%qd %qd\", 4294967290ULL, 4294967297ULL);", 
+   "|     printf(\"ap_snprintf: \\\"%s\\\"\\n\", buf);", 
+   "|", 
+   "|     sprintf(buf, \"%qd %qd\", 4294967290ULL, 4294967297ULL);", 
+   "|     printf(\"sprintf:     \\\"%s\\\"\\n\", buf);", 
+   "| }", 
+   "| $ cc -I../os/unix -I../include -o test test.c libap.a && ./test", 
+   "| ap_snprintf: \"-6 4294967297\"", 
+   "| sprintf:     \"4294967290 4294967297\"", 
+   "The reason is a wrong optimization test in ap_snprintf.c which", 
+   "can be fixed this way:", 
+   "Index: ap_snprintf.c", 
+   "===================================================================", 
+   "RCS file: /e/apache/REPOS/apache-1.3/src/ap/ap_snprintf.c,v", 
+   "retrieving revision 1.37", 
+   "diff -u -r1.37 ap_snprintf.c", 
+   "--- ap_snprintf.c   1999/10/21 20:44:10 1.37", 
+   "+++ ap_snprintf.c   1999/11/17 12:22:11", 
+   "@@ -414,7 +413,7 @@", 
+   "* If the value is less than the maximum unsigned long value,", 
+   "* then we know we aren't using quads, so use the faster function", 
+   "*/", 
+   "-    if (num <= ULONG_MAX)", 
+   "+    if (num <= ULONG_MAX && is_unsigned)", 
+   "return(conv_10( (wide_int)num, is_unsigned, is_negative,", 
+   "buf_end, len));", 
+   "With this patch ap_snprintf and the (FreeBSD) vendor sprintf print the same", 
+   "values:", 
+   "| $ cc -I../os/unix -I../include -o test test.c libap.a && ./test", 
+   "| ap_snprintf: \"4294967290 4294967297\"", 
+   "| sprintf:     \"4294967290 4294967297\"", 
+   "I think the patch is correct, although I have to admit that because of time", 
+   "I've not checked the whole quad-fiddling in ap_snprintf.c now. So I do not", 
+   "commit this myself. Instead someone else should review this first.", 
+   "-----------------------------------------------------------------------"
+  ], 
+  "revision_id": "84179"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1999-11-28T13:37:53.000000Z", 
+  "msg": [
+   "Fixed error handling in dbmmanage script.", 
+   "Submitted by: Andrew McRae <andrew@liquid.com>", 
+   "Reviewed by: Ralf S. Engelschall", 
+   "PR: 4973"
+  ], 
+  "revision_id": "84178"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1999-11-28T13:28:07.000000Z", 
+  "msg": [
+   "Fixed NEXT/OpenStep building by adding an fallback typedef for", 
+   "rlim_t to ap_config.h.", 
+   "Submitted by: Mark Miller <markm@swoon.net>", 
+   "PR: 4906"
+  ], 
+  "revision_id": "84177"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1999-11-28T13:21:48.000000Z", 
+  "msg": [
+   "Fix SHARED_CORE feature for HPUX by backing-out a change (comitted", 
+   "between 1.3.7 and 1.3.9) which changed the DSO extension from `sl' to", 
+   "`so'. This worked only for modules (where we load the DSO manually),", 
+   "but horribly fails under HPUX for DSO-based/shared libraries (where our", 
+   "$SHLIB_SUFFIX_NAME is used, too).", 
+   "Submitted by: Gary Silverman <gary.silverman@abnamro.com>", 
+   "Reviewed by: Ralf S. Engelschall", 
+   "PR: 4974"
+  ], 
+  "revision_id": "84176"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1999-11-28T12:59:51.000000Z", 
+  "msg": [
+   "Added support for Berkeley-DB/3.x to mod_auth_db.", 
+   "Submitted by: Steve Atkins <steve@blighty.com>", 
+   "Cleaned up and reviewed by: Ralf S. Engelschall", 
+   "PR: 5382"
+  ], 
+  "revision_id": "84175"
+ }
+]

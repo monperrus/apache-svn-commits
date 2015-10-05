@@ -1,0 +1,121 @@
+[
+ {
+  "author": "tobrien", 
+  "date": "2003-05-16T04:23:06.000000Z", 
+  "msg": [
+   "* DoubleArray is now an interface which is implemented by", 
+   "ExpandableDoubleArray.  The interface provides a public interface", 
+   "which does not hint at any of the storage parameters of", 
+   "Expandable or Contractable.", 
+   "* DoubleArrayTest now operates on the DoubleArray interface, casting", 
+   "to Expandable when we need to call the package scopes getInternalLength", 
+   "method.", 
+   "* While we should not provide access to the internal storage array, it", 
+   "should be possible to obtain a double[] of elements stored in this", 
+   "DoubleArray - double[] getElements() was added to the DoubleArray interface,", 
+   "it will return the element array."
+  ], 
+  "revision_id": "140834"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-16T03:55:34.000000Z", 
+  "msg": [
+   "* ContractableDoubleArray extends ExpandableDoubleArray - I sense the", 
+   "need for a DoubleArray interface.", 
+   "* ExpandableDoubleArray and the extension ContractableDoubleArray should", 
+   "aim towards presenting a public interface that does not expose any", 
+   "details of the internal.  To this end, one is no longer able to get the", 
+   "internal storage array via public double[] getValues(), and the startIndex", 
+   "(which was relative to the internal storage array) is no longer available.", 
+   "* [Expandable|Contractable]DoubleArray now allow one to discard", 
+   "elements from the front of the array.  Before this commit, one could", 
+   "accomplish the same goal by changing the starting index of the element", 
+   "array within the internal storage array.  This solution allowed one to", 
+   "discard elements from the front of the array (as well as) reclaiming", 
+   "elements by decreases the startIndex.", 
+   "There were two problems with this approach (especially in", 
+   "ContractableDoubleArray).   The ContractableDoubleArray can be", 
+   "\"compacted\" at anytime thereby reseting the startIndex to zero and the", 
+   "size of the internal store array to number of elements plus one.  Second,", 
+   "\"reclaiming\" elements from the internal storage array by finagling", 
+   "internal \"pointers\" to the start and end index seems to violate the", 
+   "principles of encapsulation.  If you \"discard\" an element from the", 
+   "front of the array, consider it unavailable.", 
+   "It should be noted that calling setNumElements allows one to move the end", 
+   "index of the internal element array at will.  Assume one has a 100 element", 
+   "array, and one calls setNumElements(10), thereby decreasing the ending index", 
+   "of the element array by 90.  The 90 \"dumped\" elements are not currently", 
+   "reinitializied to the default double primitive value.  This is an open", 
+   "question.", 
+   "* Tests for ExpandableDoubleArray and ContractableDoubleArray were", 
+   "refactored.  both test classes now extend a DoubleArrayAbstractTest", 
+   "JUnit class which contained shared unit tests for both \"implementations\".", 
+   "An approach like this should be adopted to test the Univariate implementations."
+  ], 
+  "revision_id": "140833"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T21:58:23.000000Z", 
+  "msg": [
+   "Patches from Phil S. applied:", 
+   "* A TestStatistic interface with corresponding implementation and testcase", 
+   "PR: Bugzilla 19971", 
+   "Obtained from: Patches attached to issue", 
+   "Submitted by: Phil S.", 
+   "Reviewed by: Tim O/"
+  ], 
+  "revision_id": "140832"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T15:38:48.000000Z", 
+  "msg": [
+   "Made a nubmer of change to the ExpandableDoubleArray.", 
+   "* This class now supports", 
+   "the ability to move the starting index of the internal element array.  This", 
+   "allows one to move the beginning of the element array, and form a sort of", 
+   "\"window\", this will come into play when we want to provide moving", 
+   "averages, or \"rolling\".", 
+   "* Added an addElementRolling(double v) - this will increment the startIndex", 
+   "and add the element to the end of the internal element array", 
+   "* brought the Clover test cases up to 100% for this class", 
+   "Added a class ContractableDoubleArray:", 
+   "* This is an extension of ExpandableDoubleArray - it addes a configuration", 
+   "parameter contractionCriteria.  Essential if the contractionCriteria is", 
+   "2.0f we commit to never having the internal storage array provide more", 
+   "than 2.0 times the storage capacity needed.  Once the internal", 
+   "storage array exceed this measurement, the internal storage array is", 
+   "pruned to the size of the internal element array.", 
+   "Also, my IDE scolded me for some ununsed imports in ListUnivariateImpl, they", 
+   "have been removed."
+  ], 
+  "revision_id": "140831"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T06:33:19.000000Z", 
+  "msg": [
+   "Another change to the stored Univariates.  The calculations are now abstracted", 
+   "into an AbstractStoreUnivariate class which take responsibility for", 
+   "all statistical calculations.  AbstractStoreUnivariate is implemented by", 
+   "two classes:", 
+   "* StoreUnivariateImpl - This class uses a ExpandableDoubleArray for", 
+   "internal storage.  This class is a more efficient class in terms", 
+   "of storage and cycles for users who are interested in gathering statistics", 
+   "not available in the UnivariateImpl implementation.", 
+   "* ListUnivariateImpl - This class is for a situation where a user might", 
+   "wish to maintain a List of numeric objects outside of a StoreUnivariate", 
+   "instance.  We still need to add serious error checking in the absence of", 
+   "1.5's generics, but this implementation will work with any list that", 
+   "contains Number objects - (BigDecimal, BigInteger, Byte, Double, Float,", 
+   "Integer, Long, Short).  This implementation ultimately transforms all", 
+   "numeric objects into double primitives via Number.doubleValue().", 
+   "Becuase AbstractStoreUnivariate does not hold on to any state, a user", 
+   "can add values through the Univariate.addValue() function OR one can", 
+   "directly manipulate the contents of the List directly."
+  ], 
+  "revision_id": "140830"
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "author": "dgaudet", 
+  "date": "1998-02-14T12:17:28.000000Z", 
+  "msg": [
+   "Deal gracefully with unexpected accept() and select() errors in the", 
+   "child_main() loop.  This was built based on data from a bunch of PRs,", 
+   "and data from the new-httpd archives, nh.9603 and nh.9701 in particular.", 
+   "I've actually been running with the extra errno tests for linux for", 
+   "the past 6 or 7 months.  Without them there is a LOT of spam in the", 
+   "error log on a linux box, compared to none on a solaris box on the", 
+   "same segment.", 
+   "PR:             1747, 1107, 588, 1787"
+  ], 
+  "revision_id": "80209"
+ }, 
+ {
+  "author": "dgaudet", 
+  "date": "1998-02-14T10:55:53.000000Z", 
+  "msg": [
+   "I used this for the first time... and found it emits error messages (at least", 
+   "on linux) while doing \"apachectl start\"."
+  ], 
+  "revision_id": "80208"
+ }, 
+ {
+  "author": "dgaudet", 
+  "date": "1998-02-14T10:54:41.000000Z", 
+  "msg": [
+   "The addition of child_init_modules() and child_exit_modules() has made child", 
+   "initialization a critical section.  We can't service a USR1, TERM, or HUP", 
+   "request during this period because all our data structures could be in", 
+   "some unknown state.  So block_alarms() the whole way through.", 
+   "Fix a segfault caused by terminating before allocating pchild.  This won't", 
+   "occur with the above fix in place, but seems a reasonable precaution should", 
+   "there be a need to call clean_child_exit() before pchild is allocated.", 
+   "Fix various cases where exit() was called rather than clean_child_exit()."
+  ], 
+  "revision_id": "80207"
+ }, 
+ {
+  "author": "dgaudet", 
+  "date": "1998-02-14T10:43:20.000000Z", 
+  "msg": [
+   "move ap_killpg to ap.h"
+  ], 
+  "revision_id": "80206"
+ }, 
+ {
+  "author": "dgaudet", 
+  "date": "1998-02-14T03:26:58.000000Z", 
+  "msg": [
+   "Fix security hole with \"UserDir /a/b\" without a * in the path... you", 
+   "could request /~../ and get /a.", 
+   "(djg: I also did a few touches of cleanup.)", 
+   "PR:\t\t1701", 
+   "Submitted by:\tLauri Jesmin <jesmin@ut.ee>", 
+   "Reviewed by:\tMarc Slemko, Dean Gaudet"
+  ], 
+  "revision_id": "80205"
+ }
+]

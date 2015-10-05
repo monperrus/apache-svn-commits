@@ -1,0 +1,69 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2001-08-30T05:10:54.000000Z", 
+  "msg": [
+   "Changed syntax of Set{Input|Output}Filter.  The list of filters", 
+   "must be semicolon delimited (if more than one filter is given.)", 
+   "The Set{Input|Output}Filter directive now overrides a parent", 
+   "container's directive (e.g. SetInputFilter in <Directory /web/foo>", 
+   "will override any SetInputFilter directive in <Directory /web>.)", 
+   "This new syntax is more consistent with Add{Input|Output}Filter", 
+   "directives defined in mod_mime.  Also cures a bug in prior releases", 
+   "where the Set{Input|Output}Filter directive would corrupt the", 
+   "global configuration if the multiple directives were nested.", 
+   "[William Rowe]"
+  ], 
+  "revision_id": "90799"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2001-08-30T04:38:47.000000Z", 
+  "msg": [
+   "make lwp timeout long enough for lengthy debug sessions"
+  ], 
+  "revision_id": "90798"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2001-08-30T04:24:09.000000Z", 
+  "msg": [
+   "Since the mod_mime patch was applied, here is the rest of the patch to", 
+   "introduce the ForceType and SetHandler [absolute references] directly", 
+   "into the very top of the fixups phase.  This means these will always", 
+   "override _any_ mime module, not just mod_mime.  Ergo, other mime modules", 
+   "can continue to set charset, encodings, etc.  Since these are globals,", 
+   "they belong in the core.", 
+   "This highlights a very serious drawback to the type_checker hook.  By", 
+   "using run first, a module that identifies _partial_ information (maybe", 
+   "just the content type) won't pass the query on to other modules, like", 
+   "mod_mime, that might further define the encoding or charset.  The", 
+   "type_checker hook should clearly become a run-all, and the modules should", 
+   "decline if they see someone ahead of them answered a question they were", 
+   "going to try to figure.", 
+   "Which means - if type_checker becomes RUN_ALL - this new override hook", 
+   "fn should become a type_checker again - and RUN_REALLY_FIRST, and let", 
+   "other modules _choose_ not to override this election.  (We can run it", 
+   "again at the end, for a recount ;)  Votes?"
+  ], 
+  "revision_id": "90797"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2001-08-30T04:11:57.000000Z", 
+  "msg": [
+   "Fix mod_mime skipping over mime.types when some _other_ field was set", 
+   "with mod_mime, but not AddType.", 
+   "Why is everybody always breaking my local CHANGES file ;-?"
+  ], 
+  "revision_id": "90796"
+ }, 
+ {
+  "author": "gregames", 
+  "date": "2001-08-30T03:45:30.000000Z", 
+  "msg": [
+   "fix suexec's install by invoking some powerful Sascha magic."
+  ], 
+  "revision_id": "90795"
+ }
+]

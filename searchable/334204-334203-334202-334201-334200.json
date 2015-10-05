@@ -1,0 +1,95 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2001-01-09T07:15:11.000000Z", 
+  "msg": [
+   "Set child.m_prev *before* m_next.  From note to Joe K. about this:", 
+   "I tried hard to reproduce this.  I installed IBM's 1.3 JDK, and ran many tests, but could not cause the problem.", 
+   "These problems all seem to occur when xsl:number is involved.  This might make be suspect something with getPreviousSibling().  I notice in Parent#appendChild:", 
+   "if (null == m_first)", 
+   "{", 
+   "m_first = child;", 
+   "}", 
+   "else", 
+   "{", 
+   "m_last.m_next = child;", 
+   "child.m_prev = m_last;", 
+   "}", 
+   "m_last = child;", 
+   "m_last is only used in appendChild, which must always be synchronized at the caller level, and is never entered by the transform thread anyway.  But child getPreviousSibling() can absolutely fail.  So I think this should be changed to:", 
+   "child.m_prev = m_last;", 
+   "m_last.m_next = child;", 
+   "This should be safe because getPreviousSibling() can't be called until the node is navigated to via m_last.m_next.", 
+   "However, I'm not sure why this would cause the particular problem you are having with dropped text.  I would think getPreviousSibling problem would manifest itself as a bad numbering value, not a dropped text node.  In fact, in numbering64 it just uses <xsl:value-of select=\".\"/> which is optimized as of this weekend to just use the current node, and then the text value operation uses getFirstChild to get to the text child of that element.  So it seems like it is really getFirstChild which is failing.", 
+   "Well, I'll try reversing those on the theory that it might help.  Sorry to be making you do these runs... believe me, I wish I could reproduce the problem myself.", 
+   "I know that we're pretty close to the point of just doing absolute synchronization in getFirstChild, getNextSibling, and getPreviousSibling.  But, not only am I afraid to do that because of performance issues (though I haven't measured what the difference would be), I'm worried that I could somehow introduce a deadlock or hang at this stage of the game.", 
+   "It's also possible that there's something else going on in xsl:number above the level of Stree which could be screwing things up.", 
+   "(And the original note from Joe):", 
+   "The failure frequency seems reduced... but there still seems to be a lurking horror or two, and the pattern of failure seems unchanged.", 
+   "Seventh pass, numbering64, line 9", 
+   "5: hhh", 
+   "5:", 
+   "Eighth pass, numbering27, line 17", 
+   "3+1-1: Level C", 
+   "3+1-1:", 
+   "Ninth pass", 
+   "numb42, line 3", 
+   "(1.): Level A", 
+   "(1.):", 
+   "numb66, line 35", 
+   "C. Second Subsection in third Section in second Chapter", 
+   "C."
+  ], 
+  "revision_id": "334204"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-08T19:15:02.000000Z", 
+  "msg": [
+   "Fixes problem reported by Guoliang Cao <cao@ispsoft.com>,", 
+   "note titled \"A possible bug in xalan 2.0 D05/D06\",", 
+   "01/08/2001 11:18 AM.  The DOMBuilder was screening out", 
+   "whitespace nodes before the first element was being pushed, which", 
+   "it shouldn't if a document fragment is being used.  The fix is to", 
+   "always return false from isOutsideDocElem() if the (null == m_docFrag)."
+  ], 
+  "revision_id": "334203"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T19:52:21.000000Z", 
+  "msg": [
+   "Updated version numbers to d07"
+  ], 
+  "revision_id": "334202"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T06:24:41.000000Z", 
+  "msg": [
+   "Make sure both the source locator and the error listener are set in", 
+   "the XPath Compiler and XPath parser, and the XPath object itself.", 
+   "This required passing the error listener to the XPath object, which", 
+   "had a ripple effect on several functions, including the constructor", 
+   "for StylesheetRoot.", 
+   "This was sparked by BugId 4402417 which Krishna.Meduri@eng.sun.com", 
+   "submitted to me privately, but may not be the same thing, since", 
+   "he was getting a NoSuchMethodError, and I don't", 
+   "have the stylesheet to replicate the bug.", 
+   "This fixes an error where a null pointer", 
+   "exception was being thrown if an unknown", 
+   "function was found."
+  ], 
+  "revision_id": "334201"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T04:22:18.000000Z", 
+  "msg": [
+   "format-number is implemented in org.apache.xalan.templates, since", 
+   "it is not an XPath function.  This class in xpath has long been", 
+   "dead code."
+  ], 
+  "revision_id": "334200"
+ }
+]

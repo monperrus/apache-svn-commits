@@ -1,0 +1,74 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T03:59:23.000000Z", 
+  "msg": [
+   "Do synchronization on the m_chars field in TextImpl, to address", 
+   "data read/write race that JProbe Threadalizer reported.  This may", 
+   "or may not fix the problem that Joe K's been reporting, with dropped", 
+   "text on the IBM JDK with numb37, numbering65, numb69,", 
+   "and numbering80.  The Theadalizer reports other race", 
+   "conditions, but I believe I have accounted for them all.", 
+   "The m_chars buffer initial size and growth size has", 
+   "been reduced from 64K to 8K.  We should consider", 
+   "doing blocks down the line to avoid having to do", 
+   "array copies and allocations everytime we want to", 
+   "grow the array.  I would consider this too destabilizing", 
+   "for the upcoming release.", 
+   "Also, changed SaxEventDispatch#dispatchSAXEvent to", 
+   "#dispatchCharactersEvent, and implemented it at", 
+   "the level of child, so that all known direct character events", 
+   "from the source tree can be dispatched directly from", 
+   "the nodes.  This saves a fair amount in string construction,", 
+   "and is also a big savings in not having to copy child text into", 
+   "a buffer in order to aggregate it for the string value", 
+   "of an element."
+  ], 
+  "revision_id": "334194"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T03:47:08.000000Z", 
+  "msg": [
+   "Defend against empty class name, which showed up because", 
+   "JDK 1.8 throws an illegalArgumentException.  Probably more", 
+   "defensive than it needs to be, Gary may want to restructure this", 
+   "a bit.  Addresses SPR ID#:  SCUU4SPUV3", 
+   "New SPR / Sev: 1 / JDK 1.1.8 only: extend01.xsl throws TransformerException...transformNode()", 
+   "(The previous commit that listed this was an error,", 
+   "that commit addressed SCUU4SPUXC)."
+  ], 
+  "revision_id": "334193"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T03:43:07.000000Z", 
+  "msg": [
+   "Handle IllegalArgumentException, which JDK 1.8 throws,", 
+   "in addition to UnsupportedEncoding exception.  Addresses", 
+   "SPR ID#:  SCUU4SPUV3 / Sev: 1 / JDK 1.1.8 only:", 
+   "extend01.xsl throws TransformerException...transformNode()."
+  ], 
+  "revision_id": "334192"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T03:39:19.000000Z", 
+  "msg": [
+   "Use the new CharKey class so that chars can be looked up without", 
+   "creating a Character object for each lookup.  This showed up fairly", 
+   "high on the JProbe profiler."
+  ], 
+  "revision_id": "334191"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-01-07T03:37:12.000000Z", 
+  "msg": [
+   "CharKey class to be used as a key for char hashtable lookups.", 
+   "This class is used in the serialization stuff to look up chars without", 
+   "creating a Character object for each lookup."
+  ], 
+  "revision_id": "334190"
+ }
+]

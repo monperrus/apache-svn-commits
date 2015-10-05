@@ -1,0 +1,85 @@
+[
+ {
+  "author": "rineholt", 
+  "date": "2002-07-22T20:00:35.000000Z", 
+  "msg": [
+   "By specifying the Expect 100-continue HTTP header wait to process this", 
+   "response.  Ultimately, we should also handle the case were we don't", 
+   "explicitly set this-- but that's a bit harder to handle.  This was needed", 
+   "not require getting the content size.  I beleive this *should* remedy the", 
+   "case for servers that *may* send this anyway in http 1.1. :-("
+  ], 
+  "revision_id": "254614"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-22T19:15:59.000000Z", 
+  "msg": [
+   "JSR 101 4.3.11 says that the generated service interface interface", 
+   "must have methods named get<Name_of_wsdl:port>.", 
+   "The TCK tests this behavior.  So if the wsdl:port is named \"foo\",", 
+   "a \"getfoo\" method is expected.", 
+   "Problem:", 
+   "Axis always converts the <Name_of_wsdl:port> into a java class name.", 
+   "Thus Axis generates a \"getFoo\" method for example above.", 
+   "Axis also has some interop testcases that have wsdl:port names", 
+   "that are not valid java identifier names.  So simply", 
+   "change the code to do get<Name_of_wsdl:port> will not work.", 
+   "Solution:", 
+   "The Axis code now determines if the wsdl:port name is a valid", 
+   "java identifier.  If it is, the wsdl:port name is used (which satisfies the TCK).", 
+   "If the wsd:port name is not a valid java identifier, the xmlNameToJavaClass()", 
+   "code is used to create a proper name (which satisfies the interop tests).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254613"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-22T19:09:04.000000Z", 
+  "msg": [
+   "Update polymorphism test to include a test of sending back a \"C\", which", 
+   "ISA \"A\" but has no explicit type mapping registered.   Make sure we get", 
+   "it on the other side as an \"A\"."
+  ], 
+  "revision_id": "254612"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-22T15:17:35.000000Z", 
+  "msg": [
+   "Two fixes necessary to pass TCK tests.", 
+   "These fixes may also correct some problems reported in Bugzilla.", 
+   "First Problem:", 
+   "Echoing a hexBinary does not work.  Passing the byte[] from the client to", 
+   "the server works correctly  because the stub indicates", 
+   "the parameter typeQName is xsd:hexBinary;", 
+   "thus the byte[] is serialized as a xsd:hexBinary", 
+   "instead of the default xsd:base64.", 
+   "Returning the byte[] back to the client does not work because the", 
+   "wsdd operation does not know the proper returnType QName.", 
+   "The byte[] is serialized back to the client as a xsd:base64.", 
+   "The solution is to have the returnType attribute generated in the", 
+   "deploy.wsdd and Skeleton...just like we do for parameters.", 
+   "Second Problem:", 
+   "The TCK wants to echo a collection of xsd:byte using a javaType of byte[].", 
+   "The problem is byte[] is mapped to xsd:base64, so the serialization", 
+   "and deserialization is incorrect.  The solution is to add the special", 
+   "case of (xsd:byte, byte[]) to the default type mapping so that serialization", 
+   "occurs correctly (serialize a series of bytes) and deserialization works", 
+   "correctly (deserialize individual bytes)."
+  ], 
+  "revision_id": "254611"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-22T14:54:47.000000Z", 
+  "msg": [
+   "Remove dead code per TODO."
+  ], 
+  "revision_id": "254610"
+ }
+]

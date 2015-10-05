@@ -1,0 +1,100 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-04T12:37:35.218216Z", 
+  "msg": [
+   "Fix some bucket destruction issues, and revamp the request construction", 
+   "mechanisms.", 
+   "* gen2/serf.h:", 
+   "(serf_request_t): new, opaque type for a request", 
+   "(serf_connection_request_create): drop most parameters and restructure", 
+   "as a constructor for serf_request_t objects.", 
+   "(serf_request_deliver): new function, picking up from the old", 
+   "serf_connection_request_create function. it provides the necessary", 
+   "data for a request, and schedules it for delivery.", 
+   "(serf_request_cancel): renamed from serf_connection_request_cancel with", 
+   "a tweak to the param list.", 
+   "(serf_request_get_pool): new function to return a request's pool", 
+   "(serf_request_get_alloc): new function to return a request's bucket", 
+   "allocator.", 
+   "(serf_bucket_type_t.peek): clarify docs.", 
+   "* gen2/context.c:", 
+   "(struct serf_request_t): renamed from request_t. added a connection", 
+   "object so we can \"get back home', and added a bucket allocator", 
+   "specific to this request/response pair. all users changed.", 
+   "(update_pollset): new function to adjust the read/write desirability of", 
+   "the connection's socket.", 
+   "(open_connections): store the socket into the connection. use the new", 
+   "update_pollset function.", 
+   "(write_to_connection): call update_pollset() when we run out of requests", 
+   "to write out. we want to disable looking for writeability.", 
+   "(read_from_connection): call update_pollset when we've read all", 
+   "responses. we don't want to try reading any more.", 
+   "(serf_connection_request_create): update parameters to match prototype", 
+   "(serf_request_deliver, serf_request_cancel, serf_request_get_pool,", 
+   "serf_request_get_alloc): new functions", 
+   "(serf_connection_request_cancel): removed in favor of serf_request_cancel", 
+   "* gen2/serf_bucket_util.h:", 
+   "(serf_default_destroy_and_data): helper function to destroy the bucket,", 
+   "its metadata, *and* its data member.", 
+   "* gen2/buckets/file_buckets.c:", 
+   "(serf_file_peek): tweak: len is only an output paramter; we should be", 
+   "peeking at all available data.", 
+   "(serf_file_destroy): removed", 
+   "(serf_bucket_type_file.destroy): use serf_default_destroy_and_data", 
+   "* gen2/buckets/buckets.c:", 
+   "(serf_default_destroy_and_data): new function", 
+   "* gen2/buckets/aggregate_buckets.c:", 
+   "(serf_aggregate_read): destroy the buckets when we're done with them.", 
+   "(serf_bucket_type_aggregate.destroy): use serf_default_destroy_and_data", 
+   "* gen2/buckets/request_buckets.c:", 
+   "(serf_bucket_type_request.destroy): use serf_default_destroy_and_data", 
+   "* gen2/buckets/simple_buckets.c:", 
+   "(serf_simple_destroy): use serf_default_destroy_and_data to get rid of", 
+   "most of the bucket's allocations.", 
+   "* gen2/buckets/mmap_buckets.c:", 
+   "(serf_mmap_destroy): removed", 
+   "(serf_bucket_type_mmap): renamed from serf_bucket_type_simple. used", 
+   "serf_default_destroy_and_data in place of manual (incorrect) code."
+  ], 
+  "revision_id": "89"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-11-04T09:09:27.741425Z", 
+  "msg": [
+   "Add a new commons website meant for commons.apache.org.", 
+   "Lots of changes that I'm not going to detail."
+  ], 
+  "revision_id": "88"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-04T07:45:40.873541Z", 
+  "msg": [
+   "add a couple TODO items"
+  ], 
+  "revision_id": "87"
+ }, 
+ {
+  "author": "jasons", 
+  "date": "2003-11-04T06:00:12.249085Z", 
+  "msg": [
+   "usual"
+  ], 
+  "revision_id": "86"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-11-04T05:29:43.586659Z", 
+  "msg": [
+   "Add shells for file and mmap buckets.  Fix buglet in simple_buckets.c's peek.", 
+   "* gen2/buckets/file_buckets.c, gen2/buckets/mmap_buckets.c (added): First-cut", 
+   "implementation of file and MMAP buckets.", 
+   "* gen2/buckets/simple_buckets.c (serf_simple_peek): If *len is greater than", 
+   "ctx->remaining, cap *len accordingly.", 
+   "* gen2/Makefile: Add new targets for file and mmap buckets."
+  ], 
+  "revision_id": "85"
+ }
+]

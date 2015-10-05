@@ -1,0 +1,64 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2002-04-24T04:17:44.000000Z", 
+  "msg": [
+   "Half of a fix.  We were inappropriately using GetFileInformationEx and", 
+   "friends to attempt to get the details of a Junction (NTFS symlink.)", 
+   "This was entirely invalid, we now use the open->getfileinfo->close on", 
+   "such an entity.  The faster methods exist only within the NT kernel, an", 
+   "option I'll be exploring but haven't had time to address.", 
+   "Bugz report 8014, identified by Sam Morris <sam@netcity.co.uk>"
+  ], 
+  "revision_id": "63299"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-04-24T03:31:46.000000Z", 
+  "msg": [
+   "That's an LSTAT, not a stat.  Think about it, if you are trying to figure", 
+   "the proper case (or alias) you are asking for the info about the name you", 
+   "provided (even if it's a link), never the info about the -target- (which", 
+   "fails anyway in my fix-in-progress for Win2k Junctions)."
+  ], 
+  "revision_id": "63298"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2002-04-23T19:01:35.000000Z", 
+  "msg": [
+   "Hopefully close the build problems with atomic on Solaris systems", 
+   "with GNUas. It looks like 'gcc -E' is ignoring the apr_atomic_sparc.s", 
+   "file (due to the suffix... a apr_atomic_sparc.c file would be read", 
+   "in fine) causing apr_atomic_sparc.S to be empty for GNUas users.", 
+   "Soooooo we force it to read from stdin. For non-GNUas users, we", 
+   "work as normal, though a but weirdly (instead of cat ... > it's", 
+   "cat - < ... > )", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:\tAaron Bannert"
+  ], 
+  "revision_id": "63297"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2002-04-22T21:22:21.000000Z", 
+  "msg": [
+   "Implemented the case matching to disk of the file and directory names."
+  ], 
+  "revision_id": "63296"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-04-22T16:41:50.000000Z", 
+  "msg": [
+   "Correct two huge Win32 bugs.  One failed to terminate the path (we also", 
+   "failed to allocate for the terminator) of UNC root paths, so they would", 
+   "usually be determined invalid.  The other failed to expand the path", 
+   "(shrinking worked correctly) when dealing with aliases in the file path.", 
+   "PR: 8009, other 'UNC not accepted' reports"
+  ], 
+  "revision_id": "63295"
+ }
+]

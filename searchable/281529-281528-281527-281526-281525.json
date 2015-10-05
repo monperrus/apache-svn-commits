@@ -1,0 +1,83 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-02-16T05:44:35.000000Z", 
+  "msg": [
+   "Changed ContextInterceptor and mapper to use a simpler and more extensible", 
+   "model.", 
+   "A Container represents the common properties of a set of URL paths, and we use", 
+   "this representation for both servlet-mappings ( urlPath -> handler) and", 
+   "for security properties. The model is extensible - it is possible to add", 
+   "more complex patterns ( including matching virtual hosts, source IPs, etc),", 
+   "and it is possible to fine tune the whole server.", 
+   "This is also similar with Catalina - and will help us share more code.", 
+   "Also, removed some methods from Interceptor - it's better to have a smaller set", 
+   "and add later if we need to."
+  ], 
+  "revision_id": "281529"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-16T02:41:13.000000Z", 
+  "msg": [
+   "Broken build, fixed."
+  ], 
+  "revision_id": "281528"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-16T00:48:45.000000Z", 
+  "msg": [
+   "Moved work-dir initialization in DefaultCMSetter. WorkDirInterceptor will only clean", 
+   "up the workdir if not persistent.", 
+   "Commented out the workdir removal - it's not part of the spec and it affects the", 
+   "performance ( by removing the jsp files). It is also a bad idea to clean it up", 
+   "all the time we start/shut down - it can be removed when we un-deploy or", 
+   "when we have a good reason for that, it is the only place where servlets can save files."
+  ], 
+  "revision_id": "281527"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-16T00:30:30.000000Z", 
+  "msg": [
+   "More security. Don't expect anything untill 3.1, the code is probably buggy and incomplete.", 
+   "Basic Auth works ( i.e. the protocol part - no real authorization ).", 
+   "To realy authorize you can extend SecurityCheck and override \"checkPassword\" and \"userInRole\"", 
+   "or implement a new interceptor based on SecurityCheck that will do whatever auth it needs to.", 
+   "Tomcat will impose no restrictions / APIs on how the authentication works, you can implement", 
+   "whatever scheme you want as an interceptor ( and JAAS or any other API for password and role", 
+   "checks).", 
+   "There are 2 callbacks you need to implement:", 
+   "- authenticate : if you recognize a request and feel you can authenticate,  do it and set the", 
+   "\"remoteUser\" field. ( XXX if the password is wrong return error - not implemented )", 
+   "- authorize: the request will have some \"roles\" set in, and the user. You just need to check", 
+   "if the user has one of the authorized roles. The same method will be called to implement the", 
+   "isUserInRole() API call ( with internal request with User and Roles fields set, but nothing", 
+   "else).", 
+   "If the user is not authorized you need to set the handler to a servlet that can perform", 
+   "authorization ( either the internal AuthServlet that will do Basic, or a form, or something", 
+   "else).", 
+   "( XXX that can move up into ContextManager - it's common enough )"
+  ], 
+  "revision_id": "281526"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-15T17:35:40.000000Z", 
+  "msg": [
+   "- Added tomcat.core.Container - it's similar with Catalina container, i.e. it represents a", 
+   "group of URLs. It is also similar with per dir config in Apache.", 
+   "For each URL pattern ( \"Location\" ) we can associate a handler ( via mappings ) and security", 
+   "constraints. The Container will represent the properties of a location ( or URL pattern ).", 
+   "- Added SecurityContraints to Context, use Container to represent them.", 
+   "- Changed SimpleMapper to also check if the location has secuirty requirements. The code in", 
+   "SimpleMapper needs a serious review and eventually it should be replaced ( the alghoritm for", 
+   "matching and the data structures are at least ineficient ).", 
+   "- Tested 1/2 of security - if you define a constraint in web.xml, it will be processed and", 
+   "all requests that match will be \"marked\". The missing part is authenticating and checking if", 
+   "the user is in one of the authorized roles ( this is done in Craig's code, we just need to merge)"
+  ], 
+  "revision_id": "281525"
+ }
+]

@@ -1,0 +1,81 @@
+[
+ {
+  "author": "rse", 
+  "date": "2000-10-07T16:08:09.000000Z", 
+  "msg": [
+   "FreeBSD uses socklen_t since version 4.0, so define NET_SIZE_T", 
+   "explicitly there. This gets rid of the following warnings:", 
+   "http_main.c: In function `child_main':", 
+   "http_main.c:3988: warning: pointer targets in passing arg 3 of `accept' differ in signedness", 
+   "http_main.c:4138: warning: pointer targets in passing arg 3 of `getsockname' differ in signedness", 
+   "http_main.c: In function `main':", 
+   "http_main.c:5091: warning: pointer targets in passing arg 3 of `getpeername' differ in signedness", 
+   "http_main.c:5098: warning: pointer targets in passing arg 3 of `getsockname' differ in signedness"
+  ], 
+  "revision_id": "86429"
+ }, 
+ {
+  "author": "rse", 
+  "date": "2000-10-07T15:39:19.000000Z", 
+  "msg": [
+   "Backout revision 1.124 - it was vetoed by me a few weeks ago for the", 
+   "following reasons:", 
+   "1. The patch is inside the Configuration.tmpl parsing loop and this way is", 
+   "more or less useless because the distributed Configuration.tmpl file", 
+   "doesn't have any *.so names.", 
+   "2. The example --activate-module=src/modules/xxx/libxxx.so is not", 
+   "affected by this patch, because --activate-module and --add-module", 
+   "options are implemented a lot later in the configure script.", 
+   "3. I do not understand what a --activate-module=src/modules/xxx/libxxx.so", 
+   "should do. The .[ao] -> .so step is done by configure automatically", 
+   "because of --enable-shared, so usually there is never a configured", 
+   "src/modules/xxx/libxxx.so path, even if the module exists.", 
+   "4. The error message talks about \".o|.a|.so|.module\", but the actual", 
+   "check is for a superset \"*.*\". This is slightly inconsistent."
+  ], 
+  "revision_id": "86428"
+ }, 
+ {
+  "author": "mjc", 
+  "date": "2000-10-07T09:15:19.000000Z", 
+  "msg": [
+   "Update times.  Tried to contact Mike Gardiner about testing of NetWare but Novell", 
+   "say he has left the company; so remove showstopper status.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "86427"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-07T05:41:59.000000Z", 
+  "msg": [
+   "The newest incarnation of http_filter.  This is far from perfect, but it", 
+   "is a step in the right direction.  The idea is that the http_filter knows", 
+   "about the http protocol.  So, it uses that knowledge to discover HTTP", 
+   "request headers, and sends those headers up to getline.  However, it keeps", 
+   "the request body saved in it's ctx pointer.", 
+   "Later, when ap_get_client_block is called, we have set the remaining field", 
+   "in the conn_rec.  This tells the http_filter how much of the remaining", 
+   "data is request body, and how much isn't.  So, the http_filter can return", 
+   "the request body unparsed up throught ap_get_client_block.", 
+   "This doesn't even try to work with chunked input data, and there are still", 
+   "some other bugs in it, but it works for small-ish files in my tests, and", 
+   "it lets other people play with the concept of input filters.  I will try", 
+   "to play with this more, but others should feel free to hack around in it", 
+   "too."
+  ], 
+  "revision_id": "86426"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-10-07T01:29:39.000000Z", 
+  "msg": [
+   "clean up the provider stuff some more: don't allow pick-and-choose of", 
+   "pieces, but just a complete provider. they aren't really separable anyways."
+  ], 
+  "revision_id": "86425"
+ }
+]

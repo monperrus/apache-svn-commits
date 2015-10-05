@@ -1,0 +1,102 @@
+[
+ {
+  "author": "scheu", 
+  "date": "2002-10-10T17:22:55.000000Z", 
+  "msg": [
+   "Following changes are made:", 
+   "- Added the -use option to Java2WSDL.  Valid arguments are literal and encoded.", 
+   "The default is literal if the style is not rpc.", 
+   "- The emitter had a setMode() method to set the style.  This is changed to setStyle.", 
+   "- Change Java2WSDL to properly use the use and style information.  Also changed", 
+   "the emitter to use the Use/Style enums instead of static constant integers.", 
+   "- JavaProvider now invokes the java2wsdl emitter with the style/use information", 
+   "from the serviceDesc.  Thus all the wires are now hooked up.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "248409"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-10-10T15:12:15.000000Z", 
+  "msg": [
+   "Some more fault/header fixes (testcase to test these fixes still to come...)", 
+   "- added a little defensiveness to FaultInfo", 
+   "- now that we have FaultInfo, we should use it (ie, JavaGeneratorFactory,", 
+   "JavaStubWriter) so we make sure we get ALL info (like implicit header faults)", 
+   "- now that faults are determined (wrongly, in my opinion) from the binding", 
+   "instead of the portType, it exposed a problem in Java2WSDL.  It was", 
+   "generating WSDL that had a portType fault clause but no corresponding", 
+   "binding fault clause.  Before the new fault fixes, test/wsdl/roundtrip was", 
+   "generating an SEI with exceptions on the methods.  After the fault fixes", 
+   "the SEI had no exceptions.  The test still passed because the exception", 
+   "aspect wasn't being tested (probably something else I should change)."
+  ], 
+  "revision_id": "248408"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-10-09T22:08:47.000000Z", 
+  "msg": [
+   "Moving toward portable JSSE solution.."
+  ], 
+  "revision_id": "248407"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-10-09T20:51:31.000000Z", 
+  "msg": [
+   "The recent fault fixes looked, I'm sorry to say, like one big hack.  This isn't", 
+   "particularly surprising considering the mad rush to get faults working", 
+   "before the soap builders' interop meeting.  But it caused me a couple", 
+   "ulcers.", 
+   "- FaultInfo was an inner class inside JavaDefinitionWriter AND it was used", 
+   "by SymbolTable.  This was just plain wrong!  There should be absolutely", 
+   "NO dependencies by the parser/symbol table front end on the emitter back", 
+   "end.  So I pulled FaultInfo into its own class and put it into the symbolTable", 
+   "package.", 
+   "- FaultInfo was nothing but a struct and you had to use Util methods to", 
+   "massage that info.  Tsk tsk.  Not very OO.  I've moved the logic from", 
+   "various Utils methods into the FaultInfo class itself.", 
+   "- The fault changes broke soap:headerfault.  Faults that were declared in", 
+   "the portType weren't being generated if they appeared in a", 
+   "soap:headerfault.  They only worked if they appeared in the binding as a", 
+   "soap:fault.  I've fixed this and uncommented the soap:headerfault bits of", 
+   "the header test.", 
+   "A couple remaining problems.", 
+   "- I still have a serious concern about the fault logic based on the binding", 
+   "rather than the portType, but that's a bigger fish than I wanted to fry right", 
+   "now (I'm in the mood for trout and this thing's a whopping flounder).  One", 
+   "particular issue:  if a WSDL file contains a portType but DOES NOT contain", 
+   "a binding, fault exceptions would not be generated, therefore, even though", 
+   "the SEI should be generated, it won't compile.  (There's a more serious", 
+   "problem in that this sort of WSDL won't even generate the SEI now.  This", 
+   "broke somewhere along the way.)", 
+   "- Now that FaultInfo is a real object, it seems like it should really be a", 
+   "subclass of SymTabEntry, ie., FaultEntry.  But faults aren't first-class", 
+   "objects in WSDL, so creating a FaultEntry could be problemmatic.  Needs", 
+   "more thought."
+  ], 
+  "revision_id": "248406"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-10-09T20:10:16.000000Z", 
+  "msg": [
+   "Fixes so that WSDL2Java doesn't outright barf on the round 4 group G", 
+   "(SwA/DIME) WSDLs defined at http://www.whitemesa.net/r4/interop4.html", 
+   "A number of issues remain: for example the WSDDs which are emittted for", 
+   "mime-rpc.wsdl is devoid of content.  No discernable support exists in", 
+   "WSDL2Java for DIME.", 
+   "Given my level of understanding of WSDL2Java (nearly zero), I harbor", 
+   "no preconceptions that these fixes I have made are other than hacks,", 
+   "but given the lack of responses I have received to", 
+   "http://marc.theaimsgroup.com/?l=axis-dev&m=103404539724028&w=2", 
+   "I felt it worthwhile to check in these changes so that they can be", 
+   "critiqued and/or built upon."
+  ], 
+  "revision_id": "248405"
+ }
+]

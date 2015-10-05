@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jmitchell", 
+  "date": "2002-12-24T01:05:54.000000Z", 
+  "msg": [
+   "DOH!  Sorry James and Kevin!!  forgot to update my copy first!"
+  ], 
+  "revision_id": "50014"
+ }, 
+ {
+  "author": "jmitchell", 
+  "date": "2002-12-24T00:57:57.000000Z", 
+  "msg": [
+   "Fix a few typos"
+  ], 
+  "revision_id": "50013"
+ }, 
+ {
+  "author": "martinc", 
+  "date": "2002-12-23T22:26:34.000000Z", 
+  "msg": [
+   "Update proposed freeze / tag date and open bug list."
+  ], 
+  "revision_id": "50012"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-12-23T22:00:24.000000Z", 
+  "msg": [
+   "Add an optional \"size\" attribute on <form-property>, so that you can ask", 
+   "for an array of a specific size without having to specify initial values", 
+   "in the \"initial\" attribute.  For example,", 
+   "<form-property name=\"foo\" type=\"java.lang.String[]\" size=\"10\"/>", 
+   "will cause the initialize() method of the DynaActionForm to create an", 
+   "array of ten Strings (all initialized to null).  The size attribute will be", 
+   "ignored if the initial attribute is present.  Updated unit tests included.", 
+   "This is the non-controversial half of the recommendations in Bugzilla #14800.", 
+   "I'm still reviewing the advisability of changing the way that initial arrays", 
+   "get cloned or not.", 
+   "PR: Bugzilla #14800", 
+   "Submitted by:\tJames Turner <turner at blackbear.com>"
+  ], 
+  "revision_id": "50011"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-12-23T20:52:37.000000Z", 
+  "msg": [
+   "WARNING:  Backwards-incompatible patch being applied.  Please review!", 
+   "Commit a fix for 14669 (\"reset() in DynaActionForm act the same as", 
+   "ActionForm\"), loosely based on the patch provided by Peter Pilgrim.  Now,", 
+   "the default reset() method of DynaActionForm does nothing, exactly like the", 
+   "default reset() method of ActionForm.  This should clean up lots of user", 
+   "confusion about the differences between standard ActionForm beans and", 
+   "DynaActionForm beans, even though it is not backwards compatible.", 
+   "The logic to configure the properties of a DynaActionForm to the values", 
+   "specified by the \"initial\" attribute on <form-property> elements has been", 
+   "migrated to a new public method initialize() -- versus clear() as proposed", 
+   "in Peter's patch.  This method takes an ActionMapping argument, that is", 
+   "used to look up the corresponding form bean definition.  The method is", 
+   "public so that it can be called by application logic if desired.", 
+   "To ensure that a newly created DynaActionForm bean instance has correctly", 
+   "initialized property values, the RequestUtils.createActionForm() factory method", 
+   "has also been modified to call initialize() if it did indeed create a new", 
+   "instance.  Therefore, any logic that uses this factory method to create new", 
+   "form bean instances (as Struts itself does in the only two places where form", 
+   "bean instances are created by the framework) should not be affected by this", 
+   "change.", 
+   "Applications that call DynaActionFormClass.newInstance() will need to be", 
+   "modified to call the initialize() method.", 
+   "PR: Bugzilla #14669", 
+   "Submitted by:\tBrian Topping <topping at digidemic.com>"
+  ], 
+  "revision_id": "50010"
+ }
+]

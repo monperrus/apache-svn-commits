@@ -1,0 +1,76 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:56:25.000000Z", 
+  "msg": [
+   "The lb worker - a lot simpler. All the endpoint stuff is gone, we just deal with", 
+   "our job which is to find the best worker and let it deal with communication."
+  ], 
+  "revision_id": "296319"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:55:17.000000Z", 
+  "msg": [
+   "A number of bug fixes - make sure we save the global ref, not the ref.", 
+   "We now get an Endpoint from the java side - and cache/reuse it with the", 
+   "jni endpoint.", 
+   "The jni channel is 'interesting' - it's the first non-stream channel. It could", 
+   "be treated as a stream, by using 2 threads ( so send/receive model will work ),", 
+   "but I wanted to preserve 'single thread, no sync' model from the previous", 
+   "jni worker.", 
+   "It may seem a bit complicated - and it adds some limitations on the model, but", 
+   "I think it's worth it.", 
+   "The idea is that, as before, the first message ( containing the request ) gives", 
+   "control to tomcat who may send back messages ( and get back responses to it's", 
+   "messages ). The send() method in channel is doing exactly this first step.", 
+   "Tomcat will use a native method to send messages ( that replaces receive(),", 
+   "which is not used ), which are dispatched. The response is actually put in", 
+   "the same buffer - a single jarray pin is needed.", 
+   "We must make sure we don't run into buffer problems - but that can be resolved."
+  ], 
+  "revision_id": "296318"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:48:17.000000Z", 
+  "msg": [
+   "Removed the old jni worker. It had a number of problems, and was pretty hard to", 
+   "improve.", 
+   "The new worker is a subset - it only deals with starting an embeded VM and running", 
+   "a startup/shutdown method when needed.", 
+   "It relies on all the improvements in the new jk_vm, which deals with all the", 
+   "dirty details of creating a vm - and more importantly does a lot of guessing", 
+   "( for a 'mainstream' vm, all you have to set is LD_LIBRARY_PATH and JAVA_HOME", 
+   "before starting apache - all else is detected ).", 
+   "You can of course start different programs ( a single vm will be used tough ).", 
+   "All the request forwarding is in the jni channel."
+  ], 
+  "revision_id": "296317"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:43:11.000000Z", 
+  "msg": [
+   "Added dispatch - process a single incoming message.", 
+   "ProcessCallbacks is all wrong - it doesn't work with non-stream channels like jni", 
+   "and it's to coarse. And it should be moved in channel - since each channel may", 
+   "have it's own method of handling requests ( thread-wise especially )"
+  ], 
+  "revision_id": "296316"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:41:51.000000Z", 
+  "msg": [
+   "Added a cache for requests. Right now we recycle the pools ( it used to be part", 
+   "of the endpoint logic, I just preserved it ). It would make more sense to", 
+   "recycle the whole request, like we do in java - or don't bother at all,", 
+   "allocation is much cheaper ( and is even cheaper if apr_pools are used -", 
+   "the jk_pool does a malloc ). For now I'll leave it how it was.", 
+   "Get endpoint is gone, it's up to the worker to use an endpoint if it wants", 
+   "and how it uses it. Service is in - that's what the worker is supposed to do."
+  ], 
+  "revision_id": "296315"
+ }
+]

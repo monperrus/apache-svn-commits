@@ -1,0 +1,97 @@
+[
+ {
+  "author": "markt", 
+  "date": "2004-05-08T13:48:47.000000Z", 
+  "msg": [
+   "Fix bug 16877. Null pointer exception on startup if context specifies Path=... rather than path=...", 
+   "- Based on a patch submitted by Anil Bhatia", 
+   "Removed unused imports identified by Eclipse."
+  ], 
+  "revision_id": "288984"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2004-05-06T21:25:42.000000Z", 
+  "msg": [
+   "Fix bug 21184. Rename LocalString_fr.properties to LocalStrings_fr.properties"
+  ], 
+  "revision_id": "288983"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2004-05-03T21:29:21.000000Z", 
+  "msg": [
+   "Update release notes"
+  ], 
+  "revision_id": "288982"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2004-04-30T19:15:26.000000Z", 
+  "msg": [
+   "The JDBCStore required a great deal of unnecessary db", 
+   "queries to manage the persisted data. This could severly", 
+   "impact its ability to scale to large numbers of sessions.", 
+   "1. When a JSESSIONID cookie was submitted with a request where", 
+   "the Session no longer exists multiple queries of the db occurred", 
+   "to try and load a persisted Session from the Store. I was", 
+   "seeing four attempts to load from the persistence store", 
+   "each request when a Session did not exist for a JSESSIONID.", 
+   "PersistentManagerBase swapIn() and swapOut() were patched", 
+   "to maintain a Hashtable of JSESSIONID's which do not exist", 
+   "in the Store so that they don't have to be checked multiple", 
+   "times.  Each checkInterval the Hashtable is cleared to", 
+   "prevent it from consuming too much memory.", 
+   "2. The StoreBase.processExpires() method triggers a load of", 
+   "each Session persisted to the db each checkInterval to", 
+   "perform its test to determine if the Session has expired.", 
+   "This incurred alot of overhead on the db, especially", 
+   "if there was a large amount of session data. The number", 
+   "of queries performed each checkInterval is 1 + number of", 
+   "sessions persisted to the db + number of expired sessions", 
+   "removed.", 
+   "The StoreBase.processExpires() method was overridden", 
+   "in JDBCStore.  The method in JDBCStore performs a", 
+   "query of the db to find only those Sessions which should", 
+   "be expired. The number of queries performed here is 1 +", 
+   "2 * the number of expired sessions (load then remove", 
+   "of expired session).", 
+   "3. JDBCStore.remove() is being called sometimes with a null", 
+   "sessionid String causing an unnecessary synchronization", 
+   "and db query.", 
+   "Added a check for a null sessionid String at top of method.", 
+   "Problems with expiring sessions have been reported numerous times.", 
+   "The basic problem is as follows, starting at time 0 min and with", 
+   "a max inactive interval of 30 minutes:", 
+   "00 min: First request, new session created, LastAccessedTime 0", 
+   "02 min: Second request, reuse session, LastAccessedTime 0", 
+   "31 min: Third request, reuse session, LastAccessedTime now 2", 
+   "33 min: Background manager thread expires session even though", 
+   "it has only been two minutes since the remote clients", 
+   "last request.", 
+   "The argument for not changing how this works is based on how", 
+   "the Servlet Spec defines Session.getLastAccessedTime().", 
+   "But I agree with all those who have complained about this", 
+   "behaviour that Tomcat session timeouts are buggy.", 
+   "So I came up with a compromise that still allows the", 
+   "HttpSession.getLastAccessedTime() to return the time of the", 
+   "previous request for those who are Servlet Spec purists.", 
+   "But internally sessions are expired when", 
+   "current time > last request + max inactive interval.", 
+   "When we do a major revision we should consider adding", 
+   "the StandardSession.getLastUsedTime() method to the", 
+   "org.apache.catalina.Session interface."
+  ], 
+  "revision_id": "288981"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2004-04-27T22:55:10.000000Z", 
+  "msg": [
+   "- Fix bug 20786. Manger webapp session output not formatted correctly", 
+   "for session inactive for <10 minutes.", 
+   "- Remove unused imports identified by Ecipse."
+  ], 
+  "revision_id": "288980"
+ }
+]

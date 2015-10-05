@@ -1,0 +1,74 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2001-05-16T05:33:44.000000Z", 
+  "msg": [
+   "Removed all dependencies of non-stree classes on stree.  RTF construction", 
+   "is now being done with the DTM.", 
+   "Defined null Source object for DTMManager#getDTM(Source...", 
+   "to mean \"make me a DTM but don't construct it\".", 
+   "Added incremental arg to DTMManager#getDTM(Source... to tell", 
+   "if it should build a CoRoutineParser and pass it to the DTM.", 
+   "Added getLexicalHandler, getDTDHandler, etc., to the DTM", 
+   "interface.  Ultimately needs review.", 
+   "Fixed some bugs..."
+  ], 
+  "revision_id": "334764"
+ }, 
+ {
+  "author": "jkesselm", 
+  "date": "2001-05-16T00:42:12.000000Z", 
+  "msg": [
+   "SAX filtering test written. Mostly works.", 
+   "One unaddressed case: If the parser crashes out, either on request", 
+   "(because the user issued doTerminate) or accidentally, the processing", 
+   "thread is _not_ informed. This can be addressed by having the main", 
+   "thread explicitly catch the exception and issue the exception through", 
+   "the coroutine system as if it came from the parser... but  in the case", 
+   "Scott is interested in, we would have no way to tell the event source that", 
+   "it must do this!", 
+   "\"Quite a three-pipe problem, Watson.\""
+  ], 
+  "revision_id": "334763"
+ }, 
+ {
+  "author": "jkesselm", 
+  "date": "2001-05-15T21:54:03.000000Z", 
+  "msg": [
+   "SAX filtering mode written, confirmed not to break old unit test.", 
+   "Still need new unit test to check the new mode."
+  ], 
+  "revision_id": "334762"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-05-15T21:44:24.000000Z", 
+  "msg": [
+   "This is the \"thread pooling hook\".", 
+   "It slightly changes the API used to create and wait for the transform thread.", 
+   "Instead of using threadCreate() and Thread.start() that creates a new thread", 
+   "and  thread.join() that waits for a thread to end, we now use a ThreadControler", 
+   "class that has the equivalent methods:", 
+   "- run( Runnable ) - executes a task in a thread. The default implementation", 
+   "is identical with what we had, using new Thread() and start()", 
+   "- waitTread() - waits for a task to end. The default impl. is identical with", 
+   "the previous code, using thread.join().", 
+   "Someone wanting to use a thread pool for xalan will have to extend", 
+   "the ThreadControler and override the 2 methods, then call setThreadController.", 
+   "Xalan itself doesn't implement a thread pool right now ( for mosts uses it's", 
+   "not even needed - if you just do few transforms for example ), instead", 
+   "a server that runs xalan could plug it's own thread pool."
+  ], 
+  "revision_id": "334761"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-05-15T21:36:47.000000Z", 
+  "msg": [
+   "2 more instances where Class.forName was used.", 
+   "Use the method in ExtensionHandler for consistency ( we could move it in", 
+   "org.apache.xml.utils, but for now it's easier to just use it as it is )"
+  ], 
+  "revision_id": "334760"
+ }
+]

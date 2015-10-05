@@ -1,0 +1,77 @@
+[
+ {
+  "author": "mikem", 
+  "date": "2005-10-30T00:02:02.288886Z", 
+  "msg": [
+   "Fix for DERBY-662.", 
+   "The change is an obvious fix to BaseDataFileFactory.java code which creates", 
+   "a conglomerates container file name given it's conglomerate number.  This is", 
+   "a simple hex conversion which was missing from one of the paths through the", 
+   "code.", 
+   "The path is almost never taken, but in the following circumstance during", 
+   "redo crasch recovery this bug", 
+   "could cause derby to delete the underlying file of a table.  The circumstances", 
+   "are as follows:", 
+   "1) The OS/filesystem must be case insensitive such that a request to delete", 
+   "a file named C2080.dat would also remove c2080.dat. This is true in", 
+   "windows default file systems, not true in unix/linux filesystems that", 
+   "I am aware of.", 
+   "2) The system must be shutdown not in a clean manner, such that a subsequent", 
+   "access of the database causes a REDO recovery action of a drop table", 
+   "statement. This means that a drop table statement must have happened", 
+   "since the last checkpoint in the log file. Examples of things that cause", 
+   "checkpoints are:", 
+   "o clean shutdown from ij using the \"exit\" command", 
+   "o clean shutdown of database using the \"shutdown=true\" url", 
+   "o calling the checkpoint system procedure", 
+   "o generating enough log activity to cause a regularly scheduled checkpoint.", 
+   "3) If the conglomerate number of the above described drop table is TABLE_1,", 
+   "then for a problem to occur there must also exist in the database a table", 
+   "such that it's HEX(TABLE_2) = TABLE_1", 
+   "4) Either TABLE_2 must not be accessed during REDO prior to the REDO operation", 
+   "of the drop of TABLE_1 or there must be enough other table references during", 
+   "the REDO phase to push the caching of of the open of TABLE_2 out of cache.", 
+   "The fix adds a test case which before the fix will force a container not", 
+   "found error on an existing table."
+  ], 
+  "revision_id": "329494"
+ }, 
+ {
+  "author": "tomdz", 
+  "date": "2005-10-29T23:31:32.857991Z", 
+  "msg": [
+   "Fix for DDLUTILS-37"
+  ], 
+  "revision_id": "329493"
+ }, 
+ {
+  "author": "sppatel", 
+  "date": "2005-10-29T23:25:23.167810Z", 
+  "msg": [
+   "can't apply runtime to j2ee project", 
+   "moduleType versions changed from j2ee to module spec levels"
+  ], 
+  "revision_id": "329492"
+ }, 
+ {
+  "author": "tomdz", 
+  "date": "2005-10-29T23:14:54.972989Z", 
+  "msg": [
+   "Rewrote DataWriter to use StAX for generating the data XML file (fix for DDLUTILS-30)", 
+   "Added commands for writing data from the database to a file to both Ant tasks", 
+   "Added ability to specify converters for the data writer", 
+   "The writeDataToFile command now uses the tableHints variant of Platform#query which makes it work with PostgreSQL and others (which do not return enough metadata info to determine tables from the result set)", 
+   "Updated documentation of the ant tasks", 
+   "Updated documentation of the Api usage to reflect the changes made to the platform concerning reading the model from the database"
+  ], 
+  "revision_id": "329491"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2005-10-29T21:56:52.577102Z", 
+  "msg": [
+   "use released maven 2.0 instead of latest"
+  ], 
+  "revision_id": "329490"
+ }
+]

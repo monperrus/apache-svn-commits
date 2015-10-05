@@ -1,0 +1,59 @@
+[
+ {
+  "author": "yoshiki", 
+  "date": "2002-05-06T07:54:35.000000Z", 
+  "msg": [
+   "Update generated file."
+  ], 
+  "revision_id": "94944"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2002-05-06T07:54:16.000000Z", 
+  "msg": [
+   "Fix typo."
+  ], 
+  "revision_id": "94943"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-06T07:43:40.000000Z", 
+  "msg": [
+   "Rewrite ap_byterange_filter so that it can work with data that does not", 
+   "have a predetermined C-L - such as data that passes through mod_include.", 
+   "Previously, these requests would generate 416 since when the byterange", 
+   "filter ran, r->clength would be 0.  r->clength is only guaranteed to", 
+   "be valid after C-L filter is run, but we need C-L to run after us so", 
+   "that our data can have a proper C-L returned.  So, we need to rearrange", 
+   "the code so that we can deal with this case.", 
+   "Highlights:", 
+   "- Remove r->boundary since it is possible to have this self-contained in", 
+   "boundary's ctx.  (May require MMN bump?)", 
+   "- Remove call to parse_byteranges in ap_set_byterange since this would", 
+   "wrongly return -1 for dynamic responses.  We have to wait until we", 
+   "see EOS to call parse_byteranges.", 
+   "- Move bound_head computation inside the num_parts == 2 check.", 
+   "- Change a NULL brigade check to APR_BRIGADE_EMPTY", 
+   "- Move the 416 error return to after we've run through all ranges and", 
+   "found none of them to be valid."
+  ], 
+  "revision_id": "94942"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2002-05-06T07:18:44.000000Z", 
+  "msg": [
+   "First cut of Japanese translation of module docs.", 
+   "These files don't play nicely with current transformation scripts yet."
+  ], 
+  "revision_id": "94941"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-06T05:25:52.000000Z", 
+  "msg": [
+   "Reformat/rephrase some things."
+  ], 
+  "revision_id": "94940"
+ }
+]

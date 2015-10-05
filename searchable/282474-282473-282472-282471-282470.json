@@ -1,0 +1,83 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-09-26T03:49:55.000000Z", 
+  "msg": [
+   "- fix a bug in the new Expirer", 
+   "- make sure servlet's init() is called only once ( synchronization )", 
+   "- make sure jsp interceptor is sync., only one compile even if multiple", 
+   "threads call the page at the same time", 
+   "- enable JspInterceptor by default. It worked with almost no change after", 
+   "many changes in core, I'm much more confident it is solid enough, and with", 
+   "the changes in jasper it'll be more clear in future.", 
+   "We can revert to JspServlet later ( if we can't get JspInterceptor to", 
+   "work as it should )"
+  ], 
+  "revision_id": "282474"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-26T01:06:00.000000Z", 
+  "msg": [
+   "Fix JspInterceptor.", 
+   "- workDir added to classpath when the context is added ( loader interceptor", 
+   "will set the classloader at context init time, after that changes will", 
+   "have no effect - XXX we can allow changes at any time by reloading() )", 
+   "- few compilation issues", 
+   "- create parent dir for .ver file ( we use the same hack as in JspServlet", 
+   "to avoid reloading, but a bit more explicit and I hope cleaner)", 
+   "- Please note that we use normal packages and classes( jsp.num.numguess_1", 
+   "for jsp/num/numguess.jsp )", 
+   "- set workdir in addContext ( as it's used by jspinterceptor ).", 
+   "Ordering problems can be resolved by defining new hooks - I'm wondering", 
+   "what nightmare it'll be in other projects where only one chain is used and", 
+   "enough code will be written :-)"
+  ], 
+  "revision_id": "282473"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-26T01:00:07.000000Z", 
+  "msg": [
+   "Fix for hooks - each hook was added twice for defautContainer ( once", 
+   "as global and once as local )"
+  ], 
+  "revision_id": "282472"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-26T00:59:27.000000Z", 
+  "msg": [
+   "Fix OutputBuffer bug ( at least one :-)", 
+   "The problem was simple - recycle() didn't reset the buffer of the", 
+   "writer ( convertor ), and in some cases ( for example if the connection", 
+   "is broken ) the buffer was not flushed.", 
+   "XXX Need to find out why the buffer wasn't flushed - I think we", 
+   "should assert( ob.flush() called after each request ).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282471"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-25T17:17:52.000000Z", 
+  "msg": [
+   "Ops, forgot that one too :-)", 
+   "- fix facade23 ( it compiles and should work 2.2 apps, the new 2.3 features", 
+   "need to be implemented - again, I'll try to stay away from this task", 
+   "as much as possible, it's better to have a fresh look at facade refactoring )", 
+   "Added a hack to allow compilation of both facades - checked in binaries.", 
+   "I know it's bad, but it's very hard to build tomcat when it requires 2", 
+   "different cvs branches that happen to build in the same dir.", 
+   "I'll try to make changes so that only servlet2.2 needs to be checked in (", 
+   "probably it'll not change - it's closed now ), and we can build 2.3", 
+   ", but right now I prefere a simpler solution.", 
+   "( of course, I'll have to remove them if you -1 it ... )", 
+   "( use tomcat-new target to build both !!!! )"
+  ], 
+  "revision_id": "282470"
+ }
+]

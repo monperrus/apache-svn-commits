@@ -1,0 +1,99 @@
+[
+ {
+  "author": "toshi", 
+  "date": "2005-04-13T03:26:20.000000Z", 
+  "msg": [
+   "Fixing the wrong link to RC2 instead of RC3 on index.html / news.html", 
+   "which was reported by Peter and Tardif."
+  ], 
+  "revision_id": "261174"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2005-04-12T23:42:49.000000Z", 
+  "msg": [
+   "oops forgot the main file"
+  ], 
+  "revision_id": "261173"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2005-04-12T23:07:26.000000Z", 
+  "msg": [
+   "- Upgrade to Commons HTTPClient RC2", 
+   "- Fix several deprecated API usage", 
+   "- Get NTLM auth working for the endpoint (prev code took care of NTLM proxy auth)"
+  ], 
+  "revision_id": "261172"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2005-04-12T22:18:17.000000Z", 
+  "msg": [
+   "Support \"wrapped\" literal arrays, of the following form:", 
+   "<element name=\"foo\">", 
+   "<complexType>", 
+   "<sequence>", 
+   "<element name=\"item\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>", 
+   "</sequence>", 
+   "</complexType>", 
+   "</element>", 
+   "We used to WSDL2Java this into a bean with a String[] member, but", 
+   "we will now by default represent the \"foo\" field/parameter as a", 
+   "String [] itself.  We will also by default write out WSDL using", 
+   "this style, so we'll prefer this type of array to repeating", 
+   "the \"foo\" element itself.  This last bit is critical for non-", 
+   "wrapped document services returning arrays, since we were", 
+   "formerly writing illegal schema (global elements are not", 
+   "allowed to have maxOccurs)!", 
+   "There is a WSDL2Java flag \"unwrapArrays\" which defaults to", 
+   "\"yes\".  If you set it to \"no\", we won't do this stuff (and", 
+   "remain backwards compatible).", 
+   "Note that all of this is only in non-encoded mode.  SOAP RPC", 
+   "encoding continues to work as usual (with soapenc:Arrays).", 
+   "TODO:", 
+   "There are still some edge cases to test out, but checking this", 
+   "in for now so people concerned with these types of issues can", 
+   "test with the current CVS.  I suspect we need an \"unwrapArrays\"", 
+   "flag on Java2WSDL and in the engine as well.  A little cleanup", 
+   "wouldn't hurt.", 
+   "Details:", 
+   "* ElementDesc and ParameterDesc both carry an \"itemQName\"", 
+   "which enables us to keep track of this kind of usage, and", 
+   "get the \"inner\" QName for these types of collections to", 
+   "correctly match the schema.  This needs to propagate to", 
+   "various places (esp. SerializationContext and then", 
+   "ArraySerializer), so you'll see it pop up a bunch.", 
+   "* Fix up a little logic + formatting in ArrayDeserializer", 
+   "* ArraySerializer plucks the itemQName from the current", 
+   "SerializationContext and uses that instead of always", 
+   "using \"item\".", 
+   "* BeanDeserializer uses the presence of itemQName metadata", 
+   "to tell if it's a \"normal\" repeated element (and thus", 
+   "each one should be deserialized by the component type's", 
+   "deser) or a literal array (in which case the Array", 
+   "Deserializer should be used)", 
+   "* BeanSerializer does the same", 
+   "* RPCHandler makes sure the ArrayDeserializer gets used", 
+   "when appropriate (all array params in document style)", 
+   "* Support \"unwrapArrays\" switch in various places (ant", 
+   "task, command line, thread value down through Emitter", 
+   "and SymbolTable...)", 
+   "* Shut off unwrapArrays for various tests which would", 
+   "break otherwise", 
+   "* Make sure to correctly write WSDL for wrapped arrays", 
+   "and also to correctly write metadata into generated", 
+   "Java classes", 
+   "* Change test.wsdl.arrays3 test to use unwrapped arrays"
+  ], 
+  "revision_id": "261171"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2005-04-12T17:35:47.000000Z", 
+  "msg": [
+   "Get all-tests working on LiteralArrayWork branch."
+  ], 
+  "revision_id": "261170"
+ }
+]

@@ -1,0 +1,109 @@
+[
+ {
+  "author": "henning", 
+  "date": "2002-07-01T16:33:38.000000Z", 
+  "msg": [
+   "This is the Crypto Service implementation as proposed for Turbine 2.2", 
+   "some while ago. I ported it to Fulcrum and we're using it for about six", 
+   "months without any problems.", 
+   "Documentation and Tests included.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "222509"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T22:42:54.000000Z", 
+  "msg": [
+   "patch by \tStephen Haberman <stephenh@chase3000.com>", 
+   "The Fulcrum maven:clean target also calls Fulcrum's own clean target.", 
+   "However, it's broken because it refers to the old services dir and also", 
+   "it un-needed because all of the Torque generation is done into the", 
+   "prepareSourceDirectory, which gets deleted along with the entire target", 
+   "dir by maven.", 
+   "I've attached a simple patch that gets ride of the clean target and", 
+   "remove's maven:cleans' dependency on it."
+  ], 
+  "revision_id": "222508"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T17:50:05.000000Z", 
+  "msg": [
+   "patch by Stephen Haberman <stephenh@chase3000.com>", 
+   "modified slightly be me.  my comments follow Stephen's", 
+   "I'm extending the SecurityService's user to add some more columns.", 
+   "However, the DBUserManager's store code does:", 
+   "275         Criteria criteria =", 
+   "TurbineUserPeer.buildCriteria((TurbineUser)user);", 
+   "276         try", 
+   "277         {", 
+   "278             TurbineUserPeer.doUpdate(criteria);", 
+   "279         }", 
+   "http://jakarta.apache.org/turbine/fulcrum/xref/org/apache/fulcrum/securi", 
+   "ty/impl/db/DBUserManager.html#275", 
+   "To me, this is really bad, because it's hard coded to the", 
+   "TurbineUserPeer and not delegated to the configured peer the user sets", 
+   "via services.SecurityService.userPeer.class.", 
+   "Ideally some cool reflection could handle this (maybe), but since the", 
+   "TurbineUser has a complex object model anyway, couldn't the", 
+   "DBUserManager just do:", 
+   "276         try", 
+   "277         {", 
+   "278             ((TurbineUser) user).save();", 
+   "279         }", 
+   "280         catch(Exception e)", 
+   "281         {", 
+   "282             throw new DataBackendException(\"Failed to save user", 
+   "object\", e);", 
+   "283         }", 
+   "Calling save will get down to the same call as the doUpdate, but it'll", 
+   "first go through the user's object, allowing the user to more easily", 
+   "extend TurbineUser.", 
+   "Also, this has the added benefit of updating the user object's internal", 
+   "state. E.g. if DBUserManager.createAccount(user) was called before, the", 
+   "user object was in an invalid state because it thinks that it is new", 
+   "when really it's already been saved. Calling save again results in a", 
+   "duplicate entry error (assuming some kind of unique/primary key is", 
+   "setup). This isn't a huge deal, but it's nice to have the user object in", 
+   "a valid state.", 
+   "I've attached a patch that makes the above changes in the store and", 
+   "createAccount methods.", 
+   "jmcnally's comments:", 
+   "The original code did not account for the user object's status as new/old or", 
+   "modified.  So I added code to set the users state to get similar behavior", 
+   "as the previous code.  It would be better if exceptions were thrown if", 
+   "given a user object in a wrong state, but I opted for preserving current", 
+   "behavior."
+  ], 
+  "revision_id": "222507"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T17:36:44.000000Z", 
+  "msg": [
+   "using the latest torque", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "222506"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T16:54:05.000000Z", 
+  "msg": [
+   "updated the security code to use the latest torque.  Also updated the db", 
+   "service, though this service should eventually be scrapped.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "222505"
+ }
+]

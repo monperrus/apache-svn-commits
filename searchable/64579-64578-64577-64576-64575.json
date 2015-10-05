@@ -1,0 +1,60 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2003-08-07T22:16:24.000000Z", 
+  "msg": [
+   "Revamp apr_thread_mutex to be as thread safe, and occasionally", 
+   "as reentrant as possible.  Switched to atomics to preserve the", 
+   "incr/decr integrity.", 
+   "Although we previously reset the thread_id to zero, it's been", 
+   "pointed out on list that this is less than desireable.  However,", 
+   "negative one isn't necessarily a good choice because several", 
+   "platforms have unsigned thread_t's."
+  ], 
+  "revision_id": "64579"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-08-06T23:54:31.000000Z", 
+  "msg": [
+   "Introduce the proc_mutex_no_tryacquire stub, returning APR_ENOTIMPL,", 
+   "for all unimplemented trylock vectors.  Prevents us from simply", 
+   "segfaulting when a given proc_mutex style does not support trylock.", 
+   "No Apache HTTP Server code attempted an apr_proc_mutex_trylock, but", 
+   "this could affect other platforms, and was inconsistent with the", 
+   "implementations of other mutex methods and other platform implementations."
+  ], 
+  "revision_id": "64578"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-08-06T23:50:13.000000Z", 
+  "msg": [
+   "Invert the order of marking the lock as released.  Since we first", 
+   "lock, then mark locked; instead mark as unlock (while the lock is", 
+   "still held) and then unlock.", 
+   "Serious change, this will mean that an unlock 'failure' will still", 
+   "set the unlocked flag.  This is consistent with the fact that the", 
+   "lock probably is not held or valid anymore, and certainly shouldn't", 
+   "be re-unlocked when destroyed."
+  ], 
+  "revision_id": "64577"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2003-08-01T11:06:52.000000Z", 
+  "msg": [
+   "leave a comment about an interesting and possibly unexpected", 
+   "behavior"
+  ], 
+  "revision_id": "64576"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2003-07-31T17:46:13.000000Z", 
+  "msg": [
+   "Add the multi-load flag to the proc_child test binary."
+  ], 
+  "revision_id": "64575"
+ }
+]

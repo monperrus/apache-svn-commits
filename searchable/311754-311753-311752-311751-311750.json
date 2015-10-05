@@ -1,0 +1,76 @@
+[
+ {
+  "author": "sdeboy", 
+  "date": "2003-06-05T05:19:05.000000Z", 
+  "msg": [
+   "created a first pass at a jdbcreceiver for use with chainsaw...", 
+   "the receiver only runs the sql query one time..subsequent runs would create duplicate event entries in chainsaw", 
+   "not all fields are supported...patternlayout doesn't support properties and jdbcappender doesn't support exceptions.", 
+   "example appender configuration:", 
+   "<appender name=\"JDBC\" class=\"org.apache.log4j.jdbc.JDBCAppender\">", 
+   "<param name=\"password\" value=\"userpass\"/>", 
+   "<param name=\"user\" value=\"username\"/>", 
+   "<param name=\"driver\" value=\"org.gjt.mm.mysql.Driver\"/>", 
+   "<param name=\"sql\" value='insert into logtable (logger, timestamp", 
+   ", level, thread, message, ndc, mdc, class, method, file, line) values (\"%c\", \"%d", 
+   "\", \"%p\", \"%t\", \"%m\", \"%x\", \"%X\", \"%C\", \"%M\", \"%F\", \"%L\")'/>", 
+   "<param name=\"URL\" value=\"jdbc:mysql://127.0.0.1/test\"/>", 
+   "</appender>", 
+   "If fields weren't separated when they were added to the database, unused fields still need to be defined  (all columns in the list below need provided, even if you don't have them in your database) - use AS statements to make the column names match", 
+   "example receiver configuration:", 
+   "<plugin name=\"JDBCReceiver\" class=\"org.apache.log4j.jdbc.JDBCReceiver\">", 
+   "<param name=\"password\" value=\"\"/>", 
+   "<param name=\"user\" value=\"root\"/>", 
+   "<param name=\"driver\" value=\"org.gjt.mm.mysql.Driver\"/>", 
+   "<param name=\"sql\" value='select logger as LOGGER, timestamp as TIMESTAMP, level as LEVEL, thread as THREAD, message as MESSAGE, ndc as NDC, mdc as MDC, class as CLASS, method as METHOD, file as FILE, line as LINE from logtable'/>", 
+   "<param name=\"URL\" value=\"jdbc:mysql://127.0.0.1/test\"/>", 
+   "</plugin>"
+  ], 
+  "revision_id": "311754"
+ }, 
+ {
+  "author": "sdeboy", 
+  "date": "2003-06-04T19:14:00.000000Z", 
+  "msg": [
+   "hit the 8192 event size limit when starting jboss and using the multicast appender/receiver.", 
+   "increased packet size to 16384...workaround..doesn't resolve the problem of events > 16384 in the receivers and the fact that they can't parse the xml...", 
+   "also ends up with a lot more network traffic than needed for the most part..need to go back and look more intelligently at send/receive buffers and event parsing from xml...", 
+   "can probably use xmlsocketnode as an example of how to deal with this issue more intelligently and use smaller send/receive buffers"
+  ], 
+  "revision_id": "311753"
+ }, 
+ {
+  "author": "sdeboy", 
+  "date": "2003-06-04T18:43:38.000000Z", 
+  "msg": [
+   "only append pad bytes to the send buffer if the buffer size < predefined packet length (was generating negative array size exception if event > packet length..now need to see what this does on the receiver side.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "311752"
+ }, 
+ {
+  "author": "sdeboy", 
+  "date": "2003-06-04T05:02:35.000000Z", 
+  "msg": [
+   "Modified selected row color to default regardless of existing color filter.", 
+   "Corrected behavior oddities in find - now supports find/find next through", 
+   "evaluation of the text in the find field (if the text was previously empty or if the", 
+   "text length is less than the last search, it finds from the top).", 
+   "F3 or the 'find next' button are how you  'find next'"
+  ], 
+  "revision_id": "311751"
+ }, 
+ {
+  "author": "sdeboy", 
+  "date": "2003-06-03T14:48:43.000000Z", 
+  "msg": [
+   "corrected sorted column-drag issue", 
+   "modified colorized rendering code to colorize level column", 
+   "updating L&F in swing thread"
+  ], 
+  "revision_id": "311750"
+ }
+]

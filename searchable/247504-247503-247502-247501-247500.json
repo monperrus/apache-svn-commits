@@ -1,0 +1,75 @@
+[
+ {
+  "author": "scheu", 
+  "date": "2002-07-12T22:38:55.000000Z", 
+  "msg": [
+   "Problem:", 
+   "Java2WSDL uses the BeanSerializer writeSchema to write out the schema for an Exception class.", 
+   "This is done because Exception classes share a lot of processing with Beans...including", 
+   "the presences of meta data.", 
+   "The problem is that the BeanPropertyDescriptors that are built only contain the", 
+   "editable properties.  For Exceptions, the BeanPropertyDescriptor needs to contain", 
+   "the read-only properties as well.  The JSR 101 specification indicates that", 
+   "the elements within a complexType for a Fault are mapped to read-only properties in an Exception;", 
+   "thus Java2WSDL needs to consider the read-only properties when generating the wsdl.", 
+   "Solution:", 
+   "Code is added BeanUtils to add the read-only properties if the indicated class", 
+   "is Throwable.", 
+   "I also cleaned up the code a little...probably could use more cleanup.  Added", 
+   "some additional exception handling.", 
+   "I made a small change to the Roundtrip testcase to verify the problem and the fix.", 
+   "NOTE: THIS FIX IS REQUIRED TO PASS A TCK TEST.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247504"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-07-12T20:30:23.000000Z", 
+  "msg": [
+   "Add comments on pluggable components."
+  ], 
+  "revision_id": "247503"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-07-12T19:40:57.000000Z", 
+  "msg": [
+   "We didn't handle the xml include statement.  Now we do.  And we have a", 
+   "test case to prove it.  This fixed", 
+   "http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10612"
+  ], 
+  "revision_id": "247502"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2002-07-12T18:04:19.000000Z", 
+  "msg": [
+   "Patch for \"MessageElement serializability\" from \"Glyn Normington\" <glyn_normington@uk.ibm.com>"
+  ], 
+  "revision_id": "247501"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-12T16:21:40.000000Z", 
+  "msg": [
+   "Problem:", 
+   "The ServiceDesc:loadServiceDescByIntrospection method does not work", 
+   "if the implClass is an interface that inherits from multiple interfaces.  The problem", 
+   "is that the introspectionComplete flag is improperly set during the", 
+   "recursive processing.  This prevents the processing of additional interfaces.", 
+   "The solution is to not set the introspectionComplete flag during recursive processing.", 
+   "I changed the Roundtrip test to verify the problem and solution.", 
+   "The RoundtripPortType interface now extends two new interfaces RoundtripPortTypeA", 
+   "and RoundtripPortTypeB.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247500"
+ }
+]

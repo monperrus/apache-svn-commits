@@ -1,0 +1,91 @@
+[
+ {
+  "author": "butek", 
+  "date": "2002-02-21T19:11:26.000000Z", 
+  "msg": [
+   "List is a bean.  It is translated to WSDL as:", 
+   "<complexType name=\"List\">", 
+   "<all>", 
+   "<element name=\"varInt\" type=\"xsd:int\"/>", 
+   "<element name=\"varString\" nillable=\"true\" type=\"xsd:string\"/>", 
+   "<element name=\"child\" nillable=\"true\" type=\"intf:List\"/>", 
+   "</all>", 
+   "</complexType>", 
+   "Note the <all> tag (NOT <sequence>).  <all> means there's no order.  The test calls", 
+   "a List constructor that assumes a certain order.  This order is not guaranteed.  In", 
+   "fact, we've run across a situation where it IS different (though we haven't bothered to", 
+   "figure out why)."
+  ], 
+  "revision_id": "253544"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-02-21T18:51:23.000000Z", 
+  "msg": [
+   "Support for <attribute> WSDL (required for interop tests).", 
+   "WSDL2Java will generate bean fields for XML element attributes if specified", 
+   "in the WSDL.  It wil also generate a getAttributeElements() static function in", 
+   "the bean that the bean serializer/deserializer uses.  (The modifications to the", 
+   "serialization code have already been committed.)", 
+   "Sample:", 
+   "public class AccessPoint implements java.io.Serializable {", 
+   "private String element;", 
+   "private String myAttribute;  // attribute", 
+   "...", 
+   "public static java.util.Vector getAttributeElements() {", 
+   "java.util.Vector v = new java.util.Vector();", 
+   "v.add(\"myAttribute\");", 
+   "return v;", 
+   "}", 
+   "}", 
+   "Java2WSDL will generate <attribute> in the type schema for beans that have", 
+   "the getAttributeElements()  method to id which fields should be attributes.", 
+   "This involved moving the WSDL type generation for beans out of Java2WSDL", 
+   "and in to the serializer itself.", 
+   "TBD:", 
+   "- we do not handle all forms of attributes and the UDDI WSDL in our test", 
+   "suite is commented out (this WSDL uses LOTS of attributes).", 
+   "- The generation of type Schema should live in the serializers for all types.", 
+   "Currently only Map and Bean have this code.", 
+   "- For command line Java2WSDL, type serializers are generally not registered,", 
+   "so we default to the BeanSerializer for everything that isn't built in."
+  ], 
+  "revision_id": "253543"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-02-21T18:45:27.000000Z", 
+  "msg": [
+   "SOAPStruct is a bean.  It is translated to WSDL as:", 
+   "<complexType name=\"SOAPStruct\">", 
+   "<all>", 
+   "<element name=\"varFloat\" type=\"xsd:float\"/>", 
+   "<element name=\"varInt\" type=\"xsd:int\"/>", 
+   "<element name=\"varString\" nillable=\"true\" type=\"xsd:string\"/>", 
+   "</all>", 
+   "</complexType>", 
+   "Note the <all> tag (NOT <sequence>).  <all> means there's no order.  The tests call", 
+   "a SOAPStruct constructor that assumes order a certain order.  This order is not", 
+   "guaranteed.  In fact, we've run across a situation where it IS different - though we", 
+   "haven't bothered to figure out why)."
+  ], 
+  "revision_id": "253542"
+ }, 
+ {
+  "author": "glyn", 
+  "date": "2002-02-21T14:58:41.000000Z", 
+  "msg": [
+   "Add missing half of map comparison logic."
+  ], 
+  "revision_id": "253541"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-02-21T14:33:58.000000Z", 
+  "msg": [
+   "Fix a bug and be consistent.  Use the class loader everywhere Class.forName is", 
+   "used.  Contributed by Greg Truty."
+  ], 
+  "revision_id": "253540"
+ }
+]

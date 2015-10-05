@@ -1,0 +1,111 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2002-02-14T03:48:44.000000Z", 
+  "msg": [
+   "Fix the implementation in LogFactory and LogFactoryImpl so that it actually", 
+   "works as documented."
+  ], 
+  "revision_id": "138859"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-02-14T00:19:03.000000Z", 
+  "msg": [
+   "Improvements to the new LogFactory APIs, based on feedback from Costin and", 
+   "Jon plus some additional thought about using it in a multi-class-loader", 
+   "environment (like Tomcat):", 
+   "* Changed newFactory() to getFactory(), and implemented a cache of", 
+   "previously created factory instances (one per class loader).  This", 
+   "avoids potentially expensive and redundant discovery operations.", 
+   "* Added convenient static getLog() method so a typical application", 
+   "component can initialize it's Log instance like this:", 
+   "Log log = LogFactory.getLog(\"com.mycompany.mypackage.MyClass\");", 
+   "* Added variants of getInstance() and getLog() that take a Class", 
+   "parameter instead of a String.  LogSource had this convenience", 
+   "feature, and there's no reason not to keep it.", 
+   "* Added release() and releaseAll() methods to instruct the factory", 
+   "instances to release any cached references to other LogFactory", 
+   "or Log instances.  This is important, for example, if you put", 
+   "commons-logging.jar in Tomcat's shared \"lib\" directory, and then", 
+   "use the application reload facility.  The references maintained", 
+   "here would otherwise prevent garbage collection of the old", 
+   "webapp class loader once a reload takes place.", 
+   "* Added a note on getInstance() that you can make no assumptions", 
+   "about whether or not the actual Log instance you get back is", 
+   "shared or not.  The actual sharability is a feature of the", 
+   "LogFactory implementation you are using, and what kind of a", 
+   "class loader environment you ae installing.", 
+   "* Deprecated LogSource, but left it there to ease transition of", 
+   "existing code using it."
+  ], 
+  "revision_id": "138858"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-02-13T02:18:30.000000Z", 
+  "msg": [
+   "Forgot to commit the new exception class."
+  ], 
+  "revision_id": "138857"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-02-13T02:18:11.000000Z", 
+  "msg": [
+   "Add a new factory base class (LogFactory) and corresponding implementation", 
+   "(LogFactoryImpl) that is based on the principles of the JAXP API's approach", 
+   "to discovering SAXParserFactory and DocumentBuilderFactory instances.  It", 
+   "addresses the technical concerns that Costin brought up in response to the", 
+   "original Commons Logging 1.0 vote.", 
+   "The primary new features:", 
+   "* Applications can select their own LogFactory implementations, not", 
+   "just their own Log implementations.  The default LogFactoryImpl", 
+   "uses the same algorithm currently included in LogSource.", 
+   "* The LogFactory implementation class can be specified by either a", 
+   "system property (org.apache.commons.logging.LogFactory), or by a", 
+   "corresponding property in a \"commons-logging.properties\" file found", 
+   "somewhere in the class path.", 
+   "* LogFactory implementations possess optional configuration attributes,", 
+   "which are preloaded from the \"commons-logging.properties\" file if it", 
+   "is found.  These can be used by the factory to customize its own", 
+   "behavior as needed.", 
+   "* LogFactory and Log implementation classes are loaded from the", 
+   "thread context class loader (if it is set) in a JDK 1.2 or later", 
+   "environment.  Hwoever, the entire API and default implementation should", 
+   "still work on a JDK 1.1 system.", 
+   "* A specialized exception (LogConfigurationException) is thrown for things", 
+   "like missing LogFactory or Log implementation clases.  This class", 
+   "extends RuntimeException, so you normally don't have to put everything", 
+   "in try/catch blocks unless you care about dealing with this in a", 
+   "special way.", 
+   "For applications currently using the pre-release version of the API, this", 
+   "will typically mean replacing calls like this:", 
+   "Log log = LogSource.getInstance(\"foo\");", 
+   "with calls like this:", 
+   "Log log = LogFactory.newFactory().getInstance(\"foo\");", 
+   "unless you want to take advantage of the new capabilities.", 
+   "If this factory approach is accepted, I propose that we take the actions:", 
+   "* Deprecate LogSource (but leave it there for now, to assist existing", 
+   "applications in their transition)", 
+   "* Consider adding a setLogFactory() method to the Log interface -- and", 
+   "the existing implementation classes -- to give them easy access to the", 
+   "configuration attributes associated with the factory.", 
+   "* Add unit tests for the new code (it's not really been tested yet).", 
+   "* Propose the revised APIs as Commons-Logging 1.0 so that apps waiting", 
+   "for a final release can know what API to depend on.", 
+   "Follow-up technical discussions on this proposal should take place on", 
+   "COMMONS-DEV.  (If you want to argue about who can vote for what, please", 
+   "start your own thread someplace else so we can get some work done :-)."
+  ], 
+  "revision_id": "138856"
+ }, 
+ {
+  "author": "sanders", 
+  "date": "2002-02-03T01:44:03.000000Z", 
+  "msg": [
+   "Update to reflect the move of the JDK14Logger class"
+  ], 
+  "revision_id": "138855"
+ }
+]

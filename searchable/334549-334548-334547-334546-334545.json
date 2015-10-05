@@ -1,0 +1,86 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2001-03-26T21:35:46.000000Z", 
+  "msg": [
+   "Patches submitted by Patrick Moore <patrickm@rioport.com>", 
+   "on 03/15/2001 01:25 PM:", 
+   "This proposed change does a number of things:", 
+   "1. Problem: HTML output method does not uses XML output properties as", 
+   "default.", 
+   "In both org/apache/xalan/templates/output_html.properties and in the java", 
+   "doc for", 
+   "org/apache/xalan/templates/OutputProperties#getDefaultMethodProperties(Strin", 
+   "g) It specifically states that all OutputProperties use the", 
+   "output_xml.properties as a base. In the code this is not true for html. This", 
+   "is now changed to match the comments", 
+   "2. Problem: unclear IOException.", 
+   "If there was a problem loading the XML properties file. The wrapped", 
+   "exception now will say which file was trying to be loaded. If the file did", 
+   "not exist I was getting a very strange \"Stream closed\" IOException message.", 
+   "3. Problem: the streams were not closed after reading the property file.", 
+   "Fixed.", 
+   "4. Problem: the double-check locking mechanism does not work in Java (see", 
+   "bug #919)", 
+   "<http://www.javaworld.com/javaworld/jw-02-2001/jw-0209-toolbox.html>", 
+   "5. QUESTION: now if there is a default properties (i.e.", 
+   "output_xml.properties has been loaded) but the expected properties file does", 
+   "not exist a error message will be printed to System.err and the processing", 
+   "will continuing using just the default properties (output_xml.properties) I", 
+   "felt that this is the best behavior.", 
+   "(comment by sboag: I think it's better to", 
+   "throw a runtime exception in this case.", 
+   "but we can discuss this over time.  For now", 
+   "the patch was modified to do the runtime exception)."
+  ], 
+  "revision_id": "334549"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-03-26T15:47:00.000000Z", 
+  "msg": [
+   "Fix for bug# 1116, getMatchedTemplate throws ClassCastException.", 
+   "Don't push template unless it is a xsl:template."
+  ], 
+  "revision_id": "334548"
+ }, 
+ {
+  "author": "jkesselm", 
+  "date": "2001-03-23T18:23:22.000000Z", 
+  "msg": [
+   "reset() versus setLength(0)."
+  ], 
+  "revision_id": "334547"
+ }, 
+ {
+  "author": "jkesselm", 
+  "date": "2001-03-23T00:00:32.000000Z", 
+  "msg": [
+   "Minor tweak to the javadoc."
+  ], 
+  "revision_id": "334546"
+ }, 
+ {
+  "author": "jkesselm", 
+  "date": "2001-03-22T23:59:03.000000Z", 
+  "msg": [
+   "We've reworked the algorithm again. The fixed-chunk-size mode (initial", 
+   "and max. chunk sizes equal) runs essentially unchanged, though with a", 
+   "few cycles less overhead. The variable-chunk-size mode now uses a", 
+   "recursive-encapsulation scheme, where the first chunk may itself be a", 
+   "FastStringBuffer whose total length equals one chunk; every so often", 
+   "we push the existing data down one level and restart with a larger", 
+   "chunk size. The new scheme has been stress-tested and is apparently", 
+   "working.  At this writing, however, Xalan uses only the fixed-size", 
+   "mode (initial size equals max size), and no effort has been made to", 
+   "find the optimial values for the tuning parameters. It does appear", 
+   "likely that the best values will vary with usage patterns, but we hope", 
+   "to find a good compromise.", 
+   "I'll probably be putting this aside for a while to work on other things.", 
+   "If someone wants to experiment with varying the block sizes and", 
+   "how frequently they grow, and suggest good performance/memory", 
+   "tradeoff points, go for it!"
+  ], 
+  "revision_id": "334545"
+ }
+]

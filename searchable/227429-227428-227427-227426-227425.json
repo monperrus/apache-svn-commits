@@ -1,0 +1,66 @@
+[
+ {
+  "author": "henning", 
+  "date": "2005-08-04T16:42:00.488800Z", 
+  "msg": [
+   "The real reason why some of the reports e.g. jdepend end up in wrong", 
+   "directories:", 
+   "It goes like this:", 
+   "- Maven has a plugin called \"xdoc\". This defines a taglib called \"doc\"", 
+   "and a specific tag called \"doc:jsl\". This does a check to define", 
+   "where the output of a JSL transformation should go by looking at a", 
+   "parameter called \"outputDirectory\". This ends up in a jelly variable", 
+   "called ${outputDirectory}. If it is empty, then we use the maven.gen.docs", 
+   "property, which normally points at target/generated-xdocs", 
+   "- We use the Torque plugin. This defines a few ant tasks, some of them", 
+   "take a parameter called \"outputDirectory\"...", 
+   "- We use preGoals to build our OM sources. This happens to be run before the", 
+   "e.g. jdepend jsl task. By running the torque plugin, it calls one of the", 
+   "ant tasks like this:", 
+   "<torque-data-model", 
+   "[...]", 
+   "outputDirectory=\"${torque.java.dir}\"", 
+   "[...]", 
+   "/>", 
+   "- And now Jelly, Maven or whatever LET THAT DEFINITION of", 
+   "outputDirectory LEAK INTO A GLOBAL VARIABLE NAME SPACE! HORRORS! WHO", 
+   "EVER DREAMED OF THAT? DID YOU WATCH TOO MANY BAD MOVIES? WHAT IS", 
+   "THIS? VISUAL BASIC?", 
+   "- Now the tag check for outputDirectory is no longer empty. So the", 
+   "report file ends up in ${torque.java.dir} and not in ${maven.gen.docs}", 
+   "It took me the better part of an afternoon to find _that_ stupid", 
+   "bug. Now I go and get drunk."
+  ], 
+  "revision_id": "227429"
+ }, 
+ {
+  "author": "scamp", 
+  "date": "2005-08-04T16:38:33.171357Z", 
+  "msg": [], 
+  "revision_id": "227428"
+ }, 
+ {
+  "author": "andreas", 
+  "date": "2005-08-04T16:37:29.654713Z", 
+  "msg": [
+   "Overview usecase: added links to documents"
+  ], 
+  "revision_id": "227427"
+ }, 
+ {
+  "author": "pquerna", 
+  "date": "2005-08-04T16:36:29.630678Z", 
+  "msg": [
+   "create the root for the mod_smtpd project."
+  ], 
+  "revision_id": "227426"
+ }, 
+ {
+  "author": "ips", 
+  "date": "2005-08-04T16:32:02.168156Z", 
+  "msg": [
+   "a few corrections"
+  ], 
+  "revision_id": "227425"
+ }
+]

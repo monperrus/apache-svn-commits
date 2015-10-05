@@ -1,0 +1,93 @@
+[
+ {
+  "author": "santosh", 
+  "date": "2000-10-19T00:21:26.000000Z", 
+  "msg": [
+   "Added targets for new Precompilation tests", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "229989"
+ }, 
+ {
+  "author": "pierred", 
+  "date": "2000-10-18T00:07:02.000000Z", 
+  "msg": [
+   "Since we implemented 'flush=false' in tomcat-4.0, these 4 tests failed.", 
+   "It was a bug that they ran previouly. Details below.", 
+   "Small fix in each of these tests (simply added pageContext.popBody())", 
+   "so they now run properly.", 
+   "-----", 
+   "The following test in watchdog used to succeed:", 
+   "<%", 
+   "BodyContent bc = pageContext.pushBody();", 
+   "bc.println(\".com\");", 
+   "out.println(bc.getString());", 
+   "%>", 
+   "However, with the recent changes to support flush=false,", 
+   "it does not work anymore. (Actually, 4 tests that use the", 
+   "same pattern now fail).", 
+   "This is because 'out.flush()' used to occur in the page itself", 
+   "(so in the test, out would refer to the original JspWriter),", 
+   "...", 
+   "} finally {", 
+   "out.flush();", 
+   "_jspxFactory.releasePageContext(pageContext);", 
+   "}", 
+   "while now it is performed within pageContext.release() (so we", 
+   "can flush differently whether we are in an include or not).", 
+   "Because it is now performed in PageContext, the 'out' then", 
+   "refers to the BodyContent since no call to popBody() was", 
+   "done by the client.", 
+   "This test should fail (verified with Spec lead) because the client", 
+   "has not paired a call to pushBody() with a call to popBody(),", 
+   "leaving pageContext in an inconsistent state.", 
+   "Moreover, there should not be any uses of", 
+   "pageContext.pushBody()/popBody() in scripting code.", 
+   "[But it is understandable that this is done here", 
+   "for testing purposes].", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "229988"
+ }, 
+ {
+  "author": "santosh", 
+  "date": "2000-10-17T21:07:38.000000Z", 
+  "msg": [
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "229987"
+ }, 
+ {
+  "author": "santosh", 
+  "date": "2000-10-17T21:07:05.000000Z", 
+  "msg": [
+   "moved from jsp directory", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "229986"
+ }, 
+ {
+  "author": "santosh", 
+  "date": "2000-10-17T21:05:56.000000Z", 
+  "msg": [
+   "files moved from previous JSP directory in jsp-tests/WEB-INF/classes", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "229985"
+ }
+]

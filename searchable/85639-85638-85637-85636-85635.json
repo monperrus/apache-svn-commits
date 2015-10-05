@@ -1,0 +1,76 @@
+[
+ {
+  "author": "ben", 
+  "date": "2000-06-20T20:31:42.000000Z", 
+  "msg": [
+   "Fix warning."
+  ], 
+  "revision_id": "85639"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-20T20:28:47.000000Z", 
+  "msg": [
+   "Blue Skies....."
+  ], 
+  "revision_id": "85638"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-06-20T19:36:50.000000Z", 
+  "msg": [
+   "ap_create_pipe was changed to return a pipe with both handles", 
+   "blocking (previously, both handles were non-blocking).", 
+   "ap_set_pipe_timeout() is now the only way to manipulate the", 
+   "blocking state of the pipe.  Pass -1 for timeout to make it", 
+   "blocking; pass 0 for timeout to make it non-blocking.", 
+   "ap_block_pipe() is gone.", 
+   "A few minor bugs were fixed along the way.", 
+   "OS-specific notes:", 
+   "non-Unix in general:", 
+   "Only Unix/BeOS currently has the optimization to keep track of the blocking", 
+   "state.  This is used to avoid syscalls as well as to handle ap_put_os_file(),", 
+   "which is a case where we don't know the blocking state of the handle we are", 
+   "given.", 
+   "OS/2:", 
+   "ap_set_pipe_timeout() with timeout value > 0: The code didn't play with", 
+   "the blocking state before and it doesn't still.  I did add logic for special", 
+   "timeout values 0 and -1 to play with the blocking state.", 
+   "ap_create_pipe():  old logic didn't do anything with the blocking state", 
+   "of the second handle; it still doesn't; hopefully it is blocking", 
+   "pre-BONE BEOS:", 
+   "old code to make a pipe non-blocking was a no-op; now it returns", 
+   "APR_ENOTIMPL", 
+   "BONE: old code to make a pipe non-blocking; it passed &zero as the", 
+   "parm to FIONBIO instead of &one; this bug was fixed", 
+   "Win32:", 
+   "The pipe was always created blocking before; no change", 
+   "previously, ap_setprocattr_io() ignored the blocking flag; now it", 
+   "respects it like other platforms and calls ap_set_pipe_timeout(p,0)", 
+   "on appropriate pipe handles (Bill Stoddard was just working in", 
+   "ap_set_pipe_timeout(), so I presume this is golden)"
+  ], 
+  "revision_id": "85637"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2000-06-20T19:30:32.000000Z", 
+  "msg": [
+   "Correct the problem where the only local host name that the IP stack", 
+   "can discover are 'undotted' private names.  If no fully qualified", 
+   "domain name can be identified, the default ServerName will be set to", 
+   "the machine's IP address string."
+  ], 
+  "revision_id": "85636"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-20T19:16:18.000000Z", 
+  "msg": [
+   "Remove unixd_detach function, because it is provided by APR as ap_detach.", 
+   "This also modifies the ap_detach function to look like unixd_detach.", 
+   "Finally all calls to unixd_detach are changed to ap_detach."
+  ], 
+  "revision_id": "85635"
+ }
+]

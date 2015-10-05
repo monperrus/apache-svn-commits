@@ -1,0 +1,93 @@
+[
+ {
+  "author": "kaz", 
+  "date": "2002-03-01T18:11:26.000000Z", 
+  "msg": [
+   "- Converted the XSL stylesheet that is used to display the XML output of", 
+   "JDepend to a DVSL stylesheet.  This makes Maven a pure DVSL shop now.", 
+   "As a result, the XSLT is no longer used in the build files (only DVSL).", 
+   "- The output of the DVSL stylesheet is not HTML, but rather an xdoc that", 
+   "is then transformed to HTML when the rest of the documentation is", 
+   "built.  Consequently, the new metric page *looks* like the rest of the", 
+   "site (jakarta style).", 
+   "- The DVSL stylesheet required the creation of one helper class that has", 
+   "been added to the DVSL toolbox.  This helper class converts a decimal", 
+   "to a percentage (I couldn't figure out how to do this in the template).", 
+   "As a result, this required the addition of another path to the DVSL", 
+   "task's classpath, because because the new helper class was not in the", 
+   "existing classpath.", 
+   "- Finally, the bootstrap build was modified to include the new helper", 
+   "class when creating the maven jar file."
+  ], 
+  "revision_id": "116539"
+ }, 
+ {
+  "author": "kaz", 
+  "date": "2002-03-01T11:37:41.000000Z", 
+  "msg": [
+   "The auto-generated documentation is no longer transformed to HTML", 
+   "directly.  It is now transformed to a valid xdoc and stored in the", 
+   "${gen.docs} directory (target/generated-xdocs).", 
+   "There are a few motivations for this change:", 
+   "- Previously, HTML formatting was located in each of the auto-generated", 
+   "doc stylesheets.  In addition, maven.dvsl was almost an exact copy of", 
+   "site.dvsl.  Thus, changes in formatting of one's site has to occur in", 
+   "multiple stylesheets.  With this change, all formatting for a site is", 
+   "maintained in only one location (site.dvsl).", 
+   "- User documentation stored in the xdocs directory will no longer be", 
+   "clobbered by our auto-generated docs because they are stored in a", 
+   "separate directory.  However, this still does not resolve conflicts", 
+   "between the HTML docs that are eventually generated.", 
+   "- I needed an easy way to convert jdepend.xsl to a DVSL stylesheet that", 
+   "blended in with the rest of the site.  By creating a valid xdoc, I", 
+   "was able to take advantage of site.dvsl instead of re-inventing the", 
+   "wheel.  (I'll be checking this change in later).", 
+   "As a result of this change I made the following changes:", 
+   "- I rewrote the DVSL stylesheets for each auto-generated page so that", 
+   "they generate xdocs instead of HTML.  These xdocs are stored in a", 
+   "separate directory from the user's xdocs.", 
+   "- Modified cvs-change-log target to also leverage the new ${gen.docs}", 
+   "directory.", 
+   "- Added another DVSL task in the target that transforms the user's xdocs", 
+   "to HTML.  This new task transforms the auto-generated xdocs to HTML.", 
+   "All xdoc -> HTML transforms are isolated in one Ant target.", 
+   "- Deleted maven.dvsl as its not needed anymore and was mostly redundant."
+  ], 
+  "revision_id": "116538"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2002-03-01T04:27:09.000000Z", 
+  "msg": [
+   "Two unit tests were failing, so cleaned them up and set the build test target", 
+   "to fail when the unit tests aren't at 100%.", 
+   "o Added test.xml to src/descriptors/profile to get the TestWorkspaceMapper", 
+   "unit test passing.", 
+   "o Fixed name mispelling in TestProjectMapper to get that unit test passing.", 
+   "o Added the failureProperty to the junit task in build-test.xml and split", 
+   "the execution of the unit tests into a subtarget.  This way we can still", 
+   "have all the unit test attempted as before, but catch the failure and", 
+   "have the build actually fail with a message."
+  ], 
+  "revision_id": "116537"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-03-01T01:37:18.000000Z", 
+  "msg": [
+   "SimpleDateFormat instances are not thread-safe -- changed class", 
+   "members to instance members."
+  ], 
+  "revision_id": "116536"
+ }, 
+ {
+  "author": "jvanzyl", 
+  "date": "2002-02-28T23:49:18.000000Z", 
+  "msg": [
+   "UpdateResources needs a pointer to a project descriptor. The 'update-jars'", 
+   "target now works. Need to add a non-dist list on the server so that users", 
+   "can be warned about non-distributable jars."
+  ], 
+  "revision_id": "116535"
+ }
+]

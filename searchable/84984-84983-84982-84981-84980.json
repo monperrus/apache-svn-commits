@@ -1,0 +1,104 @@
+[
+ {
+  "author": "fanf", 
+  "date": "2000-04-17T19:17:20.000000Z", 
+  "msg": [
+   "Hey, wow! Some of the sky is blue!"
+  ], 
+  "revision_id": "84984"
+ }, 
+ {
+  "author": "coar", 
+  "date": "2000-04-17T16:50:00.000000Z", 
+  "msg": [
+   "Make note of another patch submitted.."
+  ], 
+  "revision_id": "84983"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-04-17T13:56:41.000000Z", 
+  "msg": [
+   "linkwin20.diffs Resolves:", 
+   "1) Explicit /base: addresses by the following table...", 
+   "Required sizes are for debug builds.  It is assumed that", 
+   "as we increase the size of aprlib, we will be trimming", 
+   "the size of ApacheCore, and the 278A0000 base can move down.", 
+   "ApacheCore.dll            27800000  80000 required", 
+   "aprlib.dll                278A0000  40000 required", 
+   "ApacheModuleAuthAnon.dsp  27900000", 
+   "ApacheModuleCERNMeta.dsp  27910000", 
+   "ApacheModuleDigest.dsp    27920000", 
+   "ApacheModuleExpires.dsp   27930000", 
+   "ApacheModuleHeaders.dsp   27940000", 
+   "ApacheModuleInfo.dll      27950000", 
+   "ApacheModuleRewrite.dsp   27960000  20000 required", 
+   "ApacheModuleSpeling.dsp   27980000", 
+   "ApacheModuleStatus.dsp    27990000", 
+   "ApacheModuleUserTrack.dsp 279A0000", 
+   "ApacheModuleProxy.dsp     279B0000  20000 anticipated", 
+   "3 slots still available   279C0000", 
+   "2) Make APR consistent with the rest of the API and", 
+   "not build septypes for debugging (in other words,", 
+   "roll in the debug symbols as every other module does.)", 
+   "If we decide we LIKE /pdbtype:septypes... then we", 
+   "should be using them throughout.", 
+   "3) Slide the current path specs into /libpath: options", 
+   "so the library list is more ledgible.", 
+   "4) Drop all the gui crud from the library list.  Everything", 
+   "listed is referenced, with the following exceptions:", 
+   "*) don't do anything with msvcrtd/oldnames today.", 
+   "*) aprlib and ApacheCore have the same list, since functions", 
+   "may still be moving between them.", 
+   "*) apache.exe looses networking (it doesn't), while it keeps", 
+   "advapi, which I don't think it needs, but it could later.", 
+   "*) add aprlib to ApacheModuleProxy, since it will need it.", 
+   "*) hang mswsock whereever ws2_32 is invoked.  I believe", 
+   "the most special case was ApacheModuleProxy, which may", 
+   "become entirely APR.  But for today we hang onto both.", 
+   "5) MAP, MAP, MAP, everything gets a map.  I for one have an", 
+   "untold number of installed OS's and boot mappings, and the", 
+   "debugger isn't installed to all of them.  We gotta be able", 
+   "to track down those renegade GP faults.  (What faults...", 
+   "I know, it's clean, but I am overly cautious that way.)", 
+   "6) Set the DEFAULT linkage to be this linkage.  Because", 
+   "\"it's a vc thing\" the defaults were not all that", 
+   "useful as a starting point (take, for example, the", 
+   "joke of linking to the OLE libraries).", 
+   "Submitted by:\tWilliam Rowe"
+  ], 
+  "revision_id": "84982"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-04-17T13:45:42.000000Z", 
+  "msg": [
+   "Updates Makefile.win", 
+   "1) offers a single execution list, regardless of the CTARGET.", 
+   "Sans CTARGET, it builds the default (the .exe or .dll).", 
+   "With CTARGET=CLEAN, it cleans back up.", 
+   "2) To eliminate the _clean block needed to move the delete", 
+   "generated headers out of that block.  They now get wiped only", 
+   "on a full NMAKE -f makefile.win clean", 
+   "3) Also threw in the _installdll cleanup with the full", 
+   "NMAKE -f makefile.win clean.", 
+   "4) Added RECURSE=0, the REAL reason this patch is absolutely", 
+   "necessary.  As we start tweaking individual .dsp project files,", 
+   "we will need to prevent the makefile.win from going nuts.", 
+   "5) Added a commented-out logresolve make item.", 
+   "Submitted by:\tWilliam Rowe", 
+   "Reviewed by:\tBill Stoddard"
+  ], 
+  "revision_id": "84981"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-04-17T13:38:13.000000Z", 
+  "msg": [
+   "Update Apache on Windows documentation. Add new document", 
+   "describing how to compile Apache on Windows.", 
+   "Submitted by:\tWilliam Rowe <wrowe@lnd.com>"
+  ], 
+  "revision_id": "84980"
+ }
+]

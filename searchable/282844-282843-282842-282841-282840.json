@@ -1,0 +1,73 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-12-28T19:50:42.000000Z", 
+  "msg": [
+   "Transformed the \"automatic server config\" generators in modules.", 
+   "Those classes were an attempt to simplify the server configuration for", 
+   "\"integrated\" mode. The problem is that tomcat can add/remove applications", 
+   "at runtime, modules like AutoSetup can also add applications.", 
+   "Another problem is that users still need to edit the files.", 
+   "One thing is clear - the code in doesn't work as it should.", 
+   "By turning the generators into modules we allow access to all server hooks -", 
+   "it will be possible to regenerate the configs ( and maybe restart the server)", 
+   "when a context is added/removed, even at runtime.", 
+   "We'll also have more flexibility in configuring ( we can add only the", 
+   "generator we need, and pass the location of apache/iis/nes, etc ).", 
+   "The code is low-priority - if ajp1x-based autoconfiguration will work this will no longer be needed. I think there is a lot of work to be done to", 
+   "fully integrate with the server ( like using the native-authentication, etc),", 
+   "and I don't think that can be done in 3.3 timeframe - but later, as a module.", 
+   "I would even propose removing them completely from the 3.3 distribution,", 
+   "since they are not essential ( and were never completed )"
+  ], 
+  "revision_id": "282844"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-12-28T19:44:40.000000Z", 
+  "msg": [
+   "> I found problem that tomcat 3.2-b8 doesn't work on Kaffe VM.", 
+   "> (probably 3.2 final is same)", 
+   "> Error occurs at read() method in java.io.BufferedInputStream.", 
+   "> # Maybe it's Kaffe VM's problem.(which has problem?)", 
+   "Kaffe developer resolved this problem in Kaffe VM.", 
+   "We won't need following patch for next Kaffe release.", 
+   "Takashi Okamoto <tokamoto@rd.nttdata.co.jp>", 
+   "seems like it is not bad to have it though anyway -JSS"
+  ], 
+  "revision_id": "282843"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-28T07:14:45.000000Z", 
+  "msg": [
+   "Next step in refactoring the hooks. Container is now using the Hook", 
+   "util."
+  ], 
+  "revision_id": "282842"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-28T06:15:20.000000Z", 
+  "msg": [
+   "First attempt to refactor hooks. Moving them in a util package is not a", 
+   "bad idea ( and it's inspired by the new organization in 2.0 - I was", 
+   "initially surprized to find ap_hook.h in apr-utils, but it's quite a generic", 
+   "concept ).", 
+   "The only disadvantage of using \"generic\" hooks is that a cast is", 
+   "needed ( to BaseInterceptor ), but it gives a lot more flexibility.", 
+   "I think there is a simple workaround for that."
+  ], 
+  "revision_id": "282841"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-28T01:57:41.000000Z", 
+  "msg": [
+   "Same for authentication - modules will return DECLINED if they can't", 
+   "handle the user, OK if they authenticate.", 
+   "Again, same conventions as in Apache, auth* modules should be interoperable."
+  ], 
+  "revision_id": "282840"
+ }
+]

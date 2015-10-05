@@ -1,0 +1,95 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-10T08:04:46.917434Z", 
+  "msg": [
+   "Add a socket bucket. Hey, it compiles.", 
+   "* gen2/buckets/socket_buckets.c: new file to implement a bucket that wraps", 
+   "a socket.", 
+   "* gen2/Makefile: add the socket bucket to OBJECTS"
+  ], 
+  "revision_id": "99"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-10T06:00:42.695957Z", 
+  "msg": [
+   "Implement a generic data buffer structure and utility functions for", 
+   "buckets that need to move data from an external source into memory.", 
+   "* gen2/serf_bucket_util.h:", 
+   "(serf_bucket_mem_alloc, serf_bucket_mem_free): add doc string.", 
+   "(serf_util_readline): add doc string.", 
+   "(SERF_DATABUF_BUFSIZE): the size of data buffer to use", 
+   "(serf_databuf_t): structure to hold the intermediate data buffer and", 
+   "supporting state.", 
+   "(serf_databuf_init): new function to initialize a serf_databuf_t.", 
+   "(serf_databuf_read): new function to implement a bucket-style read", 
+   "function from a serf_databuf_t.", 
+   "(serf_databuf_readline): new function to implement a bucket-style", 
+   "readline function from a serf_databuf_t.", 
+   "(serf_databuf_peek): new function to implement a bucket-style peek", 
+   "function from a serf_databuf_t.", 
+   "* gen2/buckets/file_buckets.c:", 
+   "(FILE_BUFSIZE): removed; obsolete.", 
+   "(file_context_t): remove old buffer state and add serf_databuf_t.", 
+   "(file_reader): new function to implement a read function for", 
+   "serf_databuf_t.", 
+   "(serf_bucket_file_create): remove initialization of old state, and", 
+   "initialize the databuf member instead.", 
+   "(serf_file_read): reimplement in terms of the databuf.", 
+   "(serf_file_readline): implement in terms of the databuf.", 
+   "(serf_file_peek): reimplement in terms of the databuf.", 
+   "* gen2/buckets/buckets.c:", 
+   "(find_crlf): recognize and return SERF_NEWLINE_CRLF_SPLIT when", 
+   "appropriate.", 
+   "(serf_databuf_init): new function", 
+   "(common_databuf_prep): basic preparation function to check if the data", 
+   "buffer has been exhausted (EOF), or needs to be refilled.", 
+   "(serf_databuf_read): new function", 
+   "(serf_databuf_readline): new function", 
+   "(serf_databuf_peek): new function"
+  ], 
+  "revision_id": "98"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-10T03:25:03.184095Z", 
+  "msg": [
+   "Clarify a return code from the bucket 'peek' function.", 
+   "* gen2/serf.h:", 
+   "(serf_bucket_t.peek): APR_EOF may be returned in some cases, and", 
+   "APR_EAGAIN will never be returned.", 
+   "* gen2/buckets/simple_buckets.c:", 
+   "(serf_simple_peek): return APR_EOF since we're always returning all the", 
+   "data from the bucket."
+  ], 
+  "revision_id": "97"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-09T19:58:48.978177Z", 
+  "msg": [
+   "* gen2/serf.h:", 
+   "(SERF_NEWLINE_CRLF_SPLIT): add comment about why we have this symbol", 
+   "instead of a potentially-easier alternative."
+  ], 
+  "revision_id": "96"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-09T10:06:03.370281Z", 
+  "msg": [
+   "Small tweak to the readline code to tell the caller about a potential", 
+   "problem with a split CRLF sequence.", 
+   "* gen2/serf.h:", 
+   "(SERF_NEWLINE_CRLF_SPLIT): extra newline code to signify that a CRLF may", 
+   "be split by the end of the provided data buffer.", 
+   "* gen2/serf_bucket_util.h:", 
+   "(serf_util_readline): new prototype declaration", 
+   "* gen2/buckets/buckets.c:", 
+   "(find_crlf): make this static. add a missing semicolon.", 
+   "(serf_util_readline): return SERF_NEWLINE_CRLF_SPLIT when needed."
+  ], 
+  "revision_id": "95"
+ }
+]

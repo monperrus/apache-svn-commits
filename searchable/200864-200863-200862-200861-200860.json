@@ -1,0 +1,76 @@
+[
+ {
+  "author": "vhardy", 
+  "date": "2002-05-14T09:42:23.000000Z", 
+  "msg": [
+   "Application security policy no longer takes precedence over the one specified from the command line through the java.security.policy property. That way, it is easier to repackage Batik code and simply override the default packaging's policy file. For example: java -jar myBatikJar.jar -Djava.security.policy=<policyURL> ....."
+  ], 
+  "revision_id": "200864"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2002-05-14T08:57:32.000000Z", 
+  "msg": [
+   "- Minor fix in BridgeEventSupport", 
+   "- Removed trace in ScriptingEnvironment", 
+   "- Minor fix in InterpreterPool", 
+   "- Fixed getURL limitation with a work-around.", 
+   "Issue description:", 
+   "When security is enabled, Rhino sometimes still uses the default", 
+   "ClassLoader to create classes dynamically. This has the consequence", 
+   "of putting these classes in the default ProtectionDomain which is", 
+   "the most restrictive one. As a consequence, code going through these", 
+   "classes have no rights. This is what was causing the limitation on", 
+   "the getURL code.", 
+   "Ideal solution:", 
+   "The ideal solution would be to have Rhino define all classes", 
+   "it generates through the SecuritySupport interface as it does", 
+   "for most classes. This would put all the classes generated", 
+   "by Rhino in the right ProtectionDomain. I am going to work with", 
+   "the Rhino developers to see if that issue can be addressed in", 
+   "Rhino. In the meanwhile, I have implemented a work around which", 
+   "if fairly clean (below).", 
+   "Current work around:", 
+   "The current work around consists in using the AccessController's", 
+   "doPrivileged method to perform getURL/parseXML, enforcing the", 
+   "ProtectionDomain corresponding to the currently processed", 
+   "Document. No less (and no more) rights will be granted to that", 
+   "code.", 
+   "The new test: xml-batik/samples/tests/scripting/security3.svg", 
+   "shows that secure access to the Window object is operational."
+  ], 
+  "revision_id": "200863"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2002-05-14T08:29:23.000000Z", 
+  "msg": [
+   "Tests for upcoming security fix"
+  ], 
+  "revision_id": "200862"
+ }, 
+ {
+  "author": "tkormann", 
+  "date": "2002-05-14T07:34:39.000000Z", 
+  "msg": [
+   "- fix a bug for the default attribute value of 'values' if type is", 
+   "'hueRotate' or 'saturate'", 
+   "- fix a bug for the 'matrix' type, where the default value of the", 
+   "attribute 'values' is the identity matrix (instead of going into", 
+   "error).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "200861"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2002-05-13T09:23:10.000000Z", 
+  "msg": [
+   "Fixed Context creation bug. Code would have failed if invoked from different threads"
+  ], 
+  "revision_id": "200860"
+ }
+]

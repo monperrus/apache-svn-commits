@@ -1,0 +1,62 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-12-06T22:51:23.000000Z", 
+  "msg": [
+   "Cut&paste from jk_ajp14_worker."
+  ], 
+  "revision_id": "296104"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-06T22:50:25.000000Z", 
+  "msg": [
+   "Update for the interface changes.", 
+   "Various fixes", 
+   "Update the code the initialize jk."
+  ], 
+  "revision_id": "296103"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-06T22:48:49.000000Z", 
+  "msg": [
+   "- Added pools wherever they're needed.", 
+   "Factory now takes a pool - that allows us to get rid of 1/2 of mallocs and", 
+   "be sure the data will be cleaned.", 
+   "- Pass pool to methods that could be called at run time and may need", 
+   "to create temp data ( we don't want to allocate temp data in the object's pool,", 
+   "but in the caller pool or a temp pool - which is short-lived )", 
+   "- Get rid of all buf[]s. Now all pools are created using the pool hierarchy -", 
+   "i.e. from apr_pools or malloc. Since we recycle, there's no need to play all", 
+   "the stack-allocation tricks.", 
+   "- moved the jk_pool-specific private data to the impl. The common implementation", 
+   "will be used only if APR ( or other server-specific native pools ) are not available.", 
+   "- removed the per/context fileds from the per/uri structure"
+  ], 
+  "revision_id": "296102"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-06T22:43:29.000000Z", 
+  "msg": [
+   "One more thing extracted from Henri's discovery, plus things merged from", 
+   "jk_uriEnv ( merged from various places like apache private structs ).", 
+   "jk_webapp coresponds to Context, it should have all per/context settings.", 
+   "Note that now the granularity for setting the worker is bigger - you can", 
+   "set the jk worker per context only. ( we can't make it per uri, but I'm", 
+   "not sure it makes sense, and it's easier this way )."
+  ], 
+  "revision_id": "296101"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-06T22:40:41.000000Z", 
+  "msg": [
+   "Code extracted from jk_ajp_worker. Right now lb_worker, jni_worker are not", 
+   "recycling. This is general-purpose code and should be used agressivly, so", 
+   "I moved it at top level."
+  ], 
+  "revision_id": "296100"
+ }
+]

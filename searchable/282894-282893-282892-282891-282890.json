@@ -1,0 +1,77 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2001-01-07T01:53:55.000000Z", 
+  "msg": [
+   "The URLClassLoader in Sun's JDK1.2.2 for Windows has trouble loading", 
+   "classes from file URL's that have '\\' characters in the file string. Make sure", 
+   "the file URL's contain only '/' characters so LoaderInterceptor12 will work", 
+   "with JDK1.2.2 on Windows.", 
+   "For consistency, updated LoaderInterceptor11 set file URLs the contain", 
+   "only '/' characters too.", 
+   "Updated logging in LoaderInterceptor11 and LoaderInterceptor12", 
+   "to show list of classpath URLs."
+  ], 
+  "revision_id": "282894"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-07T00:24:00.000000Z", 
+  "msg": [
+   "Removed few bad tests (IMHO) that tested for tomcat-specific behavior ( that was", 
+   "wrong ).", 
+   "The problem is that in previous versions of tomcat, errors RequestDispatcher.include", 
+   "were not propagated. Thanks to Larry and other's work on error handling we do now the", 
+   "right thing.", 
+   "One of the tests was also assuming the buffer is not reset before the error message is", 
+   "shown - I think it's very important to do reset the buffer.", 
+   "Also, in IncludeMismatch1 the test assumed the error handler will be called - but the", 
+   "spec requires to forward the exception, and it is dealt with in the calling servlet,", 
+   "so no error page will be displayed.", 
+   "Another bad test was Set-Cookie2 - which belongs to the wrong Cookie spec."
+  ], 
+  "revision_id": "282893"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-07T00:19:32.000000Z", 
+  "msg": [
+   "Added a small script to run the sanity-test.", 
+   "You need to build it first ( ant sanity-test ), set TOMCAT_HOME and then you", 
+   "can run the script.", 
+   "I have a much better solution for running the tests, but it still need a bit of tunning", 
+   "( Ant is very different from what I used to know, and amazingly difficult to", 
+   "use it programatically )"
+  ], 
+  "revision_id": "282892"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-07T00:17:06.000000Z", 
+  "msg": [
+   "- Added showDebugInfo property to the ErrorHandler module - it'll act as default", 
+   "( explicit properties are easier to document, and it's better to set the properties", 
+   "on the module if it's specific to the module )", 
+   "- Bug fix: the buffer will be reset before displaying the exception, even for", 
+   "the default handler. It shouldn't be any distinction between the \"default\" error", 
+   "handler and a user-defined handler, and this helps if the buffer may have", 
+   "garbage ( open tags, etc ).", 
+   "- Bug fix: reset the exception state before calling the error servlet. This prevent", 
+   "the display of \"error in the error handler\"", 
+   "- Bug fix: if( ! (ex instanceof ... ) -> if( ex!=null && ! ( ex instanceof ... )", 
+   "- Bug fix: add the <head>, <body>, etc only if the buffere is \"clean\". The previous", 
+   "test ( getBytesWritten() ) was bad, the correct test is \"isNew()\" ( because both", 
+   "chars and bytes can be written to the buffer )."
+  ], 
+  "revision_id": "282891"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-07T00:10:33.000000Z", 
+  "msg": [
+   "Small change in OutputBuffer - the number of chars written was not exposed.", 
+   "We also need to know if the buffer is new ( needed to fix bug in ErrorHandler)."
+  ], 
+  "revision_id": "282890"
+ }
+]

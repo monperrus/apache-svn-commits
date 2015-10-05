@@ -1,0 +1,78 @@
+[
+ {
+  "author": "dion", 
+  "date": "2002-04-21T04:13:47.000000Z", 
+  "msg": [
+   "Added todo entry"
+  ], 
+  "revision_id": "117204"
+ }, 
+ {
+  "author": "kaz", 
+  "date": "2002-04-20T05:19:48.000000Z", 
+  "msg": [
+   "- Created a FileProcessingExecutor that can be used to process files in", 
+   "a project's directory.  This executor is an abstract class that", 
+   "provides a template method called \"doProcessFile\" that subclasses can", 
+   "override to do whatever (my motivation is to use SourceTool to parse", 
+   "each file and pass it a visitor).  Additionally, there is pre/post", 
+   "processing template methods that can be overridden if needed.  I.e. in", 
+   "most cases you'll want to use the postProcessing method to do", 
+   "something with the results of the processing (again, in my case, I", 
+   "query the visitor object for the information it accumulated).", 
+   "- Created a placeholder TaskListVisitor that will be used to accumulate", 
+   "todo/task tags in JavaDoc which will then be used to create the task", 
+   "list for a project.  Currenly, TaskListVisitor simply counts the", 
+   "number of JavaDoc entries (its a placeholder and I'm getting tired :)", 
+   "- Created a TaskListExecutor which is a subclass of the new", 
+   "FileProcessingExecutor.  By using the FileProcessingExecutor it", 
+   "becomes trivial to pass any type of visitor through the entire source", 
+   "tree.  TaskListExecutor uses a TaskListVisitor.  bhl: This is how you", 
+   "can create a new JXR task using another visitor.", 
+   "- Modified SourceTool to pass any parser exceptions.  Jason: you had", 
+   "modified this to ignore them so you could continue processing, but now", 
+   "I believe you can just use the FileProcessingExecutor instead, see the", 
+   "'doProcessFile' of my TaskListExecutor, this is the more appropriate", 
+   "spot to ignore the exception.", 
+   "- Modified MavenUtils.getFiles to check if the 'includes' parameter is", 
+   "null.  If it is null, then pass that directly to Ant's directory", 
+   "scanner setIncludes() method which indicates all files should be", 
+   "matched.  Prior to this change, a NPE was thrown.", 
+   "- Finally, the build files have a new target called maven:task-list", 
+   "which will invoke TaskListExecutor which will process all files in the", 
+   "{$src} directory and count the number of JavaDocs (until I actually", 
+   "write the real TaskListVisitor).  This new target is not automatically", 
+   "invoked as part of any other target yet (I'll hold off until it does", 
+   "what its supposed to), but in the meantime, you can invoke the target", 
+   "for testing purposes."
+  ], 
+  "revision_id": "117203"
+ }, 
+ {
+  "author": "kaz", 
+  "date": "2002-04-20T00:17:58.000000Z", 
+  "msg": [
+   "Provided a protected accessor for 'mavenProject' in ProjectExecutor", 
+   "rather than letting subclasses reference the field directly.  This is", 
+   "consistent with the manner that AbstractExecutor() provides an accessor", 
+   "for 'project' (the Ant project).  Also beefed up some of the javadoc."
+  ], 
+  "revision_id": "117202"
+ }, 
+ {
+  "author": "mpoeschl", 
+  "date": "2002-04-19T17:27:25.000000Z", 
+  "msg": [
+   "add info for junit.dir property"
+  ], 
+  "revision_id": "117201"
+ }, 
+ {
+  "author": "mpoeschl", 
+  "date": "2002-04-19T17:23:03.000000Z", 
+  "msg": [
+   "add a junit.dir property"
+  ], 
+  "revision_id": "117200"
+ }
+]

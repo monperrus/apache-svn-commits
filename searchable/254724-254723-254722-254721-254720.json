@@ -1,0 +1,80 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-05T05:10:48.000000Z", 
+  "msg": [
+   "Start cleaning up a bunch of stuff that's been confusing for a while, and", 
+   "perhaps fixing the sporadic allowed methods problem while we're at it.", 
+   "The main change has to do with ServiceDescs and providers.  I expanded", 
+   "on the existing support for getting the correct class into a", 
+   "ServiceDesc by asking the provider to handle the whole initialization", 
+   "(i.e. synchronization) of a ServiceDesc.  This does two things.", 
+   "First, it should make sure that the allowedMethods are correctly", 
+   "set up for JavaProvider services, and so there should now NEVER be", 
+   "OperationDescs for non-allowed methods (allowed method processing", 
+   "is now centralized, instead of scattered).  Second, it allows for", 
+   "future providers that don't directly tie to Java backends (i.e.", 
+   "BSFProvider, etc) to have more control over the building of the", 
+   "OperationDescs.  This will come in handy later as we continue to", 
+   "clean this up / abstract it.", 
+   "ServiceDesc.getInitializedServiceDesc() no longer takes any arguments,", 
+   "since the TypeMapping and the implementation Class should have already", 
+   "been set up by the time this is called.", 
+   "The MsgProvider has also been seriously cleaned up.  See comments in", 
+   "MsgProvider.java - next I believe we should a) make the arguments for", 
+   "the multi-element method consistent (either Element[] or Vector,", 
+   "not both), b) remove the MessageContext version, replacing it with a", 
+   "version which takes + returns a Document, and c) add the ability", 
+   "to have a QName/operation map in the WSDD, instead of just a single", 
+   "operation.", 
+   "Allowed/disallowed methods are now dealt with by the serviceDesc", 
+   "directly in all cases.", 
+   "When we set the service on a MessageContext, we now call", 
+   "getInitializedServiceDesc() at that point.", 
+   "SOAPService no longer keeps its own TypeMappingRegistry.  Instead it", 
+   "uses the one from the ServiceDesc.", 
+   "Removed unneeded arguments from JavaUtils.processMessage().", 
+   "Was having problems building with latest CVS, so added compilation", 
+   "step for \"step6\" of import2/import3 tests to Wsdl2JavaTestSuite.xml", 
+   "Various bits of cleanup.", 
+   "NOTE : is checkMethodName() in RPCProvider appropriate anymore?", 
+   "There should be a better way to deal with this, I think"
+  ], 
+  "revision_id": "254724"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-04T16:01:05.000000Z", 
+  "msg": [
+   "Cleanup, fix javadocs."
+  ], 
+  "revision_id": "254723"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-04T14:52:09.000000Z", 
+  "msg": [
+   "Emitted WSDL should only contain the allowed methods", 
+   "Submitted by: Stuart Thomson <stuart@swtsoftware.com>"
+  ], 
+  "revision_id": "254722"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-04T12:56:59.000000Z", 
+  "msg": [
+   "Cleanup imports, fix javadoc"
+  ], 
+  "revision_id": "254721"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-04T12:31:01.000000Z", 
+  "msg": [
+   "Replace code to deal with custom protocol types, and add code to", 
+   "throw any Exception occurring during URL creation in the LocalSender's", 
+   "invoke()."
+  ], 
+  "revision_id": "254720"
+ }
+]

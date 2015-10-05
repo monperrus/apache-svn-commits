@@ -1,0 +1,86 @@
+[
+ {
+  "author": "mturk", 
+  "date": "2003-06-09T10:57:51.000000Z", 
+  "msg": [
+   "Few paches from Gunter to compile under NETWARE."
+  ], 
+  "revision_id": "298714"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2003-06-06T03:25:30.000000Z", 
+  "msg": [
+   "Add more logging.  No functional change."
+  ], 
+  "revision_id": "298713"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2003-06-05T19:46:49.000000Z", 
+  "msg": [
+   "Undid previous changes"
+  ], 
+  "revision_id": "298712"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2003-06-05T16:42:48.000000Z", 
+  "msg": [
+   "Removed setSocket() method from org.apache.catalina.Request, since it", 
+   "was never called in any of the classes implementing this interface.", 
+   "For example, setSocket() was never called on", 
+   "org.apache.coyote.tomcat5.CoyoteRequest, causing its getSocket()", 
+   "method to always return null, which broke the CertificatesValve, which", 
+   "relies on having access to the (SSL)Socket so that it can reinitiate a", 
+   "handshake if necessary.", 
+   "Instead, added setSocket() and getSocket() methods on org.apache.coyote.Request:", 
+   "- setSocket() is called as part of", 
+   "org.apache.coyote.http11.Http11Processor.setSocket(), as follows:", 
+   "public void setSocket(Socket socket)", 
+   "throws IOException {", 
+   "this.socket = socket;", 
+   "this.request.setSocket(socket); // NEW", 
+   "}", 
+   "- getSocket() is called as part of", 
+   "org.apache.coyote.tomcat5.CoyoteRequest.getSocket(), as follows:", 
+   "diff -u -r1.5 CoyoteRequest.java", 
+   "--- CoyoteRequest.java  31 May 2003 15:00:25 -0000      1.5", 
+   "+++ CoyoteRequest.java  5 Jun 2003 16:41:17 -0000", 
+   "@@ -633,20 +633,7 @@", 
+   "* an SSLSocket.", 
+   "*/", 
+   "public Socket getSocket() {", 
+   "-        return (socket);", 
+   "-    }", 
+   "-", 
+   "-    /**", 
+   "-     * Set the Socket (if any) through which this Request was received.", 
+   "-     *", 
+   "-     * @param socket The socket through which this request was received", 
+   "-     */", 
+   "-    public void setSocket(Socket socket) {", 
+   "-        this.socket = socket;", 
+   "-        remoteHost = null;", 
+   "-        remoteAddr = null;", 
+   "-        remotePort = -1;", 
+   "-        localAddr = null;", 
+   "+        return coyoteRequest.getSocket();", 
+   "}"
+  ], 
+  "revision_id": "298711"
+ }, 
+ {
+  "author": "jfclere", 
+  "date": "2003-06-05T09:15:37.000000Z", 
+  "msg": [
+   "Fix the error when using apxs of Apache-2.0: Use apache libtool instead system.", 
+   "The error was:", 
+   "+++", 
+   "libtool: link: `../common/jk_ajp12_worker.lo' is not a valid libtool", 
+   "object", 
+   "+++"
+  ], 
+  "revision_id": "298710"
+ }
+]

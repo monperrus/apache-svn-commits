@@ -1,0 +1,93 @@
+[
+ {
+  "author": "deweese", 
+  "date": "2001-02-03T16:26:21.000000Z", 
+  "msg": [
+   "1) The deepest architectural change is a strong move towards tiling", 
+   "everything.  GraphicsNodeRable now returns a GraphicsNodeRed that", 
+   "is a tiled representation of the entire GraphicsNode.  This is then", 
+   "rendered on demand.  For a variety of reasons this can be slower", 
+   "than the pre-existing code in some cases, and _much_ faster in", 
+   "others (panning around documents that use filters for example).", 
+   "This still needs more work, but what I'm checking in is currently", 
+   "fairly comparable to the pre-existing code performance wise and", 
+   "still offers significant low-hanging fruit for further improvement.", 
+   "One thing that I plan on doing very soon is modifying the renderer", 
+   "To use the caching code, this will make panning in large documents", 
+   "fairly snappy (we might even be able to pull off interactive redraw", 
+   "in most cases, based on a few tests).", 
+   "2) Pattern/feTile this code has been completely reworked.  The new", 
+   "code appears to be faster in a number of cases, and is comparable", 
+   "in the rest.", 
+   "3) feDisplacementMap this has also been heavily reworked.  The default", 
+   "implementation now uses Bi-Linear interpolation.", 
+   "samples/tests/feDisplacementMap.svg looks a little better, but the", 
+   "BE test looks sweet (no more jaggies)!", 
+   "The Anti-aliased code is a bit slower than the original code, (it", 
+   "still has room to improve with the techniques I used for the", 
+   "Nearest Neighbor code) I have left in a Nearest Neighbor version", 
+   "that is at least 2x as fast as the original code.  I also reworked", 
+   "to code so it only generates the region of output needed (this is", 
+   "very close to a tiled implementation and should carry over nicely).", 
+   "Eventually which method is used should be controlled by a hint.", 
+   "4) 'createGraphics'.  I have added a createGraphics method to", 
+   "GraphicsUtils, along with a number of 'getDevice*' calls.  These", 
+   "methods work together to ensure that information about the", 
+   "destination is available when using a Graphics2D.  I have replaced", 
+   "most usages of BufferedImage.createGraphics with the equivalent", 
+   "call to GraphicsUtils.createGraphics. In some instances where the", 
+   "graphics was only used for very short lived work (g.dispose was", 
+   "called shortly afterwords) I didn't bother to introduce the", 
+   "dependency on GraphicsUtils.", 
+   "I think this will help to squash the constantly re-occuring bugs", 
+   "where things are not properly converted to/from linear sRGB."
+  ], 
+  "revision_id": "199434"
+ }, 
+ {
+  "author": "", 
+  "date": "2001-02-03T00:52:29.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag", 
+   "'batik-1_0beta2rc2'."
+  ], 
+  "revision_id": "199433"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2001-02-03T00:52:29.000000Z", 
+  "msg": [
+   "Fixed marker conversion stylesheet issue (temporary, until cloning is", 
+   "done properly).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "199432"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2001-02-03T00:50:51.000000Z", 
+  "msg": [
+   "Changed version back to beta2", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "199431"
+ }, 
+ {
+  "author": "vhardy", 
+  "date": "2001-02-02T19:22:36.000000Z", 
+  "msg": [
+   "Fixed bug in Marker conversion routine (ViewCSS was not restored).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "199430"
+ }
+]

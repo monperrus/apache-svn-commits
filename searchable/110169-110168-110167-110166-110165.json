@@ -1,0 +1,104 @@
+[
+ {
+  "author": "davidbau", 
+  "date": "2003-09-24T20:35:05.000000Z", 
+  "msg": [
+   "Nothing yet; just clearing out some space for v2 code work, which seems", 
+   "reasonable to start as a clean slate.  I guess it would be nice for", 
+   "somebody to work up a build.xml.  Scott?  Anybody we haven't heard from", 
+   "yet?  :-)"
+  ], 
+  "revision_id": "110169"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-09-24T19:01:29.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'db_030924'."
+  ], 
+  "revision_id": "110168"
+ }, 
+ {
+  "author": "davidbau", 
+  "date": "2003-09-24T19:01:29.000000Z", 
+  "msg": [
+   "This fixes a code generation bug (i.e., code was being generated that wasn't linking)", 
+   "when dealing with a specific cosmic coincidence of different features:", 
+   "(1) When there is a complex type...", 
+   "(2) That has an element with maxOccurs > 1", 
+   "(3) Where the element is a substitution group head", 
+   "(4) And the element has type xs:anyType", 
+   "Then: we generated code that assumed that XmlComplexContentImpl had a helper method", 
+   "that it actually doesn't have.  This checkin adds that helper method.", 
+   "Code review: eric (thanks!)", 
+   "Regression tests: passed", 
+   "Diffs...", 
+   "? v1/build", 
+   "Index: v1/src/typeimpl/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.java", 
+   "===================================================================", 
+   "RCS file: /home/cvs/xml-xmlbeans/v1/src/typeimpl/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.java,v", 
+   "retrieving revision 1.1", 
+   "diff -u -r1.1 XmlComplexContentImpl.java", 
+   "--- v1/src/typeimpl/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.java\t15 Sep 2003 18:20:30 -0000\t1.1", 
+   "+++ v1/src/typeimpl/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.java\t24 Sep 2003 18:58:39 -0000", 
+   "@@ -1095,4 +1095,29 @@", 
+   "{", 
+   "get_store().array_setter( sources, elemName );", 
+   "}", 
+   "+", 
+   "+    protected void arraySetterHelper ( XmlObject[] sources, QName elemName, QNameSet set )", 
+   "+    {", 
+   "+        int n = sources == null ? 0 : sources.length;", 
+   "+", 
+   "+        TypeStore store = get_store();", 
+   "+", 
+   "+        int m = store.count_elements( set );", 
+   "+", 
+   "+        for ( ; m > n ; m-- )", 
+   "+            store.remove_element( set, m - 1 );", 
+   "+", 
+   "+        for ( int i = 0 ; i < n ; i++ )", 
+   "+        {", 
+   "+            TypeStoreUser user;", 
+   "+", 
+   "+            if (i >= m)", 
+   "+                user = store.add_element_user( elemName );", 
+   "+            else", 
+   "+                user = store.find_element_user( set, i );", 
+   "+", 
+   "+            ((XmlObjectBase) user).set( sources[ i ] );", 
+   "+        }", 
+   "+    }", 
+   "+", 
+   "}"
+  ], 
+  "revision_id": "110167"
+ }, 
+ {
+  "author": "", 
+  "date": "2003-09-22T23:53:21.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'db_030922'."
+  ], 
+  "revision_id": "110166"
+ }, 
+ {
+  "author": "davidbau", 
+  "date": "2003-09-22T23:53:21.000000Z", 
+  "msg": [
+   "This change fixes two things:", 
+   "(1) It adds an \"EntityResolver\" option (see org.apache.xmlbeans.XmlOptions)", 
+   "that is used by the Schema compiler to resolve URL references.  This allows", 
+   "folks to define their own URL schemes, etc.  Very simple to do, yet wildly", 
+   "useful for lots of tricks.  We treat namespace URIs (when applicable) as", 
+   "publicIDs on the EntityResolver/InputSource interfaces.", 
+   "(2) It makes a minor update to XMLSchema.xsd to bring it up-to-date with", 
+   "the latest on www.w3.org.  I've also posted on xmlschema-dev@ to tell them", 
+   "about the problems we've found+fixed.", 
+   "Code review: eric vasilik", 
+   "Bootstrap: passed", 
+   "Regression tests: passed"
+  ], 
+  "revision_id": "110165"
+ }
+]

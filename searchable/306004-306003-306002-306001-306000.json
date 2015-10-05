@@ -1,0 +1,62 @@
+[
+ {
+  "author": "luehe", 
+  "date": "2004-05-25T21:28:40.000000Z", 
+  "msg": [
+   "Include javac errors whose line numbers cannot be mapped to JSP page in error message that is returned to client.", 
+   "For instance, a missing closing brace in a scriptlet causes havoc with the try-catch-finally block that that JSP compiler puts around all generated code, and the resulting javac error line numbers fall outside the scope of the begin and end java line numbers of the scriptlet (and therefore cannot be mapped back to the JSP line number of the scriptlet).", 
+   "(This used to return the misleading error message about failure to find javac compiler.)"
+  ], 
+  "revision_id": "306004"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2004-05-24T21:33:48.000000Z", 
+  "msg": [
+   "Added support for JSP compilations in a clustered env, where one", 
+   "server instance may use JSPs compiled by another server instance.", 
+   "Assume a JSP named foo.jsp, along with these timestamps:", 
+   "t1    = Timestamp of foo.jsp", 
+   "t2    = Timestamp of foo.class", 
+   "SI_1  = ServerInstance_1", 
+   "SI_2  = ServerInstance_2", 
+   "Problem description:", 
+   "- Suppose SI_1 compiles foo.jsp and loads corresponding class file.", 
+   "- foo.jsp is subsequently modified and recompiled by SI_2.", 
+   "- SI_1 accesses foo.jsp: Since t2>t1, it determines that no", 
+   "recompilation is necessary, and services the cached (outdated) class", 
+   "file", 
+   "With this commit, SI_1 will reload foo.class and service its updated contents."
+  ], 
+  "revision_id": "306003"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2004-05-24T21:22:00.000000Z", 
+  "msg": [
+   "- Added comments", 
+   "- Removed redundant \"if (reload)\" prior to calling getServlet()", 
+   "(reload flag is already being checked inside getServlet())"
+  ], 
+  "revision_id": "306002"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2004-05-24T21:17:27.000000Z", 
+  "msg": [
+   "Added comments"
+  ], 
+  "revision_id": "306001"
+ }, 
+ {
+  "author": "markt", 
+  "date": "2004-05-22T16:55:14.000000Z", 
+  "msg": [
+   "Ensure spaces in tomcat install path (if any) are decoded before", 
+   "passing to javac. This was causing the admin app to fail when", 
+   "deployed in uncompiled form to a tomcat instance with a spcae in", 
+   "it's path."
+  ], 
+  "revision_id": "306000"
+ }
+]

@@ -1,0 +1,50 @@
+[
+ {
+  "author": "sboag", 
+  "date": "2000-10-31T17:03:04.000000Z", 
+  "msg": [
+   "Fast iterator for \"node()\" selections."
+  ], 
+  "revision_id": "333644"
+ }, 
+ {
+  "author": "curcuru", 
+  "date": "2000-10-31T14:39:45.000000Z", 
+  "msg": [
+   "Changed dev build number to 02"
+  ], 
+  "revision_id": "333643"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2000-10-30T19:00:58.000000Z", 
+  "msg": [
+   "Major checkin that includes JIndent formatting.   See my note titled", 
+   "\"Optimizations, changes\" on the xalan-dev list 10/30/2000 03:55 PM."
+  ], 
+  "revision_id": "333642"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2000-10-30T18:50:08.000000Z", 
+  "msg": [
+   "In addition to JIndent formatting:", 
+   "Brought the central loop code for itterating over selections and applying templates to a function in ElemForEach, transformSelectedNodes.  Spent a fair amount of time optimizing this loop and making it as clean as possible.", 
+   "transformSelectedNodes calls the dispatchSaxEvent directly when encountering a character node that doesn't have a template defined (and thus uses the default text template).  dispatchSaxEvent can be used in other places in the code, but right now it's only used in transformSelectedNodes.", 
+   "various other finer grained optimizations, based on measurements from Rational Visual Quantify."
+  ], 
+  "revision_id": "333641"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2000-10-30T18:43:54.000000Z", 
+  "msg": [
+   "In addition to JIndent formatting:", 
+   "Many fine-grained optimizations.", 
+   "Change the Stree DOM to use linked references to first child and next and previous siblings, instead of arrays for child lists.  This follows much more naturally the way they are being accessed by the iterators, though perhaps at some expense for space.", 
+   "The DocumentImpl node now holds a single character array for text.  Text nodes copy into that array, instead of each making a String object as soon as they are created.  A string is created upon demand.  With some transformations, this could actually mean more space taken, rather than less, though I think the net will be a gain for most transformations.  In the long run, the real solution is to be able to use the original array, and not make a copy at all.  We'll be working with the Xerces folks on this, and maybe try to push this onto the SAX standard.  Having to make a copy of the character data is a real nasty issue with the SAX spec.   And why-o-why doesn't Sun define a String object that can reference a character array, instead of having to copy?", 
+   "Stree character nodes now implement a SaxEventDispatch interface.  Xalan asks the node if it implements this interface via the .supports method, and then calls dispatchSaxEvent(ContentHandler ch), allowing the text node to directly dispatch to the characters event, directly passing in the data from the character array in the DocumentImpl."
+  ], 
+  "revision_id": "333640"
+ }
+]

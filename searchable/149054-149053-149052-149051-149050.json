@@ -1,0 +1,78 @@
+[
+ {
+  "author": "cheche", 
+  "date": "2005-01-29T18:15:29.937972Z", 
+  "msg": [
+   "typo"
+  ], 
+  "revision_id": "149054"
+ }, 
+ {
+  "author": "cziegeler", 
+  "date": "2005-01-29T17:58:57.862436Z", 
+  "msg": [
+   "<action dev=\"CZ\" type=\"fix\" fixes-bug=\"33178\" due-to=\"Jean-Baptiste Quenot\" due-to-email=\"jbq@anyware-tech.com\">", 
+   "Fixing uri handling when the pass-through feature for mounting sitemaps is used.", 
+   "</action>"
+  ], 
+  "revision_id": "149053"
+ }, 
+ {
+  "author": "ekoneil", 
+  "date": "2005-01-29T17:18:46.348971Z", 
+  "msg": [
+   "Data grid work.", 
+   "This switches the way a data grid is constructed to be row / cell based rather than column based.", 
+   "The row / cell based model is a more general solution and is more flexible, though it sacrifices some of the simplicity of the programming model.  The most significant reason that this change needs to be made is the way a JSP 2.0 container evaluates expressions.", 
+   "Given a column like:", 
+   "<netui-data:columns>", 
+   "<netui-data:spanColumn headerText=\"${bundle.messages.someMessage}\" value=\"${container.item.value}\"/>", 
+   "</netui-data:columns>", 
+   "the spanColumn is rendered in two states -- header and data.  In header state, the column generated a <th></th> with the headerText String evaluated and inserted inside (among some other things like sorting / filtering).  During data state, the value String is evaluated for every row.  The problem is that regardless of the render state, the headerText and value expressions *always* evaluate because the container evaluates the expressions.  This can result in strange behavior when JSP 2.0 EL functions and complex getters are called via expressions.", 
+   "So, the header and data rendering stages are now separated into:", 
+   "<netui-data:header>", 
+   "<netui-data:headerCell headerText=\"${bundle.messages.someMessage}\"/>", 
+   "</netui-data:header>", 
+   "<netui-data:rows>", 
+   "<netui-data:spanCell value=\"${container.item.value}\"/>", 
+   "</netui-data:rows>", 
+   "The result is exactly the same, but the header and data cell UI is now decoupled.  This allows for good fexibility to define custom headers and cell contents and for setting up header / data cells that span multiple columns.  It also allows for multiple rows to be defined in the <rows> tag and selected based on some attribute of the current row.", 
+   "Column based rendering is still possible and isn't prevented by the current tag set in any way; it's just not as general of an approach to building complex grids of data.  When the next JSP version has deferred evaluation of expressions and tags can choose which / when to evaluate attributes, the model for defining a grid via columns will fit in nicely.", 
+   "Note, this change adds the following tags:", 
+   "<netui-data:", 
+   "headerCell", 
+   "header", 
+   "rows", 
+   "spanCell", 
+   "anchorCell", 
+   "imageCell", 
+   "imageAnchorCell", 
+   "templateCell", 
+   "and removes:", 
+   "anchorColumn", 
+   "spanColumn", 
+   "imageColumn", 
+   "imageAnchorColumn", 
+   "templateColumn", 
+   "BB: self", 
+   "DRT: NetUI / datagrid pass"
+  ], 
+  "revision_id": "149052"
+ }, 
+ {
+  "author": "tcurdt", 
+  "date": "2005-01-29T15:43:40.599753Z", 
+  "msg": [
+   "updated what's on the table"
+  ], 
+  "revision_id": "149051"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2005-01-29T15:40:13.996893Z", 
+  "msg": [
+   "update transformation"
+  ], 
+  "revision_id": "149050"
+ }
+]

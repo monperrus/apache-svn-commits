@@ -1,0 +1,88 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2003-02-07T20:03:25.000000Z", 
+  "msg": [
+   "rebase touches the .dll often after it's last touched the .dbg file, so", 
+   "the build continues to try and rebase even if the .dll isn't modified.", 
+   "Fix this by using a dbgmark file instead of the .dbg itself as the target."
+  ], 
+  "revision_id": "57674"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-02-07T01:02:02.000000Z", 
+  "msg": [
+   "*) Introduce Release mode debugging symbols for Win32 builds of apr.", 
+   "All library builds gain /Zi for debug symbols (which are discarded", 
+   "at link time if some flavor of the /debug flag isn't passed to link)", 
+   "and .dll builds gain both .pdb and .dbg files (older debuggers and", 
+   "Dr. Watson-type utilities on WinNT or Win9x don't support the newer", 
+   ".pdb symbol files.)  Documentation on how-to-use these symbol files", 
+   "will be forthcoming.  [Allen Edwards, William Rowe]"
+  ], 
+  "revision_id": "57673"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-02-03T23:18:26.000000Z", 
+  "msg": [
+   "If libapriconv and the conversion modules are statically linked with", 
+   "libapr, they each get their own copy of libapr's functions. In that", 
+   "case, it's an extremely bad idea for the apr-iconv code to try to", 
+   "unload something that was loaded within the conversion module, because", 
+   "the apr_dso_unload cleanups won't get run correctly (due to the", 
+   "different cleanup function addresses).", 
+   "This change addresses this problem by having the conversion module", 
+   "unload any dependencies it had loaded previously. Instead of using", 
+   "just one event, ICMODEV_DYNDEPS, to load the dependencies, we now use", 
+   "two, ICMODEV_DYN_LOAD and ICMODEV_DYN_UNLOAD, one to load and one to", 
+   "unload the dependencies.", 
+   "Without this change, the cleanups for the dependencise loaded by", 
+   "_tbl_simple.so would remain in the pool cleanups list until the pool", 
+   "was destroyed, by which time the cleanup function addresses were", 
+   "invalid (since all modules had been unloaded by then)."
+  ], 
+  "revision_id": "57672"
+ }, 
+ {
+  "author": "brane", 
+  "date": "2003-01-23T01:04:09.000000Z", 
+  "msg": [
+   "A search path for conversion modules can now be defined in the", 
+   "APR_ICONV_PATH environment variable.", 
+   "* configure.in: Make ':' the path separator in APR_ICONV_PATH on Unix.", 
+   "* include/apr_iconv.h: Remove private stuff that belongs in lib/iconv.h.", 
+   "* lib/iconv.h: Make ';' the path separator on Windows. Remove issetgid.", 
+   "* lib/iconv_module.c (iconv_getpath): Replace the old ICONV_PATH", 
+   "handling with properly APR-ized APR_ICONV_PATH handling. Use a", 
+   "subpool throughout this function, because iconv_getpathname can be", 
+   "called several times and it's really not nice to keep all those", 
+   "allocated strings hanging around.", 
+   "CVS: ----------------------------------------------------------------------", 
+   "CVS: PR:", 
+   "CVS:   If this change addresses a PR in the problem report tracking", 
+   "CVS:   database, then enter the PR number(s) here.", 
+   "CVS: Obtained from:", 
+   "CVS:   If this change has been taken from another system, such as NCSA,", 
+   "CVS:   then name the system in this line, otherwise delete it.", 
+   "CVS: Submitted by:", 
+   "CVS:   If this code has been contributed to Apache by someone else; i.e.,", 
+   "CVS:   they sent us a patch or a new module, then include their name/email", 
+   "CVS:   address here. If this is your work then delete this line.", 
+   "CVS: Reviewed by:", 
+   "CVS:   If we are doing pre-commit code reviews and someone else has", 
+   "CVS:   reviewed your changes, include their name(s) here.", 
+   "CVS:   If you have not had it reviewed then delete this line."
+  ], 
+  "revision_id": "57671"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-01-20T18:39:18.000000Z", 
+  "msg": [
+   "Identify libapriconv as a .dll, not an .exe.  Submitted by Mladen Turk."
+  ], 
+  "revision_id": "57670"
+ }
+]

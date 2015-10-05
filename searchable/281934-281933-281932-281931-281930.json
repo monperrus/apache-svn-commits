@@ -1,0 +1,82 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-05-24T04:41:57.000000Z", 
+  "msg": [
+   "Moved the HTTP-specific code from MimeHeaders and MHField to Http adapter. This also", 
+   "allow better buffer usage, and is a better code organization ( MimeHeaders are used", 
+   "by all adapters, shouldn't be http specific ).", 
+   "I also made a big change in Http adapter - optimized it and cleaned up request", 
+   "parsing. ( well, I still think you shouldn't use tomcat in standalone mode", 
+   "for production sites, only for development or where performance doesn't matter, but", 
+   "that doesn't mean it have to be slow !). The new parser generates only 4 strings,", 
+   "and uses only one byte[] buffer per thread for request processing.", 
+   "It seems all tomcat-tests are passing, I'll run watchdog after I finish all other changes.", 
+   "Small changes:", 
+   "- fixed test case ( Max-Age instead of bad MaxAge )", 
+   "- fixed Request - get facade from default context if error happens and no Context is set.", 
+   "It's a workaround, will go away when we finish decoupling Request/Facades."
+  ], 
+  "revision_id": "281934"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T01:58:17.000000Z", 
+  "msg": [
+   "More fixes.", 
+   "- admin/ContextAdmin - use the new communication mechanism.", 
+   "- allow access to FacadeManager from a request attribute - you don't need", 
+   "to access Context ( that would require to implement init())", 
+   "- the attribute name is now defined in FacadeManager", 
+   "- removed FixHeaders from server.xml", 
+   "- JSP - temporary disable the reuse of out, it creates some problems, some", 
+   "tests fail. We need to fix the root problem, reusing the stream has a big", 
+   "impact on performance", 
+   "- removed more redundant code", 
+   "- the default RequestImpl will create a StringBuffer and store the write output in it,", 
+   "make it null ( most of the type we use sub-classes of RequestImpl )", 
+   "- ResponseFacade: use the efficient methods in MimeHeaders instead of creating", 
+   "objects. We need to document/clean the efficient methods and stop generating garbage."
+  ], 
+  "revision_id": "281933"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T00:47:42.000000Z", 
+  "msg": [
+   "Removed reference to Facade - is this class used ?"
+  ], 
+  "revision_id": "281932"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-24T00:04:38.000000Z", 
+  "msg": [
+   "Facade - missing file.", 
+   "TomcatInternalServlet is a simple way to allow internal servlets to access the FacadeManager", 
+   "without security checks ( and without a complex doPriviledged or equivalent ).", 
+   "All tomcat servlets extend this class and have access to facadeM - normal servlets can", 
+   "get access only if <context trusted=\"true\" ... /> is used."
+  ], 
+  "revision_id": "281931"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-23T21:39:53.000000Z", 
+  "msg": [
+   "- Removed FixHeaders Interceptor - it was a hack that ended up with duplicated and", 
+   "inefficient code.", 
+   "- All Content-Type, Length, Language are set in ResponseImpl, the code was redundant.", 
+   "- Cookies - moved addHeader ResponseImpl too, consistent with the rest of the code", 
+   "( we add the header for setContentLength, we should do it for Cookies)", 
+   "- Date - moved the code in HttpResponse, Apache will set the date anyway.", 
+   "XXX check if NES, IIS set the date header automatically, change the C code to", 
+   "set it ( date formating in java is very inefficient, and the server is optimized", 
+   "anyway for the format used in HTTP ).", 
+   "- Servlet-Engine header will be set in the adapter, before sending the headers.", 
+   "This allows per/adapter customization ( Tomcat/JNI/Apache ), and we can move it", 
+   "in the server side, instead of sending it per/request."
+  ], 
+  "revision_id": "281930"
+ }
+]

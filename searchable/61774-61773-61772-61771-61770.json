@@ -1,0 +1,58 @@
+[
+ {
+  "author": "bjh", 
+  "date": "2001-06-16T01:27:15.000000Z", 
+  "msg": [
+   "OS/2: Add implementations of apr_file_trunc(), apr_os_thread_current() &", 
+   "apr_os_thread_equal()."
+  ], 
+  "revision_id": "61774"
+ }, 
+ {
+  "author": "bjh", 
+  "date": "2001-06-16T01:13:34.000000Z", 
+  "msg": [
+   "OS/2: correct APR_SIZE_T_FMT"
+  ], 
+  "revision_id": "61773"
+ }, 
+ {
+  "author": "bjh", 
+  "date": "2001-06-16T01:08:59.000000Z", 
+  "msg": [
+   "OS/2: Add another possibility for ENOENT & fix a missing macro line joiner", 
+   "in APR_STATUS_IS_EPIPE."
+  ], 
+  "revision_id": "61772"
+ }, 
+ {
+  "author": "sussman", 
+  "date": "2001-06-15T20:04:43.000000Z", 
+  "msg": [
+   "Bugfix for the unix version of apr_dir_read().  I caught it on my", 
+   "FreeBSD 4.3 machine while trying to debug Subversion.  :)", 
+   "It happened in the thread-less section of code (since threads are", 
+   "turned off on FreeBSD).  It turns out that apr_dir_remove() had", 
+   "previously failed and set the global `errno'.  Then later on I tried", 
+   "to do a looping apr_dir_read() in an empty directory.  After returning", 
+   "`.' and `..' as usual, the underlying unix readdir() returned NULL --", 
+   "as it should.  However, apr_dir_read() didn't return ENOENT as it", 
+   "ought to; instead, it noticed that `errno' still had an old value and", 
+   "returned that instead.  The solution is to zero errno beforehand,", 
+   "unless someone has a better suggestion.", 
+   "* file_io/unix/dir.c (apr_dir_read): clear errno *before* you depend", 
+   "on its value after calling readdir().", 
+   "* test/testdir.c:  new regression test for this bug.", 
+   "* test/Makefile.in (testdir):  build the new test."
+  ], 
+  "revision_id": "61771"
+ }, 
+ {
+  "author": "kfogel", 
+  "date": "2001-06-15T15:08:22.000000Z", 
+  "msg": [
+   "(apr_cpystrn): Doc fix."
+  ], 
+  "revision_id": "61770"
+ }
+]

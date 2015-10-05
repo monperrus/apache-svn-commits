@@ -1,0 +1,71 @@
+[
+ {
+  "author": "glenn", 
+  "date": "2002-09-08T05:46:36.000000Z", 
+  "msg": [
+   "Cleanup Exception reporting for JSP page compiler failure, just rethrow the JasperException"
+  ], 
+  "revision_id": "305179"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2002-09-08T05:45:59.000000Z", 
+  "msg": [
+   "Update JSP compiles so that it works with both javac and jikes.", 
+   "The javaEncoding init parameter was only being used when generating", 
+   "the java source, and then only if UTF8 didn't work.  Changed so that", 
+   "if a javaEncoding is configured it gets used both for generating the", 
+   "java source and for compiling.  UTF8 is the default javaEncoding.", 
+   "Javac needed System.err captured but jikes needed the Ant DefaultLogger.", 
+   "Implement both so that error reporting works regardless of which compiler is used.", 
+   "In order to get jikes to work I had to do the following:", 
+   "Specify \"jikes\" using the init parameter \"compiler\" in conf/web.xml.", 
+   "On my Solaris system jikes would not work with UTF8 encoding so I", 
+   "set the \"javaEncoding\" init parameter to \"ISO-8859-1\".", 
+   "In order to get reporting of the line number in the JSP page", 
+   "where the error occurred to work I had to define", 
+   "-Dbuild.compiler.emacs=true when starting Tomcat.", 
+   "There is one more twist if you use the Java SecurityManager.", 
+   "Ant's jikes compiler option executes jikes by using exec(\"jikes\").", 
+   "This forces the current PATH to be searched for jikes.", 
+   "In order for this to work with the Java SecurityManager the following", 
+   "permission has to be granted.", 
+   "permission java.io.FilePermission \"<<ALL FILES>>\", \"execute\";", 
+   "This is not a permission you would want to grant.  I had to modify", 
+   "the ant source so that I could specify the complete path to the", 
+   "jikes compiler using a property \"jikes.compiler.path\" so that", 
+   "only the following FilePermission was needed:", 
+   "permission java.io.FilePermission \"/usr/local/bin/jikes\", \"execute\";", 
+   "An enhancement request BUG 12038 has been filed for Ant requesting", 
+   "that the ability to specify a complete path be added."
+  ], 
+  "revision_id": "305178"
+ }, 
+ {
+  "author": "kinman", 
+  "date": "2002-09-06T21:40:53.000000Z", 
+  "msg": [
+   "- Fixed 12381: _ as the first char of the JSP file needs to be escaped."
+  ], 
+  "revision_id": "305177"
+ }, 
+ {
+  "author": "kinman", 
+  "date": "2002-09-06T21:16:23.000000Z", 
+  "msg": [
+   "- Add parseTagFileDirectives that parses a tag file for its directives only,", 
+   "and skips over other constructs.  The benfit is not just parser speedup,", 
+   "but that it avoid parsing other tag files used by the current one.  This", 
+   "paves the way for handling circular tag file dependencies."
+  ], 
+  "revision_id": "305176"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2002-09-06T19:32:44.000000Z", 
+  "msg": [
+   "Rethrow tag file parse exception as RuntimeException in ImplicitTagLibraryInfo.getTagFile()"
+  ], 
+  "revision_id": "305175"
+ }
+]

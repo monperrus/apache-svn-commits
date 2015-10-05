@@ -1,0 +1,65 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-03-20T19:34:11.000000Z", 
+  "msg": [
+   "Fix for 4264048 ( from bug parade ) - tomcat can't bind on specified inet", 
+   "address.", 
+   "Tested on Linux."
+  ], 
+  "revision_id": "281649"
+ }, 
+ {
+  "author": "shachor", 
+  "date": "2000-03-19T12:30:43.000000Z", 
+  "msg": [
+   "Fix a type in the docs, should use workers.properties in the examples", 
+   "instead of worker.properties"
+  ], 
+  "revision_id": "281648"
+ }, 
+ {
+  "author": "jhunter", 
+  "date": "2000-03-18T03:57:47.000000Z", 
+  "msg": [
+   "Keep the status code during an <error-code> redirection.  IOW, if a 404", 
+   "is setup using an <error-code> directive to serve /404.html, we now serve", 
+   "404.html but with a status code of 404 instead of 200.  Danny agreed this", 
+   "was the right way to interpret the spec."
+  ], 
+  "revision_id": "281647"
+ }, 
+ {
+  "author": "jhunter", 
+  "date": "2000-03-18T03:04:52.000000Z", 
+  "msg": [
+   "Changed to *forward* to <error-page>s (instead of including the pages) if the", 
+   "response hasn't been committed.  This has many benefits, including letting the", 
+   "error page target set the content type and headers and what not.", 
+   "Changed RequestDispatcherImpl so that forward() would be allowed if the", 
+   "response hasn't been committed.  This matches the 2.2 spec.  The old impl", 
+   "matched the 2.1 spec where forward() was only allowed if the response", 
+   "hadn't been started."
+  ], 
+  "revision_id": "281646"
+ }, 
+ {
+  "author": "jhunter", 
+  "date": "2000-03-18T00:59:05.000000Z", 
+  "msg": [
+   "Warning: change to javax.servlet.http.HttpServlet -- all eyes should review.", 
+   "The If-Modified-Since logic in HttpServlet didn't always behave as it should.", 
+   "For one thing, it didn't round the millis value down to the nearest second.", 
+   "This change fixes that problem.  The old code also called", 
+   "sendError(res.SC_NOT_MODIFIED) to send the 304 which doesn't always work since", 
+   "Not Modified is not an error status code.  Now it calls setStatus().", 
+   "I also removed the logic that sent the page if the client's If-Modified-Since", 
+   "header was after the current system time.  Nowhere in the HTTP spec do I see", 
+   "that behavior endorsed, and I can't think of a good argument for keeping it.", 
+   "Please check the code to make sure it makes sense to you.  Feel free to run", 
+   "your own tests too.  A bug here affects all servlet engines!", 
+   "-jh-"
+  ], 
+  "revision_id": "281645"
+ }
+]

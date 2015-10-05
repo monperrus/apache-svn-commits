@@ -1,0 +1,90 @@
+[
+ {
+  "author": "mkwan", 
+  "date": "2003-06-25T18:17:39.000000Z", 
+  "msg": [
+   "Fix for problem in ExpandedNameTable (bugzilla 21087)."
+  ], 
+  "revision_id": "337539"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-06-25T17:08:32.000000Z", 
+  "msg": [
+   "Performance improvement for XSLTC", 
+   "Introduce two new iterators (CachedNodeListIterator and CloneNodeListIterator).", 
+   "They are used by variable/param references that are evaluated to nodesets.", 
+   "CachedNodeListIterator traverses the underlying iterator once and caches the", 
+   "nodes in an IntegerArray. Its clone() method returns an object of", 
+   "CloneNodeListIterator, which also retrieves nodes from the cache.", 
+   "This mostly improves the case where a variable is referenced multiple times", 
+   "in a context. In the old code, the iterator for the variable is traversed", 
+   "as many times as the variable is referenced. Using the cached iterators,", 
+   "the iterator is only traversed once. All later references retrieve nodes", 
+   "from the cache."
+  ], 
+  "revision_id": "337538"
+ }, 
+ {
+  "author": "minchau", 
+  "date": "2003-06-25T17:05:03.000000Z", 
+  "msg": [
+   "Changed code like this:", 
+   "String s; ...", 
+   "char[] array = s.toCharArray();", 
+   "To this:", 
+   "final int length = s.length();", 
+   "if (length > m_charsBuff.length)", 
+   "{", 
+   "m_charsBuff = new char[length * 2 + 1];", 
+   "}", 
+   "char[] array = m_charsBuff;", 
+   "// re-use \"array\" but use \"length\" for the", 
+   "// number of characters in the array.", 
+   "This shows a 2% performance improvement for some", 
+   "XSLTC/HTML testcases. Of course some transformations", 
+   "may do betterthan this, and some worse, but all should be", 
+   "faster.", 
+   "The performance should also get marginally better for transformations that spend their", 
+   "time writing out attributes.  It runs marginally faster because", 
+   "the helper character buffer, m_charsBuffer is re-used rather", 
+   "than a new one being created each time.", 
+   "Submitted by:\tBrian Minchau"
+  ], 
+  "revision_id": "337537"
+ }, 
+ {
+  "author": "mkwan", 
+  "date": "2003-06-25T14:40:36.000000Z", 
+  "msg": [
+   "Performance improvement for XSLTC", 
+   "Implement a compiler-assisted serialization feature.", 
+   "Generate code to make use of the new", 
+   "addUniqAttribute(String name, String value, int flags)", 
+   "interface in SerializationHandler. The compiler does", 
+   "more static analysis on attributes of literal elements", 
+   "and passes the additional information to the serializer", 
+   "via a bit-encoded flag.", 
+   "The additional information includes whether this attribute", 
+   "is unique, whether its value has bad characters (something", 
+   "needs to be escaped), whether it is a HTML URI or empty", 
+   "attribute. If the attribute is unique, the serializer can", 
+   "write out the attribute right away, without having to", 
+   "accumulate it in an internal table. If it also does not", 
+   "contain bad characters, then escaping is not needed.", 
+   "All these information speeds up the serializer on writing", 
+   "the attributes out."
+  ], 
+  "revision_id": "337536"
+ }, 
+ {
+  "author": "villard", 
+  "date": "2003-06-24T21:09:08.000000Z", 
+  "msg": [
+   "Add a new method in the OperatorExpr interface: append(Expr). It allows to concat two operators of the same type", 
+   "Add the method createSequence in ExpressionFactory", 
+   "Several bugs fixes, especially for the cloneExpression feature"
+  ], 
+  "revision_id": "337535"
+ }
+]

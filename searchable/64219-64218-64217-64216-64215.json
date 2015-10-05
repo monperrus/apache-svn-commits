@@ -1,0 +1,64 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2002-12-29T05:51:43.000000Z", 
+  "msg": [
+   "After recovering the 'manditory' bits, confirm that fields are identical", 
+   "one-by-one for diagnostics.  You can't simply memcmp() all of the fields,", 
+   "such as ->valid, because some platforms don't obtain the same information", 
+   "from both the stat() of a filename and the getfileinfo() of an open handle.", 
+   "Even the filename is \"unknowable\" against a file handle, since one of many", 
+   "filenames could have been used to access that file.", 
+   "Finally, there is one test that (correctly) fails, the APR_FINFO_PROT", 
+   "values on Win32 don't agree.  I suspect we are really getting the perms", 
+   "of the 'open file handle' rather than the 'filesystem object'.  Researching."
+  ], 
+  "revision_id": "64219"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-12-29T05:48:51.000000Z", 
+  "msg": [
+   "Remove a bogus test.  All of the original architects have argued against", 
+   "testing for bogus (invalid) combinations of bits.  This test checked a", 
+   "POSIX behavior of requiring the caller to request read and/or write access.", 
+   "On Win32 and some other platforms that support metadata access, opening", 
+   "a file internally for no read or write access is entirely valid.  E.g. to", 
+   "modify the meta information, especially about directories on platforms", 
+   "that don't support opening 'directories' for read/write access, APR already", 
+   "uses apr_file_open() to handle the file metadata access.  I see no", 
+   "compelling reason to emulate POSIX's fail-on-no-read-or-write-request", 
+   "behavior."
+  ], 
+  "revision_id": "64218"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-12-29T05:45:15.000000Z", 
+  "msg": [
+   "Clean up these dup2 tests by retaining the original stderr file while", 
+   "testing the substitution of an alternate stderr (with dup2) and finally", 
+   "replacing stderr with it's original, rather than closing it."
+  ], 
+  "revision_id": "64217"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-12-29T05:44:01.000000Z", 
+  "msg": [
+   "First; once any apr object is closed, the results are undefined.", 
+   "Second; if a platform does not use distinct 'libraries' and 'modules',", 
+   "the four _non_module tests (should have been named _library tests)", 
+   "don't apply; this includes Netware, Win32, BeOS and OS2."
+  ], 
+  "revision_id": "64216"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-12-28T20:44:55.000000Z", 
+  "msg": [
+   "You cannot close files that failed to open."
+  ], 
+  "revision_id": "64215"
+ }
+]

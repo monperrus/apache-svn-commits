@@ -1,0 +1,78 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-01-12T00:57:32.000000Z", 
+  "msg": [
+   "- few name changes ( lookupResult -> subRequest, server-> contextM )", 
+   "- removed ForwardedRequest - it was used only in forwardRequest and with", 
+   "without LookupResult ( i.e. with sub-Request) it is useless.", 
+   "- started the new subRequest mechanism. This is the last big change, and it may", 
+   "brake some code.", 
+   "This will affect:", 
+   "- Context.getResource()", 
+   "- Context.getContext()", 
+   "- Context.getRealPath()", 
+   "- RequestDispatcher ( forward and include )", 
+   "( and few other places ).", 
+   "How it works:", 
+   "There are few kinds of subRequests:", 
+   "- RequestDispatcher will generate a new request and execute it", 
+   "- few methods need to go through the request processing, but without executing.", 
+   "For example getContext() needs to call the first set of interceptors that sets the", 
+   "context. getRealPath() and getResource() - same, plus all the URLMappings", 
+   "The main entry point for all this is ContextManager, and the mechanism for a", 
+   "subRequest is identical/shared with the normal request processing done for", 
+   "Adapters.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "281379"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-01-11T21:27:54.000000Z", 
+  "msg": [
+   "Forgot one change.", 
+   "addQueryString() used to be in Request, but it's used only for RequestDispatcher.", 
+   "( which alters the request for invocation).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "281378"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-01-11T20:43:04.000000Z", 
+  "msg": [
+   "Moved code out of facade into the real classes.", 
+   "It was added to fix various problems, but it's against the design of", 
+   "facade ( IMHO)."
+  ], 
+  "revision_id": "281377"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2000-01-11T16:04:29.000000Z", 
+  "msg": [
+   "Update runtest.[sh|bat] to use new moo.RunTest"
+  ], 
+  "revision_id": "281376"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-01-11T03:02:15.000000Z", 
+  "msg": [
+   "Move DefaultServlets, InvokerServlet and NoInvokerServlet in a separate directory.", 
+   "The idea is to keep in core only the classes and interfaces that are required, anything", 
+   "that is \"plugeable\" will be in a separate directory.", 
+   "This will help people to work on different sub-projects, and to understand what", 
+   "happens, and will also allow us to simplify and document the interfaces between", 
+   "components."
+  ], 
+  "revision_id": "281375"
+ }
+]

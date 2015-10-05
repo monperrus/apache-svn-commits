@@ -1,0 +1,77 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-04-22T05:37:31.000000Z", 
+  "msg": [
+   "#196 - support for re-deploying the WAR if a change is detected.", 
+   "That supports a certain operation mode, where you upload a new version of the WAR", 
+   "in the server. ( the old dir will be deleted ! - so it will not work if you change", 
+   "both the war and the files ).", 
+   "It is disabled by default, use redeploy=true to enable."
+  ], 
+  "revision_id": "283464"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-04-21T19:54:34.000000Z", 
+  "msg": [
+   "Fix for 1416. ( reported by katkere@praja.com ).", 
+   "The pool size for jsps is configurable ( starting next nightly of 3.3 )."
+  ], 
+  "revision_id": "283463"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-04-21T19:33:11.000000Z", 
+  "msg": [
+   "Fix server.xml with the right name of the attribute.", 
+   "Delay Random creation ( each random creates a thread )", 
+   "That concludes the fix of 1418, no hanging threads after shutdown.", 
+   "Note that shutdown/init is not completely debugged or tested - but at least there", 
+   "are no gross errors and kind-of works. In time things will improve ( the assumption", 
+   "is you don't do a soft restart every hour ).", 
+   "Soft restart is better in many cases - like when you embed tomcat in an application,", 
+   "as it doesn't require to restart the java vm and should clean up all the resources", 
+   "and return to a stable state.", 
+   "Of course, that requires that all modules respect the server state and clean", 
+   "up resources."
+  ], 
+  "revision_id": "283462"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-04-21T18:42:51.000000Z", 
+  "msg": [
+   "1418 - stop/start puts the thread pool in the same state ( all the threads are", 
+   "stoped, then shouldStop is reset to false and we restart ).", 
+   "Reduced the min threads ( thread creation is much cheaper than process", 
+   "creation, and after the threads are created they will remain allocated ).", 
+   "Also, increased max threads - tomcat can now handle way over 100 RPS, no need", 
+   "to limit it in the thread pool settings."
+  ], 
+  "revision_id": "283461"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-04-21T18:36:07.000000Z", 
+  "msg": [
+   "Core changes !!!", 
+   "engineShutdown() hook is supposed to be called when tomcat is shut down ( and modules", 
+   "must clean up resources ). The interceptor can be added/removed at any time -", 
+   "it must clean after itself on removeInterceptor - but it shouldn't get a shutdown", 
+   "notification when it's removed ( since the server will still work ).", 
+   "Also, shutdown will no longer remove contexts - since init() didn't add them. Whoever", 
+   "adds the contexts ( i.e. config modules ) should also remove them - if they want -", 
+   "on server stop/restart. ( the context should be cleaned up on contextShutdown, but", 
+   "it may remain added - the server will report \"application unavailable\" instead of", 
+   "not found ).", 
+   "Also, shutdown will not remove interceptors - since it didn't add them.", 
+   "A init->start->stop->shutdown whould return to the same state as before init", 
+   "( i.e. the configuration hardcoded in context manager like modules and settings", 
+   "must remain ).", 
+   "A shutdown->init should bring the server in ready state, and after start it should", 
+   "work as before."
+  ], 
+  "revision_id": "283460"
+ }
+]

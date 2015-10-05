@@ -1,0 +1,84 @@
+[
+ {
+  "author": "mrglavas", 
+  "date": "2004-02-04T18:28:53.000000Z", 
+  "msg": [
+   "Some clean up:", 
+   "- Access static method isXMLName in a static way.", 
+   "- Removing unused import."
+  ], 
+  "revision_id": "319749"
+ }, 
+ {
+  "author": "mrglavas", 
+  "date": "2004-02-04T18:23:24.000000Z", 
+  "msg": [
+   "Add serialVersionUID to PSVI DOM classes."
+  ], 
+  "revision_id": "319748"
+ }, 
+ {
+  "author": "mrglavas", 
+  "date": "2004-02-03T23:18:53.000000Z", 
+  "msg": [
+   "Fixing 2 bugs and improving performance.", 
+   "Bug #1: With namespace support turned off the parser", 
+   "emitted prefix mappings for the XML namespace", 
+   "http://www.w3.org/XML/1998/namespace and the", 
+   "XML namespace declaration namespace", 
+   "http://www.w3.org/2000/xmlns/ for every element. It", 
+   "shouldn't emit these ever, especially when namespaces", 
+   "are off. This had been broken since Xerces 2.3.0.", 
+   "Bug #2: With namespace support turned off the SAX", 
+   "parser was removing attributes named 'xmlns' from an", 
+   "attribute list even though this is just a regular attribute", 
+   "when namespace support is not enabled. It seems like", 
+   "this bug was always been in Xerces2. Probably nobody's", 
+   "noticed it because it's unwise to name a regular", 
+   "attribute 'xmlns'.", 
+   "Performance Fix: The parser always iterated over the list", 
+   "of attributes on startElement to either remove all namespace", 
+   "declaration attributes, or remove their namespace URI and", 
+   "localname if the namespace-prefixes feature was on. This", 
+   "search even occurred when namespace support is off. We", 
+   "now check whether there are local namespace declarations", 
+   "by querying the namespace context to prevent looping over", 
+   "the list if we don't have to."
+  ], 
+  "revision_id": "319747"
+ }, 
+ {
+  "author": "mrglavas", 
+  "date": "2004-02-03T20:34:27.000000Z", 
+  "msg": [
+   "Improve performance of the initialization of the", 
+   "character flag arrays for XMLChar and XML11Char.", 
+   "Although these arrays are always the same we were", 
+   "building them dynamically.", 
+   "Created some new utility classes for generating a", 
+   "more efficient initialization of these arrays. These", 
+   "generators should be used again if XMLChar or", 
+   "XML11Char need to be updated. The generated", 
+   "code uses java.util.Arrays (from JDK 1.2) to", 
+   "fill chunks of the array with the same value. This", 
+   "is similar to the C library's memset.", 
+   "This should significantly improve class initialization", 
+   "for XMLChar and XML11Char which is important", 
+   "for applications who care about faster startup and", 
+   "it is also important if these classes are garbage", 
+   "collected and reloaded several times."
+  ], 
+  "revision_id": "319746"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2004-02-03T17:27:45.000000Z", 
+  "msg": [
+   "Fixing a potential NPE.", 
+   "When there exist empty particles, it's possible for other parts to get NPE when", 
+   "they try to access such particles. Now all empty particles are removed from", 
+   "the model group that contains it."
+  ], 
+  "revision_id": "319745"
+ }
+]

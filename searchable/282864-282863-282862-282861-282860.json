@@ -1,0 +1,92 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-12-30T07:54:18.000000Z", 
+  "msg": [
+   "RequestUtils - split into util.http.AcceptLanguage and ContentType ( tools", 
+   "for parsing the 2 headers ), HttpMessages for localized http codes.", 
+   "The chunk that parse dates is already in DateTools, the code for param.", 
+   "processing is moved to Parameters. Unescaping urls is in MessageBytes", 
+   "( rewritten using Apache2.0 util.c model ).", 
+   "RequestUtils was created during refactoring - most complex code from core", 
+   "was moved in this super-class. The fact that it's now split by functionality", 
+   "doesn't make the code more efficient - it still need optimizations, but", 
+   "it'll be easier this way.", 
+   "Parameters is the largest chunk that I want to finish, plus Sessions ( sorry,", 
+   "I said I'll do the fix today - I'm very slow lately ).", 
+   "After this change we finally got the 3 separated components(core, apr, modules)"
+  ], 
+  "revision_id": "282864"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-29T21:24:35.000000Z", 
+  "msg": [
+   "Minor fixes ( including the build :-), preparing to finish RequestUtil", 
+   "( the last \"intermediary\" class - neither core nor util nor module ).", 
+   "After that is done, tomcat 3.3 will consist of only 3 components:", 
+   "- the \"core\" - 9 classes ( including TomcatException ): basic representation", 
+   "for request, response, location, application, server, module.", 
+   "- modules ( tomcat/context and tomcat/request modules will be moved to", 
+   "tomcat/modules and organized by type, again as in Apache 2.0 ). ( about 30", 
+   "modules so far - probably 20 are important )", 
+   "- utilities ( similar with APR - more work is needed to optimize and improve", 
+   "the documentation, but that's a different story, not tomcat3.3 )", 
+   "( the servlet2.2 is a particular module/group of modules ).", 
+   "( One more step would be to remove/move out all non-essential modules", 
+   "( i.e. \"features\" that are not required for normal operation ) - but I don't", 
+   "like removing existing features, probably we can leave them in.)", 
+   "Remaining items for this year: Parameters, Sessions, maybe Encoding (", 
+   "making it a module - the rest can be done independently )."
+  ], 
+  "revision_id": "282863"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-29T20:31:34.000000Z", 
+  "msg": [
+   "Explicit imports in core. There are few more dependencies that", 
+   "should be removed ( and moved to the facade, as high-level constructs -", 
+   "Principal, etc ).", 
+   "Next step is to do the same thing in util, and remove ( move out ) all", 
+   "utils that are no longer used.", 
+   "The place for \"general utils\" is in a \"jpr\" ( i.e. java-APR )-like project,", 
+   "and even the curently-used utils shouldn't be part of tomcat ( in the", 
+   "same way as Apache2.0 makes a clear difference and uses 2 CVS trees - one", 
+   "for the general-code and one for the library )"
+  ], 
+  "revision_id": "282862"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-29T20:05:13.000000Z", 
+  "msg": [
+   "Ops, forgot one change - build.xml will now build auto-executable jar", 
+   "file for stop-tomcat.jar.", 
+   "Also, in the previous commit - the server protocols will start at \"engineStart\"", 
+   "hook instead of engineInit."
+  ], 
+  "revision_id": "282861"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-29T19:59:19.000000Z", 
+  "msg": [
+   "Small change in the stop protocol: added a \"secret\" ( used only for stopping,", 
+   "all other Ajp12 requests are equivalent with HTTP requests, and need no", 
+   "secret ). The secret is optional ( for backward compatibility - \"useSecret\"", 
+   "attribute will enable its use ).", 
+   "There are 2 choices for secret - the user can set it ( secret=\"xxxx\" ), or", 
+   "( much better ) let the server generate it ( using the simple Math.random() -", 
+   "IMHO still better than \"changeit\" ). The server will save the random secret", 
+   "in a \"stop.id\" file, in conf ( XXX should it be work/private ? ). Since read", 
+   "access to that directory would allow reading of server.xml too - the method", 
+   "is equivalent.", 
+   "The main advantage is that the user doesn't have to configure anything.", 
+   "Another small usability improvement - now it's possible to do", 
+   "\"java -jar stop-tomcat.jar \" ( or double-click the jar - no scripts", 
+   "needed on JDK1.2 machines, the scripts only needed for 1.1 )"
+  ], 
+  "revision_id": "282860"
+ }
+]

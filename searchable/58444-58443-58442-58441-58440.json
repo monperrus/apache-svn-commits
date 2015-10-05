@@ -1,0 +1,91 @@
+[
+ {
+  "author": "jwoolley", 
+  "date": "2001-11-07T02:57:21.000000Z", 
+  "msg": [
+   "We weren't correctly detecting BSD/OS systems for Makefile conversion", 
+   "because we were looking for \"*bsdi*\" in $host_alias; the problem is that", 
+   "APR-util's $host_alias is not a \"real\" $host_alias like the one in", 
+   "APR's configure script, but a dummied-up one generated from `uname -s`,", 
+   "which on BSD/OS returns \"BSD/OS\".  So we weren't getting into that case and", 
+   "we were generating SYSV-style Makefiles even on BSD/OS.  (I left the *bsdi*", 
+   "part in just for good measure, and also added an extra check for GNU make", 
+   "which I stole from APR.)"
+  ], 
+  "revision_id": "58444"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-11-07T01:24:54.000000Z", 
+  "msg": [
+   "Capture some low-hanging fruit on shifting functionality to the", 
+   "separate .c files: set_error, close, freedatum, and getusednames.", 
+   "Set the vtable uesd in the DBM_VTABLE cpp symbol and store it within", 
+   "the apr_dbm_t type returned by open().", 
+   "NEEDS_CLEANUP was removed in this pass, as we shifted and them", 
+   "simplified the #if/#else/#endif branches in freedatum.", 
+   "set_error and getusednames were shifted from #if sequences into three", 
+   "new code sections; no changes within the code blocks.", 
+   "close was a simply copy to the new .c files since they all still use", 
+   "the APR_DBM_CLOSE cover macro.", 
+   "Note: no macro expansions were done yet. Keeping the code shift simple", 
+   "for review purposes."
+  ], 
+  "revision_id": "58443"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-11-07T00:59:00.000000Z", 
+  "msg": [
+   "Fix for the NEXTKEY functionality in the Berkeley DB code.", 
+   "Submitted by: Mladen Turk", 
+   "Fix for gdbm code to handle freedatum properly (I broken it when I", 
+   "previously removed the NEEDS_CLEANUP cpp symbol)."
+  ], 
+  "revision_id": "58442"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-11-06T22:23:26.000000Z", 
+  "msg": [
+   "* define a default REGISTER_CLEANUP and have gdbm replace it (the only", 
+   "user of this option). shift datum_cleanup() to apr_dbm_gdbm.c.", 
+   "* define SET_FILE() macro so that we can properly handle the berkeley", 
+   "configuration; it uses a structure rather than a ptr, so we need", 
+   "some extra work to occur (the macro covers the work).", 
+   "[ the above macros are temporary until full breakout ]", 
+   "* shift apr_posix_perms2mode() to the end of apr_dbm.c and always", 
+   "define the thing.", 
+   "* add GET_BDB macro to revamp how we access the berkeley stuff (the", 
+   "APR_DBM_* macros). also tweak the apr_dbm_fetch() function to", 
+   "compensate.", 
+   "* add vtables and functions for each database, and fill them with", 
+   "abort() calls until their code is filled in."
+  ], 
+  "revision_id": "58441"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-11-06T09:36:34.000000Z", 
+  "msg": [
+   "Begin integration of Ian's multiple DBM work. This is different from Ian's", 
+   "work (so far) in that:", 
+   "* first phase only: shifted macros from apr_dbm.c into the other .c files", 
+   "and simply #include'd those files (i.e. not using the vtables yet)", 
+   "NOTE for code review: no changes were made to the macros. This was a pure", 
+   "shift only.", 
+   "apr_dbm_private.h is the only new code (thus, good for review).", 
+   "* no per-dbm .h files; all entry points will be thru vtables. since we need", 
+   "to map names to <something> (to allow for external registration of DBM", 
+   "types), then we may as well map to a complete vtable which includes the", 
+   "open and used_names entry points.", 
+   "* similar to buckets, the predefined types are variables specified in", 
+   "apr_dbm_private.h for use by the dbm registration code.", 
+   "* removed a couple entry points from Ian's apr_dbm_type_t (set error and a", 
+   "cleanup function)", 
+   "Next steps: add infrastructure for using the types; revamp the macro stuff", 
+   "into real function calls; provide for multiple, available dbm types."
+  ], 
+  "revision_id": "58440"
+ }
+]

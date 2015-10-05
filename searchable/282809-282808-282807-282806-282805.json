@@ -1,0 +1,110 @@
+[
+ {
+  "author": "danmil", 
+  "date": "2000-12-25T22:31:58.000000Z", 
+  "msg": [
+   "Converted C++-style comments to C-style comments to fix build on Sparc."
+  ], 
+  "revision_id": "282809"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-25T04:46:50.000000Z", 
+  "msg": [
+   "Removed webdav from this repository. If anyone wants to use webdav with", 
+   "tomcat3.x - all new features and extensions will be available soon in", 
+   "a separate repository."
+  ], 
+  "revision_id": "282808"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-25T04:43:15.000000Z", 
+  "msg": [
+   "Removed any reference to other facades - non-servlet22 facades will not", 
+   "be part of the standard distribution.", 
+   "Removed webdav - it was a new feature for 3.3, and no new features should", 
+   "be part of 3.3. The code will be reintroduced as part of the independent", 
+   "\"tomcat extensions\" project."
+  ], 
+  "revision_id": "282807"
+ }, 
+ {
+  "author": "pierred", 
+  "date": "2000-12-22T19:33:08.000000Z", 
+  "msg": [
+   "Fix for Bug #55. (tomcat_32)", 
+   "-----", 
+   "Synopsis:", 
+   "Default for included files is 8859_1, with no option to set otherwise.", 
+   "Report Description:", 
+   "The default for reading an included file is ISO_8859_1. We can,", 
+   "of course, set pageConent to read UTF-8 (which is what we need it", 
+   "to be to support international", 
+   "code). Unfortunately, when there are two or more levels of", 
+   "encoding (or the pageContent type ins't set), the encoding that", 
+   "the JspReader gets set to a hard-coded", 
+   "\"ISO_8859_1\", and doesn't allow this to be set to anything else", 
+   "via the runtime system properties. In:", 
+   "org.apache.jasper.compiler.JspReader JspReader.java line", 
+   "158, encoding ALWAYS defaults to 8859_1, and the file.encoding,", 
+   "when set from the System properties. This is an easy fix, to set", 
+   "encoding to: encoding =", 
+   "System.getPropert(\"file.encoding\",\"8859_1\") ; The result,", 
+   "typically, is that the file will flake out and convert all of the", 
+   "non-UTF-8 characters to US-ASCII, @%, etc.", 
+   "-----", 
+   "I'm not sure I fully understand what's described there,", 
+   "so here is what I believe should be done.", 
+   "The \"encoding\" for a JSP file is currently handled as follows:", 
+   "1. In Compiler.java, we create a JspReader for the top-level", 
+   "(\"including\") jsp file using the 8859_1 encoding.", 
+   "2. Using that JspReader, we check if there is a page directive", 
+   "with 'contentType' specified. If there is, then", 
+   "a new JspReader for the page is created with the encoding set to the", 
+   "\"charset\" specified in the contentType value of the page", 
+   "directive; otherwise we stick with the default 8859_1 encoding.", 
+   "3. When a page is included, JspReader.pushFile() is called,", 
+   "and the encoding passed as argument appears to always", 
+   "be null (since no encoding attribute can be specified in", 
+   "the \"include\" directive, reading 'encoding' off of the", 
+   "attributes appears to be a bug in JspParseEventListener).", 
+   "Because it is null, it always defaults to 8859_1.", 
+   "If I understand well the intent of the bug report, we'd need the", 
+   "following modifications:", 
+   "- In step 2, if contentType is not specified in the \"including\" page,", 
+   "set the encoding to be:", 
+   "encoding = System.getProperty(\"file.encoding\", \"8859_1\");", 
+   "This means that the default encoding of all JSP files at a site could", 
+   "be defined globally using system property \"file.encoding\".", 
+   "I don't think this is spec-compliant, and would be reluctant", 
+   "to make that change.", 
+   "--> Change not done", 
+   "Comments from Hans Bergsten", 
+   "\"I agree that using \"file.encoding\" as the ultimate default is not", 
+   "spec compliant. I suggest you stick to the current behavior, with", 
+   "\"8859_1\" if contentType doesn't specify a charset.\"", 
+   "- In step 3, use the encoding of the \"including\" page.", 
+   "This would fix what I believe is a bug in the current implementation.", 
+   "--> Change done", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:\tnathan.dunn@tenzing.com", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282806"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2000-12-22T17:38:15.000000Z", 
+  "msg": [
+   "The PRNG used for session id generation is now intialized when a WebApp", 
+   "is loaded instead of when the first session is created.  This reduces", 
+   "response time for the first request.", 
+   "This code is based on Craig's changes to Catalina that address the same", 
+   "issue there.  I like his fix a lot more than my original attempt to fix", 
+   "this.  (Thank's Craig)."
+  ], 
+  "revision_id": "282805"
+ }
+]

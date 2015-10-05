@@ -1,0 +1,70 @@
+[
+ {
+  "author": "pcs", 
+  "date": "1998-05-09T13:23:56.000000Z", 
+  "msg": [
+   "Win32 does not have kill(). Use raise() instead."
+  ], 
+  "revision_id": "81214"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-05-09T04:42:28.000000Z", 
+  "msg": [
+   "Final touches on removing the AddVersionComponent directive and", 
+   "correcting my BD references to something called \"Server-Version.\"", 
+   "D'oh!"
+  ], 
+  "revision_id": "81213"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-05-09T04:42:27.000000Z", 
+  "msg": [
+   "Final touches on removing the AddVersionComponent directive and", 
+   "correcting my BD references to something called \"Server-Version.\"", 
+   "D'oh!"
+  ], 
+  "revision_id": "81212"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-05-09T04:36:38.000000Z", 
+  "msg": [
+   "Untangle the last patch..  ap_add_version_component() needs to", 
+   "*prepend* the strings it's fed, not append them.  This is because", 
+   "the last thing that calls it before the string is locked is", 
+   "ap_set_version() (as in set-like-cement), which adds the", 
+   "SERVER_BASEVERSION, the platform (conditionally), and the", 
+   "SERVER_SUBVERSION (if defined) at a known location - the front", 
+   "of the string.", 
+   "This has the drawback that module contributions will be listed", 
+   "in reverse order from their 'importance' (which is, in turn,", 
+   "in reverse order from their appearance in the Configuration", 
+   "file ;-).  However, only modules with major effects should be", 
+   "contributing to the string anyway, so we can consider them", 
+   "equal.  Can't we?", 
+   "The alternative is to either allow ap_set_version() to directly", 
+   "modify the string rather than going through ap_add...(), or else", 
+   "to add another routine that appends rather than prepends.  I", 
+   "don't like either of these because of the issues with semantics", 
+   "synchronisation and code duplication.", 
+   "The last patch confused things, though, so I'm just returning the", 
+   "behaviour to the original design - if someone wants to take", 
+   "extra steps to have module contributions listed in the same", 
+   "order as they're called, have a party.", 
+   "This should fix Rasmus' problem with the components being out", 
+   "of order, although it doesn't touch his issue with the init", 
+   "callback duplicating the SERVER_SUBVERSION effort."
+  ], 
+  "revision_id": "81211"
+ }, 
+ {
+  "author": "dgaudet", 
+  "date": "1998-05-09T03:25:43.000000Z", 
+  "msg": [
+   "The parent does the child signal reporting now.  Adds SYS_SIGLIST."
+  ], 
+  "revision_id": "81210"
+ }
+]

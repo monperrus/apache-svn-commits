@@ -1,0 +1,67 @@
+[
+ {
+  "author": "jwoolley", 
+  "date": "2001-04-21T22:01:05.000000Z", 
+  "msg": [
+   "Revert about half of the last commit because of an oversight on my part", 
+   "that broke it.  Unfortunately, fixing the oversight \"the right way\" is", 
+   "almost as ugly as the original code; it's easier to just go back to the way", 
+   "it was, at least for now.", 
+   "The problem is that the original code would delete buckets from foo through", 
+   "bar in the brigade, and the patched code deletes *everything* up through", 
+   "bar, which is bad.  I could have fixed it by doing two splits, but that", 
+   "introduces too many palloc's for my taste.  It's also fixable with RING macros,", 
+   "but I refuse to start using RING macros directly on brigades.  The best", 
+   "solution would be if there were a brigade equivalent to a RING_UNSPLICE/", 
+   "RING_INSERT_HEAD sequence (this sequence is also used interally by", 
+   "apr_brigade_split(), btw), something like this:", 
+   "APR_BRIGADE_TRANSFER_BUCKETS(oldbrigade,newbrigade,startbucket,endbucket);", 
+   "Absent that, the affected parts of the patch are hereby reverted (grumble,", 
+   "grumble).  If people liek the APR_BRIGADE_TRANSFER_BUCKETS() idea, I'll", 
+   "implement that and repatch mod_include later."
+  ], 
+  "revision_id": "88909"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "2001-04-21T12:23:37.000000Z", 
+  "msg": [
+   "Revert the change that moved keepalives out of conn_rec.  That variable", 
+   "controls the number of requests per connection, regardless of the protocol", 
+   "used by the request."
+  ], 
+  "revision_id": "88908"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "2001-04-21T12:00:02.000000Z", 
+  "msg": [
+   "Revert addition of HTTP logging hhok for connection status -- this is not", 
+   "specific to HTTP."
+  ], 
+  "revision_id": "88907"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2001-04-20T20:58:28.000000Z", 
+  "msg": [
+   "Change mod_include to use the latest bucket API tricks.  This gets", 
+   "rid of some obscure while loop magic that had to be done before,", 
+   "making mod_include easier to read and a better example for future", 
+   "filter writers.", 
+   "There should be no semantic changes in this patch... just a 1-to-1", 
+   "mapping from while loops to bucket API calls that do the same thing.", 
+   "Reviewed by:\tPaul J. Reder"
+  ], 
+  "revision_id": "88906"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2001-04-20T19:11:21.000000Z", 
+  "msg": [
+   "struct_ptr is a void*.  The Windows compiler doesn't like it when you try", 
+   "to do pointer math on a void*."
+  ], 
+  "revision_id": "88905"
+ }
+]

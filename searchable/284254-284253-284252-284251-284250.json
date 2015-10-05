@@ -1,0 +1,68 @@
+[
+ {
+  "author": "marcsaeg", 
+  "date": "2001-10-05T21:03:54.000000Z", 
+  "msg": [
+   "Updated comments for URLDecode()."
+  ], 
+  "revision_id": "284254"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2001-10-05T20:55:25.000000Z", 
+  "msg": [
+   "The current code can delay garbage collection for objects", 
+   "that are removed from the pool but not returned.", 
+   "Submiitted by David Schreibman [DSchreibman at eTranslate.com]"
+  ], 
+  "revision_id": "284253"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-10-05T18:49:42.000000Z", 
+  "msg": [
+   "Use a zero byte, not a NULL pointer to terminate the string.", 
+   "Submitted by:  Mathias Herberts [Mathias.Herberts@iroise.net]"
+  ], 
+  "revision_id": "284252"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-10-05T18:23:43.000000Z", 
+  "msg": [
+   "When an object is removed from the pool the pool's reference should be", 
+   "removed to expedite garbage collection.", 
+   "Submitted by:  David Schreibman <DSchreibman@eTranslate.com>"
+  ], 
+  "revision_id": "284251"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-10-05T18:12:33.000000Z", 
+  "msg": [
+   "This change addresses a side effect of a change done in Tomcat 3.2.3 to", 
+   "close a security hole.  In Tomcat 3.2.3 we disallowed any URI that", 
+   "contained encoded special characters like %, /, ., \\.  While this did help", 
+   "close the security hole, it caused other problems.  First, it violates the", 
+   "URL specification (see RFC1630 and RFC1738) and second it prevents some", 
+   "useful URLs from working.", 
+   "To address this I've modified the behavior of RequestUtil.URLDecode().  It", 
+   "used to check for some encoded special characters and if it found them it", 
+   "would throw and InvalidArgumentException.  I've added checks for the rest", 
+   "of the special characters.  Also, instead of throwing an exception the", 
+   "encoded character is left in the resulting string.", 
+   "Thus a URI like /fu%2fba%72 will decode to /fu%2fbar.  Leaving the encoded", 
+   "characters in the result will preclude them from matching against prefixes", 
+   "or security constraints but the data will be available to servlets and JSP", 
+   "pages that want the information, but they will have to decode these", 
+   "strings on their own.", 
+   "There is still an issue regarding the value returned by getPathInfo().", 
+   "The specification states (in the 4/27/2000 errata) that getPathInfo()", 
+   "should return a decoded value.  The value currently returned by", 
+   "getPathInfo() does not decode any of the special characters listed above.", 
+   "It is not clear to me now if we should take the extra step of completely", 
+   "decoding the path info or not, so for now I'm leaving it alone."
+  ], 
+  "revision_id": "284250"
+ }
+]

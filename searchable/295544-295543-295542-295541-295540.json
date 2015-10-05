@@ -1,0 +1,81 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-07-03T22:34:09.000000Z", 
+  "msg": [
+   "Added few comments, reformat some long lines ( to 80 columns - so it can be", 
+   "printed and read more easily ).", 
+   "Removed the duplicated code that inits mod_jk, preparing to allow", 
+   "more configuration to be specified in workers.properties.", 
+   "( or a common format for all servers )"
+  ], 
+  "revision_id": "295544"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-07-03T21:56:48.000000Z", 
+  "msg": [
+   "- in jk_ajp14, avoid a NPE", 
+   "- in jk_service, add a num_of_workers field to workers_env_t, and a", 
+   "first_worker. Both will be used to detect if we have a single worker", 
+   "( or default worker ? ). I still need to deal with \"lb\" configurations,", 
+   "where in most cases \"lb\" is the default worker.", 
+   "The idea is that we'll not need to map uri->worker in 99% of the cases", 
+   "( assuming the server is configured to do that ), most people either", 
+   "use a single worker or a lb ( but all tomcat requests go to lb ). Special", 
+   "configurations are still possible ( for example \"/foo\" context to go", 
+   "to JNI worker, \"/bar\" to a certain tomcat instance ).", 
+   "This is more related with simplifying the manual configuration, using", 
+   "SetHandler - if the special JkMount directive is used we can of course", 
+   "specify a particular worker."
+  ], 
+  "revision_id": "295543"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-07-03T20:52:48.000000Z", 
+  "msg": [
+   "-  In jk_handler, if a handler is already set ( by a manual configuration ),", 
+   "then deal with that - either call uri_worker_map, or if a single worker is", 
+   "defined use it ( that would avoid an extra call ).", 
+   "This allows manual mode to be used without double mapping - apache will", 
+   "do all uri matching once, without beeing duplicated in jk. This is important", 
+   "for sites with large number of applications, and admins that know apache.", 
+   "All you have to do is \"SetHandler jakarta-servlet\" in a <Location> context.", 
+   "In jk_translate we'll also detect if a handler was explicitely set, but right", 
+   "now that's useless since we add it as \"FIRST\" ( that means if both JkMount", 
+   "and native declarations are used, the mapping will happen anyway ).", 
+   "I still need to make few improvements, but right now it should be possible to", 
+   "write apache configs that are completely avoiding duplication of work.", 
+   "- added a small comment to allow emacs to match the tab style used by the", 
+   "code author ( and use spaces for new code - since the style is different from", 
+   "the one used in most java code )", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "295542"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-07-03T06:44:32.000000Z", 
+  "msg": [
+   "I have huge problems not having this directory ( or having it removed by", 
+   "-dP )"
+  ], 
+  "revision_id": "295541"
+ }, 
+ {
+  "author": "hgomez", 
+  "date": "2001-07-02T21:20:04.000000Z", 
+  "msg": [
+   "Added a default virtual host '*'", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "295540"
+ }
+]

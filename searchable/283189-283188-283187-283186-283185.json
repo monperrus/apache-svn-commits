@@ -1,0 +1,61 @@
+[
+ {
+  "author": "marcsaeg", 
+  "date": "2001-02-22T20:32:00.000000Z", 
+  "msg": [
+   "Porting thread synchronization fix from tomcat_32.", 
+   "The need to synchronize the ctxt.createCompiler() call", 
+   "doesn't seem to be critical in tomcat 3.3 due to the different", 
+   "class naming scheme.  Someone more familiar with the Jasper", 
+   "changes in Tomcat 3.3 should probably review this.", 
+   "PR: Bugzilla 80/BugRat 44", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "283189"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-02-22T16:36:01.000000Z", 
+  "msg": [
+   "Fixes two thread concurrency problems.", 
+   "1)  ctxt.createCompiler() invokes JspCompiler constructor that in turn calls ClassName.getClassName().  This method opens the JSP page's servlet", 
+   ".class file and extracts information about the class name, version, etc.  While the class file is open, if the Compiler.compile method is invoked on a different thread then it will fail to rename the newly compiled .class file and throw a JasperException.", 
+   "2)  The value of outDated is first set by calling compiler.compile().  This is wrong.  The whole point of this outdated testing is to synchronize the compilation process to avoid multiple threads from compiling the same JSP page at the same time so putting a call to Compiler.compile() outside the synchronized block defaults the point.  outDated should be checked using compiler.isOutDated() instead.", 
+   "PR: Bugzilla 80/BugRat 44", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "283188"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-02-20T03:36:00.000000Z", 
+  "msg": [
+   "Changes for the new package names, plus use of Log."
+  ], 
+  "revision_id": "283187"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-02-20T03:34:11.000000Z", 
+  "msg": [
+   "Package and import changes.", 
+   "Only one code change: JspInterceptor is now using only Log interface", 
+   "( changes in jasper will follow ).", 
+   "That will allow to plug a different logger ( if anyone wants log4j or", 
+   "any other logger - jasper was the last piece that need to be changed )"
+  ], 
+  "revision_id": "283186"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-02-20T03:17:57.000000Z", 
+  "msg": [
+   "Package move, explicit imports."
+  ], 
+  "revision_id": "283185"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-04-11T01:46:09.000000Z", 
+  "msg": [
+   "General refactoring and cleanup of the org.apache.catalina.realm package:", 
+   "* Migrated digest processing into the base class so that it can be", 
+   "used by MemoryRealm as well.", 
+   "* Migrated standard hasRole() into the base class so that Realm", 
+   "implementations using GenericPrincipal do not need to do anything.", 
+   "* Modified JDBCRealm to use GenericPrincipal.", 
+   "* Clean up code in JDBCRealm for opening and closing the database", 
+   "connection, reporting errors in start() and stop(), and creating", 
+   "prepared statements.  You can now subclass and specialize if needed.", 
+   "* Add a \"commit()\" call inside authenticate() in case the underlying", 
+   "database does not like a long-running transaction.", 
+   "* Cosmetic cleanup to code and Javadocs to be consistent with the", 
+   "rest of Catalina.", 
+   "There should be no functionality change, except for the new ability to use", 
+   "digest-encoded passwords in MemoryRealm.", 
+   "Updates to the config documentation will be done later tonight."
+  ], 
+  "revision_id": "285859"
+ }, 
+ {
+  "author": "kief", 
+  "date": "2001-04-10T13:01:55.000000Z", 
+  "msg": [
+   "Applied patch from Bip Thelin <bip@razorfish.com>, and fixed", 
+   "a nearby typo noted by Endre St\ufffdlsvik <Endre@Stolsvik.com>.", 
+   "A little update to PersistentManager.java to backup sessions that's been Idle", 
+   "for longer than specified max time."
+  ], 
+  "revision_id": "285858"
+ }, 
+ {
+  "author": "kief", 
+  "date": "2001-04-10T13:00:30.000000Z", 
+  "msg": [
+   "Applied patch from Bip Thelin <bip@razorfish.com>", 
+   "A little update to PersistentManager.java to backup sessions that's been Idle", 
+   "for longer than specified max time."
+  ], 
+  "revision_id": "285857"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2001-04-10T09:06:49.000000Z", 
+  "msg": [
+   "The digest should be called on credentials, not on what's", 
+   "picked up from the database.", 
+   "Reported by Bojan Smojver"
+  ], 
+  "revision_id": "285856"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-04-10T01:37:08.000000Z", 
+  "msg": [
+   "Fix a \"container not started\" exception at shutdown time, which was caused", 
+   "by an attempt to stop the Contexts associated with a particular Host twice", 
+   "-- once because of the undeploy processing in HostConfig.stop(), and once", 
+   "because of the normal child shutdown processing in ContainerBase.stop().", 
+   "Changes to org.apache.catalina.startup.HostConfig:", 
+   "- In undeployApps(), call host.remove() instead of host.stop() so that the", 
+   "child will be stopped and then removed from the list of children.", 
+   "- In undeployApps(), correct message resource lookup keys.", 
+   "Changes to org.apache.catalina.core.StandardHost:", 
+   "- In remove(), no longer delete the webapp directory, the corresponding", 
+   "WAR file, or the associated work directory.  This was causing webapp", 
+   "directories originally auto-deployed to be deleted.", 
+   "Changes to org.apache.catalina.core.ContainerBase:", 
+   "- In stop(), stop child containers in the order returned by", 
+   "findChildren()."
+  ], 
+  "revision_id": "285855"
+ }
+]

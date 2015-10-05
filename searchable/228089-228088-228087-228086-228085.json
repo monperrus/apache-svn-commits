@@ -1,0 +1,103 @@
+[
+ {
+  "author": "mpoeschl", 
+  "date": "2002-02-01T01:05:36.000000Z", 
+  "msg": [
+   "- use the final xerces-2.0.0 jars", 
+   "- add stratum.jar (needed for configuration and lifecycle)"
+  ], 
+  "revision_id": "228089"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-01-31T17:15:13.000000Z", 
+  "msg": [
+   "patch by Byron Foster to make sure requests for connections are taken in", 
+   "order.  The following is detailed description of problem and solution:", 
+   "Terry explains the issue well so take a look at his message for a", 
+   "description of the problem.", 
+   "This patch fixes the problem by keeping track of the number of threads", 
+   "that are in the wait state.  If a new thread calls the", 
+   "getInternalPooledConnection method and the wait count is not zero then", 
+   "the calling thread drops into the wait state. This allows a potential", 
+   "thread \"awakened\" from the wait state by a notify call to acquire the", 
+   "synchronize lock and obtain the connection.  It also acts in a \"fair\"", 
+   "way since if there are existing threads in a wait state when a thread", 
+   "calls the get connection method then the thread will also go into the", 
+   "wait state, essentially getting in the back of the line.", 
+   "Byron", 
+   "On Tue, 2001-11-27 at 12:50, Terry August wrote:", 
+   ">", 
+   "> I have ran into a problem with the ConnectionPool class from Turbine 2.x.  I", 
+   "> noticed the problem while making many requests to a pool configured with a", 
+   "> maximum of 5 connections.  What happens is the following:", 
+   ">", 
+   "> 1.  All 5 connections go into use.", 
+   "> 2.  Several threads are waiting for a connection to be returned to the", 
+   "> stack.", 
+   "> 3.  1 connection is returned and notify() is called - line 655", 
+   "> 4.  One of the threads is awakened and is now actively competing for the", 
+   "> lock.", 
+   "> 5.  A new thread (non-waiting) is created and gets the lock before the", 
+   "> awakened thread.", 
+   "> 6.  The new thread takes the newly available connection from the stack.", 
+   "> 7.  The awakened thread now gets the lock and discovers that there is no", 
+   "> available connection in the pool even though it was awakened.", 
+   "> 8.  The code in lines 580-585 are now executed and an exception is thrown.", 
+   ">", 
+   "> The problem is that this code will result in exceptions all the time on", 
+   "> heavily hit dynamic pages (with several connections being made in the page)", 
+   "> unless the maxConnections is raised unjustly.  Also connectionWaitTimeout", 
+   "> specifies the amount of time a thread will wait, but doesn't consider the", 
+   "> fact that the above sequence might occur.  In this case the awakened thread", 
+   "> may have only waited 1 second and caused an error, even if", 
+   "> connectionWaitTimeout is set to 10 seconds.  I can see two solutions.  One", 
+   "> solution is to revamp the synchronization to disallow new threads from", 
+   "> taking the lock before the awakened thread gets the lock.  Or, the", 
+   "> connectionWaitTimeout property can be considered a TOTAL wait time and the", 
+   "> code can loop in that section.  Something like the following may work:", 
+   ">", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228088"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-01-31T16:24:30.000000Z", 
+  "msg": [
+   "Handles DateKeys and ObjectKeys with null key properties. -jdm", 
+   "DESCRIPTION:", 
+   "The following patch is pretty simple and is related to the toString() method in", 
+   "ObjectKey and ComboKey, particulary when the ComboKey contain a DateKey.", 
+   "Edgar Gonzalez"
+  ], 
+  "revision_id": "228087"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-01-29T05:35:45.000000Z", 
+  "msg": [
+   "minor cleanup", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228086"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-01-29T05:18:02.000000Z", 
+  "msg": [
+   "added log entry for today", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228085"
+ }
+]

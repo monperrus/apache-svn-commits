@@ -1,0 +1,80 @@
+[
+ {
+  "author": "jon", 
+  "date": "2001-06-22T22:03:35.000000Z", 
+  "msg": [
+   "please check this patch!", 
+   "#1. make sure the file is deleted if there is an error.", 
+   "#2. move the ois.close() into the finally block to also ensure it is", 
+   "closed on error.", 
+   "#3. improve the logging messages", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "286189"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-06-22T21:57:08.000000Z", 
+  "msg": [
+   "Add some unit tests for bean references from a servlet (Session01 or", 
+   "Session03) to beans in the following locations:", 
+   "* SessionBean is in the same /WEB-INF/lib/tester.jar JAR file as the", 
+   "servlet classes are", 
+   "* UnsharedSessionBean is unpacked under /WEB-INF/classes in the", 
+   "tester web app, but should be loaded by the same webapp class loader", 
+   "that loads the servlet.", 
+   "* SharedSessionBean is in a JAR file under $CATALINA_HOME/lib, so it", 
+   "should be loaded by the parent classloader", 
+   "There definitely appears to be a problem with class loading, and trying", 
+   "this stuff fails under either WebappClassLoader and StandardClassLoader.", 
+   "Right now, I've commented things in the build.xml file out so that all the", 
+   "classes get built into tester.jar, and running the \"HttpSession\" target", 
+   "all succeeds.", 
+   "If you uncomment the following sets of lines in build.xml, though:", 
+   "* 75-76 to copy UnsharedSessionBean to /WEB-INF/classes", 
+   "* 95-96 to exclude SharedSessionBean and UnsharedSessionBean", 
+   "from tester.jar", 
+   "* 151-156 to create and deploy SharedSessionBean into the", 
+   "$CATALINA_HOME/lib directory", 
+   "then you will get NoClassDefFound exceptions when trying to execute either", 
+   "Session01 or Session03.", 
+   "Conclusion:  class loading fails when a class within a JAR file under", 
+   "/WEB-INF/lib references a class in /WEB-INF/classes, or in a shared JAR", 
+   "file in the parent class loader.", 
+   "Notes:", 
+   "- Fails identically under WebappClassLoader and StandardClassLoader", 
+   "- WebappClassLoader copies the JAR files under /WEB-INF/lib to the", 
+   "work directory (why?), but it does NOT copy the /WEB-INF/classes", 
+   "directory (even though the log messages say that it does).", 
+   "Now for the fun part -- figuring out WHY this is happening :-(."
+  ], 
+  "revision_id": "286188"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-06-22T20:36:29.000000Z", 
+  "msg": [
+   "Update for new JndiPermission"
+  ], 
+  "revision_id": "286187"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-06-22T20:31:25.000000Z", 
+  "msg": [
+   "Add note about new JndiPermission"
+  ], 
+  "revision_id": "286186"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-06-22T20:20:54.000000Z", 
+  "msg": [
+   "Fix path for windows file separator"
+  ], 
+  "revision_id": "286185"
+ }
+]

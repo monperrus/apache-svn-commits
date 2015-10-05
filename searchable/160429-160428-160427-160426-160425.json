@@ -1,0 +1,72 @@
+[
+ {
+  "author": "djd", 
+  "date": "2005-04-07T18:50:39.635942Z", 
+  "msg": [
+   "Derby-176 (partial)", 
+   "Reduce the number of constant pool entries in code generation by removing some uses of java fields.", 
+   "In the binary operator nodes code is generated like", 
+   "<left>.method(<left>, <right>)", 
+   "where <left> and <right> are arbitary expressions.", 
+   "In this case <left> must only be evaluated once and the existing implementation used Java fields.", 
+   "DataValueDescriptor f34;", 
+   "f34 = <left>;", 
+   "f34.method(f34, <right>)", 
+   "The issue is that a field is not required, really a local variable is,", 
+   "and a field and its use will create three unique constant pool entries.", 
+   "However local variables are not supported by the byte code compiler currently.", 
+   "The stack based code generation allows the use of the stack through MethodBuilder.dup()", 
+   "method to evaluate <left> once and re-use the result.", 
+   "E.g.", 
+   "<left>", 
+   "dup", 
+   "<right>", 
+   "leaves the stack as left,left,right which is the correct order for such a method call.", 
+   "The use of MethodBuilder.swap() allows the same pattern when <right> needs to be re-used in <right>.method(<left>, <right>)", 
+   "<right>", 
+   "dup", 
+   "<left>", 
+   "swap", 
+   "leaves right,left,right on the stack."
+  ], 
+  "revision_id": "160429"
+ }, 
+ {
+  "author": "vincenzo", 
+  "date": "2005-04-07T18:46:58.881579Z", 
+  "msg": [
+   "Fixed a problem consisting in some NNTP clients (like Mozilla Firefox and others) hanging when reading messages containing a message body. Reported as jira JAMES-311."
+  ], 
+  "revision_id": "160428"
+ }, 
+ {
+  "author": "fuzzylogic", 
+  "date": "2005-04-07T18:44:13.007801Z", 
+  "msg": [
+   "Take debug and optimize flags out of compiler properties so that setting the", 
+   "sanity state properly sets these flags. Also, fix typo in RunTest so that", 
+   "-Duseprocess=false option works again."
+  ], 
+  "revision_id": "160427"
+ }, 
+ {
+  "author": "djd", 
+  "date": "2005-04-07T18:31:35.205192Z", 
+  "msg": [
+   "Derby-176 (partial) - Added checks when the generated class file's format is created", 
+   "to ensure the structure is not corrupted by writing truncated values.", 
+   "E.g. a constant pool count N with N >65535 now will throw an error rather", 
+   "than generate a class file with an apparent constant pool count of N % 65535."
+  ], 
+  "revision_id": "160426"
+ }, 
+ {
+  "author": "randyk", 
+  "date": "2005-04-07T18:23:45.768514Z", 
+  "msg": [
+   "Start of a document discussing the effects of the recent", 
+   "renaming changes."
+  ], 
+  "revision_id": "160425"
+ }
+]

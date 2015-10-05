@@ -1,0 +1,95 @@
+[
+ {
+  "author": "rich", 
+  "date": "2005-09-23T00:23:29.428596Z", 
+  "msg": [
+   "Merging in the branches/v1/final fix for http://issues.apache.org/jira/browse/BEEHIVE-949 : netui compiler does not encode strings in validation config files", 
+   "tests: bvt in netui (WinXP)", 
+   "BB: bvt in netui (linux)"
+  ], 
+  "revision_id": "291049"
+ }, 
+ {
+  "author": "fuzzylogic", 
+  "date": "2005-09-23T00:17:09.675621Z", 
+  "msg": [
+   "Merge change to regex.masters target from revision 291046 to trunk."
+  ], 
+  "revision_id": "291048"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2005-09-23T00:14:45.389582Z", 
+  "msg": [
+   "DERBY-453", 
+   "Add additional master for j9 outparams.", 
+   "Contributed by Deepa Remesh"
+  ], 
+  "revision_id": "291047"
+ }, 
+ {
+  "author": "fuzzylogic", 
+  "date": "2005-09-23T00:14:26.841555Z", 
+  "msg": [
+   "Add missed master file from version update"
+  ], 
+  "revision_id": "291046"
+ }, 
+ {
+  "author": "kmarsden", 
+  "date": "2005-09-23T00:08:32.043837Z", 
+  "msg": [
+   "DERBY-453", 
+   "Create a test wrapper to run tests using BigDecimal in J2ME/CDC/Foundation", 
+   "This patch (derby_453_outparams_patch1.diff) changes tests.", 
+   "* It enables the tests which use procedures in outparams.java to run in J2ME/CDC/FP. The following tests have been enabled:", 
+   "- lang/lang/outparams.java", 
+   "- jdbcapi/batchUpdate.java", 
+   "- jdbcapi/StmtCloseFunTest.java", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Changes to outparams.java:", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "* The methods 'takesBigDecimal' and 'returnsBigDecimal' are moved from outparams.java to a new class outparams30.java. These methods use java.Math.BigDecimal class which is not available in J2ME. This separation is needed because Connection.prepareCall looks at all the public methods available in the specified class. If the class has any public method using BigDecimal, it will fail in J2ME.", 
+   "* For procedure names, outparams class will be used for J2ME and outparams30 for non-J2ME.", 
+   "* Variables HAVE_BIGDECIMAL and CLASS_NAME are added to outparams.java. Depending on the availability of BigDecimal class in the JVM, CLASS_NAME is initialized to outparams or outparams30. CLASS_NAME is used in the create procedure SQL instead of \"org.apache.derbyTesting.functionTests.tests.lang.outparams.\".", 
+   "* The content of the arrays 'outputMethods' and 'returnMethods' are also decided based on value of HAVE_BIGDECIMAL. For J2ME, takesBigDecimal and returnsBigDecimal are removed from these arrays. To minimize changes to the master file, the order of these arrays is kept same. An if/else loop is used to determine which array will be used.", 
+   "* callSetMethod, callSetObject and callGetMethod are changed to use wrapper methods in BigDecimalHandler class. An additional parameter 'int paramType' is passed to callGetMethod. This is needed because ParameterMetaData is not available in JSR19. A new array 'paramJDBCType' with the JDBC types (java.sql.Types) for the corresponding methods is used to get the param type for a method. When creating this array, I noticed that outputMethods and returnMethods do not match. To make them match, a null value has been removed from outputMethods and outProcParam arrays.", 
+   "* testMisc method used returnsBigDecimal to check that a set cannot be called on an output param. This check is independent of the type of output param and so returnsString is used intstead.", 
+   "* test5116 method uses a procedure with nested connection, which uses java.sql.Driver. This is not available in JSR169. So this test is done only for non-JSR169 environments based on value of HAVE_DRIVER_CLASS.", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Changes to org.apache.derbyTesting.functionTests.util.BigDecimalHandler.java:", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "* Added wrappers for following methods:", 
+   "CallableStatement method getBigDecimal(int parameterIndex)", 
+   "PreparedStatement method setBigDecimal(int parameterIndex,BigDecimal x)", 
+   "PreparedStatement method setObject(int parameterIndex, Object x)", 
+   "* Fixed the type conversions and moved it to an array, which is used in the method canConvertToDecimal.", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Changes to master files:", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "* The master files for main and j9_13 are modified to use returnsBigDecimal instead of returnsString in output for testMisc method. On comparing the two master files, they are identical. I think the master file for j9_13 can be removed. I have not done it in this patch. Is it okay to do this?", 
+   "* Added a master file for j9_foundation. This is needed because of the following:", 
+   "- takesBigDecimal and returnsBigDecimal methods are not in outputMethods/returnMehtods.", 
+   "- The exception strings for type conversion and invalid character format are different because of use of wrapper methods.", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Changes to <testname>_app.properties:", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "* Removed excludes for J2ME for following tests:", 
+   "- lang/outparams.java", 
+   "- jdbcapi/batchUpdate.java", 
+   "- jdbcapi/StmtCloseFunTest.java", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Changes to tests which use procedures in outparams.java", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "* jdbcapi/batchUpdate.java and jdbcapi/StmtCloseFunTest.java are modified to use outparams/outparams30 depending on value of HAVE_BIG_DECIMAL.", 
+   "* jdbcapi/StmtCloseFunTest.java was using a deprecated constructor for java.sql.Date, which is not available in JSR169. So the constructor java.sql.Date(long) is used instead.", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "Tests Run", 
+   "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 
+   "This patch changes tests only. I had run derbyall in J2SE and J2ME. 1 expected failure in J2ME. But I made few changes before submitting this patch. After the changes, I ran the individual tests successfully.", 
+   "-------------------------------------------------------------------------", 
+   "Contributed by Deepa Remesh"
+  ], 
+  "revision_id": "291045"
+ }
+]

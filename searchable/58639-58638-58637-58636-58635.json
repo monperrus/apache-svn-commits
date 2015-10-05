@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-14T09:14:39.000000Z", 
+  "msg": [
+   "How did that fi sneak in?  Remove it."
+  ], 
+  "revision_id": "58639"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-14T09:11:31.000000Z", 
+  "msg": [
+   "If we're using our bundled expat, we can't (yet) provide -L/-l link", 
+   "information because expat won't exist in its final state (i.e. libexpat.so)", 
+   "until install time, so we must use .la files for this case no matter what.", 
+   "Providing we use library dependencies with libtool-1.4+, this hack should go", 
+   "away.", 
+   "On one hand, it is invalid to use apu-config --libs until we're installed.", 
+   "But, since we don't support libtool dependencies yet, httpd-2.0 still needs", 
+   "to know the dependencies even though it uses libtool.  Only teaching", 
+   "libaprutil.la about its dependencies suitably solves this."
+  ], 
+  "revision_id": "58638"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-14T08:40:57.000000Z", 
+  "msg": [
+   "It's Midnight Cinderella.  (Actually, it's 1:40, but hey...)"
+  ], 
+  "revision_id": "58637"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-14T08:37:17.000000Z", 
+  "msg": [
+   "Ensure that apu-config --libs does not print any libtool libraries.  PHP", 
+   "is specifically adversely affected by this since they refuse to compile", 
+   "modules with libtool, so we have to stop doing this.", 
+   "This require some internal reshuffling.  If Greg's suggestions to use", 
+   "libtool-1.4+ is accepted, then we are also in a position to easily turn on", 
+   "the dependency tracking code in libtool.", 
+   "- Add APRUTIL_LDFLAGS to Makefile", 
+   "- New variable APRUTIL_LIBS that replaces the old LIBS value - we should", 
+   "not be overriding the LIBS value.", 
+   "- Deprecate internal overrides of LIBS in favor of APRUTIL_LIBS", 
+   "- Fix GDBM so that it adds its -L value to LDFLAGS not to EXPORT_LIBS", 
+   "- Add expat_libtool, expat_ldflags output parameter from the expat", 
+   "detection code.  If the expat ostensibly has .la support, we want to use", 
+   "that over -L/-l combinations.  But, for export (APRUTIL_EXPORT_LIBS), we", 
+   "must provide -L/-l combinations.", 
+   "- expat_ldflags may only have -L<library path>", 
+   "(if using automated detection, we will not specifically not add", 
+   "-L/usr/lib because we know that's trouble.)", 
+   "- expat_libs may only have -l<library>", 
+   "- expat_libtool may be either the .la file path or it will end up", 
+   "being the concat of expat_ldflags and expat_libs if the found expat", 
+   "doesn't support libtool.", 
+   "- Rework test/Makefile so that it has a PROGRAM_DEPENDENCIES rather than", 
+   "the misnomer of LIBS."
+  ], 
+  "revision_id": "58636"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-14T08:07:36.000000Z", 
+  "msg": [
+   "Revert and fix ala gstein.", 
+   "The better thing to do here is if we're installed and the file doesn't", 
+   "exist, we MUST print the -L/-l options.  But, if we're in build mode, then", 
+   "we'll be optimistic and assume that at some point we'll create the LA_FILE."
+  ], 
+  "revision_id": "58635"
+ }
+]

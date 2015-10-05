@@ -1,0 +1,68 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-17T04:21:15.000000Z", 
+  "msg": [
+   "Correct the handling of <jsp-file> declarations in the web.xml file.", 
+   "Previously, the way this was mapped to Jasper involved modifying the", 
+   "request URI and servlet path of the request.  Now, the name of the actual", 
+   "page to be executed is passed as a request attribute", 
+   "(\"org.apache.catalina.jsp_file\") instead.", 
+   "PR: BugTraq #4458252, Bugzilla #2613"
+  ], 
+  "revision_id": "286279"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-07-17T04:14:25.000000Z", 
+  "msg": [
+   "- Handle lowercase / uppercase, etc, etc. Patch by Craig + Marc (who should", 
+   "have committed that themselves, I have terrible problems with my connection in the", 
+   "evening)."
+  ], 
+  "revision_id": "286278"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-07-17T01:04:29.000000Z", 
+  "msg": [
+   "- %25, %2F, %2E and %5C are now forbidden in the request URI. I hope this", 
+   "is not a problem with multi-byte characters.", 
+   "- Medium risk fix : always finish the response. That could lead to connection", 
+   "management problems. That has to be changed since otherwise no HTTP error", 
+   "report would be generated when something bad happened when parsing", 
+   "the request."
+  ], 
+  "revision_id": "286277"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-07-17T01:00:34.000000Z", 
+  "msg": [
+   "- Check for protocol to be null."
+  ], 
+  "revision_id": "286276"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-17T00:14:17.000000Z", 
+  "msg": [
+   "Modify the way that the invoker servlet works.", 
+   "Previously, the invoker servlet would dynamically create a new Wrapper", 
+   "(and associated servlet mapping) on the first request to a particular", 
+   "servlet, and then do a RequestDispatcher.forward() to utilize the new", 
+   "Wrapper immediately.  This causes problems, though, when the invoker is", 
+   "itself included via a RequestDispatcher -- the semantics of", 
+   "RequestDispatcher.forward() say that the response is closed after the", 
+   "forwarded-to servlet returns, so that any output subsequently added by the", 
+   "including servlet would be ignored.", 
+   "Now, the invoker servlet will still create a new Wrapper and mapping as it", 
+   "did before (these are used on all subsequent requests to the same", 
+   "servlet).  However, instead of calling RequestDispatcher.forward(), a new", 
+   "servlet instance is allocated, invoked, and deallocated directly.", 
+   "PR: Bugzilla #1902", 
+   "Submitted by:\tJason Hunter <jhunter@apache.org>"
+  ], 
+  "revision_id": "286275"
+ }
+]

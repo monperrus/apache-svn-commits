@@ -1,0 +1,60 @@
+[
+ {
+  "author": "minfrin", 
+  "date": "2003-04-05T19:48:02.000000Z", 
+  "msg": [
+   "- Clarify an error message to be more useful", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "99254"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-04-05T19:32:01.000000Z", 
+  "msg": [
+   "Have some consistency!  Fixes logic I introduced in 1.37."
+  ], 
+  "revision_id": "99253"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-04-05T19:04:44.000000Z", 
+  "msg": [
+   "Reapply the fix *intended* by rev 1.79 in a safer manner.  Prior to", 
+   "all assignments and the final SSL_free(), free ssl_conn->client_cert", 
+   "to avoid leaks of this refcounted X509*.  Prereleasing refcounted", 
+   "objects is unsafe programming; fix applied to both branches."
+  ], 
+  "revision_id": "99252"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-04-05T19:04:43.000000Z", 
+  "msg": [
+   "Reapply the fix *intended* by rev 1.79 in a safer manner.  Prior to", 
+   "all assignments and the final SSL_free(), free ssl_conn->client_cert", 
+   "to avoid leaks of this refcounted X509*.  Prereleasing refcounted", 
+   "objects is unsafe programming; fix applied to both branches."
+  ], 
+  "revision_id": "99251"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-04-05T18:36:56.000000Z", 
+  "msg": [
+   "EVP_PKEY_free() is refcounted on OpenSSL, but NOT under RSA SSL-C.", 
+   "Eliminate a number of test failures by conditionally reverting rev 1.79", 
+   "pubkey handling in ssl_engine_kernel.c, except under OpenSSL.", 
+   "Also revert a rev 1.79 bogisity for all toolkits; it's entirely bogus", 
+   "to release a refcount after setting aside the results in a persistant", 
+   "structure, in this case sslconn->client_cert from SSL_get_peer_certificate()", 
+   "mustn't be freed while sslconn is still in play.  The proper patch (not", 
+   "written yet) is to invoke the X509_free(sslconn->client_cert) when we", 
+   "cleanup the sslconn structure."
+  ], 
+  "revision_id": "99250"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "andyc", 
+  "date": "2001-07-26T08:19:26.000000Z", 
+  "msg": [
+   "More slight XMLLocator changes."
+  ], 
+  "revision_id": "317399"
+ }, 
+ {
+  "author": "andyc", 
+  "date": "2001-07-26T08:03:38.000000Z", 
+  "msg": [
+   "Improved the use of the document locator. It was originally added", 
+   "to the org.apache.xerces.xni.parser package because I needed it in", 
+   "the parser implementation to keep SAX dependencies out of everything", 
+   "except for the AbstractSAXParser, SAXParser, and DOMParser (for", 
+   "backwards compatibility). But it wasn't used by anything so I made", 
+   "the following changes:", 
+   "1) Moved it to the org.apache.xerces.xni package.", 
+   "2) Made change to pass XMLLocator in place of systemId in the", 
+   "XMLDocumentHandler#startDocument method because the locator holds", 
+   "the system identifier.", 
+   "3) Made change to pass XMLLocator in place of baseSystemId in the", 
+   "XMLDocumentFragmentHandler#startDocumentFragment method because the", 
+   "locator holds the base system identifier.", 
+   "4) Added XMLLocator parameter to the XMLDTDHandler#startDTD method", 
+   "so that if that handler is used standalone then the handler will", 
+   "still be able to get access to location information.", 
+   "The XMLLocator is in XNI because the Xerces Native Interface doesn't", 
+   "rely on any other API, including SAX. In addition, the SAX locator", 
+   "interface doesn't hold the base system identifier information.", 
+   "The XMLLocator is passed to the various startXXX() methods instead", 
+   "of having a separate setDocumentLocator() method (like SAX's", 
+   "DocumentHandler and ContentHandler interfaces) because this is", 
+   "problematic. The SAX docs mention that the setDocumentLocator method", 
+   "is called before any other methods in those interfaces, ONLY IF the", 
+   "parser is going to tell the handler about document locations. However,", 
+   "if previous document parsed with the handler fails abnormally *and*", 
+   "the next parse doesn't have a locator, the handler won't know this", 
+   "*unless* there is explicit communication between the handler and", 
+   "the ErrorHandler. (On normal operation, the locator could be nulled", 
+   "out at endDocument().) I didn't like requiring this kind of tenuous", 
+   "connection. Plus, it makes more sense to pass it at the beginning", 
+   "of the document, anyway."
+  ], 
+  "revision_id": "317398"
+ }, 
+ {
+  "author": "andyc", 
+  "date": "2001-07-25T08:43:37.000000Z", 
+  "msg": [
+   "More XNI Documentation"
+  ], 
+  "revision_id": "317397"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2001-07-24T16:23:20.000000Z", 
+  "msg": [
+   "Bug fix http://nagoya.apache.org/bugzilla/show_bug.cgi?id=2761 - normalization"
+  ], 
+  "revision_id": "317396"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2001-07-24T11:51:37.000000Z", 
+  "msg": [
+   "compilation fix"
+  ], 
+  "revision_id": "317395"
+ }
+]

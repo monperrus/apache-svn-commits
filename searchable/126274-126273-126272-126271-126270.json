@@ -1,0 +1,119 @@
+[
+ {
+  "author": "evenisse", 
+  "date": "2005-01-24T09:23:18.217054Z", 
+  "msg": [
+   "rollback my change"
+  ], 
+  "revision_id": "126274"
+ }, 
+ {
+  "author": "stevenn", 
+  "date": "2005-01-24T09:12:49.867971Z", 
+  "msg": [
+   "removed some cruft and added Daisy"
+  ], 
+  "revision_id": "126273"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2005-01-24T09:11:38.432847Z", 
+  "msg": [
+   "Settez le mime-type."
+  ], 
+  "revision_id": "126272"
+ }, 
+ {
+  "author": "rich", 
+  "date": "2005-01-24T09:03:38.188917Z", 
+  "msg": [
+   "Reworked \"Page Flow Action Interceptors\" (see below for more info on this feature) to make the following changes:", 
+   "- The APIs now conform to a more generic set of Interceptor APIs, which will allow this feature to share functionality/user-model with pageflow-request and pageflow-app interceptors.  It may also be possible for Controls/NetUI(/WSM?) to share the base Interceptor code in the future, if this makes sense.", 
+   "- Added \"simple\" action interceptors, which can be configured wholly in XML (and don't require a user ActionInterceptor class).", 
+   "- Added the ability to configure interceptors per-pageflow and per-action in the XML.", 
+   "- Changed the default behavior when injecting a nested page flow before or after an action.  Previously, if the ActionInterceptor callback (afterNestedIntercept) did nothing, then the nested page flow's return-action would be raised on the original page flow.  Now, if the callback does nothing, the intercepted action's original destination is used.  This is far more likely to work (and is far more likely to be the intended behavior).", 
+   "- Added the ability to set custom properties in the XML that are passed to the user's ActionInterceptor class when it is initialized.", 
+   "- Added the ability to intercept an action and prevent *any* forwarding to occur.  This is useful when the interceptor wants to write directly to the response.", 
+   "Info on Action Interceptors", 
+   "---------------------------", 
+   "In general, this feature is used to alter the behavior of a page flow action, in any of the following ways:", 
+   "- \"inject\" an entire nested page flow, before or after the action runs", 
+   "- change the destination of the action, before or after it runs", 
+   "- prevent the action from running", 
+   "- perform non-flow-altering logic before or after the action runs", 
+   "As an example, a global action interceptor could decide (dynamically at runtime) to show an Update Contact Information page flow before allowing the user to reach the original destination page flow, and, depending on the outcome of the Update Contact page flow, could redirect the user somewhere else or allow the user to reach the original destination.", 
+   "Action interceptors are configured in /WEB-INF/netui-config.xml.  They are chainable, and can be configured to run for every action, for every action in a given page flow, or for a specific action in a given page flow.", 
+   "\"Global\" action interceptors, which are invoked before and after every action, are configured like this:", 
+   "<pageflow-action-interceptors>", 
+   "<global>", 
+   "<action-interceptor>", 
+   "<interceptor-class>test.Interceptor1</interceptor-class>", 
+   "</action-interceptor>", 
+   "</global>", 
+   "</pageflow-action-interceptors>", 
+   "The interceptor-class is a class that extends org.apache.beehive.netui.pageflow.actioninterceptor.ActionInterceptor.", 
+   "Per-page flow interceptors are configured using a page flow URI and interceptor-class:", 
+   "<pageflow-action-interceptors>", 
+   "<per-pageflow>", 
+   "<pageflow-uri>/test/MyFlow.jpf</pageflow-uri>", 
+   "<action-interceptor>", 
+   "<interceptor-class>test.Interceptor2</interceptor-class>", 
+   "</action-interceptor>", 
+   "</per-pageflow>", 
+   "</pageflow-action-interceptors>", 
+   "Finally, per-action interceptors are configured using a page flow URI and action name:", 
+   "<pageflow-action-interceptors>", 
+   "<per-pageflow>", 
+   "<pageflow-uri>/test/MyFlow.jpf</pageflow-uri>", 
+   "<per-action>", 
+   "<action-name>someAction</action-name>", 
+   "<action-interceptor>", 
+   "<interceptor-class>test.Interceptor3</interceptor-class>", 
+   "</action-interceptor>", 
+   "</per-action>", 
+   "</per-pageflow>", 
+   "</pageflow-action-interceptors>", 
+   "\"Simple\" action interceptors can be used when a specific override path is known:", 
+   "<simple-action-interceptor>", 
+   "<override-path>/privacy/PrivacyNotice.jpf</override-path>", 
+   "</simple-action-interceptor>", 
+   "In all cases, there can be a list of action-interceptors or simple-action-interceptors, in which case a chain of interceptors is created.", 
+   "Inside an ActionInterceptor class, there are methods for intercepting pre-action and post-action:", 
+   "public void preAction( ActionInterceptorContext context, InterceptorChain chain )", 
+   "public void postAction( ActionInterceptorContext context, InterceptorChain chain )", 
+   "public abstract void afterNestedIntercept( AfterNestedInterceptContext context )", 
+   "In either method, the original destination can be overridden by setting an \"interceptor forward\":", 
+   "setInterceptorForward( new InterceptorForward( [webapp-relative URI] ), context );", 
+   "To allow the rest of the interceptor chain to run, continueChain() is called on the given chain (similar to FilterChain.doFilter() in a Servlet Filter):", 
+   "chain.continueChain();", 
+   "*If* the InterceptorForward refers to a nested page flow, then the following method will be called on the ActionInterceptor when the nested page flow is finished:", 
+   "public void afterNestedIntercept( AfterNestedInterceptContext context )", 
+   "This method can set an InterceptorForward as above, but if the method does nothing, the original (intercepted) action will be allowed to forward to its desired destination.", 
+   "Odd and ends:", 
+   "- a simple-action-interceptor can run *after* the action by providing the optional after-action element:", 
+   "<simple-action-interceptor>", 
+   "<override-path>/privacy/PrivacyNotice.jpf</override-path>", 
+   "<after-action>true</after-action>", 
+   "</simple-action-interceptor>", 
+   "- an action-interceptor element can contain custom properties, which are provided to the ActionInterceptor in its ActionInterceptorConfig:", 
+   "<action-interceptor>", 
+   "<interceptor-class>test.Interceptor3</interceptor-class>", 
+   "<custom-property>", 
+   "<name>someProperty</name>", 
+   "<value>some value</value>", 
+   "</custom-property>", 
+   "</action-interceptor>", 
+   "DRT/BVT: netui (WinXP)", 
+   "BB: self (linux)"
+  ], 
+  "revision_id": "126271"
+ }, 
+ {
+  "author": "sylvain", 
+  "date": "2005-01-24T09:01:45.368683Z", 
+  "msg": [
+   "fix typo"
+  ], 
+  "revision_id": "126270"
+ }
+]

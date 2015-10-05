@@ -1,0 +1,81 @@
+[
+ {
+  "author": "tomj", 
+  "date": "2004-11-18T21:37:34.000000Z", 
+  "msg": [
+   "Fix .NET 2D array interop problem caused by previous changes.", 
+   "Update the array serializer to not add the subdimentions to the array if", 
+   "the component type is set as we will already have them there.", 
+   "Back out my change to the Deserializer that compensates for the incorrect", 
+   "serialization."
+  ], 
+  "revision_id": "259844"
+ }, 
+ {
+  "author": "prestonf", 
+  "date": "2004-11-18T17:08:12.000000Z", 
+  "msg": [
+   "Hi All,", 
+   "I think this the first iteration of AXISCPP-148 & AXISCPP-260.", 
+   "Regards,", 
+   "Fred Preston."
+  ], 
+  "revision_id": "259843"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2004-11-18T17:00:41.000000Z", 
+  "msg": [
+   "Patch from Dominik Kacprzak <dominik@sonic.net>, with additional", 
+   "changes to the encoding unit tests to pass.", 
+   "This patch provides a fix for various bugs related to Axis treatment of element's", 
+   "nillable attribute. Although the default value of nillable attribute is \"false\". Axis", 
+   "assumes that a nillable attribute is always true and it does not keep track of its", 
+   "real value.  It leads to scenarios in which Axis sets a non-nillable, omittable", 
+   "element to be null. For Axis there is no difference between the following", 
+   "two definitions:", 
+   "<element name=\"areaCode\" type=\"string\" minOccurs=\"0\" maxOccurs=\"1\"/>", 
+   "and", 
+   "<element name=\"areaCode\" type=\"string\" minOccurs=\"0\" maxOccurs=\"1\" nillable=\"true\"/>", 
+   "The fix adds an additional field to org.apache.axis.description.ElementDesc.  The nillable property defaults to false and is populated based on web services deployment definition or element's type.  As a result, Axis enforces stricter rules when generating web services.  An exception is thrown when a null value is passed as a value of a non-nillable, required element.", 
+   "This patch fixes the following JIRA issues:", 
+   "- AXIS-530", 
+   "- AXIS-1321", 
+   "- AXIS-1332", 
+   "- AXIS-1357", 
+   "- AXIS-1670", 
+   "Details:", 
+   "- Java/Types.java -", 
+   "NOTE: This is most likely the most controversial change.", 
+   "1) I changed the method signature to static since it does not access", 
+   "any class properties.  This is harmless.", 
+   "2) I changed the logic which checks if type can be nullable.", 
+   "I couldn't find any justification for why a byte array cannot be null.", 
+   "To the contrary, I found an example in JAXRPC patterns that shows a nillable byte array: http://java.sun.com/developer/technicalArticles/xml/jaxrpcpatterns/index3.html", 
+   "- I had to fix quite a few schemas and wsdls in functional tests to allow for null elements.", 
+   "The test were passing null values for non-nillable elements.", 
+   "- Extended wsdl.omit test case to cover non-nillable and nillable scenarios."
+  ], 
+  "revision_id": "259842"
+ }, 
+ {
+  "author": "dicka", 
+  "date": "2004-11-18T16:08:20.000000Z", 
+  "msg": [
+   "Remove full paths from default transport and xmlParser libraries.", 
+   "PR: AXISCPP-220", 
+   "Submitted by: Adrian Dick"
+  ], 
+  "revision_id": "259841"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2004-11-18T15:31:20.000000Z", 
+  "msg": [
+   "Add a trailing slash to namespaces we create from package names.", 
+   "The WS-I validation of our WSDL complains about our targetNamespace", 
+   "while this doesn't fix it, it does make them just a bit more well formed."
+  ], 
+  "revision_id": "259840"
+ }
+]

@@ -1,0 +1,71 @@
+[
+ {
+  "author": "nacho", 
+  "date": "2002-06-11T21:19:31.000000Z", 
+  "msg": [
+   "The patch deals with unnecesary calls to the AttachCurrentThread if the", 
+   "GetEnv returns valid environment.", 
+   "The second part of patch uses WIN32 registry to guess the correct", 
+   "jvm.dll like Java does itself.", 
+   "Submitted by Mladen Turk."
+  ], 
+  "revision_id": "297524"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-11T02:51:18.000000Z", 
+  "msg": [
+   "Fix initialization problem for libjkjni.so"
+  ], 
+  "revision_id": "297523"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-11T00:13:48.000000Z", 
+  "msg": [
+   "Deal with the special case of JNI POST. The first receive() is for", 
+   "the ajp initial chunk, if it is not present it's fine."
+  ], 
+  "revision_id": "297522"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-11T00:11:03.000000Z", 
+  "msg": [
+   "Fix for POST in in-process.", 
+   "This is a very tricky code - we must 'simulate' a 2-thread model ( i.e.", 
+   "one tomcat thread sending/receiving messages with apache, and one apache", 
+   "thread ) in a 1-thread model, with no context switch.", 
+   "We do this by requiring a certain behavior from the invoked method - the", 
+   "send() will marshal the response back into the same buffer, and next", 
+   "receive() will just read it.", 
+   "While a cleaner solution may be possible, this has the main benefit of", 
+   "minimizing the most expensive operation in jni - moving data between java", 
+   "heap and C ( we have a single java buffer that is pinned ). Of course,", 
+   "the rest of the code must deal with that - and make sure the buffer is", 
+   "not used for something else.", 
+   "Since we simulate the send/response in 2-thread model, the receive() will", 
+   "be called imediately after send(), so things are not too bad.", 
+   "The problem with POST was the 'special' chunk sent imediately after the", 
+   "request data. In tcp mode, that optimize the case of small requests", 
+   "( since it eliminates one round trip - well, it's not too much and", 
+   "it may be worth removing it for cleaner code ). In JNI mode, there", 
+   "is no such thing.", 
+   "The fix is to check if the receive() is the result of a sent(), and", 
+   "return an empty message otherwise."
+  ], 
+  "revision_id": "297521"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-06-11T00:01:16.000000Z", 
+  "msg": [
+   "Fix the POST in in-process mode.", 
+   "The 'response' from a jni invocation is in the same buffer, but we must", 
+   "call msg->end() to update the message size.", 
+   "The dispatch mechanism is no longer used ( or it shouldn't ), I'll do a grep and", 
+   "clean the code. ( invoke is much cleaner )."
+  ], 
+  "revision_id": "297520"
+ }
+]

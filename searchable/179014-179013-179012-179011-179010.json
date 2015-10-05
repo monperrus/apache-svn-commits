@@ -1,0 +1,50 @@
+[
+ {
+  "author": "kmarsden", 
+  "date": "2005-05-30T05:36:14.381626Z", 
+  "msg": [
+   "This fixes DERBY-255", 
+   "Closing a resultset after retriving BLOB or CLOB data > 32K, does not release locks properly.", 
+   "Network server/client materializes the LOB on the client and cannot differentiate getBlob from getBytes or getBinaryStream. Previously, network server would always call getBlob/getClob for any lob related call. This change changes network server to use getBytes/getString and not  hold locks for any of the calls.", 
+   "The implementation adds a new class EXTDTAInputStream to network server to localize the stream handling for large objects.   This should make it easier to adjust in the future as improvements are made in the large object handling. Because we need a length in order to write a stream, EXTDTAInputStream currently call getBytes or getString to get the length and stream out that object. This is apparently required because we cannot reset the input stream after traversing it to get the length.", 
+   "Future suggestions for changes to network server to handle this in a more complete way would be to:", 
+   "1) Change DDMWriter.writeScalarStream to  not require a length and optimize EXTDTAObjectInputStream accordingly", 
+   "2) Add support for lob locators with network server.  The getBlob, getClob calls would use the locators and would hold locks until the end of the transaction."
+  ], 
+  "revision_id": "179014"
+ }, 
+ {
+  "author": "roberto", 
+  "date": "2005-05-30T05:28:27.988110Z", 
+  "msg": [
+   "~Updated C# docs: programming section of DataAccess guide and .NET section of DataMapper guide", 
+   "still need to proofread, re-number section & example references in text, and add more DataMapper code examples (if there's time!)"
+  ], 
+  "revision_id": "179013"
+ }, 
+ {
+  "author": "madams", 
+  "date": "2005-05-30T05:11:57.665700Z", 
+  "msg": [
+   "Added redirection to real README.txt file."
+  ], 
+  "revision_id": "179012"
+ }, 
+ {
+  "author": "roberto", 
+  "date": "2005-05-30T04:33:56.349742Z", 
+  "msg": [
+   "~Updated C# docs: lots of edits for configuration", 
+   "~Updated C# docs fopdf.xsl (left-align text instead of full justification)"
+  ], 
+  "revision_id": "179011"
+ }, 
+ {
+  "author": "chathura", 
+  "date": "2005-05-30T03:45:22.132007Z", 
+  "msg": [
+   "Testcases added to test the Multipart handling and resloving the operations that refer to the same message"
+  ], 
+  "revision_id": "179010"
+ }
+]

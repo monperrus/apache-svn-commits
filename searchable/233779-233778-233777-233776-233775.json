@@ -1,0 +1,75 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2002-08-26T17:41:57.000000Z", 
+  "msg": [
+   "Integrated a patch by Andrew Evers <aevers@redwood.nl>:", 
+   "+ XmlRpcHandlerMapping - the getHandler(String) throws Exception interface.", 
+   "+ DefaultHandlerMapping - an implementation of HandlerMapping based", 
+   "on the existing XmlRpcServer implementation.", 
+   "+ ParseFailed - A runtime exception a'la AuthenticationFailed.", 
+   "+ Invoker - the Invoker class previously in XmlRpcServer.java, now public.", 
+   "+ XmlRpcRequest - encapsulates an XML-RPC request.", 
+   "+ XmlRpcRequestProcessor - decode a request", 
+   "Produce an XmlRpcRequest from an InputStream (optional user/pass).", 
+   "public XmlRpcRequest processRequest(InputStream, String, String)", 
+   "public XmlRpcRequest processRequest(InputStream)", 
+   "+ XmlRpcResponseProcessor - encode a response/exception", 
+   "Produce a byte [] from either an Object - representing a return value", 
+   "or an Exception - representing an error.", 
+   "public byte [] processException(Exception x, String encoding)", 
+   "public byte [] processResponse(Object outParam, String encoding)", 
+   "+ XmlRpcWorker - decode, process and encode a request/response.", 
+   "Ties everything together, but only communicates with the XmlRpcServer", 
+   "via XmlRpcServer -> XmlRpcWorker execute() and XmlRpcWorker calls via", 
+   "the XmlRpcHandlerMapping.", 
+   "+ XmlRpcServer - handle a thread pool and a default handler mapping.", 
+   "Things changed a little from the patch I originally proposed. The", 
+   "whole thing is probably best explained by four lines in XmlRpcWorker:", 
+   "request = requestProcessor.processRequest(is, user, password);", 
+   "handler = handlerMapping.getHandler(request.getMethodName());", 
+   "response = invokeHandler(handler, request);", 
+   "return responseProcessor.processResponse(response,", 
+   "requestProcessor.getEncoding());", 
+   "The *Processor classes are public and have public entry points so that", 
+   "it is possible to build your own XmlRpcWorker-like classes, by assembly", 
+   "(ie. delegation) rather than by inheritance, which can be trickier."
+  ], 
+  "revision_id": "233779"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-08-21T09:49:48.000000Z", 
+  "msg": [
+   "execute(): Updated JavaDoc for AuthenticationFailed changes."
+  ], 
+  "revision_id": "233778"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-08-21T09:47:13.000000Z", 
+  "msg": [
+   "Added supported for HTTP basic auth using a patch from Adam Megacz", 
+   "<adam@xwt.org> as a base."
+  ], 
+  "revision_id": "233777"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-08-21T09:45:48.000000Z", 
+  "msg": [
+   "Added propogation of AuthenticationFailed exception to execute*()", 
+   "methods."
+  ], 
+  "revision_id": "233776"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2002-08-21T09:19:09.000000Z", 
+  "msg": [
+   "Turns out that this needs to be a sub-class of Throwable, so we may as", 
+   "well extend RuntimeException."
+  ], 
+  "revision_id": "233775"
+ }
+]

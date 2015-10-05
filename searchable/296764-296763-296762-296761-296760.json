@@ -1,0 +1,72 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-04-11T05:45:56.000000Z", 
+  "msg": [
+   "Small fix"
+  ], 
+  "revision_id": "296764"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-04-11T05:44:46.000000Z", 
+  "msg": [
+   "Got unix socket to work again.", 
+   "Note that we still use 'direct' unix calls, not the APR wrappers ( is it", 
+   "finished ? I read about adding it in the plain apr sockets, but didn't see the", 
+   "code yet ).", 
+   "I also changed the names and messages to show the real source ( the code was", 
+   "cut&pasted from channel_socket ).", 
+   "Support the same 'trick' of using the object name as the constructor/URL.", 
+   "All you need is:", 
+   "[worker.ajp13:apr]", 
+   "channel=channel.apr:${jkHome}/work/jk2.socket"
+  ], 
+  "revision_id": "296763"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-04-11T05:20:48.000000Z", 
+  "msg": [
+   "A bigger change in the way we build native2.", 
+   "So far we had a jni_connect ( I changed the name to libjkjni since it conflicts with jk1 )", 
+   "It contained a subset of jk and the native methods ( the minimum amount required to get", 
+   "jni working ). I changed this to include the whole thing - that will allow java to", 
+   "access all the features of jk, including the future scoreboard and all channels/etc.", 
+   "( and more APR features will be used/exposed directly or in jk objects at a higher level)", 
+   "A second change is in the mod_jk2.so - it didn't include any jni method. That's", 
+   "a source of big problems since the jni worker will try to load jni_connect and is", 
+   "likely to run into conflicts.", 
+   "The JNI methods do not have _any_ dependency on java - just plain C methods taking", 
+   "some pointer parameters. The JNI header and the pointers to functions are doing", 
+   "all the magic. So if we include support for the JNI worker ( i.e. we have jni.h )", 
+   "we can also include the jni methods in the same .so"
+  ], 
+  "revision_id": "296762"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-04-10T23:53:11.000000Z", 
+  "msg": [
+   "More fixes for the new env.", 
+   "The properties will find their way to the target jk component ( assuming", 
+   "you want to use attributes in server.xml for config - I strongly disagree with this )", 
+   "conf/jk2.properties ( or whatever name you set ) will be read.", 
+   "Also: AprImpl and ChannelUn work - assuming you know the magic incantations.", 
+   "( i.e. jk2.properties and LD_LIBRARY_PATH )"
+  ], 
+  "revision_id": "296761"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-04-10T23:50:33.000000Z", 
+  "msg": [
+   "Set 'jkHome' with the server-specific values ( catalina.base or tomcat.home )", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "296760"
+ }
+]

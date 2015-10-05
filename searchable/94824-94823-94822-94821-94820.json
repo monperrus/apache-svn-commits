@@ -1,0 +1,55 @@
+[
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T01:45:00.000000Z", 
+  "msg": [
+   "Add a \"queue_info\" structure to the worker MPM. This is used to prevent", 
+   "the listener thread from accept()ing more connections than there are", 
+   "available workers. This prevents long-running requests from starving", 
+   "connections that have been accepted but not yet processed.", 
+   "The queue_info is a simple counter, mutex, and condition variable. Only", 
+   "the listener thread blocks on the condition, and only when there are no", 
+   "idle workers. In the fast path there is a mutex lock, integer decrement,", 
+   "and and unlock (among a few conditionals). The worker threads each notify", 
+   "the queue_info when they are about to block on the normal worker_queue", 
+   "waiting for some connection to process, which wakes up any sleeping", 
+   "listener thread to go perform another accept() in parallel."
+  ], 
+  "revision_id": "94824"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-04-28T00:34:49.000000Z", 
+  "msg": [
+   "Fixed the creation of the worker threads' data structures"
+  ], 
+  "revision_id": "94823"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2002-04-27T21:01:20.000000Z", 
+  "msg": [
+   "my_generation is in the shared scoreboard now."
+  ], 
+  "revision_id": "94822"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-04-26T22:45:47.000000Z", 
+  "msg": [
+   "Added a vote on MPMs"
+  ], 
+  "revision_id": "94821"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-04-26T22:23:06.000000Z", 
+  "msg": [
+   "After review and testing against all of the PSDK examples (see", 
+   "http://www.apache.org/~wrowe/ for commentary on building the", 
+   "examples and making them work) ... this disable-optimization", 
+   "should no longer be required."
+  ], 
+  "revision_id": "94820"
+ }
+]

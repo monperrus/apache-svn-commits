@@ -1,0 +1,72 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-01-06T18:36:47.000000Z", 
+  "msg": [
+   "Fix the Java source code generation failure for OM class whose", 
+   "corresponding table lacks a PK.", 
+   "Observed behavior before this patch:", 
+   "Compilation error in BaseYourObject.setQueryKey(String) due to throws", 
+   "delcaration mismatch between Torque's BaseObject.setPrimaryKey(String)", 
+   "method and lack of generated setPrimaryKey(String) method.  Had the", 
+   "override been generated, it would've had a throws declaration of", 
+   "TorqueException, instead of Exception as declared by BaseObject.", 
+   "[javac] .../BaseYourObject.java:392:9:392:26: Semantic Error: The", 
+   "method \"void setPrimaryKey(java.lang.String $1) throws", 
+   "java.lang.Exception;\" can throw the checked exception", 
+   "\"java.lang.Exception\", so its invocation must be enclosed in a try", 
+   "statement that catches the exception, or else this method must be", 
+   "declared to throw the exception.", 
+   "* src/generator/src/templates/om/Object.vm", 
+   "* src/generator/src/templates/om/ObjectWithManager.vm", 
+   "Wrap the invocation of setPrimaryKey(String) in a try/catch block to", 
+   "re-throw Exception as TorqueException in the setQueryKey(String)", 
+   "method.", 
+   "CollabNet-internal issue: PCN33929"
+  ], 
+  "revision_id": "229654"
+ }, 
+ {
+  "author": "tfischer", 
+  "date": "2004-12-29T20:45:01.000000Z", 
+  "msg": [
+   "This change removes qualifiers from table names. An example would be the columnanme \"DISTINCT x.y\". These columnnames appear if one wants to count datasets.", 
+   "e.g. wanted SQL:  select count(distinct x.y) from x", 
+   "java:", 
+   "Criteria criteria = new criteria;", 
+   "criteria.addSelectColumn(\"count(distinct x.y)\");", 
+   "BasePeer.doSelect(criteria);", 
+   "produced until now:", 
+   "select count(distinct x.y) from distinct x", 
+   "This change basically restores former behavour, see BasePeer 1.76.2.5, line 2153 and following.", 
+   "Also added a test case which tests the correct behaviour"
+  ], 
+  "revision_id": "229653"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2004-12-29T10:50:49.000000Z", 
+  "msg": [
+   "Add a few sanity tests for configuration objects. These should", 
+   "strictly spoken not be necessary, but better safe than sorry IMHO."
+  ], 
+  "revision_id": "229652"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2004-12-29T10:32:07.000000Z", 
+  "msg": [
+   "Make sure that JNDI datasources are only bound if they are also", 
+   "configured. Patch suggested by M. Sean Gilligan and Roger A. Caron."
+  ], 
+  "revision_id": "229651"
+ }, 
+ {
+  "author": "tfischer", 
+  "date": "2004-12-27T19:52:47.000000Z", 
+  "msg": [
+   "added a test case where the accuracy of date/time/timestamp values are checked. For this, a new table was added to the bookstore schema."
+  ], 
+  "revision_id": "229650"
+ }
+]

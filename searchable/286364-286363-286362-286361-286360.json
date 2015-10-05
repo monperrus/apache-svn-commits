@@ -1,0 +1,93 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-28T22:54:13.000000Z", 
+  "msg": [
+   "Add the following contents to the \"tomcat-docs\" web app:", 
+   "* Application developer's guide (converted from HTML, and updated", 
+   "for taking advantage of the capabilities of Ant 1.3)", 
+   "* Servlet/JSP Javadocs (copied from jakarta-servletapi-4/dist/docs/api)", 
+   "* Catalina and Jasper Javadocs", 
+   "This conversion has illustrated some clumsiness in trying to use the", 
+   "\"site.xsl\" stylesheet from jakarta-site2 directly.  Further work is", 
+   "needed to make that more gracefully."
+  ], 
+  "revision_id": "286364"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-28T22:47:42.000000Z", 
+  "msg": [
+   "Update the tomcat-docs build procedure to copy the relevant Javadocs", 
+   "directories."
+  ], 
+  "revision_id": "286363"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-28T22:47:10.000000Z", 
+  "msg": [
+   "Remove \"dist\" dependency on \"tomcat-docs\" for now, until we stabilize the", 
+   "documentation production process.  If you want to create this web app,", 
+   "execute \"ant tomcat-docs\" explicitly."
+  ], 
+  "revision_id": "286362"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-28T01:35:39.000000Z", 
+  "msg": [
+   "Initial setup of a new webapp for Tomcat 4.0 documentation that is", 
+   "generated (from XML files) rather than being edited directly in HTML.  It", 
+   "is based on the \"site.xsl\" stylesheet that I checked in to the", 
+   "jakarta-site2 project earlier, so you will need a \"site.xsl\" property in", 
+   "your build.properties file that points at it.", 
+   "The basic thinking is that the \"tomcat-docs\" webapp will contain all of", 
+   "the user-oriented and developer-oriented documentation relevant to Tomcat", 
+   "4.0, all generated in a nice consistent style according to the stylesheet.", 
+   "In addition, we can simply take the tomcat-docs.war file, and unpack it", 
+   "into a convenient directory on the web site, and have the online version", 
+   "of the docs instantly available (and always consistent) as well.", 
+   "Over the weekend, I will be porting over some of the existing", 
+   "documentation (in particular the App Developer's Guide, the server.xml", 
+   "configuration stuff, and some of the developer docs) to ensure that this", 
+   "approach scales well, and to offer an example of how to add new categories", 
+   "of documentation to the overall docs webapp.", 
+   "NOTE:  When setting this up, I ran into a nasty bug in the <style> tag in", 
+   "Ant 1.3 -- it treats the \"style\" attribute (identifying the filename of", 
+   "the stylesheet to use) as relative, even if you try to specify an absolute", 
+   "pathname.  This was nasty, because I wanted to be able to simply point at", 
+   "my checked-out copy of the jakarta-site2 repository.", 
+   "To work around this, the build.xml file for the \"tomcat-docs\" webapp does", 
+   "the following (for the moment):", 
+   "- Copies the XML sources to a temporary directory", 
+   "- Copyies the site.xsl file (pointed at by your property) into the", 
+   "temporary directory", 
+   "- Runs the XSLT transformations from the temporary directory to the", 
+   "usual build directory", 
+   "- Deletes the temporary directory", 
+   "A side effect of this workaround is that the generation of the entire", 
+   "tomcat-docs webapp happens every time, even if nothing has changed.", 
+   "Therefore, creation of this webapp is *not* included in the defaults.  If", 
+   "you want to generate it, go to the top-level jakarta-tomcat-4.0 source", 
+   "directory and type", 
+   "ant tomcat-docs", 
+   "or", 
+   "ant dist"
+  ], 
+  "revision_id": "286361"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-07-27T22:26:03.000000Z", 
+  "msg": [
+   "Update build and install documentation to current formats, similar to that", 
+   "used on \"jakarta-servletapi-4\" and \"jakarta-watchdog-4.0\".  Remove the top", 
+   "level \"build.bat\" and \"build.sh\" scripts, since they are now unnecessary.", 
+   "TODO:  Tweak the build.xml files (and corresponding BUILDING.txt notes)", 
+   "for configurability of the remaining packages that do not have documented", 
+   "property names you can override in \"build.properties\"."
+  ], 
+  "revision_id": "286360"
+ }
+]

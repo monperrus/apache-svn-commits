@@ -1,0 +1,71 @@
+[
+ {
+  "author": "henning", 
+  "date": "2003-07-15T10:15:18.000000Z", 
+  "msg": [
+   "Added some debugging which helps tremendously when looking for Intake", 
+   "Bugs."
+  ], 
+  "revision_id": "221564"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-07-15T10:13:57.000000Z", 
+  "msg": [
+   "While this is a simple checkin, it fixes a not quite so simple bug", 
+   "(IMHO).  The problem was dragged in in the 1.3 revision changes made", 
+   "by quinton. There as a test added that said \"if the supplied string is", 
+   "empty or null value\", then set this field to \"null\".", 
+   "This is fine, as long as all of the fields in your form are", 
+   "\"required\". Now I have an application that has a few \"required\" fields", 
+   "and quite some \"non-required\" fields. So they're submitted empty by the", 
+   "user. As they're empty and valid (they're not required), its value (the", 
+   "empty string) ends up in doSetValue. Here the test tells the StringField", 
+   "to put \"null\" into its internal value.", 
+   "This null value is propagated via setProperties(Object obj) to an", 
+   "underlying bean. I use a torque generated object here, which in turn", 
+   "inserts it value into a database table. Where the column is defined as", 
+   "required=\"true\", which should 'just work'. Because the user sent the", 
+   "empty String (\"\") to the application.", 
+   "However, the null value in the bean is translated to SQL NULL. Which", 
+   "in turn gets refused by the database (required == NOT NULL). So the", 
+   "user gets an errors which is not clear at all.", 
+   "IMHO this behaviour of Intake is a bug. An empty string should be an", 
+   "empty string in Intake, too. We can discuss about the behaviour when", 
+   "\"null\" is passed to doSetValue() in the StringField, which would", 
+   "restore the behaviour before the 1.3 revision (and similar with", 
+   "Fulcrum, which uses quite different code).", 
+   "Discussion wanted."
+  ], 
+  "revision_id": "221563"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-07-15T09:07:32.000000Z", 
+  "msg": [
+   "I'm officially fed up with the obscure Velocity error logging and", 
+   "non-existent stack traces if a tool throws an exception. This is an", 
+   "attempt to fix this by adding an EventCartridge to the TurbineVelocityService", 
+   "and reporting the actual stack traces in the log file. This behaviour is", 
+   "controllable by a property. Even added some docs.", 
+   "This wants some testing, so I defaulted it to on."
+  ], 
+  "revision_id": "221562"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-07-15T09:05:31.000000Z", 
+  "msg": [
+   "Add an XML Header to the test file"
+  ], 
+  "revision_id": "221561"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-07-15T08:55:53.000000Z", 
+  "msg": [
+   "& -> &amp;"
+  ], 
+  "revision_id": "221560"
+ }
+]

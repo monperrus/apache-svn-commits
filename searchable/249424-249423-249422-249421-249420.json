@@ -1,0 +1,91 @@
+[
+ {
+  "author": "ericf", 
+  "date": "2003-07-31T06:25:18.000000Z", 
+  "msg": [
+   "fix for 21981 -- lack of support in WSDL2Java for complex types that", 
+   "are derived by restriction.", 
+   "TypeDesc has a new constructor which takes an additional parameter,", 
+   "a boolean, indicating whether the TypeDesc is permitted to look at", 
+   "the superclass(es) of the type it describes when locating metadata", 
+   "about that type's fields.  The default preserves the existing", 
+   "behavior -- superclasses are searched.  The existing constructor", 
+   "is now implemented in terms of the new constructor.", 
+   "SchemaUtils has a new method for locating the base type for a", 
+   "complex type derived by restriction.  This is substantially similar", 
+   "to the existing strategy for finding the base type for derivation", 
+   "by extension.  Methods in that class that locate elements and", 
+   "attributes in complex content models now look into restriction", 
+   "nodes for content particles, just as they already did for extension", 
+   "nodes.", 
+   "JavaTypeWriter looks for a supertype from which the current type", 
+   "is derived-by-restriction when creating JavaBeanWriter/JavaBeanHelperWriter", 
+   "instances iff that type wasn't derived-by-extension.  If both", 
+   "searches fail, the type has no parent and the extendsType value", 
+   "remains null.", 
+   "JavaBeanWriter's constructor checks to see if the complex type it's", 
+   "writing is derived by restriction.  If it is, and the extendsType", 
+   "value is defined (i.e. there is a superclass for the type being", 
+   "generated), most generation hooks are disabled -- mutators/accessors;", 
+   "fields; hashcode; equals.  Since a type derivated-by-extension is,", 
+   "by definition, a subset of the base class, it follows that the base", 
+   "class (or its superclass(es)) already defines all of the members", 
+   "and variables needed for the subset.  So, the derived type gets", 
+   "all of those members/methods for \"free\" through inheritance and", 
+   "they do not need to be generated again.  The result is a class", 
+   "which extends another class (the class it restricts), defines", 
+   "no member variables, no accessor/mutator methods, and no new", 
+   "behavior for equals/hashCode.  It does, however, define", 
+   "its own TypeDesc to capture the restricted value space of", 
+   "the derived type's content model.", 
+   "JavaBeanHelperWriter performs the same check to see if it's a", 
+   "writing a complex type derived by restriction.  If it is, it uses", 
+   "the new constructor for TypeDesc to *disable* searches of the class", 
+   "hierarchy for additional binding metadata.  Since types derived by", 
+   "restriction are required to re-specify their complete content model,", 
+   "including fields that are being retained from the base type, all", 
+   "of the necessary metadata for the derived type is present in that", 
+   "type's own TypeDesc.  Further, it would be an error to allow searches", 
+   "for additional metadata in the inheritance hierarchy, as any particle", 
+   "which isn't explicitly re-defined in the derived type is not allowed", 
+   "in its content model (this is what restriction means, in part).", 
+   "In sum, this strategy ensures that the TypeDesc defines all of the", 
+   "metadata needed to bind the derived type *and no more than that*.", 
+   "TODO: attributes in a restricted content model can be \"prohibited.\"", 
+   "This change set does nothing to address those."
+  ], 
+  "revision_id": "249424"
+ }, 
+ {
+  "author": "susantha", 
+  "date": "2003-07-30T11:03:01.000000Z", 
+  "msg": [
+   "project file for WCG"
+  ], 
+  "revision_id": "249423"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2003-07-29T14:44:43.000000Z", 
+  "msg": [
+   "GUMP: compile and run tests before building javadocs. (I think Gump is just running the junit tests and not the functional-tests)"
+  ], 
+  "revision_id": "249422"
+ }, 
+ {
+  "author": "damitha", 
+  "date": "2003-07-29T13:20:57.000000Z", 
+  "msg": [
+   "*** empty log message ***"
+  ], 
+  "revision_id": "249421"
+ }, 
+ {
+  "author": "roshan", 
+  "date": "2003-07-29T12:09:08.000000Z", 
+  "msg": [
+   "removed lines"
+  ], 
+  "revision_id": "249420"
+ }
+]

@@ -1,0 +1,77 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-26T23:13:10.000000Z", 
+  "msg": [
+   "Changes for new message model."
+  ], 
+  "revision_id": "251779"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-26T23:07:04.000000Z", 
+  "msg": [
+   "Changes for new message model.", 
+   "NOTE:  Message dispatch is currently broken!  We need a way of injecting", 
+   "DOM into the body of a SOAPEnvelope for responses to work.", 
+   "Also, we should migrate MsgDispatchHandler to using SAX.... we should", 
+   "provide DOM upon request, but make SAX the easy choice for XML", 
+   "processing at high speed."
+  ], 
+  "revision_id": "251778"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-26T23:03:08.000000Z", 
+  "msg": [
+   "1st cut at new encoding system.  Needs work!", 
+   "This includes the (raw) beginnings of a service description framework,", 
+   "which will hopefully be an abstract framework for understanding the", 
+   "types of various parts of a message.  An implementation of this", 
+   "framework would handle WSDL."
+  ], 
+  "revision_id": "251777"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-26T22:57:28.000000Z", 
+  "msg": [
+   "Various changes for new message model."
+  ], 
+  "revision_id": "251776"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-26T22:53:42.000000Z", 
+  "msg": [
+   "New message model.", 
+   "WARNING : THIS IS NOT FULLY COMPLETE.  IT NEEDS AT LEAST", 
+   "SOME SERIOUS CLEANING, IF NOT REWRITING IN PLACES.  USE", 
+   "AT YOUR OWN RISK.", 
+   "Summary:", 
+   "The big difference here is that there's no DOM.  We now use a custom data", 
+   "structure which is built by parsing a stream of SAX events.  The", 
+   "SOAPSAXParser class is the parser - you initialize it and hook it up to", 
+   "a SAX event stream, and it happily fills in the message data structures", 
+   "for you.  NOTE: it does this in a \"lazy\" fashion, so there are pause()", 
+   "and continue() methods which allow the parse to start, and then stop", 
+   "when you've found what you're looking for.", 
+   "During a parse, there is a DeserializationContext object which keeps track", 
+   "of the current namespace/prefix mappings, which elements map to which IDs,", 
+   "and the current set of type mappings for deserialization.  (see the", 
+   "encoding package)", 
+   "Elements that we scan over, or ones for which we don't have a particular", 
+   "deserializer, are recorded - in other words, the SAX events are placed into", 
+   "a queue which may be 'played back' at a later time to any SAX", 
+   "ContentHandler.", 
+   "Once a SOAPEnvelope has been built, either through a parse or manual", 
+   "construction by the user, it may be output using a SerializationContext (also", 
+   "see the encoding package).  MessageElements all have an output() method", 
+   "which lets them write out their contents.", 
+   "There's a lot that still needs doing, but the basics are here.  More info", 
+   "on the axis-dev list.", 
+   "Code-level changes:  Too many to list"
+  ], 
+  "revision_id": "251775"
+ }
+]

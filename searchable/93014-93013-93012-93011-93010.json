@@ -1,0 +1,74 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-01-25T01:11:47.000000Z", 
+  "msg": [
+   "Change ap_get_brigade prototype to remove *readbytes in favor of readbytes.", 
+   "If you need the length, you should be using apr_brigade_length.  This is", 
+   "much more consistent.  Of all the places that call ap_get_brigade, only", 
+   "one (ap_http_filter) needs the length.  This makes it now possible to", 
+   "pass constants down without assigning them to a temporary variable first.", 
+   "Also:", 
+   "- Change proxy_ftp to use EXHAUSTIVE mode (didn't catch its -1 before)", 
+   "- Fix buglet in mod_ssl that would cause it to return too much data in", 
+   "some circumstances"
+  ], 
+  "revision_id": "93014"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-25T00:24:47.000000Z", 
+  "msg": [
+   "Enable the BrowserMatch for Microsoft's DAV client -- we know it is", 
+   "broken.", 
+   "Add a match for the WebDrive client. It is similarly broken.", 
+   "Sync up the NetWare and Windows .conf files a bit.", 
+   "Submitted by: Sander Striker <striker@apache.org>, Greg Stein"
+  ], 
+  "revision_id": "93013"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2002-01-25T00:17:31.000000Z", 
+  "msg": [
+   "Fix some serious, hard-core breakage :-(  I don't even know how it", 
+   "compiled and linked.", 
+   "* there is no UNIX symbol, so go back to #ifndef WIN32. that other", 
+   "platforms can pile on as needed until we have a proper mechanism.", 
+   "* reinstate the liveprop callbacks and the dav_hooks_liveprop_fs", 
+   "structure. since the latter structure is referred to elsewhere in", 
+   "the file, it better be defined.", 
+   "* use a \"feature\" name of DAV_FS_HAS_EXECUTABLE rather than", 
+   "conditionally specifying the property. convert the tests over to", 
+   "that symbol."
+  ], 
+  "revision_id": "93012"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-01-24T23:59:51.000000Z", 
+  "msg": [
+   "Rewrite ap_rgetline to remove the need to have an \"internal\" brigade stored", 
+   "in the core_module structure by using the AP_MODE_SPECULATIVE filter mode", 
+   "to determine if MIME-continuation should occur.", 
+   "Notes:", 
+   "- ap_rgetline has a new prototype.", 
+   "- ap_rgetline returns APR_ENOSPC when we are out of buffer space.", 
+   "All direct callers of ap_rgetline are now adjusted to handle this new API.", 
+   "ap_getline will mimic the old API for now.", 
+   "Reviewed by:\tRyan Morgan"
+  ], 
+  "revision_id": "93011"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-01-24T23:47:31.000000Z", 
+  "msg": [
+   "Remove mod_auth_db since we've received enough votes (Justin, Ian, and", 
+   "Lars) and ample warning has been posted to dev@httpd.", 
+   "mod_auth_dbm should be able to take over all functionality of mod_auth_db", 
+   "with the AuthDBMType directive."
+  ], 
+  "revision_id": "93010"
+ }
+]

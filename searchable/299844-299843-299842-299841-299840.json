@@ -1,0 +1,55 @@
+[
+ {
+  "author": "billbarker", 
+  "date": "2004-10-21T02:41:38.000000Z", 
+  "msg": [
+   "Clean up references to TS when one is removed.", 
+   "Fix for Bug #31800", 
+   "Submitted By: David Blavier  david.blavier@one2team.com"
+  ], 
+  "revision_id": "299844"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2004-10-20T12:28:06.000000Z", 
+  "msg": [
+   "- Change the default value for the cache size, as there's no use keeping seldom used strings."
+  ], 
+  "revision_id": "299843"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2004-10-19T09:28:58.000000Z", 
+  "msg": [
+   "- Build the caches using a temp array."
+  ], 
+  "revision_id": "299842"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2004-10-18T23:19:36.000000Z", 
+  "msg": [
+   "- Fix CharChunk.toString, and remove dead debug."
+  ], 
+  "revision_id": "299841"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2004-10-18T23:16:36.000000Z", 
+  "msg": [
+   "- Refactor toString for the buffers, and add a cache.", 
+   "- The cache works in two phases:", 
+   "- First phase is heavily synchronized, and keeps statistics on String usage", 
+   "- When first phase is done (after a number of calls to toString), a cache array is generated; this might be a rather expensive operation", 
+   "- During the second phase, unsynchronized lookups in the static cache are done to try to avoid expensive toString conversions", 
+   "- If the cache is registered in JMX (later ...), an operation exists to get back to the beginning of the first phase. This could be useful", 
+   "after installing new applications on the fly, which could have different Strign requirements.", 
+   "- I think it works really well for ByteChunk -> String, since this is a quite expensive operation (note: some of these conversions could", 
+   "be optimized by assuming US-ASCII encoding, which I'll do for the session ID cookie value since it's so commonly used - and the String", 
+   "is not cacheable, obviously - but doing the trick everywhere would lead to major problems). For CharChunk, it's less evident, as", 
+   "it is a matter of allocating a String, a char array and then using an arraycopy to move over the chars.", 
+   "- This is configured using system properties, for example in the catalina.properties file. Byte and char can be enabled separately."
+  ], 
+  "revision_id": "299840"
+ }
+]

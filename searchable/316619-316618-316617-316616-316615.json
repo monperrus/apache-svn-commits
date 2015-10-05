@@ -1,0 +1,85 @@
+[
+ {
+  "author": "lehors", 
+  "date": "2000-11-22T20:54:18.000000Z", 
+  "msg": [
+   "applied patch from Elena Litani:", 
+   "This is a patch to RangeImpl.removeNode(). The indexOf() is fixed to be", 
+   "'0' based, however some references in removeNode() assume that index is", 
+   "'1' based.", 
+   "Small fix to traverseContents() -- add collapse() range for Text Nodes."
+  ], 
+  "revision_id": "316619"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-11-22T17:42:16.000000Z", 
+  "msg": [
+   "Applied patch from Lynn Monson:", 
+   "This brings the Xerces code into conformance", 
+   "with the specification.  I've also included below, an example from previous", 
+   "e-mail that demonstrates the bug that exists in the current code base.", 
+   "take a very simple example:", 
+   "Text node: abc", 
+   "Let aRange span the character \"a\"", 
+   "let sourceRange span the character \"c\"", 
+   "If I invoke aRange.compareBoundaryPoints( START_TO_START, sourceRange ):", 
+   "Xerces code says:", 
+   "if (how == START_TO_START) {", 
+   "endPointA = sourceRange.getStartContainer();", 
+   "endPointB = fStartContainer;", 
+   "offsetA = sourceRange.getStartOffset();", 
+   "offsetB = fStartOffset;", 
+   "} else", 
+   "So far, so good.  \"A\" is sourceRange and \"B\" is aRange.  They have the same", 
+   "container, and offsetA==2 and offsetB==0.  The next lines executed are:", 
+   "// case 1: same container", 
+   "if (endPointA == endPointB) {", 
+   "if (offsetA < offsetB) return -1;", 
+   "if (offsetA == offsetB) return 0;", 
+   "return 1;", 
+   "}", 
+   "Since offsetA > offsetB, a +1 is returned.  But this contradicts the (new)", 
+   "spec wording which says the result is:", 
+   "-1, 0 or 1 depending on whether the corresponding boundary-point of the", 
+   "Range is, respectively, before, equal to, or after the corresponding", 
+   "boundary-point of sourceRange", 
+   "In the example, offsetB is the \"corresponding boundary-point of the Range\"", 
+   "and offsetA is the \"corresponding boundary-point of sourceRange.\"  Since", 
+   "offsetB is before A, shouldn't the answer be -1 instead of +1?"
+  ], 
+  "revision_id": "316618"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-11-22T17:27:08.000000Z", 
+  "msg": [
+   "applied patch from Elena Litani:", 
+   "This patch fixes several bugs in Range.cloneContents() &", 
+   "Range.extractContents() reported by Lynn Monson (see 1-4).", 
+   "In addition it fixes the following bugs:", 
+   "a) if startContainer == endContainer; fEndOffset was not properly", 
+   "updated in case of extractContents()", 
+   "b) middle children of common root were not properly added in case where", 
+   "one of the nodes was fully selected (and thus was moved to DocumentFrag)"
+  ], 
+  "revision_id": "316617"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2000-11-22T17:17:35.000000Z", 
+  "msg": [
+   "applied patch from Lynn Monson:", 
+   "fixed a bug in indexOf which was off by 1"
+  ], 
+  "revision_id": "316616"
+ }, 
+ {
+  "author": "jeffreyr", 
+  "date": "2000-11-22T02:23:45.000000Z", 
+  "msg": [
+   "Xerces 1.2.2 DOM 2 Recommendation supportand bug release"
+  ], 
+  "revision_id": "316615"
+ }
+]

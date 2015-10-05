@@ -1,0 +1,61 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-31T07:19:04.000000Z", 
+  "msg": [
+   "Fix the case where if there is no ErrorDocument specified for an error,", 
+   "the error would be sent to the client *twice* because both the filter", 
+   "and the core would trigger error responses.", 
+   "The problem is that the filters have already handled some errors (say 413)", 
+   "and due to the ap_get_client_block API, the error was morphed into 400.", 
+   "Therefore, ap_discard_request_body must use brigades directly rather than", 
+   "the ap_get_client_block API so that any potential errors are not dropped.", 
+   "The special value AP_FILTER_ERROR indicates that the lower level has", 
+   "already dealt with this problem (ap_die() will realize this).  Otherwise,", 
+   "we'll error with HTTP_BAD_REQUEST and ap_die() will take it from there.", 
+   "This also prevents needless memory copies when we are just going to", 
+   "discard it anyway.", 
+   "Thanks to Cliff Woolley who found this wacky problem."
+  ], 
+  "revision_id": "95424"
+ }, 
+ {
+  "author": "martin", 
+  "date": "2002-05-31T07:13:00.000000Z", 
+  "msg": [
+   "Note impact on invalid requests from Netscape"
+  ], 
+  "revision_id": "95423"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-31T05:23:26.000000Z", 
+  "msg": [
+   "items_to_fix--;", 
+   "cliff++;  (Cliff rocks for picking up after my mess and fixing this.)"
+  ], 
+  "revision_id": "95422"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2002-05-31T05:03:09.000000Z", 
+  "msg": [
+   "fix some major badness: error buckets *cannot* use simple_copy because", 
+   "they're not simple buckets.  they have a private data structure which", 
+   "gets freed.  if you're going to copy them and share whatever ->data points", 
+   "to (which is what simple_copy does), you have to refcount the structure,", 
+   "which is the whole point of apr_bucket_refcount and apr_bucket_shared_copy."
+  ], 
+  "revision_id": "95421"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-05-31T00:59:56.000000Z", 
+  "msg": [
+   "Removing mod_bucketeer from the output filters seems to be the cure.  Why?", 
+   "So, this isn't a showstopper since no one will enable bucketeer in", 
+   "production."
+  ], 
+  "revision_id": "95420"
+ }
+]

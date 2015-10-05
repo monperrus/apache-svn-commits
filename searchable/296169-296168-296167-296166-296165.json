@@ -1,0 +1,69 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-12-16T23:36:58.000000Z", 
+  "msg": [
+   "Update to the new method signatures."
+  ], 
+  "revision_id": "296169"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-16T23:29:55.000000Z", 
+  "msg": [
+   "Update to the new method signatures."
+  ], 
+  "revision_id": "296168"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-16T23:18:11.000000Z", 
+  "msg": [
+   "Update the code to the new method signatures."
+  ], 
+  "revision_id": "296167"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-16T23:17:23.000000Z", 
+  "msg": [
+   "As previously discussed, add jk_env param to all methods.", 
+   "This is for now just a 'cosmetic' change - all functions will now follow", 
+   "the same pattern ( previously most but not all had access to logger, etc).", 
+   "The actual implementation of env is not completed, but should work the same", 
+   "as it did before - it's just one level of indirection to access the logger.", 
+   "We still use a single shared logger, etc.", 
+   "In future we may improve this to give each thread a env instance ( that will", 
+   "include a per thread logger and per thread temp pool )", 
+   "that will allow us to implement error handling and", 
+   "get rid of the last 3 mallocs ( and use pools exclusively ).", 
+   "This should be my last 'major' change in jk2 refactoring."
+  ], 
+  "revision_id": "296166"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-15T17:36:25.000000Z", 
+  "msg": [
+   "Use jk_map for headers.", 
+   "Make sure we copy all data we'll need later in long-lived pools.", 
+   "Changed the option ( that I added few weeks ago ) to set jk properties", 
+   "in httpd.conf to JkSet. All jk options that can be set in workers.properties", 
+   "can also be set using \"JkSet name value\" instead of \"name=value\" in the", 
+   ".properties file.", 
+   "Finally added the per-dir configuration that will allow the 'native mapper'", 
+   "to work. This is still experimental, but will provide huge improvements in", 
+   "jk scalability !", 
+   "The idea is that you can use \"JkWorker\" in any <Location> ( eventually", 
+   "included in a <VirtualHost> section ) to specify that location", 
+   "is a webapp and what worker to use. Apache will use it's normal", 
+   "mapper to locate the context - without any need to duplicate this in", 
+   "jk. For sites with a large number of virtual hosts/apps this is", 
+   "very significant.", 
+   "( of course, JkMount remains and we'll add the autoconf, but none of", 
+   "those should be used for large sites, at least not with the current", 
+   "uri mapper )"
+  ], 
+  "revision_id": "296165"
+ }
+]

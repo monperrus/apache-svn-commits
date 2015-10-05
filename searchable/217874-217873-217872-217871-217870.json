@@ -1,0 +1,100 @@
+[
+ {
+  "author": "arista", 
+  "date": "2002-04-14T23:05:33.000000Z", 
+  "msg": [
+   "Bug 8067 - change EL implicit objects to match final list", 
+   "The list of implicit objects has been changed to:", 
+   "* param - Map from param name to String value", 
+   "* paramValues - Map from param name to String[] of values", 
+   "* header - Map from header name to String value", 
+   "* headerValues - Map from header name to String[] of values", 
+   "* initParam - Map from init param name to String value", 
+   "* pageScope - Map of page-scoped variables", 
+   "* requestScope - Map of request-scoped variables", 
+   "* sessionScope - Map of session-scoped variables", 
+   "* applicationScope - Map of application-scoped variables", 
+   "* cookie - Map from cookie name to first matching Cookie in request.getCookies()"
+  ], 
+  "revision_id": "217874"
+ }, 
+ {
+  "author": "shawn", 
+  "date": "2002-04-14T17:07:16.000000Z", 
+  "msg": [
+   "Bug 8071:  x-rt.tld contains on invalid class reference for the 'when' action."
+  ], 
+  "revision_id": "217873"
+ }, 
+ {
+  "author": "horwat", 
+  "date": "2002-04-14T17:06:57.000000Z", 
+  "msg": [
+   "Add missing </attribute>", 
+   "Bugzilla 8070", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "217872"
+ }, 
+ {
+  "author": "arista", 
+  "date": "2002-04-14T14:32:37.000000Z", 
+  "msg": [
+   "Bug 8066 - EL implementation should be made generic (non-Servlet specific)", 
+   "The EL has been separated into a generic part and a JSTL-specific", 
+   "part.  The JSTL-specific part is still called Evaluator, but it", 
+   "delegates to the generic implementation called ELEvaluator.  The", 
+   "following other changes were made:", 
+   "* variable lookups have been abstracted into a VariableResolver", 
+   "interface, which is passed to the constructor of the ELEvaluator.", 
+   "The JSTLVariableResolver is the JSTL-specific implementation of", 
+   "the variable resolver, which looks up variables in PageContext,", 
+   "and also handles the implicit objects.  The VariableResolver has", 
+   "to be passed to all the expressions during evaluation, which is", 
+   "why so many classes had to be changed.", 
+   "* The context passed to ELEvaluator.evaluate() is just an Object,", 
+   "not a PageContext.  That context is eventually passed to the", 
+   "VariableResolver, which is responsible for casing the context to", 
+   "whatever class it expects.", 
+   "* The notion of implicit objects has been removed from the parser -", 
+   "the parser just parses variable references, and lets the", 
+   "VariableResolver take care of implicit objects.  This means that", 
+   "there will be a slight difference in error messages - instead of", 
+   "listing the implicit objects among the expected tokens, it will", 
+   "just say <IDENTIFIER>", 
+   "* The ELEvaluator has substituted all notions of \"attribute value\"", 
+   "with \"expression string\".  The attribute name is not passed to the", 
+   "ELEvaluator.", 
+   "* ELEvaluator now throws ELException, which is no longer a subclass", 
+   "of JspException.  The Evaluator, when it delegates to ELEvaluator,", 
+   "will catch the ELException and convert it to a JspException.  It", 
+   "will also wrap the error message with the attribute name and", 
+   "value.", 
+   "If there comes a time to separate the generic and JSTL-specific parts", 
+   "into different packages, the following classes should be moved into", 
+   "the JSTL-specific package:", 
+   "JSTLVariableResolver", 
+   "Evaluator", 
+   "ImplicitObjects", 
+   "EnumeratedMap (this is generic, but it's only used by ImplicitObjects)", 
+   "These are the only classes that still contain references to servlet or", 
+   "JSP api's.  There are also couple of error messages in", 
+   "Resources.properties/Constants.java that should be moved - in", 
+   "particular:", 
+   "ATTRIBUTE_EVALUATION_EXCEPTION", 
+   "ATTRIBUTE_PARSE_EXCEPTION"
+  ], 
+  "revision_id": "217871"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2002-04-14T05:16:53.000000Z", 
+  "msg": [
+   "<fmt:setLocale> now supports 'value' of type java.util.Locale (in addition to String)"
+  ], 
+  "revision_id": "217870"
+ }
+]

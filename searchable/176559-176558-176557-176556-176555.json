@@ -1,0 +1,83 @@
+[
+ {
+  "author": "rse", 
+  "date": "1998-06-09T13:55:02.000000Z", 
+  "msg": [
+   "Fix three APACI/APXS-related things:", 
+   "1. The shell doesn't like strings like \"can't\". We need quotes here.", 
+   "2. MakeMaker complained that WITH_APXS is not a MakeMaker argument", 
+   "3. The C compiler for the APXS is already the correct one (no forcing", 
+   "via \"make CC=..\" needed) while under APACI it has to be set at the", 
+   "configuration step and cannot be overridden later (notice that mod_perl", 
+   "_always_ use the $Config{cc}, CC=.. only affects the rest of Apache).", 
+   "Now all three new build variants seem to work fine."
+  ], 
+  "revision_id": "176559"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "1998-06-09T13:54:38.000000Z", 
+  "msg": [
+   "take the easy way out for now", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "176558"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1998-06-09T13:50:55.000000Z", 
+  "msg": [
+   "After fiddling around with a lot of tricks I have to came to the conclusion", 
+   "that we Cannot build mod_include with Perl support (USE_PERL_SSI) when", 
+   "mod_perl is compiled itself as DSO because of a lot of problems.  All problems", 
+   "can be solved (like linking httpd against Perl lib for mod_include, even if", 
+   "mod_perl is a DSO, etc.) except for twoi cross-module calls from mod_include", 
+   "to mod_perl. Such cross-module calls are the death for any DSO mechanism", 
+   "(that's why I've removed those for the standard modules of Apache 1.3).  I", 
+   "don't know how we can replace them in mod_include. Unless we can USE_DSO=1 has", 
+   "to force PERL_SSI=0. Hmmmm..."
+  ], 
+  "revision_id": "176557"
+ }, 
+ {
+  "author": "rse", 
+  "date": "1998-06-09T13:37:27.000000Z", 
+  "msg": [
+   "Under APACI the APACHE_SRC dir is not in the include path (no -I for this) and", 
+   "thus Tie.xs only compiled when PERL_SSI was active (where -I$(SRCDIR) is", 
+   "needed for mod_include - which cannot do it differenly). OTOH we can change", 
+   "this to a local variant because all other sources are already this way:", 
+   "Apache.xs:#include \"mod_perl.h\"", 
+   "Constants.xs:#include \"mod_perl.h\"", 
+   "Makefile:$(OBJS): mod_perl.h $(INCDIR)/httpd.h $(INCDIR)/http_config.h", 
+   "ModuleConfig.xs:#include \"mod_perl.h\"", 
+   "mod_perl.c:#include \"mod_perl.h\"", 
+   "mod_perl.h:} mod_perl_handler;", 
+   "mod_perl.h:SV *mod_perl_resolve_handler(request_rec *r, SV *sv,", 
+   "mod_perl_handler *h);", 
+   "mod_perl.h:mod_perl_handler *mod_perl_new_handler(request_rec *r, SV *sv);", 
+   "perl_config.c:#include \"mod_perl.h\"", 
+   "perl_util.c:#include \"mod_perl.h\"", 
+   "perlio.c:#include \"mod_perl.h\"", 
+   "So we break nothing and only gain a working APACI variant when", 
+   "we subst modules/perl/mod_perl.h --> mod_perl.h for Tie.xs."
+  ], 
+  "revision_id": "176556"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "1998-06-09T12:41:28.000000Z", 
+  "msg": [
+   "more debugging tips", 
+   "new module list entry", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "176555"
+ }
+]

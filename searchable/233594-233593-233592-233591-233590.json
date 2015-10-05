@@ -1,0 +1,69 @@
+[
+ {
+  "author": "jvanzyl", 
+  "date": "2001-10-30T16:09:05.000000Z", 
+  "msg": [
+   "- set of minimal documentation just to get hannes going."
+  ], 
+  "revision_id": "233594"
+ }, 
+ {
+  "author": "hannes", 
+  "date": "2001-10-29T17:07:05.000000Z", 
+  "msg": [
+   "Encode '>' as &gt; in chardata() method of XmlWriter.", 
+   "This is necessary if the chardata contains \"]]>\" (reported", 
+   "by John Wilson)."
+  ], 
+  "revision_id": "233593"
+ }, 
+ {
+  "author": "leonardr", 
+  "date": "2001-09-04T22:03:49.000000Z", 
+  "msg": [
+   "Clear the StringBuffer before processing a new request; otherwise, data from old requests piles up and the client gets junk. This patch inspected by operator #23. (dlr)"
+  ], 
+  "revision_id": "233592"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2001-08-11T10:15:52.000000Z", 
+  "msg": [
+   "Override WebServer's createServerSocket() hook method.", 
+   "setupServerSocket() is responsible for setting socket timeout, so we", 
+   "don't want to override that method.  setupServerSocket() should", 
+   "probably be private in WebServer, or final (though I don't see any", 
+   "reason for it to remain public).  I vote for deprecating it, then", 
+   "inlining its code."
+  ], 
+  "revision_id": "233591"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2001-08-11T10:13:07.000000Z", 
+  "msg": [
+   "* Added createServerSocket() factory method (for subclassing by", 
+   "SecureWebServer).", 
+   "* Refactored setupServerSocket() method to initialize the WebServer's", 
+   "listener to the socket created by createServerSocket().  Also set a", 
+   "timeout on the socket so it doesn't block forever when accept() is", 
+   "called (more on this below).", 
+   "* Since SO_TIMEOUT is now being set on our listener socket, we can", 
+   "actually shutdown properly now.  An InterruptedIOException will be", 
+   "thrown every 4 seconds while the listener is blocking on accept().  If", 
+   "the server has been told to shutdown, this will allow it to actually", 
+   "happen before another client connection comes in.  This bug was", 
+   "originally reported by Ilkka Priha <ipriha@surfeu.fi>, and was fixed", 
+   "by myself long ago (while it was still @ Helma):", 
+   "\"The helma webserver shutdown method sets a listener acting as a flag", 
+   "to null and calls interrupt() for the thread, but blocking I/O", 
+   "operations don't care about thread interrupts. By default, the server", 
+   "socket accept() method waits forever or until the socket is closed. I", 
+   "think that the server socket should either have a preset SO_TIMEOUT", 
+   "interrupting I/O waits at regular intervals or the shutdown() method", 
+   "should simply close the server socket.\"", 
+   "* Formatting cleanup."
+  ], 
+  "revision_id": "233590"
+ }
+]

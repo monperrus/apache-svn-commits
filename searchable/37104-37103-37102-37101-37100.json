@@ -1,0 +1,57 @@
+[
+ {
+  "author": "crossley", 
+  "date": "2004-08-27T02:23:36.903714Z", 
+  "msg": [
+   "Added another credit logo to express thanks to and from the ASF."
+  ], 
+  "revision_id": "37104"
+ }, 
+ {
+  "author": "cfieber", 
+  "date": "2004-08-26T23:57:42.129116Z", 
+  "msg": [
+   "patch from Stephen McConnell"
+  ], 
+  "revision_id": "37103"
+ }, 
+ {
+  "author": "cfieber", 
+  "date": "2004-08-26T23:48:00.281476Z", 
+  "msg": [
+   "patch v2.0 from Stephen McConnell ;)"
+  ], 
+  "revision_id": "37102"
+ }, 
+ {
+  "author": "cfieber", 
+  "date": "2004-08-26T23:41:27.847006Z", 
+  "msg": [
+   "patch from Stephen McConnell"
+  ], 
+  "revision_id": "37101"
+ }, 
+ {
+  "author": "kentam", 
+  "date": "2004-08-26T23:22:42.597903Z", 
+  "msg": [
+   "Initial WSM prototype of the core as suggested in the proposal posted last week (see Beehive Wiki) that is based on Anil's posting from earlier this week.", 
+   "The prototype provides a skeleton consisting of three main branches:", 
+   "1) Object model", 
+   "The object model is a set of classes that acts as the repository for annotation metadata.  The model is intended to be a simple Java Bean object structure organized around TYPE, METHOD and PARAMETER ElementTypes defined in JSR 181.  The corresponding classes are: WebServiceTYPEMetadata, WebServiceMEHTODMetadata, and WebServicePARAMETERMetadata.  There are one to many relationships between TYPE and METHODS, and between METHODS and PARAMETERS.", 
+   "There are get/set methods for simple attributes at each ElementType (eg. wsName or the WebService Name in WebServiceTYPEMetadata).   For annotation data that requires complex structure (e.g.  SoapBinding) or when there is a one to many relationship (e.g. SOAP Message handler at WebServiceTYPEMetadata)  Info classes are used (e.g. SoapBindingInfo, or SOAPMessageHandlersInfo) to capture the metadata.", 
+   "The model can be initialized from source (using two phase APT processor) or class file (straight java 1.5 api).  In either case the metadata is processed according to the rules of the 181 and the result is stored in the object model.  The APT, or Class file processing is responsible for the declaration level validation.  The model , on the other hand  is responsible for overall validation of the meta data.", 
+   "The model is intended to be used throughout the application (ant tasks, command line applications such as Java2WSDL, Axis server etc).  The model will be enhanced to support the use cases as they become more apparent.", 
+   "2) JSR-181 processor", 
+   "The JSR-181 processor has an (apt) interface that can be used by IDEs, for instance. This interface works on annotated java source files and extends the TwoPhaseAnnotationProcessor (see controls subproject).", 
+   "Its main methods, check() and generate() are mainly invoked by the apt (through the TwoPhaseAnnotationProcessor's process() method). The WsmAnnotationProcessorFactory currently registers only for one annotation type, @WebService. Since check() work on the entire file, all further information is derived while @WebService is being processed. [On the other hand, this means that check() does currently not perform any validation tasks if a @WebService annotation is not present.]", 
+   "generate() only performs a simple print out of @WebService and all @WebMethod annotations -- for error checking (until unit tests for this module are in place). In the future, generate() will be called to generate all artifacts for a Web Service, while check() performs quick, low-cost error checks.", 
+   "From the command line, the apt can be invoked with the WsmAnnotationProcessorFactory like this (assuming the current directory is the classpath root directory):", 
+   "apt -cp . -factory org.apache.beehive.wsm.runtime.processor.apt.WsmAnnotationProcessorFactory <name of annotated WebService file, e.g. <directory>/Foo.java>", 
+   "3) XMLBeans", 
+   "The org.apache.beehive.wsm.wsdl.WSDLProcessor provides a (hopefully!) convenient way to work with WSDL documents.  Behind the scenes, the WSDLProcessor loads a WSDL as XmlBeans and returns a DefinitionsDocument from which the entire WSDL can be examined or manipulated.  Additionally, the DefinitionsDocument can write out its internal representation back to XML with any modifications now in place.  Since the WSDL used by most web services consists of elements from both the wsdl schema (http://schemas.xmlsoap.org/wsdl/) and the wsdlsoap schema extension (http://schemas.xmlsoap.org/wsdl/soap/), the WSDLProcessor provides helper functions to navigate more eaily between the core wsdl elements and those provided by the extension.  By loading the WSDL into XmlBean generated objects, the rest of the WSM system can read and write WSDL documents with a minimum of effort and no core dependencies on a specific web services implementation.", 
+   "Contributed by: Michael Merz, Jonathan Colwell, Daryoush Mehrtash, Anil Sharma"
+  ], 
+  "revision_id": "37100"
+ }
+]

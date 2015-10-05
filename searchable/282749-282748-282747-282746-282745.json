@@ -1,0 +1,98 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-12-07T18:34:54.000000Z", 
+  "msg": [
+   "First refactoring of MessageBytes.", 
+   "The byte[] manipulation moved to ByteChunk, char[] to CharChunk. Both act", 
+   "as \"cursors\" in an existing byte/char[] ( they can't resize and don't own", 
+   "the buffer ).", 
+   "The int/date conversion is cached, but it's just a cached value, it's no longer", 
+   "\"first class\". Probably it's better to do the caching and conversion at a", 
+   "higher level anyway.", 
+   "In Headers, removed the Enumerations - as it was a bad choice and confusing.", 
+   "It is still possible to enumerate a MultiMap, for use by the upper layer", 
+   "( facade )."
+  ], 
+  "revision_id": "282749"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-06T03:59:30.000000Z", 
+  "msg": [
+   "Few changes to Larry's commit. Handler needs more work and cleanup,", 
+   "probably we'll need to add a \"state\" there too.", 
+   "- service() method can throw any Exception, handler is not specific", 
+   "to servlets ( internal handlers could throw TomcatException).", 
+   "- keep the 2 layers separated ( i.e. no dependencies between core", 
+   "to facade/servlets)", 
+   "- log the fact that an exception happens in an exception handler ( except", 
+   "IOExceptions ) - it's a serious situation."
+  ], 
+  "revision_id": "282748"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-05T23:31:16.000000Z", 
+  "msg": [
+   "Small change in util.log - expose the LogEntry.", 
+   "I'm going to do another set of small changes to clean up the way loggers", 
+   "are set up and maintained in ContextManager.", 
+   "Among the changes, I would like to split Logger in LogManager and", 
+   "LogHandler, use the package name to identify loggers. Probably", 
+   "I'll try few performance enhancements ( recycle and pool LogEntry,", 
+   "re-add the optional XML output format, try to make the interfaces similar", 
+   "to the javax.logging so we can easily switch when the spec will be available)", 
+   "I'll also try to port back the AccessLogValve.", 
+   "( all this is low-priority, finishing the core is the most important thing)"
+  ], 
+  "revision_id": "282747"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-12-05T14:02:41.000000Z", 
+  "msg": [
+   "Port exception propagation behavior from Tomcat 3.2. Exceptions that occur", 
+   "in included servlets are throw back to their callers.  The exception is handled", 
+   "only if it occurs or when it reaches the top level handler.", 
+   "The implementation differs from that of Tomcat 3.2. Where Tomcat 3.2", 
+   "catches and rethrows the exception at each level, this implementation tries", 
+   "to catch and save the exception.  I think this makes the flow of execution", 
+   "easier to control.  We can give interceptors a chance to examine the", 
+   "exceptions.  Now, only RequestDispatcherImpl rethrows the exceptions.", 
+   "There are several places that exceptions are saved. Init exceptions and", 
+   "UnavailableExceptions thrown in the service() method are saved in Handler", 
+   "along with a \"permanent\" indication. postServletInit interceptors can find it", 
+   "here.  Also, postServletInit is called even if the init() method throws an", 
+   "exception.", 
+   "The first exception that occurs during request processing is saved on the", 
+   "Response along with the \"include\" URI, if present.  This exception will not", 
+   "be overwritten if subsequent exceptions occur.", 
+   "Exceptions during request processing are also saved on the Request.  But", 
+   "unlike the Response exception, the Request exception is overwritten with", 
+   "each new exception that occurs.", 
+   "In RequestDispatcherImpl, setting of the \"included\" flag was restored in", 
+   "includeNamed() and forwardNamed() since it is used to control error handling", 
+   "behavior.", 
+   "JspInterceptor has been updated to set an initial exception if translation or", 
+   "compilation fails.  This way these error won't always show up as a 404 error.", 
+   "Also, setting the compileTime from the java file was removed.  After a restart,", 
+   "this prevented the error from being recreated.  Thus, a new java file will be", 
+   "created after each restart for a non-compiling JSP, but this is better than", 
+   "creating one on each request.", 
+   "Watchdog still passes, but these changes need more review and testing.", 
+   "Handling of destroy() wasn't addressed in these changes.  This needs", 
+   "review in the context of these changes."
+  ], 
+  "revision_id": "282746"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-12-05T13:24:35.000000Z", 
+  "msg": [
+   "Port Tomcat 3.2 strings for RequestDispatcherImpl.", 
+   "Fix typo in resource string used by HttpServletResponseFacade."
+  ], 
+  "revision_id": "282745"
+ }
+]

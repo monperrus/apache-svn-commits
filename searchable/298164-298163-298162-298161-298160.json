@@ -1,0 +1,58 @@
+[
+ {
+  "author": "jfclere", 
+  "date": "2002-11-22T12:23:22.000000Z", 
+  "msg": [
+   "Prevent warnings."
+  ], 
+  "revision_id": "298164"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-11-21T17:58:35.000000Z", 
+  "msg": [
+   "Same fix for jk2. Don't send initial chunk for chunked encoding.", 
+   "The reason the data is sent for POST - in almost all cases tomcat", 
+   "will read it ( required by the spec - to process the data ). This way", 
+   "we avoid a round-trip.", 
+   "We don't send more than 8k for few reasons - tomcat may want to", 
+   "discard the request ( for example to prevent a huge body that it", 
+   "can't handle ), the TCP stack would do round-trips anyway ( for flow-control )", 
+   "and most requests are <8k anyway.", 
+   "There is a major problem ( since the first release of Ajp13) related", 
+   "with the fact that this chunk of data is not properly", 
+   "marshalled ( it doesn't have the 'type' descriptor )."
+  ], 
+  "revision_id": "298163"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-11-21T17:53:48.000000Z", 
+  "msg": [
+   "Do not send the initial chunk for chunked encoding ( only for", 
+   "regular POST ).", 
+   "Ajp13 servers ( tomcat x.y, etc ) expect this initial chunk", 
+   "only if a content-length is specified.", 
+   "( this is just an initial fix - I still need to test various", 
+   "cases )"
+  ], 
+  "revision_id": "298162"
+ }, 
+ {
+  "author": "jfclere", 
+  "date": "2002-11-21T16:23:59.000000Z", 
+  "msg": [
+   "Add FD_CLOEXEC to prevent log file and sockets beeing opened in a son process.", 
+   "Submitted by Martin Kraemer."
+  ], 
+  "revision_id": "298161"
+ }, 
+ {
+  "author": "jfclere", 
+  "date": "2002-11-21T16:08:32.000000Z", 
+  "msg": [
+   "Allow no-threaded APR. - But no-threaded APR won't work anyway -"
+  ], 
+  "revision_id": "298160"
+ }
+]

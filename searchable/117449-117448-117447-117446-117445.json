@@ -1,0 +1,107 @@
+[
+ {
+  "author": "kaz", 
+  "date": "2002-05-15T19:26:26.000000Z", 
+  "msg": [
+   "Fixed a typo."
+  ], 
+  "revision_id": "117449"
+ }, 
+ {
+  "author": "kaz", 
+  "date": "2002-05-15T19:17:45.000000Z", 
+  "msg": [
+   "Two significant changes have been made with this commit as detailed", 
+   "below.  For those that don't want to read it, here is the summary: you", 
+   "must now update your Maven delegators in your local build files because", 
+   "the Maven build files are not located in your ${maven.home} directory", 
+   "anymore.  And second, extending the Maven build system should be done", 
+   "using callbacks and not by adding 'depends' tags to the Maven delegators", 
+   "in your local build files.", 
+   "- All Maven targets now contain callback pre/post hooks that users can", 
+   "implement to extend the behavior of Maven's default build system.  For", 
+   "example, if you aren't happy with the maven:clean target and want it", 
+   "to delete additional stuff, you can just create your own clean target", 
+   "(lets call it 'my-clean') in your own build file (lets call it", 
+   "'build-custom.xml').  You can then instruct maven to invoke your", 
+   "target before or after the processing of the maven:clean target by", 
+   "setting properties.  If you want to execute your target before the", 
+   "maven:clean target executes, you'd add:", 
+   "maven.core.callback.pre-clean.buildFile = build-custom.xml", 
+   "maven.core.callback.pre-clean.buildTarget = my-clean", 
+   "For more information on how to extend Maven, please refer to the", 
+   "documentation as it has also been updated to reflect these changes.", 
+   "Thanks to dion/glenn for the work they did on the plugin from which I", 
+   "modeled these changes after.", 
+   "- The Maven build system (build-maven.xml, build-test.xml,", 
+   "build-iutest.xml, build-metrics.xml, build-docs.xml, etc ..) has been", 
+   "converted into plugins (core, test, iutest, metric, docs, etc ..).", 
+   "This standardizes the way the build system is generated.  Each plugin", 
+   "is processed in the src/templates/build/plugins directory.  Within", 
+   "each plugin directory there is an individual Control.vm file that adds", 
+   "the appropriate buildElements, delegators, and callbacks for the", 
+   "plugin.  The build files have also been renamed to build.xml as they", 
+   "are now in their own directories and it keeps things more consistent.", 
+   "In addition, all of the build files are now installed in a user's", 
+   "Maven installation plugins directory.  NOTE: this means that the Maven", 
+   "delegators currently in use will no longer work when the Maven install", 
+   "is udpated.  You must update your maven delegators to point to the new", 
+   "locations.  For example, the previous delegator:", 
+   "<target", 
+   "name=\"maven:site\">", 
+   "<ant antfile=\"${maven.home}/build-docs.xml\" target=\"site\"/>", 
+   "</target>", 
+   "<target", 
+   "name=\"maven:jar\">", 
+   "<ant antfile=\"${maven.home}/build-maven.xml\" target=\"jar\"/>", 
+   "</target>", 
+   "Should be updated to the following:", 
+   "<target", 
+   "name=\"maven:site\">", 
+   "<ant antfile=\"${maven.home}/plugin/docs/build.xml\" target=\"site\"/>", 
+   "</target>", 
+   "<target", 
+   "name=\"maven:jar\">", 
+   "<ant antfile=\"${maven.home}/plugins/core/build.xml\" target=\"jar\"/>", 
+   "</target>", 
+   "The full list of delegators is generated each time Maven is", 
+   "bootstrapped and can be found in ${maven.home}/examples/build.xml for", 
+   "those that don't feel like changing each line manually.  To keep", 
+   "things simple, the plugin name is called the same as the build-xyz.xml", 
+   "was, with the exception of build-maven.xml which is now located in", 
+   "plugins/core directory.  In summary, UPDATE your build files that", 
+   "contain maven delegators to point to the new locations.", 
+   "All of the documentation has been updated as part of this change.", 
+   "Thanks to glenn for the suggestion about making the core of maven a", 
+   "plugin!"
+  ], 
+  "revision_id": "117448"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-05-15T16:00:48.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag", 
+   "'pre_callbacks'."
+  ], 
+  "revision_id": "117447"
+ }, 
+ {
+  "author": "tcopeland", 
+  "date": "2002-05-15T16:00:48.000000Z", 
+  "msg": [
+   "PR:", 
+   "Submitted by:", 
+   "Commented out several unused local variables."
+  ], 
+  "revision_id": "117446"
+ }, 
+ {
+  "author": "dion", 
+  "date": "2002-05-15T15:37:17.000000Z", 
+  "msg": [
+   "no message"
+  ], 
+  "revision_id": "117445"
+ }
+]

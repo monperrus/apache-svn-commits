@@ -1,0 +1,96 @@
+[
+ {
+  "author": "tomj", 
+  "date": "2002-03-13T16:14:55.000000Z", 
+  "msg": [
+   "Cleanup a nit: Move debug exit message to end of init() method."
+  ], 
+  "revision_id": "246679"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-03-13T16:07:56.000000Z", 
+  "msg": [
+   "Convert noisy NSStack debug message to trace, which in our log4j config will still", 
+   "go to debug, but other loggers can deal with as they see fit."
+  ], 
+  "revision_id": "246678"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-03-13T15:43:34.000000Z", 
+  "msg": [
+   "Changed mangling from *ANON# to *Type# per Glen's comment"
+  ], 
+  "revision_id": "246677"
+ }, 
+ {
+  "author": "glyn", 
+  "date": "2002-03-13T15:20:03.000000Z", 
+  "msg": [
+   "Make MessageElement implement JAXM SOAPElement.", 
+   "Remove getValue method from SOAPHeader and re-introduce as getObjectValue", 
+   "(to avoid clash with SOAPElement.getValue) in MessageElement. This was", 
+   "derived from code submitted by Taras Shkvarchuk and addresses one of the", 
+   "beta 'must do' items."
+  ], 
+  "revision_id": "246676"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-03-13T15:19:27.000000Z", 
+  "msg": [
+   "Changes for anonymous type processing in WSDL2Java Symbol Table.", 
+   "Problem Description:", 
+   "--------------------", 
+   "An anonymous type is a type (simpleType or complexType) that does not", 
+   "have a name.  Here is an example:", 
+   "...", 
+   "<element name=\"foo\">", 
+   "<complexType>", 
+   "....", 
+   "</complexType>", 
+   "The WSDL2Java symbol table uses the QName as the key to access a", 
+   "symbol table entry.  Since an anonymous type does not have a qname,", 
+   "the qname of the containing element is used.  Unfortunately it is", 
+   "possible that the element is not unique, which results in a symbol", 
+   "table collision.  (As reported by Tom Jordahl.)", 
+   "Solution:", 
+   "---------", 
+   "1) The first change is to give anonymous type elements unique names", 
+   "to avoid symbol table collisions.  The unique name must be something", 
+   "that can be determined by examining the dom tree.  I chose to use", 
+   "the following format for the local name:", 
+   "<qname-of-containing-simple/compleType>.<qname-of-element>", 
+   "If the anonymous type is used to define a global element, its local name is:", 
+   ".<qname-of-element>", 
+   "2) Change to the SchemaUtils code that queries the qname of an anon type.", 
+   "3) Change to the JavaWriterFactory.javifyNames method.  This method is", 
+   "enhanced to ensure that anonymous java type name collisions don't occur.", 
+   "If a name collision is detected, the suffix ANON### is appended to the name", 
+   "of the anonymous class java name to prevent the collision (### is a unique number).", 
+   "4) Changed the refattr.wsdl to have a anonymous type collision similar to the", 
+   "one submitted to axis-dev by Tom Jordahl.", 
+   "Phase 2:", 
+   "--------", 
+   "Anonymous types for root elements are not put into the symbol table.  Instead", 
+   "the emitter writer classes use the DefinedElement information when generating code.  This", 
+   "can lead to some fuzzy logic and subtle bugs. (I promised Glen last week that", 
+   "I would look at changing this code.)", 
+   "Solution:", 
+   "1) Anonymous types for root elements are added to the symbol table just like", 
+   "all other anonymous types.", 
+   "2) The JavaWriterFactory.resolve() method is modified to ensure that", 
+   "the java name of the root DefinedElement matches the java name of its anonymous DefinedType.", 
+   "3) Changed Utils.getNested to get the anonymous DefinedType.", 
+   "4) Changed the emitter writeTypes() method to only process Type entries", 
+   "(not Element entries).  This is an improvement, writeTypes only deals with types!", 
+   "5) Changed the deploy and stub writers to not register type mappings for", 
+   "Elements.  (Before the deploy and stub writers had to examine the Element", 
+   "to see if it had an anonymous type...)", 
+   "* There are a number of existing testcases that use anonymous types", 
+   "for root elements.  All of the tests passed."
+  ], 
+  "revision_id": "246675"
+ }
+]

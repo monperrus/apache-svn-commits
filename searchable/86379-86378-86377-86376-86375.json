@@ -1,0 +1,70 @@
+[
+ {
+  "author": "trawick", 
+  "date": "2000-10-03T21:56:43.000000Z", 
+  "msg": [
+   "Change core_input_filter() so that it returns an empty brigade upon", 
+   "FIN/EOF or error.  This meshes with what getline() looks for.  It isn't", 
+   "perfect, but it avoids some nasty loops consuming all available storage", 
+   "on http/1.1 connections.  In keepalive state, we call getline to read the", 
+   "next request...  getline() calls core_input_filter() (indirectly)...", 
+   "core_input_filter() calls apr_recv() which returns APR_SUCCESS/0 bytes", 
+   "to signal FIN/EOF.  But core_input_filter() returned a bucket with length", 
+   "zero to getline(), so getline() called core_input_filter() again."
+  ], 
+  "revision_id": "86379"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-10-03T21:48:31.000000Z", 
+  "msg": [
+   "Fix some bad calls to ap_log_error(); some of these neglected to", 
+   "turn on APLOG_NOERRNO even though no syscall failure was being", 
+   "reported; others passed errno instead of the APR retcode."
+  ], 
+  "revision_id": "86378"
+ }, 
+ {
+  "author": "jim", 
+  "date": "2000-10-03T16:39:45.000000Z", 
+  "msg": [
+   "Add the concept and implementation for a runtime config", 
+   "directory, ala /etc/rc.d/init. Basically, if any of the", 
+   "config \"files\" are actually directories, all files in", 
+   "that directory (and in subdirectories) will be parsed as", 
+   "config files. Thus you can add new config directives with", 
+   "no file edits at all, simply file additions.", 
+   "PR: 6397", 
+   "Obtained from:", 
+   "Submitted by:\tLionel Clark <bishop@platypus.bc.ca> (concept + initial patch)", 
+   "Reviewed by:\tWilliam A. Rowe, Jr"
+  ], 
+  "revision_id": "86377"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-10-03T15:05:26.000000Z", 
+  "msg": [
+   "The previous commit pointed out an unfortunate problem with the", 
+   "ap_os_case_canonical_filename() interface: It returns const char * on", 
+   "platforms where no mapping is ever performed but char * on platforms", 
+   "where mapping can occur.  Such a discrepancy seems to be a good choice,", 
+   "as no platform is penalized with extra pathlength.", 
+   "This tweak gets rid of a const misuse warning on systems where", 
+   "ap_os_case_canonical_filename() returns const char *."
+  ], 
+  "revision_id": "86376"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2000-10-03T13:11:25.000000Z", 
+  "msg": [
+   "Definately need a canonical name, so comparison succeeds at run time.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "86375"
+ }
+]

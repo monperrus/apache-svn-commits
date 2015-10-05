@@ -1,0 +1,62 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-12-15T17:23:28.000000Z", 
+  "msg": [
+   "Change the storage of headers and attributes. The start_response methods was", 
+   "changed - it didn't actually started the response, but set the", 
+   "fields in request_rec. ( probably in a jk3 we should change jk_service", 
+   "to use virtual methods, and use directly the 'original' server structure", 
+   "and methods )"
+  ], 
+  "revision_id": "296159"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-15T17:19:26.000000Z", 
+  "msg": [
+   "Added the 'add' method, to be compatible with apr_tables ( and usable for", 
+   "storing headers and multi-values ).", 
+   "Change the storage of headers, attributes to jk_map. This will avoid", 
+   "copying the data, and provide a simpler interface."
+  ], 
+  "revision_id": "296158"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-14T07:14:59.000000Z", 
+  "msg": [
+   "Switch to jk_pools so I can test them.", 
+   "The apr pools seem to work fine, we seem to clean up everything", 
+   "( i.e. reset the pool - I fixed a small bug there ). I run few 100.000 requests,", 
+   "the memory is constant.", 
+   "It also seem jk_pools are fine ( and no malloc happens after the", 
+   "warmup, all pools are recycled and we have constant memory as well ! ).", 
+   "( I'll remove the debug statements tommorow )"
+  ], 
+  "revision_id": "296157"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-14T07:12:42.000000Z", 
+  "msg": [
+   "Use the new interface to maps."
+  ], 
+  "revision_id": "296156"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-12-14T07:11:42.000000Z", 
+  "msg": [
+   "The map implementation using apr_table.", 
+   "One problem is that apr_table supports only string values. We use", 
+   "string values for most of the stuff, but we need void * for uriMap.", 
+   "But in uriMap we should better use hashtable - and maybe we shuld have", 
+   "2 interfaces ?", 
+   "For now aprtable will be used only for headers/env where we know", 
+   "we only have strings, and the 'original' jk_map will continue to", 
+   "be used."
+  ], 
+  "revision_id": "296155"
+ }
+]

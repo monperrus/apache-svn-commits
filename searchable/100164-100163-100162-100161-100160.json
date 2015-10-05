@@ -1,0 +1,69 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-06-03T22:09:24.000000Z", 
+  "msg": [
+   "mod_dav improvement: make dav_method_propfind stream its response,", 
+   "rather than cache every <response> object and send the whole 207 at once.", 
+   "Note:  this patch doesn't affect the mod_dav provider API at all.", 
+   "Providers still return property results in text-buffers, but mod_dav", 
+   "then streams them out immediately.", 
+   "Submitted by: Ben Collins-Sussman <sussman@collab.net>", 
+   "Reviewed by: gstein, jerenkrantz, sander", 
+   "* mod_dav.h (dav_walker_ctx): add a brigade field and a scratchpool field.", 
+   "* mod_dav.c (dav_send_one_response): new helper function to write a", 
+   "<DAV:response> into a brigade/filter.  this code has been factorized", 
+   "out of dav_send_multistatus.", 
+   "(dav_begin_multistatus): new factorized helper func; creates brigade", 
+   "and sends initial <multistatus> tag.", 
+   "(dav_send_multistatus): create brigade, call dav_begin_multistatus,", 
+   "and switch all ap_rputs calls to ap_fputs instead.  call", 
+   "dav_send_one_response when looping over response list.  use a", 
+   "subpool when iterating.", 
+   "(dav_method_propfind): initialize walker ctx's brigade.  initialize", 
+   "ctx's scratchpool as a subpool of r->pool.  Send a <multistatus> tag", 
+   "before calling the provider's walk() function, and a </multistatus>", 
+   "tag afterwards.", 
+   "(dav_stream_response): new function, originally based on", 
+   "dav_add_repsonse.  don't build linked list of responses in memory;", 
+   "just spew each response object into the brigade via", 
+   "dav_send_one_response().  take an incoming pool argument to do the", 
+   "temporary allocation and streaming.", 
+   "(dav_propfind_walker): pass ctx->scratchpool to dav_stream_response,", 
+   "and clear the pool when finished."
+  ], 
+  "revision_id": "100164"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2003-06-03T21:50:49.000000Z", 
+  "msg": [
+   "drop more unused image files"
+  ], 
+  "revision_id": "100163"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2003-06-03T21:34:02.000000Z", 
+  "msg": [
+   "drop more unused image files."
+  ], 
+  "revision_id": "100162"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2003-06-03T20:22:46.000000Z", 
+  "msg": [
+   "drop unused image"
+  ], 
+  "revision_id": "100161"
+ }, 
+ {
+  "author": "nd", 
+  "date": "2003-06-03T20:21:15.000000Z", 
+  "msg": [
+   "this image is not referenced anywhere -> drop it."
+  ], 
+  "revision_id": "100160"
+ }
+]

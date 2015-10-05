@@ -1,0 +1,69 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-05-14T17:15:27.000000Z", 
+  "msg": [
+   "Long due - 'decent' dump of the buffer. Lots of pointers, it'll probably disqualify", 
+   "me as a java programmer."
+  ], 
+  "revision_id": "297204"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-14T17:13:22.000000Z", 
+  "msg": [
+   "Add getters for the info we collect."
+  ], 
+  "revision_id": "297203"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-14T17:12:45.000000Z", 
+  "msg": [
+   "Implement config reloading.", 
+   "IMORTANT: when the config file is reloaded we do process _only_ components", 
+   "with a 'ver' attribute that is newer than what we have.", 
+   "We will call all setters for that component - but that is not guaranteed", 
+   "to have any effect, as only few attributes are supported at runtime.", 
+   "We should be very conservative in what we allow reconfiguration for - it's", 
+   "dangerous to modify a running server, and adding sync can kill performance.", 
+   "In particular enabling/disabling workers is save, adding workers should", 
+   "be safe too. Adding uris at runtime is also possible. Changin lb_factors", 
+   "and other properties is possible."
+  ], 
+  "revision_id": "297202"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-14T17:07:08.000000Z", 
+  "msg": [
+   "Few changes:", 
+   "- removed the statistics, too dangerous in a MT env.", 
+   "- remove the config stuff, it's now implemented in a generic way in jkconfig.", 
+   "- remove the init/destroy methods - that duplicate the init/destroy in bean.", 
+   "It is much cleaner to use the same lifecycle API for all components.", 
+   "( it's mostly cosmetic, the behavior is the same ).", 
+   "- Added a 'hwBalanceErr' to support Bernd's use case - if set we check", 
+   "only local workers for requests without a session, and if all are down", 
+   "we return the given error code ( to be used by a front balancer )"
+  ], 
+  "revision_id": "297201"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-14T17:04:09.000000Z", 
+  "msg": [
+   "The 'stats' we collect are now part of the endpoint - this is the best way to", 
+   "avoid threading issues. Using the worker is dangerous - there are many", 
+   "threads accessing the worker at the same time. Atomic operations may help,", 
+   "but they are not very portable and do have performance impact ( this", 
+   "is happening in the critical loop ).", 
+   "The downside of using the endpoint is that we'll have to agregate", 
+   "the data from all endpoints to get per/worker info.", 
+   "The data is in a struct that'll be in the scoreboard.", 
+   "Removed unused fields ( will be added in a later version, when we start", 
+   "adding new APIs )."
+  ], 
+  "revision_id": "297200"
+ }
+]

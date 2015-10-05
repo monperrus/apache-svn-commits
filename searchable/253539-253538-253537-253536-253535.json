@@ -1,0 +1,86 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-02-21T04:28:27.000000Z", 
+  "msg": [
+   "Bulletproof SerializationContextImpl a little more by always using the", 
+   "default TypeMapping even if there's no MessageContext at all.", 
+   "Add a unit test which exercises toString() on an RPCElement which was", 
+   "dynamically created and therefore has no current MessageContext."
+  ], 
+  "revision_id": "253539"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-02-21T04:01:48.000000Z", 
+  "msg": [
+   "In case there isn't a deserialization context available when trying to", 
+   "string-ize a MessageElement (for instance, when the MessageElement", 
+   "has been dynamically created), just use whatever the current", 
+   "MessageContext is to get the TypeMappings which are in scope.", 
+   "This fixes a bug discovered by Romin Irani (thanks, Romin!)"
+  ], 
+  "revision_id": "253538"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-02-20T20:41:14.000000Z", 
+  "msg": [
+   "The following changes were implemented by IBM'er Brent Ulbricht.", 
+   "Some modifications were made based on inconsistencies found", 
+   "in the JAX-RPC spec.", 
+   "* Java2WSDL is changed to read the throws clauses of a method and generate", 
+   "the appropriate wsdl:fault and wsdl:message elements in the wsdl file.", 
+   "The name= attribute of the wsdl:fault element and the message=", 
+   "attribute of the wsdl:fault element are both based on the Java exception", 
+   "class name.", 
+   "* The roundtrip test is updated to test this new behavior."
+  ], 
+  "revision_id": "253537"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-02-20T20:22:07.000000Z", 
+  "msg": [
+   "Make sure we set things up when not using introspected types!"
+  ], 
+  "revision_id": "253536"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-02-20T18:59:22.000000Z", 
+  "msg": [
+   "Several changes:", 
+   "1. Fix bug in RPCProvider where we were dispatching to no-arg methods", 
+   "regardless of what we received in the XML.", 
+   "2. Remove the code to search for methods which have a MessageContext", 
+   "as the first arg, and upgrade all usages of this functionality to", 
+   "use MessageContext.getCurrentContext()", 
+   "3. Add a switch in the WSDD so you can say:", 
+   "<service name=\"foo\" provider=\"java:RPC\" style=\"document\">", 
+   "and the \"document-ness\" will be remembered through the system,", 
+   "including in particular the WSDL emitter.  This will be used a lot", 
+   "more later as our doc/lit support improves.", 
+   "4. Change MessageContext.getServiceHandler() to getService(), and", 
+   "it now returns a SOAPService explicitly.  Also setServiceHandler()", 
+   "is now setService(SOAPService).  This rippled through AxisServer", 
+   "and EngineConfiguration as well.", 
+   "5. Remove the code which attempted to map an element QName as a type", 
+   "QName - if we need to do type mapping via elements, there should be", 
+   "a better way.", 
+   "6. Handle overloaded methods - this was accomplished for now by", 
+   "moving the \"determineDefaultParams\" logic that used to be in", 
+   "RPCHandler into RPCElement.deserialize().  That method now attempts", 
+   "to deserialize the RPCElement once for each potential method", 
+   "match, and it continues in the face of deserialization errors.", 
+   "This is the biggest change, and it needs some more looking at, IMO.", 
+   "The logic that is currently spread out between here, RPCHandler, and", 
+   "RPCProvider to deal with method dispatch and argument conversion", 
+   "could be cleaned up and made a lot more efficient, I think.", 
+   "7. Add an overloaded method test to test.RPCDispatch.TestSerializedRPC", 
+   "*whew*, I think that's it.  This all started with just wanting to do", 
+   "the document switch!!"
+  ], 
+  "revision_id": "253535"
+ }
+]

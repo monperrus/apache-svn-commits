@@ -1,0 +1,72 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2000-11-08T13:11:15.000000Z", 
+  "msg": [
+   "Port Pierre Delisle's fix for the incredably unhelpful error message that occurs", 
+   "for unterminated user-defined tags."
+  ], 
+  "revision_id": "282609"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-08T01:17:01.000000Z", 
+  "msg": [
+   "Use the platform-independent file separator instead of a hardcoded \"/\"", 
+   "character.", 
+   "Submitted by: Chris Halverson <chalverson@ncube.com>"
+  ], 
+  "revision_id": "282608"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-07T22:52:52.000000Z", 
+  "msg": [
+   "Security related fix:  Support the ability to suppress the automatic generation", 
+   "of directory listings when there is no welcome file present.  If you change", 
+   "the value of the \"suppress\" property to \"true\", a 404 (not found) error will", 
+   "be returned instead."
+  ], 
+  "revision_id": "282607"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-07T22:15:35.000000Z", 
+  "msg": [
+   "Restore a limited ability to configure the matching prefix for the invoker", 
+   "servlet (defaults to \"/servlet/\").  This ability had been removed when Tomcat", 
+   "3.2 was changed to stop reading the global web.xml file.", 
+   "NOTE:  The default you configure in server.xml applies to *all* web apps that", 
+   "are installed in this instance of Tomcat.", 
+   "NOTE:  Tomcat 4.0 reverts back to the behavior of Tomcat 3.1 -- it uses the", 
+   "values in \"conf/web.xml\" as defaults for all web applications, which are then", 
+   "customized from the web.xml file for each individual web app separately."
+  ], 
+  "revision_id": "282606"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-07T03:16:50.000000Z", 
+  "msg": [
+   "Work around a nasty problem that is caused by the way SessionInterceptor is", 
+   "implemented in Tomcat 3.2.", 
+   "The problem report (BugRat Bug Report #316) indicates that session cookies", 
+   "were not being set if a servlet did a RequestDispatcher.include() of a JSP", 
+   "page.", 
+   "The actual problem would occur anytime that the first flush of the response", 
+   "buffer occurred inside the included servlet.  It happens because the session", 
+   "interceptor (that sets the session cookie) uses the same method used by", 
+   "servlets (response.addHeader()) to add the session ID cookie -- but attempts", 
+   "to add headers inside an included servlet are ignored.  A JSP page as the", 
+   "included target triggers this because it includes a flush someplace; you can", 
+   "easily duplicate it with regular servlets as well.", 
+   "The workaround is to call response.flushBuffer() before actually calling", 
+   "the included servlet.  This causes the session ID cookie (and the", 
+   "Servlet-Engine header) to be correctly set.  It should not cause any", 
+   "compatibility problems, because included servlets are not able to do anything", 
+   "but write to the output stream or writer (or flush) anyway.", 
+   "PR: 316"
+  ], 
+  "revision_id": "282605"
+ }
+]

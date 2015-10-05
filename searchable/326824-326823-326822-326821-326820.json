@@ -1,0 +1,76 @@
+[
+ {
+  "author": "mikem", 
+  "date": "2005-10-20T05:06:37.791416Z", 
+  "msg": [
+   "phase 1 work for DERBY-239, committed on behalf of: Suresh Thalamati", 
+   "This patch adds some code necessary to support real-time online backup that", 
+   "does not block writes when database backup is in progress. All the current functional tests", 
+   "passed with these changes. It would be great if some can review and commit this patch.", 
+   "This patch changes the way data segment and log is backed up without blocking", 
+   "the writes.", 
+   "Data Segment Backup:", 
+   "o The containers to be backed up are found by scanning the files in seg0.", 
+   "o Each container is backed up by reading all the pages through the page cache,", 
+   "and then writing to the backup container. Pages are latched while", 
+   "writing into the backup container.", 
+   "o Not necessary to backup containers in any particular order , All updates", 
+   "that happens after a container is backed will be redone using the", 
+   "transaction log on restore.", 
+   "MT cases:", 
+   "1) Each page is latched when it is written to the backup to prevent partial", 
+   "written pages sneaking into the backup.", 
+   "2) Thread that is backing up the container will stop if another thread", 
+   "requests removal of the container when container is being backed up.", 
+   "3) Truncate of the container blocks if the container is being backed up.", 
+   "4) Partially created containers will not be backed up. Container cache will", 
+   "not return the container items until the creation is complete.", 
+   "(No changes are not for this case , that is how it currently works).", 
+   "Transaction Log Backup:", 
+   "Transaction Log file backup in two phases:", 
+   "1) First Check point info and the the log files are backed up before the", 
+   "data segment.", 
+   "2) After the data segment is backed up , all the log files", 
+   "that are generated after tha backup started are also copied into the backup.", 
+   "MT cases:", 
+   "1) If there is a checkpoint in progress, backup will wait for the", 
+   "checkpoint to complete before copying checkpoint control information", 
+   "into the backup."
+  ], 
+  "revision_id": "326824"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2005-10-20T05:06:11.560044Z", 
+  "msg": [
+   "Show which ones are getting notification of errors."
+  ], 
+  "revision_id": "326823"
+ }, 
+ {
+  "author": "samisa", 
+  "date": "2005-10-20T05:04:41.867583Z", 
+  "msg": [
+   "More fixes to get builder working"
+  ], 
+  "revision_id": "326822"
+ }, 
+ {
+  "author": "damitha", 
+  "date": "2005-10-20T05:01:50.683199Z", 
+  "msg": [
+   "Added calling convention in axis2_defines.h"
+  ], 
+  "revision_id": "326821"
+ }, 
+ {
+  "author": "crossley", 
+  "date": "2005-10-20T04:59:05.630108Z", 
+  "msg": [
+   "These sites have heaps of failures.", 
+   "Notify to dev at cocoon.", 
+   "Don't send the notification email until they ask for it."
+  ], 
+  "revision_id": "326820"
+ }
+]

@@ -1,0 +1,60 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-05-16T20:56:08.000000Z", 
+  "msg": [
+   "Filter debugging, fix head, add support for the shm.", 
+   "It should work now reasonably well."
+  ], 
+  "revision_id": "297264"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-16T20:55:23.000000Z", 
+  "msg": [
+   "Remove another log statement."
+  ], 
+  "revision_id": "297263"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-16T20:54:57.000000Z", 
+  "msg": [
+   "Few fixes to get it built on windows."
+  ], 
+  "revision_id": "297262"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-16T20:54:18.000000Z", 
+  "msg": [
+   "We can't call find_by_pid in init() because the scoreboard may not be initialized", 
+   "or the process may not be registered.", 
+   "We can't call it in service() because linux will return the pid of the", 
+   "thread, which has nothing to do with the child id ( so it won't be found", 
+   "in the scoreboard ).", 
+   "We need the right pid to find the childId - it used to be available in", 
+   "connection_rec. We need the childId because there's no easy way to", 
+   "allocate a slot in the jk scoreboard ( or detect a slot is no longer", 
+   "used ).", 
+   "The current workaround is to get the pid in init(), which is called ( hopefully )", 
+   "in the child main thread ( which is registered in the scoreboard ).", 
+   "And we find the child_num in service, when the scoreboard is supposed", 
+   "to be ok.", 
+   "( we do the same for apache1.3 - since child_num is only available", 
+   "on the first connection )"
+  ], 
+  "revision_id": "297261"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-16T20:49:53.000000Z", 
+  "msg": [
+   "Moved the 'id' to bean.", 
+   "Added a field for the processid. That's part of a very ugly workaround", 
+   "for the removal of child_num from Apache2 ( I hope I got it right )", 
+   "( see next commits )"
+  ], 
+  "revision_id": "297260"
+ }
+]

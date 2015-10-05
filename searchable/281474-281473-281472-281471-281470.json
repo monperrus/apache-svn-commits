@@ -1,0 +1,86 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-02-08T20:25:49.000000Z", 
+  "msg": [
+   "Use XmlMapper instead of XmlHelper ( i.e. no magic and a bit more complex, but", 
+   "more flexibility and cleaner )"
+  ], 
+  "revision_id": "281474"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-08T20:13:32.000000Z", 
+  "msg": [
+   "Important change in XML reading ( for configuration ).", 
+   "The main ideea is to decouple the XML architecture from the Java objects.", 
+   "XML documents should be easy to read/edit, Java object have different", 
+   "requirement, and IMHO it's a bad ideea to design a Java object as a document", 
+   "or a document as a programming language.", 
+   "The XML object will be read ( by a SAX driver ) and various informations will", 
+   "be extracted - creating Java objects or setting properties ( like in Ant).", 
+   "The model is the same - except that we have to deal with object hierarchies,", 
+   "and we want to reduce the amount of \"magic\". The reader will have no", 
+   "\"behind-the-scene\" role, all object creations, property settings, or relations", 
+   "must be explicitly requested. ( either as Java code or using <taskdef-like>)", 
+   "There are few \"pre-defined\" actions:", 
+   "- create object", 
+   "- set parent", 
+   "- add child", 
+   "- set object properties from tags", 
+   "- invoke an object method ( like addMapping) using body or sub-elements as", 
+   "parameters", 
+   "- set properties using the body ( usefull in web.xml-like documents )", 
+   "You can define new actions, using the SaxContext.", 
+   "This is different from XSL or XML serialization - we are just extracting", 
+   "some informations from an XML file ( that is not under our control - so", 
+   "serialization is not posible ) - we don't process the information in any", 
+   "way except feeding it to Java objects.", 
+   "That means all validation is done by the Java objects ( vs. DTD ), we", 
+   "don't need the full document in memory - Java object hierarchy instead", 
+   "of DOM, and all processing is inside java code instead of templates.", 
+   "BTW, with all watchdog tests deployed, the time to read all web.xml files", 
+   "is 3 sec versus 6 sec. with the DOM reader."
+  ], 
+  "revision_id": "281473"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-08T18:53:29.000000Z", 
+  "msg": [
+   "Added AdaptiveClassLoader from JServ repository to main tree.", 
+   "It will also used by Catalina.", 
+   "( it is not \"plugged in\", still need a lot of work, but it's better to", 
+   "share it with Catalina and develop it in common )"
+  ], 
+  "revision_id": "281472"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-08T18:50:46.000000Z", 
+  "msg": [
+   "- Moved the JSP \"load-on-startup\" hack in LoadOnStartupInterceptor.", 
+   "Still a hack, but no longer in core.", 
+   "- As a result we can remove JSPWrapper. We still have a special case", 
+   "for JSP pages, but it will be easy to fix ( i.e. have JSP engine set", 
+   "the generated servlet wrapper after the first invocation - or another", 
+   "way to avoid a RD )", 
+   "- Fixed getPathTranslated() ( regression after cleanup )", 
+   "- added \"deprecated\" comments in Context, many methods will go", 
+   "- added few more debug lines, will probably be removed for release", 
+   "or replaced with if(debug). Time the initialization ( the new web.xml", 
+   "and server.xml reader will be 2x faster )", 
+   "- servlet initParam are set on ServletWrapper instead of Context."
+  ], 
+  "revision_id": "281471"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-08T18:25:32.000000Z", 
+  "msg": [
+   "Added Apache license to some examples - we missed them in the original", 
+   "check in."
+  ], 
+  "revision_id": "281470"
+ }
+]

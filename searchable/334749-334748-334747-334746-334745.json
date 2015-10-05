@@ -1,0 +1,49 @@
+[
+ {
+  "author": "dleslie", 
+  "date": "2001-05-15T16:30:46.000000Z", 
+  "msg": [
+   "Added link to design doc on transets and TrAX."
+  ], 
+  "revision_id": "334749"
+ }, 
+ {
+  "author": "dleslie", 
+  "date": "2001-05-15T16:29:47.000000Z", 
+  "msg": [
+   "Added link to xsltc_usage#api"
+  ], 
+  "revision_id": "334748"
+ }, 
+ {
+  "author": "dleslie", 
+  "date": "2001-05-15T16:28:55.000000Z", 
+  "msg": [
+   "Added link to in xsltcreadme to XSLTC Design docs."
+  ], 
+  "revision_id": "334747"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-05-15T16:08:38.000000Z", 
+  "msg": [
+   "> Inactive means no parse in progress. Boolean.TRUE is the parameter meaning we want more nodes. So the question is why we're telling the parser to send us more when the CoroutineParser thinks it has already sent us everything it has... or the parser thinks that it never got a request to begin parsing in the first place.", 
+   "Here's what's going on.  The DTMManagerDefault calls coParser.doParse(xmlSource, appCoroutine);.  The document is very short (<doc>hello</doc>), so the parse is done immediately.  Then, SAX2DTM gets into nextNode() (where I moved the CoRoutine stuff), and doesn't know that the parse has completed, and so na\ufffdvely calls m_coroutineParser.doMore(true, m_appCoroutineID);.", 
+   "I can make it work by setting a flag in the endDocument event of SAX2DTM, and then catching this in nextNode() and calling the CoRoutine parser to doTerminate and nulling out the reference (I can't do this in the endDocument event because it's on the same thread and calling doTerminate hangs things).", 
+   "An alternative would be to check the return of doParse and then, if not true, call setCoroutineParser(null) on the SAX2DTM?", 
+   "> Re the other glitch: I have no clue why the Xerces parser would throw an out-of-bounds exception in response to  the parse() method being called, which appears to be what's going on in line 506. Are you sure the InputSource you're passing in is properly constructed?", 
+   "This was a nested exception, as I thought, thrown from SAX2DTM.  Dumb bug that I introduced when mucking with the character handling, as I suspected.", 
+   "We still get some failures and then leftover threads for some idkey test cases."
+  ], 
+  "revision_id": "334746"
+ }, 
+ {
+  "author": "dleslie", 
+  "date": "2001-05-15T14:11:29.000000Z", 
+  "msg": [
+   "Added info on using Crimson parser to usagepatterns.xml", 
+   "Edited TrAX section in xsltc_usage.xml."
+  ], 
+  "revision_id": "334745"
+ }
+]

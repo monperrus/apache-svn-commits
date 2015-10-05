@@ -1,0 +1,69 @@
+[
+ {
+  "author": "stevel", 
+  "date": "2002-08-07T19:34:09.000000Z", 
+  "msg": [
+   "new fingerprint file for diagnostics reporting"
+  ], 
+  "revision_id": "254749"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-07T19:26:11.000000Z", 
+  "msg": [
+   "Fix problem where a \"build clean all\" would fail as the test-reports", 
+   "directory is created first in build.xml, then later in build_functional_tests."
+  ], 
+  "revision_id": "254748"
+ }, 
+ {
+  "author": "stevel", 
+  "date": "2002-08-07T18:45:46.000000Z", 
+  "msg": [
+   "moved a check from need to want, correct an erroneous error message"
+  ], 
+  "revision_id": "254747"
+ }, 
+ {
+  "author": "seibert", 
+  "date": "2002-08-07T17:50:45.000000Z", 
+  "msg": [
+   "Okay, here is the long version:", 
+   "I moved the following targets from buildTest.xml into xmls/targets.xml:", 
+   "<target name=\"start-functional-test-tcp-server\" if=\"junit.present\">", 
+   "<target name=\"start-functional-test-http-server\" if=\"junit.present\">", 
+   "<target name=\"stop-functional-test-http-server\" if=\"junit.present\" depends=\"stop-signature-signing-and-verification\">", 
+   "<target name=\"stop-functional-test-http-server-secure\" if=\"junit.present\" depends=\"stop-signature-signing-and-verification\">", 
+   "<target name=\"start-signature-signing-and-verification\" if=\"security.present\">", 
+   "<target name=\"stop-signature-signing-and-verification\" if=\"security.present\">", 
+   "This lets me start the server from any given file, without a LOT of repetitive code.  I then created:", 
+   "<target name=\"component-junit-functional-prepare\" if=\"junit.present\">", 
+   "<target name=\"component-junit-functional\" if=\"junit.present\" depends=\"component-junit-functional-prepare,start-signature-signing-and-verification\">", 
+   "which are just \"component compliant\" (i.e. genericized\" versions of the original \"junit-functional-prepare\" and", 
+   "\"junit-functional\" targets.  These handle the creation of the deploy.xml and undeploy.xml properties with the services", 
+   "to deploy for each test, as well as execing the specific tests themselves.", 
+   "I created a nasty thing called:", 
+   "<target name=\"execute-Component\"  depends=\"setenv\" >", 
+   "which, coincidentally, is the action peice for executing the test of any given component.  It will look similar to \"functional-tests\".  Here is how some given componentized test \"x\" which is in test/y/x, is invoked:", 
+   "In the file test/y/x/buildComponent.xml, there are two properties defined:", 
+   "1) axis.home is REDEFINED to be the depth of the test.  So for test/y/x, axis.home = \"../../..\"", 
+   "2) componentName is defined to be the realtive path structure \"test/y/x\"", 
+   "the component- targets use these property variables to gather up files, determine tests to exec, and operate.", 
+   "In addition to these, there is one more property \"extraServices\" which can be defined.  This is to support some given test needing a service deployed which is NOT self-contained.  The primary (and only, so far) example of this is the test/wsdl/multithread test.  It needs the Address Sample service deployed prior to running, but the samples/addr tree is just about as disjoint as you can possibly get from the test/wsdl/multithread tree.  So I created an optional placeholder to accomdate this oddity.", 
+   "There is only one major assumption made:", 
+   "\"This test, and everything NEEDED by this test, is found in some path structure relative to axis.home.\"", 
+   "This keeps the dependancy checking down.  In english, this means that if test/y/x need something from xml-axis, when it, the test, lives in xml-axis/java, you will need to hack a LOT of files to re-define axis.home as xml-axis instead of as xml-axis/java.", 
+   "Does this make sense?"
+  ], 
+  "revision_id": "254746"
+ }, 
+ {
+  "author": "seibert", 
+  "date": "2002-08-07T17:40:40.000000Z", 
+  "msg": [
+   "You can do the following to see the componetized execution in action", 
+   "ant -buildfile buildTest.xml matt"
+  ], 
+  "revision_id": "254745"
+ }
+]

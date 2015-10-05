@@ -1,0 +1,75 @@
+[
+ {
+  "author": "glick", 
+  "date": "2005-10-11T03:49:28.556846Z", 
+  "msg": [
+   "Modified BooterTestCase to use the System Property \"localRepository\" set by the Surefire plugin so", 
+   "that the test classes can find the maven.repo.local.  On Windows, if the String returned by the property", 
+   "contains spaces, an error message is produced and TestCase fail is invoked."
+  ], 
+  "revision_id": "331389"
+ }, 
+ {
+  "author": "glick", 
+  "date": "2005-10-10T03:09:17.721554Z", 
+  "msg": [
+   "Modified pom and Java classes.", 
+   "o Modified Surefire pom to remove references to slf4j classes. I had", 
+   "tried to use the commons-logging replacement classes, but I realized", 
+   "that I didn't want to hardwire logging into the classes, so I rolled", 
+   "back to using commons-logging directly. A better solution would be to", 
+   "reference the plexus logger and to build a monitor using Listeners", 
+   "that would allow invoking code to hook into the logging output.", 
+   "o Modified Surefire's classLoader handling so that it can use the", 
+   "IsolatedClassLoader when running in-process and that Surefire and", 
+   "ForkedSurfireLoader use the default ClassLoader when running forked.", 
+   "ForkedSurefireLoader simply gets the classLoader that loaded it and", 
+   "uses it as its classLoader. In Surefire added a new run method that", 
+   "doesn't take a ClassLoader as an argument. In that method the default", 
+   "classLoader is accessed and set as the classLoader."
+  ], 
+  "revision_id": "331388"
+ }, 
+ {
+  "author": "glick", 
+  "date": "2005-10-09T19:55:15.251178Z", 
+  "msg": [
+   "Modified all poms in the Surefire project tree so that this \"experiment\"", 
+   "in forking can be installed as a standalone entity in a repo.local and", 
+   "so that someone who wanted to test with it would modify their target", 
+   "pom to make use of these modified artifacts."
+  ], 
+  "revision_id": "331387"
+ }, 
+ {
+  "author": "glick", 
+  "date": "2005-10-09T14:47:23.527889Z", 
+  "msg": [
+   "Copied the new report classes to this branch."
+  ], 
+  "revision_id": "331386"
+ }, 
+ {
+  "author": "glick", 
+  "date": "2005-10-09T04:28:46.326521Z", 
+  "msg": [
+   "Adding forking to surefire -", 
+   "subproject surefire-booter", 
+   "o added a test class in surefire-booter: BooterTestCase which emulates", 
+   "the surefire plugin and invokes SurefireBooter varying the forkMode", 
+   "variable from {\"none\", \"once\"}", 
+   "o added logic to SurefireBooter which follows different logic paths", 
+   "depending on the value of forkMode.  For \"none\" it marshals arguments", 
+   "and invokes Surefire directly. For \"once\" it marshals arguments and uses", 
+   "plexus.utils.cli to fork a process and invokes ForkedSurefireLoader.", 
+   "subproject surefire", 
+   "o added ForkedSurefireBooter which is invoked when a Surefire process", 
+   "is forked. ForkedSurefireLoader creates arguments for the Surefire class from", 
+   "strings passed to it as String[] args.", 
+   "o modified Surefire - made a series of minor modifications.", 
+   "subproject surefire-common", 
+   "o deleted the subproject - determined that it was not required"
+  ], 
+  "revision_id": "331385"
+ }
+]

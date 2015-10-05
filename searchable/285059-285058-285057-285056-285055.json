@@ -1,0 +1,75 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-13T01:54:19.000000Z", 
+  "msg": [
+   "Eliminate the use of -Xbootclasspath, which is no longer needed since", 
+   "org.apache.catalina.startup.Bootstrap already builds a custom class loader", 
+   "for the internal Catalina classes, and does *not* make them visible to", 
+   "web applications."
+  ], 
+  "revision_id": "285059"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-12T01:00:27.000000Z", 
+  "msg": [
+   "Add a sanity check to the getSession(boolean) method so that it will return", 
+   "null (instead of throw an NPE) when no context has yet been assigned to this", 
+   "request.", 
+   "Submitted by: Bernd Eilers (bei@staroffice.de)", 
+   "PR: BugRat Bug Report #101"
+  ], 
+  "revision_id": "285058"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-12T00:10:12.000000Z", 
+  "msg": [
+   "Add the initial version of an authenticator for Tomcat 4.0 that implements", 
+   "the CLIENT-CERT authentication method.  The following issues remain:", 
+   "* The chain of certificates returned by JSSE 1.0.2 (which this was tested", 
+   "with) implement the javax.security.cert.X509Certificate interface, but", 
+   "this does NOT appear to extend java.security.cert.X509Certificate.", 
+   "Therefore, the chain of certificates exposed as a request attribute", 
+   "(\"javax.servlet.request.X509Certificate\") is not of the type required", 
+   "by the servlet spec.  This is under investigation with the JSSE folks.", 
+   "* The certificate chain is checked for validity (which checks that today", 
+   "is in the date range for that certificate), but it is not", 
+   "\"verified\".  Some of the JSSE documentation implies that this is", 
+   "automatically done for you, but this has not been confirmed.  Also,", 
+   "due to the base interface discrepancy noted above, you apparently", 
+   "cannot use a JSSE TrustManager to verify the chain against a key store", 
+   "database.", 
+   "* This authenticator class only concerns itself with *identifying* the", 
+   "client; not authorizing access to resources.  For that, you still need", 
+   "to configure a realm.  The username that should be defined in the Realm", 
+   "is the value returned by:", 
+   "certs[0].getSubjectDN().getName()", 
+   "(in other words, the principal name of the subject of the first", 
+   "certificate in the chain).  It may be that some other mechanism for", 
+   "tying a client identity to a set of roles would be more useful."
+  ], 
+  "revision_id": "285057"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-11T18:53:53.000000Z", 
+  "msg": [
+   "Make all loggers that subclass LoggerBase smarter about dumping out the root", 
+   "cause of LifecycleExceptions as well as ServletExceptions."
+  ], 
+  "revision_id": "285056"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-09-11T18:46:19.000000Z", 
+  "msg": [
+   "Make the \"org.apache.catalina.startup.Catalina\" class amenable to subclassing", 
+   "by removing the \"final\" declaration and changing private instance variables and", 
+   "methods to protected instead.", 
+   "Submitted by: Bernd Eilers <bei@stardivision.de>"
+  ], 
+  "revision_id": "285055"
+ }
+]

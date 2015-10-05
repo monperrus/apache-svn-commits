@@ -1,0 +1,43 @@
+[
+ {
+  "author": "jorton", 
+  "date": "2004-07-13T11:26:44.000000Z", 
+  "msg": [
+   "* build/config.guess, build/config.sub: Remove since buildconf copies", 
+   "these files from APR."
+  ], 
+  "revision_id": "104269"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-13T07:08:46.000000Z", 
+  "msg": [
+   "The copy slot in MGVTBL isn't available in 5.6, so we #ifdef this stuff out.  Also start phasing out the MAGIC_KEYS code, since it's really hack over vstrings with no clear line of support for future perl 5.x."
+  ], 
+  "revision_id": "104268"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-13T05:12:39.000000Z", 
+  "msg": [
+   "magic_getpack isn't public- try SvGETMAGIC instead"
+  ], 
+  "revision_id": "104267"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-13T03:35:45.000000Z", 
+  "msg": [
+   "Only prefetch the key when the iterator is active (SvCUR > 0).  The problem is that apreq_xs_table_magic_copy gets called on EXISTS and STORE (not just FETCH), so the extra method call is wasteful.  By checking that the iterator is > 0 before running Perl_magic_getpack, we can eliminate that ineffiency outside of C<< while (($a,$b) = each %$table) {...} >> loops."
+  ], 
+  "revision_id": "104266"
+ }, 
+ {
+  "author": "joes", 
+  "date": "2004-07-13T02:44:55.000000Z", 
+  "msg": [
+   "Seems saner (and considerably more efficient) to prefectch the table value instead of cloning the object and waiting for perl to do it."
+  ], 
+  "revision_id": "104265"
+ }
+]

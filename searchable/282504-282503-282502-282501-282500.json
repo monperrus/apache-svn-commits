@@ -1,0 +1,89 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2000-10-05T06:16:58.000000Z", 
+  "msg": [
+   "Fix use of \"urn\" instead of \"uri\".", 
+   "Bug submitted by: Brian Bucknam", 
+   "Ported Tomcat 3.3. bug fix to allow \"yes\" for required and rtexprvalue", 
+   "attributes per spec."
+  ], 
+  "revision_id": "282504"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-10-04T20:49:18.000000Z", 
+  "msg": [
+   "Patch from Sebastien Alborini <sebastien.alborini@m4x.org>.", 
+   "It has 3 components:", 
+   "- added a field and get/setParentClassLoader() in ContextManager.", 
+   "That can't have any side effects.", 
+   "- In LoaderInterceptor, check if parentClassLoader is set, and if", 
+   "it is use it instead of getClass().getLoader(). In normal use ( if", 
+   "cm.parentClassLoader is not set ) it doesn't change anything in the", 
+   "current functionality.", 
+   "- In Jdk12Interceptor, nothing change unless \"useThreadLoader\" is", 
+   "set ( probably a better name would be useful ). If this property", 
+   "is set, Jdk12Interceptor will set the ContextManager parent loader", 
+   "to be the context class loader. This doesn't change anything in", 
+   "normal operation. The default is false, to match current functionality.", 
+   "Please review and if you feel that have any side effects I can roll", 
+   "back.", 
+   "Submitted by: Sebastien Alborini <sebastien.alborini@m4x.org>"
+  ], 
+  "revision_id": "282503"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-10-04T20:23:57.000000Z", 
+  "msg": [
+   "Second patch from Stef\ufffdn Freyr Stef\ufffdnsson <stebbi@decode.is>.", 
+   "Make javax.servlet.request.X509Certificate available - this is part", 
+   "of the spec.", 
+   "In order to do that, 2 new methods are added - that can't have any negative", 
+   "impact or add regressions. First ( getServerSocketFactory in Endpoint )", 
+   "allow clients to directly access the factory used by the endpoint.", 
+   "Second, preProcessRequest() allows a factory to set attributes and", 
+   "alter the request before it gets processed.", 
+   "In the case of non-ssl http nothing change - just an empty function call.", 
+   "If SSLSocketFactory is used, it'll just add the attribute ( and also", 
+   "set scheme to \"https\" - in case you forgot to add \"secure=true\" attribute", 
+   "in the config - it's a cleaner way to do that )", 
+   "The only negative side of the patch is that it adds a dependency between", 
+   "SSLSocketFactory and tomcat.core.Request. I think this is not a problem -", 
+   "tomcat 3.2 doesn't claim or tries to support this as an API, and", 
+   "we know that in 3.3 everything will be clean ( by using ssl interceptor", 
+   "to set the attributes )", 
+   "Please let me know if you see any problem with that, and I'll roll back.", 
+   "I don't think it'll affect the current functionality in any way.", 
+   "Submitted by: Stef\ufffdn Freyr Stef\ufffdnsson <stebbi@decode.is>"
+  ], 
+  "revision_id": "282502"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-10-04T19:59:19.000000Z", 
+  "msg": [
+   "Ops, I commited something that doesn't build.", 
+   "Fixed it - now it should be ok."
+  ], 
+  "revision_id": "282501"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-10-04T19:55:26.000000Z", 
+  "msg": [
+   "First patch from Stef\ufffdn Freyr Stef\ufffdnsson <stebbi@decode.is>", 
+   "to support mutual authentication.", 
+   "This is a minimal change, nothing will happen unless you set \"clientAuth\"", 
+   "attribute - the trustManager will be null, so the same call to init", 
+   "will happen and setNeedClientAuth will have the same false param.", 
+   "The code affects tomcat only if the attribute is set - I don't think it can", 
+   "add any regression.", 
+   "As usually, let me know if you want me to roll it back, I know it's late but", 
+   "it is very minimal change with a clear benefit.", 
+   "Submitted by: Stef\ufffdn Freyr Stef\ufffdnsson <stebbi@decode.is>"
+  ], 
+  "revision_id": "282500"
+ }
+]

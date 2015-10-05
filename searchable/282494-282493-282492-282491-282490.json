@@ -1,0 +1,84 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-10-01T22:21:47.000000Z", 
+  "msg": [
+   "- removed host and port from ContextManager. (since we support multiple", 
+   "hosts).", 
+   "- We now generate the temp dir with DEFAULT for the default host ( used", 
+   "to be localhost%8080 ), and the name of the virtual host where set.", 
+   "- Added \"state\" to Context ( it's not checked, but it's a start )", 
+   "- commented the states for ContextManager", 
+   "- made final what is final in ContextManager ( the extension mechanism", 
+   "is interceptor, if you need something else it's better to fix the", 
+   "interceptor than hack CM )", 
+   "- moved doAuth* in request, where it's used ( no need to call container", 
+   "intereptors via CM )", 
+   "- made private all the fields in CM", 
+   "- removed deprecated methods ( some of them ).", 
+   "- moved code around in Request - group getter/setter, group by function", 
+   "Remove unused/deprecated code.( a small part - there is still a lot)"
+  ], 
+  "revision_id": "282494"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-10-01T06:37:51.000000Z", 
+  "msg": [
+   "Few big changes in ContextManager.", 
+   "- removed RequestInterceptors and ContextInterceptors. We only have", 
+   "Interceptors ( no need to make distinction )", 
+   "- most of the doHOOK moved next to the caller, no need to", 
+   "call context manager to intermediate. That will also help when/if we", 
+   "add some mechanism to define dynamic hooks.", 
+   "- IMPORTANT - documented the order of startup ( at least the way I understand", 
+   "it), and make sure no hooks are called until CM is initialized.", 
+   "We still need to make sure that", 
+   "1. No request is served until CM is in STARTED state", 
+   "2. A context will not serve requests until it's in ACTIVE state.", 
+   "- A lot of cleanup and simplifactions resulting from this ( the state of", 
+   "ContextManager should be consistent now). For example we can move more", 
+   "functionality in interceptors ( fixing the paths is now done in", 
+   "DefaultCMSetter and it's much improved, etc).", 
+   "So far I thought MessageBytes and OutputBuffer are the most important changes", 
+   "for 3.3. Now I think making sure we have a clear definition of state", 
+   "for CM and interceptors is much more important. Please help and review", 
+   "( at least the comments at the beginning of ContextManager )"
+  ], 
+  "revision_id": "282493"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-10-01T01:00:45.000000Z", 
+  "msg": [
+   "Update the installation instructions to indicate that JDK 1.3 is supported", 
+   "already, as well as 1.1 and 1.2."
+  ], 
+  "revision_id": "282492"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-30T05:01:35.000000Z", 
+  "msg": [
+   "Ops, it seems destroy was called indeed - in Handler, while init callbacks", 
+   "were called in ServletWrapper.", 
+   "Handler need a major cleanup."
+  ], 
+  "revision_id": "282491"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-30T04:57:56.000000Z", 
+  "msg": [
+   "Moved doPreServletInit/doPostServletInit and Destroy from", 
+   "contextmanager to ServletWrapper.", 
+   "There is no benefit in having it in ContextManager ( and same will happen", 
+   "with most doXXX methods), while having them in the code that actually", 
+   "needs it seems better.", 
+   "( for example it's easier to understand when the hooks are called", 
+   "and what's the return convention - i.e. errors are ignored )", 
+   "It seems pre/postServletDestroy wasn't called when it should."
+  ], 
+  "revision_id": "282490"
+ }
+]

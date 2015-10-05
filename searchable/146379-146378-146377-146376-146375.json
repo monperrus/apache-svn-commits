@@ -1,0 +1,102 @@
+[
+ {
+  "author": "tobrien", 
+  "date": "2003-05-17T23:24:21.000000Z", 
+  "msg": [
+   "Added a FixedDoubleArray.  FixedDoubleArray supports a rolling mechanism", 
+   "that reuses an array of fixed length.  This classes was added to an efficient", 
+   "rolling mechanism.", 
+   "FixedDoubleArray was influenced by discussions on the commons-dev list and", 
+   "patches submitted by Mark Diggory."
+  ], 
+  "revision_id": "146379"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-16T05:23:29.000000Z", 
+  "msg": [
+   "The Univariate interface now contains getWindow and setWindow in", 
+   "addition to a constant which signifies an \"infinite\" window.  Windowing", 
+   "has been added to all three Univariate implementations:", 
+   "* UnivariateImpl - If the window is not infinite, we keep track of", 
+   "0..n elements and discount the contribution of the discarded element when", 
+   "our \"window\" is moved.  If the window is infinite no extra storage is used", 
+   "beyond an empty ContractableDoubleArray.", 
+   "- In the following two implementations, the window size can be changed at anytime.", 
+   "* ListStoreUnivariateImpl - If the window is not infinite, this", 
+   "implementation only takes into account the last n elements of the List.", 
+   "* StoreUnivariateImpl - Uses an internal ContractableDoubleArray, window size", 
+   "can be changed at any time."
+  ], 
+  "revision_id": "146378"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-16T04:23:06.000000Z", 
+  "msg": [
+   "* DoubleArray is now an interface which is implemented by", 
+   "ExpandableDoubleArray.  The interface provides a public interface", 
+   "which does not hint at any of the storage parameters of", 
+   "Expandable or Contractable.", 
+   "* DoubleArrayTest now operates on the DoubleArray interface, casting", 
+   "to Expandable when we need to call the package scopes getInternalLength", 
+   "method.", 
+   "* While we should not provide access to the internal storage array, it", 
+   "should be possible to obtain a double[] of elements stored in this", 
+   "DoubleArray - double[] getElements() was added to the DoubleArray interface,", 
+   "it will return the element array."
+  ], 
+  "revision_id": "146377"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-16T03:55:34.000000Z", 
+  "msg": [
+   "* ContractableDoubleArray extends ExpandableDoubleArray - I sense the", 
+   "need for a DoubleArray interface.", 
+   "* ExpandableDoubleArray and the extension ContractableDoubleArray should", 
+   "aim towards presenting a public interface that does not expose any", 
+   "details of the internal.  To this end, one is no longer able to get the", 
+   "internal storage array via public double[] getValues(), and the startIndex", 
+   "(which was relative to the internal storage array) is no longer available.", 
+   "* [Expandable|Contractable]DoubleArray now allow one to discard", 
+   "elements from the front of the array.  Before this commit, one could", 
+   "accomplish the same goal by changing the starting index of the element", 
+   "array within the internal storage array.  This solution allowed one to", 
+   "discard elements from the front of the array (as well as) reclaiming", 
+   "elements by decreases the startIndex.", 
+   "There were two problems with this approach (especially in", 
+   "ContractableDoubleArray).   The ContractableDoubleArray can be", 
+   "\"compacted\" at anytime thereby reseting the startIndex to zero and the", 
+   "size of the internal store array to number of elements plus one.  Second,", 
+   "\"reclaiming\" elements from the internal storage array by finagling", 
+   "internal \"pointers\" to the start and end index seems to violate the", 
+   "principles of encapsulation.  If you \"discard\" an element from the", 
+   "front of the array, consider it unavailable.", 
+   "It should be noted that calling setNumElements allows one to move the end", 
+   "index of the internal element array at will.  Assume one has a 100 element", 
+   "array, and one calls setNumElements(10), thereby decreasing the ending index", 
+   "of the element array by 90.  The 90 \"dumped\" elements are not currently", 
+   "reinitializied to the default double primitive value.  This is an open", 
+   "question.", 
+   "* Tests for ExpandableDoubleArray and ContractableDoubleArray were", 
+   "refactored.  both test classes now extend a DoubleArrayAbstractTest", 
+   "JUnit class which contained shared unit tests for both \"implementations\".", 
+   "An approach like this should be adopted to test the Univariate implementations."
+  ], 
+  "revision_id": "146376"
+ }, 
+ {
+  "author": "tobrien", 
+  "date": "2003-05-15T21:58:23.000000Z", 
+  "msg": [
+   "Patches from Phil S. applied:", 
+   "* A TestStatistic interface with corresponding implementation and testcase", 
+   "PR: Bugzilla 19971", 
+   "Obtained from: Patches attached to issue", 
+   "Submitted by: Phil S.", 
+   "Reviewed by: Tim O/"
+  ], 
+  "revision_id": "146375"
+ }
+]

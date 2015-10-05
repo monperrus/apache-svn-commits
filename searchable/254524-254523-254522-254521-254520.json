@@ -1,0 +1,89 @@
+[
+ {
+  "author": "scheu", 
+  "date": "2002-07-03T22:28:13.000000Z", 
+  "msg": [
+   "This is the fix for the multi-ref problem reported John Gregg.", 
+   "Summary of problem:", 
+   "The multi-ref serialization is using a HashMap to determine", 
+   "whether instances are multi-ref'd.  This does not work because a HashMap uses", 
+   "the hashCode/equals methods of the object...and for generated", 
+   "Axis beans these methods do not test object identity (they test member equality).", 
+   "This resulted in separate instances being serialized as one instance.", 
+   "Patch:", 
+   "John provided a small patch to SerializationContextImpl", 
+   "that forced the multi-ref HashMap to use the object identity", 
+   "hashCode.", 
+   "Thanks John for debugging this problem!!", 
+   "Tom Jordahl ran into problems when he installed the patch.", 
+   "(I looked at this a little and I believe the problem is due", 
+   "to the multi-ref HashMap being cloned and its keys iterated.", 
+   "This caused problems because the keys in the patch were no", 
+   "longer the original instance values.)", 
+   "Solution:", 
+   "I proposed an alternate solution that Tom agreed with.", 
+   "A new class IdentityHashMap is added to utils.  This class", 
+   "behaves like a HashMap except that under the covers the", 
+   "keys are differentiated by object identity instead of", 
+   "the keys hashCode method.  The keys() method returns", 
+   "the original key values instead of the mangled keys...", 
+   "Looking at the SerializationContextImpl code, I believe that", 
+   "the same problems can occur with the secondLevelObjects.", 
+   "So I changed secondLevelObjects to be an IdentityHashMap.", 
+   "I added John's test and I added an extra test to", 
+   "the existing multi-ref test to verify the new code.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254524"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-07-03T21:08:11.000000Z", 
+  "msg": [
+   "A first cut at a built-in bytecode reader to remove", 
+   "dependancies on external jar files (tt-bytecode, BCEL, etc)..", 
+   "This isn't turned on by default (yet).  I still need", 
+   "to do more testing and optimize ParamReader to read", 
+   "all argument names in the first pass and cache them.", 
+   "Eventually we would want remove the other providers", 
+   "as unnecessary, but not till we are sure this code", 
+   "meets Axis' needs."
+  ], 
+  "revision_id": "254523"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-07-03T20:57:14.000000Z", 
+  "msg": [
+   "Fix a problem with Skeletons and WSDL generation:", 
+   "The getOperationDescs() and getOperationDescByName()", 
+   "APIs were showing up in WSDL when skeletons were", 
+   "turned on.", 
+   "Fix: Filter out static methods when creating the", 
+   "method list for a service.", 
+   "NOTE TO IBM: You may want this for Beta 3 if you care", 
+   "about the WSDL generated when using skeletons!"
+  ], 
+  "revision_id": "254522"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-03T20:22:42.000000Z", 
+  "msg": [
+   "Merge fix from beta-3 - don't write Holder types to schema, write", 
+   "the held type."
+  ], 
+  "revision_id": "254521"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-07-03T20:21:43.000000Z", 
+  "msg": [
+   "Merge WSDD fixes over from beta-3"
+  ], 
+  "revision_id": "254520"
+ }
+]

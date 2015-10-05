@@ -1,0 +1,71 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-06-28T07:26:08.000000Z", 
+  "msg": [
+   "Decouple the Hook ( and the core ) from introspection, open it for", 
+   "better ( declarative or code generation ) mechanisms.", 
+   "The current implementation will still use the introspection ( until", 
+   "modules.xml will include the correct declarations about the callbacks ).", 
+   "As a side note, I repeated an old benchamark to find out if \"too many hooks", 
+   "will affect performance\"", 
+   "Surprisingly for me ( I didn't expected that ) - it does, with about 5%", 
+   "If you disable the code that sets up the hook chains with only the", 
+   "modules that are actually involved ( that's avg 3-4 calls per chain, most", 
+   "have 1-2 ), and if you run ~100.000 requests ( few times ), you may find", 
+   "a statistical difference ( now that we cut most of the hotspots from", 
+   "tomcat - a year ago it was none ).", 
+   "The surprise is that I expected the JIT to just eliminate the empty calls -", 
+   "5% is not insignificant.", 
+   "( of course, this is just theoretical - there is no reason to", 
+   "add all the modules in all chains - that have been resolved a long ago, but", 
+   "it's interesting to know that it had such a small impact. )"
+  ], 
+  "revision_id": "283734"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-28T07:15:02.000000Z", 
+  "msg": [
+   "Removed introspection ( well, moved it to IntrospectionUtil where we can", 
+   "do a better job caching ids, reusing, etc ).", 
+   "The whole XmlMapper will be probably replaced ( in a future version )", 
+   "with a code-generation system ( I expect this to happen after jasper34", 
+   "refactoring is finished, as I'll probably reuse a lot from it ). My estimate", 
+   "is that 60..80% of the startup time is in this object, and can be eliminated", 
+   "almost completely. It was a cool idea, but obviously didn't took performance", 
+   "into consideration ( well, I wrote it - so I'm not offending anyone )."
+  ], 
+  "revision_id": "283733"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-28T07:11:14.000000Z", 
+  "msg": [
+   "Moved some more introspection code from XmlMapper and Hooks. We want", 
+   "to keep it all in the same place, it's ugly but necesary - and other", 
+   "classes can be cleaner.", 
+   "We also cache some more method ids ( small speedup )."
+  ], 
+  "revision_id": "283732"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-28T07:10:02.000000Z", 
+  "msg": [
+   "Small fix in loadOnStartup: Throwables shouldn't be able to stop the startup.", 
+   "( it happens in strange situations )", 
+   "Also, check if we validated before.( small speedup )"
+  ], 
+  "revision_id": "283731"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-06-28T06:48:50.000000Z", 
+  "msg": [
+   "Fix for multi-line headers ( I didn't tought any browser or client will", 
+   "generate such thing, but it seems there is one  - now it should work fine )"
+  ], 
+  "revision_id": "283730"
+ }
+]

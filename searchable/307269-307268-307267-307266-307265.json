@@ -1,0 +1,61 @@
+[
+ {
+  "author": "brett", 
+  "date": "2005-10-08T06:59:27.509122Z", 
+  "msg": [
+   "need to handle resolution exception too at present"
+  ], 
+  "revision_id": "307269"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2005-10-08T06:52:25.253974Z", 
+  "msg": [
+   "PR: MNG-512", 
+   "skip project if no goals are bound"
+  ], 
+  "revision_id": "307268"
+ }, 
+ {
+  "author": "brett", 
+  "date": "2005-10-08T06:36:17.746670Z", 
+  "msg": [
+   "PR: MNG-828", 
+   "log parameters to mojo in debug mode"
+  ], 
+  "revision_id": "307267"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-10-08T06:16:22.522442Z", 
+  "msg": [
+   "This is an empty revision for padding."
+  ], 
+  "revision_id": "307266"
+ }, 
+ {
+  "author": "kohsuke", 
+  "date": "2005-10-08T05:47:58.054097Z", 
+  "msg": [
+   "fixed a bug in the stack restoration.", 
+   "the way the reference stack works is that when a stack frame is saved,", 
+   "the callee pushs to the rstack, then when restored, the caller pops", 
+   "from the rstack. So when the top-level Runnable object returns, the top", 
+   "of the rstack if that Runnable object. Previously we were using this to", 
+   "fetch the first Runnable, so everything was OK. But now that we use a", 
+   "separate 'runnable' field, this top rstack object needs to be removed", 
+   "or else the restoration won't work correctly.", 
+   "Also note that the same Runnable object is normally kept in the ostack", 
+   "as well, as most of the time local variable #0 is used for the 'this'", 
+   "variable.", 
+   "IMO, this makes it somewhat useless to introduce the 'runnable' variable,", 
+   "as you won't be able to change it and expect that the stack restores", 
+   "correctly --- the only thing you'll be able to do is to inspect the value,", 
+   "which could be just as well done by defining the 'getRunnable' method", 
+   "that checks for the top of the rstack.", 
+   "In any case, for now I just fixed the problem and left the design", 
+   "as-is. I also added a test case to prevent future regressions."
+  ], 
+  "revision_id": "307265"
+ }
+]

@@ -1,0 +1,89 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2003-05-12T18:34:02.000000Z", 
+  "msg": [
+   "improvements by Lance Eason:", 
+   "9) PersistenceBrokerAbstractImpl manages firing off events during the lifecycle of a PersistenceBroker.", 
+   "There are three opportunities for performance improvements here.  First it iterates through a map every", 
+   "time an event is fired.  Since listeners are added rarely but events are fired frequently it's much better", 
+   "to construct a new array each time a listener is added and iterate through an array on event firing.", 
+   "Second, listeners are stored in a map with a Boolean indicating whether they are permanent or not.", 
+   "When the broker is released this map is iterated through and all non-permanent listeners are discarded.", 
+   "It's better to keep two separate arrays and just discard the non-permanent array rather than doing", 
+   "this iteration.  Finally, a single fireBrokerEvent method is provided which takes a PersistenceBrokerEvent.", 
+   "Internally this method does two instanceof operations to decide how to dispatch the event.", 
+   "Letting the compiler decide how to dispatch at compile time by providing overloaded signatures of", 
+   "fireBrokerEvent is more efficient.  Similar things could be done for add and removeListener, but I", 
+   "didn't bother since these will be called relatively rarely."
+  ], 
+  "revision_id": "362399"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-05-12T14:01:32.000000Z", 
+  "msg": [
+   "improvements by Lance Eason:", 
+   "3) ObjectCacheDefaultImpl and ObjectCachePerBrokerImpl both call toString()", 
+   "on the Identity passed in and use that as the key to their internal maps.", 
+   "In addition Identity calls toString() on itself to calculate it's hashCode.", 
+   "Converting the Identity objects to Strings turns out to be much more", 
+   "costly than simply comparing their contents.", 
+   "Compounding matters is the fact that a lot of Identity objects get", 
+   "constructed solely to do cache lookups and then are immediately", 
+   "discarded but they get unnecessarily converted to String in the", 
+   "process at extra cost in processing and object creation.", 
+   "I changed the two caches to use the Identity object itself", 
+   "as the key and changed Identity.hashCode() to calculate the", 
+   "hashCode directly rather than converting to a String."
+  ], 
+  "revision_id": "362398"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-05-12T10:01:57.000000Z", 
+  "msg": [
+   "improvements by Lance Eason:", 
+   "2) Three methods on ClassDescriptor, getFieldDescriptorByName,", 
+   "getObjectReferenceDescriptorByName, and getCollectionDescriptorByName", 
+   "all have the same fundamental problem.", 
+   "They each try to build a descriptor by name map lazily.", 
+   "To do this they look for the name in the map and if they", 
+   "don't find it scan through all the descriptors and if found", 
+   "add it to the map.  The problem with this is that queries for", 
+   "things where the descriptor doesn't exist always end up", 
+   "scanning the entire set of descriptors in order to determine", 
+   "that it doesn't exist.  In other words this strategy works fine", 
+   "for positive queries but is very poor for negative queries.", 
+   "It turns out that a fair number of negative queries do occur", 
+   "though for things like the field descriptor for OJB_CONCRETE_CLASS.", 
+   "I also fixed a bug where ClassDescriptor doesn't rebuild it's", 
+   "cached lists of FieldDescriptors when new field descriptors", 
+   "are added and I cached the result of isAbstract.", 
+   "Files modified:", 
+   "ClassDescriptor", 
+   "- changed map building strategy in getXXXDescriptorByName methods", 
+   "- changed setClassOfObject and isAbstract to cache value of isAbstract", 
+   "- changed addFieldDescriptor to clear out cached lists of field descriptors and clear the name map", 
+   "- changed addCollectionDescriptor and addObjectReferenceDescriptor to clear their respective name maps"
+  ], 
+  "revision_id": "362397"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-05-12T09:18:06.000000Z", 
+  "msg": [
+   "replace 'found' with 'find' in log", 
+   "statements (thanks Oliver)"
+  ], 
+  "revision_id": "362396"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2003-05-12T08:57:37.000000Z", 
+  "msg": [
+   "fix #166, patch by Oliver Matz"
+  ], 
+  "revision_id": "362395"
+ }
+]

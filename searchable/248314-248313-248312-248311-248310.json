@@ -1,0 +1,64 @@
+[
+ {
+  "author": "tomj", 
+  "date": "2002-10-02T16:29:09.000000Z", 
+  "msg": [
+   "Add test case for the simple rpc-encoded fault test."
+  ], 
+  "revision_id": "248314"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-10-02T16:17:36.000000Z", 
+  "msg": [
+   "Getting ready to run this in an automated fashion..."
+  ], 
+  "revision_id": "248313"
+ }, 
+ {
+  "author": "rsitze", 
+  "date": "2002-10-02T15:27:11.000000Z", 
+  "msg": [
+   "Issue being solved: WSDDService with 0 (zero) options:", 
+   "1. WSDDService.makeNewInstance():   calls  new SOAPService(..);", 
+   "2.   SOAPService(): calls initHashtable(true);", 
+   "3.     Options were then created as a LockableHashtable.", 
+   "4. makeNewInstance(): service.setOptions(getParametersTable())", 
+   "- note that getParametersTable() can return null,", 
+   "in which case service.options == null", 
+   "5. service.setOption() is called at least once...", 
+   "- since options == null, it calls initHashtable(false);", 
+   "- options is no long null... and it is a Hashtable", 
+   "5. If Call.setSOAPService() OR Call.invoke() are called,", 
+   "then service.setPropertyParent() is called.", 
+   "6. SOAPService.setPropertyParent()", 
+   "- typecasts options to LockableHashtable,", 
+   "options is now a Hashtable...", 
+   "7. Boom.", 
+   "There still remains one loose end: calling setOptions(Hashtable)", 
+   "may overwrite the (expected) LockableHashtable with a simple Hashtable.", 
+   "Regardless, tests are passing.."
+  ], 
+  "revision_id": "248312"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-10-02T15:14:56.000000Z", 
+  "msg": [
+   "All tests in the simple-rpc-encoded.wsdl now pass against the Sun endpoint.", 
+   "Add some protective code to check for null.", 
+   "Emit the fault QNames using the namespace from the BindingFault, not the", 
+   "message namespace.  Don't emit register calls for duplicate QNames."
+  ], 
+  "revision_id": "248311"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-10-02T14:53:56.000000Z", 
+  "msg": [
+   "Lookup wrapper types and convert them to their base type when passing them", 
+   "in to the Exception constructor."
+  ], 
+  "revision_id": "248310"
+ }
+]

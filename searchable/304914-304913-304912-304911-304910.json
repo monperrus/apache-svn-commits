@@ -1,0 +1,74 @@
+[
+ {
+  "author": "remm", 
+  "date": "2002-05-30T00:02:35.000000Z", 
+  "msg": [
+   "- The suggested amount was actually 512.", 
+   "- Patch submitted by Tyler Van Gorder <tkv at landacorp.com>. Sorry for forgetting", 
+   "to give you credit the first time around."
+  ], 
+  "revision_id": "304914"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2002-05-29T23:24:59.000000Z", 
+  "msg": [
+   "- Make the tag buffer size smaller, as suggested in bug 6858.", 
+   "- In addition, those buffers must be recycled and reused as much as possible,", 
+   "as we actually should only need an amount equal to the tag depth (if I", 
+   "understand things correctly). This should provide a major improvement."
+  ], 
+  "revision_id": "304913"
+ }, 
+ {
+  "author": "", 
+  "date": "2002-05-24T23:57:42.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'TOMCAT_4_1_3'."
+  ], 
+  "revision_id": "304912"
+ }, 
+ {
+  "author": "kinman", 
+  "date": "2002-05-24T23:57:42.000000Z", 
+  "msg": [
+   "- Thanks Jan Luehe for the patch.", 
+   "According to JSP.7.4 (\"The Tag Library Descriptor Format\"), it is", 
+   "illegal for a tag to define scripting variables in both its TLD and", 
+   "TagExtraInfo class.", 
+   "Jasper already enforces this, but its code generator makes separate", 
+   "method calls for declaring/synchronizing scripting variables from a", 
+   "TLD and those from the TagExtraInfo class, like this:", 
+   "// Update AT_BEGIN variables", 
+   "updateVariableInfos(varInfos, VariableInfo.AT_BEGIN, false);", 
+   "updateTagVariableInfos(tagVarInfos, n.getTagData(),", 
+   "This can be simplified, since if \"varInfos\" is non-null, \"tagVarInfos\"", 
+   "must be null, and vice-versa.", 
+   "The proposed patch collapses the above method calls into one.", 
+   "Also, the code generator makes separate method calls to declare", 
+   "AT_BEGIN scripting variables outside the try-finally block, and then", 
+   "synchronizing them inside the try-finally block.", 
+   "Now that try-finally has been flattened, no separate declaration of", 
+   "AT_BEGIN variables is required, that is, AT_BEGIN variables can be", 
+   "declared when they are first synchronized (after a call to", 
+   "doStartTag()), just as NESTED and AT_END variables. This makes", 
+   "declareVariableInfos() and declareTagVariableInfos() redundant", 
+   "As a summary, the attached patch replaces", 
+   "declareVariableInfos(),", 
+   "declareTagVariableInfos(),", 
+   "updateVariableInfos(), and", 
+   "updateTagVariableInfos()", 
+   "with a single", 
+   "syncScriptingVariables()."
+  ], 
+  "revision_id": "304911"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2002-05-24T01:15:27.000000Z", 
+  "msg": [
+   "- Use Ant includes to only select one JSP file at a time for compilation."
+  ], 
+  "revision_id": "304910"
+ }
+]

@@ -1,0 +1,111 @@
+[
+ {
+  "author": "jhunter", 
+  "date": "2000-08-18T08:36:24.000000Z", 
+  "msg": [
+   "Made the RequestDispatcher.forward() error message match the code behavior.", 
+   "Here's the code:", 
+   "// according to specs (as of 2.2: started is OK, just not committed)", 
+   "if (realResponse.isBufferCommitted())", 
+   "throw new IllegalStateException(sm.getString(\"rdi.forward.ise\"));", 
+   "The error msg used to be:", 
+   "\"Cannot forward as OutputStream or Writer has already been obtained\"", 
+   "The error msg is now:", 
+   "\"Cannot forward because the response has already been committed\"", 
+   "I translated the Spanish as well thanks to my high school Spanish and", 
+   "babelfish.  :-)", 
+   "-jh-"
+  ], 
+  "revision_id": "282294"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-18T04:51:01.000000Z", 
+  "msg": [
+   "Guess tomcat.home.", 
+   "In fact the guess method should be very exact - i.e. no need to set", 
+   "tomcat.home any more.", 
+   "If you start tomcat using startup.Main you'll have to include", 
+   "tomcat.jar in classpath - and that's enough to find the lib dir.", 
+   "A good idea would be to use same mechanism as apache - libDir,", 
+   "confDir, webappsDir ( separate, with reasonable defaults )"
+  ], 
+  "revision_id": "282293"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-18T04:12:04.000000Z", 
+  "msg": [
+   "Added the manifest, now java -Dtomcat.home=... -jar tomcat.jar", 
+   "should do it."
+  ], 
+  "revision_id": "282292"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-18T03:42:17.000000Z", 
+  "msg": [
+   "First chunk of code to simplify startup and allow customizable class loaders.", 
+   "startup/Main will use URLClassLoader or SimpleClassLoader ( if jdk1.1 is", 
+   "detected ) and load all the needed jars ( XXX make this customizable ).", 
+   "It will also set the parentLoader to its own loader, and that can be", 
+   "used ( later ) as the parent for servlets loaders ( so tomcat jars", 
+   "don't interfere ).", 
+   "We'll also build Main and the minimal set of required classes into tomcat.jar,", 
+   "that will get a MANIFEST - in the end we should be able to replace all", 
+   "the scripts with java -jar tomcat.jar ( if we find some tricks to", 
+   "detect TOMCAT_HOME from java)", 
+   "I also added a LoaderInterceptor11 - I think we should deprecate Adaptive", 
+   "ClassLoader and all other classes - the code is way too complex ( compared", 
+   "with DependManager and a simple class loader) and for 1.2 we are far", 
+   "away from the security checks of URLClassLoader.", 
+   "The only problem is that tomcat.policy will need to become a bit more", 
+   "verbose ( that can be automated ).", 
+   "startup/Main will use URLClassLoader or SimpleClassLoader ( if jdk1.1 is", 
+   "detected ) and load all the needed jars ( XXX make this customizable ).", 
+   "It will also set the parentLoader to its own loader, and that can be", 
+   "used ( later ) as the parent for servlets loaders ( so tomcat jars", 
+   "don't interfere ).", 
+   "We'll also build Main and the minimal set of required classes into tomcat.jar,", 
+   "that will get a MANIFEST - in the end we should be able to replace all", 
+   "the scripts with java -jar tomcat.jar ( if we find some tricks to", 
+   "detect TOMCAT_HOME from java)", 
+   "I also added a LoaderInterceptor11 - I think we should deprecate Adaptive", 
+   "ClassLoader and all other classes - the code is way too complex ( compared", 
+   "with DependManager and a simple class loader) and for 1.2 we are far", 
+   "away from the security checks of URLClassLoader.", 
+   "The only problem is that tomcat.policy will need to become a bit more", 
+   "verbose ( that can be automated ).", 
+   "startup/Main will use URLClassLoader or SimpleClassLoader ( if jdk1.1 is", 
+   "detected ) and load all the needed jars ( XXX make this customizable ).", 
+   "It will also set the parentLoader to its own loader, and that can be", 
+   "used ( later ) as the parent for servlets loaders ( so tomcat jars", 
+   "don't interfere ).", 
+   "We'll also build Main and the minimal set of required classes into tomcat.jar,", 
+   "that will get a MANIFEST - in the end we should be able to replace all", 
+   "the scripts with java -jar tomcat.jar ( if we find some tricks to", 
+   "detect TOMCAT_HOME from java)", 
+   "I also added a LoaderInterceptor11 - I think we should deprecate Adaptive", 
+   "ClassLoader and all other classes - the code is way too complex ( compared", 
+   "with DependManager and a simple class loader) and for 1.2 we are far", 
+   "away from the security checks of URLClassLoader.", 
+   "The only problem is that tomcat.policy will need to become a bit more", 
+   "verbose ( that can be automated ).", 
+   "The code consist mostly on additions, I hope it doesn't brake anything -", 
+   "I need feedback and help."
+  ], 
+  "revision_id": "282291"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2000-08-17T22:22:29.000000Z", 
+  "msg": [
+   "* Some cleaing and cosmethic changes to JDBCRealm", 
+   "* made the realms compatible with being various in the", 
+   "interceptor list. Mainly now a user can have 0 roles", 
+   "and nul roles, this last is the case for a realm is using", 
+   "a user authenticated by another realm in the list."
+  ], 
+  "revision_id": "282290"
+ }
+]

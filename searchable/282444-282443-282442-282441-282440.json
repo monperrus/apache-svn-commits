@@ -1,0 +1,88 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2000-09-21T10:35:53.000000Z", 
+  "msg": [
+   "Moved \"res.resetBuffer()\" back to begining of handleStatus() where it is", 
+   "again always executed. HttpServletResponseFacade.sendError()", 
+   "depends on this resetBuffer() to be spec compliant.  Note that sendError()", 
+   "sends its own IllegalStateException without depending on the", 
+   "resetBuffer() call in handleStatus() to throw it.", 
+   "Wrapped \"res.resetBuffer()\" calls in handleStatus() and handleError()", 
+   "within try-catch to avoid masking the real problem.  If exception is thrown,", 
+   "just continue and hope for the best.", 
+   "Updated handleError() to set \"javax.servlet.jsp.jspException\" so JSP pages", 
+   "with isErrorPage=\"true\" can get the exception when thrown from servlets", 
+   "and other sources.  Only found PageContext.handlePageException() setting", 
+   "it before."
+  ], 
+  "revision_id": "282444"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-09-21T10:29:51.000000Z", 
+  "msg": [
+   "This is an error page for exceptions that displays stack traces.  The display", 
+   "of stack traces has been removed from the default exception response for", 
+   "security reasons.", 
+   "Executing this page directly displays brief instructions on how to make it", 
+   "the default error page for exceptions in a webapp."
+  ], 
+  "revision_id": "282443"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-09-21T10:25:09.000000Z", 
+  "msg": [
+   "I didn't see simple way to configure stack traces off, so I removed them", 
+   "from ExceptionHandler() for security reasons.  If I have missed a simple", 
+   "configuration method, they can be restored.", 
+   "As an alternative, I added DisplayException.jsp to \"/examples/jsp\".", 
+   "If set as the error page for java.lang.Throwable, you will get roughly the", 
+   "same behavior that ExceptionHandler used to provide. Information about", 
+   "how to do this displays with the page is executed directly."
+  ], 
+  "revision_id": "282442"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2000-09-20T11:30:32.000000Z", 
+  "msg": [
+   "Modify to not reveal included resource.  Show the original request instead."
+  ], 
+  "revision_id": "282441"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-19T07:02:24.000000Z", 
+  "msg": [
+   "Server adapter refactoring.", 
+   "The new code makes the implementation closer to the design patterns", 
+   "we chosed ( i.e. Interceptors act as an adapter between an external API - the", 
+   "protocol implementation - and tomcat internal representation ).", 
+   "This is the first step in documenting Ajp13 - the protocol is now in", 
+   "a single file, easier to read and enhance. We no longer try", 
+   "to make ajp13 a \"generic-protocol\" - we'll stay with TCP-specific. JNI", 
+   "doors or other protocols have different requirement and we can", 
+   "deal with that after ajp13 is stable.", 
+   "All other files in this package will slowly disapear, and unless you find", 
+   "a design problem with the new organization I'll remove them.", 
+   "As usually that will happen after the new code is tested and stable.", 
+   "( now it compile, but I haven't even run it )", 
+   "TODO:", 
+   "- make sure it runs", 
+   "- document Ajp13.", 
+   "- change Ajp13, Jni and Http to use MessageBytes and make sure they are", 
+   "optimized ( we should be now in the race for the last 10-20 object allocations", 
+   "per request)", 
+   "- enhance Ajp13 with all 2-directional calls we need", 
+   "- !!! make sure the buffers are properly used ( one important optimization", 
+   "will be to lazy-decode the buffers, but that means the buffer can't", 
+   "be reused for other callbacks. The current scheme works fine, and", 
+   "I don't expect this to be a problem ). Since this is a low-level", 
+   "protocol with a clear interface and function it's important to tune it", 
+   "very well."
+  ], 
+  "revision_id": "282440"
+ }
+]

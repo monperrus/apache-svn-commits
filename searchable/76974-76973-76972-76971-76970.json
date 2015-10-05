@@ -1,0 +1,70 @@
+[
+ {
+  "author": "fielding", 
+  "date": "1996-11-12T06:02:54.000000Z", 
+  "msg": [
+   "Added REMOTE_PORT to the environment variables set for scripts,", 
+   "with the value being the client's TCP port.  This allows CGI scripts", 
+   "to independently check the client's Ident (RFC 1413) without needing", 
+   "IdentityCheck \"On\" for the whole server."
+  ], 
+  "revision_id": "76974"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "1996-11-12T05:22:06.000000Z", 
+  "msg": [
+   "Removed the module_names[] and preloaded_module_names[] arrays.", 
+   "All functions now get the name from the module structure and either", 
+   "search the preloaded_modules list (for static info) or the actual", 
+   "linked list of modules (for active modules).", 
+   "Docs note: The \"httpd -h\" and \"httpd -l\" options print info about all", 
+   "compiled modules, not just the active (prelinked) ones.  mod_info only", 
+   "prints the prelinked module information [I would have changed that, but", 
+   "the code in mod_info uses an, ummmm, unusual style].  The <IfModule>", 
+   "and AddModule directives' use the file name of the module (what you now see", 
+   "with \"httpd -l\") as the argument."
+  ], 
+  "revision_id": "76973"
+ }, 
+ {
+  "author": "ben", 
+  "date": "1996-11-10T14:51:56.000000Z", 
+  "msg": [
+   "Spelling misteaks."
+  ], 
+  "revision_id": "76972"
+ }, 
+ {
+  "author": "fielding", 
+  "date": "1996-11-10T09:16:10.000000Z", 
+  "msg": [
+   "Fixed a bug in the header parsing code triggered when a continuation line", 
+   "is a single space: the entire header field above it was ignored and the", 
+   "message terminated. This would normally only occur when cut-n-pasting from", 
+   "an xterm, but it revealed a bunch of other problems with the way we were", 
+   "looking for the request-line and header fields.  I fixed it by rewriting", 
+   "the routines so that they would be more natural and not discard the", 
+   "error conditions, and introduced a new routine to buff.* for looking", 
+   "at the top of the input stream without changing it.", 
+   "The good news is that we now handle input lines robustly and do not", 
+   "puke when an extra CRLF is placed at the end of a POST request.", 
+   "The bad news is that I have found several places where we should be", 
+   "responding with 400 or 414 (Request-URI Too Long) messages when our", 
+   "input buffer fills-up, but we have no apparent mechanism for die'ing", 
+   "inside http_protocol.c.  For now I am just letting the input be truncated,", 
+   "which is good enough for robust handling, but I would prefer to send an", 
+   "error response so that the webmaster can know about the invalid", 
+   "buffer-blowing attempts."
+  ], 
+  "revision_id": "76971"
+ }, 
+ {
+  "author": "jim", 
+  "date": "1996-11-08T13:50:47.000000Z", 
+  "msg": [
+   "remove Ptime stuff"
+  ], 
+  "revision_id": "76970"
+ }
+]

@@ -1,0 +1,78 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-06-22T00:36:07.000000Z", 
+  "msg": [
+   "Big commit.  Basically, if APR defines a public feature macro, then APR", 
+   "should also use that macro internally.  This keeps us from checking for", 
+   "multiple macros as we were doing in the SENDFILE case.  It also means that", 
+   "APR is definately building the same way that external programs expect it to."
+  ], 
+  "revision_id": "60239"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-21T23:11:28.000000Z", 
+  "msg": [
+   "Remove warnings on some 64 bit machines because we were return 32 bit", 
+   "integers and we wanted 64 bit integers", 
+   "Submitted by:\tVictor J. Orlikowski <vjo@raleigh.ibm.com>", 
+   "Reviewed by:\tRyan Bloom"
+  ], 
+  "revision_id": "60238"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-20T23:51:05.000000Z", 
+  "msg": [
+   "Remvoe some checks that are producing macros that are never used."
+  ], 
+  "revision_id": "60237"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-06-20T22:58:29.000000Z", 
+  "msg": [
+   "Fix the config.cache used for MM.  MM now uses the same cache file as the", 
+   "rest of Apache."
+  ], 
+  "revision_id": "60236"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-06-20T19:36:48.000000Z", 
+  "msg": [
+   "ap_create_pipe was changed to return a pipe with both handles", 
+   "blocking (previously, both handles were non-blocking).", 
+   "ap_set_pipe_timeout() is now the only way to manipulate the", 
+   "blocking state of the pipe.  Pass -1 for timeout to make it", 
+   "blocking; pass 0 for timeout to make it non-blocking.", 
+   "ap_block_pipe() is gone.", 
+   "A few minor bugs were fixed along the way.", 
+   "OS-specific notes:", 
+   "non-Unix in general:", 
+   "Only Unix/BeOS currently has the optimization to keep track of the blocking", 
+   "state.  This is used to avoid syscalls as well as to handle ap_put_os_file(),", 
+   "which is a case where we don't know the blocking state of the handle we are", 
+   "given.", 
+   "OS/2:", 
+   "ap_set_pipe_timeout() with timeout value > 0: The code didn't play with", 
+   "the blocking state before and it doesn't still.  I did add logic for special", 
+   "timeout values 0 and -1 to play with the blocking state.", 
+   "ap_create_pipe():  old logic didn't do anything with the blocking state", 
+   "of the second handle; it still doesn't; hopefully it is blocking", 
+   "pre-BONE BEOS:", 
+   "old code to make a pipe non-blocking was a no-op; now it returns", 
+   "APR_ENOTIMPL", 
+   "BONE: old code to make a pipe non-blocking; it passed &zero as the", 
+   "parm to FIONBIO instead of &one; this bug was fixed", 
+   "Win32:", 
+   "The pipe was always created blocking before; no change", 
+   "previously, ap_setprocattr_io() ignored the blocking flag; now it", 
+   "respects it like other platforms and calls ap_set_pipe_timeout(p,0)", 
+   "on appropriate pipe handles (Bill Stoddard was just working in", 
+   "ap_set_pipe_timeout(), so I presume this is golden)"
+  ], 
+  "revision_id": "60235"
+ }
+]

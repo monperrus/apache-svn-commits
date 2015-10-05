@@ -1,0 +1,84 @@
+[
+ {
+  "author": "mcconnell", 
+  "date": "2002-08-18T02:14:20.000000Z", 
+  "msg": [
+   "Re-committed as Pete Donald has totally failed to even bother to provide", 
+   "any explination for his retraction of this class.  Pete has failed to understand", 
+   "that there exist alternative approaches to containers above and beyond", 
+   "Phoenix.  Merlin is a container that needs to be able to handle components", 
+   "that through missadventure have included Phoeix specific classes in their", 
+   "implementations.  Prolific referecnes to BlockContext is an example of this.", 
+   "This class resolves that problem by allowing alternative containers to", 
+   "generate a compatible context object."
+  ], 
+  "revision_id": "14569"
+ }, 
+ {
+  "author": "leif", 
+  "date": "2002-08-18T01:59:12.000000Z", 
+  "msg": [
+   "Remove access to the RoleManager until it is really needed for some reason."
+  ], 
+  "revision_id": "14568"
+ }, 
+ {
+  "author": "mcconnell", 
+  "date": "2002-08-18T01:26:24.000000Z", 
+  "msg": [
+   "Corrects bug when the scheduler is refereced within the context of a ComponentManager.", 
+   "See stack trace for details:", 
+   "[INFO   ] (root.james.remote): RemoteManager init...", 
+   "[INFO   ] (root.james.remote): RemoteManager using plain on port 4555 at null", 
+   "[INFO   ] (root.james.remote): RemoteManager ...init end", 
+   "[WARN   ] (root.connections#6561434): Error handling connection", 
+   "org.apache.avalon.framework.component.ComponentException: Manager returned a non-component for the role: org.apache.avalon.cornerstone.servi", 
+   "ces.scheduler.TimeScheduler", 
+   "at org.apache.avalon.cornerstone.services.connection.AdaptingComponentManager.lookup(AdaptingComponentManager.java:48)", 
+   "at org.apache.james.smtpserver.SMTPHandler.compose(SMTPHandler.java:149)", 
+   "at org.apache.avalon.framework.container.ContainerUtil.compose(ContainerUtil.java:164)", 
+   "at org.apache.avalon.cornerstone.services.connection.AbstractHandlerFactory.createConnectionHandler(AbstractHandlerFactory.java:64)", 
+   "at org.apache.avalon.cornerstone.blocks.connection.ConnectionRunner.run(Connection.java:182)", 
+   "at org.apache.avalon.excalibur.thread.impl.ExecutableRunnable.execute(ExecutableRunnable.java:47)", 
+   "at org.apache.avalon.excalibur.thread.impl.WorkerThread.run(WorkerThread.java:80)", 
+   "rethrown from", 
+   "java.lang.ClassCastException", 
+   "at org.apache.avalon.cornerstone.services.connection.AdaptingComponentManager.lookup(AdaptingComponentManager.java:42)", 
+   "at org.apache.james.smtpserver.SMTPHandler.compose(SMTPHandler.java:149)", 
+   "at org.apache.avalon.framework.container.ContainerUtil.compose(ContainerUtil.java:164)", 
+   "at org.apache.avalon.cornerstone.services.connection.AbstractHandlerFactory.createConnectionHandler(AbstractHandlerFactory.java:64)", 
+   "at org.apache.avalon.cornerstone.blocks.connection.ConnectionRunner.run(Connection.java:182)", 
+   "at org.apache.avalon.excalibur.thread.impl.ExecutableRunnable.execute(ExecutableRunnable.java:47)", 
+   "at org.apache.avalon.excalibur.thread.impl.WorkerThread.run(WorkerThread.java:80)"
+  ], 
+  "revision_id": "14567"
+ }, 
+ {
+  "author": "mcconnell", 
+  "date": "2002-08-18T01:06:30.000000Z", 
+  "msg": [
+   "While attempted to build James based on the current Avalon CVS of Cornerstone and I'm experiencing a ClassCastException.  The James implementation is referencing DefaultThreadManager as a Component, however, the \"implements Component\" clause has been removed from the defintion without modification of any versioning information breaking backward compatibility with the James implementation.", 
+   "The solution is to re-include the Component interface into the implements statement which has no side-effects and will not impact any other usage of this class.  If someone has an objectition to this, please feel free to post a detailed explination to the Avalon Dev list.", 
+   "A stack trace demonstrating the issue is included below:", 
+   "[ERROR  ] (root.james): Container disposal triggered by abnormal condition.", 
+   "org.apache.excalibur.merlin.container.ContainerException: Unexpected error during container execution.", 
+   "at org.apache.excalibur.merlin.container.DefaultContainer.run(Unknown Source)", 
+   "at java.lang.Thread.run(Thread.java:536)", 
+   "Caused by: org.apache.excalibur.merlin.resource.LifecycleException: Component named \"/root/james/spool\" failed to pass through the Composing", 
+   "stage. (Reason: org.apache.avalon.framework.component.ComponentException: Service provider returned a non-Component: class org.apache.avalon.cornerstone.blocks.threads.DefaultThreadManager).", 
+   "at org.apache.excalibur.merlin.resource.LifecycleHelper.fail(Unknown Source)", 
+   "at org.apache.excalibur.merlin.resource.LifecycleHelper.startup(Unknown Source)", 
+   "at org.apache.excalibur.merlin.resource.AbstractLifestyleHandler.createInstance(Unknown Source)", 
+   "at org.apache.excalibur.merlin.resource.SingletonLifestyleHandler.get(Unknown Source)"
+  ], 
+  "revision_id": "14566"
+ }, 
+ {
+  "author": "donaldp", 
+  "date": "2002-08-17T02:34:44.000000Z", 
+  "msg": [
+   "Revert changes that were -1'ed."
+  ], 
+  "revision_id": "14565"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "author": "rubys", 
+  "date": "2002-08-24T15:20:14.000000Z", 
+  "msg": [
+   "Class name changes"
+  ], 
+  "revision_id": "254924"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-24T02:22:37.000000Z", 
+  "msg": [
+   "String compare instead of QName compare"
+  ], 
+  "revision_id": "254923"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-24T02:20:29.000000Z", 
+  "msg": [
+   "Avoid over/underflow by using bitwise XOR instead of addition"
+  ], 
+  "revision_id": "254922"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-08-24T01:25:19.000000Z", 
+  "msg": [
+   "Some changes made to help performance.", 
+   "1) Speed up of the Pair class in TypeMappingImpl.  May need some more improvement later.", 
+   "2) DeserializationContestImpl.getTypeFromAttributes is called for every element.", 
+   "If the request does not have an xsi:type, a high performance penalty is incurred", 
+   "constructing a QName and doing a series of if tests.  This is now improved, and", 
+   "BeanDeserializer now calls getTypeFromXSITypeAttr for its children", 
+   "3) BeanDeserializer onStartChild constructs a default DeserializerImpl if no", 
+   "Deserializer is found for the child element.  This is a major performance penalty if", 
+   "the request does not have xsi:types.  In such cases a DeserializerImpl is created", 
+   "to simply find the right Deserializer down stream.  Added a short circuit to see", 
+   "if the child element is a simple primitive type (most cases) and create the proper", 
+   "deserializer directly.  A similar change is made in the array deserializer.", 
+   "Ultimately I think that DeserializationImpl should have a static createDeserializer(...)", 
+   "method instead of having hard-coded calls to new DeserializerImpl().  Thus extra", 
+   "logic (like the short circuit in (3) could be applied in all situations).", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "254921"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-24T00:22:37.000000Z", 
+  "msg": [
+   "In the original Xerces from which this originated, SymbolTables were used", 
+   "to convert Strings to integers so that they can be more easily compared.", 
+   "When transplanted to Axis, this class was used merely to convert Strings", 
+   "to integers so that they could be converted back again to Strings (upon", 
+   "which point, the embedded char array is then extracted, appended to a", 
+   "StringBuffer, extracted as a String, and then converted to the desired", 
+   "type; but I digress).", 
+   "More globally, this whole Sax2EventRecorder needs to be optimized away", 
+   "whenever possible as it is now getting to the point where it is dominating", 
+   "the processing...", 
+   "Meanwhile, this commit takes a more modest approach and merely eliminates", 
+   "the 4 hash gets/put's pair per start element, 3 per end element, and 1 pair", 
+   "for any character strings encountered in the middle.  This being the", 
+   "top method on the hit parade on SOAP messages of even moderate size."
+  ], 
+  "revision_id": "254920"
+ }
+]

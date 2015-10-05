@@ -1,0 +1,106 @@
+[
+ {
+  "author": "", 
+  "date": "2001-07-11T15:42:37.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'L22RC2'."
+  ], 
+  "revision_id": "335159"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-11T15:42:37.000000Z", 
+  "msg": [
+   "Now implements DocumentFragment."
+  ], 
+  "revision_id": "335158"
+ }, 
+ {
+  "author": "garyp", 
+  "date": "2001-07-11T09:54:26.000000Z", 
+  "msg": [
+   "Resolve bugzilla 2355 <http://nagoya.apache.org/bugzilla/show_bug.cgi?id=2355>.  Added code to populate m_index for global variables and parameters.  If the backward search for templates reaches the top level, use the list of composed top-level variables and parameters from StylesheetRoot."
+  ], 
+  "revision_id": "335157"
+ }, 
+ {
+  "author": "garyp", 
+  "date": "2001-07-11T06:49:51.000000Z", 
+  "msg": [
+   "Fix bug 2175 <http://nagoya.apache.org/bugzilla/show_bug.cgi?id=2175> by adding the current time to the method key to ensure method key uniqueness.  Multiple Compilers were getting the same hashCode, particularly in Visual Age for Java, due to aggressive garbage collection.  Added the current time in mills to distinguish between the different functions being compiled."
+  ], 
+  "revision_id": "335156"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-11T04:00:15.000000Z", 
+  "msg": [
+   "Application of patch submitted by Ovidiu Predescu <ovidiu@cup.hp.com>", 
+   "for file, line, column number information for XML source document.", 
+   "[A made one change: m_sourceSystemId, m_sourceLine, and", 
+   "m_sourceColumn are not created with the member variable", 
+   "initializer, since they are initialized in setProperty.]", 
+   "The following patch is a rework of a previous patch I've submitted on", 
+   "May 24 against the Stree model, current at that time. This time the", 
+   "patch is against the DTM model, and makes use of DTM features to", 
+   "optimize the lookup time and storage requirements. I hope this time", 
+   "the patch gets incorporated in the CVS repository, before any major", 
+   "rework happens again ;-).", 
+   "As with the previous patch, there is no overhead in space or time if", 
+   "source information is not needed.", 
+   "From a user perspective, this feature can be turned on by passing the", 
+   "-L flag to Xalan when invoking it from the command", 
+   "line. Programmatically you can also enable it by invoking the", 
+   "setProperty method on the TransformerImpl:", 
+   "TransformerImpl impl = ((TransformerImpl) transformer);", 
+   "impl.setProperty(org.apache.xalan.transformer.XalanProperties.SOURCE_LOCATION,", 
+   "Boolean.TRUE);", 
+   "A Transformer \"property\" is different from a \"feature\": while a", 
+   "feature is specific to all the transformer instances and usually", 
+   "refers to an implementation aspect, a property is a runtime capability", 
+   "that is set per Transformer instance. Currently the only property", 
+   "added by this patch is the source location in the XML source document.", 
+   "The patch adds two methods to the DTM interface:", 
+   "public void setProperty(String property, Object value);", 
+   "public SourceLocator getSourceLocatorFor(int node);", 
+   "The second method is used to obtain the source location given a node", 
+   "handle.", 
+   "There are two ways you can make use of the source location. The first", 
+   "one is from within a stylesheet, where you can have something like", 
+   "this:", 
+   "<xsl:stylesheet", 
+   "xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"", 
+   "xmlns:nodeinfo=\"xalan://org.apache.xalan.lib.NodeInfo\"", 
+   "version=\"1.0\">", 
+   "<xsl:template match=\"*\">", 
+   "//node <xsl:value-of select=\"name()\"/>", 
+   "//file <xsl:value-of select=\"nodeinfo:systemId()\"/>", 
+   "//line <xsl:value-of select=\"nodeinfo:lineNumber()\"/>", 
+   "//column <xsl:value-of select=\"nodeinfo:columnNumber()\"/>", 
+   "<xsl:apply-templates/>", 
+   "</xsl:template>", 
+   "</xsl:stylesheet>", 
+   "If no arguments are passed to the systemId(), lineNumber() or", 
+   "columnNumber() functions, the corresponding information of the current", 
+   "context node is returned. A node can be passed as argument to the", 
+   "above functions, in which case the corresponding information about", 
+   "that node is returned. If a node set containing multiple nodes is", 
+   "passed as argument, only the information of the first node in the set", 
+   "is returned.", 
+   "The second way of obtaining the source location is", 
+   "programmatically. Given a Node instance, one can obtain the owner DTM", 
+   "and the node handle (an integer) that represents the", 
+   "node. Unfortunately I didn't see any way of hiding this: if you find", 
+   "one please let me know and I'll fix it.", 
+   "The following example is extracted from PrintTraceListener and", 
+   "illustrates the API:", 
+   "Node sourceNode = ev.m_sourceNode;", 
+   "int nodeHandler = ((DTMNodeProxy)sourceNode).getDTMNodeNumber();", 
+   "SourceLocator locator = ((DTMNodeProxy)sourceNode).getDTM()", 
+   ".getSourceLocatorFor(nodeHandler);", 
+   "m_pw.println(\"Selected source node '\" + sourceNode.getNodeName()", 
+   "+ \"', at \" + locator);"
+  ], 
+  "revision_id": "335155"
+ }
+]

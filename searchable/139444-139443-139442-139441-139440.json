@@ -1,0 +1,96 @@
+[
+ {
+  "author": "dfs", 
+  "date": "2004-01-09T16:35:36.000000Z", 
+  "msg": [
+   "Changed name of DuplicateFilteringFileIterator.current to next, which", 
+   "more accurately reflects the role of the variable."
+  ], 
+  "revision_id": "139444"
+ }, 
+ {
+  "author": "dfs", 
+  "date": "2004-01-09T09:07:03.000000Z", 
+  "msg": [
+   "Made FTPFileList and FTPFileIterator abstract.  Moved implementations", 
+   "into DefaultFTPFileList and DefaultFTPFileIterator.  Added", 
+   "createFTPFileList method (the name is not fixed in stone and should", 
+   "probably change) in FTPFileEntryParser to take over role", 
+   "of FTPFilelist.create.  These changes were made to allow customization", 
+   "of file list handling by entry parseres.  Finally, changed VMSFTPEntryParser", 
+   "to return an FTPFileList that filters out duplicates."
+  ], 
+  "revision_id": "139443"
+ }, 
+ {
+  "author": "dfs", 
+  "date": "2004-01-09T06:19:23.000000Z", 
+  "msg": [
+   "\"Jeff Barrett\" <JBarrett@sawyermedia.com> reports that:", 
+   "I'm using commons-net to ftp a bunch of files around every night as a batch process.  It probably copies just under 1g.  Over the course of that process I'll  often get 2 or 3 thrown exceptions like so:", 
+   "[java] java.lang.NullPointerException", 
+   "[java] \tat java.io.BufferedInputStream.read(BufferedInputStream.java:279)", 
+   "[java] \tat java.io.BufferedInputStream.fill(BufferedInputStream.java:183)", 
+   "[java] \tat java.io.BufferedInputStream.read(BufferedInputStream.java:201)", 
+   "[java] \tat org.apache.commons.net.telnet.TelnetInputStream.__read(TelnetInputStream.java:140)", 
+   "[java] \tat org.apache.commons.net.telnet.TelnetInputStream.run(TelnetInputStream.java:464)", 
+   "[java] \tat java.lang.Thread.run(Thread.java:536)", 
+   "Since we didn't open a Bugzilla report, I'm recording my email", 
+   "explanation as a log message:", 
+   "That's all happening in BufferedInputStream.  Looking at the code", 
+   "for BufferedInputStream in J2SE 1.4.2, it looks like the", 
+   "NullPointerException exception is happening at a call of in.available().", 
+   "in is set to null in close().  So it seems there may be a situation", 
+   "whereby a read by TelnetInputStream.__read is being performed after", 
+   "a close.  Looking at the code, I'm pretty sure there's a problem.", 
+   "TelnetInputStream calls super.close() BEFORE entering a", 
+   "synchronized block.  There's a race condition that could allow", 
+   "the reader thread to start a read after BufferedInputStream.close()", 
+   "is called.  The reason it hardly ever happns is that", 
+   "BufferedInputStream calls an ensureOpen() method at the", 
+   "beginning of read() that checks to make sure in is not null.", 
+   "However, between that call and the call to in.available(),", 
+   "the value may become null because BufferdInputStream.close()", 
+   "is not a synchronized method, unlike BufferedInputStream.read().", 
+   "Now, there's a comment in the code before the close", 
+   "call that I'm guilty of that says:", 
+   "// Completely disregard the fact thread may still be running.", 
+   "// We can't afford to block on this close by waiting for", 
+   "// thread to terminate because few if any JVM's will actually", 
+   "// interrupt a system read() from the interrupt() method.", 
+   "This means the close() is being used to force the read() to return -1", 
+   "or throw an exception.  If we synchronize the call to close, we", 
+   "may get deadlock.  Mind you, this is circa JDK 1.1.x.", 
+   "The good news is that the NullPointerException is probably harmless", 
+   "because it's happening when the stream is being closed and the thread", 
+   "is terminated.  Also, it's the FTP control stream, not the data stream", 
+   "that's being affected, so there will be no loss of data.  The bad", 
+   "news is that I'm not immediately sure how to fix it in light of the", 
+   "code comment.  This is a great example of why I'd like to get rid of", 
+   "the threads and move to java.nio for version 2.0.", 
+   "I can't come up with any ideas that don't run the risk of", 
+   "deadlock on some JVM.  I'm afraid the right fix may be to", 
+   "simply catch any RuntimeExceptions thrown by read and take", 
+   "the same action as a close().  We probably should have been", 
+   "doing that anyway to gracefully handle unexpected situations.", 
+   "As an interim fix, I applied that change."
+  ], 
+  "revision_id": "139442"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2004-01-09T04:20:15.000000Z", 
+  "msg": [
+   "Fixed typo in changes doc and added outstanding to-do' to tasks.xml."
+  ], 
+  "revision_id": "139441"
+ }, 
+ {
+  "author": "brekke", 
+  "date": "2004-01-09T04:19:44.000000Z", 
+  "msg": [
+   "remove unused import"
+  ], 
+  "revision_id": "139440"
+ }
+]

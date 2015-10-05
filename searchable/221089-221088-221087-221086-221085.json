@@ -1,0 +1,75 @@
+[
+ {
+  "author": "henning", 
+  "date": "2003-02-27T17:56:18.000000Z", 
+  "msg": [
+   "This is a quite innocent looking change. In fact, it is a major bug", 
+   "fix. It still is ugly as hell, introduces a dependency of the Velocity", 
+   "Service to Turbine.java but the correct fix would be a massive rewrite", 
+   "of some parts of the Turbine cycle (you would need action specific", 
+   "listeners for this so some code can be run if a specific action is", 
+   "executed) so I keep this either for Turbine NG or post-2.3 This fix", 
+   "will do, because these days, everyone seems to run Turbine with", 
+   "Velocity.", 
+   "It might be, that the actual bug isn't even (yet) present in the", 
+   "current Turbine source base, but I will tell you about it", 
+   "nevertheless. :-)", 
+   "When Turbine starts up, it should have no user logged in. So the", 
+   "session validator will create a new user object for the anonymous user", 
+   "by calling TurbineSecurity.getAnonymousUser(). After that, the pull", 
+   "tools are initialized for this user and the Login screen is displayed.", 
+   "User specific tools are kept in a hash table which is copied and then", 
+   "populated with the request tools.", 
+   "If the user logs in, we get a new user object. But at this point, the", 
+   "non-request tools are already set. So on the first screen that the", 
+   "freshly logged in user is shown, he still gets the tools of the old", 
+   "(anonymous) user. The second and any further screens will contain the", 
+   "right tools. Same goes for logout. The first login screen after the", 
+   "user logged out will contain all the tools of the last authorized", 
+   "user.", 
+   "This change fixes this by removing the Velocity Context containing the", 
+   "global and session tools, forcing the Pull Service to rebuild these."
+  ], 
+  "revision_id": "221089"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-02-27T17:37:34.000000Z", 
+  "msg": [
+   "Factored out the Login and Logout code which should be run before the", 
+   "Session Validator. I now start to understand where the whole pipeline", 
+   "idea came from, as this shouldn't really be here but in a sort of", 
+   "listener which should be registered with the Turbine servlet at", 
+   "startup time."
+  ], 
+  "revision_id": "221088"
+ }, 
+ {
+  "author": "quintonm", 
+  "date": "2003-02-27T16:42:33.000000Z", 
+  "msg": [
+   "- Removed torque.useClasspath setting.  This duplicated the default setting", 
+   "for the plugin.", 
+   "- Changed torque.runOnlyOnSchemaChange to true.  Now the OM classes will only", 
+   "be generated if the *-schema.xml files have changed since the last", 
+   "generation."
+  ], 
+  "revision_id": "221087"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-02-27T15:40:00.000000Z", 
+  "msg": [
+   "Constants. I love Constants. Some docs, too."
+  ], 
+  "revision_id": "221086"
+ }, 
+ {
+  "author": "henning", 
+  "date": "2003-02-27T15:02:22.000000Z", 
+  "msg": [
+   "Ah the joy of cut'n'paste. :-)"
+  ], 
+  "revision_id": "221085"
+ }
+]

@@ -1,0 +1,60 @@
+[
+ {
+  "author": "mmanders", 
+  "date": "2001-10-18T14:06:23.000000Z", 
+  "msg": [
+   "Fixed a problem where a value containing a space was truncated at the space.  The RFC is somewhat vague in this reguard, but this patch matches functionality of other versions of Tomcat and other servlet conainters.  Fixes bug 4237."
+  ], 
+  "revision_id": "284294"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-10-16T21:03:37.000000Z", 
+  "msg": [
+   "Fix typo.", 
+   "Submitted by: Hans Schmid"
+  ], 
+  "revision_id": "284293"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-10-16T13:44:32.000000Z", 
+  "msg": [
+   "Re-fix SimpleMapper. Now hosts is a Hastable ( the simplest fix, better safe... ).", 
+   "Please note that SimpleMapper is quite Simple, it uses a pretty unoptimized alghoritm.", 
+   "It is intended only as a substitute for the 'real' thing, which should be some tree-based,", 
+   "optimized mapper ( or the real web server ).", 
+   "We tried to compensate the bad alghoritm with a faster impl. of hashtable."
+  ], 
+  "revision_id": "284292"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-10-16T03:20:50.000000Z", 
+  "msg": [
+   "Important fix - this rolls back a previous change that disabled recycling.", 
+   "The thread pool is used to run tasks of the same type. The tasks are initialized", 
+   "only once, and the pool provides a 'free' per/thread storage ( i.e. no synchronization,", 
+   "O(1) ).", 
+   "The init() is not supposed to be called on each exacution - otherwise we would", 
+   "lose all the recycling.", 
+   "( the real fix is just one line, but I also added few flush() for better debugging", 
+   "in future )"
+  ], 
+  "revision_id": "284291"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-10-16T03:16:29.000000Z", 
+  "msg": [
+   "Replace SimpleHashtable ( the unsynchronized hashtable ) with a real hashtable.", 
+   "The prefix and exact mapping can change at runtime ( we dynamically add mappings", 
+   "for jsps and /servlet ). We could avoid the sync, but it's safer to use Hashtable for now.", 
+   "Regarding *hosts, the keys() can't be used in multiple threads - so we have to use", 
+   "SimpleHashtable ( or possibly move it to an [] and avoid creating Enumeration and", 
+   "using a hashtable when in fact we check all elements ).", 
+   "Most of the time this isn't a problem, but under hight load you may see exceptions."
+  ], 
+  "revision_id": "284290"
+ }
+]

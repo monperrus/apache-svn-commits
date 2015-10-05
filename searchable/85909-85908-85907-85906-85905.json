@@ -1,0 +1,63 @@
+[
+ {
+  "author": "fielding", 
+  "date": "2000-07-28T01:35:48.000000Z", 
+  "msg": [
+   "A minimalist update to reality as of 27 July 2000.", 
+   "If your info is wrong, then now is a good time to fix it."
+  ], 
+  "revision_id": "85909"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-07-27T23:05:44.000000Z", 
+  "msg": [
+   "Don't try to process a connection when accept() failed."
+  ], 
+  "revision_id": "85908"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-07-27T18:42:39.000000Z", 
+  "msg": [
+   "Win32: Revamp NT shutdown code. I think this shutdown code is pretty close", 
+   "to production ready. Introduce a two-phase shutdown. First phase is", 
+   "shutdown_pending which prevents new contexts from being queued to the", 
+   "AcceptEx completion port.  The server runs for a period (~1 second)", 
+   "in this state to enable threads to drain the completion port of active", 
+   "connections by handling the connections. This works very well on a busy", 
+   "server as the contexts are consumed quickly and completely (leaving non", 
+   "to cancel in the next phase).", 
+   "The next phase is the workers_may exit phase, which prevents threads", 
+   "from blocking on the completion port (especially important to prevent", 
+   "threads unblocking off of keep-alive connections from calling", 
+   "GetQueuedCompletionStatus).  One we enter this phase, all threads blocked on the", 
+   "port (we track the number carefully) are unblocked and allowed to exit.", 
+   "Then we cancel any pending i/o completion contexts on the listeners (those which", 
+   "were not consumed naturally in the shutdown phase). Then we reap the ABORTED", 
+   "completion packets off the port. (Possible to reap a few good \"accepted\"", 
+   "connections here also. Oh well...). Once we are done reaping completion packets,", 
+   "we release the start mutex which allows the new child (in a restart) to", 
+   "begin accepting connections.", 
+   "It is really REALLY important to not let multiple processes call", 
+   "GetQueuedCompletionStatus at the same time.  Results are unpredictable."
+  ], 
+  "revision_id": "85907"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-07-27T14:39:13.000000Z", 
+  "msg": [
+   "Add a patch for review."
+  ], 
+  "revision_id": "85906"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-07-27T14:28:40.000000Z", 
+  "msg": [
+   "Remove some items that are done from the STATUS file."
+  ], 
+  "revision_id": "85905"
+ }
+]

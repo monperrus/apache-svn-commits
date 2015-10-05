@@ -1,0 +1,60 @@
+[
+ {
+  "author": "jstrachan", 
+  "date": "2002-07-08T16:19:06.000000Z", 
+  "msg": [
+   "Numerous patches applied.", 
+   "Firstly the BridgeMDO will now work in a transacted mode or not based on the mode of the Messenger connection.", 
+   "The transacted mode is set via the <factory> or <jndi> elements in the Messenger.xml. e.g.", 
+   "<msessenger name=\"foo\">", 
+   "<factory className=\"com.acme.MySessionFactory\" transacted=\"true\">", 
+   "or", 
+   "<msessenger name=\"foo\">", 
+   "<jndi lookupName=\"foo\" transacted=\"true\">", 
+   "Also there is a simple StopWatchMessageListener that can be useful for doing simple timings of Message processing.", 
+   "Also added a Messagelet Main.java which is a simple command line program that can be fired off from Ant, Maven, Jelly that can consume a number of messages and delegate to MessageListener and MDOs for processing of the messages, without requiring a Servlet engine.", 
+   "This is fine for quickly running some samples etc."
+  ], 
+  "revision_id": "146644"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-07-08T15:15:24.000000Z", 
+  "msg": [
+   "updated to add some demos to maven-ng's maven.xml file"
+  ], 
+  "revision_id": "146643"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-07-08T14:59:31.000000Z", 
+  "msg": [
+   "patched randomizing destination logic so that we don't get an out of bounds exception! :-)"
+  ], 
+  "revision_id": "146642"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-07-08T14:37:36.000000Z", 
+  "msg": [
+   "Added support for MessageProducer caching to boost performance. This is optional and is enabled by default.", 
+   "It can be disabled via the cacheProducers=\"false\" attribute for example", 
+   "<messenger cacheProducers=\"false\">", 
+   "...", 
+   "Also I've added a DistributeBridgeMDO. This is like BridgeMDO, messages are consumed from one destination and published to another destination (maybe using a different JMS provider and connection).", 
+   "However the DistributeBridgeMDO allows load balancing of, say, queues. Thats to say the messages can be randomized onto a number of possible output destinations. This can sometimes boost JMS throughput performance.", 
+   "For example messages could be consumed on IN.A and sent to any of OUT.A, OUT.B, OUT.C, OUT.D. Then 4 server clusters could run off each of the 4 output queues which typically boosts throughput (using 4 queues rather than 1) for complex JMS processors.", 
+   "Also added some extra stuff to keep the build in sync with Maven's CVS HEAD."
+  ], 
+  "revision_id": "146641"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-06-27T15:30:08.000000Z", 
+  "msg": [
+   "Optimised the implementation of the call() methods to pool the MessageConsumer per thread for temporary destinations, which greatly boosts performance on most JMS providers.", 
+   "Typically its not safe to generically pool MessageConsumers in JMS, however its fine for temporary destinations, since there are no other processes consuming them, and we only pool 1 MessageConsumer per thread (and per temporary destination) so this is fine."
+  ], 
+  "revision_id": "146640"
+ }
+]

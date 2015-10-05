@@ -1,0 +1,89 @@
+[
+ {
+  "author": "niallp", 
+  "date": "2005-04-01T02:21:01.826773Z", 
+  "msg": [
+   "Correct EL Build in struts 1.2.X Branch"
+  ], 
+  "revision_id": "159654"
+ }, 
+ {
+  "author": "dblevins", 
+  "date": "2005-04-01T00:40:32.001342Z", 
+  "msg": [
+   "Added correct repo list"
+  ], 
+  "revision_id": "159653"
+ }, 
+ {
+  "author": "ips", 
+  "date": "2005-04-01T00:22:16.226175Z", 
+  "msg": [
+   "finished writing all blackberry tests"
+  ], 
+  "revision_id": "159652"
+ }, 
+ {
+  "author": "mikem", 
+  "date": "2005-03-31T23:55:44.007790Z", 
+  "msg": [
+   "committing change for Suresh:  suresh.thalamati@gmail.com", 
+   "Attached is a first patch towards implementing checksum support for transaction", 
+   "log to handle out of order incomplete log writes during recovery.  This patch", 
+   "is based on writing a checksum log record that contain checksum information for a", 
+   "group of log records in the log buffers. Please refer to Derby-96 in JIRA for", 
+   "more details.", 
+   "Testing : Ran derbyall test suite, all tests passed.", 
+   "Changes in this patch addresses writing checksum information to the transaction", 
+   "log before the log records are written and verifying the log at recovery time", 
+   "using the checksum information on the disk.", 
+   "Writing Checksum Log Records:", 
+   "Checksum log record contains checksum Algorithm, size of  the data  and the checksum value.", 
+   "Added a new class to implement this log operation.", 
+   "The checksum Log record is placed before the actual log data the checksum", 
+   "record represents. This is done by reserving the space in the log buffers and", 
+   "in the log file then writing into reserved buffer space the checksum log record whenever", 
+   "buffer is full or it need to be written because of a flush request due to a", 
+   "commit. Incase of a large log records that does not fit into a single log", 
+   "buffer, the log records are written directly to the log file, in this case", 
+   "checksum log record represents only one log record and it is written to the", 
+   "log file before writing the large log record directly into the log file.", 
+   "In the current system the log group information is encrypted when a database", 
+   "is encrypted. There is no facility to identify that a log record is checksum", 
+   "log record without decrypting the log record. Checksum Log Record is also", 
+   "encrypted to work correctly with the rest of the system.", 
+   "changed files: LogAccessFile.java, ChecksumOperation.java, LogToFile.java", 
+   "Verifying the Log:", 
+   "During recovery, while doing forward scan whenever scan finds a checksum record,", 
+   "it reads the amount of the data specified in the checksum record , calculates", 
+   "the checksum for the data and compares it to the checksum value in the log record. If the on", 
+   "disk checksum value does not match with the value recalculated then that", 
+   "portion of the log is assumed as incompletely written and the record before the", 
+   "checksum log record becomes the last valid record for the recovery.", 
+   "changed files: Scan.java", 
+   "Unit Tests:", 
+   "Enhanced a existing  recovery unit test with test cases that simulate out of", 
+   "order incomplete writes by  corrupting the end of the log intentionally.", 
+   "changed files: T_RecoveryBadLog.java", 
+   "functional tests: current backup and recovery tests checks all cases where", 
+   "checksum should be valid.", 
+   "To Be Done:", 
+   "0) Handle Soft upgrade from old versions.   1) Check  for any timing issues between Checkpoint Thread and Checksum Log Record writes.", 
+   "2) Check  for any timing issues between Checksum Log Record writes and the backup/restore.", 
+   "3) Performance Testing", 
+   "4) Write a  JDBC level functional test with large log records(>32k> incomplete log writes.", 
+   "5) Any thing else that I find  while testing :-)", 
+   "Thanks", 
+   "-suresht"
+  ], 
+  "revision_id": "159651"
+ }, 
+ {
+  "author": "rgardler", 
+  "date": "2005-03-31T23:19:45.774789Z", 
+  "msg": [
+   "style attributes are legal in Document V2.0"
+  ], 
+  "revision_id": "159650"
+ }
+]

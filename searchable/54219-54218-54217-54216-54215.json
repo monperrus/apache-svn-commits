@@ -1,0 +1,65 @@
+[
+ {
+  "author": "akarasulu", 
+  "date": "2004-10-10T06:23:21.852041Z", 
+  "msg": [
+   "correcting misspelled auxiliary which was misspelled auxillary"
+  ], 
+  "revision_id": "54219"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-10-10T05:36:01.806863Z", 
+  "msg": [
+   "use top level parse entry point instead of the one for attributeTypes"
+  ], 
+  "revision_id": "54218"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-10-10T05:34:59.256492Z", 
+  "msg": [
+   "PROBLEM", 
+   "=======", 
+   "The parser was trying to do far too much.  First off it was trying to handle", 
+   "name to OID resolution while trying to create all the dependent objects.  This", 
+   "presented a few problems:", 
+   "o OID resolution requires mappings of names to OIDs across all schemas so", 
+   "all schemas would need to be parsed with dependent schemas coming first", 
+   "o OID resolution also used eve server classes dealing with schemas", 
+   "o Intra schema dependencies were introduced since dependencies needed to be", 
+   "parsed before dependent attributes and this is not how OpenLDAP files are", 
+   "structured.  Order is arbitray in OL schema files!", 
+   "Yeah it was an ugly situation leaving several questions unanswered and", 
+   "intermingled with Eve server side schema object dependency resolution.", 
+   "SOLUTION", 
+   "========", 
+   "We took a totally literal capture of all entities.  Meaning there's no attempt", 
+   "to resolve OIDs for names and to resolved dependencies.  Beans like", 
+   "AttributeTypeLiteral are simply used to encapsulate the parsed String values.", 
+   "This leaves the task of resolution setup up to the code generation piece and", 
+   "the runtime operation of the schema configuration set objects.  This makes", 
+   "sense since these objects are part of the Eve backend subsystem within the", 
+   "schema facilities.  This is where dependency resolution for schema objects", 
+   "should take place not in the OpenLDAP schema parser.  The schema parser should", 
+   "be simple doing only what it needs to do and no more."
+  ], 
+  "revision_id": "54217"
+ }, 
+ {
+  "author": "chirino", 
+  "date": "2004-10-10T04:40:53.683497Z", 
+  "msg": [
+   "Fixing http://nagoya.apache.org/jira/browse/GERONIMO-369"
+  ], 
+  "revision_id": "54216"
+ }, 
+ {
+  "author": "akarasulu", 
+  "date": "2004-10-10T04:29:41.396281Z", 
+  "msg": [
+   "started to generalize parser for entire schema to include objectClasses"
+  ], 
+  "revision_id": "54215"
+ }
+]

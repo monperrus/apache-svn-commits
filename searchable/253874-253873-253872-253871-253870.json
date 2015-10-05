@@ -1,0 +1,102 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-27T18:29:08.000000Z", 
+  "msg": [
+   "Fix xmlToJavaName() to correctly deal with cases where punctuation (i.e.", 
+   "\"_\") starts an identifier that has multiple capital letters.  \"_OID\" should map", 
+   "to \"OID\", not \"oID\".", 
+   "Add a unit test for this."
+  ], 
+  "revision_id": "253874"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-27T18:17:43.000000Z", 
+  "msg": [
+   "I've updated javax.xml.rpc.ServiceFactory to JAX-RPC 0.8 and changed", 
+   "org.apache.axis.client.ServiceFactory to implement it (though I haven't", 
+   "filled in the implementation, yet)."
+  ], 
+  "revision_id": "253873"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-27T17:53:07.000000Z", 
+  "msg": [
+   "Improvements / cleanup of the RPC infrastructure + service metadata.  Still", 
+   "needs some work, but this is much more like it.  Need to implement some edge-", 
+   "case tests for this code.", 
+   "Details:", 
+   "* Fix NPE in WSDDOperation - there can be 0 elementMappings", 
+   "* Slight change in TypeMappingImpl to only override the qname or class", 
+   "mapping for a registered type mapping if there is a serializer/deserializer", 
+   "present OR if there is no other mapping registered in that direction.", 
+   "* Mapping from xmlsoap:Map is now to HashMap, not Map.  We still happily", 
+   "serialize any Map to an xmlsoap:Map, but the deser mapping goes to the", 
+   "concrete class.", 
+   "* Add \"isConvertable()\" method to JavaUtils.", 
+   "* ServiceDesc is now much smarter about introspecting.  We introspect once", 
+   "for each method that we're interested in, and methods which never get called", 
+   "typically won't ever get introspected for.", 
+   "* Implement \"synchronizing\" OperationDescs which have been generated from", 
+   "deployment (WSDD) info with an implementation class on the server.  This", 
+   "means if we have a service with this deployment info:", 
+   "<service...>", 
+   "<operation name=\"method\">", 
+   "<parameter name=\"a\" type=\"xsd:string\" mode=\"IN\"/>", 
+   "<parameter name=\"b\" type=\"xsd:string\" mode=\"INOUT\"/>", 
+   "<parameter name=\"c\" type=\"xsd:string\" mode=\"OUT\"/>", 
+   "</operation>", 
+   "</service>", 
+   "...and a method on the implementation class which looks like this:", 
+   "public void method(String a, StringHolder b, StringHolder c)", 
+   "we will match the two together, recording the correct Java classes for", 
+   "the parameters in the ParameterDescs, and keeping a pointer to the Method", 
+   "in the OperationDesc.  See next couple of bullets for why this is cool.", 
+   "* RPCProvider method search + dispatch code is now *much* cleaner.  We rely", 
+   "on \"early binding\" to dispatch to the correct method via a ServiceDesc,", 
+   "so by the time we've deserialized the RPCElement successfully, we know", 
+   "exactly which OperationDesc (and hence which Java Method) we're dealing with.", 
+   "That enables us to simply set up the parameters and call it.", 
+   "* RPCHandler now checks any actually received xsi:types against what is", 
+   "expected/desired by the appropriate ParameterDesc, and throws a fault", 
+   "if it can't map them.", 
+   "* RPCElement doesn't try to introspect every time anymore, it just makes sure", 
+   "the ServiceDesc has the right typemapping and implementation class if", 
+   "appropriate.  Then getOperationsByName() will introspect if necessary.", 
+   "* JavaDeployWriter now writes out <parameter> information into the WSDD", 
+   "* Put in missing mapping in samples/echo service, and put an <operation>", 
+   "into the deploy.wsdd so we get the OUT parameters right for", 
+   "echoStructAsSimpleTypes()", 
+   "* Enable accessing a Call's TypeMapping via getTypeMapping() - relies on the", 
+   "encodingStyle being set correctly.", 
+   "* Remove various try/catch blocks which were obscuring exceptions in tests.", 
+   "Tests in general should throw exceptions (and their associated stack traces)", 
+   "instead of eating them, unless there's a good reason to eat them.", 
+   "* Move code which understands primitives/wrappers into JavaUtils, since it's", 
+   "generally handy"
+  ], 
+  "revision_id": "253872"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-27T16:46:57.000000Z", 
+  "msg": [
+   "ParameterMode.PARAM_MODE_IN/INOUT/OUT changed in JAX-RPC", 
+   "version 0.8 to ParameterMode.IN/INOUT/OUT.", 
+   "I've kept the old stuff and deprecated it."
+  ], 
+  "revision_id": "253871"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-27T13:35:56.000000Z", 
+  "msg": [
+   "I brought the Stub interface/implementation up to JAX-RPC 0.8 snuff, which", 
+   "meant simply moving the standard property constants from the implementation", 
+   "to the interface."
+  ], 
+  "revision_id": "253870"
+ }
+]

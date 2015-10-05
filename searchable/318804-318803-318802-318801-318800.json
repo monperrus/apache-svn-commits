@@ -1,0 +1,71 @@
+[
+ {
+  "author": "sandygao", 
+  "date": "2002-10-25T20:28:42.000000Z", 
+  "msg": [
+   "Performance: we were using java.math.BigDecimal and BigInteger to represent", 
+   "decimal values. These classes are too heavy, and involve a lot of object", 
+   "creations. Now we use a light weight object for decimal values.", 
+   "We may want to add more functionality to this new representation later, but", 
+   "it now has everything necessary for schema validation."
+  ], 
+  "revision_id": "318804"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-10-25T19:51:30.000000Z", 
+  "msg": [
+   "Performance: we don't always need to fully normalize the string.", 
+   "1. For base64 and derived types, the whitespaces are actually handled in the", 
+   "Base64 classes, so we don't need to normalize the string at all.", 
+   "2. For many other types (all but string and derived types), no whitespace is", 
+   "allowed in in the value (only leading and trailing ones are allowed). So instead", 
+   "of collapse, the whitespaces, we only need to trim the leading and trailing one.", 
+   "if there are whitespaces in the middle, an error will be reported when trying to", 
+   "convert the string value to actual value."
+  ], 
+  "revision_id": "318803"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-10-25T16:57:15.000000Z", 
+  "msg": [
+   "1. Schema assessment doesn't augment the infoset for character information", 
+   "items, so our PSVIWriter sample doesn't need to output information abou characters.", 
+   "2. All PSVI properties for elements are available on endElement calls, so we", 
+   "choose to output them all together.", 
+   "3. When \"validation attempted\" is none, no other property is meaningful, so", 
+   "we don't need to output any other properties than \"validation context\", \"validity\"", 
+   "and \"validation attempted\". This also fixes bug [13276], because we won't", 
+   "try to access the \"type definition\" property when it's null."
+  ], 
+  "revision_id": "318802"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-10-25T16:44:42.000000Z", 
+  "msg": [
+   "We can dynamically figure out the component before and after the DTD", 
+   "validator, so we don't need to pass such kind of information to the namespace", 
+   "scanner."
+  ], 
+  "revision_id": "318801"
+ }, 
+ {
+  "author": "sandygao", 
+  "date": "2002-10-25T16:42:38.000000Z", 
+  "msg": [
+   "Performance: adding a new validate method that takes an Object as the string", 
+   "value. This enables passing a StringBuffer to such method, and possibly avoid", 
+   "some object creations. Without this method, we need to convert StringBuffer", 
+   "to String before calling validate method, then create a StringBuffer in the", 
+   "validate method for normalization, and finally convert the StringBuffer to a", 
+   "String again after normalization:", 
+   "buffer -> string -> buffer -> string", 
+   "With this method, the original StringBuffer can be used to hold the normalized", 
+   "value. This saves 2 object creations:", 
+   "buffer -> string"
+  ], 
+  "revision_id": "318800"
+ }
+]

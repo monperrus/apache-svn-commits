@@ -1,0 +1,89 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-11-30T07:30:09.000000Z", 
+  "msg": [
+   "Removed obsolte files - sync with 3.2 fixes."
+  ], 
+  "revision_id": "282709"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-11-30T06:17:13.000000Z", 
+  "msg": [
+   "Fix the build for JDK1.1", 
+   "Since it's expected that the optimizations will use more JDK1.2 features", 
+   "( in optional modules, of course :-) we want to make sure that tomcat's", 
+   "core remains usable on JDK1.1 and the optimized code is indeed optional.", 
+   "The rule is simple - no JDK1.2 specific code in core, in the basic modules", 
+   "or in utils used by basic modules ( if you do, the nightly build should", 
+   "catch it ).", 
+   "Use", 
+   "<exclude name=\"org/apache../MyJdk12Class.java\" unless=\"jdk12.present\" />", 
+   "for all the 1.2 modules ( and make sure they are not enabled by default", 
+   "in server.xml )", 
+   "XXX need an exclude/unless for server.xml", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282708"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-11-30T04:58:57.000000Z", 
+  "msg": [
+   "A small round of optimizations - removed few dozens of un-needed allocations", 
+   "and GC.", 
+   "Now we are down to 11 objects per simple request - still not zero, but close", 
+   "enough. I think that concludes the memory tunning for the \"common path\"", 
+   "( i.e. the overhead common to all requests ).", 
+   "We can now start doing \"real\" performance in 3.3 !!! ( from my point", 
+   "of view, nothing so far was more than removing garbage )", 
+   "( of course, Cookies and Parameters have to be rewritten after the MimeHeaders", 
+   "model, plus a refactoring of MimeHeaders )", 
+   "( BTW, all 11 objects are allocated in interceptors, no change in core", 
+   "will be needed to remove them - one is the Socket and it's not easy to", 
+   "reuse that - so probably we'll have 1 object per request instead of 0.", 
+   ")", 
+   "Details:", 
+   "- Continue the work on Request - now \"serverName\" ( the virtual host ) is", 
+   "a reusable MessageByte. There are only few Strings left, most of them not", 
+   "used in most cases.", 
+   "- small optimization in RequestUtil - no need to do the loop if the string", 
+   "is not encoded ( that saves few Strings/request + a loop )", 
+   "- small optimization in SessionUtil - the string allocation is not needed", 
+   "- small optimization in AccessInterceptor - avoid string allocation", 
+   "( it'll be further optimized after we're done with the core, I'm working", 
+   "on few better tools for string manipulation )", 
+   "- small optimization in SimpleMapper1 - use/pass MessageBytes instead of", 
+   "converting to String.", 
+   "- same in PrefixMapper, use unsynchronized Hashtable ( SimpleHashtable - from", 
+   "crimson :-), pass strings", 
+   "- added getChars in MessageBytes", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282707"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-30T01:09:59.000000Z", 
+  "msg": [
+   "Remove some additional obsolete files, which also makes the \"etc\"", 
+   "directory obsolete for the 3.2 release."
+  ], 
+  "revision_id": "282706"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-11-29T23:55:28.000000Z", 
+  "msg": [
+   "Remove additional obsolete binaries from CVS."
+  ], 
+  "revision_id": "282705"
+ }
+]

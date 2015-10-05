@@ -1,0 +1,63 @@
+[
+ {
+  "author": "stoddard", 
+  "date": "2000-02-15T22:51:23.000000Z", 
+  "msg": [
+   "ap_dupfile (specifically dup2) is not available in a general form under Windows.", 
+   "So use SetStdHandle directly. A single call to ap_dup2stderr() (or similar) could", 
+   "replace the entire chunk of code in the #ifdef #else #endif block.  Ryan didn't", 
+   "want to put this speciality function into APR, but we could put it into os.c", 
+   "if folks are interested."
+  ], 
+  "revision_id": "84624"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-02-15T21:20:39.000000Z", 
+  "msg": [
+   "Don't close the duplicated AcceptEx completion port handle in the parent.", 
+   "Check the return code when duplicating the acceptex completion port.", 
+   "Get rid of the event routine wrappers."
+  ], 
+  "revision_id": "84623"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-02-15T00:54:06.000000Z", 
+  "msg": [
+   "First step to get piped logs working on Windows (and Unix as well).", 
+   "There are still all kinds of problems in http_log.c. This patch just", 
+   "barely scratches the surface."
+  ], 
+  "revision_id": "84622"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-02-14T22:20:34.000000Z", 
+  "msg": [
+   "Port the scoreboard from the mpmt_pthread MPM to use APR's shared memory.", 
+   "Tested on Linux, but it could use testing on other platforms."
+  ], 
+  "revision_id": "84621"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-02-14T22:01:08.000000Z", 
+  "msg": [
+   "Rework the code to handle apache -k shutdown|restart. The fundamental problem", 
+   "being solved here is determining the best way to discover the Apache", 
+   "parent process PID (stored in the location specified by the PidFile directive).", 
+   "This patch attempts to read the config file directly to determine the", 
+   "pidfile and avoids going through the motions of calling all the module initialization", 
+   "routines.", 
+   "This patch will not work if the pidfile directive is in a file pointed to by", 
+   "an include directive. Not sure is this is a common case or not on Windows.", 
+   "If it is, it is easy enough to add a bit more code to follow include", 
+   "directives. An interesting modification would be to detect the presence of a \\", 
+   "-C directive containing a pointer to the pidfile: E.g.,", 
+   "apache -k restart -C \"pidfile d:/mypidfile\". Let's keep it simple for now and", 
+   "see what happens."
+  ], 
+  "revision_id": "84620"
+ }
+]

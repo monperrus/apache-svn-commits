@@ -1,0 +1,99 @@
+[
+ {
+  "author": "rubys", 
+  "date": "2001-12-23T17:32:35.000000Z", 
+  "msg": [
+   "Minor cleanup"
+  ], 
+  "revision_id": "253199"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-12-23T14:52:37.000000Z", 
+  "msg": [
+   "NullPointerException => InternalException"
+  ], 
+  "revision_id": "253198"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-12-23T12:33:32.000000Z", 
+  "msg": [
+   "Enable deserialization factories to know the desired java class in advance.", 
+   "This can result in signficiant performance improvements as the", 
+   "deserializers produced by this factory can be pre-initialized.", 
+   "I also couldn't take it any more and split out BasicDeserializer into", 
+   "a separate (non-nested) class.", 
+   "Finally, I started an InternalException class along the lines of Glyn's", 
+   "suggestion.  Among other things, it provides a place for convenient logging."
+  ], 
+  "revision_id": "253197"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2001-12-22T04:38:14.000000Z", 
+  "msg": [
+   "Added support in WSDL2Java, Java2WSDL and the BeanSerializer for", 
+   "indexed fields.  This support is not yet defined by JAX-RPC", 
+   "but we have a lot of requests for this behaviour (like Mark Roder's note today).", 
+   "If a Java class has a Java Bean indexed property.  For example:", 
+   "void setBar(Foo[] v);", 
+   "Foo[] getBar();", 
+   "void setBar(int i, Foo v);", 
+   "Foo  getBar(int i);", 
+   "then the xml schema field representing the element is emitted as", 
+   "<element name=\"Bar\" type=\"Foo\" maxOccurs=\"unbounded\" />", 
+   "and the BeanSerializer will properly serialize a series of Bar elements (not as an array):", 
+   "<Bar xsi:type=\"Foo\"> whatever1 </Bar>", 
+   "<Bar xsi:type=\"Foo\"> whatever2 </Bar>", 
+   "<Bar xsi:type=\"Foo\"> whatever3 </Bar>", 
+   "The bean serializer and deserializer use the indexed getter and setter to access the", 
+   "indexed values.  Also WSDL2Java is changed to produce the indexed accessors.", 
+   "Changed the test/array testcase to use an indexed property.", 
+   "------------------------------------------------------------------------------------", 
+   "Added support in the parsers and BeanSerializer so that", 
+   "a \"get\" class for a boolean property uses \"is\" instead of \"get\".", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "253196"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2001-12-21T21:14:57.000000Z", 
+  "msg": [
+   "Now users have a way to provide their own operation overloading resolution, parameter name", 
+   "mapping, bean field determination, etc.", 
+   "/**", 
+   "* Java2WSDLFactory is part of the Java2WSDL framework.", 
+   "* To extend the functionality, implement this interface with your own factory and", 
+   "* supply your implementation to Java2WSDL (via command line option -f or", 
+   "* by extending Java2WSDL).", 
+   "*", 
+   "* By default the DefaultFactory is used.  You may wish to extend the DefaultFactory", 
+   "* instead of directly implementing Java2WSDLFactory.  Thus if new methods are", 
+   "* added you will automatically pick up the default implementation.", 
+   "*", 
+   "* The Java2WSDL emitter operates on ClassRep, MethodRep, FieldRep & ParamRep", 
+   "* objects that are built from Class objects.  These Rep objects allow users", 
+   "* to add, rename, remove, etc. the various names and types in order to", 
+   "* affect the WSDL generation. (The classes are very simple, see ClassRep for details)", 
+   "*", 
+   "* There are two ClassRep builder interfaces, one for building the", 
+   "* ClassRep for the PortType Class/Interface, and one for building the", 
+   "* ClassRep for the referenced Bean Classes.  The DefaultFactory", 
+   "* uses DefaultBuilderPortTypeClassRep and DefaultBuilderBeanClassRep.", 
+   "* You may want to examine/extend these builder classes to provide", 
+   "* your own functionality.", 
+   "*", 
+   "*/", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "253195"
+ }
+]

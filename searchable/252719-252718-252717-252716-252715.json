@@ -1,0 +1,101 @@
+[
+ {
+  "author": "butek", 
+  "date": "2001-11-01T16:49:58.000000Z", 
+  "msg": [
+   "Make enumerated types work in the runtime.", 
+   "Submitted by Richard Scheuerle."
+  ], 
+  "revision_id": "252719"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-11-01T13:12:31.000000Z", 
+  "msg": [
+   "Fix functional tests (manually deploy TCP transport for the nonce)"
+  ], 
+  "revision_id": "252718"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-10-31T23:50:22.000000Z", 
+  "msg": [
+   "WSDD integration!", 
+   "There's a lot here, and I want to get home, but the functional tests do work", 
+   "on my machine with these changes.  Hopefully this will be true for you too!", 
+   "Note that the old syntax for configuration still works, with a small caveat", 
+   "or two.  The big one is that Service pivots may ONLY be \"RPCDispatcher\" or", 
+   "\"MsgDispatcher\", not custom chains.  I altered the deploy.xml's which were", 
+   "affected by this in the samples.", 
+   "SOME DETAILS:", 
+   "* The engine now gets all its Handlers and Services and such from a", 
+   "DeploymentManager which is initialized by a WSDD document.  This", 
+   "connects with the whole config/deploy conversation, which I'd love to", 
+   "get closure on in the next week or so. (nailing down where everything", 
+   "comes from, how pluggable we want/need to be, the whole JNDI", 
+   "situation, etc.)", 
+   "* Changed newInstance() to getInstance() in DeployableItem - since we may", 
+   "want to cache/pool/etc., this seemed more intuitive", 
+   "* Removed all direct usage of HandlerRegistries, always going through the", 
+   "AxisEngine or DeploymentRegistry APIs instead.", 
+   "* Switch the default config from *.xml to *.wsdd", 
+   "* Added an ElementSerializer while I was working on this, too", 
+   "* Added initial support for polymorphic serialization - will look for", 
+   "serializers for the class, followed by all implemented interfaces,", 
+   "and do that for each class up the hierarchy (see TypeMappingRegistry for", 
+   "details)", 
+   "* Took out a couple of places where we were re-initializing the Engine", 
+   "ISSUES + COMMENTS:", 
+   "The encodingStyle support still needs to be hooked in (though I don't think", 
+   "it'll really get much usage judging from the current SOAP community).", 
+   "The \"provider\" configuration is still a little grotty, and I'd like to figure", 
+   "out a final nice form for this.  Will send a more detailed message to the", 
+   "list on this subject in the next day or so.", 
+   "When new services are deployed into an active engine, an in-memory version of", 
+   "the DOM document is modified via the WSDD APIs.  Therefore the resulting", 
+   "server-config.wsdd files are in the order of deployment, not arranged via type", 
+   "like server-config.xml used to be.  Also, this does NOT catch duplicates,", 
+   "so after running the functional tests, you end up with a rather large", 
+   "server-config.wsdd file.  This will get fixed.", 
+   "Right now we still use the Admin class to configure the engine via the", 
+   "usual FileProvider.  There's a new method, processWSDD(), which hands off", 
+   "deployment tasks to the WSDD code if the Admin class notices the root element", 
+   "is in the WSDD namespace. The old style XML configuration will continue to", 
+   "work through this next release as well, but when it disappears we can clean up", 
+   "a lot of code, including the Admin class.", 
+   "STILL TO DO:", 
+   "* Cleanup (probably including some refactoring)", 
+   "* Test writing", 
+   "* Fix generated WSDD docs so they look better (organization and no dups)", 
+   "* Several places which used to use \"client\" deployment via the Admin class", 
+   "(in particular the transport tests) have been switched to hardcoded transport", 
+   "deployments.  I'll work on getting the equivalent functionality into WSDD,", 
+   "but it's not there yet.", 
+   "* Switch all the samples and tests over to using WSDD (only the stock sample", 
+   "does it now)", 
+   "OK, that's it for now.  I'll be working on this more tomorrow, so if any", 
+   "issues arise I'll be on them quickly."
+  ], 
+  "revision_id": "252717"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2001-10-31T21:46:07.000000Z", 
+  "msg": [
+   "Another incremental drop of Writer framework code.  Rearranged stuff for", 
+   "JavaInterfaceWriter, JavaServiceInterfaceWriter, JavaFaultWriter.  This is the last", 
+   "big change.  There is still some cleanup that has to be done, but it's functional as it is."
+  ], 
+  "revision_id": "252716"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2001-10-31T17:28:55.000000Z", 
+  "msg": [
+   "Another incremental drop of Writer framework code.  Rearranged stuff for", 
+   "JavaDefinitionWriter (ie deploy/undeploy).  Emitter.java is under 1000 lines and", 
+   "getting smaller!"
+  ], 
+  "revision_id": "252715"
+ }
+]

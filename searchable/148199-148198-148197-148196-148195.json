@@ -1,0 +1,86 @@
+[
+ {
+  "author": "rdonkin", 
+  "date": "2003-10-13T08:50:20.000000Z", 
+  "msg": [
+   "Fixed typos in apache license"
+  ], 
+  "revision_id": "148199"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2002-01-05T01:39:17.000000Z", 
+  "msg": [
+   "Add META-INF/LICENSE.txt to \"modeler\" and \"workflow\", and reflect the fact", 
+   "that these packages now depend on commons-logging.jar (because Digester does)", 
+   "for their unit tests."
+  ], 
+  "revision_id": "148198"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-12-24T19:45:58.000000Z", 
+  "msg": [
+   "Major enhancement to the Workflow system's capabilities, to allow nested", 
+   "blocks of steps for conditional (such as \"if\") and iteration (such as", 
+   "\"while\") implementations.  See the Javadocs for the", 
+   "org.apache.commons.workflow.core package for details.", 
+   "New features:", 
+   "* Four variations of an \"if\" step (if, ifAny, ifNot, ifNotAny) that", 
+   "conditionally execute a nested block once.", 
+   "* Four variations of a \"while\" step (while, whileAny, whileNot, whileNotAny)", 
+   "that conditionally execute a nested block repeatedly.", 
+   "* Implementation of \"break\" and \"continue\" steps to exit a nested", 
+   "iteration prematurely, with semantics similar to the corresponding", 
+   "statements in programming languages like Java and C/C++.", 
+   "* RuleSet definitions have been modified so that all of the standard", 
+   "Steps are recognized at all arbitrary nesting levels.  You will want", 
+   "to do the same with any of your own RuleSet definitions, by changing", 
+   "the matching pattern from something like 'prefix + \"invoke\"' to", 
+   "'*/invoke' for each Step definition."
+  ], 
+  "revision_id": "148197"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-12-16T03:44:21.000000Z", 
+  "msg": [
+   "Update the infrastructure required to support Blocks (conditionals and", 
+   "iteration).  Given these changes, it should now be possible to write Block", 
+   "implementations of things like \"if\", \"while\", \"for\", and to extend the", 
+   "existing family (and/or/notAnt/notOr) to do nesting instead fo a", 
+   "conditional GOTO if the \"step\" attribute is not defined.", 
+   "Of course, the only way to find out if the infrastructure is sufficient is", 
+   "to start writing such Blocks ... that's next ..."
+  ], 
+  "revision_id": "148196"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-12-16T02:29:30.000000Z", 
+  "msg": [
+   "Refactor slightly to prepare for the introduction of nested Steps for", 
+   "better expression of conditional and iteration functionality:", 
+   "- Create new Owner interface that abstracts out of Activity", 
+   "the management of the set of Steps associated with that Activity.", 
+   "- Create new Block interface that extends both Step and Owner.", 
+   "This will be the class used for Step implementations that require", 
+   "support for nested steps", 
+   "- Create new BaseBlock convenience class for Block implementations.", 
+   "- Graduate the BaseStep.findStep(String id) method up to being part", 
+   "of the Owner interface, and therefore implemented in BaseActivity", 
+   "and BaseBlock.", 
+   "These changes should have minimal impact on Step implementations that", 
+   "extend BaseStep, and slightly more impact if you are implementing the Step", 
+   "interface directly.", 
+   "TODO:  The activity execution logic in BaseContext does *not* yet know", 
+   "anything special about Block versus Step.  There are also no implemented", 
+   "Block implementations yet.  Doing so will define how to handle the", 
+   "decisions of whether to execute the nested Steps in a block when the", 
+   "owning Block is first entered (conditional execution), and whether the", 
+   "nested Steps should be repeated (iteration).", 
+   "NOTE:  All current unit tests still pass."
+  ], 
+  "revision_id": "148195"
+ }
+]

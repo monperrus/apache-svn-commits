@@ -1,0 +1,62 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-17T20:07:41.000000Z", 
+  "msg": [
+   "For Tomcat 4.0, fix the security vulnerability reported by Hiromitsu", 
+   "Takagi.", 
+   "The problem actually has nothing to do with JSP pages per se -- it is due", 
+   "to the fact that the original request URI is included in the response on", 
+   "many of the standard error pages produced by Tomcat.  In the case at hand,", 
+   "it is the standard message for error 404 (not found).", 
+   "You can prove that it is not related to JSP by trying *any* URI that", 
+   "includes JavaScript code, and triggers a 404, such as:", 
+   "http://localhost:8080/examples/<SCRIPT>alert(document.cookie)</SCRIPT>.xyz", 
+   "The fix is to filter the message string included in the response, so that", 
+   "characters sensitive to HTML are rendered as their corresponding escape", 
+   "sequences (such as translating \"<\" to \"&lt;\") so that the browser will", 
+   "render them rather than execute them.", 
+   "WARNING:  Web application error pages that naively display the request URI", 
+   "in their output can be subject to this same kind of problem."
+  ], 
+  "revision_id": "285724"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-17T19:48:21.000000Z", 
+  "msg": [
+   "Add some additional tests to access JSP pages both before and after a", 
+   "servlet that uses Xerces itself."
+  ], 
+  "revision_id": "285723"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-17T19:46:41.000000Z", 
+  "msg": [
+   "Modify the special case treatment of loading the Jasper servlet so that it", 
+   "works when you use <jsp-file> declarations in web.xml, as well as for the", 
+   "usual servlet declaration.  This was broken by the class loader revisions", 
+   "done previously to deal with package sealing violations."
+  ], 
+  "revision_id": "285722"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-17T18:50:32.000000Z", 
+  "msg": [
+   "Adapt to the changes to the Filter API."
+  ], 
+  "revision_id": "285721"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-03-17T05:32:37.000000Z", 
+  "msg": [
+   "- Don't log InterruptedIOExceptions anymore unless debug > 1. They happen when a user", 
+   "presses stop in his browser. In production environments, that will avoid filling", 
+   "up the logs with stack traces which can safely be ignored."
+  ], 
+  "revision_id": "285720"
+ }
+]

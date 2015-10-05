@@ -1,0 +1,76 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-21T17:21:12.000000Z", 
+  "msg": [
+   "Fix a major bug with deserialization!!", 
+   "We were re-recording the RPC body when we deserialized, which caused", 
+   "later serializations of the message to appear to have two bodies, one inside", 
+   "and one just after the envelope.  Bad bad bad.", 
+   "Thanks to dims for pointing the symptom out."
+  ], 
+  "revision_id": "253834"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-21T16:30:40.000000Z", 
+  "msg": [
+   "Oops.  Reality didn't match the deprecation comment.  (Thanks, Glyn.)"
+  ], 
+  "revision_id": "253833"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-03-21T16:20:48.000000Z", 
+  "msg": [
+   "Improved the Stub assignment and conversion of output parameters.", 
+   "There are a number of places in JavaStubWriter that", 
+   "assigned (or returned) the output value(s).  If the", 
+   "expected type is an array, JavaUtils.convert is invoked", 
+   "to convert the value to the expected type.  Otherwise", 
+   "the output value is cast to to the expected type.", 
+   "This processing fails if an array comes over the wire", 
+   "and the expected type is a Vector.", 
+   "The following changes are made to the stub generation:", 
+   "First an attempt is made to cast the", 
+   "output value to the expected type.", 
+   "If an exception is thrown, it is caught and", 
+   "an attempt is made to convert the output value", 
+   "to the expected type using JavaUtils.convert.", 
+   "This slightly improves performance for the", 
+   "array case (since most of the time a cast is", 
+   "sufficient).  It also makes the stub more", 
+   "flexible, allowing conversions in many more", 
+   "situations.", 
+   "There was a lot of redundant code in JavaStubWriter,", 
+   "so I moved most of the processing into a private", 
+   "method (writeOutputAssign).  I also cleaned", 
+   "up some bad logic and stale comments.", 
+   "I changed the arrays testcase so that", 
+   "it returns a Vector.  This verifies the", 
+   "new stub code."
+  ], 
+  "revision_id": "253832"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-21T16:19:09.000000Z", 
+  "msg": [
+   "I backed out my 'fix' to get rid of a deprecation warning.  I also added a", 
+   "comment to make sure no-one else does what I just did."
+  ], 
+  "revision_id": "253831"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-21T16:07:43.000000Z", 
+  "msg": [
+   "JAX-RPC folks have actually accepted my suggestion and put constants", 
+   "for the standard properties on javax.xml.rpc.Call.  They even accepted", 
+   "most of my suggested names.  Since the constants are on javax...Call,", 
+   "we don't need them on org...Call.  I've left them there for the moment, but", 
+   "deprecated them.  After beta2 I'll remove them."
+  ], 
+  "revision_id": "253830"
+ }
+]

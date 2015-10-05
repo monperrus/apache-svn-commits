@@ -1,0 +1,73 @@
+[
+ {
+  "author": "rubys", 
+  "date": "2002-08-23T19:07:19.000000Z", 
+  "msg": [
+   "Support the new SOAP 1.2 encoding type"
+  ], 
+  "revision_id": "247844"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-23T18:31:26.000000Z", 
+  "msg": [
+   "Back out namespaces.pop() for the nonce, and make it possible", 
+   "to pass a generic SOAPHandler as the initialHandler."
+  ], 
+  "revision_id": "247843"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2002-08-23T18:07:43.000000Z", 
+  "msg": [
+   "Try to respect SOAP 1.2 encoding style"
+  ], 
+  "revision_id": "247842"
+ }, 
+ {
+  "author": "seibert", 
+  "date": "2002-08-23T16:09:20.000000Z", 
+  "msg": [
+   "Removed redundant dependancy on \"compile\""
+  ], 
+  "revision_id": "247841"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-08-23T15:08:56.000000Z", 
+  "msg": [
+   "* Streamline the JWS process.", 
+   "Formerly, JWS worked by having one shared \"JWSProcessor\" service (i.e.", 
+   "a SOAPService with a JWSProcessor as the provider), which when invoked", 
+   "would create a \"real\" service using an RPCProvider and pointing to the", 
+   "target class.  The JWSProcessor would also do all the compilation of", 
+   "the class, so we didn't have the class (or an intialized ServiceDesc)", 
+   "available until the handler chain had gotten all the way to the end.", 
+   "Now there's no unnecessary middle step - the JWSHandler notices the", 
+   "file extension when it runs, and it does all the compilation/class", 
+   "loading work.  Rather than a shared \"JWSProcessor\" service, the", 
+   "JWSHandler now simply directly sets the service to the \"real\"", 
+   "RPC one which accesses the JWS class.", 
+   "* Improve deserialization of RPC parameters", 
+   "Formerly, we were always deserializing RPC parameters based only on", 
+   "their XML type.  In other words, we were always getting the first", 
+   "Deserializer that could handle the xsi:type which came over the", 
+   "wire.  We then relied on being able to convert() the resultant", 
+   "Java object into the desired Java type.  This wasn't working very", 
+   "well when we had multiple Java mappings and no defined conversion,", 
+   "as in the xsd:dateTime -> Date/Calendar case.  (actually, we should", 
+   "fix isConvertable() to return TRUE for Date/Calendar, but that", 
+   "doesn't change the basic problem here).", 
+   "Now we use the getDeserializer(Class c, QName xmlType) method of", 
+   "the DeserializationContextImpl/DeserializationContext (grr - I", 
+   "still really think that interface is unnecessary!) to make sure", 
+   "we prefer the RIGHT Deserializer, which can deserialize the XML", 
+   "type directly to the desired Java type.  We still fall back to", 
+   "deserializing and convert()ing if there's no exact match.", 
+   "* Add namespaces.pop() call to end of DeserializationContextImpl's", 
+   "endElement() (thanks to Marco Framba for noticing this one!)", 
+   "* Bits of general cleanup"
+  ], 
+  "revision_id": "247840"
+ }
+]

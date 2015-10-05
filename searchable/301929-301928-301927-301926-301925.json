@@ -1,0 +1,87 @@
+[
+ {
+  "author": "jfarcand", 
+  "date": "2003-06-06T03:03:33.000000Z", 
+  "msg": [
+   "When the SecurityManager is turned on, the facade is never properly garbaged. Bugtraq 48", 
+   "66915 demonstrates a case where CoyoteRequestFacade is re-used with a request object equ", 
+   "als to null (the getAttribute throws NPE). The bug also exists in Tomcat 4.1.x. (should", 
+   "I port the patch?)", 
+   "Also, the way response are recycled may also produce the same behaviour, althrough I can", 
+   "'t reproduce the exception."
+  ], 
+  "revision_id": "301929"
+ }, 
+ {
+  "author": "billbarker", 
+  "date": "2003-06-06T02:46:41.000000Z", 
+  "msg": [
+   "Removing CertificatesValve, since the HttpConnector isn't supported here.", 
+   "It doesn't do anything with the CoyoteConnector, and could cause problems trying to use Tomcat with a non-Sun 1.4 JVM."
+  ], 
+  "revision_id": "301928"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2003-06-05T19:47:41.000000Z", 
+  "msg": [
+   "Undid previous changes"
+  ], 
+  "revision_id": "301927"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2003-06-05T18:28:49.000000Z", 
+  "msg": [
+   "- Add placeholder page for the setup instructions."
+  ], 
+  "revision_id": "301926"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2003-06-05T16:43:41.000000Z", 
+  "msg": [
+   "Removed setSocket() method from org.apache.catalina.Request, since it", 
+   "was never called in any of the classes implementing this interface.", 
+   "For example, setSocket() was never called on", 
+   "org.apache.coyote.tomcat5.CoyoteRequest, causing its getSocket()", 
+   "method to always return null, which broke the CertificatesValve, which", 
+   "relies on having access to the (SSL)Socket so that it can reinitiate a", 
+   "handshake if necessary.", 
+   "Instead, added setSocket() and getSocket() methods on org.apache.coyote.Request:", 
+   "- setSocket() is called as part of", 
+   "org.apache.coyote.http11.Http11Processor.setSocket(), as follows:", 
+   "public void setSocket(Socket socket)", 
+   "throws IOException {", 
+   "this.socket = socket;", 
+   "this.request.setSocket(socket); // NEW", 
+   "}", 
+   "- getSocket() is called as part of", 
+   "org.apache.coyote.tomcat5.CoyoteRequest.getSocket(), as follows:", 
+   "diff -u -r1.5 CoyoteRequest.java", 
+   "--- CoyoteRequest.java  31 May 2003 15:00:25 -0000      1.5", 
+   "+++ CoyoteRequest.java  5 Jun 2003 16:41:17 -0000", 
+   "@@ -633,20 +633,7 @@", 
+   "* an SSLSocket.", 
+   "*/", 
+   "public Socket getSocket() {", 
+   "-        return (socket);", 
+   "-    }", 
+   "-", 
+   "-    /**", 
+   "-     * Set the Socket (if any) through which this Request was received.", 
+   "-     *", 
+   "-     * @param socket The socket through which this request was received", 
+   "-     */", 
+   "-    public void setSocket(Socket socket) {", 
+   "-        this.socket = socket;", 
+   "-        remoteHost = null;", 
+   "-        remoteAddr = null;", 
+   "-        remotePort = -1;", 
+   "-        localAddr = null;", 
+   "+        return coyoteRequest.getSocket();", 
+   "}"
+  ], 
+  "revision_id": "301925"
+ }
+]

@@ -1,0 +1,79 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-09-25T15:12:38.000000Z", 
+  "msg": [
+   "Fixed build - forgot JspInterceptor.", 
+   "BTW, what about enabling ( and fixing the remaining bugs :-) it by default", 
+   "for 3.3 ?", 
+   "It's much faster and cleaner, and will allow us to better integrate with", 
+   "Jasper 1.2. Another risk - but it may be worth it."
+  ], 
+  "revision_id": "282469"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-25T07:42:51.000000Z", 
+  "msg": [
+   "Removed old server connectors from tomcat.modules.server", 
+   "We'll keep tomcat.service until the new code is tested, but the new code", 
+   "is much cleaner and probably have exactly the same functionality as", 
+   "before.", 
+   "( probably we should remove old code anyway - and roll back from", 
+   "cvs in case the new code is worse)"
+  ], 
+  "revision_id": "282468"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-25T07:21:33.000000Z", 
+  "msg": [
+   "Finally, src/share is completely independent of servlet.jar  and we have", 
+   "a clear layer and module separation.", 
+   "Tomcat.util is the collection of general-purpose, independent utilities", 
+   "Tomcat.core represent the web layer ( low-level objects, close to web", 
+   "server architecture ) and depends _only_ on utils and JDK1.1", 
+   "Tomcat.modules consists of general modules (independent of servlet.jar,", 
+   "but acting as adapters for external APIs and tools ), depend on core,", 
+   "utils and the APIs they plug in ( some may be JDK1.2-specific )", 
+   "Tomcat.facade is the adapter between core and a certain ServletAPI. Since", 
+   "core maps ( almost completely ) to all common web servers, and servlet API is", 
+   "supposed to work with those servers - all servlet API versions can be", 
+   "supported on this architecture ( including legacy 2.0, and for sure 2.3", 
+   "and whatever follows - including 3.0 ).", 
+   "There is only one extension mechanism ( BasicInterceptor ), that mapps to", 
+   "the extension mechanisms used by common servers, and about 5 core classes that", 
+   "matter.", 
+   "Interceptors are the basis of tomcat modularity, and we can tune up individual", 
+   "components.", 
+   ":-)"
+  ], 
+  "revision_id": "282467"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-25T06:24:05.000000Z", 
+  "msg": [
+   "Ops, forgot a debug statement."
+  ], 
+  "revision_id": "282466"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-09-25T06:10:54.000000Z", 
+  "msg": [
+   "- moved the code that handle expiration in a tomcat.util class.", 
+   "It will be used by ContextManager to unload unused Contexts and servlets,", 
+   "and may be used for other tasks ( it's a general-purpose tool )", 
+   "- same refactoring as in core - replaced indirect calls, methods and properties", 
+   "moved to the object where it belongs, split complex objects in simpler ones,", 
+   "moved generic code in util.", 
+   "- the session manager code is now much narrowly focused, and it should be", 
+   "easier ( in 3.4 + ) to add more sophisticated managers ( database, etc). It's", 
+   "also much cleanly separated from upper layer.", 
+   "( some thing may be broken, but most of the refactoring is done.", 
+   ")"
+  ], 
+  "revision_id": "282465"
+ }
+]

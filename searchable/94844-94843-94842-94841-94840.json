@@ -1,0 +1,62 @@
+[
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T23:10:26.000000Z", 
+  "msg": [
+   "Remove unused variable."
+  ], 
+  "revision_id": "94844"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T23:05:15.000000Z", 
+  "msg": [
+   "Some more threadpool MPM changes:", 
+   "- Add a \"state\" variable to the worker_wakeup_info struct. This is", 
+   "used to make sure that we act on the correct signal, and to know when", 
+   "to shut down a worker thread.", 
+   "- Fix the call when the worker thread waits for a connection to use", 
+   "the new state variable and use mutexes around the cond_wait() call.", 
+   "- Change the interrupt_all() call to set the WORKER_TERMINATED state.", 
+   "- Add two AP_DEBUG_ASSERT() to make sure that we aren't waking up", 
+   "a worker thread before it is idle."
+  ], 
+  "revision_id": "94843"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T22:32:17.000000Z", 
+  "msg": [
+   "Clarify an incorrect statement about why we're purposfully putting", 
+   "the signal inside of a mutex."
+  ], 
+  "revision_id": "94842"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T22:25:16.000000Z", 
+  "msg": [
+   "Some threadpool fixes:", 
+   "- We don't need the listener_blocked flag, just check if the element", 
+   "we're adding makes the stack non-empty.", 
+   "- When we are terminated, return APR_EOF; catch this event in the", 
+   "worker thread and the listener thread.", 
+   "- When shutting down, always signal a potential listener thread.", 
+   "- Wait to signal the listener thread until after we add the worker", 
+   "element to the stack."
+  ], 
+  "revision_id": "94841"
+ }, 
+ {
+  "author": "aaron", 
+  "date": "2002-04-28T22:13:32.000000Z", 
+  "msg": [
+   "Detect APR_EINTR from ap_queue_pop() and avoid calling", 
+   "ap_queue_info_set_idle() more than once at a time per worker thread.", 
+   "This fixes an assert coredump.", 
+   "Submitted by:\tAaron Bannert", 
+   "Reviewed by:\tBrian Pane"
+  ], 
+  "revision_id": "94840"
+ }
+]

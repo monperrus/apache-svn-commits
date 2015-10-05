@@ -1,0 +1,58 @@
+[
+ {
+  "author": "wrowe", 
+  "date": "2003-03-19T03:45:42.000000Z", 
+  "msg": [
+   "Clean up a runover line, and reflect that apr_os_file_put() does not", 
+   "register a cleanup whatsoever."
+  ], 
+  "revision_id": "64429"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-03-19T03:34:47.000000Z", 
+  "msg": [
+   "A common sense logic change.  If we are dup()ing or dup2()ing", 
+   "into one", 
+   "of the std[in|out|err] fd's - we should automatically toggle the inherit", 
+   "bit.  If the user calls apr_file_inherit_set() again it will be a noop.", 
+   "This brings Unix into line with Win32's implementation of dup.  If folks", 
+   "feel we should *only* apply this code to which_dup==2 cases, that's fine", 
+   "with me; although close(1); dup(n) would generally create a new fd 1 on", 
+   "unix, that code isn't portable to Win32 and should be strongly discouraged."
+  ], 
+  "revision_id": "64428"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-03-19T02:31:15.000000Z", 
+  "msg": [
+   "Fix bug #5 of the evening; always register the proper child_cleanup", 
+   "in apr_file_setaside(), based on the ->flags of the fd being set-aside."
+  ], 
+  "revision_id": "64427"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-03-19T02:26:34.000000Z", 
+  "msg": [
+   "Fix bug #4 of the evening; it is altogether possible for the user to have", 
+   "called apr_file_close() against the original handle, and then invoke", 
+   "apr_file_dup2().  However, in that case the apr_file_t has already been", 
+   "unregistered from the cleanups.", 
+   "Always register a cleanup within _file_dup(), yet kill any remaining", 
+   "cleanup for the existing apr_file_t in the apr_file_dup2() situation.", 
+   "This also prevents double-registration, but in a more robust manner."
+  ], 
+  "revision_id": "64426"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-03-19T02:16:37.000000Z", 
+  "msg": [
+   "apr_p[c]alloc always succeeds, exit()s or calls the user defined callback.", 
+   "APR_ENOMEM checks are noops."
+  ], 
+  "revision_id": "64425"
+ }
+]

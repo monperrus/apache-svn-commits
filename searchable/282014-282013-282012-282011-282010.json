@@ -1,0 +1,93 @@
+[
+ {
+  "author": "jon", 
+  "date": "2000-06-15T19:34:59.000000Z", 
+  "msg": [
+   "here is some of the email discussion that should explain these", 
+   "fixes...note that catalina will also probably need to be fixed. craig, i", 
+   "will leave that one up to you. :-)", 
+   "FAT kudo's to Sean for tracking this one down...it wasn't easy.", 
+   "-jon", 
+   "On Wed, Jun 14, 2000 at 07:12:26PM +0000, Sean Legassick wrote:", 
+   "> The sessions aren't being nullified - they are still there. At least", 
+   "> part of the problem is that SessionSerializer.doSerialization doesn't do", 
+   "> anything with sessions when it has been serialized & deserialized, so", 
+   "> the old hashtable remains in place.", 
+   ">", 
+   "> This works for anything loaded from the system classpath, but anything", 
+   "> loaded by the ACL gets a ClassCastException when it is retrieved from", 
+   "> the session, as the class of the object retrieved belongs to the old", 
+   "> classloader. This happens in RunData.getUserFromSession for us, so we", 
+   "> just start with a new user object.", 
+   ">", 
+   "> I'm not sure this is the whole problem", 
+   "Hi Jon, I thought I'd carry on ....", 
+   "It's not the whole problem, although it's most of it.", 
+   "Even when I patched SessionSerializer to replace the old sessions", 
+   "hashtable in sessionM with the new one, I was getting a", 
+   "ClassCastException in RunData.populate.", 
+   "The reason is that when the session is serialized/deserialized the", 
+   "Request object has already been setup with the current session (with", 
+   "objects loaded by the old classloader). What's needed is to have the", 
+   "reload handler also replace the session in the current request.", 
+   "I've done a quick'n'dirty patch that does this, and it now works for me!", 
+   "Basically my patch extends ContextInterceptor.reload to have 'Request", 
+   "req' as a paramter as well, and then I keep on passing the Request down", 
+   "until it hits SessionSerializer, which can then replace the old session", 
+   "with the regenerated one there and then.", 
+   "I'm not sure a Request is the right thing to pass around here, but if", 
+   "you'd like my patch I can send it to you.", 
+   "--", 
+   "Sean Legassick", 
+   "sean@somacity.com"
+  ], 
+  "revision_id": "282014"
+ }, 
+ {
+  "author": "ed", 
+  "date": "2000-06-15T19:02:40.000000Z", 
+  "msg": [
+   "I went in to fix a typo noted by Juan Jose Pablos <J.J.Pablos@bton.ac.uk>", 
+   "(an URL was broken) and then made a few other changes to correct typos", 
+   "and to try to standardize certain terms.  (ajp, ApJServ, etc.)"
+  ], 
+  "revision_id": "282013"
+ }, 
+ {
+  "author": "ed", 
+  "date": "2000-06-15T18:58:19.000000Z", 
+  "msg": [
+   "Fix the line used to truncate charset information from the content-type.", 
+   "Previously, it had an OBOE.", 
+   "Submitted by:\tChris Sokol <CSokol@shootinggallery.com>", 
+   "Reviewed by:\tEd Korthof <ed@apache.org>"
+  ], 
+  "revision_id": "282012"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-06-15T18:51:06.000000Z", 
+  "msg": [
+   "Various changes in policy-based security - it works again ( after 1.1 fixes ).", 
+   "I tried to make the model as simple as possible - while the original code was much", 
+   "more powerfull, it is probably better to keep it simple until we fully understand it.", 
+   "PolicyInterceptor is the main component - it will replace SetSecurityManager", 
+   "and set a SecurityManager when the engine starts ( if none is set ).", 
+   "It will also add the minimal permissions to each context, and set the ProtectionDomain.", 
+   "We'll use only one ProtectionDomain per web-app, and all policy is stored in tomcat.policy.", 
+   "( we do a refresh before loading a new context, so you can edit it after tomcat starts", 
+   "and before adding a new webapp - if you don't like the default )", 
+   "All you need to do is add the PolicyInterceptor in server.xml."
+  ], 
+  "revision_id": "282011"
+ }, 
+ {
+  "author": "shachor", 
+  "date": "2000-06-15T10:17:33.000000Z", 
+  "msg": [
+   "Support for mod_ssl as well as apache_ssl + Win32 verification with", 
+   "OpenSA/mod_ssl"
+  ], 
+  "revision_id": "282010"
+ }
+]

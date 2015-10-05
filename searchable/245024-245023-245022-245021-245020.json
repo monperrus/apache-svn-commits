@@ -1,0 +1,76 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-01T12:58:54.000000Z", 
+  "msg": [
+   "Add automatic entity encoding for String types, and change unit test", 
+   "to test this."
+  ], 
+  "revision_id": "245024"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-01T12:38:47.000000Z", 
+  "msg": [
+   "Improve error handling for JavaProviders - throw a more informative", 
+   "fault if the className / methodName properties are not set on the", 
+   "Service.", 
+   "NOTE: a null methodName property used to allow access to any", 
+   "method in the target class.  Now we throw an Exception for an", 
+   "unspecified methodName, and if you want the \"any\" behaviour,", 
+   "you use a value of \"*\"."
+  ], 
+  "revision_id": "245023"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-01T03:48:25.000000Z", 
+  "msg": [
+   "Fix formatting."
+  ], 
+  "revision_id": "245022"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-01T03:41:28.000000Z", 
+  "msg": [
+   "Remove explicit mapping for Vector (I put this in while building the List", 
+   "code, and we don't need it anymore)."
+  ], 
+  "revision_id": "245021"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-01T03:31:19.000000Z", 
+  "msg": [
+   "* Add the ability to automatically do List -> Array -> List conversions.", 
+   "This involves two pieces.  First, the ArraySerializer can now happily", 
+   "serialize anything that implements List (Vector, LinkedList, etc).", 
+   "There is now also a check in SOAPTypeMappingRegistry for Lists in a", 
+   "similar vein to the one that was already there for arrays.", 
+   "LIMITATIONS: Right now we look at the first element in a List to", 
+   "determine the SOAP Array type.  This means we can't use Lists which", 
+   "contain multiple object types.  Long term we probably want to send", 
+   "\"anyType\" as the array type and explicitly xsi:type the elements.", 
+   "The second piece is in RPCProvider, which now attempts to do array ->", 
+   "List conversion if the first invoke() fails with an illegal argument", 
+   "exception.", 
+   "The end result of all this is that you can invoke a service with a", 
+   "LinkedList argument, have it get automatically serialized into a", 
+   "SOAP array, and then that array automatically gets converted into", 
+   "(say) a Vector on the other side so the desired function can be", 
+   "called.", 
+   "We might want a switch to turn this behavior on and off, and we should", 
+   "probably think all the way through the ramifications of matching", 
+   "methods this way (i.e. how can we decide between service(Vector) and", 
+   "service(LinkedList)?)", 
+   "* Add unit tests for the above.", 
+   "* Add a constructor for LocalTransport which lets you specify a particular", 
+   "AxisServer you'd like to use.  This allows dynamic configuration of an", 
+   "AxisServer for testing (see test.encoding.TestArrayListConversions for", 
+   "an example)", 
+   "* Remove a few debugging statements, and add a few."
+  ], 
+  "revision_id": "245020"
+ }
+]

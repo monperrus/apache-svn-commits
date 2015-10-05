@@ -1,0 +1,121 @@
+[
+ {
+  "author": "rse", 
+  "date": "1998-07-11T10:24:11.000000Z", 
+  "msg": [
+   "Provide HAVE_XXXX_H defines for C headers (take 3)", 
+   "==================================================", 
+   "PR#2093, PR#2361, PR#2377, PR#2434,", 
+   "PR#2524, PR#2525, PR#2533, PR#2569", 
+   "Background", 
+   "----------", 
+   "Currently we have some places (especially in conf.h and os/unix/os.h) where we", 
+   "make decisions about the existence of particular header files based on the", 
+   "underlying platform. In general this is sufficient, but expercience showed", 
+   "(especially the Linux/dlfcn.h PRs) that making general implications from", 
+   "platforms to file existance is very problematic because of too much variants", 
+   "and version of particular platforms.", 
+   "Problem", 
+   "-------", 
+   "The problem is that we decide particular header files exists even when they", 
+   "don't exist. This caused compile time failures and a lot of PRs.", 
+   "Solution", 
+   "--------", 
+   "The short-hand solution in the past was to use ``-D<PLATFORM>=<VERSION>''", 
+   "defines instead of ``-D<PLATFORM>'' and use ``#if defined(<PLATFORM>) &&", 
+   "<PLATFORM> >= <VERSION>'' instead of ``#ifdef <PLATFORM>''. This is ok for", 
+   "platforms where we really have access to and where we can be sure that a", 
+   "particular platform version has a file or hasn't it.  This is not the case for", 
+   "esoteric Unix derivates and not the case of the huge amount of Linux variants.", 
+   "So a long-term solution is needed. As often GNU Autoconf is the father of the", 
+   "idea: We actually check for the existance of particular header files and", 
+   "define HAVE_XXXX_H if ``#include <xxxx.h>'' works (which means xxxx.h exists).", 
+   "The patch", 
+   "---------", 
+   "The patch actually does the following:", 
+   "1. It src/Configure another check-cycle is done where we test for various", 
+   "header files which later conditionally can be included via", 
+   "#ifdef HAVE_XXX_H", 
+   "#include <xxx.h>", 
+   "#endif", 
+   "This is done by calling TestCompile with a new command \"header\" which", 
+   "checks for existing header files.  As a result the file include/conf_auto.h", 
+   "is generated containing these HAVE_XXX_H defines.  Currently the following", 
+   "header files are tested (can be extended in the future):", 
+   "dlfcn.h", 
+   "dl.h", 
+   "bstring.h", 
+   "crypt.h", 
+   "unistd.h", 
+   "sys/resource.h", 
+   "sys/select.h", 
+   "sys/processor.h", 
+   "2. In include/conf.h all HAVE_XXX_H defines/undefines were replaced by", 
+   "a single ``#include \"conf_auto.h\"'' statement at the top. And in all", 
+   "related files the inclusion of such headers are now based on HAVE_XXX_H", 
+   "defines.", 
+   "The generated conf_auto.h file looks like this:", 
+   "| /* Automatically generated file - DO NOT EDIT */", 
+   "| #ifndef APACHE_CONF_AUTO_H", 
+   "| #define APACHE_CONF_AUTO_H 1", 
+   "|", 
+   "| /* <dlfcn.h> */", 
+   "| #ifndef HAVE_DLFCN_H", 
+   "| #define HAVE_DLFCN_H 1", 
+   "| #endif", 
+   "|", 
+   "| /* <dl.h> */", 
+   "| #ifdef HAVE_DL_H", 
+   "| #undef HAVE_DL_H", 
+   "| #endif", 
+   "|   :", 
+   "|   :", 
+   "| #endif /* APACHE_CONF_AUTO_H */", 
+   "Submitted by: Ralf S. Engelschall", 
+   "Reviewed by: Dean Gaudet, Jim Jagielski", 
+   "PR: 2093, 2361, 2377, 2434, 2524, 2525, 2533, 2569"
+  ], 
+  "revision_id": "81704"
+ }, 
+ {
+  "author": "rasmus", 
+  "date": "1998-07-10T18:29:51.000000Z", 
+  "msg": [
+   "Set the RTLD_GLOBAL dlopen mode parameter to allow dynamically loaded", 
+   "modules to load their own modules dynamically.  This improves mod_perl", 
+   "and mod_php3 when these modules are loaded dynamically into Apache."
+  ], 
+  "revision_id": "81703"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-07-10T13:33:09.000000Z", 
+  "msg": [
+   "Add a missing 'Override' clause.", 
+   "PR:\t\t2582", 
+   "Submitted by:\tAndrew Gillespie <apache@FutureQuest.net>", 
+   "Reviewed by:\tKen Coar"
+  ], 
+  "revision_id": "81702"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-07-10T13:33:09.000000Z", 
+  "msg": [
+   "Add a missing 'Override' clause.", 
+   "PR:\t\t2582", 
+   "Submitted by:\tAndrew Gillespie <apache@FutureQuest.net>", 
+   "Reviewed by:\tKen Coar"
+  ], 
+  "revision_id": "81701"
+ }, 
+ {
+  "author": "coar", 
+  "date": "1998-07-10T12:58:56.000000Z", 
+  "msg": [
+   "Make mod_setenvif work like mod_rewrite - namely, let it use", 
+   "\"^$\" to match missing fields."
+  ], 
+  "revision_id": "81700"
+ }
+]

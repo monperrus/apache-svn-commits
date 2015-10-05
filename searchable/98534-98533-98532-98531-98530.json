@@ -1,0 +1,64 @@
+[
+ {
+  "author": "bnicholes", 
+  "date": "2003-01-29T17:06:20.000000Z", 
+  "msg": [
+   "Enabled the -n parameter on NetWare to allow the administrator to rename", 
+   "the console screen"
+  ], 
+  "revision_id": "98534"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-01-29T16:02:17.000000Z", 
+  "msg": [
+   "Allow headers (if not already passed by other means) to be sent via", 
+   "WriteFile() since the foxisapi and other thunks seem to indicate that", 
+   "headers within the WriteFile() operation are expected to succeed.", 
+   "Also assure that all ->completion callbacks get the original size of", 
+   "the document."
+  ], 
+  "revision_id": "98533"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-01-29T15:09:14.000000Z", 
+  "msg": [
+   "Conditionally revert the otherchild logic from the WinNT mpm, based on", 
+   "the APR_HAS_OTHER_CHILD flag.  This gets us building again on WinNT."
+  ], 
+  "revision_id": "98532"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-01-29T15:08:06.000000Z", 
+  "msg": [
+   "Conditionally revert the otherchild logic from the WinNT MPM, based on", 
+   "the APR_HAS_OTHER_CHILD flag from APR.  This gets us building again", 
+   "on win32."
+  ], 
+  "revision_id": "98531"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2003-01-29T08:49:44.000000Z", 
+  "msg": [
+   "Finallllly got around to testing mod_file_cache.  Looks good to me.  Both", 
+   "Bill's and my patches need to be merged in, but we might as well do them", 
+   "at the same time.  Which means somebody else needs to look at Bill's and", 
+   "+1 it.", 
+   "Here's why it's right:  Since there's no transfer_ownership flag on", 
+   "apr_mmap_dup() anymore [or rather, since it's now ignored pending an API", 
+   "change at a later date to remove it], the only indication of whether an", 
+   "mmap should be deleted or not is the refcount.  The core will now", 
+   "delete any apr_mmap_t it encounters when it's done with it.  Before", 
+   "Bill's patch, we had exactly two copies of each apr_mmap_t: one to hang", 
+   "onto, and one that we passed to all requests.  But the very first", 
+   "request would delete that second one, so subsequent requests would be", 
+   "botched.  Each request needs its own dup of the original apr_mmap_t that", 
+   "we hang onto now that there's no ownership flag to prevent a request from", 
+   "deleting the shared apr_mmap_t we had before."
+  ], 
+  "revision_id": "98530"
+ }
+]

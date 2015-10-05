@@ -1,0 +1,59 @@
+[
+ {
+  "author": "brianp", 
+  "date": "2002-01-13T06:34:10.000000Z", 
+  "msg": [
+   "Removed the creation of a temporary pool in the expression parsing", 
+   "code.  Now that the code no longer allocs huge buffers (based on the", 
+   "last commit), there's no need to incur the overhead of creating a", 
+   "temporary pool just to clean up the storage quickly.  This saves", 
+   "a lot of space (because the temp pool used 8KB) and a small amount", 
+   "of processing time.", 
+   "As a side-effect of this change, we don't need the gotos any longer."
+  ], 
+  "revision_id": "92839"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-01-13T06:06:52.000000Z", 
+  "msg": [
+   "Allocate only as much data as we need to hold token values in the", 
+   "\"<!--#if\" processing code, rather always allocating an 8KB structure"
+  ], 
+  "revision_id": "92838"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-01-13T02:35:56.000000Z", 
+  "msg": [
+   "Clear the output socket descriptor in unixd_accept() to make sure", 
+   "we don't supply a bogus socket to the caller if the accept fails.", 
+   "(This was causing problems in the worker MPM, which tried to process", 
+   "the returned socket if it was non-NULL, even if unixd_accept()", 
+   "returned an error.)"
+  ], 
+  "revision_id": "92837"
+ }, 
+ {
+  "author": "lars", 
+  "date": "2002-01-12T18:50:20.000000Z", 
+  "msg": [
+   "Update Copyright footer."
+  ], 
+  "revision_id": "92836"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2002-01-12T02:43:31.000000Z", 
+  "msg": [
+   "Move a check for an empty brigade to the start of core input filter", 
+   "to avoid segfaults.", 
+   "Using prefork MPM and APR_POOL_DEBUG and ElectricFence, I found a", 
+   "couple of paths where weren't able to report APR_EOF all the way", 
+   "back up the call tree, leading us back into core_input_filter with", 
+   "an empty brigade.", 
+   "Some of the paths in core_input_filter handled it, some didn't."
+  ], 
+  "revision_id": "92835"
+ }
+]

@@ -1,0 +1,51 @@
+[
+ {
+  "author": "jstrachan", 
+  "date": "2002-08-09T14:40:13.000000Z", 
+  "msg": [
+   "added more descriptive toString() to display what the XPath actually is"
+  ], 
+  "revision_id": "135124"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-08-09T14:07:24.000000Z", 
+  "msg": [
+   "patch so that a tag description appears with its attribute summary."
+  ], 
+  "revision_id": "135123"
+ }, 
+ {
+  "author": "jefft", 
+  "date": "2002-08-04T06:38:45.000000Z", 
+  "msg": [
+   "Fix some javadoc warnings"
+  ], 
+  "revision_id": "135122"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-08-01T10:09:30.000000Z", 
+  "msg": [
+   "minor patch to make the demo:tagdef demo a little cleaner; though this demo only works with a recent build of CVS HEAD of Maven, since its demonstrating the use of <tagdef> inside Maven, rather than spawning another JVM and using the local Jelly build."
+  ], 
+  "revision_id": "135121"
+ }, 
+ {
+  "author": "jstrachan", 
+  "date": "2002-08-01T09:53:19.000000Z", 
+  "msg": [
+   "Patched the Script implementation mechanism for 2 reasons", 
+   "(i) to try make a single Script instance cacheable and multi-threaded so that in server side deployments, the scripts can be cached and reused across multiple threads to boost performance and lower RAM usage", 
+   "(ii) to introduce the TagFactory so that a tag can be bound to a Tag instance at runtime, rather than just at parse time.", 
+   "This makes many things much simpler, particularly in the area of dynamic tags.", 
+   "For example the Jeez library unifies the define tag library with the ant tag library, both of which can create dynamic tags, at run time.", 
+   "Until this change was done, it was not possible to return a single efficient Tag implementation at parse time. So now at parse time a TagLibrary can create a TagFactory which at runtime decides which Tag instance to use.", 
+   "This chance helps the multi-threaded nature also, so that different threads can create their own tag implemention.", 
+   "Right now the current policy is for a Script object to be reusable across threads (which needs testing), then each thread will create & cache 1 Java object per tag on the page. Each Tag is cached in ThreadLocal storage. If a Script goes out of scope then all this should be GC'd.", 
+   "So we've a neat, simple,  multi-threaded, pooled solution that should cause minimum object allocation yet allow flexible bean style coding and not require byte code generation (and all the classloading / GC issues that entails).", 
+   "Also for the Maven users, the <tagdef> is now working and can be used inside Maven now, which simplifies things greatly - no need to create a new tag library & new tag, just use <tagdef> and add a new tag dynamically to the maven (Jeez) tag library."
+  ], 
+  "revision_id": "135120"
+ }
+]

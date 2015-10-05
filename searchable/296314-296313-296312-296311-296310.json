@@ -1,0 +1,67 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:25:56.000000Z", 
+  "msg": [
+   "Moved that strange is_recoverable_error in request instead of passing it", 
+   "as argument to all methods.", 
+   "The real meaning ( not easy to discover :-) is if the request can be safely", 
+   "sent to a fallback worker. It is used by lb, but all workers doing active", 
+   "processing must set it ( or leave a default FALSE ).", 
+   "Init() method will now use the worker, not the endpoint. It is perfectly", 
+   "possible to recycle requests or preinit them or anything else - they don't", 
+   "depend on a particular connection.", 
+   "( I also added flush, probably not needed but I have a feeling it's missing )"
+  ], 
+  "revision_id": "296314"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:22:41.000000Z", 
+  "msg": [
+   "Removed the sent/receive methods. They were duplicated in channel, and made impossible", 
+   "or difficult to do some optimizations. Jni channel ( or most message-based - doors,", 
+   "fifo, etc ) do not need to read the header in a separate operation. Even for socket,", 
+   "it may be better to read as much as available ( buffering ) - that could be", 
+   "implemented in the apr channel."
+  ], 
+  "revision_id": "296313"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:20:10.000000Z", 
+  "msg": [
+   "Added few more fields needed to store data associated with the endpoint. We really", 
+   "need some 'notes' or generic attributes here.", 
+   "Removed the old interface methods. Service is now part of worker, where it belongs.", 
+   "Having it in endpoint required the worker implementation to also implement an", 
+   "endpoint and made things complex.", 
+   "Aquiring and releasing endpoints ( or even using endpoints at all ) is also", 
+   "left to the worker - as it was in the past, except that now it's not required.", 
+   "In fact most 'non-protocol' workers do not need that at all. ( see next commits )"
+  ], 
+  "revision_id": "296312"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-01-26T06:17:47.000000Z", 
+  "msg": [
+   "Added before/after request hooks to channel.", 
+   "Used to get resources that will be used for request processing ( instead", 
+   "of getting them on each message ) - that's the attach to vm in the case", 
+   "of the jni channel."
+  ], 
+  "revision_id": "296311"
+ }, 
+ {
+  "author": "seguin", 
+  "date": "2002-01-26T04:58:29.000000Z", 
+  "msg": [
+   "fix for bug 5861 -- NumberFormatException when non-standard HTTP header", 
+   "with length of 8 characters and non-numeric value is part of request.", 
+   "patch submitted by ruediger.pluem <at> vodafone-telecommerce.de.", 
+   "thanks to Nick Wesselman for the test case :)"
+  ], 
+  "revision_id": "296310"
+ }
+]

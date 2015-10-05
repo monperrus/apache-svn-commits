@@ -1,0 +1,86 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-04-16T23:44:56.000000Z", 
+  "msg": [
+   "Add warning message when selecting an experimental MPM.", 
+   "While this message will scroll by without their reading it, we can", 
+   "reasonably say that we warned them if they report errors."
+  ], 
+  "revision_id": "94674"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-04-16T23:39:09.000000Z", 
+  "msg": [
+   "Added support for the threadpool MPM"
+  ], 
+  "revision_id": "94673"
+ }, 
+ {
+  "author": "brianp", 
+  "date": "2002-04-16T23:37:06.000000Z", 
+  "msg": [
+   "Another experimental MPM derived from worker:", 
+   "The threadpool MPM implements Aaron Bannert's \"time-space tradeoff\"", 
+   "design managing idle workers.  Rather than putting accepted connections", 
+   "into a queue, the threadpool MPM keeps idle worker threads in a stack.", 
+   "Its dedicated listener thread retrieves an idle worker from the stack", 
+   "before accepting a connection.  If there are no idle workers, the", 
+   "listener blocks until a worker becomes available before doing an accept.", 
+   "In many ways, threadpool is also a variant of leader/follower.  They", 
+   "both maintain a stack of idle threads.  The difference is that threadpool", 
+   "has a dedicated listener thread, and leader/follower rotates the listening", 
+   "responsibility among its worker threads.  In my initial testing, the", 
+   "leader/follower MPM performs very well on multiprocessor Solaris 8 when", 
+   "listening on a single port, but poorly when listening on multiple ports.", 
+   "(I don't know why this is happening.  What I've found so far is that", 
+   "when you add a poll on the listen socket(s) before the accept in the", 
+   "leader/follower MPM, all the socket-related syscalls in the httpd get", 
+   "slower.  My hypothesis is that the thread scheduler is making an optimal", 
+   "decision about where (on what CPU) to run the newly awakened thread if", 
+   "its first syscall is an accept, and a nonoptimal decision if its first", 
+   "syscall is a poll.)  The threadpool MPM performs better with multiple", 
+   "listener ports, and in my testing so far it looks competitive with", 
+   "leader/follower when running with a single listener."
+  ], 
+  "revision_id": "94672"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-04-16T08:49:03.000000Z", 
+  "msg": [
+   "Merge in latest GNU config.guess and config.sub files.  Synchronize all", 
+   "config.guess/config.sub files to be identical.  Previously, we had three", 
+   "different versions of the guess files - now they are the same.", 
+   "I attempted to merge in ASF changes that were marked and still needed.", 
+   "Please verify that these work on your platform.  (Particular attention", 
+   "is required for the IBM platforms.)", 
+   "Part of PR 7818 stems from the fact that the bundled expat did not have an", 
+   "included config.guess/config.sub.  Therefore, it would take the config.guess", 
+   "from the system.  Icarus's autoconf/libtool is very old (2.13/1.3.5).  The", 
+   "machine that was used to roll 2.0.32 had a recent autoconf/libtool which", 
+   "explains the behavior that Sander saw in the PR.  Therefore, we now", 
+   "explicitly provide a config.guess/.sub for the bundled expat so that", 
+   "all of the versions are in sync.  This should minimize configuration", 
+   "problems.", 
+   "pcre was using a config.guess that was imported when Brian made the 3.9", 
+   "import.  It did not have the Apache modifications, but seems to have", 
+   "had the Darwin changes.  Go figure.  Sync it up as well.", 
+   "PR: 7818", 
+   "Obtained from: GNU FSF - ftp.gnu.org/gnu/config"
+  ], 
+  "revision_id": "94671"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2002-04-16T06:13:48.000000Z", 
+  "msg": [
+   "worker is not the default Unix MPM.  [This statement has been in the docs", 
+   "ever since this was copy-and-pasted from the threaded MPM documentation,", 
+   "and threaded *was* the default at one point.]", 
+   "Reported by: kap@katchoo.org"
+  ], 
+  "revision_id": "94670"
+ }
+]

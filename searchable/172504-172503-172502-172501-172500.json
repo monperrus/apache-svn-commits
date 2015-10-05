@@ -1,0 +1,77 @@
+[
+ {
+  "author": "tng", 
+  "date": "2001-01-18T15:02:03.000000Z", 
+  "msg": [
+   "it's a no-op if refChild is the same as newChild"
+  ], 
+  "revision_id": "172504"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2001-01-18T02:49:57.000000Z", 
+  "msg": [
+   "This commit is a port of the latest changes I've made to the Java version,", 
+   "it brings yet another optimization to this DOM implementation.", 
+   "The whole idea is to try and avoid to always create a Text node to hold", 
+   "the value of an attribute. The DOM spec requires it, so we still have", 
+   "to do it in case getFirstChild() is called for instance. The reason", 
+   "attribute values are stored as a list of nodes is so that they can carry", 
+   "more than a simple string. They can also contain EntityReference nodes.", 
+   "However, most of the times people only have a single string that they", 
+   "only set and get through Element.set/getAttribute or Attr.set/getValue.", 
+   "In this new version, the Attr node has a value pointer which can either", 
+   "be the DOMString directly or a pointer to the first ChildNode. A flag tells", 
+   "which one it currently is.", 
+   "Note that while we try to stick with the direct DOMString as much as", 
+   "possible once we've switched to a node there is no going back. This is", 
+   "because we have no way to know whether the application keeps referring to", 
+   "the node we once returned (I guess that's not so true for C++!).", 
+   "The gain in memory varies on the density of attributes in the document.", 
+   "But in the tests I've run I've seen up to 12% of memory gain in the Java", 
+   "version. And the good thing is that it also leads to a slight gain in speed", 
+   "because we allocate fewer objects! I mean, that's until we have to actually", 
+   "create the node...", 
+   "To avoid too much duplicated code, I got rid of ParentNode and renamed", 
+   "ChildAndParentNode, which I never really liked, to ParentNode for", 
+   "simplicity, this doesn't make much of a difference in memory usage because", 
+   "there are only very few objects that are only a Parent. This is only true", 
+   "now because AttrImpl now inherits directly from NodeImpl and has its own", 
+   "implementation of the ParentNode's node behavior. So there is still some", 
+   "duplicated code there."
+  ], 
+  "revision_id": "172503"
+ }, 
+ {
+  "author": "tng", 
+  "date": "2001-01-17T21:15:16.000000Z", 
+  "msg": [
+   "ElementImpl::getAttributeNS should check null pointer.  Fixed by Volker Krause."
+  ], 
+  "revision_id": "172502"
+ }, 
+ {
+  "author": "tng", 
+  "date": "2001-01-17T18:39:41.000000Z", 
+  "msg": [
+   "Access violations and stack overflows in insertBefore"
+  ], 
+  "revision_id": "172501"
+ }, 
+ {
+  "author": "lehors", 
+  "date": "2001-01-17T17:46:02.000000Z", 
+  "msg": [
+   "We used to have a change counter on a node basis, so that we knew what", 
+   "subtree changed. But since only DeepNodeList really use this today,", 
+   "the gain appears to be really small compared to the cost of having", 
+   "an int on every (parent) node plus having to walk up the tree all the", 
+   "way to the root to mark the branch as changed everytime a node is", 
+   "changed.", 
+   "So we now have a single counter global to the document. It means that", 
+   "some objects may flush their cache more often than necessary, but this", 
+   "makes nodes smaller and only the document needs to be marked as changed."
+  ], 
+  "revision_id": "172500"
+ }
+]

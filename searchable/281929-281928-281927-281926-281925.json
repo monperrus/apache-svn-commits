@@ -1,0 +1,68 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-05-23T20:58:27.000000Z", 
+  "msg": [
+   "- Fix Facade problem ( RequestDispatcher )", 
+   "- start working on MimeHeader", 
+   "- remove gross garbage generation in HttpResponse ( and Ajp11, Ajp12 adapters that extend it)", 
+   "StringBuffer.setLength(0) is _wrong_", 
+   "Note that the code is still bad - changing the I/O system to support other charsets and", 
+   "avoid multiple buffers is probably the most important thing ( both I18N and performance)."
+  ], 
+  "revision_id": "281929"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-23T16:57:12.000000Z", 
+  "msg": [
+   "Moved facades to a different package. This will improve the readability of tomcat and", 
+   "provide a clear separation between layers. In addition, the security-sensitive code will", 
+   "be clearly demarcated and we open the possibility of making the facade a plug-in.", 
+   "Changes:", 
+   "- all facades are now package-level classes ( non-public), only the methods in servlet API", 
+   "are public.", 
+   "- all communication between facade and core is controled by FacadeManager interface.", 
+   "- also, package.html contains some documentation about facades.", 
+   "- changed the method to access the internal objects, you can't cast to Facade and call getReal.", 
+   "You need to get an instance of FacadeManager ( right now we use a tomcat-specific", 
+   "context attribute). The application must have a \"trusted\" attribute in server.xml.", 
+   "The FacadeManager can't be used to access objects from a different context.", 
+   "- few changes in ServletWrapper and ServletConfigImpl - the parameters are stored now in SW,", 
+   "ServletConfigImpl is a pure facade.", 
+   "Please, please review the facade package. The main goal is to enable use of un-trusted code.", 
+   "There are few problems I found:", 
+   "- core needs protection too ( servlet shouldn't be able to construct core objects or", 
+   "access them in any way )", 
+   "- recycling of facades is dangerous - at least one obvious exploit. That means we'll have", 
+   "to break the one-one relation between internal objects and facade.", 
+   "- few objects don't have facades ( it is possible to access the AdaptiveClassLoader and call", 
+   "public methods - very dangerous )."
+  ], 
+  "revision_id": "281928"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-05-23T00:44:56.000000Z", 
+  "msg": [
+   "re-wrote the read/write object methods to be more efficient."
+  ], 
+  "revision_id": "281927"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-05-23T00:43:47.000000Z", 
+  "msg": [
+   "use the JServ session generation code...."
+  ], 
+  "revision_id": "281926"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-05-23T00:43:19.000000Z", 
+  "msg": [
+   "remove some duplicated code"
+  ], 
+  "revision_id": "281925"
+ }
+]

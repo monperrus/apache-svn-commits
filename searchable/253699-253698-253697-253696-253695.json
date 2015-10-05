@@ -1,0 +1,88 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-08T05:11:24.000000Z", 
+  "msg": [
+   "add javadoc/license"
+  ], 
+  "revision_id": "253699"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-08T05:04:54.000000Z", 
+  "msg": [
+   "Implement structured type mapping metadata, part I.", 
+   "* Define two new classes, TypeDesc and FieldDesc, representing", 
+   "metadata about a Java<->XML mapping for a given type.  FieldDesc", 
+   "maps a given Java field to/from a particular XML element OR attribute,", 
+   "and has two subclasses, ElementDesc and AttributeDesc.  The subclasses", 
+   "may be created directly, the FieldDesc root may not.", 
+   "* Adjust the code in the BeanSerializer/Deserializer and SimpleSerializer/", 
+   "Deserializer to look for a static \"getTypeDesc()\" method on classes to", 
+   "obtain metadata instead of looking for the old \"getAttributeNames()\"", 
+   "string array.", 
+   "* Edit the stub generator to emit the new metadata style.", 
+   "* Fix up the TestAttributes test to use the new metadata style, test", 
+   "more combinations of present + missing metadata, and also add a", 
+   "test for a SimpleType with an attribute.", 
+   "So what does this mean?", 
+   "The framework is now in place for much smoother data binding, and we", 
+   "can eventually move towards supporting an xdoclet-type Javadoc", 
+   "syntax for expressing these kinds of mappings.", 
+   "We now support attributes which are in other namespaces than the", 
+   "default.", 
+   "Next steps:", 
+   "Get the emitter doing the right thing for XML -> Java name mangling.  In", 
+   "other words, if we have to change an XML name when writing a stub", 
+   "from WSDL, we should now be able to keep track of the original XML", 
+   "name and add it to the metadata instead of relying on the Java -> XML", 
+   "reverse name mangling to preserve fidelity.", 
+   "Get the WSDL emitted for attributes to look correct.  I was a little too", 
+   "tired to finish this tonight.", 
+   "Attempt to refactor the BeanSerializer/SimpleSerializer and equiv.", 
+   "deserializers into a common family so they can share all the duplicated", 
+   "code that currently lives both places.", 
+   "Clean up a bit more."
+  ], 
+  "revision_id": "253698"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-07T16:14:54.000000Z", 
+  "msg": [
+   "WSDL2Java updates."
+  ], 
+  "revision_id": "253697"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-03-07T15:45:51.000000Z", 
+  "msg": [
+   "Clean up cache code a bit, pull cache up to the class level and make", 
+   "it static so that it's more useful.", 
+   "Might want to add some cache-cleaning code later (every call after more", 
+   "than 10 minutes have passed since the last cache-clean should scan", 
+   "through the cache and delete entries older than a time limit, etc)."
+  ], 
+  "revision_id": "253696"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-03-06T23:39:17.000000Z", 
+  "msg": [
+   "I got rid of the rest of the ignorable exceptions from the functional-tests.  Here's the", 
+   "philosophy I followed:", 
+   "- if a catch block is rethrowing the exception, don't log it (it will probably be logged", 
+   "elsewhere)", 
+   "- if a catch block throws a different exception, log the original, but log it as debug, not", 
+   "error; this bit of code is in error, but somebody higher up the call chain may handle it,", 
+   "in which case it is NOT an error.", 
+   "The toughest choice was following this philosophy on SimpleAxisServer, but since", 
+   "the exceptions there are being bundled to go across the wire, I still feel changing", 
+   "from log.error to log.debug is the right thing to do.  The outermost catch block, in", 
+   "main, I left as log.error because if the code gets there execution ceases.", 
+   "The important thing is that the functional tests are back to being clean again."
+  ], 
+  "revision_id": "253695"
+ }
+]

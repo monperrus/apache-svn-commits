@@ -1,0 +1,84 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-12T20:34:01.000000Z", 
+  "msg": [
+   "Change RequestUtils.computeURL() back to returning a String -- the", 
+   "java.net.URL class does not like dealing with page-relative or", 
+   "server-relative URLs.", 
+   "When a \"forward\" or \"page\" attribute is used to specify the hyperlink, a", 
+   "server-relative URL (beginning with the context path) is generated", 
+   "*without* the scheme, server, and port portions.  This assists in many", 
+   "cases where proxy servers intervene between the client and the actual", 
+   "server.  (If an \"href\" attribute is used, it is passed through unchanged.)", 
+   "I haven't addressed the problem with computeParameters() yet -- that will", 
+   "be next.", 
+   "PR: Bugzilla #1356", 
+   "Submitted by:\tStoehr Sukachevin"
+  ], 
+  "revision_id": "48339"
+ }, 
+ {
+  "author": "mschachter", 
+  "date": "2001-05-11T22:33:37.000000Z", 
+  "msg": [
+   "- Added the MultipartRequestWrapper class, which is a class that implements", 
+   "HttpServletRequest and wraps a normal request.  All normal HttpServletRequest", 
+   "methods will be called to the underlying request, except for methods involving", 
+   "parameters, which were over-ridden to provide a transparent way of accessing", 
+   "multipart elements.  The version of the HttpServletRequest is Servlet 2.2, however", 
+   "the new methods from Servlet 2.3 are also included in this class with empty", 
+   "implementations so that Struts will build against the servlet 2.2 and 2.3 jars", 
+   "- Removed the isCancelled(MultipartRequestHandler) method from Action, in favor", 
+   "of isCancelled(HttpServletRequest), which now works for multipart requests", 
+   "- The process() method of ActionServlet now determines whether or not the current", 
+   "request is a multipart request, and if it is, wraps it in the new", 
+   "MultipartRequestWrapper class temporarily, and right before the ActionForward", 
+   "is processed, reverts the request back to the original one", 
+   "- Modified DiskMultipartRequestHandler to populate the request with multipart", 
+   "data if it's passed a request of type MultipartRequestWrapper", 
+   "- Modified RequestUtils to check to make sure the method of the request is", 
+   "\"POST\" before processing a multipart request (Submitted by Martin Cooper).  It does", 
+   "this in RequestUtils as well as ActionServlet when it checks for multipart", 
+   "requests", 
+   "This change has been tested against all the webapps included with Struts,", 
+   "and doesn't seem to cause any issues.  Command tokens and cancel buttons", 
+   "should now work fine for multipart requests without any modifications"
+  ], 
+  "revision_id": "48338"
+ }, 
+ {
+  "author": "mschachter", 
+  "date": "2001-05-11T17:10:58.000000Z", 
+  "msg": [
+   "- Add an isCancelled() method to the Action class that takes a", 
+   "MultipartRequestHandler as an argument.  This should address", 
+   "issues with the html:cancel tag, as long as the new isCancelled", 
+   "method is called on for multipart forms.", 
+   "- Add myself to the EJB Design Pattern TODO"
+  ], 
+  "revision_id": "48337"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-11T16:55:38.000000Z", 
+  "msg": [
+   "Make the \"size\" attribute available on the <html:file> custom tag.  The", 
+   "underlying base class already supports this.", 
+   "Submitted by:\tAndy Brook <andy_brook@mcgraw-hill.com>"
+  ], 
+  "revision_id": "48336"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-05-10T03:13:33.000000Z", 
+  "msg": [
+   "Add standard actions that let you integrate other web application", 
+   "components via RequestDispatcher.forward() and", 
+   "RequestDispatcher.include(), but still take advantage of the preprocessing", 
+   "performed by the controller servlet (such as auto-population and", 
+   "validation of ActionForm beans)."
+  ], 
+  "revision_id": "48335"
+ }
+]

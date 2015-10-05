@@ -1,0 +1,80 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-03-25T03:35:28.000000Z", 
+  "msg": [
+   "Verified tomcat on Win98 working standalone, with IIS with AJP and JNI", 
+   "connectors. Terific job Gal, the JNI is just great.", 
+   "Fixed minor problems with directories - make sure the loggers are created", 
+   "under tomcat home, same for workdir.", 
+   "Added few more comments and few more checks - Tomcat+JNI+IIS is a very good", 
+   "test case, no control on start dir or env.", 
+   "Also made few changes in the IIS, Netsape and JNI documentations and moved", 
+   "the sample config files into src/etc - it will now be built into tomcat.", 
+   "The current behavior is a bit more permisive with config problems:", 
+   "- if -Dtomcat.home is set, it will be used as tomcat installation dir, and", 
+   "will be used for classpath and default files ( dtds, configs ).", 
+   "If <contextManager home=\"\"> is specified it will be used as base for webapps,", 
+   "config, logs, workdir.", 
+   "- if no tomcat.home is set, we use  contextManager.home as default - it is", 
+   "also possible to set tomcatHome as an attribute of <contextManager>", 
+   "- if none is set up, current working directory is used.( we should throw", 
+   "an exception probably, but give it a chance)"
+  ], 
+  "revision_id": "281664"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-03-25T01:11:17.000000Z", 
+  "msg": [
+   "Allow TOMCAT.BAT to work even if TOMCAT_HOME has spaces in it.", 
+   "PR: 102", 
+   "Submitted by:\tLarry.Isaacs@sas.com"
+  ], 
+  "revision_id": "281663"
+ }, 
+ {
+  "author": "akv", 
+  "date": "2000-03-24T22:48:48.000000Z", 
+  "msg": [
+   "Fixes for bugs:", 
+   "41: Relative paths to TLD not resolved correctly", 
+   "53: NPE due to null object passed to java.lang.MessageFormat"
+  ], 
+  "revision_id": "281662"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-03-24T18:43:48.000000Z", 
+  "msg": [
+   "this is based off an email that craig just sent to the list,", 
+   "it is a good resource to be included with the distribution", 
+   "because it gives people a clear way to find out how to", 
+   "report bugs."
+  ], 
+  "revision_id": "281661"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2000-03-24T03:29:38.000000Z", 
+  "msg": [
+   "Fix the \"Tomcat will not shut down\" problem.  There were actually two", 
+   "unrelated issues:", 
+   "- The logic added to the execute() method of org.apache.tomcat.startup.Tomcat", 
+   "to locate the default server configuration file also needed to be executed", 
+   "in stopTomcat().  This was causing a null pointer exception.", 
+   "- The server sockets on which Tomcat was listening were being given an", 
+   "accept() call to wait for the next connection, but there was no timeout", 
+   "set.  Thus, the serverSocket.close() method being called during shutdown", 
+   "was hanging \"forever\".  Fixed by setting the timeout.", 
+   "I also changed the default timeout (from 1000ms) to 5000ms, to reduce the", 
+   "CPU overhead of a relatively idle server processing timeouts.  As a result,", 
+   "it can take a worst case 5 seconds per connector to shut down (the default", 
+   "config opens two connectors, so double this) plus whatever other processing", 
+   "time is required.", 
+   "PR: 92", 
+   "Submitted by: Larry.Isaacs@sas.com"
+  ], 
+  "revision_id": "281660"
+ }
+]

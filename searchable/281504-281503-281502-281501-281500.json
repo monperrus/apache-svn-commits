@@ -1,0 +1,73 @@
+[
+ {
+  "author": "rubys", 
+  "date": "2000-02-13T02:58:55.000000Z", 
+  "msg": [
+   "Convert to the new (j2ee-less) shell"
+  ], 
+  "revision_id": "281504"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-13T01:43:41.000000Z", 
+  "msg": [
+   "Removed few more \"old\" methods from Context.", 
+   "( old == used by j2ee; fixed j2ee to use the current methods )"
+  ], 
+  "revision_id": "281503"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-13T01:16:18.000000Z", 
+  "msg": [
+   "Change in SimpleMapper and Context:  the mapper(s) are now in charge of the", 
+   "full mapping process, including creating of internal representations.", 
+   "Context will maintain a list with all declared mappings, but it will no longer", 
+   "have internal \"byPrefix\" or \"byExtension\" tables - it's up to the mapper to", 
+   "use whatever it need ( like tree or sorted arrays ).", 
+   "Implemented the notifications for servlet  add/remove, context add/remove", 
+   "and mapping add/remove - we might be able to support dynamic configuration", 
+   "changes ( for the admin tool). ( J2EE does support that by restarting the", 
+   "server ).", 
+   "Dynamic add of mappings also means that JSP or Invoker can declare new", 
+   "path->servlet mappings, and optimize future invocations ( by removing one", 
+   "step ).", 
+   "That will allow implementations of security authorization by reusing the", 
+   "mappings in SimpleMapper ( in next checkin )", 
+   "Also:", 
+   "- added \"throws TomcatException\" to various methods that might do that", 
+   "- removed one variant of addServlet, now only addServlet( ServletWrapper ) is", 
+   "used."
+  ], 
+  "revision_id": "281502"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2000-02-12T19:50:40.000000Z", 
+  "msg": [
+   "More fun and games with JDK 1.1.", 
+   "SimpleFileFilter was dying in getParent due to wrong way slashes.", 
+   "Instead of proliferating FileUtil.patch calls, I decided to fix", 
+   "these at the source (the classpath vector itself).  This has the", 
+   "added advantage of fixing up the file once on creation instead of", 
+   "every time on reference."
+  ], 
+  "revision_id": "281501"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-02-12T03:38:51.000000Z", 
+  "msg": [
+   "Interface change for ContextInterceptor: all methods are void instead of int,", 
+   "and throw TomcatException.", 
+   "RequestInterceptor still return int and doesn't throw Exceptions.", 
+   "1. performance - exception is expensive.", 
+   "2. request interceptors are supposed to be fast and do minimal operations,", 
+   "3. It's hard to define what is Exception - for example \"request is not", 
+   "authorized\" is a normal HTTP state, and happen the first time you access", 
+   "a protected resource - it can't generate an exception. Wrong method or", 
+   "strange URI are also normal HTTP cases, not exceptions."
+  ], 
+  "revision_id": "281500"
+ }
+]

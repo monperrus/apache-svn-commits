@@ -1,0 +1,60 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2002-02-01T01:15:01.000000Z", 
+  "msg": [
+   "get rid of the apr_shmem.h include file -- it messes up dependencies.", 
+   "some minor tweaks to make it compile a bit better, but the use of", 
+   "shared memory in here is just borken. needs to be updated to the", 
+   "latest shm APIs."
+  ], 
+  "revision_id": "62884"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-01-31T23:34:04.000000Z", 
+  "msg": [
+   "To be useful, these right helper library must be used based on the", 
+   "application's choice of static apr.lib or dynamic libapr.dll.  This", 
+   "became a problem once the helper started registering sucess against", 
+   "the shared variable, to prevent apr_app_main logic (or whatever that", 
+   "call is renamed to) from running more than once."
+  ], 
+  "revision_id": "62883"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2002-01-31T19:15:44.000000Z", 
+  "msg": [
+   "All memory resources are shared with all NLMs running on NetWare.  This", 
+   "requires us to have to track each applications use of memory and make sure", 
+   "that the memory is freed back to the global pool when the application", 
+   "terminates.  Added code to help track which application owns each pool and", 
+   "a cleanup routine for making sure that all memory is freed when the application", 
+   "terminates.  Also redefined the malloc() call for NetWare to library_malloc() so", 
+   "that the library actually owns all memory allocated and can distribute it how it", 
+   "sees fit.  This prevents an application from terminating and invalidating half", 
+   "of the memory in the global memory pool."
+  ], 
+  "revision_id": "62882"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2002-01-31T19:00:36.000000Z", 
+  "msg": [
+   "Switched the project to build the NetWare version of start.c"
+  ], 
+  "revision_id": "62881"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2002-01-31T18:59:58.000000Z", 
+  "msg": [
+   "NetWare version of start.c for handling initialization of application NLMs with", 
+   "the APR library NLM, allocating the application specific pools and starting", 
+   "Winsock.  It also handle deregistering the application NLM and freeing any", 
+   "memory back to the shared memory pool."
+  ], 
+  "revision_id": "62880"
+ }
+]

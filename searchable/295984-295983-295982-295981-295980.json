@@ -1,0 +1,64 @@
+[
+ {
+  "author": "remm", 
+  "date": "2001-11-19T18:46:32.000000Z", 
+  "msg": [
+   "- Fix typo in the package name.", 
+   "Submitted by Daniel Rall <dlr at finemaltcoding.com>, and forwarded by Jon."
+  ], 
+  "revision_id": "295984"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-11-19T18:14:38.000000Z", 
+  "msg": [
+   "Patch from  Michael Smith.", 
+   "One change I didn't apply is the signature change in jk_env_objectFactory_t.", 
+   "The problem with the worker_factory is that it is specific to workers,", 
+   "while objectFactory can create any kind of jk object.", 
+   "In time we should replace worker_factory and use the new method. ( I'll start", 
+   "this soon, I'm working on a proposal )"
+  ], 
+  "revision_id": "295983"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-11-17T06:08:20.000000Z", 
+  "msg": [
+   "The big commit - plugin in the new socket code.", 
+   "All is #ifdef-ed by now - the old code is compiled by default, unmodified", 
+   "( except some ifs that I reversed to be able to read and minor indentations).", 
+   "Probably this will remain this way until we are comfortable with the new", 
+   "abstraction - then we can remove the old code and the ifdefs. So far I can run it without", 
+   "problems.", 
+   "One big issue is the code that recycles the connection - I'm very comfused, it", 
+   "seems that besides recycling the endpoint we have some code that is doing", 
+   "some tricks with the sockets. From the comments it seems to be dealing with", 
+   "lb - but the lb worker has it's own mechanism to get another endpoint", 
+   "if one fails.", 
+   "I've also got a core on high load ( but very hard to reproduce ) and it happens", 
+   "in the reuse_connection - I added a check, but not sure why the worker would be null", 
+   "in the endpoint. What's more important is finding if we need this extra attempt to reuse", 
+   "( or recover from endpoint errors ), closing the socket and reopening again could", 
+   "be a better solution ( if tomcat was restarted, all sockets will be invalid, so", 
+   "reuse_connection couldn't help in any way )."
+  ], 
+  "revision_id": "295982"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-11-17T06:00:24.000000Z", 
+  "msg": [
+   "Few fixes for the previous commits."
+  ], 
+  "revision_id": "295981"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-11-16T22:59:06.000000Z", 
+  "msg": [
+   "Minor changes ( remove unused imports, add socket channel to the registry )"
+  ], 
+  "revision_id": "295980"
+ }
+]

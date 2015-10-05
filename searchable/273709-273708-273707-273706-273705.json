@@ -1,0 +1,90 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-12-28T17:10:17.000000Z", 
+  "msg": [
+   "\"Dynamic properties\" and a bit more.", 
+   "This is \"slightly\" different from embed - if dynamic properties will be", 
+   "accepted in 1.6, it is better to do it right. Embed uses few hacks to", 
+   "trick the ProjectHelper.", 
+   "PropertyHelper includes all the code related with property manipulation", 
+   "from Project (cut&paste). I added a very simple hook mechanism ( Filter/Valve", 
+   "like ) for the most common operations.", 
+   "The API is obviously far from final - someone who really understand \"user\"", 
+   "and \"inherited\" properties should review it and make few changes.", 
+   "In Project, all properties fields are private - so all can be removed.", 
+   "The methods related with properties will just delegate to PropertyHelper.", 
+   "From a user point of view - no visible change ( hopefully :-). Even grant", 
+   "will continue to work ( but won't be able to use the new features ).", 
+   "Benefits:", 
+   "- cleanup of Project. Less code and better organised.", 
+   "- Property handling will hopefully be cleaner too", 
+   "- we get to add APIs for namespace support, and maybe support non-string", 
+   "properties ( JSP-EL like - that needs to be disussed, but IMO it would", 
+   "be very helpfull ). While refs are Objects, the main distinction is imutability.", 
+   "Also:", 
+   "- apps embeding or extending ant can fully customize _all_ aspects of", 
+   "property processing, including ${} replacement and even the syntax.", 
+   "- it should be very easy to hook a different storage mechanism ( i.e.", 
+   "integrated with the embeding app, without requiring copy of properties ).", 
+   "- it should be possible to avoid copy when creating execution frames", 
+   "( by using a chain that keeps changes and delegates getters ).", 
+   "- dynamic properties support ( my original itch :-)", 
+   "Please wait few days before firing, it seems all tests are passing", 
+   "and gump works - but I'm sure there are few problems :-)", 
+   "( I'll commit the change in Project later today )", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "273709"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-12-28T16:54:12.000000Z", 
+  "msg": [
+   "*** empty log message ***"
+  ], 
+  "revision_id": "273708"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-12-28T16:17:07.000000Z", 
+  "msg": [
+   "Quick fail if ImportTask is used with a ProjectHelper that doesn't", 
+   "support imports. The original helper won't work ( because of eval order ),", 
+   "and embed will fail too ( since it can't use 1.6 features - one of the", 
+   "goals is to work in ant1.5 ).", 
+   "I'm ready to move the dynamic properties and the component hooks - I'll", 
+   "porbably do it this weekend ( most people are in vacation, so fewer", 
+   "will feel any breakage ). In any case [embed] should now used only", 
+   "if you want to use (some) new features in ant1.5."
+  ], 
+  "revision_id": "273707"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-12-28T05:33:21.000000Z", 
+  "msg": [
+   "Renamed PropertyHelper to PropertyHelper2, so it'll still compile with", 
+   "ant1.6 after a PropertyHelper is added."
+  ], 
+  "revision_id": "273706"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-12-27T18:14:50.000000Z", 
+  "msg": [
+   "Update with the 2 changes: set attributes explicitely ( instead of passing", 
+   "the SAX2 Attributes).", 
+   "- import will use the normal entry point and will not depend on the sax", 
+   "context. We know we are in an import by looking at the importStack,", 
+   "that will set ignoreProjectTag flag and we'll reuse the context.", 
+   "There are few more changes needed to clean up the context ( some fields", 
+   "are no longer needed, and it needs to use proper getter/setters instead", 
+   "of the fields )."
+  ], 
+  "revision_id": "273705"
+ }
+]

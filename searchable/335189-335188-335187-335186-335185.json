@@ -1,0 +1,79 @@
+[
+ {
+  "author": "garyp", 
+  "date": "2001-07-15T05:58:32.000000Z", 
+  "msg": [
+   "Add section to explain processing of return values from extension function calls."
+  ], 
+  "revision_id": "335189"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-13T20:19:10.000000Z", 
+  "msg": [
+   "On code review of previous checkin from Gary P., we determined there", 
+   "was a problem with the point at which type was declared a", 
+   "DTM.NAMESPACE_NODE.  So that part was moved back up (actuall", 
+   "a bit higher than where it was before),", 
+   "and the call to declareNamespaceInContext was moved a bit", 
+   "further down."
+  ], 
+  "revision_id": "335188"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-13T19:35:13.000000Z", 
+  "msg": [
+   "Application of patch submitted by Benjamin Riefenstahl <Benjamin.Riefenstahl@ision.net>", 
+   "Motivation: We are using Xalan to generate HTML pages.  We have the", 
+   "requirement to integrate code for ad banners.  The ad server provider", 
+   "has written the code to use with compatibility to NetScape 4 in mind.", 
+   "The code uses the NetScape proprietory <LAYER> element and <IFRAME>", 
+   "elements for other browsers.  The SRC attributes of these elements", 
+   "contain URLs with several URL parameters separated by '&', as is the", 
+   "common convention.", 
+   "Problem: The code is integrated in our XSL stylesheets.  In the", 
+   "stylesheet the '&' has to be written as the entity '&amp;'.  That's", 
+   "ok.  The problem is that in the output the '&' is also written as", 
+   "'&amp;' which is not ok, because NetScape doesn't understand that.", 
+   "OTOH the same URL is written with '&' when used in an <A> element.", 
+   "Solution: This goes down to a different handling of attribute values", 
+   "in the class SerializeToHTML, depending on whether the attribute in", 
+   "question is known to contain a URI or not.  Xalan knows this for <A>", 
+   "but not for <LAYER> and <IFRAME>.  When I compare the list in", 
+   "SerializeToHTML.java with the HTML specs, I find a couple of other", 
+   "missing URI attributes in SerializeToHTML.java.  When I add the", 
+   "missing pieces, the generation works fine.", 
+   "Patch: Here is the patch (diff -c) for xalan-j_2_2_D6.  I also have", 
+   "one for xalan-j_2_0_1 which is the version I actually tested this", 
+   "with.  Please let me know if this is insufficient or the patch is", 
+   "wrong or if there is something else I can do to fix this problem."
+  ], 
+  "revision_id": "335187"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-13T19:13:31.000000Z", 
+  "msg": [
+   "Fix problem reported by jason heddings <Jason.Heddings@Sun.COM>.", 
+   "\"In v2.0.1, I was able to pass a Node to this function and have the node", 
+   "be copied to the result tree (as expected).  In the source code for", 
+   "XSLProcessorContext, it appears that the only objects that can be sent", 
+   "to the result tree are XObjects.  Everything else is converted to a", 
+   "String.  So for instance, I can no longer create a ProcessingInstruction", 
+   "and pass it to the result tree via this method since the PI is simply", 
+   "converted to a String.\""
+  ], 
+  "revision_id": "335186"
+ }, 
+ {
+  "author": "sboag", 
+  "date": "2001-07-13T19:09:18.000000Z", 
+  "msg": [
+   "Add pauseForTransformThreadStartup.  Call this in startDocument just", 
+   "after starting the transform thread.  This should get rid of any variability", 
+   "with racing threads."
+  ], 
+  "revision_id": "335185"
+ }
+]

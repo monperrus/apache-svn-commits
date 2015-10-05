@@ -1,0 +1,79 @@
+[
+ {
+  "author": "costin", 
+  "date": "2001-01-26T06:45:32.000000Z", 
+  "msg": [
+   "Bug fix - if JspServlet is used, make sure we pass the class loader that", 
+   "jasper expects and we don't use URLClassLoader ( as we have done for", 
+   "JspInterceptor ). That should address the requirement that \"JspServlet", 
+   "should still be supported\" - all tests are passing using JspServlet.", 
+   "IMHO we should use JspInterceptor's and URLClassLoader for jsps, but", 
+   "it's good to have a backup.", 
+   "Right now 3.x is passing all sanity and watchdog in standalone/java2,", 
+   "there are 7 watchdog/servlet tests failing under sandbox and many", 
+   "watchdog/jsp ( all with the same error - a null pointer in TestTag.doInitBody).", 
+   "I'll start testing with jdk1.1 also."
+  ], 
+  "revision_id": "282959"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-26T02:59:55.000000Z", 
+  "msg": [
+   "Fix typo in method name - most tests are passing under sandbox."
+  ], 
+  "revision_id": "282958"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2001-01-26T00:07:24.000000Z", 
+  "msg": [
+   "Log cycle"
+  ], 
+  "revision_id": "282957"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-25T05:07:40.000000Z", 
+  "msg": [
+   "Fixes and changes for JDK1.1 support.", 
+   "The build on 1.1 was broken for few weeks, and I hope this solution", 
+   "will improve the things a bit (in addition, I'll check the nightly 1.1", 
+   "build until we're done ).", 
+   "The util.compat package contains a helper that will avoid the use of", 
+   "introspection or other (complex) solutions to maintain 1.1 compatibility.", 
+   "It's just a small wrapper around common methods, with 2 implementations -", 
+   "one for jdk1.1 ( doing nothing for doPriviledged, returning SimpleClassLoader,", 
+   "etc) and one for jdk1.2+ ( wrapping and performing PriviledgedAction,", 
+   "returning the URLClassLoader, etc).", 
+   "As a result:", 
+   "- LoaderInterceptor12 is no longer needed", 
+   "- LoaderInterceptor11 will automatically use URLClassLoader if in Java2", 
+   "environment, no need to edit server.xml for that", 
+   "- Jdk12Interceptor compiles and can be loaded in jdk1.1. It'll do", 
+   "java2 tasks if java2 is detected ( there is another trick to add it only", 
+   "if needed - see next )", 
+   "- and of course, it builds and work fine on JDK1.1 ( again )", 
+   "As a related change, PolicyInterceptor will be automatically", 
+   "loaded if Java2 is detected and a security manager is set (or a", 
+   "secure option is set on the contextmanager ). To do that we use", 
+   "PolicyLoader, that detect the conditions where we want sandboxing", 
+   "and if java2 is available and loads the \"real\" policy interceptor.", 
+   "That simplifies a lot the configuration, we no longer need to explain", 
+   "how to change the config just to run JNDI in java2 environment.", 
+   "I also added the permissions needed to run /admin in a sandbox, there", 
+   "are few tests that are failing in sandbox - I'm working on a fix", 
+   "( but probably next week, I have a deadline for monday )", 
+   "Also, added a small comment ( to be expanded ) in BaseInterceptor."
+  ], 
+  "revision_id": "282956"
+ }, 
+ {
+  "author": "marcsaeg", 
+  "date": "2001-01-24T16:27:32.000000Z", 
+  "msg": [
+   "Added additional notes about stopping and starting the IIS service using the services control panel instead of the MMC"
+  ], 
+  "revision_id": "282955"
+ }
+]

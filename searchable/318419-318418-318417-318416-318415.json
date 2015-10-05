@@ -1,0 +1,58 @@
+[
+ {
+  "author": "neilg", 
+  "date": "2002-05-27T23:05:42.000000Z", 
+  "msg": [
+   "Adding a schema implementation of the new grammar loading interface.  This also results in a complete decoupling of the schema Validator from the schema handler, which will hopefully make their formerly tangled relationship more clear and result in easier-to-maintain code.  Also centralized handling of schemaLocation strings."
+  ], 
+  "revision_id": "318419"
+ }, 
+ {
+  "author": "neilg", 
+  "date": "2002-05-27T23:01:42.000000Z", 
+  "msg": [
+   "update to use appropriate URIs as constants instead of arbitrary strings.  Of course the question as to whether strings, appropriate or not, should live in this interface is still open."
+  ], 
+  "revision_id": "318418"
+ }, 
+ {
+  "author": "neilg", 
+  "date": "2002-05-27T23:00:25.000000Z", 
+  "msg": [
+   "fix a tiny typo."
+  ], 
+  "revision_id": "318417"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2002-05-24T14:06:23.000000Z", 
+  "msg": [
+   "In the last commit accidentally changed visibility of getDOMImplementation() from public", 
+   "to package."
+  ], 
+  "revision_id": "318416"
+ }, 
+ {
+  "author": "elena", 
+  "date": "2002-05-24T00:00:54.000000Z", 
+  "msg": [
+   "Implemented of normalizeDocument and related set/getNormalizeFeature methods.", 
+   "For the following features setting the state to both true or false is supported:", 
+   "\"comments\", \"entities\", \"cdata-sections\", \"split-cdata-sections\", \"discard-default-content\", \"validate\".", 
+   "Setting \"datatype-normalization\" to [true] does not have any effect.", 
+   "Implemented initial support for DOMRevalidation with the following limitations:", 
+   "1) Validation can only be performed against XMLSchemaGrammar", 
+   "2) XML Schema normalized values as well as default element content will not be exposed", 
+   "3) If Entity references are present in the tree their content won't be part of validation process. Same applies for CDATA section nodes.", 
+   "4) Attribute value normalization defined by XML 1.0 is not performed (XML Schema requires as precondition to validation that the attribute values will be normalized).", 
+   "5) For the documents created from scratch (not using the DOMParser), before calling normalizedDocument() user must set documentURI that represents the baseURI of the document related to which location of schema grammar will resolved.", 
+   "6) Performance: the first time user calls normalizeDocument() (with validation turned on) it will be extremely slow since this is the time DOMImplementation will instantiate XMLSchemaValidator. Subsequent calls should be much faster.", 
+   "In addition to the listed limitations we need to revisit some of the design issues:", 
+   "a) Currently it is no longer possible to build DTD only xerces jars, because of dependency of normalizeDocument on XMLSchemaValidator. Explore how we can avoid this dependency (this includes the issue with exposing PSVI in the DOM)", 
+   "b) Grammar cashing - we should be able at least to store grammar against which document was revalidated to avoid reparsing the grammar. Multiple issues here.", 
+   "c) Implement validators pool - for multi-threaded applications.", 
+   "etc."
+  ], 
+  "revision_id": "318415"
+ }
+]

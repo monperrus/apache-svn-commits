@@ -1,0 +1,83 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-05-30T16:06:00.000000Z", 
+  "msg": [
+   "Fix ServletWrapper - synchronized init().", 
+   "This doesn't affect the normal execution, sync is called only if the servlet", 
+   "is not initialized."
+  ], 
+  "revision_id": "281959"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-30T15:40:14.000000Z", 
+  "msg": [
+   "Small fixes.", 
+   "We need to fix error handling, after that we can remove the hack from Facade."
+  ], 
+  "revision_id": "281958"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-30T14:08:23.000000Z", 
+  "msg": [
+   "Missing file."
+  ], 
+  "revision_id": "281957"
+ }, 
+ {
+  "author": "shachor", 
+  "date": "2000-05-30T14:01:10.000000Z", 
+  "msg": [
+   "Minor compile warnings on Linux"
+  ], 
+  "revision_id": "281956"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-05-30T06:16:55.000000Z", 
+  "msg": [
+   "I was offline - many changes, but most of them are", 
+   "just moving some code and small evolutionary changes..", 
+   "Everything that worked before should still work, I just", 
+   "added few more methods and hooks, preparing for 2 bigger", 
+   "changes.", 
+   "- added support for explicit in/out buffers using ByteBuffer.", 
+   "The only change in core is adding the property to Request/Response.", 
+   "This will be very important for:", 
+   "- performance - we can minimize and control the flow, probably", 
+   "save 2-3 copies.", 
+   "- character encoding - this is the first step in allowing", 
+   "modules to control the byte<->char and fix the wrong code", 
+   "that assumes ascii ( that also means javax.servlet, but we", 
+   "can override the methods ).", 
+   "- performance - enable faster character encoders", 
+   "- protocol adapters - all existing adapters implement only", 
+   "the read/write operations.", 
+   "- added hooks for buffer - if a buffer is present, it will be used", 
+   "instead of BufferedServletInput/Output stream.", 
+   "- the code in buffer is the same as in BufferedOutputStream.", 
+   "BufferedInputStream was just a stub, added the buffering", 
+   "( a bit better, not complete yet )", 
+   "- started moving the adapters to the new model ( event callbacks", 
+   "instead of extending request/response). The old model still works,", 
+   "but I think we should deprecate it soon.", 
+   "- Ajp13ConnectorResponse: no longer extend BufferedOS, just", 
+   "override write. It's a first step in moving to ByteBuffer.", 
+   "- added various utils to BuffTool - scan a byte[] directly.", 
+   "- reorganized the http code to use buffers - see HttpAdapter", 
+   "- small change in PoolTcpConnectionHandler - replaced", 
+   "the Vector with a SimplePool ( lighter ) and also added the", 
+   "option to not use a pool, just per thread data ( less sync in", 
+   "critical path )", 
+   "- moved \"commited\" from BufferedServletOS to Response, where", 
+   "it should be  (since BSOS is just a facade).", 
+   "- added missing setPort method in request", 
+   "- small fixes in facades - if request processing fails, default", 
+   "context's facade will be used. This will be important after we", 
+   "fix the security and implement webapp isolation."
+  ], 
+  "revision_id": "281955"
+ }
+]

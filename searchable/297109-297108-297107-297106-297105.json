@@ -1,0 +1,73 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-05-09T00:10:57.000000Z", 
+  "msg": [
+   "Temporary disable the use of apr_pools. There is something strange with", 
+   "reseting a child pool - I'll re-enable it after more investigations.", 
+   "Use the 'debug' filter for logging.", 
+   "A bit of small reorg in service, to make it easier to read."
+  ], 
+  "revision_id": "297109"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-09T00:08:50.000000Z", 
+  "msg": [
+   "Remove the direct calls to shm. We use jk as an intermediary layer - this", 
+   "allows less duplicated code and more flexibility, plus some important", 
+   "optimizations.", 
+   "The unix socket code will go too.", 
+   "After everything is cleared, we can start adding conditional code for", 
+   "pining the buffers and/or use the new JDK1.4 JNI calls ( if 1.4 is detected :-).", 
+   "for direct buffer access."
+  ], 
+  "revision_id": "297108"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-09T00:05:14.000000Z", 
+  "msg": [
+   "Started to unmangle the unix socket from apr.", 
+   "If/when APR will have unix domain support - it will not need special", 
+   "#ifdefs.", 
+   "The channel_un is specific to unix and will be available only if HAVE_UNIX_SOCKET", 
+   "is set at compile time.", 
+   "( you shouldn't set it unless you want to play with the cutting-edge, there", 
+   "are problems with signals sent when the other end dies - at least in JDK1.4 ).", 
+   "Expect more work in this area after everything else is stable - I can't", 
+   "wait to play with passing open file descriptors :-)"
+  ], 
+  "revision_id": "297107"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-09T00:01:43.000000Z", 
+  "msg": [
+   "Some big changes.", 
+   "I did more cleanup in the 'find_best_worker'. Right now we don't use", 
+   "the 'in_recovery' or the extra delay - if the timeout expires we'll", 
+   "remove the worker from 'error' state, so it can be tried again.", 
+   "Normal rules are used.", 
+   "If the next request is ok, great. If not - it'll go back to error state.", 
+   "The only problem is that after timeout the worker will have a low lb_factor,", 
+   "and will be prefered. That will be resolved by using 'int' factors and a", 
+   "better mechanism for re-selection.", 
+   "In addition, the scoreboard is almost completely operational - it can", 
+   "do gracefull shutdown, add new workers at runtime, re-enable workers.", 
+   "All this requires using some JNI and jkshm.jar - but a non-jni based", 
+   "solution is in work ( for JDK1.4 and nio )"
+  ], 
+  "revision_id": "297106"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-05-08T23:57:16.000000Z", 
+  "msg": [
+   "Display debug only if configured to do so.", 
+   "Removed the (useless) in_recovery getter.", 
+   "Add 'gracefull' getter - yes, it's working !"
+  ], 
+  "revision_id": "297105"
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "author": "larryi", 
+  "date": "2001-01-23T13:17:07.000000Z", 
+  "msg": [
+   "If an expanded context is already defined, try to reload the context instead", 
+   "of recreate it.  This has a better chance of preserving the context settings. :-)", 
+   "Note: Context reloading is not currently successful at completely avoiding", 
+   "the bug.  If you try to execute the admin/test/test.jsp when the admin.war", 
+   "wasn't already expaned, the request will result in a 500 error. The", 
+   "ServletContext for the JspServlet is still carrying a reference to the", 
+   "old context and its old classloader.  This old classloader doesn't have", 
+   "WEB-INF/classes in its urls[] array. If this problem occurs, restart Tomcat.", 
+   "Since the admin.war is already expanded, the problem is avoided."
+  ], 
+  "revision_id": "282949"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-01-23T13:02:01.000000Z", 
+  "msg": [
+   "If reaload is true, don't defer to DependManager."
+  ], 
+  "revision_id": "282948"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-01-23T05:08:40.000000Z", 
+  "msg": [
+   "2 fixes in the Http implementation:", 
+   "- do case-sensitive compare for the http method ( GET works, get doesn't )", 
+   "- right HTTP 0.9 support", 
+   "Also, a fix in the matcher ( the responseCode is not matched, needed to", 
+   "deal with 0.9 requests ).", 
+   "I also commented out or changed a number of tests ( POST doesn't exist", 
+   "in 0.9, so need to add the protocol ).", 
+   "Right now all but one tests are passing.", 
+   "The failing test works fine with JspInterceptor ( if useJspServlet=\"false\"", 
+   "is used ), but fails with JspServlet.", 
+   "( the current default is to use JspServlet, in order to test and make sure", 
+   "it is supported and works fine ).", 
+   "The failing test is test/jsp/classTest.jsp, with the error:", 
+   "java.lang.IllegalAccessError: try to access class jsp/_0002fjsp_0002fclassTest_0002ejspclassTest_jsp_0$JSPTest$Inner from class jsp/_0002fjsp_0002fclassTest_0002ejspclassTest_jsp_0"
+  ], 
+  "revision_id": "282947"
+ }, 
+ {
+  "author": "danmil", 
+  "date": "2001-01-23T03:23:03.000000Z", 
+  "msg": [
+   "Adding more thorough DEBUG-level to describe what mapping the module is", 
+   "using for a given request.", 
+   "Submitted by: James Courtney"
+  ], 
+  "revision_id": "282946"
+ }, 
+ {
+  "author": "larryi", 
+  "date": "2001-01-22T21:37:29.000000Z", 
+  "msg": [
+   "Fix classloader problem which occurs when a war file gets expanded for", 
+   "a context that is already listed in the server.xml.", 
+   "The classloader gets created by server.xml processing before the war file", 
+   "is expanded.  When SimpleClassLoader is used, it will lack the WEB-INF", 
+   "directories in its urls[] array.  Make AutoSetup remove and add the context", 
+   "so the classloader gets updated.", 
+   "Fixed the indentation to make it more readable, though it somewhat hides", 
+   "the actual changes."
+  ], 
+  "revision_id": "282945"
+ }
+]

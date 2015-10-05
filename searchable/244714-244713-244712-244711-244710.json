@@ -1,0 +1,66 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-04-27T15:24:33.000000Z", 
+  "msg": [
+   "Fix problem with deploy, cleanup.", 
+   "Summary:", 
+   "New Message form \"BodyInputStream\", which assumes the currentMessage", 
+   "object is an InputStream pointing at some XML which should be in the", 
+   "body of the SOAP envelope.  New subtype of SOAPBodyElement called", 
+   "InputStreamBody which encapsulates this input stream.  When asked to", 
+   "output() to the SerializationContext, it just writes the stream.", 
+   "(NOTE: there are potential problems embedding XML inside XML like this,", 
+   "but we'll leave them for theorizing about later)", 
+   "There is also a new body type called \"DOMBody\" which encapsulates a", 
+   "DOM Element, and walks the element to output XML during serialization.", 
+   "This is to allow programmatic construction of bodies (such as we do in", 
+   "MsgDispatchHandler).", 
+   "To be able to distinguish which kind of body to create, I threaded the", 
+   "ServiceDescription down through the Message object and the", 
+   "SOAPSAXHandler so that clients can set it before the SOAP envelope", 
+   "gets parsed.  Then at parse time, if the service is registered as RPC,", 
+   "we make an RPCBody, otherwise a plain old SOAPBodyElement.  This", 
+   "needs some more thinking, both in terms of cleaning up the design and", 
+   "also potentially dealing with a situation where you don't know if it's an", 
+   "RPC until after you parse (i.e. when doing dispatch based on the body", 
+   "element's namespace).", 
+   "Also did some general cleanup, removed a few debugging printlns, etc."
+  ], 
+  "revision_id": "244714"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-04-27T13:31:49.000000Z", 
+  "msg": [
+   "Eliminate deprecation warning"
+  ], 
+  "revision_id": "244713"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-04-27T02:42:14.000000Z", 
+  "msg": [
+   "Remove hack - no longer needed"
+  ], 
+  "revision_id": "244712"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-04-27T02:41:55.000000Z", 
+  "msg": [
+   "Give input stream directly to SAX"
+  ], 
+  "revision_id": "244711"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-04-27T02:19:14.000000Z", 
+  "msg": [
+   "Temp hack - solves a problem of incomplete XML being passed to SAX.", 
+   "Once I get enough of a scenario up and running, I promise to come", 
+   "back and replace this with a FixedLengthInputStream."
+  ], 
+  "revision_id": "244710"
+ }
+]

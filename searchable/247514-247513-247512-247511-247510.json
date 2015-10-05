@@ -1,0 +1,108 @@
+[
+ {
+  "author": "butek", 
+  "date": "2002-07-17T17:32:56.000000Z", 
+  "msg": [
+   "If we have", 
+   "<message name=\"in\"><part name=\"in\" element=\"e\"/></message>", 
+   "<message name=\"out\"><part name=\"out\" element=\"e\"/></message>", 
+   "where e contains a string named a.  Note that the input and output", 
+   "messages both refer to the same element.  Because the unwrapped list", 
+   "of parameters are named the same for input and output, we used to say", 
+   "we had an inout parameter and generate the following:", 
+   "public void e(StringHolder a);", 
+   "but inoutness is determined by part name, not parameter name, so we", 
+   "should generate:", 
+   "public String e(String a);", 
+   "This is a TCK issue."
+  ], 
+  "revision_id": "247514"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-16T22:42:51.000000Z", 
+  "msg": [
+   "The following changes are made:", 
+   "1) Added documentation describing the new Java2WSDL --input and --bindingName options.", 
+   "2) Made a small fix to Java2WSDL Types found while constructing a testcase.", 
+   "3) Extended the roundtrip testcase to test the new options.  Java2WSDL is now called", 
+   "an extra time to add a second port to the WSDL file (named RoundtripTripTest2).  The", 
+   "second port uses the same binding as the orginal port.  A new test method is added", 
+   "(testStockInvestmentWithPort2) to verify that the second port was created successfully", 
+   "and deployed properly.", 
+   "Cool!", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247513"
+ }, 
+ {
+  "author": "scheu", 
+  "date": "2002-07-16T18:32:46.000000Z", 
+  "msg": [
+   "The following new options are added to Java2WSDL", 
+   "-I, --input <wsdl>", 
+   "-b, --bindingName <name>", 
+   "The --input <wsdl> option is used to read an existing", 
+   "wsdl file and use it as the javax.wsdl.Definition.", 
+   "The code is changed in several places to query for", 
+   "an existing wsdl construct before adding a new one.", 
+   "For example a binding is created only if a", 
+   "binding with the same qname does not exist.", 
+   "Ignoring existing constructs is a simple rule.  (An alternative", 
+   "rule would be to replace the existing construct, but", 
+   "a replacement rule is more error prone and less desirable.)", 
+   "Dealing with the types was a bit more complicated due to the", 
+   "way types are processed.  The Types class builds a SymbolTable", 
+   "with the input wsdl file and examines the types in the symbol table", 
+   "to determine which types/elements do not need to be reprocessed.", 
+   "This has the beneficial side effect of checking the", 
+   "input wsdl file.", 
+   "The new code exposed some minor bugs, which I fixed.", 
+   "---------------------", 
+   "The --binding <name> option is used to set the name of the", 
+   "wsdl binding element.", 
+   "---------------------", 
+   "I used these new options to generate wsdl for the TCK", 
+   "tests that required multi-ports, mult-services, multi-portTypes, etc.", 
+   "The --input <wsdl> option will also be useful in the future to", 
+   "add such things as doc-lit bindings.  (First run the tool to generate", 
+   "a wsdl with the RPC binding, and then run again with the --input <wsdl>", 
+   "to add a doc-lit binding).", 
+   "--------------------------------------------", 
+   "I also changed some Java2WSDL signatures to be", 
+   "more specific in regards to Exceptions.", 
+   "--------------------------------------------", 
+   "I expect that there will be additions to this code as it matures.", 
+   "I need to add information to the user guide and add a testcase.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "247512"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-07-16T15:17:34.000000Z", 
+  "msg": [
+   "If the address book sample fails in the build, the build still succeeds.  The", 
+   "problem is samples.addr.Main swallows any exceptions.  A fix is to remove", 
+   "the try/catch block since we don't want the exception caught in the sample."
+  ], 
+  "revision_id": "247511"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-07-16T15:14:13.000000Z", 
+  "msg": [
+   "The new include test was using the same port name as the samples/addr", 
+   "AddressBook.wsdl.  The samples deploy.wsdd info was getting overridden", 
+   "by the include test deploy.wsdd info and the address book sample was", 
+   "failing."
+  ], 
+  "revision_id": "247510"
+ }
+]

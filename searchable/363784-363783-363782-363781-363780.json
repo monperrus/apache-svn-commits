@@ -1,0 +1,76 @@
+[
+ {
+  "author": "arminw", 
+  "date": "2004-06-12T12:45:41.000000Z", 
+  "msg": [
+   "fix bug in link method"
+  ], 
+  "revision_id": "363784"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-06-11T22:05:58.000000Z", 
+  "msg": [
+   "additional field conversions by Guillaume Nodet"
+  ], 
+  "revision_id": "363783"
+ }, 
+ {
+  "author": "arminw", 
+  "date": "2004-06-11T22:04:47.000000Z", 
+  "msg": [
+   "add patches by Guillaume Nodet", 
+   "cache package:", 
+   "I think there are several problems with the cache implementations :", 
+   "* ObjectCacheDefaultImpl", 
+   "This cache uses soft references for storing objects,", 
+   "but not for the keys so they stay in the map forever.", 
+   "The key for a garbaged soft reference is only removed", 
+   "when the same object is looked up in the cache. I modified the", 
+   "ObjectCacheDefaultImpl to link soft references", 
+   "to a Queue, and clear garbaged keys everytime the", 
+   "cache is accessed. It ensure that no needed Identity", 
+   "objects will be kept after the object has been garbaged.", 
+   "These remarks also apply to ObjectCachePerBrokerImpl", 
+   "and ObjectCacheLocalDefaultImpl but i did not changed", 
+   "them.", 
+   "* ObjectCacheSoftImpl", 
+   "This is a good cache implementation. It uses a lru map", 
+   "with a fixed number of hard references to objects and", 
+   "a hashmap containing soft references, cleaned with a", 
+   "queue associated to these soft references.", 
+   "This is only available with JDK 1.4.", 
+   "I changed the FixSizedLinkedHashMap from JDK 1.4 to", 
+   "the org.apache.commons.collections.map.LRUMap", 
+   "to remove the dependency on JDK 1.4.", 
+   "I also added the proper constructor so that this cache", 
+   "is usable. As the Properties object given to the", 
+   "cache constructor is always null (see ObjectCacheFactory),", 
+   "i made the cache implements the Configurable interface to", 
+   "be able to configure the number of entries in the lru map.", 
+   "* ObjectCacheJCSImpl", 
+   "The JCS cache documentation states that it is a good", 
+   "practice for performance to use strings instead of", 
+   "objects for keys.  As the string representation of", 
+   "an Identity is unique, it modified the code to", 
+   "use oid.toString() as keys instead of oid ?"
+  ], 
+  "revision_id": "363782"
+ }, 
+ {
+  "author": "brj", 
+  "date": "2004-06-11T19:06:35.000000Z", 
+  "msg": [
+   "use System.arraycopy (by robert sfeir)"
+  ], 
+  "revision_id": "363781"
+ }, 
+ {
+  "author": "brj", 
+  "date": "2004-06-11T19:01:47.000000Z", 
+  "msg": [
+   "some minor fixes (by robert sfeir)"
+  ], 
+  "revision_id": "363780"
+ }
+]

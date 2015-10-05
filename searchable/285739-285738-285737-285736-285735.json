@@ -1,0 +1,81 @@
+[
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-21T19:38:50.000000Z", 
+  "msg": [
+   "Add test cases where the URL returned by getResource() is actually opened", 
+   "and read, to ensure that the appropriate stream handler is provided."
+  ], 
+  "revision_id": "285739"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2001-03-21T12:37:55.000000Z", 
+  "msg": [
+   "The classpath needed by javac is now built dynamically by using getURLs", 
+   "on the Context URLClassLoader and all its parent class loaders except", 
+   "for the system class loader.  This removes the need to pass a context", 
+   "attribute for the classpath between Tomcat and Jasper.", 
+   "This also fixed a problem with a bad class path element due to", 
+   "Jasper not understanding jndi named URL's."
+  ], 
+  "revision_id": "285738"
+ }, 
+ {
+  "author": "", 
+  "date": "2001-03-21T05:05:44.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag 'J2EE_13_08'."
+  ], 
+  "revision_id": "285737"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2001-03-21T05:05:44.000000Z", 
+  "msg": [
+   "- Fix a problem where the following code would throw a NullPointerException", 
+   "at line 163 of DirContextURLConnection when excuting the second", 
+   "(new URL(\"jndi:/WEB-INF/web.xml\")).openStream() :", 
+   "InputStream is =", 
+   "getServletContext().getResource", 
+   "(\"/WEB-INF/web.xml\").openStream();", 
+   "is.close();", 
+   "is = (new URL(\"jndi:/WEB-INF/web.xml\")).openStream();", 
+   "is.close();", 
+   "URLClassLoader newcl =", 
+   "new URLClassLoader(new URL[0],", 
+   "Thread.currentThread().getContextClassLoader());", 
+   "Thread.currentThread().setContextClassLoader(newcl);", 
+   "is = getServletContext().getResource(\"/WEB-INF/web.xml\")", 
+   ".openStream();", 
+   "is.close();", 
+   "is = (new URL(\"jndi:/WEB-INF/web.xml\")).openStream();", 
+   "is.close();", 
+   "- Now, the stream handler will also check the bindings with the parent of", 
+   "the context class loader (up to the bootstrap class loader), so that case", 
+   "should work.", 
+   "- If the stream handler fails to retrieve the directory context, it will throw", 
+   "an IllegalStateException indicating that the class loader configuration is", 
+   "messed up. That should only happen if a servlet replaces the thread context", 
+   "class loader with a totally separate loader. In that case, the web", 
+   "application classloader will be unable to load most classes from /WEB-INF/lib", 
+   "(because resolving a URL like \"jar:jndi:/WEB-INF/lib/foo.jar!/foo/bar.class\"", 
+   "requires some magic), but this shouldn't be a problem since the new", 
+   "classloader is totally independent, and will be used to load all classes.", 
+   "- The ServletContext.getResource(String path) calls should always work,", 
+   "regardless of how much hacking is done on the classloader (the stream", 
+   "handler is specified when constructing the URL)."
+  ], 
+  "revision_id": "285736"
+ }, 
+ {
+  "author": "craigmcc", 
+  "date": "2001-03-21T01:59:19.000000Z", 
+  "msg": [
+   "Flesh out configuration documents for the Logger, Realm, and Valve", 
+   "utility components.  Several more need to be finished before the", 
+   "configuration document can be considered complete."
+  ], 
+  "revision_id": "285735"
+ }
+]

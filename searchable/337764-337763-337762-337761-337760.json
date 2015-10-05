@@ -1,0 +1,114 @@
+[
+ {
+  "author": "zongaro", 
+  "date": "2003-11-24T22:18:57.000000Z", 
+  "msg": [
+   "Patch from myself, reviewed by Morris Kwan (mkwan@ca.ibm.com):", 
+   "Introduced a versioning mechanism in AbstractTranslet.  After constructing an", 
+   "object of a class that extends AbstractTranslet, the postInitialization method", 
+   "must be called.  That method will detect any versioning differences that can", 
+   "be resolved automatically, if a translet was compiled with an older version of", 
+   "the XSLTC than is being used at run-time.  The version number is stored in the", 
+   "translet's transletVersion field.", 
+   "In many cases, incompabilities run up against Java's binary compatibility", 
+   "rules, and fail catastrophically.  This versioning mechanism is designed to", 
+   "detect those cases that can't be detected by the JVM.  The first use of this", 
+   "mechanism is to translate from the old form of the namesArray used by old", 
+   "translets, to the new form expected by the modified version of the XSLTC", 
+   "run-time, as described above.", 
+   "In addition, if the translet version detected by the XSLTC run-time is more", 
+   "recent than any supported by the XSLTC run-time, an error will be reported."
+  ], 
+  "revision_id": "337764"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2003-11-24T22:18:54.000000Z", 
+  "msg": [
+   "Patch from Morris Kwan (mkwan@ca.ibm.com), reviewed by myself:", 
+   "Split namesArray in translet into three arrays:  namesArray, urisArray and", 
+   "typesArray.", 
+   "Previously, entries in the namesArray had to be examined at run-time to", 
+   "distinguish those that represented elements, from those that represented", 
+   "attributes (prefixed by an '@'), and those that represented namespace node", 
+   "names (prefixed by a '?').  In addition, any namespace URI for the element or", 
+   "attribute was similarly stored in the namesArray entry.  So,", 
+   "\"http://example.org:abc\" and \"http://example.org:@abc\" respectively represented", 
+   "an element and an attribute named abc in the http://example.org namespace;", 
+   "\"?abc\" represented a namespace prefix of abc.", 
+   "With this change, the namesArray will have entries for \"abc\" in all three", 
+   "cases; the urisArray will contain entries for \"http://example.org\" for the", 
+   "element and attribute, and an empty string for the namespace prefix; and the", 
+   "typesArray will contain the value 1 for the element, 2 for the attribute and 13", 
+   "for the namespace (which correspond to the DTM constant values for those kinds", 
+   "of nodes).", 
+   "In addition, these values are stored in static arrays in the translet, and", 
+   "references to those arrays are copied to instance fields in the translet's", 
+   "constructor, rather than constructing arrays and initializing all their entries", 
+   "in the constructor each time.", 
+   "All this serves to reduce the overhead of initializing a transformation.", 
+   "Patch from myself, reviewed by Morris Kwan:", 
+   "Introduced a versioning mechanism in AbstractTranslet.  After constructing an", 
+   "object of a class that extends AbstractTranslet, the postInitialization method", 
+   "must be called.  That method will detect any versioning differences that can", 
+   "be resolved automatically, if a translet was compiled with an older version of", 
+   "the XSLTC than is being used at run-time.  The version number is stored in the", 
+   "translet's transletVersion field.", 
+   "In many cases, incompabilities run up against Java's binary compatibility", 
+   "rules, and fail catastrophically.  This versioning mechanism is designed to", 
+   "detect those cases that can't be detected by the JVM.  The first use of this", 
+   "mechanism is to translate from the old form of the namesArray used by old", 
+   "translets, to the new form expected by the modified version of the XSLTC", 
+   "run-time, as described above.", 
+   "In addition, if the translet version detected by the XSLTC run-time is more", 
+   "recent than any supported by the XSLTC run-time, an error will be reported."
+  ], 
+  "revision_id": "337763"
+ }, 
+ {
+  "author": "zongaro", 
+  "date": "2003-11-24T22:18:52.000000Z", 
+  "msg": [
+   "Patch from Morris Kwan (mkwan@ca.ibm.com), reviewed by myself, with a tweak", 
+   "or two from myself, reviewed by Morris.", 
+   "Split namesArray in translet into three arrays:  namesArray, urisArray and", 
+   "typesArray.", 
+   "Previously, entries in the namesArray had to be examined at run-time to", 
+   "distinguish those that represented elements, from those that represented", 
+   "attributes (prefixed by an '@'), and those that represented namespace node", 
+   "names (prefixed by a '?').  In addition, any namespace URI for the element or", 
+   "attribute was similarly stored in the namesArray entry.  So,", 
+   "\"http://example.org:abc\" and \"http://example.org:@abc\" respectively represented", 
+   "an element and an attribute named abc in the http://example.org namespace;", 
+   "\"?abc\" represented a namespace prefix of abc.", 
+   "With this change, the namesArray will have entries for \"abc\" in all three", 
+   "cases; the urisArray will contain entries for \"http://example.org\" for the", 
+   "element and attribute, and an empty string for the namespace prefix; and the", 
+   "typesArray will contain the value 1 for the element, 2 for the attribute and 13", 
+   "for the namespace (which correspond to the DTM constant values for those kinds", 
+   "of nodes).", 
+   "In addition, these values are stored in static arrays in the translet, and", 
+   "references to those arrays are copied to instance fields in the translet's", 
+   "constructor, rather than constructing arrays and initializing all their entries", 
+   "in the constructor each time.", 
+   "All this serves to reduce the overhead of initializing a transformation."
+  ], 
+  "revision_id": "337762"
+ }, 
+ {
+  "author": "santiagopg", 
+  "date": "2003-11-21T18:34:41.000000Z", 
+  "msg": [
+   "Updated patch for Bugzilla 24695 by Bhakti Metha. This patch gets an XMLReader from a SAXParserFactory if unable to obtain one from an XMLReaderFactory."
+  ], 
+  "revision_id": "337761"
+ }, 
+ {
+  "author": "santiagopg", 
+  "date": "2003-11-20T18:01:49.000000Z", 
+  "msg": [
+   "Moved and modified Xerces' fallback code for the creation of XMLReaders. This fallback does not belong here and will be removed after we figure out why is needed."
+  ], 
+  "revision_id": "337760"
+ }
+]

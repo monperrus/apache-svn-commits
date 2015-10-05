@@ -1,0 +1,68 @@
+[
+ {
+  "author": "jim", 
+  "date": "2001-02-27T15:24:26.000000Z", 
+  "msg": [
+   "revert back to old way until we figure out", 
+   "an autoheader work-around. Allow building again"
+  ], 
+  "revision_id": "61324"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2001-02-27T13:09:25.000000Z", 
+  "msg": [
+   "Get APR to build on Tru64 again.", 
+   "1) Move sendfile-disable logic to a point after we set the sendfile", 
+   "shell variable.  It was broken before, from Sunday when I moved the", 
+   "thread configuration to a point earlier in the APR configure", 
+   "procedure.", 
+   "2) (!!!!!!!!!DEFINITELY FIXME!!!!!!!)", 
+   "Work around a problem with APR_FLAG_HEADERS on Tru64 by adding", 
+   "additional, separate invocations of APR_FLAG_HEADERS() for header", 
+   "files which were not handled properly.", 
+   "3) (!!!!!!WOULD BE NICE TO AUTODETECT!!!!!!!)", 
+   "Work around a problem where the presence of sigwait() isn't detected.", 
+   "sigwait() is renamed in a system header file, but the normal", 
+   "autoconf way to detect functions has no provision for including", 
+   "header files.", 
+   "Also, some empty lines in the invocation of APR_FLAG_HEADERS were removed.", 
+   "They had to impact on processing, but they didn't look nice."
+  ], 
+  "revision_id": "61323"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-27T11:34:49.000000Z", 
+  "msg": [
+   "* configure.in: just call APR_FLAG_HEADERS once. This allows autoconf to", 
+   "loop over the values *once* rather than substituting N loops for header", 
+   "checking. This drops configure's size from 340k down to 255k. (!!!)", 
+   "* apr_common.m4: M4 sees the shell's backslash, so treat it as whitespace in", 
+   "APR_COMMA_ARGS"
+  ], 
+  "revision_id": "61322"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-27T11:09:43.000000Z", 
+  "msg": [
+   "Use some deep M4 magic to remove two \"echo | sed\" subshell operations per", 
+   "header file tested (plus a couple shell \"eval\" statements). We now use M4's", 
+   "translit() to create cache and APR variable names (rather than invoking", 
+   "sed). For the loop over the headers, we use a magical tail-recursive M4", 
+   "macro."
+  ], 
+  "revision_id": "61321"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2001-02-27T03:51:02.000000Z", 
+  "msg": [
+   "AC_CHECK_HEADERS() must be used with M4 arguments, not shell arguments. Pass", 
+   "$1 (an M4 arg containing the names of the headers) to AC_CHECK_HEADERS. Then", 
+   "check the resulting cache variables to set the APR test result variables."
+  ], 
+  "revision_id": "61320"
+ }
+]

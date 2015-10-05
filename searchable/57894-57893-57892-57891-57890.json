@@ -1,0 +1,57 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2000-10-15T22:24:19.000000Z", 
+  "msg": [
+   "const-ify the type stuff and simplify the type  registration process"
+  ], 
+  "revision_id": "57894"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-15T18:15:10.000000Z", 
+  "msg": [
+   "Stop using the index into the array for the bucket type.  Now we just use", 
+   "a pointer to a static structure.  The ap_foo_type functions have also been", 
+   "replaced with simple macro calls.  I am going to replace the", 
+   "ap_bucket_(read|split|setaside|destroy) functions with macros soon.", 
+   "Reviewed by:\tWill Rowe"
+  ], 
+  "revision_id": "57893"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-10-13T19:40:50.000000Z", 
+  "msg": [
+   "Fix transient bucket read/split (I've only tested the read path, but", 
+   "split definitely looks better)."
+  ], 
+  "revision_id": "57892"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-13T05:35:55.000000Z", 
+  "msg": [
+   "Remove all function pointers from the ap_bucket type.  These function", 
+   "pointers are replaced with a global table that allows modules to register", 
+   "their bucket types.  Those bucket types are then allowed to be used in", 
+   "the server processing.  This also required removing all direct calls to", 
+   "those functions.  The ap_bucket type has an index into an array, so in", 
+   "each ap_bucket_* function, we use that index to find the correct set of", 
+   "functions."
+  ], 
+  "revision_id": "57891"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-12T18:01:29.000000Z", 
+  "msg": [
+   "Remove the offset field from ap_bucket type.  This is a file bucket", 
+   "specific value, and therefore it belongs in the ap_bucket_file type,", 
+   "which was also created with this commit.  ap_bucket needs to be as generic", 
+   "as possible to make it easily extensible, which means we have to keep", 
+   "the generic ap_bucket type very separate from ap_bucket_foo."
+  ], 
+  "revision_id": "57890"
+ }
+]

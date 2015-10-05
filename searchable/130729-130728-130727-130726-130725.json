@@ -1,0 +1,90 @@
+[
+ {
+  "author": "bayard", 
+  "date": "2002-06-20T02:51:18.000000Z", 
+  "msg": [
+   "Added a start and end index to the ArrayIterator. Unit tests also added and", 
+   "currently passing."
+  ], 
+  "revision_id": "130729"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-06-18T05:41:11.000000Z", 
+  "msg": [
+   "Remove use of TestHashMap which didn't really test anything that isn't", 
+   "already tested in TestMap."
+  ], 
+  "revision_id": "130728"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-06-18T05:35:58.000000Z", 
+  "msg": [
+   "Enabled the new test framework in the following test classes:", 
+   "- TestBeanMap", 
+   "- TestCursorableLinkedList", 
+   "- TestDoubleOrderedMap", 
+   "- TestFastHashMap", 
+   "- TestFastHashMap1", 
+   "- TestFastTreeMap", 
+   "- TestFastTreeMap1", 
+   "- TestLRUMap", 
+   "- TestSequencedHashMap", 
+   "- TestSoftRefHashMap", 
+   "Submitted by Paul Jack ( pjack at sfaf dot org ).", 
+   "Note: TestAll does not contain reference to TestSoftRefHashMap, so this test is", 
+   "not automatically run.  If you run it manually, you will see many failures that", 
+   "are due to bug 9571.", 
+   "Note: With this commit, there are four test failures if you are running with", 
+   "JDK 1.2.  This is due to a bug in the JDK's implementation of keySet on a", 
+   "HashMap which incorrectly returns false after removing a mapping which maps a", 
+   "key to a null value.  Incidently, this problem is very similar to the problem", 
+   "that existed on SequencedHashMap, filed as bug 9719, and fixed on June 9th.", 
+   "See: http://developer.java.sun.com/developer/bugParade/bugs/4286765.html"
+  ], 
+  "revision_id": "130727"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-06-18T03:28:35.000000Z", 
+  "msg": [
+   "Modified tests that used makeEmptyMap and makeFullMap to use the map field", 
+   "along with resetEmpty() and resetFull().  This allows for more calls to verify", 
+   "to ensure that calls to methods that should not modify a collection don't", 
+   "actually modify it.", 
+   "Split the verify() method into four separate verification methods.  This way,", 
+   "if a Map implementation needs to change the way verification is performed for", 
+   "just one of the collection views, they only need to override one method and", 
+   "won't need to reimplement all the other verifications.", 
+   "Override TestMultiHashMap's verifyValues() method to retrieve a fresh copy of", 
+   "the values collection before verification.  This ensures some verification", 
+   "testing on the values, even though the values is not backed by the map (bug", 
+   "9573)", 
+   "Override a few more test methods and the verifyyMap and verifyEntrySet methods", 
+   "for TestMultiHashMap since it's values are collections rather than the expected", 
+   "objects.  These will need to be filled in with better implementations to", 
+   "actually test the MultiMap contact.", 
+   "Removed the SupportsPut marker interface.", 
+   "Removed some duplicate tests (i.e. some old tests that weren't written with the", 
+   "current framework in mind and just duplicate the tests that have been added)."
+  ], 
+  "revision_id": "130726"
+ }, 
+ {
+  "author": "mas", 
+  "date": "2002-06-18T03:17:34.000000Z", 
+  "msg": [
+   "Enhanced TestMap to more completely test the Map contract.", 
+   "Submitted by: Paul Jack ( pjack at sfaf dot org ).", 
+   "Needed to change Paul's implementation slightly to get things compile properly", 
+   "using JDK 1.2.  The 1.2 compiler thought that the \"confirmed\" field was", 
+   "ambiguous in the anonymous inner class and thus needed to be qualified with a", 
+   "ClassName.this.  In order to do that, the anonymous inner classes needed to be", 
+   "made named inner classes.", 
+   "This change exposes one test failure for MultiHashMap that appears to be caused", 
+   "by its values() method not being backed by the map (bug 9573)."
+  ], 
+  "revision_id": "130725"
+ }
+]

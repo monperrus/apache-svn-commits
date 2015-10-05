@@ -1,0 +1,79 @@
+[
+ {
+  "author": "costin", 
+  "date": "2002-02-06T17:48:22.000000Z", 
+  "msg": [
+   "Few big changes here:", 
+   "- added support for 'secret' - as a normal request attributes. If", 
+   "the handler is configured to require a secret, it'll block any request", 
+   "without one. If not - older mod_jk's will work. ( I'll commit the change", 
+   "on the C code for both mod_jk and mod_jk2 )", 
+   "- added support for 'ajp13.id' - similar with what ajp12interceptor is", 
+   "doing in 3.3. This will save the connection info ( including secret )", 
+   "for easy reading by caller. ( not completed )", 
+   "- add useSecret option - it'll automatically generate a secret, no", 
+   "config needed ( and no need to ask the user to change the pass", 
+   "regularily - we'll do it on each server restart ). Mod_jk will just", 
+   "read the file.", 
+   "- added support for the shutdown message ( not completed )", 
+   "The request handler will call 'container' as the next handler,", 
+   "unless overriden. It'll also check if a dispathcer is", 
+   "present and register the messages it supports ( right now it's", 
+   "the only handler, so dispatcher is optional )"
+  ], 
+  "revision_id": "296369"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-02-06T17:43:08.000000Z", 
+  "msg": [
+   "Update for the api changes.", 
+   "Added isSameAddress from Ajp12Interceptor - will be used with the secret for", 
+   "the shutdown handler.", 
+   "Few changes in jni - less code in static methods ( we'll eventually remove all,", 
+   "but for now it's easier on the C side )"
+  ], 
+  "revision_id": "296368"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-02-06T17:41:29.000000Z", 
+  "msg": [
+   "Dispatch handler - based on the message type will call the right", 
+   "handler.", 
+   "This is specific to ajp13 ( or any other transport that stores the message type", 
+   "as the first byte of the message :-).", 
+   "Each protocol is supposed to have a set of protocol-specific handlers,", 
+   "some may be generic.", 
+   "What we'll eventually do is create an HandlerAjp13 to consolidate ajp13", 
+   "specific processing. Other protocols could do the same.", 
+   "Then whatever info containes the 'target' will be stored as the message", 
+   "tag, and the rest of the info will be decoded in message/request/etc.", 
+   "Note that the tag is an int - we want to reduce the use of Strings,", 
+   "and do table dispatching, so protocol handlers should use a message handle"
+  ], 
+  "revision_id": "296367"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-02-06T17:37:16.000000Z", 
+  "msg": [
+   "Initial ( incomplete ) version of the Chain - that allows iterative", 
+   "calling of handlers.", 
+   "XXX would it be better to move it in commons - it's after all just a simple", 
+   "handler ?"
+  ], 
+  "revision_id": "296366"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2002-02-06T17:36:07.000000Z", 
+  "msg": [
+   "Moved the process() logic in the HandlerDispatch, it doesn't have to be hardcoded.", 
+   "Added a 'home' property.", 
+   "Added 'notes' for the workerenv ( for generic properties stored by handlers )", 
+   "Removed the channel, consolidate Handler as the main 'plugin' mechanism."
+  ], 
+  "revision_id": "296365"
+ }
+]

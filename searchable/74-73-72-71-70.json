@@ -1,0 +1,88 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-11-04T04:10:08.072969Z", 
+  "msg": [
+   "Trick the build system into building.  (Now just need ap{ru}-config in PATH.)", 
+   "* gen2/serf_declare.h (copied): Copied from trunk/include.", 
+   "* gen2/Makefile: Rely upon apr-config to do the heavy lifting rather than", 
+   "hardcoded defines."
+  ], 
+  "revision_id": "74"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-03T11:13:27.506080Z", 
+  "msg": [
+   "Add first draft of read/write logic to the main loop.", 
+   "* branches/gen2/context.c:", 
+   "(request_t): add a 'next' link. move it upwards in the file.", 
+   "(serf_connection_t): add fields for the socket address, the list of", 
+   "requests, and info for unwritten data.", 
+   "(open_connections): helper function to open sockets for each connection.", 
+   "(write_to_connection): new helper to write data to a socket", 
+   "(read_from_connection): new helper to read data from a socket", 
+   "(process_connection): process all I/O on a socket", 
+   "(serf_context_run): open connections before polling.", 
+   "(add_connection): removed. folded into open_connections().", 
+   "(serf_connection_create): put more values into the connection object and", 
+   "don't call add_connection()."
+  ], 
+  "revision_id": "73"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-03T11:01:30.745551Z", 
+  "msg": [
+   "tweak/clarify some comments"
+  ], 
+  "revision_id": "72"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-03T10:41:05.714335Z", 
+  "msg": [
+   "wheeeeeeeee"
+  ], 
+  "revision_id": "71"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-02T05:27:08.838349Z", 
+  "msg": [
+   "Add a couple new types of functions for reading, to assist with high-perf", 
+   "zero-copy networking. (specifically: enable writev() and sendfile()).", 
+   "* gen2/serf.h:", 
+   "(serf_response_acceptor_t): avoid the name 'socket' as it shadows a", 
+   "global function by that name.", 
+   "(serf_bucket_type_t.read_iovec): new function to read values into an", 
+   "iovec structure.", 
+   "(serf_bucket_type_t.read_for_sendfile): new function to read values into", 
+   "variables suitable for passing to apr_socket_sendfile().", 
+   "(serf_bucket_type_t.peek): moved to *after* the read_bucket function.", 
+   "(serf_bucket_read_iovec): new helper macro", 
+   "(serf_bucket_read_for_sendfile): new helper macro", 
+   "* gen2/serf_bucket_util.h:", 
+   "(serf_default_read_iovec): default implementation for the read_iovec", 
+   "vtable function.", 
+   "(serf_default_read_for_sendfile): default implementation for the", 
+   "read_iovec vtable function.", 
+   "* buckets/buckets.c:", 
+   "(serf_default_set_metadata): fix reference to bucket->allocator", 
+   "(serf_default_read_iovec): new function.", 
+   "(serf_default_read_for_sendfile): new function.", 
+   "* buckets/aggregate_buckets.c:", 
+   "(serf_bucket_type_aggregate): add default functions for iovec and", 
+   "sendfile, and reorder peek/read_bucket", 
+   "* buckets/request_buckets.c:", 
+   "(request_context_t): remove 'state' member", 
+   "(serf_bucket_request_create): don't initialize the 'state' member", 
+   "(serf_bucket_type_request): add default functions for iovec and", 
+   "sendfile, and reorder peek/read_bucket", 
+   "* buckets/simple_buckets.c:", 
+   "(serf_bucket_type_simple): add default functions for iovec and", 
+   "sendfile, and reorder peek/read_bucket"
+  ], 
+  "revision_id": "70"
+ }
+]

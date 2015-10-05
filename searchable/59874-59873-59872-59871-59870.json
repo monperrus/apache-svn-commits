@@ -1,0 +1,108 @@
+[
+ {
+  "author": "fanf", 
+  "date": "2000-04-18T00:47:14.000000Z", 
+  "msg": [
+   "remove, spare, commas"
+  ], 
+  "revision_id": "59874"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-04-17T19:57:29.000000Z", 
+  "msg": [
+   "Add a pool to dupfile.  There is no reason that when we duplicate a file,       we would want to use the same pool for the duplicated file as we used for", 
+   "the original file.  This should solve a problem we were having with", 
+   "dieing quietly on startup, because we are no longer closing stderr in the", 
+   "original process and then opening the config file as file descriptor 2.", 
+   "The original problem report can be found in the message", 
+   "<20000311232812.A1066@sanguine.linuxcare.com.au>"
+  ], 
+  "revision_id": "59873"
+ }, 
+ {
+  "author": "stoddard", 
+  "date": "2000-04-17T13:56:39.000000Z", 
+  "msg": [
+   "linkwin20.diffs Resolves:", 
+   "1) Explicit /base: addresses by the following table...", 
+   "Required sizes are for debug builds.  It is assumed that", 
+   "as we increase the size of aprlib, we will be trimming", 
+   "the size of ApacheCore, and the 278A0000 base can move down.", 
+   "ApacheCore.dll            27800000  80000 required", 
+   "aprlib.dll                278A0000  40000 required", 
+   "ApacheModuleAuthAnon.dsp  27900000", 
+   "ApacheModuleCERNMeta.dsp  27910000", 
+   "ApacheModuleDigest.dsp    27920000", 
+   "ApacheModuleExpires.dsp   27930000", 
+   "ApacheModuleHeaders.dsp   27940000", 
+   "ApacheModuleInfo.dll      27950000", 
+   "ApacheModuleRewrite.dsp   27960000  20000 required", 
+   "ApacheModuleSpeling.dsp   27980000", 
+   "ApacheModuleStatus.dsp    27990000", 
+   "ApacheModuleUserTrack.dsp 279A0000", 
+   "ApacheModuleProxy.dsp     279B0000  20000 anticipated", 
+   "3 slots still available   279C0000", 
+   "2) Make APR consistent with the rest of the API and", 
+   "not build septypes for debugging (in other words,", 
+   "roll in the debug symbols as every other module does.)", 
+   "If we decide we LIKE /pdbtype:septypes... then we", 
+   "should be using them throughout.", 
+   "3) Slide the current path specs into /libpath: options", 
+   "so the library list is more ledgible.", 
+   "4) Drop all the gui crud from the library list.  Everything", 
+   "listed is referenced, with the following exceptions:", 
+   "*) don't do anything with msvcrtd/oldnames today.", 
+   "*) aprlib and ApacheCore have the same list, since functions", 
+   "may still be moving between them.", 
+   "*) apache.exe looses networking (it doesn't), while it keeps", 
+   "advapi, which I don't think it needs, but it could later.", 
+   "*) add aprlib to ApacheModuleProxy, since it will need it.", 
+   "*) hang mswsock whereever ws2_32 is invoked.  I believe", 
+   "the most special case was ApacheModuleProxy, which may", 
+   "become entirely APR.  But for today we hang onto both.", 
+   "5) MAP, MAP, MAP, everything gets a map.  I for one have an", 
+   "untold number of installed OS's and boot mappings, and the", 
+   "debugger isn't installed to all of them.  We gotta be able", 
+   "to track down those renegade GP faults.  (What faults...", 
+   "I know, it's clean, but I am overly cautious that way.)", 
+   "6) Set the DEFAULT linkage to be this linkage.  Because", 
+   "\"it's a vc thing\" the defaults were not all that", 
+   "useful as a starting point (take, for example, the", 
+   "joke of linking to the OLE libraries).", 
+   "Submitted by:\tWilliam Rowe"
+  ], 
+  "revision_id": "59872"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-04-17T03:39:06.000000Z", 
+  "msg": [
+   "a few bug fixes to get it running better on Linux"
+  ], 
+  "revision_id": "59871"
+ }, 
+ {
+  "author": "trawick", 
+  "date": "2000-04-16T16:59:39.000000Z", 
+  "msg": [
+   "APR_SO_TIMEOUT now takes microseconds instead of seconds.  (The new", 
+   "CHANGES text also reflects prior work on ap_poll() and", 
+   "ap_set_pipe_timeout()).", 
+   "apr/test/client.c now has a crude command-line mechanism for selecting", 
+   "a read timeout.", 
+   "Included bug fixes:", 
+   "1) Some storage leaks were removed in BeOS and Unix select() usage.", 
+   "2) For Win32, the code to process APR_SO_TIMEOUT stored timeout in", 
+   "milliseconds but the code to timeout a TransmitFile() in", 
+   "ap_sendfile() assumed that it had been stored in seconds.", 
+   "3) ab_apr.c used a 30,000-second timeout in one place.  This was", 
+   "changed to a 30-second timeout.", 
+   "4) fix bad perldoc comment in apr_network_io.h which hid the", 
+   "ap_shutdown() prototype", 
+   "5) disable stdout buffering in apr/test/client.c so that messages", 
+   "appear in the correct order when an error occurs"
+  ], 
+  "revision_id": "59870"
+ }
+]

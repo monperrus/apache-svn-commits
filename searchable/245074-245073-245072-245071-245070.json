@@ -1,0 +1,77 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-15T16:40:16.000000Z", 
+  "msg": [
+   "Revamp parsing code.", 
+   "The DeserializationContext class is now the main \"outer\" SAX handler (what", 
+   "SOAPSAXHandler used to be), and it uses a much cleaner recursive", 
+   "descent style parse, delegating to SOAPHandlers which decide which", 
+   "handlers should be pushed onto a stack.", 
+   "The BodyBuilder/HeaderBuilder/EnvelopeBuilder handlers take care of", 
+   "building up the actual MessageElements inside the SOAPEnvelope.", 
+   "The HeaderBuilder is the place where we could consider adding custom", 
+   "per-Header parse-time behaviour.", 
+   "There is now an \"IDResolver\" interface, which will be used to handle things", 
+   "like MIME attachments and URL references eventually - right now the only", 
+   "concrete implementation is the LocalIDResolver.", 
+   "I switched to James' SAX2EventRecorder class, since it provides a clean", 
+   "interface to a \"master\" SAX recording for the whole message, which we've", 
+   "talked about needing in various scenarios.  It should also perform pretty", 
+   "well, as it builds many less objects than the \"object per event\" model.", 
+   "*** JAMES : I had problems getting the SymbolTable to work, so I diked", 
+   "out the complex string-management code and simply create a new", 
+   "String per symbol - can you take a look at getting the original version to", 
+   "work?  (pitfall warning - I had to change the indexes in the characters", 
+   "event in the replay() method to account for the String, so the start index", 
+   "is always zero at present)", 
+   "MessageElements are now mostly divorced from the actual deserialization", 
+   "process (i.e. they don't have a value member).", 
+   "*** ALL : to handle deserializing HREF/IDs in an efficient way, we should", 
+   "always let the Deserializers \"push\" values to us (via callbacks or FieldTargets", 
+   "or what have you) rather than trying to \"pull\" the value from the Dser at", 
+   "the end of an element.  We might even consider removing the", 
+   "Deserializer.getValue() method entirely, to enforce this model.", 
+   "I'm still not 100% happy with the modularization of the system, but it's better.", 
+   "The code needs more comments and cleanup, but I'm checking it in now so", 
+   "Sam can have something to test with.", 
+   "Anyways, everything works on my machine, so let's see how it flies on yours!"
+  ], 
+  "revision_id": "245074"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-13T05:19:15.000000Z", 
+  "msg": [
+   "Specify root=0 on the target of the href (otherwise it may be", 
+   "interpreted as the first body element, depending on placement)"
+  ], 
+  "revision_id": "245073"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-12T16:47:58.000000Z", 
+  "msg": [
+   "Default Root to true, and use it to determine the type of element"
+  ], 
+  "revision_id": "245072"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-12T15:05:13.000000Z", 
+  "msg": [
+   "Four space indents everywhere.", 
+   "NOTE: I did not deal with all the longer-than-80-char lines.  If you're", 
+   "editing a file and see some of this, please clean it up."
+  ], 
+  "revision_id": "245071"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-11T20:10:25.000000Z", 
+  "msg": [
+   "Use the constant defined in the last checkin."
+  ], 
+  "revision_id": "245070"
+ }
+]

@@ -1,0 +1,85 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2005-02-12T04:41:21.000000Z", 
+  "msg": [
+   "Enable beans with array fields but no indexed accessors,", 
+   "and along the way clean up some potentially problem-", 
+   "causing rough spots.  Hopefully I didn't add more of the", 
+   "same. :)", 
+   "* Provide an equivalent mechanism to the one Tom and I", 
+   "added to the ArraySerializer for the ArrayDeserializer,", 
+   "allowing us to specify a component type to the", 
+   "factory so that we can customize it at creation time.", 
+   "This gets used when figuring out types using", 
+   "TypeMappingImpl.getDeserializer() - if we're looking", 
+   "for a deserializer for a Java array type, and", 
+   "we're not in maxOccurs mode (in which case you just", 
+   "let the BeanDeserializer or RPCHandler do it for you),", 
+   "we return an ArrayDeserializerFactory preconfigured", 
+   "with the correct component type.  This allows us to", 
+   "deserialize array items without xsi:types.  There's", 
+   "a bit of tricky code in there which checks to see", 
+   "that the desired XML type isn't the component type", 
+   "of the desired array type - if so, that indicates", 
+   "we're using maxOccurs mode.", 
+   "* Remove digging down into the component type from", 
+   "DeserializationContext.getDeserializerForClass()", 
+   "* Since we use SOAP_ARRAY as a marker type for arrays", 
+   "even in literal mode, make sure we don't end up", 
+   "inadvertently serializing it on the wire as an", 
+   "xsi:type (in SerializationContext)", 
+   "* Clean up what's going on when we're registering", 
+   "the \"default\" mappings in Service/WSDDService/", 
+   "Emitter.  Use a common function,", 
+   "TypeMappingRegistryImpl.doRegisterFromVersion(),", 
+   "in order to register the correct SOAPENC default", 
+   "(which is really what goes on when selecting the", 
+   "typemapping switch [insert flame about how awful", 
+   "the \"1.X\" arguments are for these things]). Avoid", 
+   "weird delegation chains by forcing the defaults", 
+   "in these situations.", 
+   "* Comment out indexed setter/getter from ArrayOfBook", 
+   "* For some reason we were forcing \"isResponse\" to", 
+   "false in BodyBuilder when deserializing in \"fast\"", 
+   "mode.  Respect the actual message type, which lets", 
+   "us get the right metadata in RPCHandler.", 
+   "Passes all-tests, need to re-run TCK."
+  ], 
+  "revision_id": "260684"
+ }, 
+ {
+  "author": "dims", 
+  "date": "2005-02-11T21:48:03.000000Z", 
+  "msg": [
+   "Fix for AXIS-1811 - Attribute field names are not honored from bean type desc", 
+   "from Steve Green (steve.green@epok.net)", 
+   "URL: http://issues.apache.org/jira/browse/AXIS-1811"
+  ], 
+  "revision_id": "260683"
+ }, 
+ {
+  "author": "toshi", 
+  "date": "2005-02-11T20:24:54.000000Z", 
+  "msg": [
+   "Initial sources for the Forrest 0.6 based C++ site."
+  ], 
+  "revision_id": "260682"
+ }, 
+ {
+  "author": "toshi", 
+  "date": "2005-02-11T20:12:51.000000Z", 
+  "msg": [
+   "Initial sources for the Forrest 0.6 based C++ site."
+  ], 
+  "revision_id": "260681"
+ }, 
+ {
+  "author": "toshi", 
+  "date": "2005-02-11T19:30:50.000000Z", 
+  "msg": [
+   "Initial sources for the Forrest 0.6 based C++ site."
+  ], 
+  "revision_id": "260680"
+ }
+]

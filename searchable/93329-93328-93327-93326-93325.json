@@ -1,0 +1,59 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-02-07T06:37:09.000000Z", 
+  "msg": [
+   "Allow mod_autoindex to serve symlinks if permitted and optimize our stats", 
+   "so that only one stat() is needed.", 
+   "If we get APR_FINFO_MIN bits, lookup_dirent won't do a repeated stat()", 
+   "call.  So, let's do it here.  Also, if we see a symlink, expand it.", 
+   "(Technically, we don't *have* to expand the symlinks - the resolve_symlink", 
+   "fix handles that, but we can't really assume that.)  Since we know that", 
+   "dirent will be rr->finfo anyway, go back to relying on dirent only for", 
+   "APR_DIR checks."
+  ], 
+  "revision_id": "93329"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2002-02-07T06:29:57.000000Z", 
+  "msg": [
+   "Fix resolve_symlink to save the original symlink name if known.", 
+   "We would previously receive APR_INCOMPLETE on symlinks if wanted has", 
+   "FINFO_NAME set because it isn't supported via apr_stat().  Furthermore, we", 
+   "don't care what the real name is anyway (even if it apr_stat returned", 
+   ".name) - we want to call it by the name the symlink says it is."
+  ], 
+  "revision_id": "93328"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-02-07T06:28:45.000000Z", 
+  "msg": [
+   "Eliminate tons o cruft - we are in another thread - and these can all", 
+   "be longlived malloced regions, or sit upon the stack.  No need to mess", 
+   "with pool conflicts.", 
+   "The remaining pool accesses are still a problem to resolve."
+  ], 
+  "revision_id": "93327"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2002-02-07T00:24:12.000000Z", 
+  "msg": [
+   "Upon advice of the FirstBill, I began looking for exceptions that occur", 
+   "only in the service-mode.  SetServiceDescription was borked, now fixed.", 
+   "Since we don't use the posix/libc style stderr, I've also pitched that", 
+   "code, which was causing an exception."
+  ], 
+  "revision_id": "93326"
+ }, 
+ {
+  "author": "bnicholes", 
+  "date": "2002-02-06T23:17:53.000000Z", 
+  "msg": [
+   "Added the missing header that contains the prototype for ap_construct_url()"
+  ], 
+  "revision_id": "93325"
+ }
+]

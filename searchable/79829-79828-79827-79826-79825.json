@@ -1,0 +1,107 @@
+[
+ {
+  "author": "pcs", 
+  "date": "1998-01-04T17:03:18.000000Z", 
+  "msg": [
+   "Correct && into a &"
+  ], 
+  "revision_id": "79829"
+ }, 
+ {
+  "author": "pcs", 
+  "date": "1998-01-04T16:35:28.000000Z", 
+  "msg": [
+   "Fix removing errno from APLOG_WIN32ERROR error messages."
+  ], 
+  "revision_id": "79828"
+ }, 
+ {
+  "author": "pcs", 
+  "date": "1998-01-04T15:36:45.000000Z", 
+  "msg": [
+   "Major Win32 multithreading overheal. The changes are:", 
+   "- Replaced assert()'s with aplog_errors() in various places, so that", 
+   "we don't loose error checking in the release build. Also asserts()", 
+   "do an ungraceful exit - try to be kinder to the user.", 
+   "- Added some debug macros to send messages to the screen or error log", 
+   "(these are just for convenience - if you don't like them they can", 
+   "be removed) (APD1() thru APD5()).", 
+   "- Add model-independent functions to initiate a restart or shutdown.", 
+   "Currently this is initiated in functions which know they are being", 
+   "called as a signal handler. This is now abstracted to a separate", 
+   "functions, which can be called from a signal handler, or on Win32", 
+   "from the service controller callback. (start_shutdown(),", 
+   "start_restart())", 
+   "- Added lots of comments to the MT part of the code probably containing", 
+   "lots of tyops, er, typos.", 
+   "- In child_sub_main() (the \"worker\" thread code) used ptrans for", 
+   "the temporary pool, instead of pchild - now consistent with", 
+   "Unix child_main() [Incidently I'm not sure why ptrans is a global,", 
+   "since it (should) only be used within child_main()?]", 
+   "- made the parent thread (worker_main()) exit without going into the", 
+   "main parent loop if it is being signalled to die. Create the child", 
+   "pool (pchild) here (since this pool has a lifetime of a process,", 
+   "not a \"child\" (thread)). Cleanup this pool on exit, and run", 
+   "child_exit_modules().", 
+   "- worker_main() now will not exit until all the connections in its", 
+   "listen() queue are dealt with (previous it would \"count_down\" a", 
+   "few requests, then die, which would loose the connections in", 
+   "this process'es listen() queue). This now makes graceful restarts not", 
+   "loose connections. Once worker_main() has been told to exit it", 
+   "frees the mutex to allow another worker_main() to get into a listen()", 
+   "[however it seems Win32 directs incoming requests to the first process", 
+   "annoyingly]. To give the old worker_main() a chance to exit,", 
+   "only sleep for 1 second in the select. Also catch problems if the", 
+   "select() returns immediately with an error (previously this would", 
+   "cause a busy loop forever).", 
+   "- In the parent process (master_main()) abstract the creation/removal", 
+   "of processes (create_process(), cleanup_process()). Only bother to", 
+   "create one child process at once (more are unnecessary). Use an event", 
+   "to simulate a signal (with variables used to determine what action", 
+   "should be taken). Block forever waiting for a child to die or for", 
+   "the \"signal\" event (previously it would loop every 2 seconds). Handle", 
+   "shutdowns and restarts (both graceful). Allow multiple graceful", 
+   "restarts. Log error conditions like when child processes have to", 
+   "be forcibly terminated.", 
+   "- Update os/win32/service.c so that a \"net stop apache\" sends a", 
+   "graceful shutdown \"signal\" (using start_shutdown()). By changing", 
+   "this to call start_restart() you can also test graceful restarts.", 
+   "- Some unused code to do ungraceful shutdown/restart. Currently", 
+   "mutually exclusive with graceful restarts. Not compiled in by", 
+   "default. See the comments about UNGRACEFUL_RESTARTS in the patch.", 
+   "On the downside, this patch", 
+   "- Makes the MT code more Win32 specific (this is necessary since", 
+   "it is useful to do WaitForMultipleObject() type things, for instance,", 
+   "and we don't have an abstraction for that). Also the Win32 stuff should", 
+   "use completion ports, and again we don't have an abstraction. However", 
+   "this does give us a good idea of stuff that does need abstracting.", 
+   "- I haven't checked for resource leaks, proper pool maintenence, or", 
+   "proper sequences of module init/child init/child exit API calls.", 
+   "- Makes http_main.c even bigger. I was going to split it out in", 
+   "core, multi-process and MT parts at the outset but that would", 
+   "have made comparing the patch pretty difficult. However I think it", 
+   "is a good idea to move the code in the #ifdef MULTITHREAD/#endif", 
+   "part to a separate http_main_mt.c (or maybe a http_main_win32 since", 
+   "it is quite specific at the moment)."
+  ], 
+  "revision_id": "79827"
+ }, 
+ {
+  "author": "pcs", 
+  "date": "1998-01-04T15:26:20.000000Z", 
+  "msg": [
+   "When a shutdown is requested, call start_shutdown() to set it up, rather", 
+   "than setting the global service_stop variable. start_shutdown() will set", 
+   "the appropriate variables and wakeup the parent process main thread"
+  ], 
+  "revision_id": "79826"
+ }, 
+ {
+  "author": "ben", 
+  "date": "1998-01-04T14:43:46.000000Z", 
+  "msg": [
+   "Add ap library to clean."
+  ], 
+  "revision_id": "79825"
+ }
+]

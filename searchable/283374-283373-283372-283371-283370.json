@@ -1,0 +1,68 @@
+[
+ {
+  "author": "danmil", 
+  "date": "2001-03-21T07:12:26.000000Z", 
+  "msg": [
+   "Added comments, renamed a few variables for clarity and converted tabs to", 
+   "spaces."
+  ], 
+  "revision_id": "283374"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-21T06:55:40.000000Z", 
+  "msg": [
+   "Added the new modules ( definitions and in server.xml )"
+  ], 
+  "revision_id": "283373"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-21T06:54:01.000000Z", 
+  "msg": [
+   "I'm looking into session expiration bugs and I decided it's easier", 
+   "to split the expire code so we can read it and understand what happens.", 
+   "I also created a separate module for ID generation, as the code is", 
+   "independent of the session storage ( which we want to keep it simple", 
+   "in case someone wants to backport file store or other advanced", 
+   "session stores ).", 
+   "In the expirer, the main difference is that we use a single expire thread", 
+   "per context manager - instead of one thread per context. This allows", 
+   "tomcat to scale a bit better when many contexts are deployed", 
+   "( some dynamic loading/unloading is needed, but that can be done later ).", 
+   "( there is no gain in having 100 expire threads working in paralel -", 
+   "even if you have a 100 processor machine, you don't want expirer to", 
+   "take all the time. You can still have multiple expirers if you explicitely", 
+   "define it per context )", 
+   "I tested the code, and it seems the sessions are expiring fine. I'm", 
+   "still working on the admin pages that will show the session statistics", 
+   "and allow a bit of control.", 
+   "Larry - please don't kill me, the changes are not very big ( even if it", 
+   "looks like ), I don't think they add too much instability but makes", 
+   "the code clearer."
+  ], 
+  "revision_id": "283372"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-21T06:46:42.000000Z", 
+  "msg": [
+   "Added the notification call when the session change the state ( as in", 
+   "Context and ContextManager )."
+  ], 
+  "revision_id": "283371"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2001-03-21T06:41:36.000000Z", 
+  "msg": [
+   "Few more changes to the .sh script:", 
+   "- less verbosity ( no message on the console if the output will be redirected,", 
+   "let java do the output for home, classpath )", 
+   "- fixed the startup with wait", 
+   "- added a \"force\" stop ( i.e. kill the process )", 
+   "- use log for pid and console output ( as sugested )"
+  ], 
+  "revision_id": "283370"
+ }
+]

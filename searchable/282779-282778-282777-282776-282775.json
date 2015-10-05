@@ -1,0 +1,90 @@
+[
+ {
+  "author": "pierred", 
+  "date": "2000-12-14T22:28:27.000000Z", 
+  "msg": [
+   "When the Jasper code gets the setter method for tag properties, it doesn't", 
+   "check to see whether the m variable is null until after attempting to use its", 
+   "getParameterTypes() method, which throws an uninformative NullPointerException.", 
+   "I simply moved the null check immediately after the variable m is set.", 
+   "[This was already fixed in tomcat-4.0; porting back to tomcat-3.2]", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by: Kief Morris <kief@bitBull.com>", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "282779"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-14T07:10:58.000000Z", 
+  "msg": [
+   "Major rewrite of JspInterceptor. IMHO what used to be ServletWrapper and", 
+   "all related classes are now in a much better shape. That should be the", 
+   "last big change - we should start building the first milestone for 3.3", 
+   "soon. ( I want to do yet-another review of the core and remove everything", 
+   "that is not used or can be simplified before that )", 
+   "The new code removes few optimizations ( for simplicity ) - most of them", 
+   "were part of the initial loading or compilation of JSPs, where the", 
+   "compiler is taking most of the time.", 
+   "There is yet another simplification we can do ( separate the ServletHandler", 
+   "and add a JspHanlder ), but so far ServletHandler doesn't seem too complex", 
+   "and handling jsps is a very small overhead ( far away from what it used to be)."
+  ], 
+  "revision_id": "282778"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-13T19:58:04.000000Z", 
+  "msg": [
+   "One more step in Handler refactoring. We are very close, I think", 
+   "Handler starts to be simple enough and ServletWrapper is now at least", 
+   "readable ( that was one of the most complex parts of tomcat3).", 
+   "In the process I also fixed a number of bugs ( it's amazing what you", 
+   "find when the code is simpler ) and added few improvements on the", 
+   "JspInterceptor ( now the main target for refactoring )", 
+   "- added get/setModule - the handler is associated with an interceptor the", 
+   "same way as in apache, etc. The interceptor creates the handler and sets", 
+   "it ( properties, debug ) - Servlet22Interceptor and JspInterceptor are doing", 
+   "this for servlets/jsps", 
+   "- many fixes in JspInterceptor - the error handling had few problems,", 
+   "same for reloading.", 
+   "- changed JspInterceptor to use the same mechanism for reloading with", 
+   "servlets - now expire checks are done periodically, not for each", 
+   "request.", 
+   "- started to simplify and better organize JspInterceptor", 
+   "- fixed bugs related with jsps declared in web.xml", 
+   "- added a small test for jsp declarations", 
+   "- use a prefix for the names declared by JspInterceptor, to avoid", 
+   "conflicts with web.xml names", 
+   "- changed the Context logger to report the context path", 
+   "- removed accounting from Handler - a better mechanism is needed, and", 
+   "it's not a priority.", 
+   "- that simplifies a lot the Handler, and make it possible and easy to", 
+   "pass options using server.xml", 
+   "- removed \"origin\" from handler - it's implied by Module", 
+   "- removed Context from handler - it's used only in ServletHandler.", 
+   "- Small hack in ServletInfo so that servlets declared by WebXmlReader will", 
+   "have Servlet22Interceptor as \"owner\"."
+  ], 
+  "revision_id": "282777"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-12-13T18:48:43.000000Z", 
+  "msg": [
+   "Few small enhancements to the depend manager  - some dependencies are", 
+   "\"local\" ( the case of a jsp file ), and don't triger the expiration of", 
+   "the full collection."
+  ], 
+  "revision_id": "282776"
+ }, 
+ {
+  "author": "jon", 
+  "date": "2000-12-13T07:33:41.000000Z", 
+  "msg": [
+   "added trailing slash"
+  ], 
+  "revision_id": "282775"
+ }
+]

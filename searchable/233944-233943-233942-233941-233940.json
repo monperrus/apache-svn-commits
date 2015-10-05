@@ -1,0 +1,82 @@
+[
+ {
+  "author": "dlr", 
+  "date": "2005-05-02T04:22:21.000000Z", 
+  "msg": [
+   "Partially revert overly strict handling of character encoding when", 
+   "writing XML, and some unreleased and inappropriate API changes.", 
+   "* src/java/org/apache/xmlrpc/XmlWriter.java", 
+   "(chardata): Removed exception thrown when characters outside", 
+   "of the valid range for XML are encountered.  Instead, pass these", 
+   "characters along (valid for XML-RPC), either entity-encoding them", 
+   "as &#xxx; if less than 0x20, or literally if greater than 0x7f.", 
+   "This doesn't appear to cause complaints from the XML parsers used", 
+   "in SourceCast, likely because the XML specification demands that", 
+   "parsers support UTF-8 and UTF-16.  This is a revision to the change", 
+   "made in CVS rev 1.4 of XmlWriter.java.  This change is the analog", 
+   "of CVS rev 1.6.2.1, as committed to the XMLRPC_1_2 branch.", 
+   "(writeObject): Revert API incorrectness introduced in CVS rev", 
+   "1.7.  Since XmlWriter is used by both the server and the clients,", 
+   "its APIs should throw the base XmlRpcException, not", 
+   "XmlRpcClientException.  This is an API change back to the previous", 
+   "state from 1.2, but okay since this inappropriate incarnation of", 
+   "the API was never actually released.", 
+   "* src/java/org/apache/xmlrpc/XmlRpcClientRequestProcessor.java", 
+   "(encodeRequest): Wrap XmlRpcException exception thrown by", 
+   "XmlWriter.writeObject() in a XmlRpcClientException.", 
+   "* src/java/org/apache/xmlrpc/XmlRpcException.java", 
+   "(cause, getCause): New APIs to support nested exceptions.", 
+   "(XmlRpcException): Added overload to set \"cause\".  Adjusted existing", 
+   "decl accordingly.", 
+   "* src/java/org/apache/xmlrpc/XmlRpcClientException.java", 
+   "(cause, getCause): Removed, pushed up into superclass.", 
+   "Target release: 2.0", 
+   "Reviewed by: Jochen Wiedmann (XmlWriter changes)"
+  ], 
+  "revision_id": "233944"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-05-02T03:58:46.000000Z", 
+  "msg": [
+   "* src/java/org/apache/xmlrpc/XmlWriter.java", 
+   "(chardata): Removed exception thrown when characters outside", 
+   "of the valid range for XML are encountered.  Instead, pass these", 
+   "characters along (valid for XML-RPC), either entity-encoding them", 
+   "as &#xxx; if less than 0x20, or literally if greater than 0x7f.", 
+   "This doesn't appear to cause complaints from the XML parsers used", 
+   "in SourceCast, likely because the XML specification demands that", 
+   "parsers support UTF-8 and UTF-16.  This is a revision to the change", 
+   "made in CVS rev 1.4 of XmlWriter.java.", 
+   "Target release: 1.2", 
+   "Branch: XMLRPC_1_2", 
+   "Reviewed by: Jochen Wiedmann"
+  ], 
+  "revision_id": "233943"
+ }, 
+ {
+  "author": "", 
+  "date": "2005-04-30T00:28:22.000000Z", 
+  "msg": [
+   "This commit was manufactured by cvs2svn to create tag", 
+   "'XMLRPC_2_0_B1'."
+  ], 
+  "revision_id": "233942"
+ }, 
+ {
+  "author": "dlr", 
+  "date": "2005-04-30T00:28:22.000000Z", 
+  "msg": [
+   "* project.xml: Updated 2.0 <version> for consistency."
+  ], 
+  "revision_id": "233941"
+ }, 
+ {
+  "author": "sgoeschl", 
+  "date": "2005-04-29T12:14:19.000000Z", 
+  "msg": [
+   "Deleting the MD5 checksums from the \"dist\" target within the \"clean\" target to keep the directory clean."
+  ], 
+  "revision_id": "233940"
+ }
+]

@@ -1,0 +1,55 @@
+[
+ {
+  "author": "jwoolley", 
+  "date": "2001-06-19T02:57:18.000000Z", 
+  "msg": [
+   "Tweaks to mmap_setaside():", 
+   "*) Fix a memory leak: after calling apr_bucket_pool_make() to morph the", 
+   "bucket, you have to call mmap_destroy(); otherwise, you leak the", 
+   "apr_bucket_mmap struct after the last reference to it goes away.", 
+   "*) Use palloc() instead of pcalloc() to get the memory to copy into", 
+   "since we're about to overwrite it anyway."
+  ], 
+  "revision_id": "58304"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2001-06-18T21:57:10.000000Z", 
+  "msg": [
+   "Fix a bug whereby file_setaside() accidentally put the file back in the", 
+   "same pool it started in.  This bug would have been easy to miss because", 
+   "the requested pool and the current pool were just called \"pool\" and \"p\".", 
+   "This patch renames them to \"reqpool\" and \"curpool\" and uses \"reqpool\" where", 
+   "needed to fix the bug."
+  ], 
+  "revision_id": "58303"
+ }, 
+ {
+  "author": "jwoolley", 
+  "date": "2001-06-18T21:39:27.000000Z", 
+  "msg": [
+   "Pool buckets should use _setaside_noop instead of _setaside_notimpl.", 
+   "If the data in the pool bucket is still in use when the pool it's in dies,", 
+   "the data gets copied onto the heap anyway; therefore, there's no need to", 
+   "make sure that the data will live at least a certain length because the", 
+   "cleanup logic makes it effectively live forever."
+  ], 
+  "revision_id": "58302"
+ }, 
+ {
+  "author": "ben", 
+  "date": "2001-06-17T14:34:14.000000Z", 
+  "msg": [
+   "Documentation updates."
+  ], 
+  "revision_id": "58301"
+ }, 
+ {
+  "author": "bjh", 
+  "date": "2001-06-16T03:54:57.000000Z", 
+  "msg": [
+   "Fix build for non-mmap platforms."
+  ], 
+  "revision_id": "58300"
+ }
+]

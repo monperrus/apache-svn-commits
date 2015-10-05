@@ -1,0 +1,52 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2001-01-22T23:07:23.000000Z", 
+  "msg": [
+   "We only want to define ap_send_mmap if APR_HAS_MMAP is true.  Without", 
+   "this, we don't build successfully."
+  ], 
+  "revision_id": "87789"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2001-01-22T21:57:57.000000Z", 
+  "msg": [
+   "AP_REQUEST_DONE is bogus and a bad idea.  This had the http_header filter", 
+   "return -3 for every HEAD request, which in turn made us call ap_die.  Of", 
+   "course, if we didn't have a 200 status (say we had a 206), then we would", 
+   "seg fault, because we would end up sending down a second EOS bucket, which", 
+   "would in turn make us call the byterange filter again, but at this point,", 
+   "we hadn't cleaned up the byterange ctx structure, because it was never", 
+   "supposed to be called again.", 
+   "This was biting us on apache.org, where we had a HEAD request for", 
+   "bytes=100- for a file.  This was a major seg fault.  We are better off", 
+   "just returning OK is much safer."
+  ], 
+  "revision_id": "87788"
+ }, 
+ {
+  "author": "gtrubetskoy", 
+  "date": "2001-01-22T05:14:12.000000Z", 
+  "msg": [
+   "__auth__ improvements"
+  ], 
+  "revision_id": "87787"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2001-01-22T01:57:51.000000Z", 
+  "msg": [
+   "s/LAST/MIDDLE/"
+  ], 
+  "revision_id": "87786"
+ }, 
+ {
+  "author": "dougm", 
+  "date": "2001-01-22T01:11:01.000000Z", 
+  "msg": [
+   "adjust to ap_hook_handler changes"
+  ], 
+  "revision_id": "87785"
+ }
+]

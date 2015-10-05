@@ -1,0 +1,63 @@
+[
+ {
+  "author": "rich", 
+  "date": "2004-12-10T08:33:03.046683Z", 
+  "msg": [
+   "Rewrote Shared Flow support.  A shared flow is an object that can provide common actions, state and exception handlers to a page flow.  It is declared in a page flow's @Jpf.Controller annotation like this:", 
+   "sharedFlowRefs={", 
+   "@Jpf.SharedFlowRef(name=\"mySharedFlow\", type=foo.bar.MySharedFlow.class),", 
+   "@Jpf.SharedFlowRef(name=\"anotherSharedFlow\", type=another.SharedFlow.class)", 
+   "}", 
+   "- Shared flow source files can exist in the webapp as \".jpfs\" files, and they can also exist as normal Java source files.  Unlike page flows, they are not web-addressable.", 
+   "- When a page flow is hit, all its declared shared flows are created and stored in the session.", 
+   "- Raising an action on a shared flow is much like raising an action on a page flow.  It follows the pattern \"<shared-flow-name>.<action-name>\", e.g.,", 
+   "<netui:anchor action=\"mySharedFlow.someAction\">raise someAction on mySharedFlow</netui:anchor>", 
+   "- Binding to a property of a shared flow is also much like binding to a property on a page flow.  It follows the patternn \"sharedFlow.<shared-flow-name>.<property-name>\", e.g.,", 
+   "<netui:span value=\"${sharedFlow.mySharedFlow.someProperty}\"/>", 
+   "- Any unhandled exception raised during page flow action processing will be handled by the first declared shared flow with an appropriate @Jpf.Catch annotation.  The shared flows are tried in order of declaration in the 'simpleActions' attribute of @Jpf.Controller.", 
+   "- If a page flow wants to have a direct reference to any of its shared flows, it simply declares a member variable annotated with @Jpf.SharedFlowField:", 
+   "@Jpf.SharedFlowField(name=\"mySharedFlow\")", 
+   "foo.bar.MySharedFlow _mySharedFlow;", 
+   "When the page flow is created, this field will be initialized with a reference to the current instance of foo.bar.MySharedFlow.", 
+   "- Shared flows can be retrieved and deleted explicitly through methods on PageFlowUtils.", 
+   "Finally, a quote from an ancient Shared Flow checkin:", 
+   "\"Philosophical question: Why not just depend on inheritance for these features?  The main reason is that most often the state for a shared flow needs to be... shared, rather than duplicated across all page flows extending a common base class.  Shared flows have their own lifecycles, and can be managed independently of the page flows that depend on them.  Shared flows also avoid stealing the single spot in the inheritance hierarchy, so that various page flows using a single shared flow can extend the right base classes to provide inherited behavior and state.\"", 
+   "DRT/BVT: netui (WinXP)", 
+   "BB: self (linux)"
+  ], 
+  "revision_id": "111484"
+ }, 
+ {
+  "author": "hemapani", 
+  "date": "2004-12-10T07:56:01.561809Z", 
+  "msg": [
+   "refactor engine tests"
+  ], 
+  "revision_id": "111483"
+ }, 
+ {
+  "author": "kentam", 
+  "date": "2004-12-10T07:51:05.460985Z", 
+  "msg": [
+   "Reactivate the Database control check-in tests.", 
+   "Contributor: Hoi Lam"
+  ], 
+  "revision_id": "111482"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2004-12-10T07:38:02.429994Z", 
+  "msg": [
+   "It's authn that manages authentication."
+  ], 
+  "revision_id": "111481"
+ }, 
+ {
+  "author": "yoshiki", 
+  "date": "2004-12-10T07:27:32.753010Z", 
+  "msg": [
+   "One more s/authentication/authorization/."
+  ], 
+  "revision_id": "111480"
+ }
+]

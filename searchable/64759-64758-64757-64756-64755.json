@@ -1,0 +1,76 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2003-11-17T01:41:18.000000Z", 
+  "msg": [
+   "With the removal of apr_poll(), the apr_wait_for_io_or_timeout() function", 
+   "needed to be rebuilt. Specifically, it needs a pollset, but we don't want", 
+   "to allocate that all the time. Thus, we need to create it once at socket", 
+   "or file creation time, and then reuse that pollset.", 
+   "NOTE: this makes the library compile, but some of the test programs may", 
+   "not. I have also not verified this work yet (in favor of just getting it", 
+   "to at least compile...)", 
+   "For the apr_arch_*.h files, I added a pollset member to the file and", 
+   "socket structures.", 
+   "For the various open/dup/etc functions, I added the creation of that", 
+   "pollset whenever a file or socket is created.", 
+   "(I may have missed some and will verify further)", 
+   "For the socket create and sendrecv function, I added the creation of the", 
+   "pollset.", 
+   "(again, may have missed some, but if everybody uses alloc_socket, then we", 
+   "should be okay)", 
+   "* support/unix/waitio.c: rebuild in terms of the pollset"
+  ], 
+  "revision_id": "64759"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-11-17T00:59:00.000000Z", 
+  "msg": [
+   "apr_random won't be in APR1.0.0, so pull testrand2."
+  ], 
+  "revision_id": "64758"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2003-11-17T00:32:36.000000Z", 
+  "msg": [
+   "Remove the old/deprecated apr_poll interface.", 
+   "* include/apr_poll.h:", 
+   "(apr_poll, apr_poll_setup, apr_poll_socket_add, apr_poll_socket_mask,", 
+   "apr_poll_socket_remove, apr_poll_socket_clear,", 
+   "apr_poll_revents_get): removed. these were deprecated a while back,", 
+   "in favor of the apr_pollset_t interfaces.", 
+   "* poll/os2/poll.c: removed. this implemented apr_poll() which was", 
+   "deprecated by the new apr_pollset_t interfaces.", 
+   "* poll/os/Makefile.in: remove reference to poll.lo", 
+   "* poll/unix/poll.c:", 
+   "- remove include of alloca.h; no longer needed", 
+   "(apr_poll): removed both implementations", 
+   "* poll/unix/pollacc.c:", 
+   "(apr_poll_setup, apr_poll_socket_add, apr_poll_socket_mask,", 
+   "apr_poll_socket_remove, apr_poll_socket_clear,", 
+   "apr_poll_revents_get): removed these deprecated functions."
+  ], 
+  "revision_id": "64757"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2003-11-17T00:28:25.000000Z", 
+  "msg": [
+   "Puzzle for the day, how does sha2.c compile already on Win32 or Netware."
+  ], 
+  "revision_id": "64756"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2003-11-17T00:20:44.000000Z", 
+  "msg": [
+   "Remove 'long double' configure check as it's not an integral type.", 
+   "According to ViewCVS/cvs annotate, this dates to r1.28 of configure.in.", 
+   "Submitted by:\tWill Rowe", 
+   "Reviewed by:\tJeff Trawick, Justin Erenkrantz"
+  ], 
+  "revision_id": "64755"
+ }
+]

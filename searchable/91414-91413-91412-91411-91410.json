@@ -1,0 +1,76 @@
+[
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-10-11T01:49:21.000000Z", 
+  "msg": [
+   "This is the mod_ssl input filtering rewrite.  Lots of stuff here.  I also", 
+   "changed some of the style issues within the filtering code to conform to", 
+   "the rest of the server.", 
+   "Various incarnations of this patch have been posted to dev@httpd without", 
+   "feedback.  Now that it passes all of the httpd-test cases (with the", 
+   "exception of module/negotiation test which fails without mod_ssl anyway),", 
+   "it is time to check it in.", 
+   "Please review and test.  We are under C-T-R rules, so I'm going to take", 
+   "advantage of that and commit it now.  I have tested this about as much", 
+   "as I can and it seems to work from everything I can give to it.", 
+   "Considering that mod_ssl was broken before this commit, this is an", 
+   "improvement."
+  ], 
+  "revision_id": "91414"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-10-11T01:40:32.000000Z", 
+  "msg": [
+   "We can't pass in &r->remaining because we change that value on output to", 
+   "be how many bytes we read.  This trounces on the r->remaining value, so", 
+   "we must use a local variable and subtract that from r->remaining after we", 
+   "read.", 
+   "Reviewed by:\tAaron Bannert"
+  ], 
+  "revision_id": "91413"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-10-11T01:38:28.000000Z", 
+  "msg": [
+   "The problem here is that we are getting some zero-length buckets at the head", 
+   "of our brigade - which are in isolation okay.  In this situation, they", 
+   "must be removed by the call to APR_BRIGADE_NORMALIZE.", 
+   "The way we partition the buckets means that we will never remove the", 
+   "zero-length bucket from the head - causing an infinite loop.  We read only", 
+   "a single bucket now - previously partition with the blocking reads would", 
+   "read multiple buckets - but it forced having a defined length which we", 
+   "agreed was bogus.", 
+   "Therefore, if we have a zero-length bucket at the head, we would then try", 
+   "to partition and split at the zero-point of the brigade.  That combination", 
+   "doesn't actually remove the zero-length bucket - it is still there - causing", 
+   "an infinite loop because we'll never go past the zero-length bucket.", 
+   "This call was originally present in core_input_filter.  I think it might", 
+   "be better to fix partition/split/etc to eliminate a zero-length bucket", 
+   "and skip it.  But, I'm not 100% sure that needs to happen."
+  ], 
+  "revision_id": "91412"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-10-10T22:14:10.000000Z", 
+  "msg": [
+   "We also need to increment *readbytes when we find a match in the middle of", 
+   "a bucket."
+  ], 
+  "revision_id": "91411"
+ }, 
+ {
+  "author": "jerenkrantz", 
+  "date": "2001-10-10T21:42:07.000000Z", 
+  "msg": [
+   "It'd help when testing mod_ssl if the test program could handle SSL", 
+   "buffering correctly.", 
+   "Call SSL_pending before doing the poll to see if we could satisfy", 
+   "the current request without reading from the raw socket.", 
+   "What a nightmare.  mod_ssl has probably been working for a week.  *Gag*"
+  ], 
+  "revision_id": "91410"
+ }
+]

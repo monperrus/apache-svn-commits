@@ -1,0 +1,78 @@
+[
+ {
+  "author": "tomj", 
+  "date": "2002-09-24T21:06:09.000000Z", 
+  "msg": [
+   "Fix bug 12969 - UnsignedLong doesn't format correctly", 
+   "Remove code that was chopping off thenumber after the decimal for string", 
+   "formatting as this is bad when the number is 1.234567E7.", 
+   "Add a test case for the problem, and enhance test which exposed", 
+   "more limits of precision."
+  ], 
+  "revision_id": "255289"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-09-24T21:02:23.000000Z", 
+  "msg": [
+   "Also support Document method(Document)", 
+   "(this is needed for the attachments sample right now, will probably go away becuase it's not really an adequate API)"
+  ], 
+  "revision_id": "255288"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2002-09-24T20:45:20.000000Z", 
+  "msg": [
+   "* Fix bug http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12923", 
+   "* We now dispatch to methods for MsgProvider services based on", 
+   "the QName of the first body element.  If you've specified an", 
+   "OperationDesc for your method, the QName in there will be used", 
+   "for dispatch, otherwise we'll use the namespace of the service", 
+   "and look up the localPart of the XML QName as the method name.", 
+   "If you don't specify a <namespace> for your service (in the", 
+   "WSDD), we'll match just on local name.  (NOTE: I disagree with", 
+   "this, because I think it's not precise enough for the XML world.", 
+   "We'll need to produce schemas for this stuff eventually, and", 
+   "mapping random namespaces seems dangerously lax to me.", 
+   "However, it was the way it used to work, and there was agitation", 
+   "to keep it this way, so I did.)", 
+   "* Rationalize MsgProvider's accepted signatures.  We now accept:", 
+   "SOAPBodyElement [] method(SOAPBodyElement [])", 
+   "Element [] method(Element [])", 
+   "void method(SOAPEnvelope reqest, SOAPEnvelope response)", 
+   "A nice side effect of this is that we only introspect once (in", 
+   "ServiceDesc), not on every call in MsgProvider as we used to.", 
+   "* Add tests to confirm that we can dispatch to multiple methods,", 
+   "and that each of the valid signatures works as expected."
+  ], 
+  "revision_id": "255287"
+ }, 
+ {
+  "author": "butek", 
+  "date": "2002-09-24T20:29:18.000000Z", 
+  "msg": [
+   "Fixed http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10365.", 
+   "If a binding operation doesn't match a portType operation, we now fail.", 
+   "We used to generate sort-of-duplicate operations."
+  ], 
+  "revision_id": "255286"
+ }, 
+ {
+  "author": "tomj", 
+  "date": "2002-09-24T20:19:57.000000Z", 
+  "msg": [
+   "Fix bug 12833 - Axis clients fail to extract the value of output (only)", 
+   "parameters when they are last in the parameter list", 
+   "The special case logic I added to prevent functions like", 
+   "void echo(StringHolder inout)", 
+   "and instead make signatures like", 
+   "String echo (String in)", 
+   "was doing very bad things.  Remove it and put the code in a better place", 
+   "that will not affect processing of functions with more than 1 parameter.", 
+   "Add a test case which has .NET WSDL for a large number of in/out/inout", 
+   "and return values, and include the test case noted in the bug for good measure."
+  ], 
+  "revision_id": "255285"
+ }
+]

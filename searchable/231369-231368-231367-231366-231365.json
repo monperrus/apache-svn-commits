@@ -1,0 +1,59 @@
+[
+ {
+  "author": "chirino", 
+  "date": "2005-08-11T01:42:16.464553Z", 
+  "msg": [
+   "http://issues.apache.org/jira/browse/GERONIMO-873", 
+   "Decouple the connector module from the kernel module by extracting the GBeanInfo definitions to a new set of GBean classes."
+  ], 
+  "revision_id": "231369"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-08-11T01:38:47.511983Z", 
+  "msg": [
+   "* test: update svn:ignore."
+  ], 
+  "revision_id": "231368"
+ }, 
+ {
+  "author": "rooneg", 
+  "date": "2005-08-11T01:20:26.636630Z", 
+  "msg": [
+   "Catch some tests up to apr_dbd API change.", 
+   "* test/dbd.c", 
+   "(test_pselect): use apr_dbd_pvselect instead of accessing the internals", 
+   "of the driver struct.", 
+   "(test_pquery): use apr_dbd_pquery instead of accessing the internals of", 
+   "the driver struct."
+  ], 
+  "revision_id": "231367"
+ }, 
+ {
+  "author": "davidvc", 
+  "date": "2005-08-11T01:12:31.167400Z", 
+  "msg": [
+   "Committing changes for DERBY-171 - Need correlation ID in UPDATE/DELETE statements.", 
+   "Submitted by Rick Hillegas.", 
+   "Comments from Rick:", 
+   "I have added the optional correlation name clauses to the UPDATE and DELETE productions in the parser and added supporting bind-time logic. In addition to fixing this particular bug, I have significantly changed the binding of correlated subqueries which have GROUP BY or HAVING clauses: I am now passing the outer fromList context down the subquery binding stack. This makes it possible to bind correlated references in those subqueries and fixes a cluster of other bugs. These other correlated subqueries were failing to compile because the bind logic did not match the way that the parser rewrites the query tree in these cases. I tripped across these problems in the lang/refActions1.sql regression test. I have extensively updated the canon for that test. Looking at the old canon, it appears to me that the old canon was riddled with incorrect results.", 
+   "Here are some responses to issues which Army raised while reviewing the first rev of this bugfix:", 
+   "1) This bugfix fixes some other, unlogged bugs. These are basically syntax errors raised by the parser when it encounters correlated references in subqueries which contain GROUP BY or HAVING clauses. The problem was that the parser does something clever. It takes advantage of the fact that the HAVING clause functions like a WHERE clause on the GROUP BY result. The parser then makes the GROUP BY result an outer query with the HAVING clause as its WHERE clause, and the parser then turns the rest of the SELECT into a subquery which feeds the GROUP BY outer query. However, the the binding logic for these rewritten GROUP BY results was not as clever as the parser. Subselects which had GROUP BY or HAVING clauses were not passed the list of correlated tables and so failed to bind correlated references. Perhaps an example would help:", 
+   "select e.* from employee e", 
+   "where e.bonus <", 
+   "( select b.bonus from bonus b where b.empid=e.empid group by bonus having bonus > 3)", 
+   "In this case, the query would be rewritten to have 3 rather than 2 levels. The outer level would remain like the original. But the subselect would be rewritten to have its own outer select, consisting of the GROUP BY and HAVING clauses and an inner select consisting of the SELECT B.BONUS. In binding this query, level 1 would pass its correlated from list down to level 2, but level 2 would not pass the list on to level 3. However, level 3 needs the correleted from list in order to resolve b.empid=e.empid.", 
+   "2) This bugfix changes some queries in refActions1.sql. These are queries which used to raise syntax errors.because of the bugs mentioned in (1) above. I first changed these queries by qualifying some dangling references with correlation names. I did this to prove that the syntax errors were not being caused by ambiguity. I verified that the changed queries continued to raise the same syntax errors. Then I fixed the bugs mentioned in (1) above. Most of the queries then successfully compiled. What did the authors of this test hope to demonstrate? It's hard to say since the comments indicate that these statements are supposed to both be correlated and to complete successfully but, of course, they didn't. complete. The changed queries satisfy the minimal contract in the comments: the statements have correlated references and they complete successfully. Do these changes mask other bugs? Possibly. Were those other bugs disclosed by the previous state of the test? No, The changed queries at least track something useful now: syntax that is supposed to compile. I think this is an improvement.", 
+   "Second rev of bugfix. Incorporates Army's feedback: 1) Removes FromBaseTable.java, which had a vacuous diff, 2) Moves regression tests into update.sql and delete.sql."
+  ], 
+  "revision_id": "231366"
+ }, 
+ {
+  "author": "jm", 
+  "date": "2005-08-11T00:29:39.035552Z", 
+  "msg": [
+   "bugfixes to rescoring"
+  ], 
+  "revision_id": "231365"
+ }
+]

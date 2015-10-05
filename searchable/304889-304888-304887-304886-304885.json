@@ -1,0 +1,92 @@
+[
+ {
+  "author": "glenn", 
+  "date": "2002-05-06T04:33:16.000000Z", 
+  "msg": [
+   "Reduced amount of code within the JspServlet synchronized block,", 
+   "should improve performance slightly.", 
+   "Added ability to remove the JspServletWrapper and the class", 
+   "file for its JSP when a JSP file no longer exists.", 
+   "Added removal of JSP java source file to", 
+   "Compiler.removeGeneratedFiles().", 
+   "Moved the normalizing of the java class output directory", 
+   "from JspServletWrapper to JspEngineContext where it belongs.", 
+   "Moved obtaining the parentClassLoader, codeSource, classpath,", 
+   "and permissionCollection from the JspServlet to JspDependency.", 
+   "The servlet init method for the JSP was not getting called on", 
+   "the first load of the JSP page if the page were already compiled.", 
+   "This has been fixed.", 
+   "Refactored the code in JspServletWrapper for loadJSP to remove", 
+   "nested try/catch blocks and the overhead from several method calls.", 
+   "The outdated check for recompile now includes checking of", 
+   "compile time included files using <%@ include file=\"...\" %>.", 
+   "The data about what pages were compile time includes is generated", 
+   "as part of the Servlet code for the JSP.  This is alot cleaner", 
+   "than my original proposal of storing the data in a separate file.", 
+   "Added the JspRuntimeContext background thread. It checks for changes", 
+   "to the JSP file and compile time included files.  If changed,", 
+   "it recompiles the JSP in the background. This will allow the", 
+   "previous compiled JSP class to be used until the page has", 
+   "been recompiled and the new class is available.  This will", 
+   "remove any request latency seen due to JSP recompiles.", 
+   "The background thread is only started if the web application", 
+   "context is a directory, reloading is enabled, and development", 
+   "is false.  If the webapp is running directly from a war file", 
+   "there is no need to check for recompiles.", 
+   "Added two Jasper init parameters:", 
+   "development - set to true to force an outdated check on", 
+   "each page request instead of using background", 
+   "thread.", 
+   "checkInterval - Number of seconds background thread should", 
+   "wait before checking if JSP's are out dated.", 
+   "Passes all jsp watchdog tests except for the broken test case."
+  ], 
+  "revision_id": "304889"
+ }, 
+ {
+  "author": "kinman", 
+  "date": "2002-05-04T01:21:59.000000Z", 
+  "msg": [
+   "- URL encode request time expression parameters when passed", 
+   "to forward or include actions."
+  ], 
+  "revision_id": "304888"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2002-05-01T15:02:38.000000Z", 
+  "msg": [
+   "Remove some dead code"
+  ], 
+  "revision_id": "304887"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2002-05-01T02:40:37.000000Z", 
+  "msg": [
+   "Reformat code to more closely match coding conventions"
+  ], 
+  "revision_id": "304886"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2002-05-01T01:33:42.000000Z", 
+  "msg": [
+   "Refactor JspServlet, JspServletWrapper, and JspEngineContext", 
+   "prior to implementing new features.  There was alot of intimacy", 
+   "and some code duplication between these three.", 
+   "JspServletWrapper had been an inner class of JspServlet,", 
+   "refactored out of JspServlet into its own class.", 
+   "Removed unneeded imports.", 
+   "Removed some unused code.", 
+   "Removed use of an HttpServletRequest and HttpServletResponse", 
+   "from JspEngineContext in preparation for doing background", 
+   "compiles.", 
+   "Switched JspServlet over to using the Jakarta-Commons", 
+   "collections FastHashMap instead of a Hashtable, this", 
+   "should improve performance while remaining thread safe.", 
+   "Passes all jsp watchdog tests except for the broken test case."
+  ], 
+  "revision_id": "304885"
+ }
+]

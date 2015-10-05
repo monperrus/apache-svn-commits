@@ -1,0 +1,65 @@
+[
+ {
+  "author": "luehe", 
+  "date": "2005-02-17T17:55:24.000000Z", 
+  "msg": [
+   "Removed potential WebappClassLoader leak.", 
+   "Consider the following example scenario:", 
+   "- Servlet class references RequestDispatcher.", 
+   "- Servlet is loaded. Any of the symbols referenced will be", 
+   "resolved lazily.", 
+   "- Servlet is invoked. Thread's context classloader has been set to the", 
+   "servlet's WebappClassLoader.", 
+   "- org.apache.catalina.core.ApplicationDispatcher is loaded, and its", 
+   "static \"log\" variable is initialized as follows:", 
+   "private static Log log = LogFactory.getLog(ApplicationDispatcher.class);", 
+   "- LogFactory.getLog() causes the context classloader (which corresponds", 
+   "to the WebappClassLoader) to be cached in its static \"factories\"", 
+   "Hashtable, as follows:", 
+   "if (classLoader != null && factory != null)", 
+   "factories.put(classLoader, factory);", 
+   "Right now, this classloader is never removed from this Hashtable when the", 
+   "webapp is stopped.", 
+   "Depending on number of deployed webapps and their servlets' execution", 
+   "paths, different Catalina classes will be loaded on different servlet", 
+   "invocation threads, and the classes' \"log\" initialization will cause", 
+   "the threads' context classloaders to be cached in LogFactory and never", 
+   "released from it.", 
+   "This patch should fix the issue.", 
+   "Let me know if you see any problems."
+  ], 
+  "revision_id": "303714"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2005-02-17T00:46:14.000000Z", 
+  "msg": [
+   "- Deleting expanded folder doesn't have too many benefits overall."
+  ], 
+  "revision_id": "303713"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2005-02-16T21:14:36.000000Z", 
+  "msg": [
+   "- The XML should be added last in that case too."
+  ], 
+  "revision_id": "303712"
+ }, 
+ {
+  "author": "remm", 
+  "date": "2005-02-16T12:39:34.000000Z", 
+  "msg": [
+   "- Changelog update."
+  ], 
+  "revision_id": "303711"
+ }, 
+ {
+  "author": "luehe", 
+  "date": "2005-02-15T21:10:35.000000Z", 
+  "msg": [
+   "Added getSession() action on session manager mbean"
+  ], 
+  "revision_id": "303710"
+ }
+]

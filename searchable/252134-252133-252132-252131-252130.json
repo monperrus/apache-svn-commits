@@ -1,0 +1,72 @@
+[
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-10T03:30:51.000000Z", 
+  "msg": [
+   "Fix serviceDescription linkage a bit.", 
+   "Pass messageType parameter down into the DeserializationContext, and", 
+   "make it available directly from there.  This works better now that we", 
+   "check the SD at MessageElement creation time.", 
+   "This fix restores the functionality for parsing return vals w/o xsi:type."
+  ], 
+  "revision_id": "252134"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-10T02:29:32.000000Z", 
+  "msg": [
+   "Move convert() method into a new utility class JavaUtils.", 
+   "Modify TestClient for the echo test to use convert() to get arrays for", 
+   "equality check.", 
+   "When we have service descriptions fully integrated, the system will automatically", 
+   "convert return types from the canonical form (i.e. Vectors for SOAP arrays)", 
+   "to the desired class."
+  ], 
+  "revision_id": "252133"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-09T21:32:03.000000Z", 
+  "msg": [
+   "Fix some serialization stuff:", 
+   "* Using the Local transport was re-serializing the message into String form", 
+   "in the context of the *client*, not the server.  We deal with this by adding", 
+   "a default local transport output chain on the server (the LocalResponder)", 
+   "which simply sets the message to string form, exercising the serializers", 
+   "while still in server-land.", 
+   "* The ArraySerializer now produces Vectors by default instead of Arrays.", 
+   "This is a way to make life a little easier when we're needing to convert", 
+   "general array types into specific ones.  For instance, if we get a SOAP", 
+   "array with arrayType=\"xsd:anyType\", and the argument this parameter maps", 
+   "to is an Integer[], we can just use the List.toArray(Integer[]) method", 
+   "to let Java do the conversion (or throw an Exception) for us.  The", 
+   "TestDeser unit test was changed to reflect the new behavior.", 
+   "* The RPCProvider.convert() method is now static and public, so that the", 
+   "BeanSerializer (or whoever) can get to it.  This should probably move", 
+   "to a utility class.", 
+   "* Cleaned up the CallbackTarget in DeserializerBase - it now acts like a", 
+   "regular Target, thus obliviating the need for a separate callbacks", 
+   "Vector.", 
+   "* Support all the SOAP-ENC:<Type> element names."
+  ], 
+  "revision_id": "252132"
+ }, 
+ {
+  "author": "rubys", 
+  "date": "2001-07-09T20:34:22.000000Z", 
+  "msg": [
+   "Simply indicating the AxisFault is sufficient, the entire stack trackback", 
+   "is a bit over the top..."
+  ], 
+  "revision_id": "252131"
+ }, 
+ {
+  "author": "gdaniels", 
+  "date": "2001-07-09T17:01:59.000000Z", 
+  "msg": [
+   "Remove extraneous debugging println.", 
+   "Thanks to Carl Woolf (cwoolf@macromedia.com) for noticing this 'un."
+  ], 
+  "revision_id": "252130"
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "author": "cutting", 
+  "date": "2005-10-28T21:06:03.240995Z", 
+  "msg": [
+   "Finished adding Grant Ingersoll's ApacheCon presentation."
+  ], 
+  "revision_id": "329299"
+ }, 
+ {
+  "author": "dlydick", 
+  "date": "2005-10-28T21:05:32.099831Z", 
+  "msg": [
+   "Extended doc \"main page\" comments on subdirectories to", 
+   "include 'org.apache.harmony' directory."
+  ], 
+  "revision_id": "329298"
+ }, 
+ {
+  "author": "rgardler", 
+  "date": "2005-10-28T21:02:56.020511Z", 
+  "msg": [
+   "use the daisy navigation document to definethe URLspace (gives paths and names to the documents instead of the document ID numebr)"
+  ], 
+  "revision_id": "329297"
+ }, 
+ {
+  "author": "dlydick", 
+  "date": "2005-10-28T21:00:21.115603Z", 
+  "msg": [
+   "Make silent the test and optional 'chmod' of target directories."
+  ], 
+  "revision_id": "329296"
+ }, 
+ {
+  "author": "bandaram", 
+  "date": "2005-10-28T20:57:08.632793Z", 
+  "msg": [
+   "DERBY-582: Allow unary plus/minus operators with parameters. Here is the email from Mamta with details:", 
+   "I have a new patch to allow dynamic parameters for unary minus and unary plus", 
+   "operator. This is based on the feedback from Jeff and Dan. The unary minus/plus", 
+   "parameters will determine their types depending on the context. For this, I", 
+   "have added requiresTypeFromContext to ValueNode which always returns false.", 
+   "ParameterNode always returns true for this method. UnaryOperatorNode's", 
+   "requiresTypeFromContext calls the operand's requiresTypeFromContext if operand", 
+   "is not null. SimpleStringOperatorNode(subclass of UnaryOperatorNode) ends up", 
+   "overriding this method and returns false because functions lower and upper are", 
+   "always typed to String and do not need to get their type from the context.", 
+   "I have added 2 methods to UnaryOperatorNode.java, namely getParameterOperand()", 
+   "and isUnaryMinusOrPlusWithParameter(). There are few places in engine, where", 
+   "we need to access the underlying parameter and that is when", 
+   "getParameterOperand() gets used. This is required to directly call the", 
+   "ParameterNode methods such as  getDefaultValue(), getParameterNumber() etc", 
+   "isUnaryMinusOrPlusWithParameter() is required so that engine can catch edge", 
+   "cases like select * from t1 where -? and c11=c11 or +? ie such a use of", 
+   "-?/+? should be disallowed, same as what we do for ? parameters.", 
+   "Also, as mentioned in the earlier review packages, the binding code for unary", 
+   "minus/unary plus dynamic parameters will not be executed until the type of", 
+   "these parameters can be determined. The type gets detemined when the setType", 
+   "method is called. For this reason, setType method is overridden in", 
+   "UnaryArithmeticOperatorNode. After setting the type, this method calls the", 
+   "binding code to make sure all the bind time rules are enforced.", 
+   "I have also consolidated the 2 type setting methods into one, namely setType.", 
+   "This setType is overwritten in ParameterNode so it can also set the type in", 
+   "the array of parameter types in StatementNode. Hopefully, this will make the", 
+   "type setting code much cleaner.", 
+   "I have added several new tests to check this functionality and these tests are in unaryArithmeticDynamicParameter.java. The test will get run in both embedded and network server modes.", 
+   "Submitted by Mamta Satoor (msatoor@gmail.com)"
+  ], 
+  "revision_id": "329295"
+ }
+]

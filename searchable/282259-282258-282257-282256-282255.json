@@ -1,0 +1,81 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-08-11T21:20:55.000000Z", 
+  "msg": [
+   "Big cleanup in LocalStrings. All messages are now in tomcat/resources - some", 
+   "of them are used from more than one package, and it's easier to translate them", 
+   "if you have only one place. That also removes a lot of duplications.", 
+   "All components that are part of tomcat distribution should use resources/.", 
+   "For non-standard components or external you should use local strings."
+  ], 
+  "revision_id": "282259"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-11T16:24:27.000000Z", 
+  "msg": [
+   "As previously announced and proposed, ServletLoader and ServerConnector", 
+   "are removed. Both are no longer needed in tomcat, all functionality is already", 
+   "in Interceptor.", 
+   "Also removed the ( unused ) BufferedServletOutputStream and (not-so)Buffered", 
+   "InputSteam.", 
+   "- fixed the product test - the \"welcome\" files handling changed, and the tests", 
+   "were implementation  specific."
+  ], 
+  "revision_id": "282258"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-08-11T06:14:19.000000Z", 
+  "msg": [
+   "This is a big change, I couldn't find a good way of spliting it", 
+   "( most changes are related with each other ).", 
+   "This is just a start for a big refactoring - the goal is security and", 
+   "performance.", 
+   "This change:", 
+   "- For all internal Handlers, use a per/thread re-usable StringBuffer.", 
+   "The buffer is not converted toString, so it generates no garbage.", 
+   "- use OutputBuffer - the code from BufferedServletOutputStream is now here,", 
+   "plus addition to write a StringBuffer ( without the expensive toString())", 
+   "( still need to make sure the char/byte mixing works in all cases - this", 
+   "is the DEV branch )", 
+   "- removed the old ByteBuffer code - interesting experiment, too complex.", 
+   "- enhanced MessageBytes ( used as an efficient way to store headers ).", 
+   "Also use MessageBytes for efficient storage of request fields.", 
+   "This still require a lot of work, but we are getting very close to 0 GC.", 
+   "( at least for requests without params and without cookies - those will", 
+   "also need to be converted to recyclable structures )", 
+   "- also few small cosmetic changes in RequestImpl to allow better visibility.", 
+   "Most fields will disapear soon, it will be a very simple class.", 
+   "- Same for response - only OutputBuffer is used in Request and core, the", 
+   "Output/Writer is handled by facade.", 
+   "- few minor optimizations ( cache, avoid GC )", 
+   "- a bit of cleanup ( more to come )", 
+   "- few optimizations in HttpRequest"
+  ], 
+  "revision_id": "282257"
+ }, 
+ {
+  "author": "nacho", 
+  "date": "2000-08-10T22:39:24.000000Z", 
+  "msg": [
+   "Check for nulls in resolve", 
+   "Entity.", 
+   "Thanks to C. Jason Benedict [jbenedict@Q4i.com]"
+  ], 
+  "revision_id": "282256"
+ }, 
+ {
+  "author": "glenn", 
+  "date": "2000-08-10T20:44:49.000000Z", 
+  "msg": [
+   "When using the Java SecurityManager to set a security policy for what", 
+   "remote web servers can connect to tomcat using SocketPermission, if", 
+   "a remote web server tried to connect which was not permitted, the", 
+   "Socket would be closed.  Added code to detect an AccessControlException", 
+   "and log it without closing socket.  This should be jdk 1.1.x compatible."
+  ], 
+  "revision_id": "282255"
+ }
+]

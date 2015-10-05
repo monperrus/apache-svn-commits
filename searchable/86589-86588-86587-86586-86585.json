@@ -1,0 +1,57 @@
+[
+ {
+  "author": "rbb", 
+  "date": "2000-10-14T06:53:02.000000Z", 
+  "msg": [
+   "Cleanup ap_get_client_block a bit.  All of the code that I am removing", 
+   "doesn't actually do anything useful, it was meant to remove all zero", 
+   "length buckets before trying to read from the brigade.  However, it is", 
+   "perfectly fine to not do this, and to just read those buckets along with", 
+   "the rest of them."
+  ], 
+  "revision_id": "86589"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-14T06:21:38.000000Z", 
+  "msg": [
+   "My last patch had most of the code to insert the eos bucket, but it was", 
+   "missing some major pieces that I only found after the commit.  This patch", 
+   "fixes the problem, and makes sure that request bodies are always ended", 
+   "with an EOS bucket."
+  ], 
+  "revision_id": "86588"
+ }, 
+ {
+  "author": "wrowe", 
+  "date": "2000-10-14T04:54:19.000000Z", 
+  "msg": [
+   "More binaries I'm aware of."
+  ], 
+  "revision_id": "86587"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-10-14T04:37:22.000000Z", 
+  "msg": [
+   "Get non-chunked input body filtering working with an EOS bucket.  The", 
+   "basic design has ap_setup_client_block setting a field in the conn_rec", 
+   "which tells http_filter how much data is in the body (with chunking this", 
+   "will represent how much data is in the chunk).  The ap_get_client_block", 
+   "then calls down the stack with the maximum amount of data that it can", 
+   "receive back.  When http_filter reads all of the data, it adds an eos", 
+   "bucket to the end of the brigade.  ap_get_client_block continues to read", 
+   "data until it gets the eos bucket.  This allows filters to increase the", 
+   "size of the body data."
+  ], 
+  "revision_id": "86586"
+ }, 
+ {
+  "author": "wsanchez", 
+  "date": "2000-10-14T03:03:48.000000Z", 
+  "msg": [
+   "Darwin and Rhapsody binaries are online."
+  ], 
+  "revision_id": "86585"
+ }
+]

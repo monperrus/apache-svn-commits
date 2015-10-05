@@ -1,0 +1,102 @@
+[
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-23T02:12:13.000000Z", 
+  "msg": [
+   "patch by James Turner <turner@blackbear.com>", 
+   "and modified to reset all attributes;", 
+   "this will fix a problem wherein if you use .clear() on a Criteria, and then try to use the Criteria on a different table, it fails."
+  ], 
+  "revision_id": "228424"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-23T01:41:04.000000Z", 
+  "msg": [
+   "patch by Alexis HAUMONT <alexis.haumont@smile.fr>", 
+   "and also modified for ObjectWithManager.vm by jmcnally", 
+   "Also added the test table as a part of the rttest.", 
+   "On our project, we found (and fix) a problem related to self-refered table", 
+   "when the PK is a multi-column PK.", 
+   "Here's a minimalist schema to reproduce it :", 
+   "<database>", 
+   "<table name=\"TEST_TABLE\">", 
+   "<column name=\"COL1\" primaryKey=\"true\" required=\"true\"", 
+   "type=\"DECIMAL\"/>", 
+   "<column name=\"COL2\" primaryKey=\"true\" required=\"true\"", 
+   "type=\"DECIMAL\"/>", 
+   "<column name=\"PARENT_COL1\" required=\"true\" type=\"DECIMAL\"/>", 
+   "<column name=\"PARENT_COL2\" required=\"true\" type=\"DECIMAL\"/>", 
+   "<foreign-key foreignTable=\"TEST_TABLE\">", 
+   "<reference foreign=\"COL1\" local=\"PARENT_COL1\"/>", 
+   "<reference foreign=\"COL2\" local=\"PARENT_COL2\"/>", 
+   "</foreign-key>", 
+   "</table>", 
+   "</database>", 
+   "The generated Object TestTable.java won't compile, the generated methods", 
+   "getTestRelatedBy**** are broken :", 
+   "On one side, the Object.vm creates a reference to the pointed TestTable", 
+   "object with the name :", 
+   "aTestTableRelatedByParentCol1Col2", 
+   "But on an other portion of the velocity code, it is reffered as", 
+   "aTestTableRelatedByParentCol1", 
+   "The code works for a Single column PK but not for my test Case :", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228423"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T22:17:55.000000Z", 
+  "msg": [
+   "move the second lookup inside the if (m == null) block so that it does not", 
+   "always get executed twice.  Thanks again to Stephen Haberman <stephenh@chase3000.com>"
+  ], 
+  "revision_id": "228422"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T22:04:22.000000Z", 
+  "msg": [
+   "try to give some better error messages than the default npe.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228421"
+ }, 
+ {
+  "author": "jmcnally", 
+  "date": "2002-06-22T21:34:39.000000Z", 
+  "msg": [
+   "patch by \tStephen Haberman <stephenh@chase3000.com>", 
+   "I've attached a patch that lets you not specify managers in the", 
+   "configuration and instead they default to the generated peers. It could", 
+   "be considered a hack, but I think it works.", 
+   "Basically in the managers template, I added DEFAULT_MANAGER_CLASSNAME,", 
+   "which is a static string of the manager class itself. Then in", 
+   "getManager(), instead of just calling Torque.getManager(key), I pass", 
+   "that static string as the default classname.", 
+   "Inside the Torque.getManager(key, defaultClassname), it checks to see if", 
+   "the key is already in the managers map. If not, it adds the key with the", 
+   "defaultClassname, just as if it had come from the configuration via the", 
+   "initManager method.", 
+   "So you can't use the straight Torque.getManager(\"ThisClass\") from your", 
+   "client code, but you can use ThisClassManager.getInstance() and it'll", 
+   "work fine (and unless I'm using the managers wrong, I go with the", 
+   "ThisClassManager.getInstance method anyway).", 
+   "jmcnally - I modified this to synchronize the initManager method.  Not sure", 
+   "that this does not still suffer MT problems, but if a new manager is", 
+   "placed into the map, it would not cause problems with standard usage.", 
+   "PR:", 
+   "Obtained from:", 
+   "Submitted by:", 
+   "Reviewed by:"
+  ], 
+  "revision_id": "228420"
+ }
+]

@@ -1,0 +1,116 @@
+[
+ {
+  "author": "costin", 
+  "date": "2000-04-22T02:01:00.000000Z", 
+  "msg": [
+   "Initial check in for the \"next\" mapper.", 
+   "It's not yet final, but I cleaned up most of the alghoritm and", 
+   "factored out the prefix matching alghoritm, while removing a lot", 
+   "of redundant operations.", 
+   "Missing:", 
+   "- virtual host ( easy, but I want to do it in the right way, by using a", 
+   "hierarchy mapping instead of simple string hashtable lookups)", 
+   "- security - as you know, the implementation of security was mostly", 
+   "experimental, with double a matching - once for the normal request", 
+   "and once for security checking. This can ( and should ) be done", 
+   "in one step only, and requires merging the security and mapping patterns.", 
+   "- tree instead of hashtable, better longest-match ( now we remove", 
+   "the last component from the path till it matches and look in a hashtable).", 
+   "A better way is to look from start and stop when no longer matches, or", 
+   "even better to use a sorted tree. Even with the current simple matching,", 
+   "using a TreeMap adds 20% to the speed.", 
+   "Another important thing is to use char[] instead of string operations", 
+   "when matching - there is no need to create so many strings in the process.", 
+   "- shortcut code. We do have an experimental \"mapCache\" that will benefit from", 
+   "the \"locality\" ( a number of pages tend to be very popular and frequently", 
+   "accessed, and we can avoid the full matching alghoritm for those), but we", 
+   "need to better integrate with the Web adapters.", 
+   "The code still has a bit of \"inheritance\" from the (ugly) SimpleMapper,", 
+   "but it will go away soon."
+  ], 
+  "revision_id": "281829"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-04-21T20:45:11.000000Z", 
+  "msg": [
+   "- Added SimpleHashtable from xml-contrib ( Crimson ) - it's a non-synch", 
+   "Hashtable that will improve the performance of the path mapper", 
+   "- Added \"notes\" as a general communication mechanism for interceptors.", 
+   "Notes are similar with req->notes in apache ( I don't remember the", 
+   "equivalent in IIS, NES).", 
+   "Remember that interceptors are supposed to be state-less and have as little", 
+   "config as possible - the state and config is part of the tomcat.core.", 
+   "That also address Craig's concerns regarding state in interceptors.", 
+   "- Added mapType property in Container. Every container represents a mapping,", 
+   "and this allow easy generalization if new mapping types are introduced.", 
+   "- Every context will also have a container, coresponding to the default", 
+   "mapping. That will eliminate a lot of checking and guessing, and allows", 
+   "us to treat all URLs in an uniform way. Note that defaultServlet and a number", 
+   "of methods are no longer needed, and Context will be simplified a lot.", 
+   "- Removed the use of request.lookupPath and replaced it with", 
+   "ServletPath+PathInfo. It was an artificial construct used in the mapper.", 
+   "- in HttpRequest, lazy evaluation for expensive getHostName()", 
+   "- fix Invoker ( register the right prefix mapping for further invocations )", 
+   "I will also check in a cleaned-up version of SimpleMapper ( really cleaned up -", 
+   "probably 1/3 hashtable lookups and finally clear code ). I will also add", 
+   "virtual host, but I have to do it from home."
+  ], 
+  "revision_id": "281828"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-04-19T17:40:27.000000Z", 
+  "msg": [
+   "- Cleaned-up ( a bit) the InvokerServlet. Removed some duplicated code", 
+   "( string.length(), lookups for the same element, etc).", 
+   "Most important difference - invoker will notify the context of a new", 
+   "map, so next time the servlet will be called we'll no longer call 2", 
+   "servlets instead of one.", 
+   "This alters the old logic a bit - you can no longer test if a request", 
+   "is \"Invoker-based\" by comparing the servlet with invoker servlet. That", 
+   "test was bad anyway - there is no guarantee that a particular invoker", 
+   "will be used.", 
+   "- Added logic to get the source of a servlet definition - it can be web.xml,", 
+   "the admin interface, a dynamic mapping like invoker - and hopefully soon", 
+   "jsp can take advantage of this.", 
+   "- Added counters to ServletWrapper - to be used in tomcat performance tuning", 
+   "( the overhead is very small, and the information may be very usefull even", 
+   "at run-time. The web interface later )", 
+   "Please test and review the new Invoker.", 
+   "( during this review it showed up that exact matching is broken, and it also", 
+   "look like suffix mapping with PathInfo will not work even if you declare the", 
+   "JSP page.  )"
+  ], 
+  "revision_id": "281827"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-04-18T23:16:14.000000Z", 
+  "msg": [
+   "Uniform interface between internal components - use Request and Response", 
+   "as parameters to handleRequest instead of facades.", 
+   "That will also help with Facade/internal isolation."
+  ], 
+  "revision_id": "281826"
+ }, 
+ {
+  "author": "costin", 
+  "date": "2000-04-18T23:04:35.000000Z", 
+  "msg": [
+   "- Removed the fix for bug #116 ( class loader problems with JNDI and other", 
+   "libs)", 
+   "- Added back the fix in a better form ( plus support for destroy ). It is now", 
+   "possible to use it only if you need to ( i.e. no need to do several", 
+   "introspections if you are in jdk1.1). We use a normal interceptor that will", 
+   "set the contextClassLoader for JDK1.2 - the code is still jdk independent,", 
+   "but probably it's usefull to just call the real method instead of using", 
+   "invoke() - at least faster...", 
+   "- Start the missing piece for Facade - the ability to restrict access to", 
+   "tomcat internals. It's still a lot of work in this area - review all", 
+   "public methods and constructors, including attributes that are set during", 
+   "jsp processing."
+  ], 
+  "revision_id": "281825"
+ }
+]

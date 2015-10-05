@@ -1,0 +1,76 @@
+[
+ {
+  "author": "gstein", 
+  "date": "2000-11-23T11:44:22.000000Z", 
+  "msg": [
+   "dav_resource should carry around a pool for allocations related to it"
+  ], 
+  "revision_id": "87074"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-11-23T10:37:00.000000Z", 
+  "msg": [
+   "More revamping of live properties. Focused around the fact that a provider's", 
+   "hooks are only called if that provider defines the prop (e.g. NOTME return", 
+   "values are no longer needed). Also refactored some code to simplify liveprop", 
+   "management for providers (assuming they don't have \"funny\" stuff).", 
+   "*) enumerate all known DAV properties (DAV_PROPID_* in mod_dav.h)", 
+   "- use these in fs/repos.c rather than DAV_PROPID_FS_*", 
+   "- will use in SVN and a second-round whack on the \"core\" props in props.c", 
+   "*) refactor dav_fs_liveprop_name to dav_liveprop_spec and add a writeable", 
+   "flag", 
+   "*) add dav_liveprop_group to hold a number of \"top-level\" items to pass to", 
+   "the new liveprop utility functions", 
+   "*) add dav_do_find_liveprop() as a util for the find_liveprop hook function", 
+   "- toss repos.c::dav_fs_find_prop", 
+   "- use the new function for repos.c::dav_fs_find_liveprop", 
+   "*) rebuild dav_register_liveprop_namespace() as a full \"group\" registration", 
+   "which will handle all the namespaces in a liveprop provider. The new func", 
+   "is called dav_register_liveprop_group().", 
+   "*) add dav_get_liveprop_info() to look up liveprop info given a provider's", 
+   "propid. used in dav_fs_insert_prop() and dav_fs_is_writeable()", 
+   "*) fold dav_fs_insert_all() directly into dav_fs_insert_all_liveprops()", 
+   "since the former wasn't called by anything else", 
+   "*) rename var in dav_fs_insert_prop() to \"global_ns\" to clarify its purpose.", 
+   "torch a couple out-of-date comments in there.", 
+   "*) toss dav_prop_rw type and simplify is_writeable hook. fix up calling of", 
+   "hook in props.c::dav_rw_liveprop(). dav_rw_liveprop() should also call", 
+   "the provider *first*, if one has stated it is handling the property.", 
+   "*) toss DAV_PROP_INSERT_NOTME since we can't call a provider's insert_prop", 
+   "with somebody else's liveprop", 
+   "*) remove DAV_IS_CORE_PROP() in props.c. a core prop is not defined by its", 
+   "propid, but by provider==NULL. add comments to clarify when that happens.", 
+   "*) fix sub-request creation to include new next-filter arg"
+  ], 
+  "revision_id": "87073"
+ }, 
+ {
+  "author": "gstein", 
+  "date": "2000-11-23T10:08:19.000000Z", 
+  "msg": [
+   "*) fix subtle crasher in COPY method", 
+   "*) update sub-request-creation calls to include new \"next filter\" arg"
+  ], 
+  "revision_id": "87072"
+ }, 
+ {
+  "author": "slive", 
+  "date": "2000-11-23T03:59:24.000000Z", 
+  "msg": [
+   "Fix a few broken links."
+  ], 
+  "revision_id": "87071"
+ }, 
+ {
+  "author": "rbb", 
+  "date": "2000-11-22T20:35:56.000000Z", 
+  "msg": [
+   "Add the ability for apxs to install both libtool generated and non-libtool", 
+   "generated shared objects.", 
+   "Submitted by:\tJon Travis <jtravis@covalent.net>", 
+   "Reviewed by:\tRyan Bloom"
+  ], 
+  "revision_id": "87070"
+ }
+]
