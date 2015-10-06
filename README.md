@@ -60,6 +60,22 @@ The JSON files contains the same info as JSON:
 
 ```
 
+To checkout a particular revision, say 1000001, first idenfify the related project through the project name
+
+```
+$ svn diff --summarize -r <commit_id - 1>:<commit_id> http://svn.apache.org/repos/asf/
+# example
+$ svn diff --summarize -r 100000:100001 http://svn.apache.org/repos/asf/
+M      http://svn.apache.org/repos/asf/httpd/httpd/trunk/build/NWGNUtail.inc
+```
+
+This shows that this comes from project `httpd`. Then checkout the revision:
+```
+$ svn checkout -r <commit_id>  http://svn.apache.org/repos/asf/<project-name>/trunk/
+#example 
+$ svn checkout -r 100001  http://svn.apache.org/repos/asf/httpd/httpd/trunk/
+```
+
 Contributions
 ------------
 
