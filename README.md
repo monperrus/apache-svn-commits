@@ -60,6 +60,8 @@ The JSON files contains the same info as JSON:
 
 ```
 
+To see the diff of a particular revision, say 1590251, simply visit http://svn.apache.org/viewvc?view=revision&revision=1590251
+
 To checkout a particular revision, say 1000001, first idenfify the related project through the project name
 
 ```
